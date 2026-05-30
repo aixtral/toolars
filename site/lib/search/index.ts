@@ -12,12 +12,28 @@ interface ScoredTool {
   score: number;
 }
 
+const genericTokens = new Set([
+  'a',
+  'an',
+  'and',
+  'calculator',
+  'calculators',
+  'free',
+  'online',
+  'real',
+  'the',
+  'tool',
+  'tools',
+]);
+
 function normalize(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 function tokensFor(value: string) {
-  return normalize(value).split(' ').filter(Boolean);
+  return normalize(value)
+    .split(' ')
+    .filter((token) => token && !genericTokens.has(token));
 }
 
 function textParts(tool: ToolDefinition) {

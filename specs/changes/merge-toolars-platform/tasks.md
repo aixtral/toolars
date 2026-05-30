@@ -139,8 +139,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test -- navigation                      # expected: exit 0; menu and drawer component tests pass
     pnpm --dir site test:e2e -- search                      # expected: exit 0; Cmd/Ctrl+K and Esc flows pass
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-30T16:20:19Z
+  status: done
   owner_mode: AFK
   estimate: 4h
   depends_on:

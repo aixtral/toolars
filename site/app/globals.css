@@ -1,3 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0F172A;
+  --color-porcelain: #FAFAFC;
+  --color-brand-500: #14B8A6;
+  --color-brand-600: #0D9488;
+  --color-brand-700: #0F766E;
+  --color-brand-900: #0B1220;
+  --color-accent-ai: #2563EB;
+  --color-accent-finance: #F59E0B;
+  --color-accent-health: #22C55E;
+  --color-success: #16A34A;
+  --color-info: #2563EB;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --container-content: 1240px;
+  --shadow-toolars: 0 4px 6px -1px rgba(15, 23, 42, 0.08),
+    0 2px 4px -2px rgba(15, 23, 42, 0.08);
+}
+
 :root {
   color-scheme: light;
   --color-ink: #0F172A;

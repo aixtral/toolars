@@ -1,28 +1,12 @@
-export type RepurposePlatform =
-  | 'twitter-thread'
-  | 'linkedin-post'
-  | 'newsletter'
-  | 'medium-article'
-  | 'reddit-post'
-  | 'instagram-post'
-  | 'youtube-script'
-  | 'facebook-post'
-  | 'hacker-news-post'
-  | 'indie-hackers-post'
-  | 'wechat-article'
-  | 'xiaohongshu-post'
-  | 'jike-post'
-  | 'zhihu-answer';
+import { AI_PLATFORMS } from '@/data/ai-platforms';
+import type { AiPlatformDefinition, RepurposePlatform } from '@/data/ai-platforms';
+
+export { AI_PLATFORM_GROUPS, AI_PLATFORMS } from '@/data/ai-platforms';
+export type { AiPlatformDefinition, RepurposePlatform } from '@/data/ai-platforms';
 
 export type RepurposeTone = 'professional' | 'casual' | 'viral';
 export type RepurposeSourceType = 'url' | 'text';
 export type RepurposeStatus = 'draft' | 'streaming' | 'completed' | 'canceled' | 'failed';
-
-export interface AiPlatformDefinition {
-  id: RepurposePlatform;
-  label: string;
-  format: string;
-}
 
 export interface AiOption {
   id: string;
@@ -56,23 +40,6 @@ export interface RepurposeJob extends RepurposeRequest {
   outputs: RepurposeOutput[];
   createdAt: string;
 }
-
-export const AI_PLATFORMS: readonly AiPlatformDefinition[] = [
-  { id: 'twitter-thread', label: 'Twitter Thread', format: 'Thread' },
-  { id: 'linkedin-post', label: 'LinkedIn Post', format: 'Professional post' },
-  { id: 'newsletter', label: 'Newsletter', format: 'Email section' },
-  { id: 'medium-article', label: 'Medium Article', format: 'Long-form article' },
-  { id: 'reddit-post', label: 'Reddit Post', format: 'Community post' },
-  { id: 'instagram-post', label: 'Instagram Post', format: 'Caption' },
-  { id: 'youtube-script', label: 'YouTube Script', format: 'Video script' },
-  { id: 'facebook-post', label: 'Facebook Post', format: 'Social post' },
-  { id: 'hacker-news-post', label: 'Hacker News Post', format: 'Launch note' },
-  { id: 'indie-hackers-post', label: 'Indie Hackers Post', format: 'Founder update' },
-  { id: 'wechat-article', label: 'WeChat Article', format: 'Article' },
-  { id: 'xiaohongshu-post', label: 'Xiaohongshu Post', format: 'Lifestyle post' },
-  { id: 'jike-post', label: 'Jike Post', format: 'Short update' },
-  { id: 'zhihu-answer', label: 'Zhihu Answer', format: 'Answer' },
-] as const;
 
 export const AI_TONES: readonly AiOption[] = [
   {

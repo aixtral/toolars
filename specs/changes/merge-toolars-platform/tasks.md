@@ -256,8 +256,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test -- ai-pages                        # expected: exit 0; all AI page component tests pass
     pnpm --dir site test:e2e -- ai-navigation               # expected: exit 0; app navigation covers all AI pages
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-31T07:47:52Z
+  status: done
   owner_mode: AFK
   estimate: 6h
   depends_on:

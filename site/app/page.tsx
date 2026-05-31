@@ -115,6 +115,7 @@ export default function HomePage() {
               <CardTitle>Continue where you left off</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-3">
+              <p className="text-sm font-semibold text-neutral-600">Recent Tools</p>
               {recent.map((tool) => (
                 <a key={tool.slug} href={tool.route} className="text-sm font-semibold text-neutral-700 hover:text-brand-700">
                   {tool.title}

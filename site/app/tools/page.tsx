@@ -17,7 +17,7 @@ const filterControls = [
   {
     id: 'directory-category',
     label: 'Category',
-    options: ['All categories', 'AI Content', 'Health & Wellness', 'Finance', 'Wealth'],
+    options: ['All categories', 'AI Content', 'Health tools', 'Finance', 'Wealth'],
   },
   {
     id: 'directory-tool-type',

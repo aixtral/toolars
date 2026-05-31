@@ -11,7 +11,7 @@ const drawerLinks = [
   { title: 'All Tools', href: '/tools' },
   { title: 'AI Tools', href: '/ai' },
   { title: 'Blog', href: '/blog' },
-  { title: 'Body', href: '/categories/body' },
+  { title: 'Health', href: '/categories/health' },
   { title: 'Finance', href: '/categories/finance' },
   { title: 'Pricing', href: '/pricing' },
   { title: 'Sign in', href: '/login' },

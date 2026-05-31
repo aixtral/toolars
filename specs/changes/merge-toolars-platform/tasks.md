@@ -155,6 +155,11 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
     - site/app/categories/health/page.tsx
     - site/app/categories/finance/page.tsx
     - site/app/ai/page.tsx
+    - site/components/tools
+    - site/lib/discovery
+    - site/lib/seo
+    - site/e2e/public-pages.spec.ts
+    - site/public/assets/icons/toolars
   covers:
     - D2-S1
     - D2-S2
@@ -163,8 +168,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test:e2e -- public-pages                # expected: exit 0; home/tools/category/AI directory render
     pnpm --dir site test -- metadata                        # expected: exit 0; public metadata helpers pass
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-31T05:27:14Z
+  status: done
   owner_mode: AFK
   estimate: 5h
   depends_on:

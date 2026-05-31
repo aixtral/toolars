@@ -1,7 +1,7 @@
-import { TOOL_CATEGORIES } from '@/data/categories';
 import { getPopularTools } from '@/data/tools';
 import { Badge } from '@/components/ui/badge';
 import { Command } from 'lucide-react';
+import { categoryCards } from '@/lib/discovery';
 
 const solutions = [
   { title: 'Fast Calculator Lookup', href: '/tools' },
@@ -17,6 +17,7 @@ const resources = [
 
 export function MegaMenu() {
   const popularTools = getPopularTools(5);
+  const categories = categoryCards();
 
   return (
     <div
@@ -50,7 +51,7 @@ export function MegaMenu() {
       <section>
         <h2 className="text-lg font-semibold text-ink">Categories</h2>
         <div className="mt-3 grid gap-2">
-          {TOOL_CATEGORIES.map((category) => (
+          {categories.map((category) => (
             <a
               key={category.slug}
               href={category.route}

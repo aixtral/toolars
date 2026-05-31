@@ -43,4 +43,20 @@ describe('billing webhook verification', () => {
       }),
     ).toBe(false);
   });
+
+  it('rejects subscription events with unsupported status values', () => {
+    const unsupportedStatusBody = JSON.stringify({
+      id: 'evt_unsupported',
+      type: 'subscription.updated',
+      data: {
+        userId: 'user_123',
+        planId: 'pro',
+        status: 'paused_forever',
+      },
+    });
+
+    expect(() => parseBillingWebhookEvent(unsupportedStatusBody)).toThrow(
+      'Unsupported billing webhook event.',
+    );
+  });
 });

@@ -4,6 +4,13 @@ import type { PlanId } from '@/lib/plans';
 
 export type BillingSubscriptionStatus = 'active' | 'trialing' | 'past_due' | 'canceled';
 
+const billingSubscriptionStatuses: readonly BillingSubscriptionStatus[] = [
+  'active',
+  'trialing',
+  'past_due',
+  'canceled',
+];
+
 export interface BillingWebhookSignatureInput {
   body: string;
   secret: string;
@@ -18,8 +25,19 @@ export interface ParsedBillingWebhookEvent {
   status: BillingSubscriptionStatus;
 }
 
-function signedPayload({ body, timestamp }: Pick<BillingWebhookSignatureInput, 'body' | 'timestamp'>) {
+function signedPayload({
+  body,
+  timestamp,
+}: Pick<BillingWebhookSignatureInput, 'body' | 'timestamp'>) {
   return `${timestamp}.${body}`;
+}
+
+function isBillingSubscriptionStatus(
+  status: string | undefined,
+): status is BillingSubscriptionStatus {
+  return Boolean(
+    status && billingSubscriptionStatuses.includes(status as BillingSubscriptionStatus),
+  );
 }
 
 export function createBillingWebhookSignature({
@@ -27,7 +45,9 @@ export function createBillingWebhookSignature({
   secret,
   timestamp,
 }: BillingWebhookSignatureInput) {
-  return createHmac('sha256', secret).update(signedPayload({ body, timestamp })).digest('hex');
+  return createHmac('sha256', secret)
+    .update(signedPayload({ body, timestamp }))
+    .digest('hex');
 }
 
 export function verifyBillingWebhookSignature({
@@ -51,7 +71,7 @@ export function parseBillingWebhookEvent(body: string): ParsedBillingWebhookEven
     data?: {
       userId?: string;
       planId?: string;
-      status?: BillingSubscriptionStatus;
+      status?: string;
     };
   };
 
@@ -60,7 +80,7 @@ export function parseBillingWebhookEvent(body: string): ParsedBillingWebhookEven
     payload.type !== 'subscription.updated' ||
     !payload.data?.userId ||
     !isPlanId(payload.data.planId) ||
-    !payload.data.status
+    !isBillingSubscriptionStatus(payload.data.status)
   ) {
     throw new Error('Unsupported billing webhook event.');
   }

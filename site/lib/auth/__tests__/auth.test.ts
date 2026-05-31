@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   createPreviewSession,
   getSessionFromRequest,
@@ -6,6 +6,10 @@ import {
 } from '@/lib/auth';
 
 describe('auth preview sessions', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it('returns null when no account context is present', () => {
     expect(getSessionFromSearchParams({})).toBeNull();
     expect(getSessionFromRequest(new Request('http://127.0.0.1/api'))).toBeNull();
@@ -31,5 +35,27 @@ describe('auth preview sessions', () => {
     });
 
     expect(getSessionFromRequest(request)).toEqual(createPreviewSession('team'));
+  });
+
+  it('does not trust preview sessions in production unless explicitly enabled', () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', '');
+
+    const request = new Request('http://127.0.0.1/api', {
+      headers: {
+        'x-toolars-preview-user': 'true',
+        'x-toolars-preview-plan': 'pro',
+      },
+    });
+
+    expect(getSessionFromSearchParams({ preview: 'pro' })).toBeNull();
+    expect(getSessionFromRequest(request)).toBeNull();
+
+    vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'true');
+
+    expect(getSessionFromSearchParams({ preview: 'pro' })).toMatchObject({
+      planId: 'pro',
+    });
+    expect(getSessionFromRequest(request)).toEqual(createPreviewSession('pro'));
   });
 });

@@ -22,12 +22,22 @@ function planFromPreview(value: string | undefined) {
   return isPlanId(value) ? value : undefined;
 }
 
+function previewAuthEnabled() {
+  return (
+    process.env.NODE_ENV !== 'production' ||
+    process.env.TOOLARS_ENABLE_PREVIEW_AUTH === 'true'
+  );
+}
+
 export function getSessionFromSearchParams(searchParams: Record<string, string | undefined>) {
+  if (!previewAuthEnabled()) return null;
+
   const planId = planFromPreview(searchParams.preview);
   return planId ? createPreviewSession(planId) : null;
 }
 
 export function getSessionFromRequest(request: Request) {
+  if (!previewAuthEnabled()) return null;
   if (request.headers.get('x-toolars-preview-user') !== 'true') return null;
 
   const requestedPlan = request.headers.get('x-toolars-preview-plan');

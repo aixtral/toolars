@@ -186,7 +186,7 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
     - T3-S2
   verify: |
     pnpm --dir site test -- calculators                     # expected: exit 0; formula and validation tests pass
-    rg "document|window|fetch|useState" site/lib/calculators # expected: exit 1; pure modules do not use DOM/network/React APIs
+    bash -lc '! rg "document|window|fetch|useState" site/lib/calculators' # expected: exit 0; pure modules do not use DOM/network/React APIs
   red_at: 2026-05-31T06:00:26Z
   status: done
   owner_mode: AFK

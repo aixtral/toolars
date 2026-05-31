@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Container } from '@/components/layout';
-import { CalculatorWorkspace } from '@/components/calculators';
+import { CalculatorPageActions, CalculatorWorkspace } from '@/components/calculators';
 import { Badge } from '@/components/ui';
 import { APPROVED_CALCULATOR_SLUGS } from '@/data/calculators';
 import type { CalculatorDefinition, ToolDefinition } from '@/data/types';
@@ -125,7 +125,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <span className="text-ink">{tool.title}</span>
         </nav>
 
-        <section className="grid gap-5 border-b border-neutral-200 pb-7 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
+        <section className="grid gap-5 border-b border-neutral-200 pb-7 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-end">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               {tool.badges?.map((badge) => (
@@ -135,20 +135,38 @@ export default async function ToolPage({ params }: ToolPageProps) {
               ))}
               <Badge>{tool.category.replace('-', ' ')}</Badge>
             </div>
-            <h1 className="mt-4 text-4xl font-bold leading-[44px] text-ink">
+            <h1 className="mt-4 text-3xl font-bold leading-9 text-ink sm:text-4xl sm:leading-[44px]">
               {tool.title}
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-6 text-neutral-600">
               {tool.description}
             </p>
+            <div className="mt-5 hidden gap-3 sm:grid sm:grid-cols-3">
+              <div className="rounded-lg border border-neutral-200 bg-white px-3 py-3">
+                <p className="text-xs font-bold uppercase text-neutral-500">Access</p>
+                <p className="mt-1 text-sm font-semibold text-ink">Free, no login</p>
+              </div>
+              <div className="rounded-lg border border-neutral-200 bg-white px-3 py-3">
+                <p className="text-xs font-bold uppercase text-neutral-500">Runtime</p>
+                <p className="mt-1 text-sm font-semibold text-ink">Browser-local</p>
+              </div>
+              <div className="rounded-lg border border-neutral-200 bg-white px-3 py-3">
+                <p className="text-xs font-bold uppercase text-neutral-500">Output</p>
+                <p className="mt-1 text-sm font-semibold text-ink">Save, compare, share</p>
+              </div>
+            </div>
           </div>
-          <div className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-500">
-              Formula
-            </p>
-            <p className="mt-2 text-sm font-semibold leading-5 text-ink">
-              {engine.formulaLabel}
-            </p>
+          <div className="grid gap-3">
+            <CalculatorPageActions route={tool.route} title={tool.title} />
+            <section
+              aria-label="Calculator formula preview"
+              className="hidden rounded-lg border border-neutral-200 bg-white p-4 shadow-sm lg:block"
+            >
+              <p className="text-xs font-bold uppercase text-neutral-500">Formula</p>
+              <p className="mt-2 text-sm font-semibold leading-5 text-ink">
+                {engine.formulaLabel}
+              </p>
+            </section>
           </div>
         </section>
 
@@ -168,7 +186,10 @@ export default async function ToolPage({ params }: ToolPageProps) {
             </div>
           </article>
 
-          <aside className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
+          <section
+            aria-label="Calculator FAQ"
+            className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm"
+          >
             <h2 className="text-xl font-bold leading-7 text-ink">FAQ</h2>
             <div className="mt-4 space-y-4">
               {calculatorFaq.map((faq) => (
@@ -178,7 +199,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 </div>
               ))}
             </div>
-          </aside>
+          </section>
         </section>
       </Container>
     </main>

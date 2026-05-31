@@ -278,8 +278,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test -- billing                         # expected: exit 0; plan gates and webhook verification pass
     pnpm --dir site test:e2e -- auth-billing                # expected: exit 0; login, subscription, and Pro gate flows pass
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-31T07:58:17Z
+  status: done
   owner_mode: HITL
   estimate: 8h
   depends_on:

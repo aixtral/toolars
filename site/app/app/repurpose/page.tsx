@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { RepurposeWorkspace } from '@/components/ai';
+import { UsagePlanCard } from '@/components/billing';
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { getSessionFromSearchParams } from '@/lib/auth';
+import { getPlanById } from '@/lib/plans';
 
 export const metadata: Metadata = {
   title: 'AI Content Repurposer | toolars',
@@ -65,28 +68,38 @@ function AuthGate() {
 
 export default async function RepurposePage({ searchParams }: RepurposePageProps) {
   const params = await searchParams;
-  const previewAuthenticated = params?.preview === '1';
+  const session = getSessionFromSearchParams(params ?? {});
 
-  if (!previewAuthenticated) return <AuthGate />;
+  if (!session) return <AuthGate />;
+
+  const plan = getPlanById(session.planId);
+  const remainingGenerations = plan.monthlyAiGenerations;
 
   return (
     <section className="space-y-6">
-      <div className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="ai">Streaming workflow</Badge>
-          <Badge variant="success">Preview account</Badge>
-          <Badge>Brand voice</Badge>
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="ai">Streaming workflow</Badge>
+            <Badge variant="success">Preview account</Badge>
+            <Badge>{plan.name} plan</Badge>
+            <Badge>Brand voice</Badge>
+          </div>
+          <h1 className="mt-4 text-4xl font-bold leading-[44px] text-ink">
+            AI Content Repurposer
+          </h1>
+          <p className="mt-3 max-w-3xl text-base leading-6 text-neutral-600">
+            Turn one source into platform-native drafts for social, newsletters,
+            articles, and community launches. Canceling preserves partial output.
+          </p>
         </div>
-        <h1 className="mt-4 text-4xl font-bold leading-[44px] text-ink">
-          AI Content Repurposer
-        </h1>
-        <p className="mt-3 max-w-3xl text-base leading-6 text-neutral-600">
-          Turn one source into platform-native drafts for social, newsletters,
-          articles, and community launches. Canceling preserves partial output.
-        </p>
+        <UsagePlanCard
+          planId={session.planId}
+          remainingGenerations={remainingGenerations}
+        />
       </div>
 
-      <RepurposeWorkspace />
+      <RepurposeWorkspace planId={session.planId} />
     </section>
   );
 }

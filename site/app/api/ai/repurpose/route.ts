@@ -1,12 +1,11 @@
 import { createRepurposeJob, validateRepurposeRequest } from '@/lib/ai';
 import type { RepurposeRequest } from '@/lib/ai';
-
-function hasPreviewAccount(request: Request) {
-  return request.headers.get('x-toolars-preview-user') === 'true';
-}
+import { getSessionFromRequest } from '@/lib/auth';
+import { evaluateAiGenerationAccess, getPlanById } from '@/lib/plans';
 
 export async function POST(request: Request) {
-  if (!hasPreviewAccount(request)) {
+  const session = getSessionFromRequest(request);
+  if (!session) {
     return Response.json(
       { error: 'Account required for AI repurposing.' },
       { status: 401 },
@@ -25,13 +24,27 @@ export async function POST(request: Request) {
     return Response.json({ errors }, { status: 400 });
   }
 
+  const plan = getPlanById(session.planId);
+  const gate = evaluateAiGenerationAccess({
+    planId: session.planId,
+    selectedPlatformCount: body.platforms.length,
+    usedGenerations: 0,
+  });
+
+  if (!gate.allowed) {
+    return Response.json(
+      { error: gate.reason, upgradeLabel: gate.upgradeLabel },
+      { status: 402 },
+    );
+  }
+
   const job = createRepurposeJob(body);
 
   return Response.json({
     job,
     usage: {
-      plan: 'Pro preview',
-      remainingGenerations: 48,
+      plan: `${plan.name} preview`,
+      remainingGenerations: Math.max(0, plan.monthlyAiGenerations - 1),
     },
   });
 }

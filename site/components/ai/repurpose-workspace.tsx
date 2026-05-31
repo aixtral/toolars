@@ -26,7 +26,10 @@ import type {
   RepurposeStatus,
   RepurposeTone,
 } from '@/lib/ai';
+import { UpgradePrompt } from '@/components/billing';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from '@/components/ui';
+import { evaluateAiGenerationAccess } from '@/lib/plans';
+import type { PlanId } from '@/lib/plans';
 
 const defaultPlatforms: RepurposePlatform[] = ['twitter-thread', 'linkedin-post'];
 
@@ -61,7 +64,11 @@ function emptyOutput(platform: RepurposePlatform, tone: RepurposeTone): Repurpos
   };
 }
 
-export function RepurposeWorkspace() {
+interface RepurposeWorkspaceProps {
+  planId?: PlanId;
+}
+
+export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) {
   const [sourceType, setSourceType] = useState<RepurposeSourceType>('text');
   const [sourceValue, setSourceValue] = useState('');
   const [platforms, setPlatforms] = useState<RepurposePlatform[]>(defaultPlatforms);
@@ -72,6 +79,7 @@ export function RepurposeWorkspace() {
   const [outputs, setOutputs] = useState<RepurposeOutput[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [message, setMessage] = useState('Ready to generate.');
+  const [upgradeReason, setUpgradeReason] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
 
@@ -143,12 +151,26 @@ export function RepurposeWorkspace() {
   }
 
   async function generate(request: RepurposeRequest = selectedRequest) {
+    setUpgradeReason('');
     const validationErrors = validateRepurposeRequest(request);
     setErrors(validationErrors);
 
     if (validationErrors.length > 0) {
       setStatus('failed');
       setMessage('Check the highlighted AI inputs.');
+      return;
+    }
+
+    const gate = evaluateAiGenerationAccess({
+      planId,
+      selectedPlatformCount: request.platforms.length,
+      usedGenerations: 0,
+    });
+
+    if (!gate.allowed) {
+      setStatus('failed');
+      setUpgradeReason(gate.reason);
+      setMessage(gate.reason);
       return;
     }
 
@@ -166,6 +188,7 @@ export function RepurposeWorkspace() {
         headers: {
           'content-type': 'application/json',
           'x-toolars-preview-user': 'true',
+          'x-toolars-preview-plan': planId,
         },
         body: JSON.stringify(request),
         signal: controllerRef.current.signal,
@@ -175,6 +198,7 @@ export function RepurposeWorkspace() {
         const payload = (await response.json()) as { error?: string; errors?: string[] };
         const nextErrors = payload.errors ?? [payload.error ?? 'Generation failed.'];
         setErrors(nextErrors);
+        setUpgradeReason(response.status === 402 ? nextErrors.join(' ') : '');
         setStatus('failed');
         setMessage(nextErrors.join(' '));
         return;
@@ -219,6 +243,7 @@ export function RepurposeWorkspace() {
             <Badge variant="ai">AI workspace</Badge>
             <Badge>Account required</Badge>
             <Badge variant="warning">Pro preview</Badge>
+            <Badge>{planId} plan</Badge>
           </div>
           <CardTitle className="text-2xl leading-8">Source and controls</CardTitle>
           <p className="text-sm leading-5 text-neutral-600">
@@ -386,6 +411,10 @@ export function RepurposeWorkspace() {
       </Card>
 
       <section className="space-y-5">
+        {upgradeReason ? (
+          <UpgradePrompt feature="AI generation" reason={upgradeReason} />
+        ) : null}
+
         <Card>
           <CardHeader className="border-b border-neutral-200">
             <div className="flex flex-wrap items-center justify-between gap-3">

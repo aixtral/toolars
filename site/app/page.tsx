@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Container } from '@/components/layout';
 import { CategoryCard, ToolCard } from '@/components/tools';
 import { Badge, Card, CardContent, CardHeader, CardTitle, Input } from '@/components/ui';
@@ -67,13 +68,13 @@ export default function HomePage() {
               </CardHeader>
               <CardContent className="grid gap-2 sm:grid-cols-2">
                 {['Calculate BMI', 'Estimate mortgage', 'Compare interest', 'Repurpose content'].map((action) => (
-                  <a
+                  <Link
                     key={action}
                     className="rounded-lg border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-700 hover:border-brand-500 hover:text-ink"
                     href="/tools"
                   >
                     {action}
-                  </a>
+                  </Link>
                 ))}
               </CardContent>
             </Card>

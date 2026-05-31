@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpDown, Command, CornerDownLeft, Search, X } from 'lucide-react';
 import { TOOL_CATEGORIES } from '@/data/categories';
@@ -190,9 +191,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                 <ul className="mt-3 space-y-2 text-sm text-neutral-600">
                   <li>Check spelling or try different keywords</li>
                   <li>
-                    <a className="font-semibold text-brand-700 hover:underline" href="/tools">
+                    <Link className="font-semibold text-brand-700 hover:underline" href="/tools">
                       Browse all calculators
-                    </a>
+                    </Link>
                   </li>
                   <li>Search articles and guides</li>
                 </ul>

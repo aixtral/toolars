@@ -210,8 +210,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test -- calculators                     # expected: exit 0; template state tests pass
     pnpm --dir site test:e2e -- calculators                 # expected: exit 0; anonymous calculate/save/compare/share flows pass
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-31T06:09:08Z
+  status: done
   owner_mode: AFK
   estimate: 8h
   depends_on:

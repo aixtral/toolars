@@ -9,6 +9,12 @@ import type { CalculatorDefinition, ToolDefinition } from '@/data/types';
 import { ALL_TOOLS, getPopularTools, getToolBySlug } from '@/data/tools';
 import type { CalculatorSlug } from '@/lib/calculators';
 import { getCalculatorEngine } from '@/lib/calculators';
+import {
+  buildBreadcrumbSchema,
+  buildFaqPageSchema,
+  buildWebApplicationSchema,
+  serializeJsonLd,
+} from '@/lib/seo';
 
 type CalculatorTool = CalculatorDefinition & { slug: CalculatorSlug };
 
@@ -44,6 +50,17 @@ function relatedToolsFor(tool: CalculatorDefinition) {
     .slice(0, 4);
 }
 
+const calculatorFaq = [
+  {
+    question: 'Do I need an account?',
+    answer: 'No. Basic calculator use is free and does not require login.',
+  },
+  {
+    question: 'Where are saved results stored?',
+    answer: 'Saved and comparison results use local browser storage in this release.',
+  },
+] as const;
+
 export function generateStaticParams() {
   return APPROVED_CALCULATOR_SLUGS.map((slug) => ({ slug }));
 }
@@ -76,9 +93,27 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
   const engine = getCalculatorEngine(tool.slug);
   const relatedTools = relatedToolsFor(tool);
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Tools', url: '/tools' },
+    { name: tool.title, url: tool.route },
+  ]);
+  const webApplicationSchema = buildWebApplicationSchema(tool);
+  const faqSchema = buildFaqPageSchema(calculatorFaq);
 
   return (
     <main className="min-h-screen bg-porcelain text-ink">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(webApplicationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
+      />
       <Container className="space-y-7 py-8">
         <nav aria-label="Breadcrumb" className="text-sm font-semibold text-neutral-600">
           <Link className="hover:text-brand-700" href="/tools">
@@ -136,18 +171,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <aside className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
             <h2 className="text-xl font-bold leading-7 text-ink">FAQ</h2>
             <div className="mt-4 space-y-4">
-              <div>
-                <h3 className="text-sm font-bold text-ink">Do I need an account?</h3>
-                <p className="mt-1 text-sm leading-5 text-neutral-600">
-                  No. Basic calculator use is free and does not require login.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-ink">Where are saved results stored?</h3>
-                <p className="mt-1 text-sm leading-5 text-neutral-600">
-                  Saved and comparison results use local browser storage in this release.
-                </p>
-              </div>
+              {calculatorFaq.map((faq) => (
+                <div key={faq.question}>
+                  <h3 className="text-sm font-bold text-ink">{faq.question}</h3>
+                  <p className="mt-1 text-sm leading-5 text-neutral-600">{faq.answer}</p>
+                </div>
+              ))}
             </div>
           </aside>
         </section>

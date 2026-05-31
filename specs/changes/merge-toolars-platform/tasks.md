@@ -299,8 +299,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test -- seo                             # expected: exit 0; schema and metadata tests pass
     pnpm --dir site test:e2e -- seo                         # expected: exit 0; representative public pages expose metadata
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-31T08:23:23Z
+  status: done
   owner_mode: AFK
   estimate: 6h
   depends_on:

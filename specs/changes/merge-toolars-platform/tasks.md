@@ -178,6 +178,7 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
 - id: T-008
   title: Port calculator formulas into pure modules
   files:
+    - site/data/calculators/index.ts
     - site/lib/calculators
     - site/lib/formatting
   covers:
@@ -186,8 +187,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
   verify: |
     pnpm --dir site test -- calculators                     # expected: exit 0; formula and validation tests pass
     rg "document|window|fetch|useState" site/lib/calculators # expected: exit 1; pure modules do not use DOM/network/React APIs
-  red_at: pending-red
-  status: pending
+  red_at: 2026-05-31T06:00:26Z
+  status: done
   owner_mode: AFK
   estimate: 8h
   depends_on:

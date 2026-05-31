@@ -341,7 +341,7 @@ export const CALCULATOR_TOOLS: readonly CalculatorDefinition[] = calculatorSlugs
       isPopular: popularSlugs.has(slug),
       requiresAccount: false,
       sourceProject: 'aixtral-calm/vitalcalc',
-      formulaStatus: 'pending-migration',
+      formulaStatus: 'ported',
       seo: {
         title: `${title} | Free Online Tool - toolars`,
         description,

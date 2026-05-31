@@ -3,11 +3,28 @@ import { describe, expect, it } from 'vitest';
 import AnalyticsPage from '@/app/app/analytics/page';
 import BrandVoicePage from '@/app/app/brand-voice/page';
 import HistoryPage from '@/app/app/history/page';
+import RepurposePage from '@/app/app/repurpose/page';
 import SettingsPage from '@/app/app/settings/page';
 import TemplatesPage from '@/app/app/templates/page';
 import { AI_PLATFORM_GROUPS, AI_PLATFORMS } from '@/data/ai-platforms';
 
 describe('AI supporting pages', () => {
+  it('renders the repurpose workspace header with plan and usage context', async () => {
+    const page = await RepurposePage({
+      searchParams: Promise.resolve({ preview: '1' }),
+    });
+
+    render(page);
+
+    expect(screen.getByRole('region', { name: /ai workspace header/i })).toHaveTextContent(
+      /ai content repurposer/i,
+    );
+    expect(screen.getByRole('region', { name: /usage limits/i })).toHaveTextContent(
+      /ai generations left/i,
+    );
+    expect(screen.getByRole('region', { name: /ai repurpose workspace/i })).toBeInTheDocument();
+  });
+
   it('renders the template library with required template card metadata', () => {
     render(<TemplatesPage />);
 

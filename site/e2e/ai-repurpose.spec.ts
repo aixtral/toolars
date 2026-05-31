@@ -18,6 +18,21 @@ test.describe('AI repurpose workflow', () => {
     await expect(
       page.getByRole('heading', { name: /ai content repurposer/i }),
     ).toBeVisible();
+    await expect(page.getByRole('region', { name: /ai workspace header/i })).toBeVisible();
+    await expect(page.getByRole('region', { name: /usage limits/i })).toContainText(
+      /ai generations left/i,
+    );
+    await expect(
+      page.getByRole('region', { name: /ai repurpose workspace/i }),
+    ).toBeVisible();
+    await expect(page.getByRole('tablist', { name: /source type/i })).toBeVisible();
+    await expect(page.getByRole('group', { name: /platform picker/i })).toBeVisible();
+    await expect(page.getByRole('region', { name: /generation controls/i })).toContainText(
+      /toolars fast/i,
+    );
+    await expect(
+      page.getByRole('region', { name: /history and saved outputs/i }),
+    ).toContainText(/local draft history/i);
     await page.getByLabel(/source text/i).fill(
       'toolars helps operators move from a useful calculator to an AI workflow without losing focus.',
     );

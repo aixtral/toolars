@@ -235,9 +235,17 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
     setMessage(`${output.platformLabel} copied.`);
   }
 
+  const selectedToneLabel = AI_TONES.find((item) => item.id === tone)?.label ?? tone;
+  const selectedVoiceLabel =
+    AI_BRAND_VOICES.find((item) => item.id === brandVoiceId)?.label ?? brandVoiceId;
+  const selectedModelLabel = AI_MODELS.find((item) => item.id === model)?.label ?? model;
+
   return (
-    <section className="grid gap-5 xl:grid-cols-[minmax(0,420px)_1fr]">
-      <Card className="overflow-hidden">
+    <section
+      aria-label="AI repurpose workspace"
+      className="grid gap-5 xl:grid-cols-[minmax(0,460px)_1fr]"
+    >
+      <Card aria-label="Input panel" className="overflow-hidden">
         <CardHeader className="border-b border-neutral-200 bg-neutral-50">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="ai">AI workspace</Badge>
@@ -252,26 +260,43 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
           </p>
         </CardHeader>
         <CardContent className="space-y-5 p-5">
-          <div className="grid grid-cols-2 gap-2" aria-label="Source type">
+          <div
+            aria-label="Source type"
+            className="grid grid-cols-2 rounded-lg border border-neutral-200 bg-white p-1"
+            role="tablist"
+          >
             <Button
-              type="button"
+              aria-controls="source-panel-text"
+              aria-selected={sourceType === 'text'}
+              id="source-tab-text"
+              role="tab"
               variant={sourceType === 'text' ? 'primary' : 'secondary'}
               onClick={() => setSourceType('text')}
+              type="button"
             >
               <FileText aria-hidden="true" size={18} strokeWidth={2} />
               Text
             </Button>
             <Button
-              type="button"
+              aria-controls="source-panel-url"
+              aria-selected={sourceType === 'url'}
+              id="source-tab-url"
+              role="tab"
               variant={sourceType === 'url' ? 'primary' : 'secondary'}
               onClick={() => setSourceType('url')}
+              type="button"
             >
               <Globe2 aria-hidden="true" size={18} strokeWidth={2} />
               URL
             </Button>
           </div>
 
-          <div className="grid gap-2">
+          <div
+            aria-labelledby={`source-tab-${sourceType}`}
+            className="grid gap-2"
+            id={`source-panel-${sourceType}`}
+            role="tabpanel"
+          >
             {sourceType === 'text' ? (
               <>
                 <label className="text-sm font-semibold text-neutral-700" htmlFor="source-text">
@@ -302,8 +327,11 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             )}
           </div>
 
-          <fieldset className="grid gap-3">
+          <fieldset aria-label="Platform picker" className="grid gap-3">
             <legend className="text-sm font-semibold text-neutral-700">Platforms</legend>
+            <p className="text-sm leading-5 text-neutral-600">
+              Choose one or more destinations. Pro preview supports batch generation.
+            </p>
             <div className="grid max-h-64 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-1">
               {AI_PLATFORMS.map((platform) => (
                 <label
@@ -321,7 +349,22 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             </div>
           </fieldset>
 
-          <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-1">
+          <section
+            aria-label="Generation controls"
+            className="rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-bold uppercase text-neutral-500">
+                  Controls row
+                </h3>
+                <p className="mt-1 text-sm font-semibold text-ink">
+                  {selectedToneLabel} / {selectedVoiceLabel} / {selectedModelLabel}
+                </p>
+              </div>
+              <Badge variant="ai">{platforms.length} platforms</Badge>
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-3 xl:grid-cols-1">
             <label className="grid gap-2 text-sm font-semibold text-neutral-700">
               Tone
               <select
@@ -364,7 +407,8 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
                 ))}
               </select>
             </label>
-          </div>
+            </div>
+          </section>
 
           {errors.length > 0 ? (
             <div
@@ -375,7 +419,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             </div>
           ) : null}
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 rounded-lg border border-neutral-200 bg-white p-3">
             {status === 'streaming' ? (
               <Button type="button" variant="danger" onClick={cancelGeneration}>
                 <Square aria-hidden="true" size={18} strokeWidth={2} />
@@ -411,6 +455,26 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
       </Card>
 
       <section className="space-y-5">
+        <section
+          aria-label="Usage and plan state"
+          className="grid gap-3 rounded-lg border border-neutral-200 bg-white p-4 shadow-sm md:grid-cols-3"
+        >
+          <div>
+            <p className="text-xs font-bold uppercase text-neutral-500">Plan</p>
+            <p className="mt-1 text-sm font-semibold text-ink">{planId} plan</p>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase text-neutral-500">Generation mode</p>
+            <p className="mt-1 text-sm font-semibold text-ink">Streaming drafts</p>
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase text-neutral-500">Batch limit</p>
+            <p className="mt-1 text-sm font-semibold text-ink">
+              {platforms.length} selected outputs
+            </p>
+          </div>
+        </section>
+
         {upgradeReason ? (
           <UpgradePrompt feature="AI generation" reason={upgradeReason} />
         ) : null}
@@ -498,6 +562,33 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             </div>
           </CardContent>
         </Card>
+
+        <section
+          aria-label="History and saved outputs"
+          className="grid gap-4 rounded-lg border border-neutral-200 bg-white p-5 shadow-sm lg:grid-cols-2"
+        >
+          <div>
+            <p className="text-xs font-bold uppercase text-neutral-500">Local draft history</p>
+            <h3 className="mt-2 text-lg font-bold leading-6 text-ink">
+              Recent AI drafts stay nearby
+            </h3>
+            <p className="mt-2 text-sm leading-5 text-neutral-600">
+              Saved outputs use local preview history here. Cross-device sync belongs to the
+              account-backed Pro workflow.
+            </p>
+          </div>
+          <div className="grid gap-2">
+            {['Twitter Thread draft', 'LinkedIn Post draft', 'Newsletter draft'].map((item) => (
+              <div
+                className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2"
+                key={item}
+              >
+                <span className="text-sm font-semibold text-neutral-700">{item}</span>
+                <Badge>Preview</Badge>
+              </div>
+            ))}
+          </div>
+        </section>
       </section>
     </section>
   );

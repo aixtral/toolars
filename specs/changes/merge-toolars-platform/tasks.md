@@ -325,8 +325,8 @@ plan_ref: docs/architecture/IMPLEMENTATION-PLAN.md
     pnpm --dir site test:e2e                                # expected: exit 0
     cdc-workflow gate --mode standard --root .              # expected: exit 0
     cdc-workflow ship-preview --change merge-toolars-platform --root . # expected: preview generated
-  red_at: pending-red
-  status: pending
+  red_at: N/A
+  status: done
   owner_mode: HITL
   estimate: 2h
   depends_on:

@@ -32,7 +32,7 @@ covers:
 
 ## T-003 — Upgrade Shared Tool Card Affordances
 
-status: pending
+status: done
 owner_mode: active
 files:
   - site/components/tools/tool-card.tsx

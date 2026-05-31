@@ -46,7 +46,7 @@ covers:
 
 ## T-004 — Improve Directory Filter Framing
 
-status: pending
+status: done
 owner_mode: active
 files:
   - site/app/tools/page.tsx

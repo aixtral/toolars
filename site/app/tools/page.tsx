@@ -13,6 +13,29 @@ import { buildDirectoryMetadata } from '@/lib/seo';
 
 export const metadata = buildDirectoryMetadata('tools');
 
+const filterControls = [
+  {
+    id: 'directory-category',
+    label: 'Category',
+    options: ['All categories', 'AI Content', 'Health & Wellness', 'Finance', 'Wealth'],
+  },
+  {
+    id: 'directory-tool-type',
+    label: 'Tool type',
+    options: ['All tools', 'Calculator', 'AI Tool'],
+  },
+  {
+    id: 'directory-pricing',
+    label: 'Pricing',
+    options: ['Any pricing', 'Free', 'Freemium', 'Subscription'],
+  },
+  {
+    id: 'directory-sort',
+    label: 'Sort',
+    options: ['Most popular', 'Newest', 'Highest rated', 'A-Z'],
+  },
+];
+
 export default function ToolsDirectoryPage() {
   const tools = allDirectoryTools(12);
   const categories = categoryCards();
@@ -40,11 +63,14 @@ export default function ToolsDirectoryPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card aria-label="Quick access">
             <CardHeader>
-              <CardTitle>Favorites and Recently Used</CardTitle>
+              <CardTitle>Quick access</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-3">
+              <p className="text-sm font-semibold text-neutral-600">
+                Favorites and recently used
+              </p>
               {[...favorites, ...recent].slice(0, 5).map((tool) => (
                 <a key={tool.slug} href={tool.route} className="text-sm font-semibold text-neutral-700 hover:text-brand-700">
                   {tool.title}
@@ -79,6 +105,30 @@ export default function ToolsDirectoryPage() {
                 <SlidersHorizontal aria-hidden="true" size={18} strokeWidth={2} />
                 Filters
               </button>
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+              {filterControls.map((control) => (
+                <div key={control.id} className="grid gap-1.5">
+                  <label
+                    className="text-xs font-bold uppercase leading-4 text-neutral-500"
+                    htmlFor={control.id}
+                  >
+                    {control.label}
+                  </label>
+                  <select
+                    id={control.id}
+                    aria-label={control.label}
+                    className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-semibold text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                    defaultValue={control.options[0]}
+                  >
+                    {control.options.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
             </div>
           </div>
 

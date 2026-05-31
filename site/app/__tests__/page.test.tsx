@@ -7,6 +7,9 @@ describe('HomePage', () => {
     render(<HomePage />);
 
     expect(
+      screen.getByRole('region', { name: /tool discovery dashboard/i }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole('heading', { name: /search 73 calculators and ai tools/i }),
     ).toBeInTheDocument();
     expect(
@@ -18,5 +21,14 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('heading', { name: 'Popular Tools' }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /continue where you left off/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /favorites/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: /comparison mode/i }),
+    ).toHaveTextContent(/compare saved calculator results locally/i);
   });
 });

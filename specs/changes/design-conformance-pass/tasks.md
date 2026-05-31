@@ -18,7 +18,7 @@ covers:
 
 ## T-002 — Lock Home Dashboard Contract
 
-status: pending
+status: done
 owner_mode: active
 files:
   - site/app/__tests__/page.test.tsx

@@ -17,16 +17,32 @@ export default function HomePage() {
   const recent = recentTools();
   const favorites = favoriteTools();
   const categories = categoryCards();
+  const quickActions = [
+    { label: 'Calculate BMI', href: '/tools/bmi-calculator' },
+    { label: 'Estimate mortgage', href: '/tools/mortgage-calculator' },
+    { label: 'Compare interest', href: '/tools/compound-interest' },
+    { label: 'Repurpose content', href: '/app/repurpose' },
+  ];
 
   return (
     <main className="min-h-screen bg-porcelain text-ink">
-      <Container className="flex flex-col gap-8 py-8">
-        <section className="grid gap-4 lg:grid-cols-[1.1fr_1.9fr]">
+      <Container className="flex flex-col gap-6 py-6 lg:py-8">
+        <div className="flex flex-wrap items-center gap-2 border-b border-neutral-200 pb-4 text-sm font-semibold text-neutral-700">
+          <Badge variant="success">Free calculators</Badge>
+          <Badge>Local browser calculations</Badge>
+          <Badge>No signup for calculators</Badge>
+          <Badge>Multilingual ready</Badge>
+          <Badge variant="ai">AI tools require account</Badge>
+        </div>
+
+        <section
+          aria-label="Tool discovery dashboard"
+          className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.9fr)_minmax(280px,0.95fr)]"
+        >
           <div className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
             <div className="flex flex-wrap gap-2">
-              <Badge variant="success">Free calculators</Badge>
-              <Badge>Local where possible</Badge>
-              <Badge variant="ai">AI account required</Badge>
+              <Badge variant="success">73 calculators</Badge>
+              <Badge variant="ai">AI SaaS tools</Badge>
             </div>
             <h1 className="mt-4 text-4xl font-bold leading-[44px]">
               Search 73 calculators and AI tools
@@ -48,40 +64,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card className="md:col-span-1">
-              <CardHeader>
-                <p className="text-sm font-medium text-accent-ai">Featured AI Tool</p>
-                <CardTitle>AI Content Repurposer</CardTitle>
-              </CardHeader>
-              <CardContent>
-                Transform one source into posts, email, articles, and launch updates.
-                <a className="mt-4 block font-semibold text-brand-700 hover:underline" href="/ai">
-                  View AI tools
-                </a>
-              </CardContent>
-            </Card>
-
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-2 sm:grid-cols-2">
-                {['Calculate BMI', 'Estimate mortgage', 'Compare interest', 'Repurpose content'].map((action) => (
-                  <Link
-                    key={action}
-                    className="rounded-lg border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-700 hover:border-brand-500 hover:text-ink"
-                    href="/tools"
-                  >
-                    {action}
-                  </Link>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        <section className="grid gap-4 lg:grid-cols-[1.2fr_1fr_1fr]">
           <Card>
             <CardHeader>
               <CardTitle>Popular Tools</CardTitle>
@@ -95,9 +77,42 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
+          <div className="grid gap-4">
+            <Card>
+              <CardHeader>
+                <p className="text-sm font-medium text-accent-ai">Featured AI Tool</p>
+                <CardTitle>AI Content Repurposer</CardTitle>
+              </CardHeader>
+              <CardContent>
+                Transform one source into posts, email, articles, and launch updates.
+                <Link className="mt-4 block font-semibold text-brand-700 hover:underline" href="/ai">
+                  View AI tools
+                </Link>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-2">
+                {quickActions.map((action) => (
+                  <Link
+                    key={action.label}
+                    className="rounded-lg border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-700 hover:border-brand-500 hover:text-ink"
+                    href={action.href}
+                  >
+                    {action.label}
+                  </Link>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="grid gap-4 lg:grid-cols-[1fr_1fr]">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Tools</CardTitle>
+              <CardTitle>Continue where you left off</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-3">
               {recent.map((tool) => (
@@ -120,6 +135,25 @@ export default function HomePage() {
               ))}
             </CardContent>
           </Card>
+        </section>
+
+        <section
+          aria-label="Comparison mode"
+          className="grid gap-3 rounded-lg border border-neutral-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center"
+        >
+          <div>
+            <h2 className="text-xl font-semibold leading-7 text-ink">Comparison mode</h2>
+            <p className="mt-1 text-sm leading-5 text-neutral-600">
+              Compare saved calculator results locally, keep anonymous calculator work
+              private, and upgrade later only for cross-device sync or premium exports.
+            </p>
+          </div>
+          <Link
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-neutral-200 px-4 text-sm font-semibold text-neutral-700 hover:border-brand-500 hover:text-ink"
+            href="/tools"
+          >
+            Browse calculators
+          </Link>
         </section>
 
         <section aria-label="Tool categories" className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">

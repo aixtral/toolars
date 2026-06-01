@@ -42,4 +42,28 @@ test.describe('SEO content surfaces', () => {
     expect(jsonLd.some((entry) => entry.includes('"@type":"WebApplication"'))).toBe(true);
     expect(jsonLd.some((entry) => entry.includes('"@type":"FAQPage"'))).toBe(true);
   });
+
+  test('exposes sitemap, robots, and llms discovery manifests', async ({ page }) => {
+    const sitemap = await page.request.get('/sitemap.xml');
+    expect(sitemap.ok()).toBe(true);
+    const sitemapText = await sitemap.text();
+    expect(sitemapText).toContain('<loc>https://toolars.com/tools/bmi-calculator</loc>');
+    expect(sitemapText).toContain('<loc>https://toolars.com/pricing</loc>');
+    expect(sitemapText).not.toContain('/app/repurpose');
+    expect(sitemapText).not.toContain('/login');
+
+    const robots = await page.request.get('/robots.txt');
+    expect(robots.ok()).toBe(true);
+    const robotsText = await robots.text();
+    expect(robotsText).toContain('Disallow: /api/');
+    expect(robotsText).toContain('Disallow: /app/');
+    expect(robotsText).toContain('Sitemap: https://toolars.com/sitemap.xml');
+
+    const llms = await page.request.get('/llms.txt');
+    expect(llms.ok()).toBe(true);
+    const llmsText = await llms.text();
+    expect(llmsText).toContain('# toolars');
+    expect(llmsText).toContain('73 free calculators');
+    expect(llmsText).toContain('AI tools are subscription-gated');
+  });
 });

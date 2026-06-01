@@ -7,6 +7,9 @@ import {
   buildCategoryMetadata,
   buildDirectoryMetadata,
   buildFaqPageSchema,
+  buildLlmsText,
+  buildPublicSitemapEntries,
+  buildRobotsPolicy,
   buildWebApplicationSchema,
 } from '@/lib/seo';
 import { getToolBySlug } from '@/data/tools';
@@ -129,5 +132,45 @@ describe('public page metadata helpers', () => {
         name: 'toolars editorial',
       },
     });
+  });
+
+  it('builds a deterministic public sitemap for SEO and GEO discovery', () => {
+    const entries = buildPublicSitemapEntries('https://toolars.com');
+    const urls = entries.map((entry) => entry.url);
+
+    expect(entries).toHaveLength(87);
+    expect(urls).toContain('https://toolars.com/');
+    expect(urls).toContain('https://toolars.com/tools');
+    expect(urls).toContain('https://toolars.com/tools/bmi-calculator');
+    expect(urls).toContain('https://toolars.com/blog/free-calculators-ai-tools');
+    expect(urls).toContain('https://toolars.com/pricing');
+    expect(urls).toContain('https://toolars.com/privacy');
+    expect(urls).not.toContain('https://toolars.com/app/repurpose');
+    expect(urls).not.toContain('https://toolars.com/login');
+    expect(urls).not.toContain('https://toolars.com/register');
+  });
+
+  it('builds robots policy for public pages while excluding account and API surfaces', () => {
+    expect(buildRobotsPolicy('https://toolars.com')).toEqual({
+      rules: [
+        {
+          userAgent: '*',
+          allow: '/',
+          disallow: ['/api/', '/app/', '/login', '/register'],
+        },
+      ],
+      sitemap: 'https://toolars.com/sitemap.xml',
+    });
+  });
+
+  it('builds llms.txt content that summarizes the public product boundary', () => {
+    const text = buildLlmsText('https://toolars.com');
+
+    expect(text).toContain('# toolars');
+    expect(text).toContain('73 free calculators');
+    expect(text).toContain('AI tools are subscription-gated');
+    expect(text).toContain('https://toolars.com/tools/bmi-calculator');
+    expect(text).toContain('https://toolars.com/pricing');
+    expect(text).toContain('Anonymous calculator inputs stay local');
   });
 });

@@ -42,7 +42,7 @@ plan_ref: specs/changes/toolars-v1-design-integration/design.md
   verify: |
     git merge-base --is-ancestor origin/feat/calculator-detail-design-pass HEAD # expected: exit 0
   red_at: N/A
-  status: in_progress
+  status: done
   owner_mode: active
   estimate: 45min
   depends_on:
@@ -64,7 +64,7 @@ plan_ref: specs/changes/toolars-v1-design-integration/design.md
     cdc-workflow gate --mode standard --root .                             # expected: exit 0
     cdc-workflow ship-preview --change toolars-v1-design-integration --root . # expected: exit 0
   red_at: N/A
-  status: pending
+  status: done
   owner_mode: active
   estimate: 60min
   depends_on:

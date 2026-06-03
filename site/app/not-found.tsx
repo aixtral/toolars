@@ -1,7 +1,13 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Home, Search, Wrench } from 'lucide-react';
 import { Container } from '@/components/layout';
 import { Badge } from '@/components/ui/badge';
+
+export const metadata: Metadata = {
+  title: 'Page not found | toolars',
+  description: 'Recover from a missing toolars page with links to tools, AI workflows, and contact routes.',
+};
 
 const recoveryLinks = [
   {

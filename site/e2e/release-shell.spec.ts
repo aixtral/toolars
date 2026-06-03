@@ -21,6 +21,7 @@ test.describe('release shell polish', () => {
     const response = await page.goto('/missing-toolars-route');
 
     expect(response?.status()).toBe(404);
+    await expect(page).toHaveTitle(/page not found \| toolars/i);
     await expect(
       page.getByRole('heading', { name: /we could not find that tool/i }),
     ).toBeVisible();

@@ -41,8 +41,8 @@ plan_ref: specs/changes/release-shell-polish-pass/design.md
     - release-shell/R3-S1
   verify: |
     pnpm --dir site test -- footer not-found                                # expected: red before implementation, exit non-zero
-  red_at: pending
-  status: in_progress
+  red_at: 2026-06-03T14:00:38Z
+  status: done
   owner_mode: active
   estimate: 30min
   depends_on:
@@ -62,7 +62,7 @@ plan_ref: specs/changes/release-shell-polish-pass/design.md
     pnpm --dir site test -- footer not-found                                # expected: exit 0
     pnpm --dir site test:e2e -- release-shell                               # expected: exit 0
   red_at: N/A
-  status: pending
+  status: done
   owner_mode: active
   estimate: 60min
   depends_on:
@@ -83,7 +83,7 @@ plan_ref: specs/changes/release-shell-polish-pass/design.md
     cdc-workflow gate --mode standard --root .                               # expected: exit 0
     cdc-workflow ship-preview --change release-shell-polish-pass --root .    # expected: exit 0
   red_at: N/A
-  status: pending
+  status: in_progress
   owner_mode: active
   estimate: 45min
   depends_on:

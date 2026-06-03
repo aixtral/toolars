@@ -9,7 +9,7 @@ describe('Footer', () => {
     const footer = screen.getByRole('contentinfo', { name: /site footer/i });
 
     expect(within(footer).getByText(/free calculators, account-gated ai/i)).toBeInTheDocument();
-    expect(within(footer).getByRole('link', { exact: true, name: 'All tools' })).toHaveAttribute(
+    expect(within(footer).getByRole('link', { name: /^All tools$/i })).toHaveAttribute(
       'href',
       '/tools',
     );

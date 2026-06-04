@@ -7,6 +7,7 @@ import LoginPage from '@/app/login/page';
 import PricingPage from '@/app/pricing/page';
 import PrivacyPage from '@/app/privacy/page';
 import RegisterPage from '@/app/register/page';
+import TermsPage from '@/app/terms/page';
 
 describe('public commercial routes', () => {
   it('renders pricing with free calculators and Pro AI boundaries', () => {
@@ -75,5 +76,10 @@ describe('public commercial routes', () => {
     render(<PrivacyPage />);
     expect(screen.getByRole('heading', { name: /privacy/i, level: 1 })).toBeInTheDocument();
     expect(screen.getByText(/anonymous calculator inputs stay local/i)).toBeInTheDocument();
+
+    render(<TermsPage />);
+    expect(screen.getByRole('heading', { name: /terms/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByText(/free calculators are provided for general informational use/i)).toBeInTheDocument();
+    expect(screen.getByText(/ai tools require an account and may require a paid plan/i)).toBeInTheDocument();
   });
 });

@@ -43,8 +43,8 @@ plan_ref: specs/changes/legal-terms-discovery-pass/design.md
     - legal-terms/R3-S1
   verify: |
     pnpm --dir site test -- commercial-pages footer metadata                # expected: red before implementation
-  red_at: pending
-  status: in_progress
+  red_at: 2026-06-04T15:00:03Z
+  status: done
   owner_mode: active
   estimate: 35min
   depends_on:
@@ -63,7 +63,7 @@ plan_ref: specs/changes/legal-terms-discovery-pass/design.md
     pnpm --dir site test -- commercial-pages footer metadata                # expected: exit 0
     pnpm --dir site test:e2e -- public-pages seo                            # expected: exit 0
   red_at: N/A
-  status: pending
+  status: done
   owner_mode: active
   estimate: 60min
   depends_on:
@@ -84,7 +84,7 @@ plan_ref: specs/changes/legal-terms-discovery-pass/design.md
     cdc-workflow gate --mode standard --root .                               # expected: exit 0
     cdc-workflow ship-preview --change legal-terms-discovery-pass --root .   # expected: exit 0
   red_at: N/A
-  status: pending
+  status: in_progress
   owner_mode: active
   estimate: 45min
   depends_on:

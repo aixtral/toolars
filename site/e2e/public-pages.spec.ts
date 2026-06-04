@@ -57,6 +57,11 @@ const publicPages = [
     checks: [/anonymous calculator inputs stay local/i, /account-backed AI workflows/i],
   },
   {
+    path: '/terms',
+    heading: /^terms$/i,
+    checks: [/free calculators are provided for general informational use/i, /ai tools require an account/i],
+  },
+  {
     path: '/login',
     heading: /sign in to toolars/i,
     checks: [/Email/i, /Password/i, /Create account/i],
@@ -92,7 +97,7 @@ test.describe('public discovery pages', () => {
     expect(width.body).toBeLessThanOrEqual(width.viewport);
   });
 
-  for (const path of ['/pricing', '/login', '/compare']) {
+  for (const path of ['/pricing', '/login', '/compare', '/terms']) {
     test(`keeps ${path} inside the 390px mobile viewport`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(path);

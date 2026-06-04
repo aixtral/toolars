@@ -138,13 +138,14 @@ describe('public page metadata helpers', () => {
     const entries = buildPublicSitemapEntries('https://toolars.com');
     const urls = entries.map((entry) => entry.url);
 
-    expect(entries).toHaveLength(87);
+    expect(entries).toHaveLength(88);
     expect(urls).toContain('https://toolars.com/');
     expect(urls).toContain('https://toolars.com/tools');
     expect(urls).toContain('https://toolars.com/tools/bmi-calculator');
     expect(urls).toContain('https://toolars.com/blog/free-calculators-ai-tools');
     expect(urls).toContain('https://toolars.com/pricing');
     expect(urls).toContain('https://toolars.com/privacy');
+    expect(urls).toContain('https://toolars.com/terms');
     expect(urls).not.toContain('https://toolars.com/app/repurpose');
     expect(urls).not.toContain('https://toolars.com/login');
     expect(urls).not.toContain('https://toolars.com/register');
@@ -171,6 +172,7 @@ describe('public page metadata helpers', () => {
     expect(text).toContain('AI tools are subscription-gated');
     expect(text).toContain('https://toolars.com/tools/bmi-calculator');
     expect(text).toContain('https://toolars.com/pricing');
+    expect(text).toContain('https://toolars.com/terms');
     expect(text).toContain('Anonymous calculator inputs stay local');
   });
 });

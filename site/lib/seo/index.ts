@@ -57,6 +57,7 @@ const publicStaticRoutes = [
   '/about',
   '/contact',
   '/privacy',
+  '/terms',
 ] as const;
 
 const directoryMetadata: Record<DirectoryPage, Metadata> = {
@@ -303,6 +304,7 @@ export function buildLlmsText(siteUrl = DEFAULT_SITE_URL) {
     `- Pricing: ${absoluteUrl('/pricing', base)}`,
     `- Compare saved calculator results: ${absoluteUrl('/compare', base)}`,
     `- Privacy: ${absoluteUrl('/privacy', base)}`,
+    `- Terms: ${absoluteUrl('/terms', base)}`,
     '',
     '## Featured calculators',
     featuredCalculators,

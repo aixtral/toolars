@@ -29,6 +29,10 @@ describe('Footer', () => {
       'href',
       '/privacy',
     );
+    expect(within(footer).getByRole('link', { name: /terms/i })).toHaveAttribute(
+      'href',
+      '/terms',
+    );
     expect(within(footer).getByRole('link', { name: /open app/i })).toHaveAttribute(
       'href',
       '/app/repurpose',

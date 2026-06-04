@@ -49,6 +49,7 @@ test.describe('SEO content surfaces', () => {
     const sitemapText = await sitemap.text();
     expect(sitemapText).toContain('<loc>https://toolars.com/tools/bmi-calculator</loc>');
     expect(sitemapText).toContain('<loc>https://toolars.com/pricing</loc>');
+    expect(sitemapText).toContain('<loc>https://toolars.com/terms</loc>');
     expect(sitemapText).not.toContain('/app/repurpose');
     expect(sitemapText).not.toContain('/login');
 
@@ -65,5 +66,6 @@ test.describe('SEO content surfaces', () => {
     expect(llmsText).toContain('# toolars');
     expect(llmsText).toContain('73 free calculators');
     expect(llmsText).toContain('AI tools are subscription-gated');
+    expect(llmsText).toContain('https://toolars.com/terms');
   });
 });

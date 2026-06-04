@@ -27,6 +27,7 @@ const footerGroups = [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
       { label: 'Privacy', href: '/privacy' },
+      { label: 'Terms', href: '/terms' },
       { label: 'English', href: '/en' },
     ],
   },

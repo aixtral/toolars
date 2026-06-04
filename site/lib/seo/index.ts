@@ -228,6 +228,39 @@ export function buildBlogPostingSchema(article: SeoArticle) {
   };
 }
 
+export function buildOrganizationSchema(siteUrl = DEFAULT_SITE_URL) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'toolars',
+    url: absoluteUrl('/', siteUrl),
+    logo: absoluteUrl('/favicon.svg', siteUrl),
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        url: absoluteUrl('/contact', siteUrl),
+      },
+    ],
+  };
+}
+
+export function buildWebSiteSchema(siteUrl = DEFAULT_SITE_URL) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'toolars',
+    url: absoluteUrl('/', siteUrl),
+    description:
+      'Search 73 free calculators and account-based AI tools from one fast utility dashboard.',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${absoluteUrl('/tools', siteUrl)}?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
 export function serializeJsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c');
 }

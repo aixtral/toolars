@@ -11,19 +11,19 @@ Execute in dependency order. Each implementation task should land with evidence.
 - [x] 1.2 Commit the spec baseline.
 
 ## 2. Red Phase
-- [ ] 2.1 Add unit tests for `Organization` and `WebSite` JSON-LD helpers.
+- [x] 2.1 Add unit tests for `Organization` and `WebSite` JSON-LD helpers.
   - Files: `site/lib/seo/__tests__/metadata.test.ts`
   - Covers: R2-S1, R2-S2
-- [ ] 2.2 Add E2E assertions for root Open Graph, Twitter card, and site-level JSON-LD.
+- [x] 2.2 Add E2E assertions for root Open Graph, Twitter card, and site-level JSON-LD.
   - Files: `site/e2e/seo.spec.ts`
   - Covers: R1-S1, R2-S1, R2-S2
-- [ ] 2.3 Run focused tests and record the expected failing result.
+- [x] 2.3 Run focused tests and record the expected failing result.
 
 ## 3. Green Phase
-- [ ] 3.1 Implement site graph schema helpers in `site/lib/seo/index.ts`.
-- [ ] 3.2 Implement root metadata and JSON-LD rendering in `site/app/layout.tsx`.
-- [ ] 3.3 Run focused tests and confirm green.
-- [ ] 3.4 Commit tests and implementation.
+- [x] 3.1 Implement site graph schema helpers in `site/lib/seo/index.ts`.
+- [x] 3.2 Implement root metadata and JSON-LD rendering in `site/app/layout.tsx`.
+- [x] 3.3 Run focused tests and confirm green.
+- [x] 3.4 Commit tests and implementation.
 
 ## 4. Verification And Ship
 - [ ] 4.1 Run lint, type-check, unit tests, E2E, and build.

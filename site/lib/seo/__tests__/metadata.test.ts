@@ -8,8 +8,10 @@ import {
   buildDirectoryMetadata,
   buildFaqPageSchema,
   buildLlmsText,
+  buildOrganizationSchema,
   buildPublicSitemapEntries,
   buildRobotsPolicy,
+  buildWebSiteSchema,
   buildWebApplicationSchema,
 } from '@/lib/seo';
 import { getToolBySlug } from '@/data/tools';
@@ -174,5 +176,36 @@ describe('public page metadata helpers', () => {
     expect(text).toContain('https://toolars.com/pricing');
     expect(text).toContain('https://toolars.com/terms');
     expect(text).toContain('Anonymous calculator inputs stay local');
+  });
+
+  it('builds site-level Organization and WebSite schema for SEO and GEO entity grounding', () => {
+    expect(buildOrganizationSchema('https://toolars.com/')).toMatchObject({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'toolars',
+      url: 'https://toolars.com/',
+      logo: 'https://toolars.com/favicon.svg',
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          url: 'https://toolars.com/contact',
+        },
+      ],
+    });
+
+    expect(buildWebSiteSchema('https://toolars.com/')).toMatchObject({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'toolars',
+      url: 'https://toolars.com/',
+      description:
+        'Search 73 free calculators and account-based AI tools from one fast utility dashboard.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://toolars.com/tools?search={search_term_string}',
+        'query-input': 'required name=search_term_string',
+      },
+    });
   });
 });

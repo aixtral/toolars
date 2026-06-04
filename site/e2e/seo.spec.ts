@@ -5,6 +5,30 @@ async function canonicalHref(page: import('@playwright/test').Page) {
 }
 
 test.describe('SEO content surfaces', () => {
+  test('exposes root site metadata and searchable website JSON-LD', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute('content', 'toolars');
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website');
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      'content',
+      'https://toolars.com',
+    );
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      'content',
+      'summary_large_image',
+    );
+
+    const jsonLd = await page
+      .locator('script[type="application/ld+json"]')
+      .evaluateAll((nodes) => nodes.map((node) => node.textContent ?? ''));
+
+    expect(jsonLd.some((entry) => entry.includes('"@type":"Organization"'))).toBe(true);
+    expect(jsonLd.some((entry) => entry.includes('"@type":"WebSite"'))).toBe(true);
+    expect(jsonLd.some((entry) => entry.includes('"SearchAction"'))).toBe(true);
+    expect(jsonLd.some((entry) => entry.includes('/tools?search={search_term_string}'))).toBe(true);
+  });
+
   test('renders a crawlable blog index with English-first article links', async ({ page }) => {
     await page.goto('/blog');
 

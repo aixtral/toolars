@@ -84,7 +84,7 @@ plan_ref: specs/changes/legal-terms-discovery-pass/design.md
     cdc-workflow gate --mode standard --root .                               # expected: exit 0
     cdc-workflow ship-preview --change legal-terms-discovery-pass --root .   # expected: exit 0
   red_at: N/A
-  status: in_progress
+  status: done
   owner_mode: active
   estimate: 45min
   depends_on:

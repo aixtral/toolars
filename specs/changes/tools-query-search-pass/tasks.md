@@ -26,8 +26,8 @@ Execute in dependency order. Each implementation task should land with evidence.
 - [x] 3.4 Commit tests and implementation.
 
 ## 4. Verification And Ship
-- [ ] 4.1 Run lint, type-check, unit tests, E2E, and build.
-- [ ] 4.2 Run CDC gate and ship preview.
-- [ ] 4.3 Run browser smoke on `http://127.0.0.1:9088/tools?search=inflation`.
-- [ ] 4.4 Commit task closure and push branch.
-- [ ] 4.5 Compound learning decision: record `none` unless a repeatable process issue appears.
+- [x] 4.1 Run lint, type-check, unit tests, E2E, and build.
+- [x] 4.2 Run CDC gate and ship preview.
+- [x] 4.3 Run browser smoke on `http://127.0.0.1:9088/tools?search=inflation`.
+- [x] 4.4 Commit task closure and push branch.
+- [x] 4.5 Compound learning decision: `none`; no repeatable CDC/process issue found.

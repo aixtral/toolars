@@ -9,6 +9,6 @@
 ## Acceptance Summary
 
 - `/tools` without `search` keeps the current default directory result set.
-- `/tools?search=mortgage` shows a populated search field and a relevant Mortgage Calculator card.
+- `/tools?search=inflation` shows a populated search field and a relevant Inflation Calculator card.
 - The filtered result count and empty state are explicit enough for users and crawlers.
 - Tests cover both default and query-driven behavior.

@@ -20,9 +20,9 @@ The tools directory must render search-driven results when a `search` query para
 ### Scenarios
 
 #### Scenario R2-S1: Search query shows ranked result
-**Given** a visitor opens `/tools?search=mortgage`  
+**Given** a visitor opens `/tools?search=inflation`  
 **When** the directory renders  
-**Then** the search box contains `mortgage` and the tool grid includes `Mortgage Calculator`.
+**Then** the search box contains `inflation` and the tool grid includes `Inflation Calculator`.
 
 #### Scenario R2-S2: No matches has an explicit empty state
 **Given** a visitor opens `/tools?search=definitely-not-a-tool`  

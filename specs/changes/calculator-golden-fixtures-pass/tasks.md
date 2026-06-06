@@ -14,28 +14,28 @@ Follow TDD for production code changes.
 
 ## 2. Red: Calculator Quality Tests
 
-- [ ] 2.1 Add failing tests for calculator risk metadata completeness.
+- [x] 2.1 Add failing tests for calculator risk metadata completeness.
   - Files: `site/lib/calculators/__tests__/calculators.test.ts`
   - Covers: R1-S1, R1-S2
-- [ ] 2.2 Add failing tests for high-risk golden fixtures and source URLs.
+- [x] 2.2 Add failing tests for high-risk golden fixtures and source URLs.
   - Files: `site/lib/calculators/__tests__/calculators.test.ts`
   - Covers: R2-S1, R2-S2
-- [ ] 2.3 Add failing tests for BMI, blood pressure, and debt payoff unsafe-output boundaries.
+- [x] 2.3 Add failing tests for BMI, blood pressure, and debt payoff unsafe-output boundaries.
   - Files: `site/lib/calculators/__tests__/calculators.test.ts`
   - Covers: R3-S1, R3-S2
 
 ## 3. Green: Quality Registry And Formula Fixes
 
-- [ ] 3.1 Implement calculator quality profiles and golden fixture helpers.
+- [x] 3.1 Implement calculator quality profiles and golden fixture helpers.
   - Files: `site/lib/calculators/quality.ts`
   - Covers: R1-S1, R1-S2, R2-S1
-- [ ] 3.2 Add source-backed golden fixtures for the first high-risk health and finance set.
+- [x] 3.2 Add source-backed golden fixtures for the first high-risk health and finance set.
   - Files: `site/lib/calculators/quality.ts`
   - Covers: R2-S1, R2-S2
-- [ ] 3.3 Fix formula/category defects exposed by the golden tests.
+- [x] 3.3 Fix formula/category defects exposed by the golden tests.
   - Files: `site/lib/calculators/index.ts`
   - Covers: R3-S1, R3-S2
-- [ ] 3.4 Run focused calculator tests and commit implementation.
+- [x] 3.4 Run focused calculator tests and commit implementation.
 
 ## 4. Verification And Ship
 

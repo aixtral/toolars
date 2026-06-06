@@ -193,9 +193,17 @@ function success(
 
 function bmiCategory(bmi: number) {
   if (bmi < 18.5) return 'Underweight';
-  if (bmi < 24) return 'Normal';
-  if (bmi < 28) return 'Overweight';
+  if (bmi < 25) return 'Normal';
+  if (bmi < 30) return 'Overweight';
   return 'Obese';
+}
+
+function bloodPressureCategory(systolic: number, diastolic: number) {
+  if (systolic > 180 || diastolic > 120) return 'Hypertensive crisis';
+  if (systolic >= 140 || diastolic >= 90) return 'Stage 2 hypertension';
+  if (systolic >= 130 || diastolic >= 80) return 'Stage 1 hypertension';
+  if (systolic >= 120 && diastolic < 80) return 'Elevated';
+  return 'Normal';
 }
 
 function amortizedPayment(principal: number, annualRate: number, years: number) {
@@ -260,7 +268,7 @@ const engines: Record<CalculatorSlug, CalculatorEngine> = {
     'category from systolic and diastolic thresholds',
     [input('systolic', 'Systolic', 120, 'mmHg', 1), input('diastolic', 'Diastolic', 80, 'mmHg', 1)],
     ({ systolic, diastolic }) => {
-      const category = systolic >= 140 || diastolic >= 90 ? 'High' : systolic >= 130 || diastolic >= 80 ? 'Elevated' : 'Normal';
+      const category = bloodPressureCategory(systolic, diastolic);
       return success('Systolic pressure', systolic, { diastolic, category });
     },
   ),
@@ -421,17 +429,59 @@ const engines: Record<CalculatorSlug, CalculatorEngine> = {
     [input('amount', 'Amount', 100, undefined, 0), input('exchangeRate', 'Exchange rate', 1.08, undefined, 0)],
     ({ amount, exchangeRate }) => success('Converted amount', amount * exchangeRate),
   ),
-  'debt-payoff': buildEngine(
-    'debt-payoff',
-    'Debt Payoff Calculator',
-    'months = amortized payoff from balance, APR, and payment',
-    [input('balance', 'Balance', 10000, '$', 0), input('annualRate', 'APR', 18, '%', 0), input('monthlyPayment', 'Monthly payment', 500, '$', 1)],
-    ({ balance, annualRate, monthlyPayment }) => {
+  'debt-payoff': {
+    slug: 'debt-payoff',
+    title: 'Debt Payoff Calculator',
+    formulaLabel: 'months = amortized payoff from balance, APR, and payment',
+    inputs: [
+      input('balance', 'Balance', 10000, '$', 0),
+      input('annualRate', 'APR', 18, '%', 0),
+      input('monthlyPayment', 'Monthly payment', 500, '$', 1),
+    ],
+    calculate(raw = {}) {
+      const errors: CalculatorValidationError[] = [];
+      const balance = readNumber(raw, errors, 'balance', {
+        defaultValue: 10000,
+        label: 'Balance',
+        min: 0,
+      });
+      const annualRate = readNumber(raw, errors, 'annualRate', {
+        defaultValue: 18,
+        label: 'APR',
+        min: 0,
+      });
+      const monthlyPayment = readNumber(raw, errors, 'monthlyPayment', {
+        defaultValue: 500,
+        label: 'Monthly payment',
+        minExclusive: 0,
+      });
+
       const monthlyRate = annualRate / 100 / 12;
-      const months = monthlyRate === 0 ? balance / monthlyPayment : -Math.log(1 - (balance * monthlyRate) / monthlyPayment) / Math.log(1 + monthlyRate);
-      return success('Months to payoff', Math.ceil(Math.max(0, months)), { totalPaid: roundTo(Math.ceil(Math.max(0, months)) * monthlyPayment, 2) });
+      const firstMonthInterest = balance * monthlyRate;
+      if (monthlyRate > 0 && monthlyPayment <= firstMonthInterest) {
+        errors.push({
+          field: 'monthlyPayment',
+          message: 'Monthly payment must exceed first-month interest.',
+        });
+      }
+
+      if (errors.length > 0) return { ok: false, slug: 'debt-payoff', errors };
+
+      const months =
+        monthlyRate === 0
+          ? balance / monthlyPayment
+          : -Math.log(1 - firstMonthInterest / monthlyPayment) / Math.log(1 + monthlyRate);
+      const roundedMonths = Math.ceil(Math.max(0, months));
+      return {
+        ok: true,
+        slug: 'debt-payoff',
+        formulaLabel: 'months = amortized payoff from balance, APR, and payment',
+        ...success('Months to payoff', roundedMonths, {
+          totalPaid: roundTo(roundedMonths * monthlyPayment, 2),
+        }),
+      };
     },
-  ),
+  },
   'discount-calculator': buildEngine(
     'discount-calculator',
     'Discount Calculator',

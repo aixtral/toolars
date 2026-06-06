@@ -28,19 +28,19 @@ Production code pass. TDD required.
 
 ## 3. Implementation Green
 
-- [ ] 3.1 Replace preview billing signature helpers with Lemon raw-body
+- [x] 3.1 Replace preview billing signature helpers with Lemon raw-body
   signature helpers while preserving timing-safe comparison.
   - files: `site/lib/billing/index.ts`
-- [ ] 3.2 Add provider event parser, variant mapping, access mapper, and
+- [x] 3.2 Add provider event parser, variant mapping, access mapper, and
   processor/service functions.
   - files: `site/lib/billing/index.ts`
-- [ ] 3.3 Add server-only in-memory billing repository and test reset helpers.
+- [x] 3.3 Add server-only in-memory billing repository and test reset helpers.
   - files: `site/lib/billing/index.ts`
-- [ ] 3.4 Update `/api/billing/webhook` to require `X-Signature` and
+- [x] 3.4 Update `/api/billing/webhook` to require `X-Signature` and
   `X-Event-Name`, process events idempotently, and return structured responses.
   - files: `site/app/api/billing/webhook/route.ts`
-- [ ] 3.5 Run focused tests until green.
-- [ ] 3.6 Commit implementation.
+- [x] 3.5 Run focused tests until green.
+- [x] 3.6 Commit implementation.
 
 ## 4. Verification And Ship
 

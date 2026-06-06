@@ -14,17 +14,19 @@ const variantPlanMap = new Map([
 ]);
 
 function subscriptionPayload({
+  eventName = 'subscription_created',
   status = 'active',
   variantId = 100,
   updatedAt = '2026-06-06T12:00:00.000000Z',
 }: {
+  eventName?: string;
   status?: string;
   variantId?: number;
   updatedAt?: string;
 } = {}) {
   return JSON.stringify({
     meta: {
-      event_name: 'subscription_created',
+      event_name: eventName,
       custom_data: {
         workspace_id: 'workspace_123',
       },
@@ -118,9 +120,8 @@ describe('Lemon Squeezy billing helpers', () => {
   });
 
   it('processes duplicate provider events idempotently', () => {
-    const body = subscriptionPayload();
     const event = parseLemonSqueezySubscriptionEvent({
-      body,
+      body: subscriptionPayload({ eventName: 'subscription_updated' }),
       eventName: 'subscription_updated',
       variantPlanMap,
     });
@@ -147,7 +148,10 @@ describe('Lemon Squeezy billing helpers', () => {
 
   it('falls back to free access for expired paid variants', () => {
     const event = parseLemonSqueezySubscriptionEvent({
-      body: subscriptionPayload({ status: 'expired' }),
+      body: subscriptionPayload({
+        eventName: 'subscription_expired',
+        status: 'expired',
+      }),
       eventName: 'subscription_expired',
       variantPlanMap,
     });

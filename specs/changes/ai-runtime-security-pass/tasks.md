@@ -22,12 +22,12 @@ Production code pass. TDD required.
 
 ## 3. Implementation Green
 
-- [ ] 3.1 Add AI request normalization helpers and limits.
-- [ ] 3.2 Add preview runtime usage/rate guard.
-- [ ] 3.3 Wire bounded body reading, normalization, and runtime guard into
+- [x] 3.1 Add AI request normalization helpers and limits.
+- [x] 3.2 Add preview runtime usage/rate guard.
+- [x] 3.3 Wire bounded body reading, normalization, and runtime guard into
   `POST /api/ai/repurpose`.
-- [ ] 3.4 Run focused tests until green.
-- [ ] 3.5 Commit implementation.
+- [x] 3.4 Run focused tests until green.
+- [x] 3.5 Commit implementation.
 
 ## 4. Verification And Ship
 

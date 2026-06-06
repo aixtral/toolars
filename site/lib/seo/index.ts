@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { BLOG_ARTICLES } from '@/data/blog';
+import { CALCULATOR_TOOLS } from '@/data/calculators';
 import type { ToolDefinition } from '@/data/types';
 import { getAlternateLanguageLinks } from '@/lib/i18n';
 
@@ -23,6 +25,40 @@ export interface SeoArticle {
   updatedAt: string;
   author: string;
 }
+
+export interface PublicSitemapEntry {
+  url: string;
+  lastModified: string;
+  changeFrequency: 'daily' | 'weekly' | 'monthly';
+  priority: number;
+}
+
+export interface RobotsPolicy {
+  rules: Array<{
+    userAgent: string;
+    allow: string;
+    disallow: string[];
+  }>;
+  sitemap: string;
+}
+
+const DEFAULT_SITE_URL = 'https://toolars.com';
+const MANIFEST_LAST_MODIFIED = '2026-06-01';
+
+const publicStaticRoutes = [
+  '/',
+  '/tools',
+  '/ai',
+  '/categories/health',
+  '/categories/finance',
+  '/blog',
+  '/pricing',
+  '/compare',
+  '/about',
+  '/contact',
+  '/privacy',
+  '/terms',
+] as const;
 
 const directoryMetadata: Record<DirectoryPage, Metadata> = {
   home: {
@@ -192,6 +228,126 @@ export function buildBlogPostingSchema(article: SeoArticle) {
   };
 }
 
+export function buildOrganizationSchema(siteUrl = DEFAULT_SITE_URL) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'toolars',
+    url: absoluteUrl('/', siteUrl),
+    logo: absoluteUrl('/favicon.svg', siteUrl),
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        url: absoluteUrl('/contact', siteUrl),
+      },
+    ],
+  };
+}
+
+export function buildWebSiteSchema(siteUrl = DEFAULT_SITE_URL) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'toolars',
+    url: absoluteUrl('/', siteUrl),
+    description:
+      'Search 73 free calculators and account-based AI tools from one fast utility dashboard.',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${absoluteUrl('/tools', siteUrl)}?search={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
 export function serializeJsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
+function normalizeSiteUrl(siteUrl = DEFAULT_SITE_URL) {
+  return siteUrl.replace(/\/+$/, '');
+}
+
+function absoluteUrl(path: string, siteUrl = DEFAULT_SITE_URL) {
+  const base = normalizeSiteUrl(siteUrl);
+  return path === '/' ? `${base}/` : `${base}${path}`;
+}
+
+export function buildPublicSitemapEntries(siteUrl = DEFAULT_SITE_URL): PublicSitemapEntry[] {
+  const staticEntries = publicStaticRoutes.map((route) => ({
+    url: absoluteUrl(route, siteUrl),
+    lastModified: MANIFEST_LAST_MODIFIED,
+    changeFrequency: route === '/' ? 'daily' as const : 'weekly' as const,
+    priority: route === '/' ? 1 : 0.8,
+  }));
+
+  const calculatorEntries = CALCULATOR_TOOLS.map((tool) => ({
+    url: absoluteUrl(tool.route, siteUrl),
+    lastModified: MANIFEST_LAST_MODIFIED,
+    changeFrequency: 'monthly' as const,
+    priority: tool.isPopular ? 0.85 : 0.7,
+  }));
+
+  const articleEntries = BLOG_ARTICLES.map((article) => ({
+    url: absoluteUrl(`/blog/${article.slug}`, siteUrl),
+    lastModified: article.updatedAt,
+    changeFrequency: 'monthly' as const,
+    priority: 0.65,
+  }));
+
+  return [...staticEntries, ...calculatorEntries, ...articleEntries];
+}
+
+export function buildRobotsPolicy(siteUrl = DEFAULT_SITE_URL): RobotsPolicy {
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/app/', '/login', '/register'],
+      },
+    ],
+    sitemap: absoluteUrl('/sitemap.xml', siteUrl),
+  };
+}
+
+export function buildLlmsText(siteUrl = DEFAULT_SITE_URL) {
+  const base = normalizeSiteUrl(siteUrl);
+  const featuredCalculators = CALCULATOR_TOOLS.filter((tool) => tool.isPopular)
+    .slice(0, 8)
+    .map((tool) => `- ${tool.title}: ${absoluteUrl(tool.route, base)}`)
+    .join('\n');
+
+  const blogRoutes = BLOG_ARTICLES.map(
+    (article) => `- ${article.title}: ${absoluteUrl(`/blog/${article.slug}`, base)}`,
+  ).join('\n');
+
+  return [
+    '# toolars',
+    '',
+    'Toolars is an English-first utility website with 73 free calculators and account-based AI content tools.',
+    'Public calculators are free and usable without login. AI tools are subscription-gated, and Pro workflows can include cross-device save, PDF/CSV advanced exports, and batch tools.',
+    'Anonymous calculator inputs stay local unless the user explicitly saves or syncs through an account-backed workflow.',
+    '',
+    '## Key public routes',
+    `- Home: ${absoluteUrl('/', base)}`,
+    `- All tools: ${absoluteUrl('/tools', base)}`,
+    `- AI tools directory: ${absoluteUrl('/ai', base)}`,
+    `- Pricing: ${absoluteUrl('/pricing', base)}`,
+    `- Compare saved calculator results: ${absoluteUrl('/compare', base)}`,
+    `- Privacy: ${absoluteUrl('/privacy', base)}`,
+    `- Terms: ${absoluteUrl('/terms', base)}`,
+    '',
+    '## Featured calculators',
+    featuredCalculators,
+    '',
+    '## Editorial guides',
+    blogRoutes,
+    '',
+    '## Boundaries',
+    '- Calculator pages are public and indexable.',
+    '- Account app pages, API routes, login, and register are excluded from the sitemap.',
+    '- The AI directory is public, but generation, history, analytics, settings, and brand voice require account context.',
+  ].join('\n');
 }

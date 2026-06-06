@@ -1,6 +1,14 @@
 'use client';
 
-import { CheckCircle2, Copy, GitCompareArrows, Save } from 'lucide-react';
+import {
+  BarChart3,
+  BookOpenText,
+  CheckCircle2,
+  Copy,
+  GitCompareArrows,
+  HelpCircle,
+  Save,
+} from 'lucide-react';
 import type { FormEvent } from 'react';
 import { useMemo, useState } from 'react';
 import type { CalculatorDefinition, ToolDefinition } from '@/data/types';
@@ -20,6 +28,14 @@ interface CalculatorWorkspaceProps {
   slug: CalculatorSlug;
   relatedTools: readonly ToolDefinition[];
 }
+
+const detailTabs = [
+  { id: 'breakdown', label: 'Breakdown', icon: BarChart3 },
+  { id: 'formula', label: 'Formula', icon: BookOpenText },
+  { id: 'faq', label: 'FAQ', icon: HelpCircle },
+] as const;
+
+type DetailTabId = (typeof detailTabs)[number]['id'];
 
 function initialValues(engine: CalculatorEngine) {
   return Object.fromEntries(
@@ -81,6 +97,7 @@ export function CalculatorWorkspace({
     calculateCalculator(engine.slug, valuesForEngine(engine, defaults)),
   );
   const [statusMessage, setStatusMessage] = useState('');
+  const [activeDetailTab, setActiveDetailTab] = useState<DetailTabId>('breakdown');
 
   const errorsByField = useMemo(() => {
     if (result.ok) return new Map<string, string>();
@@ -117,8 +134,12 @@ export function CalculatorWorkspace({
   }
 
   return (
-    <section aria-label={`${tool.title} workspace`} className="space-y-5">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_380px]">
+    <section
+      aria-label={`${tool.title} workspace`}
+      className="space-y-6"
+      id="calculator-workspace"
+    >
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
         <Card className="overflow-hidden">
           <CardHeader className="border-b border-neutral-200 bg-neutral-50">
             <div className="flex flex-wrap items-center gap-2">
@@ -126,14 +147,20 @@ export function CalculatorWorkspace({
               <Badge>No login</Badge>
               <Badge>Local actions</Badge>
             </div>
-            <CardTitle className="text-2xl leading-8">Calculator inputs</CardTitle>
+            <CardTitle className="text-2xl leading-8" id="calculator-inputs-title">
+              Calculator inputs
+            </CardTitle>
             <p className="max-w-2xl text-sm leading-5 text-neutral-600">
               Calculators stay free and private. Results run in your browser and basic use
               never requires an account.
             </p>
           </CardHeader>
           <CardContent className="p-5">
-            <form className="grid gap-4" onSubmit={handleSubmit}>
+            <form
+              aria-labelledby="calculator-inputs-title"
+              className="grid gap-4"
+              onSubmit={handleSubmit}
+            >
               {engine.inputs.map((input) => {
                 const error = errorsByField.get(input.name);
                 const fieldId = `calculator-${input.name}`;
@@ -273,8 +300,131 @@ export function CalculatorWorkspace({
         </Card>
       </div>
 
+      <Card aria-label="Result details" className="overflow-hidden">
+        <CardHeader className="border-b border-neutral-200 bg-white">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase text-neutral-500">Interpretation</p>
+              <CardTitle className="mt-1 text-2xl leading-8">Result details</CardTitle>
+            </div>
+            <div
+              aria-label="Result detail sections"
+              className="grid grid-cols-3 rounded-lg border border-neutral-200 bg-neutral-50 p-1"
+              role="tablist"
+            >
+              {detailTabs.map((tab) => {
+                const Icon = tab.icon;
+                const selected = activeDetailTab === tab.id;
+
+                return (
+                  <button
+                    aria-controls={`calculator-detail-panel-${tab.id}`}
+                    aria-selected={selected}
+                    className={
+                      selected
+                        ? 'inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-white px-3 text-sm font-semibold text-ink shadow-sm'
+                        : 'inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-semibold text-neutral-600 transition-colors hover:text-ink'
+                    }
+                    id={`calculator-detail-tab-${tab.id}`}
+                    key={tab.id}
+                    onClick={() => setActiveDetailTab(tab.id)}
+                    role="tab"
+                    type="button"
+                  >
+                    <Icon aria-hidden="true" size={15} strokeWidth={2} />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-5">
+          <section
+            aria-labelledby={`calculator-detail-tab-${activeDetailTab}`}
+            className="rounded-lg border border-neutral-200 bg-neutral-50 p-4"
+            id={`calculator-detail-panel-${activeDetailTab}`}
+            role="tabpanel"
+          >
+            {activeDetailTab === 'breakdown' ? (
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+                <div>
+                  <h3 className="text-lg font-bold leading-6 text-ink">Result breakdown</h3>
+                  <p className="mt-2 text-sm leading-5 text-neutral-600">
+                    {result.ok
+                      ? `Your current ${result.primaryLabel} result is ${displayNumber(
+                          result.primaryValue,
+                        )}. Review each output value before saving or comparing it.`
+                      : 'Fix the highlighted inputs to unlock the result breakdown.'}
+                  </p>
+                </div>
+                {result.ok ? (
+                  <dl className="grid gap-2">
+                    {Object.entries(result.values).map(([key, value]) => (
+                      <div
+                        className="flex items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-white px-3 py-2"
+                        key={key}
+                      >
+                        <dt className="text-sm font-semibold capitalize text-neutral-600">
+                          {key.replace(/([A-Z])/g, ' $1')}
+                        </dt>
+                        <dd className="text-sm font-bold text-ink">{displayValue(value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
+              </div>
+            ) : null}
+
+            {activeDetailTab === 'formula' ? (
+              <div>
+                <h3 className="text-lg font-bold leading-6 text-ink">Formula in plain English</h3>
+                <p className="mt-2 text-sm font-semibold leading-5 text-ink">
+                  {engine.formulaLabel}
+                </p>
+                <p className="mt-2 text-sm leading-5 text-neutral-600">
+                  The calculator applies your visible inputs to this formula, validates the
+                  numbers, and returns a deterministic result without network or account
+                  dependencies.
+                </p>
+              </div>
+            ) : null}
+
+            {activeDetailTab === 'faq' ? (
+              <div className="grid gap-4 md:grid-cols-3">
+                {[
+                  {
+                    question: 'Do I need an account?',
+                    answer: 'No. Basic calculator use is free and works without login.',
+                  },
+                  {
+                    question: 'Can I compare results?',
+                    answer: 'Yes. Save and compare actions use local browser storage.',
+                  },
+                  {
+                    question: 'Can I export later?',
+                    answer: 'Advanced PDF and CSV exports are planned as Pro workflows.',
+                  },
+                ].map((item) => (
+                  <div
+                    className="rounded-lg border border-neutral-200 bg-white p-4"
+                    key={item.question}
+                  >
+                    <h3 className="text-sm font-bold text-ink">{item.question}</h3>
+                    <p className="mt-2 text-sm leading-5 text-neutral-600">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </section>
+        </CardContent>
+      </Card>
+
       {relatedTools.length > 0 ? (
-        <section className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
+        <section
+          aria-label="Related tools"
+          className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm"
+        >
           <h2 className="text-2xl font-bold leading-8 text-ink">Related tools</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {relatedTools.map((relatedTool) => (
@@ -292,6 +442,17 @@ export function CalculatorWorkspace({
           </div>
         </section>
       ) : null}
+
+      <aside
+        aria-label="Sponsored placement"
+        className="rounded-lg border border-dashed border-neutral-300 bg-neutral-50 p-4 text-sm leading-5 text-neutral-600"
+      >
+        <p className="text-xs font-bold uppercase text-neutral-500">Sponsor slot</p>
+        <p className="mt-1">
+          Reserved after the calculator workflow so advertising never appears between the
+          form and result.
+        </p>
+      </aside>
     </section>
   );
 }

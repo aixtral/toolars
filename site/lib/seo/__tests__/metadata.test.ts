@@ -7,6 +7,11 @@ import {
   buildCategoryMetadata,
   buildDirectoryMetadata,
   buildFaqPageSchema,
+  buildLlmsText,
+  buildOrganizationSchema,
+  buildPublicSitemapEntries,
+  buildRobotsPolicy,
+  buildWebSiteSchema,
   buildWebApplicationSchema,
 } from '@/lib/seo';
 import { getToolBySlug } from '@/data/tools';
@@ -127,6 +132,79 @@ describe('public page metadata helpers', () => {
       author: {
         '@type': 'Organization',
         name: 'toolars editorial',
+      },
+    });
+  });
+
+  it('builds a deterministic public sitemap for SEO and GEO discovery', () => {
+    const entries = buildPublicSitemapEntries('https://toolars.com');
+    const urls = entries.map((entry) => entry.url);
+
+    expect(entries).toHaveLength(88);
+    expect(urls).toContain('https://toolars.com/');
+    expect(urls).toContain('https://toolars.com/tools');
+    expect(urls).toContain('https://toolars.com/tools/bmi-calculator');
+    expect(urls).toContain('https://toolars.com/blog/free-calculators-ai-tools');
+    expect(urls).toContain('https://toolars.com/pricing');
+    expect(urls).toContain('https://toolars.com/privacy');
+    expect(urls).toContain('https://toolars.com/terms');
+    expect(urls).not.toContain('https://toolars.com/app/repurpose');
+    expect(urls).not.toContain('https://toolars.com/login');
+    expect(urls).not.toContain('https://toolars.com/register');
+  });
+
+  it('builds robots policy for public pages while excluding account and API surfaces', () => {
+    expect(buildRobotsPolicy('https://toolars.com')).toEqual({
+      rules: [
+        {
+          userAgent: '*',
+          allow: '/',
+          disallow: ['/api/', '/app/', '/login', '/register'],
+        },
+      ],
+      sitemap: 'https://toolars.com/sitemap.xml',
+    });
+  });
+
+  it('builds llms.txt content that summarizes the public product boundary', () => {
+    const text = buildLlmsText('https://toolars.com');
+
+    expect(text).toContain('# toolars');
+    expect(text).toContain('73 free calculators');
+    expect(text).toContain('AI tools are subscription-gated');
+    expect(text).toContain('https://toolars.com/tools/bmi-calculator');
+    expect(text).toContain('https://toolars.com/pricing');
+    expect(text).toContain('https://toolars.com/terms');
+    expect(text).toContain('Anonymous calculator inputs stay local');
+  });
+
+  it('builds site-level Organization and WebSite schema for SEO and GEO entity grounding', () => {
+    expect(buildOrganizationSchema('https://toolars.com/')).toMatchObject({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'toolars',
+      url: 'https://toolars.com/',
+      logo: 'https://toolars.com/favicon.svg',
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          url: 'https://toolars.com/contact',
+        },
+      ],
+    });
+
+    expect(buildWebSiteSchema('https://toolars.com/')).toMatchObject({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'toolars',
+      url: 'https://toolars.com/',
+      description:
+        'Search 73 free calculators and account-based AI tools from one fast utility dashboard.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://toolars.com/tools?search={search_term_string}',
+        'query-input': 'required name=search_term_string',
       },
     });
   });

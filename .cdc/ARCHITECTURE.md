@@ -10,31 +10,56 @@
 
 ```yaml
 project: toolars
-last_synced: 2026-05-30
-covered_changes: []
-curator: codex + cdc-workflow context bootstrap
+last_synced: 2026-06-06
+covered_changes:
+  - merge-toolars-platform
+  - design-conformance-pass
+  - toolars-v1-design-integration
+  - seo-discovery-manifests-pass
+  - site-graph-metadata-pass
+  - tools-query-search-pass
+curator: codex + context-refresh-and-integration-pass
 spec_version: v1
 mode: A-architect
-status: intended architecture approved for documentation/spec phase
+status: current runnable architecture plus open productionization work
 ```
 
 ## 1. Current Repository Shape
 
-The current repository is a design handoff workspace, not an implementation workspace.
+The current repository contains a runnable Next.js App Router implementation
+under `site/`, CDC workflow state under `.cdc/`, implementation specs under
+`specs/changes/`, product/architecture/QA docs under `docs/`, and design
+artifacts under `design/`.
 
 ```mermaid
 graph TD
   repo["toolars/"]
-  repo --> designMd["DESIGN.md"]
+  repo --> site["site/"]
+  site --> app["app/ routes"]
+  site --> components["components/"]
+  site --> data["data registry"]
+  site --> lib["lib modules"]
+  site --> e2e["e2e tests"]
   repo --> images["design/images/"]
+  repo --> docs["docs/"]
+  repo --> specs["specs/changes/"]
   repo --> cdc[".cdc/"]
   images --> generated["original_generated_files/"]
   images --> icons["extracted_tool_icons/"]
 ```
 
-There is currently no `site/package.json`, `site/app/`, `site/public/`, backend
-service, database schema, or test harness in this directory. Future application
-code must be created under `site/`.
+Current site stack:
+
+| Area | Current implementation |
+|---|---|
+| Framework | Next.js App Router 16.2.6 under `site/` |
+| Language | TypeScript 5.9.3 |
+| UI | Tailwind CSS 4, local shadcn-style primitives, Lucide icons |
+| Tests | Vitest + Testing Library + Playwright |
+| Public data | Typed calculator, AI tool, locale, blog, category registries |
+| Calculator logic | Pure `site/lib/calculators` engines independent of React/browser/network |
+| Search | Shared `site/lib/search` helper used by command palette and `/tools?search=` |
+| SEO/GEO | Metadata helpers, sitemap, robots, llms.txt, JSON-LD schemas |
 
 ## 2. Intended Product Architecture
 
@@ -68,12 +93,21 @@ graph TD
 
 ## 3. Proposed Module Map
 
-The approved implementation target is a Next.js App Router application under
-`site/`:
+The current module map is a Next.js App Router application under `site/`:
 
 ```text
-src/
-  app/ or pages/                 route layer
+site/
+  app/                            route layer
+    page.tsx                      search-first home dashboard
+    tools/page.tsx                public tools directory; reads `search` query
+    tools/[slug]/page.tsx         calculator detail pages
+    categories/*                  health and finance category pages
+    ai/page.tsx                   public AI tools directory
+    app/*                         account/AI app pages
+    api/*                         AI repurpose and billing webhook route handlers
+    blog/*                        SEO blog index and article routes
+    sitemap.ts, robots.ts         discovery manifests
+    llms.txt/route.ts             LLM discovery summary
   components/
     layout/                      shell, header, sidebar, footer
     navigation/                  mega menu, mobile drawer
@@ -93,6 +127,10 @@ src/
     auth/                        auth helpers
     ai/                          provider/client wrappers
 ```
+
+Note: `auth/`, `ai/`, and `billing/` currently contain preview-safe
+implementation logic and tests. They are not yet connected to real Supabase,
+provider APIs, billing account storage, or production usage metering.
 
 ## 4. Dependency Rules
 
@@ -132,6 +170,18 @@ These rules should hold regardless of final framework choice.
 | Billing | Lemon Squeezy | Existing source-project direction and indie SaaS fit. |
 | Tests | Vitest + Testing Library + Playwright | Unit, component, and E2E gates. |
 
+Current implementation status:
+
+| Layer | Status |
+|---|---|
+| Web framework | Implemented and verified under `site/`. |
+| Language | Implemented as TypeScript. |
+| Styling | Implemented with Tailwind CSS and local primitives; design conformance passes exist. |
+| Auth/DB | Preview auth only; Supabase/Postgres not yet implemented. |
+| AI | Deterministic preview generator; provider adapters not yet implemented. |
+| Billing | Plan gates and webhook signature parsing exist; subscription persistence not yet implemented. |
+| Tests | Implemented; latest current-branch evidence includes 78 unit/component tests and 38 E2E tests. |
+
 ## 7. Data Architecture Questions
 
 The product likely needs separate persistence tiers:
@@ -160,6 +210,23 @@ Minimum gates before implementation can be called complete:
 - SEO/schema validation for representative calculator, category, blog, and home pages.
 - Performance checks for public calculator pages and search.
 
+Current verification baseline:
+
+```bash
+pnpm --dir site lint
+pnpm --dir site type-check
+pnpm --dir site test
+pnpm --dir site test:e2e
+pnpm --dir site build
+cdc-workflow gate --mode standard --root .
+cdc-workflow ship-preview --change <change-id> --root .
+```
+
+The current branch stack passes these gates as of `tools-query-search-pass`.
+The `/tools` route is now dynamic because it reads `searchParams` for
+server-rendered query results; public calculator detail routes remain SSG via
+`generateStaticParams`.
+
 ## 9. Known Architecture Risks
 
 | Risk | Impact | Mitigation |
@@ -172,6 +239,8 @@ Minimum gates before implementation can be called complete:
 
 ## 10. Maintenance
 
-- Update this file after framework selection and before implementation planning.
+- Update this file after major branch-stack integration, before real backend
+  implementation, and before production release review.
 - Add ADRs for framework choice, data model, auth/billing, i18n routing, and calculator registry strategy.
 - Use `cdc-workflow gate --mode standard --root .` before spec/propose and implementation phases.
+- Run `cdc-role-security-audit` before releasing real auth, AI provider, billing, API key, or cross-device persistence features.

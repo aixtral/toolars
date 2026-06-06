@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetAiPreviewRuntimeState } from '@/lib/ai/runtime-security';
+import { readSecurityEvents, resetSecurityEvents } from '@/lib/security/events';
 import { POST } from './route';
 
 const requestBody = {
@@ -15,6 +16,7 @@ const requestBody = {
 describe('POST /api/ai/repurpose', () => {
   afterEach(() => {
     resetAiPreviewRuntimeState();
+    resetSecurityEvents();
   });
 
   function previewRequest(body: unknown, plan = 'pro') {
@@ -41,6 +43,15 @@ describe('POST /api/ai/repurpose', () => {
     expect(await response.json()).toEqual({
       error: 'Account required for AI repurposing.',
     });
+    expect(readSecurityEvents()).toMatchObject([
+      {
+        route: '/api/ai/repurpose',
+        category: 'ai',
+        action: 'missing_session',
+        outcome: 'denied',
+        status: 401,
+      },
+    ]);
   });
 
   it('returns output cards for authenticated preview users', async () => {
@@ -130,5 +141,35 @@ describe('POST /api/ai/repurpose', () => {
     expect(await finalResponse?.json()).toEqual({
       error: 'Too many AI generation requests. Try again shortly.',
     });
+  });
+
+  it('logs plan denials without recording source text', async () => {
+    const sourceValue = 'sensitive-ai-source-text-for-log-test';
+    const response = await POST(
+      previewRequest(
+        {
+          ...requestBody,
+          sourceValue,
+        },
+        'free',
+      ),
+    );
+
+    expect(response.status).toBe(402);
+    expect(readSecurityEvents()).toMatchObject([
+      {
+        route: '/api/ai/repurpose',
+        category: 'ai',
+        action: 'plan_denied',
+        outcome: 'denied',
+        status: 402,
+        metadata: {
+          planId: 'free',
+          selectedPlatformCount: 2,
+          userId: 'preview-free-user',
+        },
+      },
+    ]);
+    expect(JSON.stringify(readSecurityEvents())).not.toContain(sourceValue);
   });
 });

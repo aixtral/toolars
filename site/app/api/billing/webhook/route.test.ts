@@ -3,6 +3,7 @@ import {
   createLemonSqueezyWebhookSignature,
   resetBillingWebhookRuntimeState,
 } from '@/lib/billing';
+import { readSecurityEvents, resetSecurityEvents } from '@/lib/security/events';
 import { POST } from './route';
 
 function subscriptionBody({
@@ -57,6 +58,7 @@ function signedRequest(body: string, eventName = 'subscription_created') {
 describe('POST /api/billing/webhook', () => {
   beforeEach(() => {
     resetBillingWebhookRuntimeState();
+    resetSecurityEvents();
     vi.stubEnv('TOOLARS_BILLING_WEBHOOK_SECRET', 'lemon_test_secret');
     vi.stubEnv('TOOLARS_LEMONSQUEEZY_PRO_VARIANT_IDS', '100');
     vi.stubEnv('TOOLARS_LEMONSQUEEZY_TEAM_VARIANT_IDS', '200');
@@ -64,6 +66,7 @@ describe('POST /api/billing/webhook', () => {
 
   afterEach(() => {
     resetBillingWebhookRuntimeState();
+    resetSecurityEvents();
     vi.unstubAllEnvs();
   });
 
@@ -79,6 +82,15 @@ describe('POST /api/billing/webhook', () => {
     expect(await response.json()).toEqual({
       error: 'Invalid billing webhook signature.',
     });
+    expect(readSecurityEvents()).toMatchObject([
+      {
+        route: '/api/billing/webhook',
+        category: 'billing',
+        action: 'invalid_signature',
+        outcome: 'invalid',
+        status: 401,
+      },
+    ]);
   });
 
   it('rejects old preview headers without Lemon X-Signature', async () => {
@@ -136,6 +148,51 @@ describe('POST /api/billing/webhook', () => {
       error: 'Unknown Lemon Squeezy subscription variant.',
       received: false,
     });
+  });
+
+  it('logs unsupported signed payloads without recording raw body or signature', async () => {
+    const rawBody = JSON.stringify({
+      meta: {
+        event_name: 'subscription_created',
+      },
+      customer_email: 'customer@example.com',
+      secret: 'lemon_test_secret',
+      marker: 'sensitive-webhook-raw-body',
+    });
+    const signature = createLemonSqueezyWebhookSignature({
+      body: rawBody,
+      secret: 'lemon_test_secret',
+    });
+
+    const response = await POST(
+      new Request('http://127.0.0.1/api/billing/webhook', {
+        method: 'POST',
+        headers: {
+          'X-Event-Name': 'subscription_created',
+          'X-Signature': signature,
+        },
+        body: rawBody,
+      }),
+    );
+
+    expect(response.status).toBe(400);
+    expect(readSecurityEvents()).toMatchObject([
+      {
+        route: '/api/billing/webhook',
+        category: 'billing',
+        action: 'unsupported_event',
+        outcome: 'invalid',
+        status: 400,
+        metadata: {
+          eventName: 'subscription_created',
+        },
+      },
+    ]);
+    const eventsJson = JSON.stringify(readSecurityEvents());
+    expect(eventsJson).not.toContain('sensitive-webhook-raw-body');
+    expect(eventsJson).not.toContain(signature);
+    expect(eventsJson).not.toContain('lemon_test_secret');
+    expect(eventsJson).not.toContain('customer@example.com');
   });
 
   it('does not accept the development fallback secret in production', async () => {

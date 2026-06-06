@@ -17,14 +17,14 @@ Production code pass. TDD required.
 
 ## 2. TDD Red
 
-- [ ] 2.1 Add failing billing library tests for Lemon signature verification,
+- [x] 2.1 Add failing billing library tests for Lemon signature verification,
   provider payload parsing, status access mapping, unknown variants, and
   idempotent duplicate processing.
   - covers: R1-S1, R2-S1, R2-S2, R3-S1, R4-S1, R4-S2
-- [ ] 2.2 Add failing route tests for `X-Signature`, old preview headers,
+- [x] 2.2 Add failing route tests for `X-Signature`, old preview headers,
   duplicate delivery, and unknown variant responses.
   - covers: R1-S1, R1-S2, R3-S1
-- [ ] 2.3 Commit RED tests after confirming focused billing tests fail.
+- [x] 2.3 Commit RED tests after confirming focused billing tests fail.
 
 ## 3. Implementation Green
 

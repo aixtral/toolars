@@ -1,26 +1,95 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createBillingWebhookSignature } from '@/lib/billing';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  createLemonSqueezyWebhookSignature,
+  resetBillingWebhookRuntimeState,
+} from '@/lib/billing';
 import { POST } from './route';
 
-const body = JSON.stringify({
-  id: 'evt_456',
-  type: 'subscription.updated',
-  data: {
-    userId: 'preview-pro-user',
-    planId: 'pro',
-    status: 'active',
-  },
-});
+function subscriptionBody({
+  status = 'active',
+  variantId = 100,
+  updatedAt = '2026-06-06T12:00:00.000000Z',
+}: {
+  status?: string;
+  variantId?: number;
+  updatedAt?: string;
+} = {}) {
+  return JSON.stringify({
+    meta: {
+      event_name: 'subscription_created',
+      custom_data: {
+        workspace_id: 'workspace_123',
+      },
+    },
+    data: {
+      type: 'subscriptions',
+      id: 'sub_123',
+      attributes: {
+        customer_id: 42,
+        product_id: 900,
+        variant_id: variantId,
+        status,
+        renews_at: '2026-07-06T12:00:00.000000Z',
+        ends_at: status === 'cancelled' ? '2026-07-06T12:00:00.000000Z' : null,
+        trial_ends_at: null,
+        updated_at: updatedAt,
+        urls: {
+          customer_portal: 'https://billing.example/customer',
+          update_payment_method: 'https://billing.example/payment',
+        },
+      },
+    },
+  });
+}
+
+function signedRequest(body: string, eventName = 'subscription_created') {
+  const secret = 'lemon_test_secret';
+  return new Request('http://127.0.0.1/api/billing/webhook', {
+    method: 'POST',
+    headers: {
+      'X-Event-Name': eventName,
+      'X-Signature': createLemonSqueezyWebhookSignature({ body, secret }),
+    },
+    body,
+  });
+}
 
 describe('POST /api/billing/webhook', () => {
+  beforeEach(() => {
+    resetBillingWebhookRuntimeState();
+    vi.stubEnv('TOOLARS_BILLING_WEBHOOK_SECRET', 'lemon_test_secret');
+    vi.stubEnv('TOOLARS_LEMONSQUEEZY_PRO_VARIANT_IDS', '100');
+    vi.stubEnv('TOOLARS_LEMONSQUEEZY_TEAM_VARIANT_IDS', '200');
+  });
+
   afterEach(() => {
+    resetBillingWebhookRuntimeState();
     vi.unstubAllEnvs();
   });
 
-  it('rejects unsigned billing webhooks', async () => {
+  it('rejects unsigned Lemon Squeezy webhook requests', async () => {
     const response = await POST(
       new Request('http://127.0.0.1/api/billing/webhook', {
         method: 'POST',
+        body: subscriptionBody(),
+      }),
+    );
+
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({
+      error: 'Invalid billing webhook signature.',
+    });
+  });
+
+  it('rejects old preview headers without Lemon X-Signature', async () => {
+    const body = subscriptionBody();
+    const response = await POST(
+      new Request('http://127.0.0.1/api/billing/webhook', {
+        method: 'POST',
+        headers: {
+          'toolars-signature': 'preview-signature',
+          'toolars-timestamp': '1770000000',
+        },
         body,
       }),
     );
@@ -28,27 +97,44 @@ describe('POST /api/billing/webhook', () => {
     expect(response.status).toBe(401);
   });
 
-  it('accepts signed subscription webhook events', async () => {
-    const timestamp = '1770000000';
-    const secret = 'toolars-dev-webhook-secret';
-    const signature = createBillingWebhookSignature({ body, secret, timestamp });
-    const response = await POST(
-      new Request('http://127.0.0.1/api/billing/webhook', {
-        method: 'POST',
-        headers: {
-          'toolars-signature': signature,
-          'toolars-timestamp': timestamp,
-        },
-        body,
-      }),
-    );
+  it('accepts signed Lemon subscription events and mutates subscription state', async () => {
+    const response = await POST(signedRequest(subscriptionBody()));
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({
+    expect(await response.json()).toMatchObject({
       received: true,
-      eventId: 'evt_456',
+      duplicate: false,
+      eventName: 'subscription_created',
+      providerObjectId: 'sub_123',
       planId: 'pro',
-      status: 'active',
+      accessState: 'paid',
+    });
+  });
+
+  it('returns success without a second mutation for duplicate provider events', async () => {
+    const body = subscriptionBody();
+
+    const first = await POST(signedRequest(body));
+    const second = await POST(signedRequest(body));
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(200);
+    expect(await second.json()).toMatchObject({
+      received: true,
+      duplicate: true,
+      providerObjectId: 'sub_123',
+      planId: 'pro',
+      accessState: 'paid',
+    });
+  });
+
+  it('records unknown variants without granting paid access', async () => {
+    const response = await POST(signedRequest(subscriptionBody({ variantId: 404 })));
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({
+      error: 'Unknown Lemon Squeezy subscription variant.',
+      received: false,
     });
   });
 
@@ -56,19 +142,16 @@ describe('POST /api/billing/webhook', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('TOOLARS_BILLING_WEBHOOK_SECRET', '');
 
-    const timestamp = '1770000000';
-    const signature = createBillingWebhookSignature({
-      body,
-      secret: 'toolars-dev-webhook-secret',
-      timestamp,
-    });
-
+    const body = subscriptionBody();
     const response = await POST(
       new Request('http://127.0.0.1/api/billing/webhook', {
         method: 'POST',
         headers: {
-          'toolars-signature': signature,
-          'toolars-timestamp': timestamp,
+          'X-Event-Name': 'subscription_created',
+          'X-Signature': createLemonSqueezyWebhookSignature({
+            body,
+            secret: 'toolars-dev-webhook-secret',
+          }),
         },
         body,
       }),

@@ -16,9 +16,9 @@ Production code pass. TDD required.
 
 ## 2. TDD Red
 
-- [ ] 2.1 Add failing tests for oversized body, malformed payload, source
+- [x] 2.1 Add failing tests for oversized body, malformed payload, source
   length, duplicate platform normalization, and preview burst limiting.
-- [ ] 2.2 Commit RED tests after confirming focused tests fail.
+- [x] 2.2 Commit RED tests after confirming focused tests fail.
 
 ## 3. Implementation Green
 

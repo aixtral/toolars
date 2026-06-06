@@ -35,11 +35,11 @@ Production code pass. TDD required.
 
 ## 4. Verification And Ship
 
-- [ ] 4.1 Run focused security/AI/billing tests.
-- [ ] 4.2 Run lint, type-check, full unit tests, E2E, and build.
-- [ ] 4.3 Run security grep proving sensitive sentinel values are test-only.
-- [ ] 4.4 Run CDC gate and ship preview.
-- [ ] 4.5 Append evidence ledger rows.
-- [ ] 4.6 Commit task closure, push branch, and create draft PR.
-- [ ] 4.7 Compound learning decision: record `none` unless a repeatable process
+- [x] 4.1 Run focused security/AI/billing tests.
+- [x] 4.2 Run lint, type-check, full unit tests, E2E, and build.
+- [x] 4.3 Run security grep proving sensitive sentinel values are test-only.
+- [x] 4.4 Run CDC gate and ship preview.
+- [x] 4.5 Append evidence ledger rows.
+- [x] 4.6 Commit task closure, push branch, and create draft PR.
+- [x] 4.7 Compound learning decision: record `none` unless a repeatable process
   issue appears.

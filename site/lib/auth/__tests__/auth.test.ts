@@ -10,9 +10,11 @@ describe('auth preview sessions', () => {
     vi.unstubAllEnvs();
   });
 
-  it('returns null when no account context is present', () => {
+  it('returns null when no account context is present', async () => {
     expect(getSessionFromSearchParams({})).toBeNull();
-    expect(getSessionFromRequest(new Request('http://127.0.0.1/api'))).toBeNull();
+    await expect(
+      getSessionFromRequest(new Request('http://127.0.0.1/api')),
+    ).resolves.toBeNull();
   });
 
   it('maps preview query values to plan-aware sessions', () => {
@@ -26,7 +28,7 @@ describe('auth preview sessions', () => {
     });
   });
 
-  it('reads preview account headers for route handlers', () => {
+  it('reads preview account headers for route handlers', async () => {
     const request = new Request('http://127.0.0.1/api', {
       headers: {
         'x-toolars-preview-user': 'true',
@@ -34,10 +36,12 @@ describe('auth preview sessions', () => {
       },
     });
 
-    expect(getSessionFromRequest(request)).toEqual(createPreviewSession('team'));
+    await expect(getSessionFromRequest(request)).resolves.toEqual(
+      createPreviewSession('team'),
+    );
   });
 
-  it('does not trust preview sessions in production even when explicitly enabled', () => {
+  it('does not trust preview sessions in production even when explicitly enabled', async () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'true');
 
@@ -49,10 +53,10 @@ describe('auth preview sessions', () => {
     });
 
     expect(getSessionFromSearchParams({ preview: 'pro' })).toBeNull();
-    expect(getSessionFromRequest(request)).toBeNull();
+    await expect(getSessionFromRequest(request)).resolves.toBeNull();
   });
 
-  it('allows local preview sessions to be explicitly disabled', () => {
+  it('allows local preview sessions to be explicitly disabled', async () => {
     vi.stubEnv('NODE_ENV', 'development');
     vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'false');
 
@@ -64,6 +68,6 @@ describe('auth preview sessions', () => {
     });
 
     expect(getSessionFromSearchParams({ preview: 'pro' })).toBeNull();
-    expect(getSessionFromRequest(request)).toBeNull();
+    await expect(getSessionFromRequest(request)).resolves.toBeNull();
   });
 });

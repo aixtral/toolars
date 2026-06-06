@@ -25,19 +25,19 @@ Production code pass. TDD required for implementation tasks.
 
 ## 2. Session Facade
 
-- [ ] 2.1 Add failing tests for Supabase user-to-session mapping, missing
+- [x] 2.1 Add failing tests for Supabase user-to-session mapping, missing
   workspace denial, and production preview denial.
   - Files: `site/lib/auth/__tests__/supabase-session.test.ts`,
     `site/lib/auth/__tests__/auth.test.ts`
   - Covers: R2-S1, R2-S2, R2-S3
-- [ ] 2.2 Implement production session resolver and make route-handler session
+- [x] 2.2 Implement production session resolver and make route-handler session
   lookup async.
   - Files: `site/lib/auth/index.ts`,
     `site/lib/auth/supabase-session.ts`,
     `site/app/api/ai/repurpose/route.ts`,
     `site/app/api/ai/repurpose/route.test.ts`
   - Covers: R2-S1, R2-S2, R2-S3
-- [ ] 2.3 Run focused auth/AI tests and commit GREEN.
+- [x] 2.3 Run focused auth/AI tests and commit GREEN.
 
 ## 3. Account Workspace Migration
 

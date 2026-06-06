@@ -15,15 +15,15 @@ Production code pass. TDD required.
 
 ## 2. TDD Red
 
-- [ ] 2.1 Add failing security event recorder tests for request IDs,
+- [x] 2.1 Add failing security event recorder tests for request IDs,
   allowlisted metadata, and sensitive-value omission.
   - covers: R3-S1, R3-S2
-- [ ] 2.2 Add failing AI route tests for auth failure and plan denial events.
+- [x] 2.2 Add failing AI route tests for auth failure and plan denial events.
   - covers: R1-S1, R1-S2
-- [ ] 2.3 Add failing billing route tests for invalid signature and unsupported
+- [x] 2.3 Add failing billing route tests for invalid signature and unsupported
   payload events.
   - covers: R2-S1, R2-S2
-- [ ] 2.4 Commit RED tests after confirming focused tests fail.
+- [x] 2.4 Commit RED tests after confirming focused tests fail.
 
 ## 3. Implementation Green
 

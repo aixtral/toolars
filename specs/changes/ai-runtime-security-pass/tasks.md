@@ -31,9 +31,9 @@ Production code pass. TDD required.
 
 ## 4. Verification And Ship
 
-- [ ] 4.1 Run unit, focused route, focused E2E, lint, type-check, and build.
-- [ ] 4.2 Run CDC gate and ship preview.
-- [ ] 4.3 Append evidence ledger rows.
-- [ ] 4.4 Commit task closure and push branch.
-- [ ] 4.5 Compound learning decision: record `none` unless a repeatable process
+- [x] 4.1 Run unit, focused route, focused E2E, lint, type-check, and build.
+- [x] 4.2 Run CDC gate and ship preview.
+- [x] 4.3 Append evidence ledger rows.
+- [x] 4.4 Commit task closure and push branch.
+- [x] 4.5 Compound learning decision: record `none` unless a repeatable process
   issue appears.

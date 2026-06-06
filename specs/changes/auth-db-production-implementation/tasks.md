@@ -64,16 +64,16 @@ Production code pass. TDD required for implementation tasks.
 
 ## 5. Verification And Ship
 
-- [ ] 5.1 Run focused auth/supabase/db/AI tests.
-- [ ] 5.2 Run `pnpm --dir site lint`, `pnpm --dir site type-check`, and
+- [x] 5.1 Run focused auth/supabase/db/AI tests.
+- [x] 5.2 Run `pnpm --dir site lint`, `pnpm --dir site type-check`, and
   `pnpm --dir site test`.
-- [ ] 5.3 Run `pnpm --dir site build`; restore `site/next-env.d.ts` if Next
+- [x] 5.3 Run `pnpm --dir site build`; restore `site/next-env.d.ts` if Next
   build rewrites it.
-- [ ] 5.4 Run `pnpm --dir site test:e2e -- auth-billing` with a dev server on
+- [x] 5.4 Run `pnpm --dir site test:e2e -- auth-billing` with a dev server on
   port 9088.
-- [ ] 5.5 Run CDC gate and ship preview.
-- [ ] 5.6 Append evidence ledger rows.
-- [ ] 5.7 Commit task closure, push branch, and create draft PR stacked on
+- [x] 5.5 Run CDC gate and ship preview.
+- [x] 5.6 Append evidence ledger rows.
+- [x] 5.7 Commit task closure, push branch, and create draft PR stacked on
   `feat/security-event-logging-pass`.
-- [ ] 5.8 Compound learning decision: record `none` unless a repeatable process
+- [x] 5.8 Compound learning decision: record `none` unless a repeatable process
   issue appears.

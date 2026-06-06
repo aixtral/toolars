@@ -11,17 +11,17 @@ Production code pass. TDD required for implementation tasks.
 
 ## 1. Supabase Runtime Foundation
 
-- [ ] 1.1 Add failing tests for Supabase public/service env parsing and
+- [x] 1.1 Add failing tests for Supabase public/service env parsing and
   browser-safe public config.
   - Files: `site/lib/supabase/__tests__/env.test.ts`
   - Covers: R1-S1, R1-S2
-- [ ] 1.2 Install Supabase SDK packages and implement env/client/service helper
+- [x] 1.2 Install Supabase SDK packages and implement env/client/service helper
   modules.
   - Files: `site/package.json`, `site/pnpm-lock.yaml`,
     `site/lib/supabase/env.ts`, `site/lib/supabase/client.ts`,
     `site/lib/supabase/server.ts`, `site/lib/supabase/service.ts`
   - Covers: R1-S1, R1-S2
-- [ ] 1.3 Run focused Supabase env tests and commit GREEN.
+- [x] 1.3 Run focused Supabase env tests and commit GREEN.
 
 ## 2. Session Facade
 

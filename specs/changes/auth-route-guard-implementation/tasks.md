@@ -22,10 +22,10 @@ Production code pass. TDD required.
 
 ## 3. Implementation Green
 
-- [ ] 3.1 Add `site/proxy.ts` app route guard.
-- [ ] 3.2 Preserve preview navigation ergonomics for app pages.
-- [ ] 3.3 Run focused tests until green.
-- [ ] 3.4 Commit implementation.
+- [x] 3.1 Add `site/proxy.ts` app route guard.
+- [x] 3.2 Preserve preview navigation ergonomics for app pages.
+- [x] 3.3 Run focused tests until green.
+- [x] 3.4 Commit implementation.
 
 ## 4. Verification And Ship
 

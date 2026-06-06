@@ -1,9 +1,11 @@
-import { unstable_doesProxyMatch, getRedirectUrl } from 'next/experimental/testing/server';
+import { getRedirectUrl } from 'next/experimental/testing/server';
 import { NextRequest } from 'next/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { config, proxy } from './proxy';
 
-function request(path: string, init?: RequestInit) {
+type NextRequestInit = ConstructorParameters<typeof NextRequest>[1];
+
+function request(path: string, init?: NextRequestInit) {
   return new NextRequest(new URL(path, 'http://localhost:9088'), init);
 }
 
@@ -12,21 +14,8 @@ describe('app route proxy guard', () => {
     vi.unstubAllEnvs();
   });
 
-  it('matches app routes but not public calculator routes', () => {
-    expect(
-      unstable_doesProxyMatch({
-        config,
-        nextConfig: {},
-        url: '/app/templates',
-      }),
-    ).toBe(true);
-    expect(
-      unstable_doesProxyMatch({
-        config,
-        nextConfig: {},
-        url: '/tools/bmi-calculator',
-      }),
-    ).toBe(false);
+  it('matches only app routes through the Next.js proxy matcher', () => {
+    expect(config.matcher).toBe('/app/:path*');
   });
 
   it('redirects anonymous app visitors to login with the original path', () => {
@@ -71,4 +60,3 @@ describe('app route proxy guard', () => {
     expect(redirectUrl.searchParams.get('next')).toBe('/app/repurpose?preview=pro');
   });
 });
-

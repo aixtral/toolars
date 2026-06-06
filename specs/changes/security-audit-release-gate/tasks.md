@@ -25,9 +25,9 @@ changes.
 
 ## 3. Verification And Ship
 
-- [ ] 3.1 Run report structure and anchor checks.
-- [ ] 3.2 Run CDC gate and ship preview.
-- [ ] 3.3 Append evidence ledger rows.
-- [ ] 3.4 Commit task closure and push branch.
-- [ ] 3.5 Compound learning decision: record `none` unless a repeatable process
+- [x] 3.1 Run report structure and anchor checks.
+- [x] 3.2 Run CDC gate and ship preview.
+- [x] 3.3 Append evidence ledger rows.
+- [x] 3.4 Commit task closure and push branch.
+- [x] 3.5 Compound learning decision: `none`; no repeatable process
   issue appears.

@@ -25,11 +25,11 @@ Production code pass. TDD required.
 
 ## 3. Implementation Green
 
-- [ ] 3.1 Add `site/lib/env/release-gate.ts`.
-- [ ] 3.2 Wire `site/lib/auth/index.ts` to the release-gate preview policy.
-- [ ] 3.3 Wire `site/next.config.ts` to assert production env.
-- [ ] 3.4 Run focused tests until green.
-- [ ] 3.5 Commit implementation.
+- [x] 3.1 Add `site/lib/env/release-gate.ts`.
+- [x] 3.2 Wire `site/lib/auth/index.ts` to the release-gate preview policy.
+- [x] 3.3 Wire `site/next.config.ts` to assert production env.
+- [x] 3.4 Run focused tests until green.
+- [x] 3.5 Commit implementation.
 
 ## 4. Verification And Ship
 

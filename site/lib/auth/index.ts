@@ -1,4 +1,5 @@
 import { isPlanId } from '@/lib/plans';
+import { isPreviewAuthAllowed } from '@/lib/env/release-gate';
 import type { PlanId } from '@/lib/plans';
 
 export interface ToolarsSession {
@@ -23,10 +24,7 @@ function planFromPreview(value: string | undefined) {
 }
 
 function previewAuthEnabled() {
-  return (
-    process.env.NODE_ENV !== 'production' ||
-    process.env.TOOLARS_ENABLE_PREVIEW_AUTH === 'true'
-  );
+  return isPreviewAuthAllowed();
 }
 
 export function getSessionFromSearchParams(searchParams: Record<string, string | undefined>) {

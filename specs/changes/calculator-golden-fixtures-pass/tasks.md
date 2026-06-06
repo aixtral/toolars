@@ -39,9 +39,9 @@ Follow TDD for production code changes.
 
 ## 4. Verification And Ship
 
-- [ ] 4.1 Run purity grep for calculator engine modules.
-- [ ] 4.2 Run site lint, type-check, unit tests, focused E2E, and build.
-- [ ] 4.3 Run CDC gate and ship preview.
-- [ ] 4.4 Append evidence ledger rows.
-- [ ] 4.5 Commit task closure and push branch.
-- [ ] 4.6 Compound learning decision: record `none` unless a repeatable process issue appears.
+- [x] 4.1 Run purity grep for calculator engine modules.
+- [x] 4.2 Run site lint, type-check, unit tests, focused E2E, and build.
+- [x] 4.3 Run CDC gate and ship preview.
+- [x] 4.4 Append evidence ledger rows.
+- [x] 4.5 Commit task closure and push branch.
+- [x] 4.6 Compound learning decision: `none`.

@@ -17,9 +17,9 @@ Documentation-only pass. TDD exception: no production code changes.
 - [x] 2.4 Commit context refresh.
 
 ## 3. Verification And Ship
-- [ ] 3.1 Run docs/context checks and CDC gate.
-- [ ] 3.2 Run site lint, type-check, test, E2E, and build to ensure no hidden breakage.
-- [ ] 3.3 Run CDC ship preview.
-- [ ] 3.4 Append evidence ledger rows.
-- [ ] 3.5 Commit task closure and push branch.
-- [ ] 3.6 Compound learning decision: record `none` unless a repeatable process issue appears.
+- [x] 3.1 Run docs/context checks and CDC gate.
+- [x] 3.2 Run site lint, type-check, test, E2E, and build to ensure no hidden breakage.
+- [x] 3.3 Run CDC ship preview.
+- [x] 3.4 Append evidence ledger rows.
+- [x] 3.5 Commit task closure and push branch.
+- [x] 3.6 Compound learning decision: `none`.

@@ -17,11 +17,11 @@ changes.
 
 ## 2. Audit Report
 
-- [ ] 2.1 Inspect auth, AI, billing, plan gate, and public calculator boundary.
-- [ ] 2.2 Run secret/token source scans.
-- [ ] 2.3 Run dependency supply-chain audit or record network limitation.
-- [ ] 2.4 Add `docs/security/SECURITY-AUDIT-RELEASE-GATE.md`.
-- [ ] 2.5 Commit audit report.
+- [x] 2.1 Inspect auth, AI, billing, plan gate, and public calculator boundary.
+- [x] 2.2 Run secret/token source scans.
+- [x] 2.3 Run dependency supply-chain audit or record network limitation.
+- [x] 2.4 Add `docs/security/SECURITY-AUDIT-RELEASE-GATE.md`.
+- [x] 2.5 Commit audit report.
 
 ## 3. Verification And Ship
 

@@ -15,10 +15,10 @@ Documentation-only pass. TDD exception: no production code changes.
 
 ## 2. Architecture Document
 
-- [ ] 2.1 Add `docs/architecture/BILLING-SUBSCRIPTION-STATE-DESIGN.md`.
+- [x] 2.1 Add `docs/architecture/BILLING-SUBSCRIPTION-STATE-DESIGN.md`.
   - Covers: R1-S1, R1-S2, R2-S1, R2-S2, R3-S1, R3-S2, R4-S1, R4-S2
-- [ ] 2.2 Cross-check Lemon Squeezy source URLs and confirm no unchecked assumptions remain.
-- [ ] 2.3 Commit architecture document.
+- [x] 2.2 Cross-check Lemon Squeezy source URLs and confirm no unchecked assumptions remain.
+- [x] 2.3 Commit architecture document.
 
 ## 3. Verification And Ship
 

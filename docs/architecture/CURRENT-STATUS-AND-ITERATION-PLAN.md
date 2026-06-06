@@ -1,21 +1,25 @@
 # toolars Current Status And Iteration Plan
 
-Status: current branch-stack review baseline  
+Status: W2 security-productionization branch-stack review baseline  
 Updated: 2026-06-06  
-Source branch: `feat/tools-query-search-pass`
+Source branch: `feat/billing-webhook-production-pass`
 
 ## 1. Executive Summary
 
 Toolars has moved from design handoff to a runnable Next.js App Router
-implementation. The current branch stack includes the public utility shell,
-73 calculator routes, calculator detail workspaces, AI SaaS preview pages,
-commercial/legal pages, SEO/GEO discovery surfaces, and URL-driven tools
-directory search.
+implementation and into the first W2 security-productionization stack. The
+current branch stack includes the public utility shell, 73 calculator routes,
+calculator detail workspaces, AI SaaS preview pages, commercial/legal pages,
+SEO/GEO discovery surfaces, URL-driven tools directory search, a security
+release-gate audit, `/app/**` route guarding, AI runtime request limits, and
+Lemon Squeezy-shaped billing webhook intake.
 
 The project is not yet production SaaS complete. The public site and preview
-application are strong enough for integration review, but real auth, database
-persistence, AI provider integration, billing subscription state, application
-observability, and security audit remain release-blocking work.
+application are strong enough for integration review, and several high-risk
+security seams have been reduced, but real Supabase/Auth session persistence,
+durable database adapters, AI provider integration, production usage metering,
+application observability, dependency remediation, and release-readiness audits
+remain release-blocking work.
 
 ## 2. Current Implementation Snapshot
 
@@ -29,8 +33,9 @@ observability, and security audit remain release-blocking work.
 | Calculator UX | Shared detail workspace with calculate, reset, local save, compare, share |
 | Tools directory | `/tools` default directory plus `/tools?search=<query>` server-rendered search |
 | AI SaaS | Preview app shell and pages for repurpose, templates, brand voice, history, analytics, settings |
-| Auth | Preview sessions only; no production provider yet |
-| Billing | Plan gates and webhook signature parsing only; no subscription persistence yet |
+| Auth | `/app/**` is guarded by Next proxy; preview sessions still exist; no production provider/session cookies yet |
+| AI runtime | Preview AI route now has body/source limits, platform normalization, and in-memory preview rate/usage guard |
+| Billing | Lemon Squeezy-shaped webhook signature/parser/idempotency repository contract exists; no durable Supabase/Postgres adapter yet |
 | SEO/GEO | sitemap, robots, llms.txt, root Open Graph/Twitter, Organization/WebSite/SearchAction JSON-LD |
 | Tests | Vitest/Testing Library and Playwright |
 
@@ -39,8 +44,8 @@ Latest verification evidence on the current stack:
 ```text
 pnpm --dir site lint        -> pass
 pnpm --dir site type-check  -> pass
-pnpm --dir site test        -> 25 files / 78 tests passed
-pnpm --dir site test:e2e    -> 38 tests passed
+pnpm --dir site test        -> 26 files / 94 tests passed
+pnpm --dir site test:e2e -- auth-billing -> 3 tests passed
 pnpm --dir site build       -> 104 pages/routes reported
 cdc-workflow gate           -> pass
 cdc-workflow ship-preview   -> pass
@@ -60,14 +65,36 @@ stack is:
 | `feat/site-graph-metadata-pass` | Root metadata, Open Graph, Twitter card, Organization/WebSite JSON-LD |
 | `feat/tools-query-search-pass` | `/tools?search=` server-rendered query results |
 | `feat/context-refresh-and-integration-pass` | Context refresh and iteration plan |
+| `feat/security-audit-release-gate` | Release-gate security audit and production blockers |
+| `feat/auth-route-guard-implementation` | Next proxy guard for `/app/**` and preview auth routing tests |
+| `feat/ai-runtime-security-pass` | AI route request/body/source limits, normalization, and in-memory preview rate/usage guard |
+| `feat/billing-webhook-production-pass` | Lemon Squeezy `X-Signature` intake, event parser, idempotency, and subscription repository contract |
 
 Recommended merge strategy:
 
-1. Treat `feat/context-refresh-and-integration-pass` as the latest integration
-   candidate after this pass lands.
-2. Open or update a PR from the latest integration candidate into `main`.
-3. Run the full verification gate on the PR branch.
-4. Merge only after confirming no hidden branch-stack drift.
+1. Keep PR #1 from `feat/context-refresh-and-integration-pass` to `main` as the
+   W0 integration anchor until the stacked security PRs are reviewed.
+2. Review the stacked security PRs in order: #6 security audit, #7 auth route
+   guard, #8 AI runtime security, #9 billing webhook production intake.
+3. Re-run the full verification gate on the top stack branch before marking any
+   draft PR ready.
+4. Merge only after confirming no hidden branch-stack drift and after deciding
+   whether W1/W2 parallel design branches should be rebased into the same stack
+   or reviewed independently.
+
+Open draft PR state as of 2026-06-06:
+
+| PR | Head | Base | Status |
+|---|---|---|---|
+| #1 | `feat/context-refresh-and-integration-pass` | `main` | open draft, mergeable |
+| #2 | `feat/calculator-golden-fixtures-pass` | `feat/context-refresh-and-integration-pass` | open draft, mergeable |
+| #3 | `feat/auth-db-production-design` | `feat/context-refresh-and-integration-pass` | open draft, mergeable |
+| #4 | `feat/ai-provider-adapter-pass` | `feat/context-refresh-and-integration-pass` | open draft, mergeable |
+| #5 | `feat/billing-subscription-state-pass` | `feat/context-refresh-and-integration-pass` | open draft, mergeable; design content has also been pulled into #9 |
+| #6 | `feat/security-audit-release-gate` | `feat/context-refresh-and-integration-pass` | open draft, mergeable |
+| #7 | `feat/auth-route-guard-implementation` | `feat/security-audit-release-gate` | open draft, mergeable |
+| #8 | `feat/ai-runtime-security-pass` | `feat/auth-route-guard-implementation` | open draft, mergeable |
+| #9 | `feat/billing-webhook-production-pass` | `feat/ai-runtime-security-pass` | open draft, mergeable |
 
 ## 4. Preview Boundaries
 
@@ -76,12 +103,12 @@ as production-complete:
 
 | System | Current boundary | Required production work |
 |---|---|---|
-| Auth | Query/header preview sessions; disabled in production unless explicitly enabled | Real provider, session cookies, protected route middleware, user profile storage |
-| AI generation | Deterministic local draft generation | Provider adapters, streaming route behavior, retries, rate limits, cost tracking, logging |
-| Billing | Plan definitions and webhook signature helper | Lemon Squeezy event handling, subscription table, user-plan reconciliation, idempotency |
+| Auth | `/app/**` proxy guard exists; query/header preview sessions still exist and H4 env risk remains | Real provider, session cookies, production env gate, user profile storage |
+| AI generation | Deterministic local draft generation with request/source limits and in-memory preview rate/usage guard | Provider adapters, streaming route behavior, retries, durable usage metering, cost tracking, logging |
+| Billing | Lemon Squeezy-shaped intake, event parser, idempotency, and subscription repository contract | Supabase/Postgres `subscriptions` and `subscription_events` adapter, user-plan reconciliation |
 | Persistence | Local storage for anonymous calculator saves/comparisons | Account-backed saved results, cross-device sync, Pro export history |
 | Observability | CDC evidence and automated tests | Application analytics/events, error reporting, trace IDs for AI and billing |
-| Security | Helper-level tests | Full security audit for auth, billing, AI input, secrets, webhook replay, rate limits |
+| Security | Release audit exists; H1 route guard, local H2 request limits, and H3 webhook intake have follow-up PRs | H4 production env gate, M2 dependency remediation, M3 event logging, and a final production security audit |
 | Calculator formulas | All routes have formula engines; high-risk formulas have representative tests | Golden value suites and source review for high-risk finance/health calculators |
 
 ## 5. Iteration Plan
@@ -89,6 +116,8 @@ as production-complete:
 ### W0: Integration And Context Reset
 
 Goal: make the latest stack the reviewable source of truth.
+
+Status: substantially complete but not merged to `main`.
 
 Deliverables:
 
@@ -104,11 +133,15 @@ Exit criteria:
 - Worktree is clean.
 - Latest branch is pushed.
 - Full verification passes.
+- Draft PR stack is reviewed and either merged or explicitly kept as a staged
+  review stack.
 
 ### W1: Calculator Production Hardening
 
 Goal: turn calculator coverage from route/engine completeness into formula
 confidence.
+
+Status: started through draft PR #2; not merged into the main stack.
 
 Deliverables:
 
@@ -129,6 +162,9 @@ Exit criteria:
 
 Goal: replace preview SaaS surfaces with production-capable backend seams.
 
+Status: started. H1/H2/H3 route-level security seams have active stacked PRs,
+but durable Auth/DB/provider implementations are still pending.
+
 Deliverables:
 
 - Confirm and implement Supabase Auth/Postgres or revised backend choice.
@@ -137,6 +173,10 @@ Deliverables:
 - Replace preview session flow with real auth guard and app route protection.
 - Integrate AI provider adapter behind a testable interface.
 - Integrate Lemon Squeezy webhook idempotency and subscription state updates.
+- Add a production env release gate that fails if preview auth is enabled in
+  production.
+- Add security event logging for AI and billing failures without logging secrets,
+  raw payloads, or PII.
 
 Exit criteria:
 
@@ -144,6 +184,8 @@ Exit criteria:
 - Free users are blocked from paid AI generation.
 - Pro users can generate with usage metering.
 - Webhook tests cover signature, replay/idempotency, and subscription update.
+- Production builds cannot run with preview auth enabled.
+- AI and billing failures emit structured, non-sensitive security events.
 
 ### W3: Release Readiness
 
@@ -167,13 +209,17 @@ Exit criteria:
 
 ## 6. Immediate Next CDC Changes
 
-Recommended order after this pass:
+Recommended order after the current #6-#9 security stack:
 
-1. `integrate-latest-stack-to-main`
-2. `calculator-golden-fixtures-pass`
-3. `auth-db-production-design`
-4. `ai-provider-adapter-pass`
-5. `billing-subscription-state-pass`
-6. `security-audit-release-gate`
+1. `production-env-release-gate`
+2. `security-event-logging-pass`
+3. `auth-db-production-implementation`
+4. `ai-provider-adapter-implementation`
+5. `billing-subscription-db-adapter`
+6. `usage-metering-and-plan-gates`
+7. `dependency-audit-remediation-pass`
+8. `integrate-latest-stack-to-main`
 
-Do not start W2 production backend work until W0 integration is complete.
+W2 production backend work has started in route-level/security seams, but
+durable Auth/DB/provider work should remain behind explicit specs and stacked
+review until the current draft PR stack is reviewed.

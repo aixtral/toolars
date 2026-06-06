@@ -37,9 +37,9 @@ describe('auth preview sessions', () => {
     expect(getSessionFromRequest(request)).toEqual(createPreviewSession('team'));
   });
 
-  it('does not trust preview sessions in production unless explicitly enabled', () => {
+  it('does not trust preview sessions in production even when explicitly enabled', () => {
     vi.stubEnv('NODE_ENV', 'production');
-    vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', '');
+    vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'true');
 
     const request = new Request('http://127.0.0.1/api', {
       headers: {
@@ -50,12 +50,20 @@ describe('auth preview sessions', () => {
 
     expect(getSessionFromSearchParams({ preview: 'pro' })).toBeNull();
     expect(getSessionFromRequest(request)).toBeNull();
+  });
 
-    vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'true');
+  it('allows local preview sessions to be explicitly disabled', () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'false');
 
-    expect(getSessionFromSearchParams({ preview: 'pro' })).toMatchObject({
-      planId: 'pro',
+    const request = new Request('http://127.0.0.1/api', {
+      headers: {
+        'x-toolars-preview-user': 'true',
+        'x-toolars-preview-plan': 'pro',
+      },
     });
-    expect(getSessionFromRequest(request)).toEqual(createPreviewSession('pro'));
+
+    expect(getSessionFromSearchParams({ preview: 'pro' })).toBeNull();
+    expect(getSessionFromRequest(request)).toBeNull();
   });
 });

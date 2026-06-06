@@ -22,8 +22,8 @@ Documentation-only pass. TDD exception: no production code changes.
 
 ## 3. Verification And Ship
 
-- [ ] 3.1 Run docs/source grep checks.
-- [ ] 3.2 Run CDC gate and ship preview.
-- [ ] 3.3 Append evidence ledger rows.
-- [ ] 3.4 Commit task closure and push branch.
-- [ ] 3.5 Compound learning decision: record `none` unless a repeatable process issue appears.
+- [x] 3.1 Run docs/source grep checks.
+- [x] 3.2 Run CDC gate and ship preview.
+- [x] 3.3 Append evidence ledger rows.
+- [x] 3.4 Commit task closure and push branch.
+- [x] 3.5 Compound learning decision: `none`.

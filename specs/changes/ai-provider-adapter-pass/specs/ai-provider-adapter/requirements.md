@@ -75,7 +75,7 @@ content by default.
 ### Description
 
 Future implementation must be grounded in official AI SDK and OpenAI docs and
-must leave no unverified provider API assumptions.
+must leave no unchecked provider API assumptions.
 
 ### Scenarios
 

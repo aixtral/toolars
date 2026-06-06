@@ -27,11 +27,11 @@ Production code pass. TDD required.
 
 ## 3. Implementation Green
 
-- [ ] 3.1 Add `site/lib/security/events.ts`.
-- [ ] 3.2 Wire AI route failure paths to `recordSecurityEvent`.
-- [ ] 3.3 Wire billing route failure paths to `recordSecurityEvent`.
-- [ ] 3.4 Run focused tests until green.
-- [ ] 3.5 Commit implementation.
+- [x] 3.1 Add `site/lib/security/events.ts`.
+- [x] 3.2 Wire AI route failure paths to `recordSecurityEvent`.
+- [x] 3.3 Wire billing route failure paths to `recordSecurityEvent`.
+- [x] 3.4 Run focused tests until green.
+- [x] 3.5 Commit implementation.
 
 ## 4. Verification And Ship
 

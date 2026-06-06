@@ -4,6 +4,7 @@ import {
   processBillingWebhookRuntimeEvent,
   verifyLemonSqueezyWebhookSignature,
 } from '@/lib/billing';
+import { recordSecurityEvent } from '@/lib/security/events';
 
 const developmentWebhookSecret = 'toolars-dev-webhook-secret';
 
@@ -26,6 +27,17 @@ export async function POST(request: Request) {
   const secret = billingWebhookSecret();
 
   if (!secret) {
+    recordSecurityEvent({
+      request,
+      route: '/api/billing/webhook',
+      category: 'billing',
+      action: 'missing_secret',
+      outcome: 'failed',
+      status: 503,
+      metadata: {
+        eventName,
+      },
+    });
     return Response.json(
       { error: 'Billing webhook secret is not configured.' },
       { status: 503 },
@@ -36,6 +48,17 @@ export async function POST(request: Request) {
     !signature ||
     !verifyLemonSqueezyWebhookSignature({ body, secret, signature })
   ) {
+    recordSecurityEvent({
+      request,
+      route: '/api/billing/webhook',
+      category: 'billing',
+      action: 'invalid_signature',
+      outcome: 'invalid',
+      status: 401,
+      metadata: {
+        eventName,
+      },
+    });
     return Response.json(
       { error: 'Invalid billing webhook signature.' },
       { status: 401 },
@@ -51,6 +74,19 @@ export async function POST(request: Request) {
     const result = processBillingWebhookRuntimeEvent(event);
 
     if (!result.accepted) {
+      recordSecurityEvent({
+        request,
+        route: '/api/billing/webhook',
+        category: 'billing',
+        action: 'event_processing_failed',
+        outcome: 'failed',
+        status: 400,
+        metadata: {
+          eventId: result.eventId,
+          eventName: result.eventName,
+          providerObjectId: result.providerObjectId,
+        },
+      });
       return Response.json(
         {
           received: false,
@@ -73,6 +109,17 @@ export async function POST(request: Request) {
       accessState: result.accessState,
     });
   } catch {
+    recordSecurityEvent({
+      request,
+      route: '/api/billing/webhook',
+      category: 'billing',
+      action: 'unsupported_event',
+      outcome: 'invalid',
+      status: 400,
+      metadata: {
+        eventName,
+      },
+    });
     return Response.json({ error: 'Unsupported billing webhook event.' }, { status: 400 });
   }
 }

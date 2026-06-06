@@ -16,9 +16,9 @@ Production code pass. TDD required.
 
 ## 2. TDD Red
 
-- [ ] 2.1 Add failing proxy tests for anonymous redirect, public route bypass,
+- [x] 2.1 Add failing proxy tests for anonymous redirect, public route bypass,
   preview query allow, preview cookie allow, and production preview block.
-- [ ] 2.2 Commit RED tests after confirming the focused test command fails.
+- [x] 2.2 Commit RED tests after confirming the focused test command fails.
 
 ## 3. Implementation Green
 

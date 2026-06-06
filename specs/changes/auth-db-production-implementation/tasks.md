@@ -54,13 +54,13 @@ Production code pass. TDD required for implementation tasks.
 
 ## 4. Public Calculator Isolation
 
-- [ ] 4.1 Add failing dependency isolation test for public calculator paths.
+- [x] 4.1 Add failing dependency isolation test for public calculator paths.
   - Files: `site/lib/db/__tests__/public-calculator-isolation.test.ts`
   - Covers: R4-S1
-- [ ] 4.2 Fix any forbidden imports found by the isolation test.
+- [x] 4.2 Fix any forbidden imports found by the isolation test.
   - Files: only public calculator/search/registry files if needed
   - Covers: R4-S1
-- [ ] 4.3 Run focused isolation tests and commit GREEN.
+- [x] 4.3 Run focused isolation tests and commit GREEN.
 
 ## 5. Verification And Ship
 

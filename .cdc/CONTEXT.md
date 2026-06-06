@@ -11,34 +11,59 @@
 
 ```yaml
 project: toolars
-last_scanned: 2026-05-30
-scanner: codex + cdc-workflow context bootstrap
+last_scanned: 2026-06-06
+scanner: codex + context-refresh-and-integration-pass
 spec_version: v1
-recheck_at: 2026-08-28
-status: initialized main repository; documentation/spec phase
+recheck_at: 2026-09-04
+status: runnable Next.js implementation; branch-stack integration phase
 ```
 
 ## 1. Current Repository Facts
 
-The current `/Users/stanvl/Documents/dev/ai-repo/toolars` directory is a design handoff workspace.
+The current `/Users/stanvl/Documents/dev/ai-repo/toolars` directory is now a
+runnable implementation workspace for the `toolars` unified overseas tools
+site. Application code lives under `site/`; non-design docs live under `docs/`;
+design artifacts live under `design/`.
 
 Current files:
 
 | Path | Purpose |
 |---|---|
-| `DESIGN.md` | Product design specification and interaction/development guidance for toolars v1.0. |
+| `design/DESIGN.md` | Product design specification and interaction/development guidance for toolars v1.0. |
 | `design/images/original_generated_files/` | 10 generated high-fidelity PNG boards/screens. |
 | `design/images/extracted_tool_icons/` | 42 cropped tool icon PNG files. |
 | `design/images/README.txt` | Asset export notes. |
 | `docs/` | Non-design product, architecture, migration, implementation, and QA documents. |
-| `site/` | Reserved root for all future Next.js App Router application code. |
-| `specs/changes/merge-toolars-platform/` | CDC change proposal, requirements, design, and implementation tasks. |
+| `site/` | Next.js App Router + TypeScript application code, tests, routes, components, data registry, and pure library modules. |
+| `specs/changes/` | CDC change proposals, requirements, design docs, task plans, and evidence state for completed feature passes. |
 | `AGENTS.md` | Project instructions for Codex/agent workflows. |
 | `CLAUDE.md` | Claude-style project instructions mirroring the agent contract. |
 | `.cdc/CONTEXT.md` | CDC project facts and constraints. |
 | `.cdc/ARCHITECTURE.md` | CDC architecture facts and intended architecture. |
 
-This directory is now a git repository on branch `main`.
+The latest integrated implementation branch is
+`feat/tools-query-search-pass`. `main` currently points to the earlier
+`design-conformance-pass` state and should be advanced only through an explicit
+integration/merge review.
+
+Current implementation snapshot as of 2026-06-06:
+
+- Framework: Next.js App Router 16.2.6, React 19.2.4, TypeScript 5.9.3.
+- Public routes include `/`, `/tools`, `/tools/[slug]`, `/ai`,
+  `/categories/health`, `/categories/finance`, `/blog`, `/blog/[slug]`,
+  `/pricing`, `/compare`, `/about`, `/contact`, `/privacy`, `/terms`,
+  `/login`, `/register`, `/en`, `/sitemap.xml`, `/robots.txt`, and
+  `/llms.txt`.
+- App routes include `/app/repurpose`, `/app/templates`, `/app/brand-voice`,
+  `/app/history`, `/app/analytics`, and `/app/settings`.
+- Tool registry includes 73 calculator definitions plus AI SaaS tool entries.
+- Calculator pages are public and no-login; basic calculation, local save,
+  compare, and share flows are implemented.
+- `/tools?search=<query>` now renders server-side query search results using
+  the shared search helper.
+- AI app pages and billing/account flows are preview-safe UI and testable
+  route-handler logic, not yet real Supabase/Auth/DB/provider production
+  integration.
 
 ## 2. Source Projects To Merge
 
@@ -111,6 +136,20 @@ The following product decisions have been confirmed by the project owner:
 | i18n | Launch English-first; preserve architecture for phase-two es/fr/zh/ja/ru/ar/pt/hi/zh-tw. |
 | Design authority | `design/DESIGN.md` is source of truth; PNGs are visual references. |
 
+## 6.1 Current Productionization Boundaries
+
+The following boundaries are important for future planning and review:
+
+| Area | Current state | Production next step |
+|---|---|---|
+| Calculator inventory | 73 routes and engines exist, with representative formula tests. | Add golden value tests and source-backed review for high-risk health/finance calculators. |
+| Auth | Preview sessions via query/header in non-production. | Implement real auth provider, session persistence, user model, and route protection. |
+| AI generation | Deterministic preview drafts generated locally. | Integrate provider adapters, streaming server behavior, usage metering, retries, and cost/error handling. |
+| Billing | Plan definitions and webhook signature parsing exist. | Integrate Lemon Squeezy events with account/subscription state storage. |
+| Persistence | Anonymous calculator saves/comparisons use local storage. | Add account-backed cross-device sync for Pro workflows. |
+| Observability | CDC evidence and automated tests exist. | Add application analytics/events for search, no-result queries, calculator use, AI lifecycle, and billing. |
+| Security | Unit coverage exists for preview auth and webhook signature helpers. | Run `cdc-role-security-audit` before production release for auth, AI, billing, secrets, and rate limits. |
+
 ## 7. Documentation Plan
 
 Documentation set:
@@ -136,14 +175,26 @@ specs/changes/merge-toolars-platform/
 
 ## 8. Verification Baseline
 
-Current repository has no application code, package manager, tests, lint, or build command.
+Current site verification commands:
 
-Available CDC evidence so far:
+```bash
+pnpm --dir site lint
+pnpm --dir site type-check
+pnpm --dir site test
+pnpm --dir site test:e2e
+pnpm --dir site build
+cdc-workflow gate --mode standard --root .
+cdc-workflow ship-preview --change <change-id> --root .
+```
 
-- `cdc-goal --goal "...toolars..." --root . --json` routes this work to Standard mode.
-- `cdc-doctor --quick --repo . --json` passes.
-- `cdc-doctor --context-budget --repo . --json` status is ok.
-- `cdc-workflow gate --mode standard --root .` passes after context bootstrap.
-- `git init` initialized this directory as the new main repo.
+Latest recorded evidence on the current branch stack:
 
-TDD exception for this phase: documentation and project initialization only; no production code is being changed.
+- `pnpm --dir site test`: 25 test files, 78 tests passed.
+- `pnpm --dir site test:e2e`: 38 Playwright tests passed.
+- `pnpm --dir site build`: 104 generated pages/routes reported by Next.js build.
+- `cdc-workflow gate --mode standard --root .`: passes.
+- `cdc-workflow ship-preview --change tools-query-search-pass --root .`: passes.
+
+TDD remains required for production code changes. Documentation-only context
+refreshes, generated code, and configuration-only updates may declare a TDD
+exception in the relevant spec closeout.

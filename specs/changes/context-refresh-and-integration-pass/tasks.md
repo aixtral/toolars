@@ -11,10 +11,10 @@ Documentation-only pass. TDD exception: no production code changes.
 - [x] 1.2 Commit the spec baseline.
 
 ## 2. Context And Architecture Refresh
-- [ ] 2.1 Update `.cdc/CONTEXT.md` with current implementation, branch stack, verification baseline, and preview boundaries.
-- [ ] 2.2 Update `.cdc/ARCHITECTURE.md` with current module map, dependency boundaries, and open production architecture work.
-- [ ] 2.3 Add docs-level current status and iteration plan.
-- [ ] 2.4 Commit context refresh.
+- [x] 2.1 Update `.cdc/CONTEXT.md` with current implementation, branch stack, verification baseline, and preview boundaries.
+- [x] 2.2 Update `.cdc/ARCHITECTURE.md` with current module map, dependency boundaries, and open production architecture work.
+- [x] 2.3 Add docs-level current status and iteration plan.
+- [x] 2.4 Commit context refresh.
 
 ## 3. Verification And Ship
 - [ ] 3.1 Run docs/context checks and CDC gate.

@@ -15,13 +15,13 @@ Production code pass. TDD required.
 
 ## 2. TDD Red
 
-- [ ] 2.1 Add failing env gate tests for production preview auth and local
+- [x] 2.1 Add failing env gate tests for production preview auth and local
   preview policy.
   - covers: R1-S1, R2-S1, R2-S2
-- [ ] 2.2 Update auth tests to expect production preview sessions to stay
+- [x] 2.2 Update auth tests to expect production preview sessions to stay
   disabled even when `TOOLARS_ENABLE_PREVIEW_AUTH=true`.
   - covers: R1-S2
-- [ ] 2.3 Commit RED tests after confirming focused tests fail.
+- [x] 2.3 Commit RED tests after confirming focused tests fail.
 
 ## 3. Implementation Green
 

@@ -41,16 +41,16 @@ Production code pass. TDD required for implementation tasks.
 
 ## 3. Account Workspace Migration
 
-- [ ] 3.1 Add failing static migration tests for account tables, trigger, RLS,
+- [x] 3.1 Add failing static migration tests for account tables, trigger, RLS,
   and policies.
   - Files: `site/lib/db/__tests__/account-migration.test.ts`
   - Covers: R3-S1, R3-S2
-- [ ] 3.2 Add Supabase migration for `profiles`, `workspaces`, and
+- [x] 3.2 Add Supabase migration for `profiles`, `workspaces`, and
   `workspace_members`.
   - Files:
     `supabase/migrations/20260606152000_auth_workspace_foundation.sql`
   - Covers: R3-S1, R3-S2
-- [ ] 3.3 Run focused migration tests and commit GREEN.
+- [x] 3.3 Run focused migration tests and commit GREEN.
 
 ## 4. Public Calculator Isolation
 

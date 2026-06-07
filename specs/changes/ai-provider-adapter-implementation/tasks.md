@@ -50,17 +50,17 @@ Production code pass. TDD required for implementation tasks.
 
 ## 4. Verification And Ship
 
-- [ ] 4.1 Run focused AI/provider/route tests.
-- [ ] 4.2 Run `pnpm --dir site lint`, `pnpm --dir site type-check`, and
+- [x] 4.1 Run focused AI/provider/route tests.
+- [x] 4.2 Run `pnpm --dir site lint`, `pnpm --dir site type-check`, and
   `pnpm --dir site test`.
-- [ ] 4.3 Run `pnpm --dir site build`; restore `site/next-env.d.ts` if Next
+- [x] 4.3 Run `pnpm --dir site build`; restore `site/next-env.d.ts` if Next
   build rewrites it.
-- [ ] 4.4 Run `pnpm --dir site test:e2e -- ai-repurpose auth-billing` with a
+- [x] 4.4 Run `pnpm --dir site test:e2e -- ai-repurpose auth-billing` with a
   dev server on port 9088.
-- [ ] 4.5 Run provider secret/import grep checks.
-- [ ] 4.6 Run CDC gate and ship preview.
-- [ ] 4.7 Append evidence ledger rows.
-- [ ] 4.8 Commit task closure, push branch, and create draft PR stacked on
+- [x] 4.5 Run provider secret/import grep checks.
+- [x] 4.6 Run CDC gate and ship preview.
+- [x] 4.7 Append evidence ledger rows.
+- [x] 4.8 Commit task closure, push branch, and create draft PR stacked on
   `feat/auth-db-production-implementation`.
-- [ ] 4.9 Compound learning decision: record `none` unless a repeatable process
+- [x] 4.9 Compound learning decision: record `none` unless a repeatable process
   issue appears.

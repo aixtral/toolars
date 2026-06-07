@@ -11,7 +11,7 @@ import { evaluateAiGenerationAccess, getPlanById } from '@/lib/plans';
 import { recordSecurityEvent } from '@/lib/security/events';
 
 export async function POST(request: Request) {
-  const session = getSessionFromRequest(request);
+  const session = await getSessionFromRequest(request);
   if (!session) {
     recordSecurityEvent({
       request,

@@ -23,11 +23,11 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 2. Usage Repository
 
-- [ ] 2.1 RED: add usage period and in-memory repository tests.
+- [x] 2.1 RED: add usage period and in-memory repository tests.
   - Files: `site/lib/usage/__tests__/usage.test.ts`
   - Covers: R1-S1, R1-S2, R2-S1
   - Verification: `pnpm --dir site test -- usage`
-- [ ] 2.2 GREEN: implement usage domain and in-memory repository.
+- [x] 2.2 GREEN: implement usage domain and in-memory repository.
   - Files: `site/lib/usage/index.ts`
   - Verification: `pnpm --dir site test -- usage`
 - [ ] 2.3 RED: add Supabase usage adapter tests with fake query client.

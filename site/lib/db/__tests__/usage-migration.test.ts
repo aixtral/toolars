@@ -42,4 +42,15 @@ describe('usage counters Supabase migration', () => {
     expect(sql).toContain('grant select, insert, update on public.usage_counters to service_role');
     expect(sql).not.toContain('to anon');
   });
+
+  it('adds an atomic server-side AI generation increment function', () => {
+    const sql = readMigration();
+
+    expect(sql).toContain('create or replace function public.increment_ai_generation_usage');
+    expect(sql).toContain('on conflict (workspace_id, period_start)');
+    expect(sql).toContain(
+      'ai_generations_used = public.usage_counters.ai_generations_used + 1',
+    );
+    expect(sql).toContain('grant execute on function public.increment_ai_generation_usage');
+  });
 });

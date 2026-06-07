@@ -4,12 +4,9 @@ test.describe('AI repurpose workflow', () => {
   test('prompts unauthenticated visitors to sign in', async ({ page }) => {
     await page.goto('/app/repurpose');
 
-    await expect(
-      page.getByRole('heading', { name: /sign in to use ai content repurposer/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole('main').getByRole('link', { name: /^sign in$/i }),
-    ).toBeVisible();
+    await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Frepurpose/);
+    await expect(page.getByRole('heading', { name: /sign in to toolars/i })).toBeVisible();
+    await expect(page.getByText(/calculators remain free without an account/i)).toBeVisible();
   });
 
   test('generates streaming outputs and can cancel the job', async ({ page }) => {

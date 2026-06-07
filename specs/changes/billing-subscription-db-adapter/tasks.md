@@ -13,12 +13,12 @@ Execute in dependency order. Commit after each completed task group.
 - [x] 1.1 Add this CDC spec package.
   - Files: `specs/changes/billing-subscription-db-adapter/**`
   - Verification: `test -f specs/changes/billing-subscription-db-adapter/design.md`
-- [ ] 1.2 RED: add static SQL tests for billing tables, constraints, indexes,
+- [x] 1.2 RED: add static SQL tests for billing tables, constraints, indexes,
   RLS, and service-role grants.
   - Files: `site/lib/db/__tests__/billing-migration.test.ts`
   - Covers: R1-S1, R1-S2, R2-S1, R3-S1
   - Verification: `pnpm --dir site test -- billing-migration`
-- [ ] 1.3 GREEN: add Supabase billing migration.
+- [x] 1.3 GREEN: add Supabase billing migration.
   - Files: `supabase/migrations/20260607123000_billing_subscription_state.sql`
   - Verification: `pnpm --dir site test -- billing-migration`
 

@@ -23,16 +23,16 @@ Production code pass. TDD required for implementation tasks.
 
 ## 2. AI SDK Adapter And Config
 
-- [ ] 2.1 Add failing tests for AI SDK fake executor, provider config, and
+- [x] 2.1 Add failing tests for AI SDK fake executor, provider config, and
   normalized provider errors.
   - Files: `site/lib/ai/__tests__/ai-sdk-provider.test.ts`,
     `site/lib/ai/__tests__/provider-config.test.ts`
   - Covers: R2-S1, R3-S2, R4-S1, R4-S2
-- [ ] 2.2 Install `ai` package and implement server-only AI SDK adapter.
+- [x] 2.2 Install `ai` package and implement server-only AI SDK adapter.
   - Files: `site/package.json`, `site/pnpm-lock.yaml`,
     `site/lib/ai/provider-config.ts`, `site/lib/ai/providers/ai-sdk.ts`
   - Covers: R2-S1, R3-S2, R4-S1, R4-S2
-- [ ] 2.3 Run focused AI SDK/config tests and commit GREEN.
+- [x] 2.3 Run focused AI SDK/config tests and commit GREEN.
 
 ## 3. Route Integration And Boundaries
 

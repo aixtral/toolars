@@ -40,12 +40,12 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 3. AI Route Plan-Gate Integration
 
-- [ ] 3.1 RED: update AI route tests to inject usage repository and assert
+- [x] 3.1 RED: update AI route tests to inject usage repository and assert
   success increments, limit reached denies, and free denial does not increment.
   - Files: `site/app/api/ai/repurpose/route.test.ts`
   - Covers: R2-S1, R2-S2, R3-S1, R3-S2
   - Verification: `pnpm --dir site test -- repurpose`
-- [ ] 3.2 GREEN: route AI plan checks through usage repository.
+- [x] 3.2 GREEN: route AI plan checks through usage repository.
   - Files: `site/app/api/ai/repurpose/route.ts`
   - Verification: `pnpm --dir site test -- repurpose usage`
 

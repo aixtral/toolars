@@ -30,11 +30,11 @@ Execute in dependency order. Commit after each completed task group.
 - [x] 2.2 GREEN: implement usage domain and in-memory repository.
   - Files: `site/lib/usage/index.ts`
   - Verification: `pnpm --dir site test -- usage`
-- [ ] 2.3 RED: add Supabase usage adapter tests with fake query client.
+- [x] 2.3 RED: add Supabase usage adapter tests with fake query client.
   - Files: `site/lib/usage/__tests__/supabase.test.ts`
   - Covers: R1-S2, R2-S1, R4-S1
   - Verification: `pnpm --dir site test -- usage supabase`
-- [ ] 2.4 GREEN: implement server-only Supabase usage adapter and runtime factory.
+- [x] 2.4 GREEN: implement server-only Supabase usage adapter and runtime factory.
   - Files: `site/lib/usage/supabase.ts`, `site/lib/usage/runtime.ts`
   - Verification: `pnpm --dir site test -- usage supabase runtime`
 

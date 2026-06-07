@@ -32,6 +32,7 @@ export type BillingAccessState =
 
 export type BillingProvider = 'lemon_squeezy';
 export type BillingEventProcessingStatus = 'processed' | 'failed';
+export type Awaitable<T> = T | Promise<T>;
 
 export interface LemonSqueezyWebhookSignatureInput {
   body: string;
@@ -94,15 +95,17 @@ export interface BillingSubscriptionRecord {
 }
 
 export interface BillingSubscriptionRepository {
-  recordProviderEvent(record: BillingProviderEventRecord): {
+  recordProviderEvent(record: BillingProviderEventRecord): Awaitable<{
     duplicate: boolean;
     event: BillingProviderEventRecord;
-  };
-  upsertSubscription(record: BillingSubscriptionRecord): void;
-  getSubscription(providerSubscriptionId: string): BillingSubscriptionRecord | undefined;
-  listEvents(): BillingProviderEventRecord[];
-  listSubscriptions(): BillingSubscriptionRecord[];
-  reset(): void;
+  }>;
+  upsertSubscription(record: BillingSubscriptionRecord): Awaitable<void>;
+  getSubscription(
+    providerSubscriptionId: string,
+  ): Awaitable<BillingSubscriptionRecord | undefined>;
+  listEvents(): Awaitable<BillingProviderEventRecord[]>;
+  listSubscriptions(): Awaitable<BillingSubscriptionRecord[]>;
+  reset(): Awaitable<void>;
 }
 
 export interface ProcessBillingSubscriptionEventInput {
@@ -286,15 +289,15 @@ export function parseLemonSqueezySubscriptionEvent({
   };
 }
 
-export function processBillingSubscriptionEvent({
+export async function processBillingSubscriptionEvent({
   event,
   repository,
   now = new Date().toISOString(),
-}: ProcessBillingSubscriptionEventInput): ProcessBillingSubscriptionEventResult {
+}: ProcessBillingSubscriptionEventInput): Promise<ProcessBillingSubscriptionEventResult> {
   const error = event.mappedPlanId
     ? undefined
     : 'Unknown Lemon Squeezy subscription variant.';
-  const recorded = repository.recordProviderEvent({
+  const recorded = await repository.recordProviderEvent({
     provider: event.provider,
     providerEventId: event.providerEventId,
     eventName: event.eventName,
@@ -309,7 +312,7 @@ export function processBillingSubscriptionEvent({
   });
 
   if (recorded.duplicate) {
-    const subscription = repository.getSubscription(event.providerObjectId);
+    const subscription = await repository.getSubscription(event.providerObjectId);
     return {
       accepted: recorded.event.processingStatus === 'processed',
       duplicate: true,
@@ -337,7 +340,7 @@ export function processBillingSubscriptionEvent({
     };
   }
 
-  repository.upsertSubscription({
+  await repository.upsertSubscription({
     provider: event.provider,
     providerSubscriptionId: event.providerObjectId,
     workspaceId: event.workspaceId,
@@ -425,17 +428,18 @@ const billingWebhookRuntimeRepository = createInMemoryBillingRepository();
 
 export function processBillingWebhookRuntimeEvent(
   event: ParsedLemonSqueezySubscriptionEvent,
+  repository: BillingSubscriptionRepository = billingWebhookRuntimeRepository,
 ) {
   return processBillingSubscriptionEvent({
     event,
-    repository: billingWebhookRuntimeRepository,
+    repository,
   });
 }
 
-export function readBillingWebhookRuntimeSnapshot() {
+export async function readBillingWebhookRuntimeSnapshot() {
   return {
-    events: billingWebhookRuntimeRepository.listEvents(),
-    subscriptions: billingWebhookRuntimeRepository.listSubscriptions(),
+    events: await billingWebhookRuntimeRepository.listEvents(),
+    subscriptions: await billingWebhookRuntimeRepository.listSubscriptions(),
   };
 }
 

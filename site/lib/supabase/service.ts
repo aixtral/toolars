@@ -2,8 +2,12 @@ import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { requireSupabaseServiceEnv } from './env';
 
-export function createToolarsSupabaseServiceClient(): SupabaseClient {
-  const env = requireSupabaseServiceEnv();
+type EnvRecord = Partial<Record<string, string | undefined>>;
+
+export function createToolarsSupabaseServiceClient(
+  runtimeEnv: EnvRecord = process.env,
+): SupabaseClient {
+  const env = requireSupabaseServiceEnv(runtimeEnv);
 
   return createClient(env.url, env.serviceRoleKey, {
     auth: {

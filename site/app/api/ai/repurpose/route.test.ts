@@ -62,6 +62,14 @@ describe('POST /api/ai/repurpose', () => {
     expect(response.status).toBe(200);
     expect(body.job.status).toBe('completed');
     expect(body.job.outputs).toHaveLength(2);
+    expect(body.job.provider).toMatchObject({
+      id: 'preview',
+      model: 'toolars-fast',
+      usage: {
+        latencyMs: expect.any(Number),
+        totalTokens: expect.any(Number),
+      },
+    });
   });
 
   it('rejects oversized request bodies before generation', async () => {

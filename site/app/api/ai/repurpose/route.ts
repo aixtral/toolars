@@ -1,4 +1,4 @@
-import { createRepurposeJob, validateRepurposeRequest } from '@/lib/ai';
+import { generateRepurposeJobWithProvider, validateRepurposeRequest } from '@/lib/ai';
 import {
   evaluateAiPreviewRuntimeGuard,
   normalizeRepurposeRequest,
@@ -6,6 +6,7 @@ import {
   readBoundedRequestBody,
   recordAiPreviewGeneration,
 } from '@/lib/ai/runtime-security';
+import { createConfiguredAiProvider } from '@/lib/ai/provider-runtime';
 import { getSessionFromRequest } from '@/lib/auth';
 import { evaluateAiGenerationAccess, getPlanById } from '@/lib/plans';
 import { recordSecurityEvent } from '@/lib/security/events';
@@ -132,7 +133,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const job = createRepurposeJob(body);
+  const job = await generateRepurposeJobWithProvider({
+    request: body,
+    session,
+    provider: createConfiguredAiProvider(),
+  });
   recordAiPreviewGeneration(session.userId);
   const updatedUsage = readAiPreviewRuntimeSnapshot(session.userId);
 

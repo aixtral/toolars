@@ -89,7 +89,7 @@ describe('Lemon Squeezy billing helpers', () => {
     });
   });
 
-  it('records unknown variants as failed events without subscription mutation', () => {
+  it('records unknown variants as failed events without subscription mutation', async () => {
     const body = subscriptionPayload({ variantId: 404 });
     const event = parseLemonSqueezySubscriptionEvent({
       body,
@@ -98,7 +98,7 @@ describe('Lemon Squeezy billing helpers', () => {
     });
     const repository = createInMemoryBillingRepository();
 
-    const result = processBillingSubscriptionEvent({ event, repository });
+    const result = await processBillingSubscriptionEvent({ event, repository });
 
     expect(result).toMatchObject({
       accepted: false,
@@ -119,7 +119,7 @@ describe('Lemon Squeezy billing helpers', () => {
     expect(mapLemonSqueezyStatusToAccessState('expired')).toBe('free');
   });
 
-  it('processes duplicate provider events idempotently', () => {
+  it('processes duplicate provider events idempotently', async () => {
     const event = parseLemonSqueezySubscriptionEvent({
       body: subscriptionPayload({ eventName: 'subscription_updated' }),
       eventName: 'subscription_updated',
@@ -127,8 +127,8 @@ describe('Lemon Squeezy billing helpers', () => {
     });
     const repository = createInMemoryBillingRepository();
 
-    const first = processBillingSubscriptionEvent({ event, repository });
-    const second = processBillingSubscriptionEvent({ event, repository });
+    const first = await processBillingSubscriptionEvent({ event, repository });
+    const second = await processBillingSubscriptionEvent({ event, repository });
 
     expect(first).toMatchObject({
       accepted: true,
@@ -146,7 +146,7 @@ describe('Lemon Squeezy billing helpers', () => {
     expect(repository.listSubscriptions()).toHaveLength(1);
   });
 
-  it('falls back to free access for expired paid variants', () => {
+  it('falls back to free access for expired paid variants', async () => {
     const event = parseLemonSqueezySubscriptionEvent({
       body: subscriptionPayload({
         eventName: 'subscription_expired',
@@ -157,7 +157,7 @@ describe('Lemon Squeezy billing helpers', () => {
     });
     const repository = createInMemoryBillingRepository();
 
-    const result = processBillingSubscriptionEvent({ event, repository });
+    const result = await processBillingSubscriptionEvent({ event, repository });
 
     expect(result).toMatchObject({
       accepted: true,

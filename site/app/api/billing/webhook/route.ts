@@ -71,7 +71,7 @@ export async function POST(request: Request) {
       eventName,
       variantPlanMap: createLemonSqueezyVariantPlanMap(),
     });
-    const result = processBillingWebhookRuntimeEvent(event);
+    const result = await processBillingWebhookRuntimeEvent(event);
 
     if (!result.accepted) {
       recordSecurityEvent({

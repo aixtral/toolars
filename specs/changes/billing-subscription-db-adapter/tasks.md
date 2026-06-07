@@ -24,11 +24,11 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 2. Supabase Billing Repository Adapter
 
-- [ ] 2.1 RED: add adapter tests with a fake Supabase query client.
+- [x] 2.1 RED: add adapter tests with a fake Supabase query client.
   - Files: `site/lib/billing/__tests__/supabase.test.ts`
   - Covers: R1-S1, R1-S2, R2-S1, R2-S2, R3-S1
   - Verification: `pnpm --dir site test -- billing supabase`
-- [ ] 2.2 GREEN: implement `createSupabaseBillingRepository`.
+- [x] 2.2 GREEN: implement `createSupabaseBillingRepository`.
   - Files: `site/lib/billing/supabase.ts`, `site/lib/billing/index.ts`
   - Verification: `pnpm --dir site test -- billing supabase`
 

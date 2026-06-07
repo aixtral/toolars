@@ -11,15 +11,15 @@ Production code pass. TDD required for implementation tasks.
 
 ## 1. Provider Contract And Preview Service
 
-- [ ] 1.1 Add failing tests for provider contract, deterministic preview
+- [x] 1.1 Add failing tests for provider contract, deterministic preview
   provider, usage metadata, and service output mapping.
   - Files: `site/lib/ai/__tests__/provider.test.ts`
   - Covers: R1-S1, R1-S2, R3-S1
-- [ ] 1.2 Implement provider types, preview provider, and service orchestration.
+- [x] 1.2 Implement provider types, preview provider, and service orchestration.
   - Files: `site/lib/ai/provider.ts`, `site/lib/ai/service.ts`,
     `site/lib/ai/providers/preview.ts`, `site/lib/ai/index.ts`
   - Covers: R1-S1, R1-S2, R3-S1
-- [ ] 1.3 Run focused provider tests and commit GREEN.
+- [x] 1.3 Run focused provider tests and commit GREEN.
 
 ## 2. AI SDK Adapter And Config
 

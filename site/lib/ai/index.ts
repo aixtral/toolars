@@ -1,8 +1,28 @@
 import { AI_PLATFORMS } from '@/data/ai-platforms';
 import type { AiPlatformDefinition, RepurposePlatform } from '@/data/ai-platforms';
+import type {
+  AiGenerationInput,
+  AiGenerationSession,
+  AiProviderAdapter,
+  AiProviderMetadata,
+  RepurposeJobWithProvider,
+} from './provider';
 
 export { AI_PLATFORM_GROUPS, AI_PLATFORMS } from '@/data/ai-platforms';
 export type { AiPlatformDefinition, RepurposePlatform } from '@/data/ai-platforms';
+export type {
+  AiGenerationChunk,
+  AiGenerationInput,
+  AiGenerationResult,
+  AiGenerationSession,
+  AiProviderAdapter,
+  AiProviderError,
+  AiProviderErrorCode,
+  AiProviderId,
+  AiProviderMetadata,
+  AiProviderUsage,
+  RepurposeJobWithProvider,
+} from './provider';
 
 export type RepurposeTone = 'professional' | 'casual' | 'viral';
 export type RepurposeSourceType = 'url' | 'text';
@@ -39,6 +59,7 @@ export interface RepurposeJob extends RepurposeRequest {
   status: RepurposeStatus;
   outputs: RepurposeOutput[];
   createdAt: string;
+  provider?: AiProviderMetadata;
 }
 
 export const AI_TONES: readonly AiOption[] = [
@@ -183,5 +204,94 @@ export function createRepurposeJob(request: RepurposeRequest): RepurposeJob {
     status: 'completed',
     outputs,
     createdAt,
+  };
+}
+
+function estimateTokens(value: string) {
+  return Math.max(1, Math.ceil(wordCount(value) * 1.35));
+}
+
+export function createPreviewAiProvider(): AiProviderAdapter {
+  return {
+    id: 'preview',
+    async generate(input: AiGenerationInput) {
+      const startedAt = Date.now();
+      const job = createRepurposeJob(input.request);
+      const outputText = job.outputs.map((output) => output.content).join('\n\n');
+      const inputTokens = estimateTokens(input.request.sourceValue);
+      const outputTokens = estimateTokens(outputText);
+
+      return {
+        jobId: input.jobId,
+        status: 'completed',
+        outputs: job.outputs,
+        provider: {
+          id: 'preview',
+          model: input.request.model,
+          providerRequestId: `preview-${input.jobId}`,
+          usage: {
+            inputTokens,
+            outputTokens,
+            totalTokens: inputTokens + outputTokens,
+            estimatedCostUsd: 0,
+            latencyMs: Math.max(0, Date.now() - startedAt),
+          },
+        },
+      };
+    },
+    async *stream(input: AiGenerationInput) {
+      yield {
+        type: 'job_started' as const,
+        jobId: input.jobId,
+      };
+
+      const result = await this.generate(input);
+
+      for (const output of result.outputs) {
+        yield {
+          type: 'output_completed' as const,
+          jobId: input.jobId,
+          platformId: output.platform,
+          content: output.content,
+        };
+      }
+
+      yield {
+        type: 'job_completed' as const,
+        jobId: input.jobId,
+      };
+    },
+  };
+}
+
+export async function generateRepurposeJobWithProvider({
+  request,
+  session,
+  provider = createPreviewAiProvider(),
+}: {
+  request: RepurposeRequest;
+  session: AiGenerationSession;
+  provider?: AiProviderAdapter;
+}): Promise<RepurposeJobWithProvider> {
+  const errors = validateRepurposeRequest(request);
+  if (errors.length > 0) {
+    throw new Error(errors.join(' '));
+  }
+
+  const jobId = `repurpose-${Date.now()}`;
+  const result = await provider.generate({
+    jobId,
+    userId: session.userId,
+    workspaceId: session.workspaceId,
+    request,
+  });
+
+  return {
+    ...request,
+    id: result.jobId,
+    status: result.status,
+    outputs: result.outputs,
+    createdAt: result.outputs[0]?.createdAt ?? new Date().toISOString(),
+    provider: result.provider,
   };
 }

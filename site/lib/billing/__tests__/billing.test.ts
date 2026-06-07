@@ -164,7 +164,7 @@ describe('Lemon Squeezy billing helpers', () => {
       planId: 'free',
       accessState: 'free',
     });
-    expect(repository.listSubscriptions()[0]).toMatchObject({
+    expect((await repository.listSubscriptions())[0]).toMatchObject({
       providerSubscriptionId: 'sub_123',
       planId: 'free',
       accessState: 'free',

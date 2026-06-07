@@ -34,7 +34,7 @@ type SupabaseQueryBuilder<T> = {
 };
 
 export type SupabaseBillingClient = {
-  from(table: 'subscription_events' | 'subscriptions'): SupabaseQueryBuilder<Record<string, unknown>>;
+  from(table: 'subscription_events' | 'subscriptions'): unknown;
 };
 
 const eventColumns =
@@ -135,13 +135,19 @@ function throwSupabaseError(action: string, error: SupabaseError | null): never 
   throw new Error(`${action}: ${error?.message ?? 'Unknown Supabase billing error'}`);
 }
 
+function billingTable(
+  client: SupabaseBillingClient,
+  table: 'subscription_events' | 'subscriptions',
+) {
+  return client.from(table) as SupabaseQueryBuilder<Record<string, unknown>>;
+}
+
 export function createSupabaseBillingRepository(
   client: SupabaseBillingClient = createToolarsSupabaseServiceClient(),
 ): BillingSubscriptionRepository {
   return {
     async recordProviderEvent(record) {
-      const inserted = await client
-        .from('subscription_events')
+      const inserted = await billingTable(client, 'subscription_events')
         .insert(eventToRow(record))
         .select(eventColumns)
         .single();
@@ -154,8 +160,7 @@ export function createSupabaseBillingRepository(
         throwSupabaseError('Failed to record billing provider event', inserted.error);
       }
 
-      const existing = await client
-        .from('subscription_events')
+      const existing = await billingTable(client, 'subscription_events')
         .select(eventColumns)
         .eq('provider', record.provider)
         .eq('provider_event_id', record.providerEventId)
@@ -169,8 +174,7 @@ export function createSupabaseBillingRepository(
     },
 
     async upsertSubscription(record) {
-      const result = await client
-        .from('subscriptions')
+      const result = await billingTable(client, 'subscriptions')
         .upsert(subscriptionToRow(record), {
           onConflict: 'provider,provider_subscription_id',
         })
@@ -183,8 +187,7 @@ export function createSupabaseBillingRepository(
     },
 
     async getSubscription(providerSubscriptionId) {
-      const result = await client
-        .from('subscriptions')
+      const result = await billingTable(client, 'subscriptions')
         .select(subscriptionColumns)
         .eq('provider', 'lemon_squeezy')
         .eq('provider_subscription_id', providerSubscriptionId)
@@ -198,7 +201,7 @@ export function createSupabaseBillingRepository(
     },
 
     async listEvents() {
-      const result = await client.from('subscription_events').select(eventColumns);
+      const result = await billingTable(client, 'subscription_events').select(eventColumns);
       if (result.error) {
         throwSupabaseError('Failed to list billing provider events', result.error);
       }
@@ -207,7 +210,7 @@ export function createSupabaseBillingRepository(
     },
 
     async listSubscriptions() {
-      const result = await client.from('subscriptions').select(subscriptionColumns);
+      const result = await billingTable(client, 'subscriptions').select(subscriptionColumns);
       if (result.error) {
         throwSupabaseError('Failed to list billing subscriptions', result.error);
       }

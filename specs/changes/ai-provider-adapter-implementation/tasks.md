@@ -36,17 +36,17 @@ Production code pass. TDD required for implementation tasks.
 
 ## 3. Route Integration And Boundaries
 
-- [ ] 3.1 Add failing tests proving the route returns provider metadata and
+- [x] 3.1 Add failing tests proving the route returns provider metadata and
   provider SDK imports stay server-only.
   - Files: `site/app/api/ai/repurpose/route.test.ts`,
     `site/lib/ai/__tests__/provider-boundary.test.ts`
   - Covers: R1-S1, R2-S2, R3-S1
-- [ ] 3.2 Update route to call provider-neutral service and add import-boundary
+- [x] 3.2 Update route to call provider-neutral service and add import-boundary
   scanner.
   - Files: `site/app/api/ai/repurpose/route.ts`,
     `site/lib/ai/provider-boundary.ts`
   - Covers: R1-S1, R2-S2, R3-S1
-- [ ] 3.3 Run focused route/boundary tests and commit GREEN.
+- [x] 3.3 Run focused route/boundary tests and commit GREEN.
 
 ## 4. Verification And Ship
 

@@ -13,11 +13,11 @@ Execute in dependency order. Commit after each completed task group.
 - [x] 1.1 Add this CDC spec package.
   - Files: `specs/changes/usage-metering-and-plan-gates/**`
   - Verification: `test -f specs/changes/usage-metering-and-plan-gates/design.md`
-- [ ] 1.2 RED: add static SQL tests for `usage_counters`.
+- [x] 1.2 RED: add static SQL tests for `usage_counters`.
   - Files: `site/lib/db/__tests__/usage-migration.test.ts`
   - Covers: R1-S1, R4-S1
   - Verification: `pnpm --dir site test -- usage-migration`
-- [ ] 1.3 GREEN: add Supabase usage counter migration.
+- [x] 1.3 GREEN: add Supabase usage counter migration.
   - Files: `supabase/migrations/20260607133000_usage_counters.sql`
   - Verification: `pnpm --dir site test -- usage-migration`
 

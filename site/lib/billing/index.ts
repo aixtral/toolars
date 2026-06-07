@@ -428,10 +428,11 @@ const billingWebhookRuntimeRepository = createInMemoryBillingRepository();
 
 export function processBillingWebhookRuntimeEvent(
   event: ParsedLemonSqueezySubscriptionEvent,
+  repository: BillingSubscriptionRepository = billingWebhookRuntimeRepository,
 ) {
   return processBillingSubscriptionEvent({
     event,
-    repository: billingWebhookRuntimeRepository,
+    repository,
   });
 }
 

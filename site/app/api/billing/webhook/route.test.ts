@@ -1,10 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  createInMemoryBillingRepository,
   createLemonSqueezyWebhookSignature,
   resetBillingWebhookRuntimeState,
 } from '@/lib/billing';
 import { readSecurityEvents, resetSecurityEvents } from '@/lib/security/events';
-import { POST } from './route';
+import { POST, createBillingWebhookHandler } from './route';
 
 function subscriptionBody({
   status = 'active',
@@ -121,6 +122,23 @@ describe('POST /api/billing/webhook', () => {
       planId: 'pro',
       accessState: 'paid',
     });
+  });
+
+  it('can process signed events through an injected billing repository', async () => {
+    const repository = createInMemoryBillingRepository();
+    const handler = createBillingWebhookHandler({ repository });
+
+    const response = await handler(signedRequest(subscriptionBody()));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      received: true,
+      duplicate: false,
+      planId: 'pro',
+      accessState: 'paid',
+    });
+    expect(await repository.listEvents()).toHaveLength(1);
+    expect(await repository.listSubscriptions()).toHaveLength(1);
   });
 
   it('returns success without a second mutation for duplicate provider events', async () => {

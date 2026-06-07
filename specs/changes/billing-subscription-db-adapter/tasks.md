@@ -34,12 +34,12 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 3. Webhook Runtime Integration
 
-- [ ] 3.1 RED: update webhook route tests to inject a repository and assert the
+- [x] 3.1 RED: update webhook route tests to inject a repository and assert the
   route uses it.
   - Files: `site/app/api/billing/webhook/route.test.ts`
   - Covers: R4-S1, R4-S2
   - Verification: `pnpm --dir site test -- route`
-- [ ] 3.2 GREEN: add billing runtime factory and route injection.
+- [x] 3.2 GREEN: add billing runtime factory and route injection.
   - Files: `site/lib/billing/runtime.ts`,
     `site/app/api/billing/webhook/route.ts`
   - Verification: `pnpm --dir site test -- billing route`

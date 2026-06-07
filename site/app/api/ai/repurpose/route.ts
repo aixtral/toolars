@@ -2,16 +2,25 @@ import { generateRepurposeJobWithProvider, validateRepurposeRequest } from '@/li
 import {
   evaluateAiPreviewRuntimeGuard,
   normalizeRepurposeRequest,
-  readAiPreviewRuntimeSnapshot,
   readBoundedRequestBody,
-  recordAiPreviewGeneration,
 } from '@/lib/ai/runtime-security';
 import { createConfiguredAiProvider } from '@/lib/ai/provider-runtime';
 import { getSessionFromRequest } from '@/lib/auth';
 import { evaluateAiGenerationAccess, getPlanById } from '@/lib/plans';
 import { recordSecurityEvent } from '@/lib/security/events';
+import {
+  createMonthlyUsagePeriod,
+  type UsageMeterRepository,
+} from '@/lib/usage';
+import { createUsageMeterRuntimeRepository } from '@/lib/usage/runtime';
 
-export async function POST(request: Request) {
+export interface AiRepurposeHandlerOptions {
+  usageRepository?: UsageMeterRepository;
+  now?: () => Date;
+}
+
+export function createAiRepurposeHandler(options: AiRepurposeHandlerOptions = {}) {
+  return async function aiRepurposeHandler(request: Request) {
   const session = await getSessionFromRequest(request);
   if (!session) {
     recordSecurityEvent({
@@ -106,11 +115,17 @@ export async function POST(request: Request) {
     return Response.json({ error: runtimeGuard.error }, { status: runtimeGuard.status });
   }
 
-  const usage = readAiPreviewRuntimeSnapshot(session.userId);
+  const usageRepository =
+    options.usageRepository ?? (await createUsageMeterRuntimeRepository());
+  const period = createMonthlyUsagePeriod(options.now?.() ?? new Date());
+  const usage = await usageRepository.readUsageSnapshot({
+    workspaceId: session.workspaceId,
+    period,
+  });
   const gate = evaluateAiGenerationAccess({
     planId: session.planId,
     selectedPlatformCount: body.platforms.length,
-    usedGenerations: usage.usedGenerations,
+    usedGenerations: usage.aiGenerationsUsed,
   });
 
   if (!gate.allowed) {
@@ -138,14 +153,22 @@ export async function POST(request: Request) {
     session,
     provider: createConfiguredAiProvider(),
   });
-  recordAiPreviewGeneration(session.userId);
-  const updatedUsage = readAiPreviewRuntimeSnapshot(session.userId);
+  const updatedUsage = await usageRepository.incrementAiGenerations({
+    workspaceId: session.workspaceId,
+    period,
+  });
 
   return Response.json({
     job,
     usage: {
       plan: `${plan.name} preview`,
-      remainingGenerations: Math.max(0, plan.monthlyAiGenerations - updatedUsage.usedGenerations),
+      remainingGenerations: Math.max(
+        0,
+        plan.monthlyAiGenerations - updatedUsage.aiGenerationsUsed,
+      ),
     },
   });
+  };
 }
+
+export const POST = createAiRepurposeHandler();

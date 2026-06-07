@@ -20,6 +20,7 @@ const forbiddenRuntimeImports = [
   '@/lib/auth',
   '@/lib/supabase',
   '@/lib/billing',
+  '@/lib/usage',
   '@/lib/ai',
 ];
 

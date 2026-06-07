@@ -1,7 +1,13 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetAiPreviewRuntimeState } from '@/lib/ai/runtime-security';
 import { readSecurityEvents, resetSecurityEvents } from '@/lib/security/events';
-import { POST } from './route';
+import {
+  createInMemoryUsageMeterRepository,
+  createMonthlyUsagePeriod,
+  type UsageMeterRepository,
+} from '@/lib/usage';
+import { resetPreviewUsageMeterRepository } from '@/lib/usage/runtime';
+import { POST, createAiRepurposeHandler } from './route';
 
 const requestBody = {
   sourceType: 'text',
@@ -16,6 +22,7 @@ const requestBody = {
 describe('POST /api/ai/repurpose', () => {
   afterEach(() => {
     resetAiPreviewRuntimeState();
+    resetPreviewUsageMeterRepository();
     resetSecurityEvents();
   });
 
@@ -69,6 +76,64 @@ describe('POST /api/ai/repurpose', () => {
         latencyMs: expect.any(Number),
         totalTokens: expect.any(Number),
       },
+    });
+  });
+
+  it('increments workspace usage only after successful generation', async () => {
+    const usageRepository = createInMemoryUsageMeterRepository();
+    const now = new Date('2026-06-15T00:00:00.000Z');
+    const handler = createAiRepurposeHandler({
+      usageRepository,
+      now: () => now,
+    });
+
+    const response = await handler(previewRequest(requestBody));
+    const body = await response.json();
+    const period = createMonthlyUsagePeriod(now);
+
+    expect(response.status).toBe(200);
+    expect(body.usage).toMatchObject({
+      plan: 'Pro preview',
+      remainingGenerations: 999,
+    });
+    await expect(
+      usageRepository.readUsageSnapshot({
+        workspaceId: 'preview-pro-workspace',
+        period,
+      }),
+    ).resolves.toMatchObject({
+      aiGenerationsUsed: 1,
+    });
+  });
+
+  it('denies AI generation when durable usage reaches the plan limit', async () => {
+    const now = new Date('2026-06-15T00:00:00.000Z');
+    const usageRepository: UsageMeterRepository = {
+      async readUsageSnapshot({ workspaceId, period }) {
+        return {
+          workspaceId,
+          period,
+          aiGenerationsUsed: 1000,
+          exportsUsed: 0,
+          batchRunsUsed: 0,
+        };
+      },
+      async incrementAiGenerations() {
+        throw new Error('plan-denied requests must not increment usage');
+      },
+      reset() {},
+    };
+    const handler = createAiRepurposeHandler({
+      usageRepository,
+      now: () => now,
+    });
+
+    const response = await handler(previewRequest(requestBody));
+
+    expect(response.status).toBe(402);
+    expect(await response.json()).toEqual({
+      error: 'Pro monthly AI generation limit reached.',
+      upgradeLabel: 'Upgrade to Pro',
     });
   });
 
@@ -153,7 +218,13 @@ describe('POST /api/ai/repurpose', () => {
 
   it('logs plan denials without recording source text', async () => {
     const sourceValue = 'sensitive-ai-source-text-for-log-test';
-    const response = await POST(
+    const usageRepository = createInMemoryUsageMeterRepository();
+    const now = new Date('2026-06-15T00:00:00.000Z');
+    const handler = createAiRepurposeHandler({
+      usageRepository,
+      now: () => now,
+    });
+    const response = await handler(
       previewRequest(
         {
           ...requestBody,
@@ -162,6 +233,7 @@ describe('POST /api/ai/repurpose', () => {
         'free',
       ),
     );
+    const period = createMonthlyUsagePeriod(now);
 
     expect(response.status).toBe(402);
     expect(readSecurityEvents()).toMatchObject([
@@ -179,5 +251,13 @@ describe('POST /api/ai/repurpose', () => {
       },
     ]);
     expect(JSON.stringify(readSecurityEvents())).not.toContain(sourceValue);
+    await expect(
+      usageRepository.readUsageSnapshot({
+        workspaceId: 'preview-free-workspace',
+        period,
+      }),
+    ).resolves.toMatchObject({
+      aiGenerationsUsed: 0,
+    });
   });
 });

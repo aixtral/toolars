@@ -75,8 +75,10 @@ export interface AiProviderAdapter {
 
 export interface AiGenerationSession {
   userId: string;
+  email?: string | null;
   workspaceId: string;
   planId: PlanId;
+  role?: 'owner' | 'admin' | 'member';
   isAuthenticated: true;
 }
 

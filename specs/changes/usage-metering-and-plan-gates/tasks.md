@@ -51,12 +51,12 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 4. Verification And Closeout
 
-- [ ] 4.1 Run focused tests.
+- [x] 4.1 Run focused tests.
   - Verification: `pnpm --dir site test -- usage usage-migration repurpose public-calculator-isolation`
-- [ ] 4.2 Run standard gates.
+- [x] 4.2 Run standard gates.
   - Verification: `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `cdc-workflow gate --mode standard --root .`
-- [ ] 4.3 Record CDC evidence and closeout.
+- [x] 4.3 Record CDC evidence and closeout.
   - Files: `.cdc/state/evidence.jsonl`, `.cdc/state/closeouts.jsonl`,
     `specs/changes/usage-metering-and-plan-gates/tasks.md`

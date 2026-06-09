@@ -7,29 +7,46 @@ test.describe('calculator pages', () => {
     await expect(
       page.getByRole('heading', { name: /bmi calculator/i }),
     ).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: /calculator page actions/i }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('region', { name: /calculator formula preview/i }),
+    ).toContainText(/bmi = weight/i);
     await expect(page.getByText(/calculators stay free and private/i)).toBeVisible();
 
     await page.getByLabel(/height/i).fill('180');
     await page.getByLabel(/weight/i).fill('75');
     await page.getByRole('button', { name: /calculate/i }).click();
 
-    const resultPanel = page.getByRole('region', { name: /result/i });
+    const resultPanel = page.getByRole('region', { name: /^result$/i });
     await expect(resultPanel.getByText('23.1')).toBeVisible();
     await expect(resultPanel.getByText(/normal/i)).toBeVisible();
+    await expect(
+      page.getByRole('tablist', { name: /result detail sections/i }),
+    ).toBeVisible();
+    await expect(page.getByRole('tabpanel', { name: /breakdown/i })).toContainText(
+      /result breakdown/i,
+    );
 
     await page.getByRole('button', { name: /save result/i }).click();
-    await expect(page.getByRole('status')).toContainText(/saved locally/i);
+    await expect(resultPanel.getByRole('status')).toContainText(/saved locally/i);
 
     await page.getByRole('button', { name: /add to compare/i }).click();
-    await expect(page.getByRole('status')).toContainText(/added to compare/i);
+    await expect(resultPanel.getByRole('status')).toContainText(/added to compare/i);
 
     await page.getByRole('button', { name: /copy share link/i }).click();
-    await expect(page.getByRole('status')).toContainText(/share link copied/i);
+    await expect(resultPanel.getByRole('status')).toContainText(/share link copied/i);
 
     const savedCount = await page.evaluate(() => {
       const saved = window.localStorage.getItem('toolars:saved-calculator-results');
       return saved ? JSON.parse(saved).length : 0;
     });
     expect(savedCount).toBe(1);
+
+    await expect(page.getByRole('region', { name: /related tools/i })).toBeVisible();
+    await expect(
+      page.getByRole('complementary', { name: /sponsored placement/i }),
+    ).toContainText(/form and result/i);
   });
 });

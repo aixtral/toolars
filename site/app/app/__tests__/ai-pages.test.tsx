@@ -3,38 +3,83 @@ import { describe, expect, it } from 'vitest';
 import AnalyticsPage from '@/app/app/analytics/page';
 import BrandVoicePage from '@/app/app/brand-voice/page';
 import HistoryPage from '@/app/app/history/page';
+import RepurposePage from '@/app/app/repurpose/page';
 import SettingsPage from '@/app/app/settings/page';
 import TemplatesPage from '@/app/app/templates/page';
 import { AI_PLATFORM_GROUPS, AI_PLATFORMS } from '@/data/ai-platforms';
 
 describe('AI supporting pages', () => {
+  it('renders the repurpose workspace header with plan and usage context', async () => {
+    const page = await RepurposePage({
+      searchParams: Promise.resolve({ preview: '1' }),
+    });
+
+    render(page);
+
+    expect(screen.getByRole('region', { name: /ai workspace header/i })).toHaveTextContent(
+      /ai content repurposer/i,
+    );
+    expect(screen.getByRole('region', { name: /usage limits/i })).toHaveTextContent(
+      /ai generations left/i,
+    );
+    expect(screen.getByRole('region', { name: /ai repurpose workspace/i })).toBeInTheDocument();
+  });
+
   it('renders the template library with required template card metadata', () => {
     render(<TemplatesPage />);
 
     expect(
       screen.getByRole('heading', { name: /template library/i }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /template workspace/i })).toHaveTextContent(
+      /workflow-ready templates/i,
+    );
+    expect(screen.getByRole('region', { name: /template filters/i })).toHaveTextContent(
+      /platform coverage/i,
+    );
+    expect(screen.getByRole('region', { name: /template usage signals/i })).toHaveTextContent(
+      /most used/i,
+    );
     for (const group of ['Social', 'Long-form', 'Email', 'Community']) {
       expect(screen.getAllByText(group).length).toBeGreaterThan(0);
     }
-    expect(screen.getAllByRole('button', { name: /use template/i }).length).toBeGreaterThan(3);
+    expect(
+      screen.getByRole('button', { name: /use launch thread template/i }),
+    ).toBeInTheDocument();
   });
 
   it('renders the brand voice manager with plan limits and default controls', () => {
     render(<BrandVoicePage />);
 
     expect(screen.getByRole('heading', { name: /brand voice/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /voice governance/i })).toHaveTextContent(
+      /default voice/i,
+    );
+    expect(screen.getByRole('region', { name: /voice preview/i })).toHaveTextContent(
+      /sample tone preview/i,
+    );
+    expect(screen.getByRole('region', { name: /voice plan capacity/i })).toHaveTextContent(
+      /workspace assignment/i,
+    );
     expect(screen.getByRole('button', { name: /create voice/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /set as default/i }).length).toBeGreaterThan(0);
     expect(screen.getByText(/free: 1 voice/i)).toBeInTheDocument();
     expect(screen.getByText(/pro: 10 voices/i)).toBeInTheDocument();
-    expect(screen.getByText(/default voice/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/default voice/i).length).toBeGreaterThan(0);
   });
 
   it('renders history search, filters, statuses, and regenerate actions', () => {
     render(<HistoryPage />);
 
     expect(screen.getByRole('heading', { name: /content history/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /history operations/i })).toHaveTextContent(
+      /detail drawer/i,
+    );
+    expect(screen.getByRole('region', { name: /saved output detail/i })).toHaveTextContent(
+      /source snapshot/i,
+    );
     expect(screen.getByRole('searchbox', { name: /search history/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /filter by status/i })).toBeInTheDocument();
     expect(screen.getByText('Completed')).toBeInTheDocument();
     expect(screen.getByText('Canceled')).toBeInTheDocument();
     expect(screen.getByText('Failed')).toBeInTheDocument();
@@ -47,6 +92,12 @@ describe('AI supporting pages', () => {
     expect(
       screen.getByRole('heading', { name: /performance analytics/i }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /analytics cockpit/i })).toHaveTextContent(
+      /usage over time/i,
+    );
+    expect(screen.getByRole('region', { name: /usage trend/i })).toHaveTextContent(
+      /7 day trend/i,
+    );
     expect(screen.getByText('Total tool uses')).toBeInTheDocument();
     expect(screen.getByText('AI outputs generated')).toBeInTheDocument();
     expect(screen.getByText('Credits used')).toBeInTheDocument();
@@ -59,6 +110,15 @@ describe('AI supporting pages', () => {
     render(<SettingsPage />);
 
     expect(screen.getByRole('heading', { name: /workspace settings/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /settings operations/i })).toHaveTextContent(
+      /pro workspace/i,
+    );
+    expect(screen.getByRole('region', { name: /security and billing/i })).toHaveTextContent(
+      /api key vault/i,
+    );
+    expect(
+      screen.getByRole('button', { name: /export workspace data/i }),
+    ).toBeInTheDocument();
     for (const section of ['Profile', 'Subscription', 'API keys', 'Notifications', 'Workspace', 'Danger zone']) {
       expect(screen.getByText(section)).toBeInTheDocument();
     }

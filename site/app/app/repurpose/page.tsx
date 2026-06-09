@@ -78,25 +78,30 @@ export default async function RepurposePage({ searchParams }: RepurposePageProps
   return (
     <section className="space-y-6">
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
+        <section
+          aria-label="AI workspace header"
+          className="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm"
+        >
           <div className="flex flex-wrap gap-2">
             <Badge variant="ai">Streaming workflow</Badge>
             <Badge variant="success">Preview account</Badge>
             <Badge>{plan.name} plan</Badge>
             <Badge>Brand voice</Badge>
           </div>
-          <h1 className="mt-4 text-4xl font-bold leading-[44px] text-ink">
+          <h1 className="mt-4 text-3xl font-bold leading-9 text-ink sm:text-4xl sm:leading-[44px]">
             AI Content Repurposer
           </h1>
-          <p className="mt-3 max-w-3xl text-base leading-6 text-neutral-600">
+          <p className="mt-3 hidden max-w-3xl text-base leading-6 text-neutral-600 sm:block">
             Turn one source into platform-native drafts for social, newsletters,
             articles, and community launches. Canceling preserves partial output.
           </p>
-        </div>
-        <UsagePlanCard
-          planId={session.planId}
-          remainingGenerations={remainingGenerations}
-        />
+        </section>
+        <section aria-label="Usage limits" className="hidden md:block">
+          <UsagePlanCard
+            planId={session.planId}
+            remainingGenerations={remainingGenerations}
+          />
+        </section>
       </div>
 
       <RepurposeWorkspace planId={session.planId} />

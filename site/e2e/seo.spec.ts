@@ -5,6 +5,30 @@ async function canonicalHref(page: import('@playwright/test').Page) {
 }
 
 test.describe('SEO content surfaces', () => {
+  test('exposes root site metadata and searchable website JSON-LD', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute('content', 'toolars');
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website');
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      'content',
+      'https://toolars.com',
+    );
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      'content',
+      'summary_large_image',
+    );
+
+    const jsonLd = await page
+      .locator('script[type="application/ld+json"]')
+      .evaluateAll((nodes) => nodes.map((node) => node.textContent ?? ''));
+
+    expect(jsonLd.some((entry) => entry.includes('"@type":"Organization"'))).toBe(true);
+    expect(jsonLd.some((entry) => entry.includes('"@type":"WebSite"'))).toBe(true);
+    expect(jsonLd.some((entry) => entry.includes('"SearchAction"'))).toBe(true);
+    expect(jsonLd.some((entry) => entry.includes('/tools?search={search_term_string}'))).toBe(true);
+  });
+
   test('renders a crawlable blog index with English-first article links', async ({ page }) => {
     await page.goto('/blog');
 
@@ -41,5 +65,31 @@ test.describe('SEO content surfaces', () => {
 
     expect(jsonLd.some((entry) => entry.includes('"@type":"WebApplication"'))).toBe(true);
     expect(jsonLd.some((entry) => entry.includes('"@type":"FAQPage"'))).toBe(true);
+  });
+
+  test('exposes sitemap, robots, and llms discovery manifests', async ({ page }) => {
+    const sitemap = await page.request.get('/sitemap.xml');
+    expect(sitemap.ok()).toBe(true);
+    const sitemapText = await sitemap.text();
+    expect(sitemapText).toContain('<loc>https://toolars.com/tools/bmi-calculator</loc>');
+    expect(sitemapText).toContain('<loc>https://toolars.com/pricing</loc>');
+    expect(sitemapText).toContain('<loc>https://toolars.com/terms</loc>');
+    expect(sitemapText).not.toContain('/app/repurpose');
+    expect(sitemapText).not.toContain('/login');
+
+    const robots = await page.request.get('/robots.txt');
+    expect(robots.ok()).toBe(true);
+    const robotsText = await robots.text();
+    expect(robotsText).toContain('Disallow: /api/');
+    expect(robotsText).toContain('Disallow: /app/');
+    expect(robotsText).toContain('Sitemap: https://toolars.com/sitemap.xml');
+
+    const llms = await page.request.get('/llms.txt');
+    expect(llms.ok()).toBe(true);
+    const llmsText = await llms.text();
+    expect(llmsText).toContain('# toolars');
+    expect(llmsText).toContain('73 free calculators');
+    expect(llmsText).toContain('AI tools are subscription-gated');
+    expect(llmsText).toContain('https://toolars.com/terms');
   });
 });

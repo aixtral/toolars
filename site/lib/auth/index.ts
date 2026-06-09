@@ -1,10 +1,13 @@
 import { isPlanId } from '@/lib/plans';
+import { isPreviewAuthAllowed } from '@/lib/env/release-gate';
 import type { PlanId } from '@/lib/plans';
 
 export interface ToolarsSession {
   userId: string;
-  email: string;
+  email: string | null;
+  workspaceId: string;
   planId: PlanId;
+  role: 'owner' | 'admin' | 'member';
   isAuthenticated: true;
 }
 
@@ -12,7 +15,9 @@ export function createPreviewSession(planId: PlanId = 'pro'): ToolarsSession {
   return {
     userId: `preview-${planId}-user`,
     email: `${planId}@preview.toolars.test`,
+    workspaceId: `preview-${planId}-workspace`,
     planId,
+    role: 'owner',
     isAuthenticated: true,
   };
 }
@@ -23,10 +28,7 @@ function planFromPreview(value: string | undefined) {
 }
 
 function previewAuthEnabled() {
-  return (
-    process.env.NODE_ENV !== 'production' ||
-    process.env.TOOLARS_ENABLE_PREVIEW_AUTH === 'true'
-  );
+  return isPreviewAuthAllowed();
 }
 
 export function getSessionFromSearchParams(searchParams: Record<string, string | undefined>) {
@@ -36,7 +38,7 @@ export function getSessionFromSearchParams(searchParams: Record<string, string |
   return planId ? createPreviewSession(planId) : null;
 }
 
-export function getSessionFromRequest(request: Request) {
+export async function getSessionFromRequest(request: Request) {
   if (!previewAuthEnabled()) return null;
   if (request.headers.get('x-toolars-preview-user') !== 'true') return null;
 

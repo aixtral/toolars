@@ -51,4 +51,34 @@ describe('RepurposeWorkspace', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/canceled/i);
     expect(within(outputRegion).getByText(/drafting twitter thread/i)).toBeInTheDocument();
   });
+
+  it('renders the commercial AI dashboard controls from the design spec', () => {
+    render(<RepurposeWorkspace planId="pro" />);
+
+    expect(
+      screen.getByRole('region', { name: /ai repurpose workspace/i }),
+    ).toBeInTheDocument();
+
+    const sourceTabs = screen.getByRole('tablist', { name: /source type/i });
+    expect(within(sourceTabs).getByRole('tab', { name: /text/i })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(within(sourceTabs).getByRole('tab', { name: /url/i })).toBeInTheDocument();
+
+    expect(screen.getByRole('group', { name: /platform picker/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /generation controls/i })).toHaveTextContent(
+      /professional/i,
+    );
+    expect(screen.getByRole('region', { name: /generation controls/i })).toHaveTextContent(
+      /toolars fast/i,
+    );
+
+    expect(screen.getByRole('region', { name: /usage and plan state/i })).toHaveTextContent(
+      /pro plan/i,
+    );
+    expect(screen.getByRole('region', { name: /history and saved outputs/i })).toHaveTextContent(
+      /local draft history/i,
+    );
+  });
 });

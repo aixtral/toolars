@@ -10,8 +10,15 @@ import {
   recentTools,
 } from '@/lib/discovery';
 import { buildDirectoryMetadata } from '@/lib/seo';
+import { searchTools } from '@/lib/search';
 
 export const metadata = buildDirectoryMetadata('tools');
+
+interface ToolsDirectoryPageProps {
+  searchParams?: Promise<{
+    search?: string;
+  }>;
+}
 
 const filterControls = [
   {
@@ -36,8 +43,17 @@ const filterControls = [
   },
 ];
 
-export default function ToolsDirectoryPage() {
-  const tools = allDirectoryTools(12);
+function normalizeSearchQuery(value?: string) {
+  return (value ?? '').trim().slice(0, 80);
+}
+
+export default async function ToolsDirectoryPage({ searchParams }: ToolsDirectoryPageProps = {}) {
+  const params = await searchParams;
+  const searchQuery = normalizeSearchQuery(params?.search);
+  const isSearchResult = searchQuery.length > 0;
+  const tools = isSearchResult
+    ? searchTools(searchQuery, { limit: 12 })
+    : allDirectoryTools(12);
   const categories = categoryCards();
   const recent = recentTools();
   const favorites = favoriteTools();
@@ -92,10 +108,12 @@ export default function ToolsDirectoryPage() {
               Browse calculators and AI tools by category, pricing model, and workflow.
               Every public tool link is crawlable and English-first.
             </p>
-            <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto]">
+            <form action="/tools" className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto]">
               <Input
+                name="search"
                 type="search"
                 aria-label="Search all tools"
+                defaultValue={searchQuery}
                 placeholder="Search all calculators and AI tools..."
               />
               <button
@@ -105,7 +123,13 @@ export default function ToolsDirectoryPage() {
                 <SlidersHorizontal aria-hidden="true" size={18} strokeWidth={2} />
                 Filters
               </button>
-            </div>
+            </form>
+            {isSearchResult ? (
+              <p className="mt-3 text-sm font-semibold text-neutral-600" aria-live="polite">
+                Showing results for &quot;{searchQuery}&quot; ({tools.length}{' '}
+                {tools.length === 1 ? 'match' : 'matches'}).
+              </p>
+            ) : null}
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {filterControls.map((control) => (
                 <div key={control.id} className="grid gap-1.5">
@@ -144,10 +168,19 @@ export default function ToolsDirectoryPage() {
             ))}
           </nav>
 
-          <section id="tool-grid" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {tools.map((tool) => (
-              <ToolCard key={tool.slug} tool={tool} />
-            ))}
+          <section
+            id="tool-grid"
+            aria-label={isSearchResult ? 'Search results' : 'Tool grid'}
+            className="grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+          >
+            {tools.length > 0 ? (
+              tools.map((tool) => <ToolCard key={tool.slug} tool={tool} />)
+            ) : (
+              <div className="rounded-lg border border-dashed border-neutral-300 bg-white p-5 text-sm font-semibold text-neutral-700">
+                No tools found for &quot;{searchQuery}&quot;. Try a broader query or
+                browse all tools.
+              </div>
+            )}
           </section>
 
           <section aria-label="Category cards" className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">

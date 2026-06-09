@@ -4,10 +4,9 @@ test.describe('auth and billing gates', () => {
   test('keeps AI app gated for anonymous visitors', async ({ page }) => {
     await page.goto('/app/repurpose');
 
-    await expect(
-      page.getByRole('heading', { name: /sign in to use ai content repurposer/i }),
-    ).toBeVisible();
-    await expect(page.getByText(/public calculators stay free/i)).toBeVisible();
+    await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Frepurpose/);
+    await expect(page.getByRole('heading', { name: /sign in to toolars/i })).toBeVisible();
+    await expect(page.getByText(/calculators remain free without an account/i)).toBeVisible();
   });
 
   test('blocks free preview users from paid AI generation with an upgrade path', async ({ page }) => {

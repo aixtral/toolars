@@ -1,3 +1,9 @@
 allowBuilds:
+  # Existing approved native build dependencies from package.json#pnpm.onlyBuiltDependencies.
   sharp: true
   unrs-resolver: true
+# from https://pnpm.io/settings#overrides (pnpm 11.x)
+overrides:
+  # GHSA-qx2v-qp2m-jg93: PostCSS <8.5.10 has XSS in CSS stringify output.
+  # Remove after Next.js declares a patched PostCSS dependency.
+  postcss: 8.5.15

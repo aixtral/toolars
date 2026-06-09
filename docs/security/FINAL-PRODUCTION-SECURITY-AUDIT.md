@@ -1,16 +1,20 @@
 # Final Production Security Audit
 
-Status: production SaaS release blocked  
+Status: H1 code remediation completed; production SaaS release rehearsal still pending  
 Updated: 2026-06-09  
 CDC change: `final-production-security-audit`  
 Scope branch: `feat/final-production-security-audit`  
 Review anchor: PR #17, `feat/integrate-latest-stack-to-main`
 Audit PR: [#18](https://github.com/aixtral/toolars/pull/18)
+Follow-up remediation branch: `feat/auth-session-cookie-handoff`
 
 ## Executive Decision
 
 The current Toolars top stack is acceptable for continued draft-PR review and
-local/staging preview. It is not acceptable for production SaaS release yet.
+local/staging preview. After the `auth-session-cookie-handoff` follow-up,
+the H1 code-level auth blocker is remediated, but production SaaS release still
+requires a real Supabase Auth staging rehearsal and the remaining operational
+medium findings.
 
 Two release-risk issues were fixed in this audit pass:
 
@@ -18,12 +22,12 @@ Two release-risk issues were fixed in this audit pass:
   to the preview provider.
 - Failed provider generations no longer increment workspace AI usage.
 
-The remaining blocker is not a public-calculator risk. Public calculators remain
-free, crawlable, and isolated from auth, AI, billing, usage, and Supabase
-runtime modules. The remaining blocker is the SaaS account boundary: production
-Supabase Auth/session cookies are not wired into `/app/**` and
-`/api/ai/repurpose` yet, so the AI subscription product must not launch until
-that handoff is implemented and rehearsed.
+The remaining release risk is not a public-calculator risk. Public calculators
+remain free, crawlable, and isolated from auth, AI, billing, usage, and Supabase
+runtime modules. The SaaS account boundary now has server-side Supabase cookie
+handoff for `/app/**`, `/app/repurpose`, and `/api/ai/repurpose`; the next
+release gate is to rehearse that path against real Supabase credentials and
+hosted login/callback flows.
 
 ## Audit Commands
 
@@ -51,7 +55,7 @@ No open critical finding was found in the current top stack.
 
 ## High
 
-### H1: Production Supabase session handoff is not wired into app/API auth
+### H1: Production Supabase session handoff was not wired into app/API auth
 
 Anchors:
 
@@ -61,7 +65,7 @@ Anchors:
 - `site/app/api/ai/repurpose/route.ts:26`
 - `site/components/ai/repurpose-workspace.tsx:186`
 
-Issue:
+Original issue:
 
 `resolveToolarsSessionFromSupabase()` exists, but `getSessionFromRequest()`
 still derives API sessions from preview headers only. In production,
@@ -69,28 +73,39 @@ still derives API sessions from preview headers only. In production,
 401 for all users. The `/app/**` proxy likewise supports preview cookies/query
 state rather than real Supabase session cookies.
 
-Impact:
+Follow-up remediation:
 
-This is safer than fail-open, but it blocks production SaaS launch. If future
-work connects real AI provider credentials or billing before replacing preview
-headers with Supabase session resolution, the account boundary can drift into an
-unsafe state.
+`feat/auth-session-cookie-handoff` wires Supabase SSR cookie validation into the
+server-side request path:
 
-Required remediation:
+- `getSessionFromRequest()` keeps preview headers local/staging only and falls
+  through to Supabase-backed session resolution.
+- `loadToolarsWorkspaceMembershipForUser()` derives `workspaceId`, `role`, and
+  `planId` from `workspace_members` for verified Supabase users.
+- `/app/**` proxy verifies Supabase Auth cookies and writes refreshed auth
+  cookies/headers to the response.
+- `/app/repurpose` can render the AI workspace from server cookies without a
+  preview search param.
+- `/api/ai/repurpose` accepts an injectable session resolver and defaults to the
+  production request resolver.
 
-Create `auth-session-cookie-handoff` or equivalent:
+Residual impact:
 
-- Wire Supabase SSR session/cookie validation into `/app/**` and
-  `/api/ai/repurpose`.
-- Derive `userId`, `workspaceId`, `role`, and `planId` from Supabase Auth plus
-  workspace/subscription data, never from client-submitted preview headers.
+The code-level handoff is implemented and covered by unit/integration/e2e tests.
+Production SaaS launch still requires staging/live rehearsal with real Supabase
+Auth cookies, hosted login/callback flows, and expired-session scenarios.
+
+Required follow-up:
+
+- Rehearse real Supabase hosted login/callback/session refresh in staging.
+- Add staging/live E2E coverage for anonymous, free authenticated, Pro
+  authenticated, expired-session, and expired-subscription users.
 - Keep preview auth local/staging only.
-- Add E2E coverage for anonymous, free authenticated, Pro authenticated, and
-  expired subscription users.
 
 Go/no-go:
 
-Blocks production SaaS release. Does not block public calculator review.
+No longer blocks code review. Still blocks production SaaS release until real
+Supabase environment rehearsal passes. Does not block public calculator review.
 
 ## Medium
 
@@ -312,7 +327,7 @@ Observed matches were false positives:
 
 | Threat | Assessment |
 |---|---|
-| Spoofing | Preview headers are local/staging only; production session handoff remains required. |
+| Spoofing | Preview headers are local/staging only; production session handoff is implemented and still needs real Supabase rehearsal. |
 | Tampering | Signed billing webhooks are required; unknown variants do not grant access. |
 | Repudiation | Security events exist but are not durable yet. |
 | Information Disclosure | No raw webhook bodies, provider errors, source text, or secrets found in security logs. |
@@ -321,12 +336,12 @@ Observed matches were false positives:
 
 ## Go/No-Go
 
-Production SaaS release: No-go.
+Production SaaS release: Conditional no-go pending staging/live auth rehearsal.
 
 Reasons:
 
-- High H1 remains open: production Supabase session handoff is not wired into
-  app/API auth.
+- High H1 code remediation is complete, but real Supabase Auth cookie/callback
+  rehearsal has not been run in this local branch.
 - Medium operational gaps remain for billing idempotency, durable security
   logging, and production-grade rate limiting.
 
@@ -337,8 +352,8 @@ hardening continues separately.
 
 Recommended next CDC changes:
 
-1. `auth-session-cookie-handoff`
-2. `final-production-security-audit-followup`
-3. `security-event-durable-audit-pass`
-4. `checkout-portal-handoff-pass`
+1. `supabase-auth-staging-rehearsal`
+2. `security-event-durable-audit-pass`
+3. `checkout-portal-handoff-pass`
+4. `final-production-security-audit-followup`
 5. `ai-persistence-history-pass`

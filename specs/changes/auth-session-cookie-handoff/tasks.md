@@ -66,14 +66,14 @@ Green before implementation.
 
 ## 4. Verification And Release Evidence
 
-- [ ] 4.1 Verify calculator isolation still holds.
+- [x] 4.1 Verify calculator isolation still holds.
   - Verification: `rg -n "from '@/lib/(auth|billing|usage|supabase|ai|plans)'|from \"@/lib/(auth|billing|usage|supabase|ai|plans)\"" site/app/tools site/lib/calculators site/components/tools site/components/calculators`
   - Covers: R4-S1
-- [ ] 4.2 Run branch verification.
+- [x] 4.2 Run branch verification.
   - Verification: `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `pnpm --dir site test:e2e`, `cdc-workflow gate --mode standard --root .`
-- [ ] 4.3 Update audit/status docs and CDC evidence.
+- [x] 4.3 Update audit/status docs and CDC evidence.
   - Files: `docs/security/FINAL-PRODUCTION-SECURITY-AUDIT.md`,
     `.cdc/state/evidence.jsonl`, `.cdc/state/closeouts.jsonl`
 - [ ] 4.4 Run ship preview, push, and create draft PR.

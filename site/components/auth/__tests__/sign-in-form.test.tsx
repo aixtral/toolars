@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SignInForm, safeAuthNextPath } from '@/components/auth/sign-in-form';
+import { SignInForm } from '@/components/auth/sign-in-form';
+import { safeAuthNextPath } from '@/lib/auth/redirect';
 
 const push = vi.fn();
 const refresh = vi.fn();

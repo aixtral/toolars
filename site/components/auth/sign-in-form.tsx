@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LockKeyhole, Mail } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
+import { safeAuthNextPath } from '@/lib/auth/redirect';
 import { createToolarsSupabaseBrowserClient } from '@/lib/supabase/client';
-
-const defaultNextPath = '/app/repurpose';
 
 type SupabaseAuthError = {
   message?: string;
@@ -28,12 +27,6 @@ export interface SignInAuthClient {
 export interface SignInFormProps {
   nextPath?: string;
   authClient?: SignInAuthClient;
-}
-
-export function safeAuthNextPath(value: string | undefined) {
-  if (!value) return defaultNextPath;
-  if (!value.startsWith('/') || value.startsWith('//')) return defaultNextPath;
-  return value;
 }
 
 export function SignInForm({ nextPath, authClient }: SignInFormProps) {

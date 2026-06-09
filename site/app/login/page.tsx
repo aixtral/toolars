@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SignInForm, safeAuthNextPath } from '@/components/auth';
+import { SignInForm } from '@/components/auth';
 import { Container } from '@/components/layout';
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
+import { safeAuthNextPath } from '@/lib/auth/redirect';
 
 export const metadata: Metadata = {
   title: 'Sign in | toolars',

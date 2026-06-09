@@ -31,12 +31,12 @@ changes are needed, add a failing test before the fix.
 
 ## 2. Verification
 
-- [ ] 2.1 Run current branch verification.
+- [x] 2.1 Run current branch verification.
   - Verification: `pnpm --dir site audit --json --registry=https://registry.npmjs.org`,
     `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `pnpm --dir site test:e2e`, `cdc-workflow gate --mode standard --root .`
-- [ ] 2.2 Run ship preview.
+- [x] 2.2 Run ship preview.
   - Verification: `cdc-workflow ship-preview --change final-production-security-audit --root .`
 
 ## 3. PR And Closeout

@@ -22,3 +22,16 @@
   45 files and 163 tests.
 - Next session start: continue with task 3.1 route RED tests for exports and
   batch tools.
+
+## 2026-06-09 22:01 - Export And Batch Routes
+
+- Completed: RED tests for `/api/exports/csv`, `/api/exports/pdf`, and
+  `/api/batch/tools` failed on missing route handlers.
+- Completed: added export shared handler with session, plan, monthly usage, and
+  deterministic CSV/PDF preview payloads.
+- Completed: added batch tools route with session, plan, monthly usage, and
+  deterministic queued run metadata.
+- Evidence: `pnpm --dir site test -- exports batch` passed with 48 files and
+  170 tests.
+- Next session start: run focused integration verification for tasks 4.1 and
+  then standard gates.

@@ -39,14 +39,14 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 3. Export And Batch API Routes
 
-- [ ] 3.1 RED: add route tests for missing session, free denial, successful
+- [x] 3.1 RED: add route tests for missing session, free denial, successful
   Pro export increment, export limit denial, and successful batch increment.
   - Files: `site/app/api/exports/csv/route.test.ts`,
     `site/app/api/exports/pdf/route.test.ts`,
     `site/app/api/batch/tools/route.test.ts`
   - Covers: R1-S1, R1-S2, R1-S3, R2-S1, R2-S2
   - Verification: `pnpm --dir site test -- exports batch`
-- [ ] 3.2 GREEN: implement export and batch route handlers.
+- [x] 3.2 GREEN: implement export and batch route handlers.
   - Files: `site/app/api/exports/csv/route.ts`,
     `site/app/api/exports/pdf/route.ts`, `site/app/api/batch/tools/route.ts`
   - Verification: `pnpm --dir site test -- exports batch`

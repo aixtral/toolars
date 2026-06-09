@@ -7,6 +7,7 @@ import {
 import { createConfiguredAiProvider } from '@/lib/ai/provider-runtime';
 import type { AiProviderAdapter } from '@/lib/ai';
 import { getSessionFromRequest } from '@/lib/auth';
+import type { ToolarsSession } from '@/lib/auth';
 import { evaluateAiGenerationAccess, getPlanById } from '@/lib/plans';
 import { recordSecurityEvent } from '@/lib/security/events';
 import {
@@ -18,12 +19,13 @@ import { createUsageMeterRuntimeRepository } from '@/lib/usage/runtime';
 export interface AiRepurposeHandlerOptions {
   usageRepository?: UsageMeterRepository;
   provider?: AiProviderAdapter;
+  resolveSession?: (request: Request) => Promise<ToolarsSession | null>;
   now?: () => Date;
 }
 
 export function createAiRepurposeHandler(options: AiRepurposeHandlerOptions = {}) {
   return async function aiRepurposeHandler(request: Request) {
-  const session = await getSessionFromRequest(request);
+  const session = await (options.resolveSession ?? getSessionFromRequest)(request);
   if (!session) {
     recordSecurityEvent({
       request,

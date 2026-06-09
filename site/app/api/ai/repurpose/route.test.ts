@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetAiPreviewRuntimeState } from '@/lib/ai/runtime-security';
 import type { AiProviderAdapter } from '@/lib/ai';
+import type { ToolarsSession } from '@/lib/auth';
 import { readSecurityEvents, resetSecurityEvents } from '@/lib/security/events';
 import {
   createInMemoryUsageMeterRepository,
@@ -38,6 +39,25 @@ describe('POST /api/ai/repurpose', () => {
       body: JSON.stringify(body),
     });
   }
+
+  function productionRequest(body: unknown) {
+    return new Request('http://127.0.0.1/api/ai/repurpose', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  }
+
+  const supabaseSession: ToolarsSession = {
+    userId: 'user_123',
+    email: 'founder@toolars.test',
+    workspaceId: 'workspace_123',
+    planId: 'pro',
+    role: 'owner',
+    isAuthenticated: true,
+  };
 
   it('requires an account context before running AI generation', async () => {
     const response = await POST(
@@ -77,6 +97,30 @@ describe('POST /api/ai/repurpose', () => {
         latencyMs: expect.any(Number),
         totalTokens: expect.any(Number),
       },
+    });
+  });
+
+  it('uses a Supabase-backed production session for AI generation', async () => {
+    const usageRepository = createInMemoryUsageMeterRepository();
+    const now = new Date('2026-06-15T00:00:00.000Z');
+    const handler = createAiRepurposeHandler({
+      usageRepository,
+      now: () => now,
+      resolveSession: async () => supabaseSession,
+    });
+
+    const response = await handler(productionRequest(requestBody));
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.job.status).toBe('completed');
+    await expect(
+      usageRepository.readUsageSnapshot({
+        workspaceId: 'workspace_123',
+        period: createMonthlyUsagePeriod(now),
+      }),
+    ).resolves.toMatchObject({
+      aiGenerationsUsed: 1,
     });
   });
 

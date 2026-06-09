@@ -44,16 +44,16 @@ Green before implementation.
 
 ## 3. AI API Integration
 
-- [ ] 3.1 Add failing tests for AI route production session injection.
+- [x] 3.1 Add failing tests for AI route production session injection.
   - File: `site/app/api/ai/repurpose/route.test.ts`
   - Covers: R1-S1, R1-S2, R1-S3
   - Verification: `pnpm --dir site test -- repurpose`
-- [ ] 3.2 Wire AI route handler to injectable session resolver.
+- [x] 3.2 Wire AI route handler to injectable session resolver.
   - File: `site/app/api/ai/repurpose/route.ts`
   - Key points: keep preview tests working, do not increment usage on denied
     auth, do not trust preview headers in production.
   - Covers: R1-S1, R1-S2, R1-S3
-- [ ] 3.3 Run Green API tests and commit.
+- [x] 3.3 Run Green API tests and commit.
   - Verification: `pnpm --dir site test -- repurpose`
   - Commit: `feat(auth): use Supabase sessions in AI route (task 3.3)`
 

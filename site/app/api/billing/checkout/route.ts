@@ -22,6 +22,14 @@ function checkoutUrlForPlan(config: BillingHandoffConfig, planId: PlanId) {
 }
 
 async function readPlanId(request: Request): Promise<PlanId | null> {
+  const contentType = request.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/x-www-form-urlencoded')) {
+    const formData = await request.formData();
+    const planId = formData.get('planId');
+    return typeof planId === 'string' && isPlanId(planId) ? planId : null;
+  }
+
   let payload: unknown;
 
   try {

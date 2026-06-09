@@ -49,11 +49,11 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 4. Billing UI Hooks
 
-- [ ] 4.1 RED: update billing component tests for checkout and manage links.
+- [x] 4.1 RED: update billing component tests for checkout and manage links.
   - Files: `site/components/billing/__tests__/billing.test.tsx`
   - Covers: R1-S3, R2-S1
   - Verification: `pnpm --dir site test -- billing-cards`
-- [ ] 4.2 GREEN: wire Upgrade/Manage controls to billing routes.
+- [x] 4.2 GREEN: wire Upgrade/Manage controls to billing routes.
   - Files: `site/components/billing/billing-cards.tsx`
   - Verification: `pnpm --dir site test -- billing-cards`
 

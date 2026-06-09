@@ -27,9 +27,17 @@ export function UpgradePrompt({ feature, reason, onUpgrade }: UpgradePromptProps
       </CardHeader>
       <CardContent className="space-y-4">
         <p>{reason}</p>
-        <Button type="button" onClick={onUpgrade}>
-          Upgrade to Pro
-        </Button>
+        <form
+          action="/api/billing/checkout"
+          aria-label="Start Pro checkout"
+          method="post"
+          onSubmit={() => onUpgrade?.()}
+        >
+          <input name="planId" type="hidden" value="pro" />
+          <Button type="submit">
+            Upgrade to Pro
+          </Button>
+        </form>
       </CardContent>
     </Card>
   );
@@ -56,6 +64,14 @@ export function UsagePlanCard({ planId, remainingGenerations }: UsagePlanCardPro
           <li>Cross-device save: {plan.features.includes('save.crossDevice') ? 'available' : 'Pro only'}</li>
           <li>Batch tools: {plan.features.includes('batch.tools') ? 'available' : 'Pro only'}</li>
         </ul>
+        {planId === 'free' ? null : (
+          <a
+            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-700 hover:border-brand-500 hover:text-ink"
+            href="/api/billing/portal"
+          >
+            Manage billing
+          </a>
+        )}
       </CardContent>
     </Card>
   );

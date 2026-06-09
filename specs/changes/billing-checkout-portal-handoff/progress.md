@@ -40,3 +40,15 @@
 - Evidence: `pnpm --dir site test -- checkout portal` passed with 51 files and
   181 tests.
 - Next session start: continue with task 4.1 billing UI RED tests.
+
+## 2026-06-09 22:22 - Billing UI Hooks
+
+- Completed: RED tests for checkout form and manage billing link failed on
+  missing UI wiring.
+- Completed: `UpgradePrompt` now posts `planId=pro` to
+  `/api/billing/checkout`; `UsagePlanCard` exposes `/api/billing/portal` for
+  paid plans.
+- Completed: checkout route now accepts both JSON and form-encoded submissions.
+- Evidence: `pnpm --dir site test -- checkout billing.test.tsx` passed with 51
+  files and 182 tests.
+- Next session start: run focused and standard verification.

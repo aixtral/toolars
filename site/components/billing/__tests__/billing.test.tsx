@@ -20,7 +20,7 @@ describe('billing components', () => {
       '/api/billing/checkout',
     );
     expect(screen.getByDisplayValue('pro')).toHaveAttribute('name', 'planId');
-    fireEvent.click(screen.getByRole('button', { name: /upgrade to pro/i }));
+    fireEvent.submit(screen.getByRole('form', { name: /start pro checkout/i }));
     expect(onUpgrade).toHaveBeenCalledOnce();
   });
 

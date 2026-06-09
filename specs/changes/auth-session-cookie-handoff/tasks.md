@@ -76,5 +76,5 @@ Green before implementation.
 - [x] 4.3 Update audit/status docs and CDC evidence.
   - Files: `docs/security/FINAL-PRODUCTION-SECURITY-AUDIT.md`,
     `.cdc/state/evidence.jsonl`, `.cdc/state/closeouts.jsonl`
-- [ ] 4.4 Run ship preview, push, and create draft PR.
+- [x] 4.4 Run ship preview, push, and create draft PR.
   - Verification: `cdc-workflow ship-preview --change auth-session-cookie-handoff --root .`

@@ -7,6 +7,7 @@ Scope branch: `feat/final-production-security-audit`
 Review anchor: PR #17, `feat/integrate-latest-stack-to-main`
 Audit PR: [#18](https://github.com/aixtral/toolars/pull/18)
 Follow-up remediation branch: `feat/auth-session-cookie-handoff`
+Follow-up remediation PR: [#19](https://github.com/aixtral/toolars/pull/19)
 
 ## Executive Decision
 

@@ -23,7 +23,7 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 2. Status Plan Refresh
 
-- [ ] 2.1 Update current status and iteration plan through PR #15.
+- [x] 2.1 Update current status and iteration plan through PR #15.
   - Files: `docs/architecture/CURRENT-STATUS-AND-ITERATION-PLAN.md`
   - Covers: R4-S1
   - Verification: `rg "PR #15|usage-metering-and-plan-gates|dependency-audit-remediation-pass" docs/architecture/CURRENT-STATUS-AND-ITERATION-PLAN.md`

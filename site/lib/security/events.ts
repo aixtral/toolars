@@ -1,4 +1,4 @@
-export type SecurityEventCategory = 'ai' | 'billing';
+export type SecurityEventCategory = 'ai' | 'billing' | 'usage';
 export type SecurityEventOutcome = 'denied' | 'invalid' | 'rate_limited' | 'failed';
 
 export interface SecurityEvent {
@@ -30,9 +30,11 @@ const metadataAllowlist = new Set([
   'errorCount',
   'eventId',
   'eventName',
+  'format',
   'planId',
   'providerObjectId',
   'selectedPlatformCount',
+  'toolCount',
   'userId',
 ]);
 

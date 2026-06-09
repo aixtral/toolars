@@ -8,6 +8,10 @@ vi.mock('server-only', () => ({}));
 
 type UsageRow = Record<string, unknown>;
 type SupabaseError = { message: string };
+type UsageIncrementColumn =
+  | 'ai_generations_used'
+  | 'exports_used'
+  | 'batch_runs_used';
 
 class FakeUsageQuery {
   private filters: Record<string, unknown> = {};
@@ -40,7 +44,14 @@ class FakeUsageRpc {
   ) {}
 
   async single(): Promise<{ data: UsageRow | null; error: SupabaseError | null }> {
-    if (this.functionName !== 'increment_ai_generation_usage') {
+    const incrementColumnByFunction: Record<string, UsageIncrementColumn> = {
+      increment_ai_generation_usage: 'ai_generations_used',
+      increment_export_usage: 'exports_used',
+      increment_batch_run_usage: 'batch_runs_used',
+    };
+    const incrementColumn = incrementColumnByFunction[this.functionName];
+
+    if (!incrementColumn) {
       return { data: null, error: { message: 'unsupported rpc' } };
     }
 
@@ -51,19 +62,20 @@ class FakeUsageRpc {
     );
 
     if (existing) {
-      existing.ai_generations_used = Number(existing.ai_generations_used) + 1;
+      existing[incrementColumn] = Number(existing[incrementColumn]) + 1;
       existing.period_end = this.args.p_period_end;
       return { data: existing, error: null };
     }
 
-    const inserted = {
+    const inserted: UsageRow = {
       workspace_id: this.args.p_workspace_id,
       period_start: this.args.p_period_start,
       period_end: this.args.p_period_end,
-      ai_generations_used: 1,
+      ai_generations_used: incrementColumn === 'ai_generations_used' ? 1 : 0,
       exports_used: 0,
       batch_runs_used: 0,
     };
+    inserted[incrementColumn] = 1;
     this.rows.push(inserted);
     return { data: inserted, error: null };
   }
@@ -131,6 +143,39 @@ describe('Supabase usage meter repository', () => {
       workspace_id: 'workspace_123',
       period_start: '2026-06-01',
       ai_generations_used: 2,
+    });
+  });
+
+  it('increments export and batch usage through dedicated database RPCs', async () => {
+    const { client, rows } = createFakeSupabaseClient();
+    const repository = createSupabaseUsageMeterRepository(client);
+    const period = createMonthlyUsagePeriod(new Date('2026-06-15T00:00:00.000Z'));
+
+    const exported = await repository.incrementExports({
+      workspaceId: 'workspace_123',
+      period,
+    });
+    const batched = await repository.incrementBatchRuns({
+      workspaceId: 'workspace_123',
+      period,
+    });
+
+    expect(exported).toMatchObject({
+      aiGenerationsUsed: 0,
+      exportsUsed: 1,
+      batchRunsUsed: 0,
+    });
+    expect(batched).toMatchObject({
+      aiGenerationsUsed: 0,
+      exportsUsed: 1,
+      batchRunsUsed: 1,
+    });
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      workspace_id: 'workspace_123',
+      period_start: '2026-06-01',
+      exports_used: 1,
+      batch_runs_used: 1,
     });
   });
 });

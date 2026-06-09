@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   canUsePlanFeature,
   evaluateAiGenerationAccess,
+  evaluateBatchToolAccess,
+  evaluateExportAccess,
   getPlanById,
 } from '@/lib/plans';
 
@@ -42,5 +44,78 @@ describe('plan gates', () => {
 
     expect(decision.allowed).toBe(true);
     expect(decision.reason).toBe('Pro AI access active.');
+  });
+
+  it('gates PDF and CSV exports by plan and monthly export usage', () => {
+    expect(
+      evaluateExportAccess({
+        planId: 'free',
+        format: 'pdf',
+        usedExports: 0,
+      }),
+    ).toEqual({
+      allowed: false,
+      reason: 'PDF exports require a Pro subscription.',
+      upgradeLabel: 'Upgrade to Pro',
+    });
+
+    const pro = getPlanById('pro');
+    expect(
+      evaluateExportAccess({
+        planId: 'pro',
+        format: 'csv',
+        usedExports: pro.monthlyExports - 1,
+      }),
+    ).toEqual({
+      allowed: true,
+      reason: 'Pro CSV export access active.',
+    });
+
+    expect(
+      evaluateExportAccess({
+        planId: 'pro',
+        format: 'csv',
+        usedExports: pro.monthlyExports,
+      }),
+    ).toEqual({
+      allowed: false,
+      reason: 'Pro monthly export limit reached.',
+      upgradeLabel: 'Manage plan',
+    });
+  });
+
+  it('gates batch tools by plan and monthly batch usage', () => {
+    expect(
+      evaluateBatchToolAccess({
+        planId: 'free',
+        usedBatchRuns: 0,
+      }),
+    ).toEqual({
+      allowed: false,
+      reason: 'Batch tools require a Pro subscription.',
+      upgradeLabel: 'Upgrade to Pro',
+    });
+
+    const team = getPlanById('team');
+    expect(
+      evaluateBatchToolAccess({
+        planId: 'team',
+        usedBatchRuns: team.monthlyBatchRuns - 1,
+      }),
+    ).toEqual({
+      allowed: true,
+      reason: 'Team batch tool access active.',
+    });
+
+    expect(
+      evaluateBatchToolAccess({
+        planId: 'team',
+        usedBatchRuns: team.monthlyBatchRuns,
+      }),
+    ).toEqual({
+      allowed: false,
+      reason: 'Team monthly batch run limit reached.',
+      upgradeLabel: 'Manage plan',
+    });
   });
 });

@@ -19,6 +19,8 @@ export interface UsagePeriodInput {
 export interface UsageMeterRepository {
   readUsageSnapshot(input: UsagePeriodInput): Promise<UsageSnapshot>;
   incrementAiGenerations(input: UsagePeriodInput): Promise<UsageSnapshot>;
+  incrementExports(input: UsagePeriodInput): Promise<UsageSnapshot>;
+  incrementBatchRuns(input: UsagePeriodInput): Promise<UsageSnapshot>;
   reset(): void | Promise<void>;
 }
 
@@ -69,6 +71,26 @@ export function createInMemoryUsageMeterRepository(): UsageMeterRepository {
       const updated = {
         ...current,
         aiGenerationsUsed: current.aiGenerationsUsed + 1,
+      };
+      snapshots.set(usageKey(input), updated);
+      return updated;
+    },
+
+    async incrementExports(input) {
+      const current = await this.readUsageSnapshot(input);
+      const updated = {
+        ...current,
+        exportsUsed: current.exportsUsed + 1,
+      };
+      snapshots.set(usageKey(input), updated);
+      return updated;
+    },
+
+    async incrementBatchRuns(input) {
+      const current = await this.readUsageSnapshot(input);
+      const updated = {
+        ...current,
+        batchRunsUsed: current.batchRunsUsed + 1,
       };
       snapshots.set(usageKey(input), updated);
       return updated;

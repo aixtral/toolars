@@ -51,4 +51,38 @@ describe('usage metering domain', () => {
       aiGenerationsUsed: 1,
     });
   });
+
+  it('increments export usage without touching AI or batch counters', async () => {
+    const repository = createInMemoryUsageMeterRepository();
+    const period = createMonthlyUsagePeriod(new Date('2026-06-15T00:00:00.000Z'));
+
+    const updated = await repository.incrementExports({
+      workspaceId: 'workspace_123',
+      period,
+    });
+
+    expect(updated).toMatchObject({
+      workspaceId: 'workspace_123',
+      aiGenerationsUsed: 0,
+      exportsUsed: 1,
+      batchRunsUsed: 0,
+    });
+  });
+
+  it('increments batch run usage without touching AI or export counters', async () => {
+    const repository = createInMemoryUsageMeterRepository();
+    const period = createMonthlyUsagePeriod(new Date('2026-06-15T00:00:00.000Z'));
+
+    const updated = await repository.incrementBatchRuns({
+      workspaceId: 'workspace_123',
+      period,
+    });
+
+    expect(updated).toMatchObject({
+      workspaceId: 'workspace_123',
+      aiGenerationsUsed: 0,
+      exportsUsed: 0,
+      batchRunsUsed: 1,
+    });
+  });
 });

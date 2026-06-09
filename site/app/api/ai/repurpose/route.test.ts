@@ -214,6 +214,12 @@ describe('POST /api/ai/repurpose', () => {
       async incrementAiGenerations() {
         throw new Error('plan-denied requests must not increment usage');
       },
+      async incrementExports() {
+        throw new Error('not used in AI generation tests');
+      },
+      async incrementBatchRuns() {
+        throw new Error('not used in AI generation tests');
+      },
       reset() {},
     };
     const handler = createAiRepurposeHandler({

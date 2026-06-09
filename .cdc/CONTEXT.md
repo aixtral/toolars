@@ -202,7 +202,7 @@ Latest recorded evidence on the current branch stack:
 - `pnpm --dir site lint`: passes.
 - `pnpm --dir site type-check`: passes.
 - `pnpm --dir site test`: 44 test files, 147 tests passed.
-- `pnpm --dir site test:e2e`: pending for integration branch; previous stack recorded Playwright coverage.
+- `pnpm --dir site test:e2e`: 38 Playwright tests passed.
 - `pnpm --dir site build`: 104 generated pages/routes reported by Next.js build.
 - `cdc-workflow gate --mode standard --root .`: passes.
 - `cdc-workflow ship-preview --change dependency-audit-remediation-pass --root .`: passes.

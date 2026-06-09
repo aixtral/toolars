@@ -50,7 +50,7 @@ Latest verification evidence on the current stack:
 pnpm --dir site lint        -> pass
 pnpm --dir site type-check  -> pass
 pnpm --dir site test        -> 44 files / 147 tests passed
-pnpm --dir site test:e2e -- auth-billing -> 3 tests passed
+pnpm --dir site test:e2e -> 38 tests passed
 pnpm --dir site build       -> 104 pages/routes reported
 cdc-workflow gate           -> pass
 cdc-workflow ship-preview   -> pass

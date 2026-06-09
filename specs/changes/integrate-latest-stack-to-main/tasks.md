@@ -23,14 +23,14 @@ change; verification is command- and evidence-driven.
 
 ## 2. Verification
 
-- [ ] 2.1 Run package/security and unit verification.
+- [x] 2.1 Run package/security and unit verification.
   - Verification: `pnpm --dir site audit --json --registry=https://registry.npmjs.org`,
     `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `cdc-workflow gate --mode standard --root .`
-- [ ] 2.2 Run Playwright E2E.
+- [x] 2.2 Run Playwright E2E.
   - Verification: `pnpm --dir site test:e2e`
-- [ ] 2.3 Run integration ship preview.
+- [x] 2.3 Run integration ship preview.
   - Verification: `cdc-workflow ship-preview --change integrate-latest-stack-to-main --root .`
 
 ## 3. PR And Closeout

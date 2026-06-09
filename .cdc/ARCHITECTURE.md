@@ -218,7 +218,7 @@ Current implementation status:
 | Billing | Lemon Squeezy intake, idempotent event model, runtime repository injection, and Supabase subscription repository implemented; checkout/portal pending. |
 | Usage | Workspace monthly usage counters, atomic AI generation increment, preview repository, Supabase adapter, and AI plan gates implemented. |
 | Dependency posture | `postcss` overridden to 8.5.15 for `GHSA-qx2v-qp2m-jg93`; latest audit reports zero vulnerabilities. |
-| Tests | Implemented; latest current-stack evidence includes 44 Vitest files / 147 tests plus Playwright coverage on prior stack. |
+| Tests | Implemented; latest current-stack evidence includes 44 Vitest files / 147 tests and 38 Playwright tests. |
 
 ## 7. Data Architecture Questions
 

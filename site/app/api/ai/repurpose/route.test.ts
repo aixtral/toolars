@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetAiPreviewRuntimeState } from '@/lib/ai/runtime-security';
+import type { AiProviderAdapter } from '@/lib/ai';
 import { readSecurityEvents, resetSecurityEvents } from '@/lib/security/events';
 import {
   createInMemoryUsageMeterRepository,
@@ -103,6 +104,54 @@ describe('POST /api/ai/repurpose', () => {
       }),
     ).resolves.toMatchObject({
       aiGenerationsUsed: 1,
+    });
+  });
+
+  it('does not increment workspace usage when the provider fails', async () => {
+    const usageRepository = createInMemoryUsageMeterRepository();
+    const now = new Date('2026-06-15T00:00:00.000Z');
+    const failedProvider: AiProviderAdapter = {
+      id: 'preview',
+      async generate(input) {
+        return {
+          jobId: input.jobId,
+          status: 'failed',
+          outputs: [],
+          provider: {
+            id: 'preview',
+            model: input.request.model,
+            usage: {
+              latencyMs: 1,
+            },
+          },
+          error: {
+            code: 'provider_unavailable',
+            message: 'Generation service is unavailable. Try again.',
+          },
+        };
+      },
+      async *stream() {},
+    };
+    const handler = createAiRepurposeHandler({
+      usageRepository,
+      provider: failedProvider,
+      now: () => now,
+    });
+    const period = createMonthlyUsagePeriod(now);
+
+    const response = await handler(previewRequest(requestBody));
+
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({
+      error: 'Generation service is unavailable. Try again.',
+    });
+    await expect(
+      usageRepository.readUsageSnapshot({
+        workspaceId: 'preview-pro-workspace',
+        period,
+      }),
+    ).resolves.toMatchObject({
+      aiGenerationsUsed: 0,
     });
   });
 

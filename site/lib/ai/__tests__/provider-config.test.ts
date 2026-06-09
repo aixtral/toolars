@@ -29,4 +29,19 @@ describe('AI provider config', () => {
       requestTimeoutMs: 45_000,
     });
   });
+
+  it('fails closed instead of using the preview provider in production', () => {
+    expect(() =>
+      requireAiProviderConfig({
+        NODE_ENV: 'production',
+      }),
+    ).toThrow(/TOOLARS_AI_PROVIDER=ai-sdk/);
+
+    expect(() =>
+      requireAiProviderConfig({
+        NODE_ENV: 'production',
+        TOOLARS_AI_PROVIDER: 'preview',
+      }),
+    ).toThrow(/TOOLARS_AI_PROVIDER=ai-sdk/);
+  });
 });

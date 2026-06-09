@@ -23,6 +23,10 @@ function providerFromEnv(value: string | undefined): AiProviderId {
   return 'preview';
 }
 
+function isProductionEnvironment(env: EnvRecord) {
+  return env.NODE_ENV === 'production';
+}
+
 export function readAiProviderConfig(env: EnvRecord = process.env): AiProviderConfig {
   const provider = providerFromEnv(cleanValue(env.TOOLARS_AI_PROVIDER));
   const model = cleanValue(env.TOOLARS_AI_DEFAULT_MODEL) ?? 'toolars-fast';
@@ -38,6 +42,10 @@ export function requireAiProviderConfig(
   env: EnvRecord = process.env,
 ): AiProviderConfig {
   const config = readAiProviderConfig(env);
+
+  if (isProductionEnvironment(env) && config.provider !== 'ai-sdk') {
+    throw new Error('TOOLARS_AI_PROVIDER=ai-sdk is required when NODE_ENV=production.');
+  }
 
   if (config.provider === 'ai-sdk' && !cleanValue(env.TOOLARS_AI_DEFAULT_MODEL)) {
     throw new Error(

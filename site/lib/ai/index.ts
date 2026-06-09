@@ -293,5 +293,6 @@ export async function generateRepurposeJobWithProvider({
     outputs: result.outputs,
     createdAt: result.outputs[0]?.createdAt ?? new Date().toISOString(),
     provider: result.provider,
+    error: result.error,
   };
 }

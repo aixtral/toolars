@@ -5,6 +5,7 @@ import {
   readBoundedRequestBody,
 } from '@/lib/ai/runtime-security';
 import { createConfiguredAiProvider } from '@/lib/ai/provider-runtime';
+import type { AiProviderAdapter } from '@/lib/ai';
 import { getSessionFromRequest } from '@/lib/auth';
 import { evaluateAiGenerationAccess, getPlanById } from '@/lib/plans';
 import { recordSecurityEvent } from '@/lib/security/events';
@@ -16,6 +17,7 @@ import { createUsageMeterRuntimeRepository } from '@/lib/usage/runtime';
 
 export interface AiRepurposeHandlerOptions {
   usageRepository?: UsageMeterRepository;
+  provider?: AiProviderAdapter;
   now?: () => Date;
 }
 
@@ -151,8 +153,28 @@ export function createAiRepurposeHandler(options: AiRepurposeHandlerOptions = {}
   const job = await generateRepurposeJobWithProvider({
     request: body,
     session,
-    provider: createConfiguredAiProvider(),
+    provider: options.provider ?? createConfiguredAiProvider(),
   });
+
+  if (job.status === 'failed') {
+    recordSecurityEvent({
+      request,
+      route: '/api/ai/repurpose',
+      category: 'ai',
+      action: 'provider_failed',
+      outcome: 'failed',
+      status: 502,
+      metadata: {
+        userId: session.userId,
+        planId: session.planId,
+      },
+    });
+    return Response.json(
+      { error: job.error?.message ?? 'Generation failed. Try again.' },
+      { status: 502 },
+    );
+  }
+
   const updatedUsage = await usageRepository.incrementAiGenerations({
     workspaceId: session.workspaceId,
     period,

@@ -13,18 +13,18 @@ changes are needed, add a failing test before the fix.
 
 ## 1. Security Audit
 
-- [ ] 1.1 Build the security scope map.
+- [x] 1.1 Build the security scope map.
   - Files: `.cdc/CONTEXT.md`, `.cdc/ARCHITECTURE.md`, `site/proxy.ts`,
     `site/app/api/**`, `site/lib/{auth,ai,billing,usage,supabase,security,env}/**`,
     `supabase/migrations/**`
   - Covers: R2-S1, R2-S2, R2-S3, R2-S4
   - Verification: `rg "createToolarsSupabaseServiceClient|emitSecurityEvent|TOOLARS_ENABLE_PREVIEW_AUTH|Lemon|usage_counters" site supabase`
-- [ ] 1.2 Run dependency and secret archaeology checks.
+- [x] 1.2 Run dependency and secret archaeology checks.
   - Commands: `pnpm --dir site audit --json --registry=https://registry.npmjs.org`,
     `rg -n -i "sk-|api[_-]?key|password|secret|token|private key|BEGIN RSA|BEGIN OPENSSH" --glob '!site/node_modules/**' --glob '!site/.next/**' .`,
     `git log --all -p -G "API_KEY|SECRET|PASSWORD|TOKEN|PRIVATE_KEY|BEGIN RSA|BEGIN OPENSSH" -- .`
   - Covers: R3-S1, R3-S2
-- [ ] 1.3 Produce the security audit report.
+- [x] 1.3 Produce the security audit report.
   - File: `docs/security/FINAL-PRODUCTION-SECURITY-AUDIT.md`
   - Covers: R1-S1, R1-S2, R4-S2
   - Verification: `rg "Critical|High|Medium|Low|Go/No-Go|deps audit|secret archaeology" docs/security/FINAL-PRODUCTION-SECURITY-AUDIT.md`

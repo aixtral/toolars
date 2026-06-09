@@ -84,4 +84,5 @@ export interface AiGenerationSession {
 
 export type RepurposeJobWithProvider = RepurposeJob & {
   provider: AiProviderMetadata;
+  error?: AiProviderError;
 };

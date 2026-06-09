@@ -59,13 +59,13 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 5. Verification And Closeout
 
-- [ ] 5.1 Run focused tests.
+- [x] 5.1 Run focused tests.
   - Verification: `pnpm --dir site test -- handoff checkout portal billing supabase public-calculator-isolation`
-- [ ] 5.2 Run standard gates.
+- [x] 5.2 Run standard gates.
   - Verification: `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `cdc-workflow gate --mode standard --root .`
-- [ ] 5.3 Record CDC evidence, progress, closeout, and create draft PR.
+- [x] 5.3 Record CDC evidence, progress, closeout, and create draft PR.
   - Files: `.cdc/state/evidence.jsonl`, `.cdc/state/closeouts.jsonl`,
     `specs/changes/billing-checkout-portal-handoff/progress.md`,
     `specs/changes/billing-checkout-portal-handoff/tasks.md`

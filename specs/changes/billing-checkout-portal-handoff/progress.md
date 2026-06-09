@@ -52,3 +52,18 @@
 - Evidence: `pnpm --dir site test -- checkout billing.test.tsx` passed with 51
   files and 182 tests.
 - Next session start: run focused and standard verification.
+
+## 2026-06-09 22:25 - Verification Closeout
+
+- Completed: focused tests for handoff, checkout, portal, billing repository,
+  Supabase billing adapter, and public calculator isolation.
+- Completed: standard gates for lint, type-check, full test suite, production
+  build, Playwright e2e, CDC gate, and ship-preview.
+- Evidence: `.cdc/state/evidence.jsonl` contains RED/GREEN and verification
+  rows for `billing-checkout-portal-handoff`.
+- Source notes used: Lemon Squeezy Taking Payments, Create Checkout, and
+  Customer Portal official docs.
+- Risk carried: real Supabase staging auth rehearsal remains skipped by owner
+  approval until staging URL and test account exist.
+- Next session start: push branch and open draft PR, then continue with
+  customer-facing usage history or subscription reconciliation UI.

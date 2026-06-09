@@ -20,6 +20,15 @@ function checkoutRequest(body: unknown = { planId: 'pro' }) {
   });
 }
 
+function checkoutFormRequest(planId = 'pro') {
+  const body = new URLSearchParams({ planId });
+  return new Request('http://127.0.0.1/api/billing/checkout', {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body,
+  });
+}
+
 describe('POST /api/billing/checkout', () => {
   afterEach(() => {
     resetSecurityEvents();
@@ -78,5 +87,22 @@ describe('POST /api/billing/checkout', () => {
     expect(location).toContain('checkout%5Bcustom%5D%5Bworkspace_id%5D=workspace_123');
     expect(location).toContain('checkout%5Bcustom%5D%5Buser_id%5D=user_123');
     expect(location).toContain('checkout%5Bemail%5D=founder%40toolars.test');
+  });
+
+  it('accepts form-encoded checkout submissions from billing UI forms', async () => {
+    const handler = createBillingCheckoutHandler({
+      env: {
+        TOOLARS_LEMONSQUEEZY_PRO_CHECKOUT_URL:
+          'https://toolars.lemonsqueezy.com/checkout/buy/pro',
+      },
+      resolveSession: async () => session,
+    });
+
+    const response = await handler(checkoutFormRequest());
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toContain(
+      'checkout%5Bcustom%5D%5Bworkspace_id%5D=workspace_123',
+    );
   });
 });

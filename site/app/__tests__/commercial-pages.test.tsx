@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import AboutPage from '@/app/about/page';
 import ComparePage from '@/app/compare/page';
 import ContactPage from '@/app/contact/page';
@@ -8,6 +8,13 @@ import PricingPage from '@/app/pricing/page';
 import PrivacyPage from '@/app/privacy/page';
 import RegisterPage from '@/app/register/page';
 import TermsPage from '@/app/terms/page';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
 
 describe('public commercial routes', () => {
   it('renders pricing with free calculators and Pro AI boundaries', () => {
@@ -27,8 +34,12 @@ describe('public commercial routes', () => {
     );
   });
 
-  it('renders login and registration entry shells without backend side effects', () => {
-    render(<LoginPage />);
+  it('renders login and registration entry shells without backend side effects', async () => {
+    render(
+      await LoginPage({
+        searchParams: Promise.resolve({}),
+      }),
+    );
 
     expect(screen.getByRole('heading', { name: /sign in to toolars/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();

@@ -12,15 +12,15 @@ Green before implementation.
 
 ## 1. Login Implementation
 
-- [ ] 1.1 Add failing tests for login redirect and error behavior.
+- [x] 1.1 Add failing tests for login redirect and error behavior.
   - Files: `site/components/auth/__tests__/sign-in-form.test.tsx`
   - Covers: R1-S1, R1-S2, R1-S3
   - Verification: `pnpm --dir site test -- sign-in-form`
-- [ ] 1.2 Implement Supabase password sign-in form and safe next path handling.
+- [x] 1.2 Implement Supabase password sign-in form and safe next path handling.
   - Files: `site/components/auth/sign-in-form.tsx`,
     `site/components/auth/index.ts`, `site/app/login/page.tsx`
   - Covers: R1-S1, R1-S2, R1-S3
-- [ ] 1.3 Run Green login tests and commit.
+- [x] 1.3 Run Green login tests and commit.
   - Verification: `pnpm --dir site test -- sign-in-form`
   - Commit: `feat(auth): add Supabase sign-in form (task 1.3)`
 

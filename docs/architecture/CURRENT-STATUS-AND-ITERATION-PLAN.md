@@ -118,10 +118,11 @@ Open draft PR state as of 2026-06-09:
 | #14 | `feat/billing-subscription-db-adapter` | `feat/ai-provider-adapter-implementation` | open draft |
 | #15 | `feat/usage-metering-and-plan-gates` | `feat/billing-subscription-db-adapter` | open draft; PR #15 usage-metering milestone |
 | #16 | `feat/dependency-audit-remediation-pass` | `feat/usage-metering-and-plan-gates` | open draft; dependency advisory remediation |
+| #17 | `feat/integrate-latest-stack-to-main` | `main` | open draft; top-stack integration review anchor |
 
-The active integration branch `feat/integrate-latest-stack-to-main` is expected
-to open a draft PR to `main` after full local verification. It should remain a
-review anchor, not an implicit merge approval for the stacked PRs.
+The active integration branch `feat/integrate-latest-stack-to-main` is now PR
+#17 to `main`. It should remain a review anchor, not an implicit merge approval
+for the stacked PRs.
 
 ## 4. Preview Boundaries
 

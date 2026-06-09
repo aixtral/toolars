@@ -35,8 +35,8 @@ change; verification is command- and evidence-driven.
 
 ## 3. PR And Closeout
 
-- [ ] 3.1 Push `feat/integrate-latest-stack-to-main`.
-- [ ] 3.2 Create draft PR targeting `main`.
-- [ ] 3.3 Record CDC evidence and closeout.
+- [x] 3.1 Push `feat/integrate-latest-stack-to-main`.
+- [x] 3.2 Create draft PR targeting `main`.
+- [x] 3.3 Record CDC evidence and closeout.
   - Files: `.cdc/state/evidence.jsonl`, `.cdc/state/closeouts.jsonl`,
     `specs/changes/integrate-latest-stack-to-main/tasks.md`

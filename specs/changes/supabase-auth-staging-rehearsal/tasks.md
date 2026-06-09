@@ -26,16 +26,16 @@ Green before implementation.
 
 ## 2. Staging Rehearsal Harness
 
-- [ ] 2.1 Add failing/skipped Playwright staging rehearsal spec.
+- [x] 2.1 Add failing/skipped Playwright staging rehearsal spec.
   - Files: `site/e2e/staging-auth-rehearsal.spec.ts`,
     `site/playwright.config.ts`
   - Covers: R2-S1, R2-S2, R2-S3
   - Verification: `pnpm --dir site exec playwright test e2e/staging-auth-rehearsal.spec.ts --reporter=line`
-- [ ] 2.2 Implement env-gated staging Playwright config and rehearsal flow.
+- [x] 2.2 Implement env-gated staging Playwright config and rehearsal flow.
   - Files: `site/e2e/staging-auth-rehearsal.spec.ts`,
     `site/playwright.config.ts`
   - Covers: R2-S1, R2-S2, R2-S3
-- [ ] 2.3 Run local skipped rehearsal and commit.
+- [x] 2.3 Run local skipped rehearsal and commit.
   - Verification: `pnpm --dir site exec playwright test e2e/staging-auth-rehearsal.spec.ts --reporter=line`
   - Commit: `test(e2e): add Supabase auth staging rehearsal (task 2.3)`
 

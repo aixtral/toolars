@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const localNoProxyHosts = ['127.0.0.1', 'localhost', '::1'];
+const localBaseURL = 'http://127.0.0.1:9088';
+const runStagingAuthRehearsal =
+  process.env.TOOLARS_RUN_STAGING_AUTH_REHEARSAL === 'true';
+const stagingBaseURL = process.env.TOOLARS_STAGING_BASE_URL?.replace(/\/$/, '');
 const existingNoProxy = process.env.NO_PROXY ?? process.env.no_proxy ?? '';
 const noProxyHosts = new Set(
   existingNoProxy
@@ -19,14 +23,14 @@ process.env.no_proxy = process.env.NO_PROXY;
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
-  workers: process.env.CI ? 4 : 8,
+  workers: runStagingAuthRehearsal ? 1 : process.env.CI ? 4 : 8,
   use: {
-    baseURL: 'http://127.0.0.1:9088',
+    baseURL: runStagingAuthRehearsal ? (stagingBaseURL ?? localBaseURL) : localBaseURL,
     trace: 'on-first-retry',
   },
-  webServer: {
+  webServer: runStagingAuthRehearsal ? undefined : {
     command: 'pnpm dev',
-    url: 'http://127.0.0.1:9088',
+    url: localBaseURL,
     reuseExistingServer: true,
     timeout: 60_000,
   },

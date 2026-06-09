@@ -1,25 +1,26 @@
 # toolars Current Status And Iteration Plan
 
-Status: W2 backend-productionization branch-stack plus dependency remediation  
+Status: W2 backend-productionization top-stack integration review  
 Updated: 2026-06-09  
-Source branch: `feat/dependency-audit-remediation-pass`
+Source branch: `feat/integrate-latest-stack-to-main`
 
 ## 1. Executive Summary
 
 Toolars has moved from design handoff to a runnable Next.js App Router
 implementation and through the main W2 backend-productionization stack. The
-current branch stack includes the public utility shell, 73 calculator routes,
+current integration branch includes the public utility shell, 73 calculator routes,
 calculator detail workspaces, AI SaaS preview pages, commercial/legal pages,
 SEO/GEO discovery surfaces, URL-driven tools directory search, security release
 gates, `/app/**` route guarding, AI runtime request limits, Lemon
 Squeezy-shaped billing webhook intake, Supabase Auth/Postgres foundation, AI
 provider adapters, durable billing subscription adapters, workspace usage
-metering, and the current dependency audit remediation pass.
+metering, dependency audit remediation, and the governance-only branch that
+prepares the latest stack for review against `main`.
 
 The project is not yet production SaaS complete. The public site and preview
 application are strong enough for integration review, and the major W2 backend
 seams now have explicit implementation PRs. Remaining release blockers are
-stack integration to `main`, final security/release review, production
+review and merge sequencing to `main`, final security/release review, production
 environment provisioning, real provider credentials, application observability,
 AI persistence/history, Pro export persistence, and calculator golden-source
 hardening.
@@ -79,7 +80,8 @@ stack is:
 | `feat/ai-provider-adapter-implementation` | Provider-neutral AI adapter, preview provider, AI SDK wrapper, provider metadata |
 | `feat/billing-subscription-db-adapter` | Durable Supabase billing event/subscription repository and webhook runtime injection |
 | `feat/usage-metering-and-plan-gates` | Workspace monthly usage metering and AI plan gates |
-| `feat/dependency-audit-remediation-pass` | Current local pass: PostCSS advisory remediation and status refresh |
+| `feat/dependency-audit-remediation-pass` | PostCSS advisory remediation and status refresh |
+| `feat/integrate-latest-stack-to-main` | Current local pass: top-stack context/architecture refresh, full verification, and draft PR to `main` |
 
 Recommended merge strategy:
 
@@ -88,7 +90,8 @@ Recommended merge strategy:
 2. Review the stacked security/backend PRs in order: #6 security audit, #7 auth
    route guard, #8 AI runtime security, #9 billing webhook production intake,
    #10 production env gate, #11 security event logging, #12 auth DB foundation,
-   #13 AI provider adapter, #14 billing DB adapter, and #15 usage metering.
+   #13 AI provider adapter, #14 billing DB adapter, #15 usage metering, and
+   #16 dependency audit remediation.
 3. Re-run the full verification gate on the top stack branch before marking any
    draft PR ready.
 4. Merge only after confirming no hidden branch-stack drift and after deciding
@@ -114,6 +117,11 @@ Open draft PR state as of 2026-06-09:
 | #13 | `feat/ai-provider-adapter-implementation` | `feat/auth-db-production-implementation` | open draft |
 | #14 | `feat/billing-subscription-db-adapter` | `feat/ai-provider-adapter-implementation` | open draft |
 | #15 | `feat/usage-metering-and-plan-gates` | `feat/billing-subscription-db-adapter` | open draft; PR #15 usage-metering milestone |
+| #16 | `feat/dependency-audit-remediation-pass` | `feat/usage-metering-and-plan-gates` | open draft; dependency advisory remediation |
+
+The active integration branch `feat/integrate-latest-stack-to-main` is expected
+to open a draft PR to `main` after full local verification. It should remain a
+review anchor, not an implicit merge approval for the stacked PRs.
 
 ## 4. Preview Boundaries
 
@@ -137,15 +145,15 @@ as production-complete:
 
 Goal: make the latest stack the reviewable source of truth.
 
-Status: substantially complete but not merged to `main`.
+Status: active on `feat/integrate-latest-stack-to-main`; not merged to `main`.
 
 Deliverables:
 
-- Refresh `.cdc/CONTEXT.md` and `.cdc/ARCHITECTURE.md`.
-- Add this status and iteration plan.
-- Verify latest branch with lint, type-check, unit tests, E2E, build, CDC gate,
-  and ship preview.
-- Prepare PR from latest integration branch to `main`.
+- Refresh `.cdc/CONTEXT.md`, `.cdc/ARCHITECTURE.md`, and this status plan
+  through PR #16.
+- Verify the top-stack branch with dependency audit, lint, type-check, unit
+  tests, E2E, build, CDC gate, and ship preview.
+- Prepare a draft PR from `feat/integrate-latest-stack-to-main` to `main`.
 
 Exit criteria:
 
@@ -231,17 +239,16 @@ Exit criteria:
 
 ## 6. Immediate Next CDC Changes
 
-Recommended order after the current #6-#9 security stack:
+Recommended order after the current top-stack integration pass:
 
-1. `dependency-audit-remediation-pass` — in progress on
-   `feat/dependency-audit-remediation-pass`.
-2. `integrate-latest-stack-to-main`
-3. `final-production-security-audit`
-4. `ai-persistence-history-pass`
-5. `checkout-portal-handoff-pass`
-6. `pro-export-persistence-pass`
-7. `calculator-golden-source-hardening`
+1. `integrate-latest-stack-to-main` - in progress on
+   `feat/integrate-latest-stack-to-main`.
+2. `final-production-security-audit`
+3. `ai-persistence-history-pass`
+4. `checkout-portal-handoff-pass`
+5. `pro-export-persistence-pass`
+6. `calculator-golden-source-hardening`
 
 W2 backend work is now represented by explicit stacked draft PRs. The next
-coordination milestone is to finish dependency remediation, then run a top-stack
-integration review before advancing `main`.
+coordination milestone is to finish the top-stack integration review before
+advancing `main`.

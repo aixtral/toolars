@@ -10,7 +10,7 @@
 
 ```yaml
 project: toolars
-last_synced: 2026-06-06
+last_synced: 2026-06-09
 covered_changes:
   - merge-toolars-platform
   - design-conformance-pass
@@ -18,10 +18,18 @@ covered_changes:
   - seo-discovery-manifests-pass
   - site-graph-metadata-pass
   - tools-query-search-pass
-curator: codex + context-refresh-and-integration-pass
+  - production-env-release-gate
+  - security-event-logging-pass
+  - auth-db-production-implementation
+  - ai-provider-adapter-implementation
+  - billing-subscription-db-adapter
+  - usage-metering-and-plan-gates
+  - dependency-audit-remediation-pass
+  - integrate-latest-stack-to-main
+curator: codex + integrate-latest-stack-to-main
 spec_version: v1
 mode: A-architect
-status: current runnable architecture plus open productionization work
+status: current top-stack architecture plus release-readiness work
 ```
 
 ## 1. Current Repository Shape
@@ -40,6 +48,7 @@ graph TD
   site --> data["data registry"]
   site --> lib["lib modules"]
   site --> e2e["e2e tests"]
+  repo --> supabase["supabase/migrations/"]
   repo --> images["design/images/"]
   repo --> docs["docs/"]
   repo --> specs["specs/changes/"]
@@ -60,6 +69,11 @@ Current site stack:
 | Calculator logic | Pure `site/lib/calculators` engines independent of React/browser/network |
 | Search | Shared `site/lib/search` helper used by command palette and `/tools?search=` |
 | SEO/GEO | Metadata helpers, sitemap, robots, llms.txt, JSON-LD schemas |
+| Auth/DB | Supabase env/client/service helpers, workspace/profile SQL, session resolver foundation |
+| AI | Provider-neutral adapter, deterministic preview provider, AI SDK wrapper, provider metadata |
+| Billing | Lemon Squeezy webhook parser, runtime repository injection, Supabase subscription adapter |
+| Usage | Workspace monthly counters, preview repository, Supabase adapter, AI plan gates |
+| Security | `/app/**` proxy guard, production preview-auth release gate, request limits, structured security events, dependency audit remediation |
 
 ## 2. Intended Product Architecture
 
@@ -77,6 +91,8 @@ graph TD
   billing["Billing"]
   content["SEO Content + Blog"]
   assets["Brand + Tool Icon Assets"]
+  usage["Usage Metering"]
+  security["Security Events + Release Gates"]
 
   browser --> web
   web --> registry
@@ -88,6 +104,10 @@ graph TD
   ai --> db
   ai --> auth
   ai --> billing
+  ai --> usage
+  ai --> security
+  billing --> db
+  billing --> security
   web --> db
 ```
 
@@ -97,6 +117,7 @@ The current module map is a Next.js App Router application under `site/`:
 
 ```text
 site/
+  proxy.ts                        `/app/**` guard and preview-auth boundary
   app/                            route layer
     page.tsx                      search-first home dashboard
     tools/page.tsx                public tools directory; reads `search` query
@@ -122,15 +143,24 @@ site/
     ai-platforms.ts              platform definitions
   lib/
     calculators/                 pure calculation functions
+    auth/                        preview auth helpers and Supabase session resolver
+    supabase/                    browser/server/service client helpers and env parsing
+    db/                          migration isolation tests
+    plans/                       plan limits and paid/free capability rules
+    usage/                       workspace usage meter contracts, preview repo, Supabase adapter
+    billing/                     webhook parser, subscription repository, Supabase adapter
+    security/                    structured event helpers and dependency audit checks
     seo/                         metadata and schema helpers
     formatting/                  number, currency, unit formatting
-    auth/                        auth helpers
-    ai/                          provider/client wrappers
+    ai/                          provider-neutral AI adapter and provider runtime
+supabase/
+  migrations/                    Auth workspace, billing subscription, usage counter SQL
 ```
 
-Note: `auth/`, `ai/`, and `billing/` currently contain preview-safe
-implementation logic and tests. They are not yet connected to real Supabase,
-provider APIs, billing account storage, or production usage metering.
+Note: `auth/`, `ai/`, `billing/`, and `usage/` now contain production-capable
+seams with preview fallbacks. Real production credentials, live auth-cookie
+rehearsal, streaming AI transport, durable AI history, checkout/portal handoff,
+and final security audit are still pending.
 
 ## 4. Dependency Rules
 
@@ -145,18 +175,24 @@ These rules should hold regardless of final framework choice.
 | AI app UI | AI service client, auth state, platform config | calculator internals | Keep SaaS workflow separate from public calculators. |
 | Tool registry | metadata only | executable AI/provider code | Registry remains indexable and safe to render publicly. |
 | SEO/content helpers | tool registry, page metadata | account state | Crawlable pages must not depend on user session. |
+| Auth/session helpers | Supabase client/server helpers, route guard | public calculator engines | Keep account state outside free calculator logic. |
+| Billing/usage adapters | Supabase service client, plan definitions | public route components | Paid state remains server-owned and service-role scoped. |
+| AI provider adapters | AI SDK provider wrapper, preview provider, security events | billing implementation details | Preserve provider portability and testability. |
+| Security events | normalized event metadata | secrets, raw payloads, PII | Audit trails must stay non-sensitive. |
 
 ## 5. Cross-Module Contracts To Define
 
 | Contract | Producer | Consumers | Status |
 |---|---|---|---|
-| `ToolDefinition` | data registry | home, directory, category pages, search, related tools | Suggested in `DESIGN.md`; needs final schema. |
-| `CalculatorDefinition` | calculator registry | shared calculator template, validation, SEO, tests | Suggested in `DESIGN.md`; needs final schema. |
-| Calculator result shape | calculator engine | result panel, compare/save/share, exports | Open. |
-| Search index shape | tool/content registry | command palette, global search, mega menu | Open. |
-| AI repurpose job shape | AI service | dashboard, history, analytics | Suggested in `DESIGN.md`; must align with chosen backend. |
+| `ToolDefinition` | data registry | home, directory, category pages, search, related tools | Implemented in typed registries; continue hardening. |
+| `CalculatorDefinition` | calculator registry | shared calculator template, validation, SEO, tests | Implemented for 73 calculators; needs golden-source expansion. |
+| Calculator result shape | calculator engine | result panel, compare/save/share, exports | Implemented for current shared workspace; Pro export persistence pending. |
+| Search index shape | tool/content registry | command palette, global search, mega menu | Implemented for command palette and `/tools?search=`. |
+| AI repurpose job shape | AI service | dashboard, history, analytics | Preview generation and provider metadata implemented; durable job/output history pending. |
 | Anonymous local state | browser storage | favorites, recent tools, saved calculator results | Open account-sync boundary. |
-| Account state | auth + DB | AI history, brand voices, settings, billing | Open provider/schema choice. |
+| Account state | auth + DB | AI history, brand voices, settings, billing | Supabase workspace/profile foundation implemented; production sign-in rehearsal pending. |
+| Billing subscription state | billing webhook route | plan gates, account UI, usage limits | Supabase `subscription_events`/`subscriptions` adapter implemented; checkout/portal pending. |
+| Usage counters | usage runtime | AI generation route, future export/batch gates | Supabase `usage_counters` adapter and atomic AI increment implemented. |
 
 ## 6. Technology Choices
 
@@ -177,17 +213,19 @@ Current implementation status:
 | Web framework | Implemented and verified under `site/`. |
 | Language | Implemented as TypeScript. |
 | Styling | Implemented with Tailwind CSS and local primitives; design conformance passes exist. |
-| Auth/DB | Preview auth only; Supabase/Postgres not yet implemented. |
-| AI | Deterministic preview generator; provider adapters not yet implemented. |
-| Billing | Plan gates and webhook signature parsing exist; subscription persistence not yet implemented. |
-| Tests | Implemented; latest current-branch evidence includes 78 unit/component tests and 38 E2E tests. |
+| Auth/DB | Supabase Auth/Postgres env, clients, workspace SQL, and session resolver foundation implemented; production cookie/session rehearsal pending. |
+| AI | Provider-neutral adapter, preview provider, AI SDK wrapper, provider metadata, and usage metadata implemented; real credentials/streaming/history pending. |
+| Billing | Lemon Squeezy intake, idempotent event model, runtime repository injection, and Supabase subscription repository implemented; checkout/portal pending. |
+| Usage | Workspace monthly usage counters, atomic AI generation increment, preview repository, Supabase adapter, and AI plan gates implemented. |
+| Dependency posture | `postcss` overridden to 8.5.15 for `GHSA-qx2v-qp2m-jg93`; latest audit reports zero vulnerabilities. |
+| Tests | Implemented; latest current-stack evidence includes 44 Vitest files / 147 tests plus Playwright coverage on prior stack. |
 
 ## 7. Data Architecture Questions
 
 The product likely needs separate persistence tiers:
 
 - Local browser storage for anonymous calculator favorites, recent tools, and saved comparisons.
-- Account database for AI users, brand voices, AI history, usage, settings, API keys, subscription state.
+- Supabase Postgres for profiles, workspaces, workspace members, subscription events, subscription state, usage counters, and future AI history.
 - Static/content layer for calculator definitions, blog content, category pages, i18n dictionaries, and SEO metadata.
 
 Open decisions:
@@ -198,6 +236,10 @@ Open decisions:
   bespoke overrides only where the template cannot safely express the tool.
 - Blog/content is file-based for v1 unless a later spec approves a CMS.
 - Billing uses Lemon Squeezy unless a later spec supersedes this decision.
+- Current SQL migrations live in `supabase/migrations/`:
+  `20260606152000_auth_workspace_foundation.sql`,
+  `20260607123000_billing_subscription_state.sql`, and
+  `20260607133000_usage_counters.sql`.
 
 ## 8. Observability and Quality Gates
 
@@ -222,7 +264,9 @@ cdc-workflow gate --mode standard --root .
 cdc-workflow ship-preview --change <change-id> --root .
 ```
 
-The current branch stack passes these gates as of `tools-query-search-pass`.
+The current branch stack passes these gates as of
+`dependency-audit-remediation-pass`; `integrate-latest-stack-to-main` is the
+active top-stack verification branch.
 The `/tools` route is now dynamic because it reads `searchParams` for
 server-rendered query results; public calculator detail routes remain SSG via
 `generateStaticParams`.

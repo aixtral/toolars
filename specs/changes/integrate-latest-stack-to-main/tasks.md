@@ -15,7 +15,7 @@ change; verification is command- and evidence-driven.
 - [x] 1.1 Add this CDC spec package.
   - Files: `specs/changes/integrate-latest-stack-to-main/**`
   - Verification: `test -f specs/changes/integrate-latest-stack-to-main/design.md`
-- [ ] 1.2 Refresh CDC context and architecture through PR #16.
+- [x] 1.2 Refresh CDC context and architecture through PR #16.
   - Files: `.cdc/CONTEXT.md`, `.cdc/ARCHITECTURE.md`,
     `docs/architecture/CURRENT-STATUS-AND-ITERATION-PLAN.md`
   - Covers: R2-S1, R2-S2

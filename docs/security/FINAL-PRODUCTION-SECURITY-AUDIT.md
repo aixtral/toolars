@@ -5,6 +5,7 @@ Updated: 2026-06-09
 CDC change: `final-production-security-audit`  
 Scope branch: `feat/final-production-security-audit`  
 Review anchor: PR #17, `feat/integrate-latest-stack-to-main`
+Audit PR: [#18](https://github.com/aixtral/toolars/pull/18)
 
 ## Executive Decision
 

@@ -18,3 +18,13 @@
 - Evidence: `pnpm --dir site test -- handoff` passed with 49 files and 173
   tests.
 - Next session start: continue with task 2.3 repository lookup RED tests.
+
+## 2026-06-09 22:18 - Workspace Subscription Lookup
+
+- Completed: RED tests for `getSubscriptionForWorkspace()` failed on missing
+  repository method.
+- Completed: added workspace subscription lookup to in-memory and Supabase
+  billing repositories.
+- Evidence: `pnpm --dir site test -- billing supabase` passed with 49 files and
+  175 tests.
+- Next session start: continue with task 3.1 route RED tests.

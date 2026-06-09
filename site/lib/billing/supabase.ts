@@ -200,6 +200,20 @@ export function createSupabaseBillingRepository(
       return result.data ? subscriptionFromRow(result.data) : undefined;
     },
 
+    async getSubscriptionForWorkspace(workspaceId) {
+      const result = await billingTable(client, 'subscriptions')
+        .select(subscriptionColumns)
+        .eq('provider', 'lemon_squeezy')
+        .eq('workspace_id', workspaceId)
+        .maybeSingle();
+
+      if (result.error) {
+        throwSupabaseError('Failed to load billing subscription for workspace', result.error);
+      }
+
+      return result.data ? subscriptionFromRow(result.data) : undefined;
+    },
+
     async listEvents() {
       const result = await billingTable(client, 'subscription_events').select(eventColumns);
       if (result.error) {

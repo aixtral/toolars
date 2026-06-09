@@ -25,12 +25,12 @@ Execute in dependency order. Commit after each completed task group.
 - [x] 2.2 GREEN: implement billing handoff helpers.
   - Files: `site/lib/billing/handoff.ts`
   - Verification: `pnpm --dir site test -- handoff`
-- [ ] 2.3 RED: add repository helper tests for workspace subscription lookup.
+- [x] 2.3 RED: add repository helper tests for workspace subscription lookup.
   - Files: `site/lib/billing/__tests__/billing.test.ts`,
     `site/lib/billing/__tests__/supabase.test.ts`
   - Covers: R2-S1
   - Verification: `pnpm --dir site test -- billing supabase`
-- [ ] 2.4 GREEN: extend billing repository with workspace subscription lookup.
+- [x] 2.4 GREEN: extend billing repository with workspace subscription lookup.
   - Files: `site/lib/billing/index.ts`, `site/lib/billing/supabase.ts`
   - Verification: `pnpm --dir site test -- billing supabase`
 

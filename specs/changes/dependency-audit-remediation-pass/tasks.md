@@ -30,13 +30,13 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 3. Verification And Closeout
 
-- [ ] 3.1 Run audit and focused tests.
+- [x] 3.1 Run audit and focused tests.
   - Verification: `pnpm --dir site audit --registry=https://registry.npmjs.org --json`,
     `pnpm --dir site test -- dependency-audit`
-- [ ] 3.2 Run standard gates.
+- [x] 3.2 Run standard gates.
   - Verification: `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `cdc-workflow gate --mode standard --root .`
-- [ ] 3.3 Record CDC evidence and closeout.
+- [x] 3.3 Record CDC evidence and closeout.
   - Files: `.cdc/state/evidence.jsonl`, `.cdc/state/closeouts.jsonl`,
     `specs/changes/dependency-audit-remediation-pass/tasks.md`

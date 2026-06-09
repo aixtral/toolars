@@ -48,7 +48,7 @@ Latest verification evidence on the current stack:
 ```text
 pnpm --dir site lint        -> pass
 pnpm --dir site type-check  -> pass
-pnpm --dir site test        -> 43 files / 146 tests passed on #15; 44 files / 147 tests expected after dependency guard
+pnpm --dir site test        -> 44 files / 147 tests passed
 pnpm --dir site test:e2e -- auth-billing -> 3 tests passed
 pnpm --dir site build       -> 104 pages/routes reported
 cdc-workflow gate           -> pass

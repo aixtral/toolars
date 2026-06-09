@@ -8,6 +8,10 @@ vi.mock('server-only', () => ({}));
 
 type UsageRow = Record<string, unknown>;
 type SupabaseError = { message: string };
+type UsageIncrementColumn =
+  | 'ai_generations_used'
+  | 'exports_used'
+  | 'batch_runs_used';
 
 class FakeUsageQuery {
   private filters: Record<string, unknown> = {};
@@ -40,7 +44,7 @@ class FakeUsageRpc {
   ) {}
 
   async single(): Promise<{ data: UsageRow | null; error: SupabaseError | null }> {
-    const incrementColumnByFunction: Record<string, string> = {
+    const incrementColumnByFunction: Record<string, UsageIncrementColumn> = {
       increment_ai_generation_usage: 'ai_generations_used',
       increment_export_usage: 'exports_used',
       increment_batch_run_usage: 'batch_runs_used',
@@ -63,7 +67,7 @@ class FakeUsageRpc {
       return { data: existing, error: null };
     }
 
-    const inserted = {
+    const inserted: UsageRow = {
       workspace_id: this.args.p_workspace_id,
       period_start: this.args.p_period_start,
       period_end: this.args.p_period_end,

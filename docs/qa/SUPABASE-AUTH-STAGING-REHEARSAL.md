@@ -3,6 +3,7 @@
 Status: harness ready; real staging run pending credentials  
 Updated: 2026-06-09  
 CDC change: `supabase-auth-staging-rehearsal`
+Draft PR: [#20](https://github.com/aixtral/toolars/pull/20)
 
 ## Purpose
 

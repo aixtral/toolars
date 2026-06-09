@@ -50,5 +50,5 @@ Green before implementation.
   - Verification: `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `pnpm --dir site test:e2e`, `cdc-workflow gate --mode standard --root .`
-- [ ] 3.4 Record CDC evidence, ship preview, push, and create draft PR.
+- [x] 3.4 Record CDC evidence, ship preview, push, and create draft PR.
   - Verification: `cdc-workflow ship-preview --change supabase-auth-staging-rehearsal --root .`

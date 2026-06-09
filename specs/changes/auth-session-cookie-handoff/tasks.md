@@ -29,16 +29,16 @@ Green before implementation.
 
 ## 2. App Proxy Guard
 
-- [ ] 2.1 Add failing tests for Supabase-cookie app route access.
+- [x] 2.1 Add failing tests for Supabase-cookie app route access.
   - File: `site/proxy.test.ts`
   - Covers: R2-S1, R2-S2, R3-S3
   - Verification: `pnpm --dir site test -- proxy`
-- [ ] 2.2 Implement Supabase-aware `/app/**` proxy guard.
+- [x] 2.2 Implement Supabase-aware `/app/**` proxy guard.
   - File: `site/proxy.ts`
   - Key points: allow verified Supabase cookie sessions, write refreshed
     cookies/headers to response, preserve login redirect `next`.
   - Covers: R2-S1, R2-S2, R3-S3
-- [ ] 2.3 Run Green proxy tests and commit.
+- [x] 2.3 Run Green proxy tests and commit.
   - Verification: `pnpm --dir site test -- proxy`
   - Commit: `feat(auth): guard app routes with Supabase cookies (task 2.3)`
 

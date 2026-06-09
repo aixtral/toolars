@@ -12,18 +12,18 @@ Green before implementation.
 
 ## 1. Supabase Session Runtime
 
-- [ ] 1.1 Add failing tests for server request session resolution.
+- [x] 1.1 Add failing tests for server request session resolution.
   - Files: `site/lib/auth/__tests__/auth.test.ts`,
     `site/lib/auth/__tests__/supabase-session.test.ts`
   - Covers: R1-S1, R1-S2, R1-S3, R3-S1, R3-S2
   - Verification: `pnpm --dir site test -- auth supabase-session`
-- [ ] 1.2 Implement Supabase cookie-backed session resolution.
+- [x] 1.2 Implement Supabase cookie-backed session resolution.
   - Files: `site/lib/auth/index.ts`, `site/lib/auth/supabase-session.ts`,
     `site/lib/supabase/server.ts`
   - Key points: use verified `auth.getUser()`, service-side membership lookup,
     production fail-closed behavior, injectable test seams.
   - Covers: R1-S1, R1-S2, R1-S3, R3-S1, R3-S2
-- [ ] 1.3 Run Green tests and commit.
+- [x] 1.3 Run Green tests and commit.
   - Verification: `pnpm --dir site test -- auth supabase-session`
   - Commit: `feat(auth): wire Supabase cookie session handoff (task 1.3)`
 

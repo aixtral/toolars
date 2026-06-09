@@ -56,6 +56,26 @@ describe('auth preview sessions', () => {
     await expect(getSessionFromRequest(request)).resolves.toBeNull();
   });
 
+  it('uses a Supabase-backed resolver for production route handler sessions', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+
+    const request = new Request('http://127.0.0.1/api', {
+      headers: {
+        cookie: 'sb-toolars-auth-token=token-value',
+        'x-toolars-preview-user': 'true',
+        'x-toolars-preview-plan': 'team',
+      },
+    });
+    const resolveSupabaseSession = vi.fn(async () =>
+      createPreviewSession('pro'),
+    );
+
+    await expect(
+      getSessionFromRequest(request, { resolveSupabaseSession }),
+    ).resolves.toEqual(createPreviewSession('pro'));
+    expect(resolveSupabaseSession).toHaveBeenCalledWith(request);
+  });
+
   it('allows local preview sessions to be explicitly disabled', async () => {
     vi.stubEnv('NODE_ENV', 'development');
     vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'false');

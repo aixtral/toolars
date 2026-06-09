@@ -28,3 +28,15 @@
 - Evidence: `pnpm --dir site test -- billing supabase` passed with 49 files and
   175 tests.
 - Next session start: continue with task 3.1 route RED tests.
+
+## 2026-06-09 22:20 - Checkout And Portal Routes
+
+- Completed: RED tests for missing `/api/billing/checkout` and
+  `/api/billing/portal` route handlers.
+- Completed: checkout route with session requirement, paid-plan validation,
+  configured provider URL lookup, checkout URL decoration, and `303` redirect.
+- Completed: portal route with session requirement, signed subscription portal
+  lookup, unsigned portal fallback, and fail-closed `404`.
+- Evidence: `pnpm --dir site test -- checkout portal` passed with 51 files and
+  181 tests.
+- Next session start: continue with task 4.1 billing UI RED tests.

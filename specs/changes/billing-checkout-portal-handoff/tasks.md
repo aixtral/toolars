@@ -36,13 +36,13 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 3. Checkout And Portal Routes
 
-- [ ] 3.1 RED: add checkout and portal route tests for auth, missing config,
+- [x] 3.1 RED: add checkout and portal route tests for auth, missing config,
   redirect, and fallback behavior.
   - Files: `site/app/api/billing/checkout/route.test.ts`,
     `site/app/api/billing/portal/route.test.ts`
   - Covers: R1-S1, R1-S2, R1-S3, R2-S1, R2-S2, R2-S3
   - Verification: `pnpm --dir site test -- checkout portal`
-- [ ] 3.2 GREEN: implement checkout and portal route handlers.
+- [x] 3.2 GREEN: implement checkout and portal route handlers.
   - Files: `site/app/api/billing/checkout/route.ts`,
     `site/app/api/billing/portal/route.ts`
   - Verification: `pnpm --dir site test -- checkout portal`

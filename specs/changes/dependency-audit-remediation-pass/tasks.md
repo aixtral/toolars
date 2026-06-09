@@ -13,11 +13,11 @@ Execute in dependency order. Commit after each completed task group.
 - [x] 1.1 Add this CDC spec package.
   - Files: `specs/changes/dependency-audit-remediation-pass/**`
   - Verification: `test -f specs/changes/dependency-audit-remediation-pass/design.md`
-- [ ] 1.2 RED: add dependency security test for vulnerable PostCSS in lockfile.
+- [x] 1.2 RED: add dependency security test for vulnerable PostCSS in lockfile.
   - Files: `site/lib/security/__tests__/dependency-audit.test.ts`
   - Covers: R2-S1, R2-S2
   - Verification: `pnpm --dir site test -- dependency-audit`
-- [ ] 1.3 GREEN: add pnpm override and refresh lockfile.
+- [x] 1.3 GREEN: add pnpm override and refresh lockfile.
   - Files: `site/pnpm-workspace.yaml`, `site/pnpm-lock.yaml`
   - Verification: `pnpm --dir site test -- dependency-audit`
 

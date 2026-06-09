@@ -56,6 +56,13 @@ Green before implementation.
 - [x] 3.3 Run Green API tests and commit.
   - Verification: `pnpm --dir site test -- repurpose`
   - Commit: `feat(auth): use Supabase sessions in AI route (task 3.3)`
+- [x] 3.4 Wire the repurpose app page to server-cookie sessions.
+  - Files: `site/app/app/repurpose/page.tsx`,
+    `site/app/app/__tests__/ai-pages.test.tsx`
+  - Key points: preview search params still work; real Supabase cookies can
+    render the workspace instead of AuthGate.
+  - Covers: R2-S1
+  - Verification: `pnpm --dir site test -- ai-pages`
 
 ## 4. Verification And Release Evidence
 

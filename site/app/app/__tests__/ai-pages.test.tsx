@@ -1,14 +1,41 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import AnalyticsPage from '@/app/app/analytics/page';
 import BrandVoicePage from '@/app/app/brand-voice/page';
 import HistoryPage from '@/app/app/history/page';
-import RepurposePage from '@/app/app/repurpose/page';
+import RepurposePage, {
+  resolveRepurposePageSession,
+} from '@/app/app/repurpose/page';
 import SettingsPage from '@/app/app/settings/page';
 import TemplatesPage from '@/app/app/templates/page';
+import { createPreviewSession } from '@/lib/auth';
 import { AI_PLATFORM_GROUPS, AI_PLATFORMS } from '@/data/ai-platforms';
 
 describe('AI supporting pages', () => {
+  it('resolves a Supabase-backed repurpose page session from server cookies', async () => {
+    const resolveRequestSession = vi.fn(async (request: Request) => {
+      void request;
+      return createPreviewSession('pro');
+    });
+
+    await expect(
+      resolveRepurposePageSession({
+        searchParams: {},
+        cookieHeader: 'sb-toolars-auth-token=token-value',
+        resolveRequestSession,
+      }),
+    ).resolves.toEqual(createPreviewSession('pro'));
+    expect(resolveRequestSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        headers: expect.any(Headers),
+      }),
+    );
+    const request = resolveRequestSession.mock.calls[0]?.[0];
+    expect(request?.headers.get('cookie')).toBe(
+      'sb-toolars-auth-token=token-value',
+    );
+  });
+
   it('renders the repurpose workspace header with plan and usage context', async () => {
     const page = await RepurposePage({
       searchParams: Promise.resolve({ preview: '1' }),

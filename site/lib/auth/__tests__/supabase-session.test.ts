@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import { resolveToolarsSessionFromSupabase } from '@/lib/auth/supabase-session';
+import {
+  loadToolarsWorkspaceMembershipForUser,
+  resolveToolarsSessionFromSupabase,
+} from '@/lib/auth/supabase-session';
 
 function authClientFor(user: { id: string; email?: string | null } | null) {
   return {
@@ -13,6 +16,36 @@ function authClientFor(user: { id: string; email?: string | null } | null) {
 }
 
 describe('Supabase Toolars session resolver', () => {
+  it('loads the first valid workspace membership for a verified user', async () => {
+    const query = {
+      select: vi.fn(() => query),
+      eq: vi.fn(() => query),
+      order: vi.fn(() => query),
+      limit: vi.fn(() => query),
+      maybeSingle: vi.fn(async () => ({
+        data: {
+          workspace_id: 'workspace_123',
+          plan_id: 'team',
+          role: 'admin',
+        },
+        error: null,
+      })),
+    };
+    const client = {
+      from: vi.fn(() => query),
+    };
+
+    await expect(
+      loadToolarsWorkspaceMembershipForUser(client, 'user_123'),
+    ).resolves.toEqual({
+      workspaceId: 'workspace_123',
+      planId: 'team',
+      role: 'admin',
+    });
+    expect(client.from).toHaveBeenCalledWith('workspace_members');
+    expect(query.eq).toHaveBeenCalledWith('user_id', 'user_123');
+  });
+
   it('maps a verified Supabase user and workspace membership to a Toolars session', async () => {
     const loadWorkspaceForUser = vi.fn(async () => ({
       workspaceId: 'workspace_123',

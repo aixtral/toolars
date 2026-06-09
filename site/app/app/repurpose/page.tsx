@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { RepurposeWorkspace } from '@/components/ai';
 import { UsagePlanCard } from '@/components/billing';
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
-import { getSessionFromSearchParams } from '@/lib/auth';
+import { getSessionFromRequest, getSessionFromSearchParams } from '@/lib/auth';
+import type { ToolarsSession } from '@/lib/auth';
 import { getPlanById } from '@/lib/plans';
 
 export const metadata: Metadata = {
@@ -20,6 +22,38 @@ interface RepurposePageProps {
   searchParams?: Promise<{
     preview?: string;
   }>;
+}
+
+interface ResolveRepurposePageSessionInput {
+  searchParams: Record<string, string | undefined>;
+  cookieHeader?: string;
+  resolveRequestSession?: (
+    request: Request,
+  ) => Promise<ToolarsSession | null>;
+}
+
+function serializeCookieHeader(cookiesToSerialize: { name: string; value: string }[]) {
+  return cookiesToSerialize
+    .map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
+    .join('; ');
+}
+
+export async function resolveRepurposePageSession({
+  searchParams,
+  cookieHeader,
+  resolveRequestSession = getSessionFromRequest,
+}: ResolveRepurposePageSessionInput) {
+  const previewSession = getSessionFromSearchParams(searchParams);
+  if (previewSession) return previewSession;
+  if (!cookieHeader) return null;
+
+  return resolveRequestSession(
+    new Request('https://toolars.local/app/repurpose', {
+      headers: {
+        cookie: cookieHeader,
+      },
+    }),
+  );
 }
 
 function AuthGate() {
@@ -68,7 +102,13 @@ function AuthGate() {
 
 export default async function RepurposePage({ searchParams }: RepurposePageProps) {
   const params = await searchParams;
-  const session = getSessionFromSearchParams(params ?? {});
+  const previewSession = getSessionFromSearchParams(params ?? {});
+  const session =
+    previewSession ??
+    (await resolveRepurposePageSession({
+      searchParams: params ?? {},
+      cookieHeader: serializeCookieHeader((await cookies()).getAll()),
+    }));
 
   if (!session) return <AuthGate />;
 

@@ -1,25 +1,28 @@
 # toolars Current Status And Iteration Plan
 
-Status: W2 security-productionization branch-stack review baseline  
-Updated: 2026-06-06  
-Source branch: `feat/billing-webhook-production-pass`
+Status: W2 backend-productionization branch-stack plus dependency remediation  
+Updated: 2026-06-09  
+Source branch: `feat/dependency-audit-remediation-pass`
 
 ## 1. Executive Summary
 
 Toolars has moved from design handoff to a runnable Next.js App Router
-implementation and into the first W2 security-productionization stack. The
+implementation and through the main W2 backend-productionization stack. The
 current branch stack includes the public utility shell, 73 calculator routes,
 calculator detail workspaces, AI SaaS preview pages, commercial/legal pages,
-SEO/GEO discovery surfaces, URL-driven tools directory search, a security
-release-gate audit, `/app/**` route guarding, AI runtime request limits, and
-Lemon Squeezy-shaped billing webhook intake.
+SEO/GEO discovery surfaces, URL-driven tools directory search, security release
+gates, `/app/**` route guarding, AI runtime request limits, Lemon
+Squeezy-shaped billing webhook intake, Supabase Auth/Postgres foundation, AI
+provider adapters, durable billing subscription adapters, workspace usage
+metering, and the current dependency audit remediation pass.
 
 The project is not yet production SaaS complete. The public site and preview
-application are strong enough for integration review, and several high-risk
-security seams have been reduced, but real Supabase/Auth session persistence,
-durable database adapters, AI provider integration, production usage metering,
-application observability, dependency remediation, and release-readiness audits
-remain release-blocking work.
+application are strong enough for integration review, and the major W2 backend
+seams now have explicit implementation PRs. Remaining release blockers are
+stack integration to `main`, final security/release review, production
+environment provisioning, real provider credentials, application observability,
+AI persistence/history, Pro export persistence, and calculator golden-source
+hardening.
 
 ## 2. Current Implementation Snapshot
 
@@ -33,9 +36,10 @@ remain release-blocking work.
 | Calculator UX | Shared detail workspace with calculate, reset, local save, compare, share |
 | Tools directory | `/tools` default directory plus `/tools?search=<query>` server-rendered search |
 | AI SaaS | Preview app shell and pages for repurpose, templates, brand voice, history, analytics, settings |
-| Auth | `/app/**` is guarded by Next proxy; preview sessions still exist; no production provider/session cookies yet |
-| AI runtime | Preview AI route now has body/source limits, platform normalization, and in-memory preview rate/usage guard |
-| Billing | Lemon Squeezy-shaped webhook signature/parser/idempotency repository contract exists; no durable Supabase/Postgres adapter yet |
+| Auth | `/app/**` guard, production preview-auth release gate, Supabase env/client helpers, workspace SQL, and session resolver foundation exist; runtime sign-in/session cookie integration still needs production env/provider rehearsal |
+| AI runtime | Request/body/source limits, platform normalization, provider-neutral adapter, preview provider, AI SDK wrapper, and workspace usage metering exist |
+| Billing | Lemon Squeezy `X-Signature` parser, idempotency model, durable Supabase `subscription_events`/`subscriptions` adapter, and runtime repository injection exist |
+| Usage metering | Workspace monthly `usage_counters`, atomic AI generation increment RPC, preview repository, and Supabase adapter exist |
 | SEO/GEO | sitemap, robots, llms.txt, root Open Graph/Twitter, Organization/WebSite/SearchAction JSON-LD |
 | Tests | Vitest/Testing Library and Playwright |
 
@@ -44,7 +48,7 @@ Latest verification evidence on the current stack:
 ```text
 pnpm --dir site lint        -> pass
 pnpm --dir site type-check  -> pass
-pnpm --dir site test        -> 26 files / 94 tests passed
+pnpm --dir site test        -> 44 files / 147 tests passed
 pnpm --dir site test:e2e -- auth-billing -> 3 tests passed
 pnpm --dir site build       -> 104 pages/routes reported
 cdc-workflow gate           -> pass
@@ -69,20 +73,29 @@ stack is:
 | `feat/auth-route-guard-implementation` | Next proxy guard for `/app/**` and preview auth routing tests |
 | `feat/ai-runtime-security-pass` | AI route request/body/source limits, normalization, and in-memory preview rate/usage guard |
 | `feat/billing-webhook-production-pass` | Lemon Squeezy `X-Signature` intake, event parser, idempotency, and subscription repository contract |
+| `feat/production-env-release-gate` | Production env release gate; preview auth fails closed in production |
+| `feat/security-event-logging-pass` | Structured non-sensitive AI and billing security event logging |
+| `feat/auth-db-production-implementation` | Supabase env/client/session and workspace SQL foundation |
+| `feat/ai-provider-adapter-implementation` | Provider-neutral AI adapter, preview provider, AI SDK wrapper, provider metadata |
+| `feat/billing-subscription-db-adapter` | Durable Supabase billing event/subscription repository and webhook runtime injection |
+| `feat/usage-metering-and-plan-gates` | Workspace monthly usage metering and AI plan gates |
+| `feat/dependency-audit-remediation-pass` | Current local pass: PostCSS advisory remediation and status refresh |
 
 Recommended merge strategy:
 
 1. Keep PR #1 from `feat/context-refresh-and-integration-pass` to `main` as the
    W0 integration anchor until the stacked security PRs are reviewed.
-2. Review the stacked security PRs in order: #6 security audit, #7 auth route
-   guard, #8 AI runtime security, #9 billing webhook production intake.
+2. Review the stacked security/backend PRs in order: #6 security audit, #7 auth
+   route guard, #8 AI runtime security, #9 billing webhook production intake,
+   #10 production env gate, #11 security event logging, #12 auth DB foundation,
+   #13 AI provider adapter, #14 billing DB adapter, and #15 usage metering.
 3. Re-run the full verification gate on the top stack branch before marking any
    draft PR ready.
 4. Merge only after confirming no hidden branch-stack drift and after deciding
    whether W1/W2 parallel design branches should be rebased into the same stack
    or reviewed independently.
 
-Open draft PR state as of 2026-06-06:
+Open draft PR state as of 2026-06-09:
 
 | PR | Head | Base | Status |
 |---|---|---|---|
@@ -95,6 +108,12 @@ Open draft PR state as of 2026-06-06:
 | #7 | `feat/auth-route-guard-implementation` | `feat/security-audit-release-gate` | open draft, mergeable |
 | #8 | `feat/ai-runtime-security-pass` | `feat/auth-route-guard-implementation` | open draft, mergeable |
 | #9 | `feat/billing-webhook-production-pass` | `feat/ai-runtime-security-pass` | open draft, mergeable |
+| #10 | `feat/production-env-release-gate` | `feat/billing-webhook-production-pass` | open draft |
+| #11 | `feat/security-event-logging-pass` | `feat/production-env-release-gate` | open draft |
+| #12 | `feat/auth-db-production-implementation` | `feat/security-event-logging-pass` | open draft |
+| #13 | `feat/ai-provider-adapter-implementation` | `feat/auth-db-production-implementation` | open draft |
+| #14 | `feat/billing-subscription-db-adapter` | `feat/ai-provider-adapter-implementation` | open draft |
+| #15 | `feat/usage-metering-and-plan-gates` | `feat/billing-subscription-db-adapter` | open draft; PR #15 usage-metering milestone |
 
 ## 4. Preview Boundaries
 
@@ -103,12 +122,13 @@ as production-complete:
 
 | System | Current boundary | Required production work |
 |---|---|---|
-| Auth | `/app/**` proxy guard exists; query/header preview sessions still exist and H4 env risk remains | Real provider, session cookies, production env gate, user profile storage |
-| AI generation | Deterministic local draft generation with request/source limits and in-memory preview rate/usage guard | Provider adapters, streaming route behavior, retries, durable usage metering, cost tracking, logging |
-| Billing | Lemon Squeezy-shaped intake, event parser, idempotency, and subscription repository contract | Supabase/Postgres `subscriptions` and `subscription_events` adapter, user-plan reconciliation |
+| Auth | `/app/**` proxy guard, production preview-auth release gate, Supabase env/client helpers, workspace SQL, and session resolver foundation exist | Production sign-in/session rehearsal, provider env, and route-level switch from preview headers to real cookies |
+| AI generation | Deterministic preview provider plus AI SDK adapter, request/source limits, provider metadata, and workspace usage gate exist | Real provider credentials, streaming transport, retries/backoff, cost persistence, AI job/output history |
+| Billing | Lemon Squeezy intake, parser, idempotency, durable Supabase billing repository, and webhook runtime injection exist | Checkout/portal handoff, subscription reconciliation UI, operational webhook replay tooling |
+| Usage | Workspace monthly AI usage counters and atomic increment exist | Export/batch usage counters and customer-facing usage history |
 | Persistence | Local storage for anonymous calculator saves/comparisons | Account-backed saved results, cross-device sync, Pro export history |
 | Observability | CDC evidence and automated tests | Application analytics/events, error reporting, trace IDs for AI and billing |
-| Security | Release audit exists; H1 route guard, local H2 request limits, and H3 webhook intake have follow-up PRs | H4 production env gate, M2 dependency remediation, M3 event logging, and a final production security audit |
+| Security | Release audit, route guard, request limits, webhook intake, production env gate, security event logging, and current dependency remediation exist | Final production security audit after stack integration |
 | Calculator formulas | All routes have formula engines; high-risk formulas have representative tests | Golden value suites and source review for high-risk finance/health calculators |
 
 ## 5. Iteration Plan
@@ -162,8 +182,10 @@ Exit criteria:
 
 Goal: replace preview SaaS surfaces with production-capable backend seams.
 
-Status: started. H1/H2/H3 route-level security seams have active stacked PRs,
-but durable Auth/DB/provider implementations are still pending.
+Status: active stacked PRs through usage metering. Durable Auth/DB/provider,
+billing DB adapter, and AI usage-metering seams now have implementation PRs.
+Production credentials, streaming UX, AI persistence, and release rehearsal
+remain pending.
 
 Deliverables:
 
@@ -211,15 +233,15 @@ Exit criteria:
 
 Recommended order after the current #6-#9 security stack:
 
-1. `production-env-release-gate`
-2. `security-event-logging-pass`
-3. `auth-db-production-implementation`
-4. `ai-provider-adapter-implementation`
-5. `billing-subscription-db-adapter`
-6. `usage-metering-and-plan-gates`
-7. `dependency-audit-remediation-pass`
-8. `integrate-latest-stack-to-main`
+1. `dependency-audit-remediation-pass` — in progress on
+   `feat/dependency-audit-remediation-pass`.
+2. `integrate-latest-stack-to-main`
+3. `final-production-security-audit`
+4. `ai-persistence-history-pass`
+5. `checkout-portal-handoff-pass`
+6. `pro-export-persistence-pass`
+7. `calculator-golden-source-hardening`
 
-W2 production backend work has started in route-level/security seams, but
-durable Auth/DB/provider work should remain behind explicit specs and stacked
-review until the current draft PR stack is reviewed.
+W2 backend work is now represented by explicit stacked draft PRs. The next
+coordination milestone is to finish dependency remediation, then run a top-stack
+integration review before advancing `main`.

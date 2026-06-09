@@ -35,3 +35,16 @@
   170 tests.
 - Next session start: run focused integration verification for tasks 4.1 and
   then standard gates.
+
+## 2026-06-09 22:06 - Verification Closeout
+
+- Completed: focused verification for plans, usage, migration, exports, batch,
+  and public calculator isolation.
+- Completed: standard gates for lint, type-check, full unit/component tests,
+  production build, Playwright e2e, CDC gate, and ship-preview.
+- Evidence: `.cdc/state/evidence.jsonl` contains RED/GREEN and verification
+  rows for `pro-export-batch-usage-gates`.
+- Risk carried: real Supabase staging auth rehearsal remains skipped by owner
+  approval until staging URL and test account exist.
+- Next session start: push branch and open/update draft PR, then continue with
+  checkout/portal handoff or customer-facing usage history.

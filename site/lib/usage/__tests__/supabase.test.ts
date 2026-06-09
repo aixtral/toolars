@@ -133,4 +133,37 @@ describe('Supabase usage meter repository', () => {
       ai_generations_used: 2,
     });
   });
+
+  it('increments export and batch usage through dedicated database RPCs', async () => {
+    const { client, rows } = createFakeSupabaseClient();
+    const repository = createSupabaseUsageMeterRepository(client);
+    const period = createMonthlyUsagePeriod(new Date('2026-06-15T00:00:00.000Z'));
+
+    const exported = await repository.incrementExports({
+      workspaceId: 'workspace_123',
+      period,
+    });
+    const batched = await repository.incrementBatchRuns({
+      workspaceId: 'workspace_123',
+      period,
+    });
+
+    expect(exported).toMatchObject({
+      aiGenerationsUsed: 0,
+      exportsUsed: 1,
+      batchRunsUsed: 0,
+    });
+    expect(batched).toMatchObject({
+      aiGenerationsUsed: 0,
+      exportsUsed: 1,
+      batchRunsUsed: 1,
+    });
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      workspace_id: 'workspace_123',
+      period_start: '2026-06-01',
+      exports_used: 1,
+      batch_runs_used: 1,
+    });
+  });
 });

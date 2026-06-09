@@ -53,4 +53,16 @@ describe('usage counters Supabase migration', () => {
     );
     expect(sql).toContain('grant execute on function public.increment_ai_generation_usage');
   });
+
+  it('adds atomic server-side export and batch increment functions', () => {
+    const sql = readMigration();
+
+    expect(sql).toContain('create or replace function public.increment_export_usage');
+    expect(sql).toContain('exports_used = public.usage_counters.exports_used + 1');
+    expect(sql).toContain('grant execute on function public.increment_export_usage');
+
+    expect(sql).toContain('create or replace function public.increment_batch_run_usage');
+    expect(sql).toContain('batch_runs_used = public.usage_counters.batch_runs_used + 1');
+    expect(sql).toContain('grant execute on function public.increment_batch_run_usage');
+  });
 });

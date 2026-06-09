@@ -41,12 +41,12 @@ Green before implementation.
 
 ## 3. Documentation And Verification
 
-- [ ] 3.1 Document staging env vars, command, expected evidence, and no-false-pass rule.
+- [x] 3.1 Document staging env vars, command, expected evidence, and no-false-pass rule.
   - File: `docs/qa/SUPABASE-AUTH-STAGING-REHEARSAL.md`
-- [ ] 3.2 Verify calculator isolation still holds.
+- [x] 3.2 Verify calculator isolation still holds.
   - Verification: `if rg -n "from '@/lib/(auth|billing|usage|supabase|ai|plans)'|from \"@/lib/(auth|billing|usage|supabase|ai|plans)\"" site/app/tools site/lib/calculators site/components/tools site/components/calculators; then echo 'forbidden imports found'; exit 1; else echo 'ok: no forbidden calculator imports'; fi`
   - Covers: R3-S1
-- [ ] 3.3 Run branch verification.
+- [x] 3.3 Run branch verification.
   - Verification: `pnpm --dir site lint`, `pnpm --dir site type-check`,
     `pnpm --dir site test`, `pnpm --dir site build`,
     `pnpm --dir site test:e2e`, `cdc-workflow gate --mode standard --root .`

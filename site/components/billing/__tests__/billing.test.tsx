@@ -15,7 +15,12 @@ describe('billing components', () => {
 
     expect(screen.getByRole('heading', { name: /upgrade to pro/i })).toBeInTheDocument();
     expect(screen.getByText(/requires a pro subscription/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /upgrade to pro/i }));
+    expect(screen.getByRole('form', { name: /start pro checkout/i })).toHaveAttribute(
+      'action',
+      '/api/billing/checkout',
+    );
+    expect(screen.getByDisplayValue('pro')).toHaveAttribute('name', 'planId');
+    fireEvent.submit(screen.getByRole('form', { name: /start pro checkout/i }));
     expect(onUpgrade).toHaveBeenCalledOnce();
   });
 
@@ -25,5 +30,9 @@ describe('billing components', () => {
     expect(screen.getByText('Pro')).toBeInTheDocument();
     expect(screen.getByText(/48 AI generations left/i)).toBeInTheDocument();
     expect(screen.getByText(/PDF and CSV exports/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /manage billing/i })).toHaveAttribute(
+      'href',
+      '/api/billing/portal',
+    );
   });
 });

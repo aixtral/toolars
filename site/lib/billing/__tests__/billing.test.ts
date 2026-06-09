@@ -170,4 +170,24 @@ describe('Lemon Squeezy billing helpers', () => {
       accessState: 'free',
     });
   });
+
+  it('loads the current subscription by workspace id for portal handoff', async () => {
+    const event = parseLemonSqueezySubscriptionEvent({
+      body: subscriptionPayload({
+        eventName: 'subscription_created',
+      }),
+      eventName: 'subscription_created',
+      variantPlanMap,
+    });
+    const repository = createInMemoryBillingRepository();
+
+    await processBillingSubscriptionEvent({ event, repository });
+
+    await expect(repository.getSubscriptionForWorkspace('workspace_123')).resolves.toMatchObject({
+      providerSubscriptionId: 'sub_123',
+      workspaceId: 'workspace_123',
+      customerPortalUrl: 'https://billing.example/customer',
+    });
+    await expect(repository.getSubscriptionForWorkspace('workspace_missing')).resolves.toBeUndefined();
+  });
 });

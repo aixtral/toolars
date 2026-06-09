@@ -103,6 +103,9 @@ export interface BillingSubscriptionRepository {
   getSubscription(
     providerSubscriptionId: string,
   ): Awaitable<BillingSubscriptionRecord | undefined>;
+  getSubscriptionForWorkspace(
+    workspaceId: string,
+  ): Awaitable<BillingSubscriptionRecord | undefined>;
   listEvents(): Awaitable<BillingProviderEventRecord[]>;
   listSubscriptions(): Awaitable<BillingSubscriptionRecord[]>;
   reset(): Awaitable<void>;
@@ -388,6 +391,11 @@ export function createInMemoryBillingRepository(): BillingSubscriptionRepository
     },
     getSubscription(providerSubscriptionId) {
       return subscriptions.get(providerSubscriptionId);
+    },
+    async getSubscriptionForWorkspace(workspaceId) {
+      return [...subscriptions.values()].find(
+        (subscription) => subscription.workspaceId === workspaceId,
+      );
     },
     listEvents() {
       return [...events.values()];

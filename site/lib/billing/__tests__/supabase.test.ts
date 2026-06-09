@@ -206,4 +206,18 @@ describe('Supabase billing repository', () => {
       last_provider_event_id: 'evt_123',
     });
   });
+
+  it('reads subscription state by workspace id for portal handoff', async () => {
+    const { client } = createFakeSupabaseClient();
+    const repository = createSupabaseBillingRepository(client);
+
+    await repository.upsertSubscription(subscription);
+
+    await expect(repository.getSubscriptionForWorkspace('workspace_123')).resolves.toMatchObject({
+      providerSubscriptionId: 'sub_123',
+      workspaceId: 'workspace_123',
+      customerPortalUrl: 'https://billing.example/customer',
+    });
+    await expect(repository.getSubscriptionForWorkspace('workspace_missing')).resolves.toBeUndefined();
+  });
 });

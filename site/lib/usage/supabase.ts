@@ -29,8 +29,13 @@ type SupabaseUsageRpcBuilder<T> = {
 
 export type SupabaseUsageMeterClient = {
   from(table: 'usage_counters'): unknown;
-  rpc(functionName: 'increment_ai_generation_usage', args: Record<string, unknown>): unknown;
+  rpc(functionName: SupabaseUsageRpcName, args: Record<string, unknown>): unknown;
 };
+
+type SupabaseUsageRpcName =
+  | 'increment_ai_generation_usage'
+  | 'increment_export_usage'
+  | 'increment_batch_run_usage';
 
 const usageColumns =
   'workspace_id, period_start, period_end, ai_generations_used, exports_used, batch_runs_used';
@@ -39,9 +44,13 @@ function usageTable(client: SupabaseUsageMeterClient) {
   return client.from('usage_counters') as SupabaseUsageQueryBuilder<Record<string, unknown>>;
 }
 
-function usageRpc(client: SupabaseUsageMeterClient, args: Record<string, unknown>) {
+function usageRpc(
+  client: SupabaseUsageMeterClient,
+  functionName: SupabaseUsageRpcName,
+  args: Record<string, unknown>,
+) {
   return client.rpc(
-    'increment_ai_generation_usage',
+    functionName,
     args,
   ) as SupabaseUsageRpcBuilder<Record<string, unknown>>;
 }
@@ -102,7 +111,7 @@ export function createSupabaseUsageMeterRepository(
     },
 
     async incrementAiGenerations({ workspaceId, period }) {
-      const result = await usageRpc(client, {
+      const result = await usageRpc(client, 'increment_ai_generation_usage', {
         p_workspace_id: workspaceId,
         p_period_start: period.periodStart,
         p_period_end: period.periodEnd,
@@ -110,6 +119,34 @@ export function createSupabaseUsageMeterRepository(
 
       if (result.error || !result.data) {
         throwUsageError('Failed to increment AI generation usage', result.error);
+      }
+
+      return snapshotFromRow(workspaceId, period, result.data);
+    },
+
+    async incrementExports({ workspaceId, period }) {
+      const result = await usageRpc(client, 'increment_export_usage', {
+        p_workspace_id: workspaceId,
+        p_period_start: period.periodStart,
+        p_period_end: period.periodEnd,
+      }).single();
+
+      if (result.error || !result.data) {
+        throwUsageError('Failed to increment export usage', result.error);
+      }
+
+      return snapshotFromRow(workspaceId, period, result.data);
+    },
+
+    async incrementBatchRuns({ workspaceId, period }) {
+      const result = await usageRpc(client, 'increment_batch_run_usage', {
+        p_workspace_id: workspaceId,
+        p_period_start: period.periodStart,
+        p_period_end: period.periodEnd,
+      }).single();
+
+      if (result.error || !result.data) {
+        throwUsageError('Failed to increment batch run usage', result.error);
       }
 
       return snapshotFromRow(workspaceId, period, result.data);

@@ -19,20 +19,20 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 2. Plan And Usage Domain
 
-- [ ] 2.1 RED: add plan-gate tests for export and batch monthly limits.
+- [x] 2.1 RED: add plan-gate tests for export and batch monthly limits.
   - Files: `site/lib/plans/__tests__/plans.test.ts`
   - Covers: R1-S1, R1-S3, R2-S1
   - Verification: `pnpm --dir site test -- plans`
-- [ ] 2.2 GREEN: extend plan definitions and gate helpers.
+- [x] 2.2 GREEN: extend plan definitions and gate helpers.
   - Files: `site/lib/plans/index.ts`
   - Verification: `pnpm --dir site test -- plans`
-- [ ] 2.3 RED: add usage repository tests for export and batch increments.
+- [x] 2.3 RED: add usage repository tests for export and batch increments.
   - Files: `site/lib/usage/__tests__/usage.test.ts`,
     `site/lib/usage/__tests__/supabase.test.ts`,
     `site/lib/db/__tests__/usage-migration.test.ts`
   - Covers: R1-S2, R2-S2
   - Verification: `pnpm --dir site test -- usage usage-migration`
-- [ ] 2.4 GREEN: extend usage repository, Supabase adapter, and SQL RPCs.
+- [x] 2.4 GREEN: extend usage repository, Supabase adapter, and SQL RPCs.
   - Files: `site/lib/usage/index.ts`, `site/lib/usage/supabase.ts`,
     `supabase/migrations/20260607133000_usage_counters.sql`
   - Verification: `pnpm --dir site test -- usage usage-migration`

@@ -13,6 +13,8 @@ export interface PlanDefinition {
   id: PlanId;
   name: string;
   monthlyAiGenerations: number;
+  monthlyExports: number;
+  monthlyBatchRuns: number;
   maxPlatforms: number;
   maxBrandVoices: number;
   features: readonly PlanFeature[];
@@ -22,6 +24,19 @@ export interface AiGenerationAccessInput {
   planId: PlanId;
   selectedPlatformCount: number;
   usedGenerations: number;
+}
+
+export type ExportFormat = 'pdf' | 'csv';
+
+export interface ExportAccessInput {
+  planId: PlanId;
+  format: ExportFormat;
+  usedExports: number;
+}
+
+export interface BatchToolAccessInput {
+  planId: PlanId;
+  usedBatchRuns: number;
 }
 
 export interface PlanGateDecision {
@@ -35,6 +50,8 @@ export const PLAN_DEFINITIONS: Record<PlanId, PlanDefinition> = {
     id: 'free',
     name: 'Free',
     monthlyAiGenerations: 0,
+    monthlyExports: 0,
+    monthlyBatchRuns: 0,
     maxPlatforms: 0,
     maxBrandVoices: 1,
     features: ['calculator.basic'],
@@ -43,6 +60,8 @@ export const PLAN_DEFINITIONS: Record<PlanId, PlanDefinition> = {
     id: 'pro',
     name: 'Pro',
     monthlyAiGenerations: 1000,
+    monthlyExports: 200,
+    monthlyBatchRuns: 100,
     maxPlatforms: 14,
     maxBrandVoices: 10,
     features: [
@@ -58,6 +77,8 @@ export const PLAN_DEFINITIONS: Record<PlanId, PlanDefinition> = {
     id: 'team',
     name: 'Team',
     monthlyAiGenerations: 5000,
+    monthlyExports: 1000,
+    monthlyBatchRuns: 500,
     maxPlatforms: 14,
     maxBrandVoices: 50,
     features: [
@@ -118,5 +139,64 @@ export function evaluateAiGenerationAccess({
   return {
     allowed: true,
     reason: `${plan.name} AI access active.`,
+  };
+}
+
+export function evaluateExportAccess({
+  planId,
+  format,
+  usedExports,
+}: ExportAccessInput): PlanGateDecision {
+  const plan = getPlanById(planId);
+  const feature = format === 'pdf' ? 'export.pdf' : 'export.csv';
+  const formatLabel = format.toUpperCase();
+
+  if (!canUsePlanFeature(planId, feature)) {
+    return {
+      allowed: false,
+      reason: `${formatLabel} exports require a Pro subscription.`,
+      upgradeLabel: 'Upgrade to Pro',
+    };
+  }
+
+  if (usedExports >= plan.monthlyExports) {
+    return {
+      allowed: false,
+      reason: `${plan.name} monthly export limit reached.`,
+      upgradeLabel: 'Manage plan',
+    };
+  }
+
+  return {
+    allowed: true,
+    reason: `${plan.name} ${formatLabel} export access active.`,
+  };
+}
+
+export function evaluateBatchToolAccess({
+  planId,
+  usedBatchRuns,
+}: BatchToolAccessInput): PlanGateDecision {
+  const plan = getPlanById(planId);
+
+  if (!canUsePlanFeature(planId, 'batch.tools')) {
+    return {
+      allowed: false,
+      reason: 'Batch tools require a Pro subscription.',
+      upgradeLabel: 'Upgrade to Pro',
+    };
+  }
+
+  if (usedBatchRuns >= plan.monthlyBatchRuns) {
+    return {
+      allowed: false,
+      reason: `${plan.name} monthly batch run limit reached.`,
+      upgradeLabel: 'Manage plan',
+    };
+  }
+
+  return {
+    allowed: true,
+    reason: `${plan.name} batch tool access active.`,
   };
 }

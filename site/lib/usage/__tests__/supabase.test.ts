@@ -40,7 +40,14 @@ class FakeUsageRpc {
   ) {}
 
   async single(): Promise<{ data: UsageRow | null; error: SupabaseError | null }> {
-    if (this.functionName !== 'increment_ai_generation_usage') {
+    const incrementColumnByFunction: Record<string, string> = {
+      increment_ai_generation_usage: 'ai_generations_used',
+      increment_export_usage: 'exports_used',
+      increment_batch_run_usage: 'batch_runs_used',
+    };
+    const incrementColumn = incrementColumnByFunction[this.functionName];
+
+    if (!incrementColumn) {
       return { data: null, error: { message: 'unsupported rpc' } };
     }
 
@@ -51,7 +58,7 @@ class FakeUsageRpc {
     );
 
     if (existing) {
-      existing.ai_generations_used = Number(existing.ai_generations_used) + 1;
+      existing[incrementColumn] = Number(existing[incrementColumn]) + 1;
       existing.period_end = this.args.p_period_end;
       return { data: existing, error: null };
     }
@@ -60,10 +67,11 @@ class FakeUsageRpc {
       workspace_id: this.args.p_workspace_id,
       period_start: this.args.p_period_start,
       period_end: this.args.p_period_end,
-      ai_generations_used: 1,
+      ai_generations_used: incrementColumn === 'ai_generations_used' ? 1 : 0,
       exports_used: 0,
       batch_runs_used: 0,
     };
+    inserted[incrementColumn] = 1;
     this.rows.push(inserted);
     return { data: inserted, error: null };
   }

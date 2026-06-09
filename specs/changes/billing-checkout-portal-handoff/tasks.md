@@ -17,12 +17,12 @@ Execute in dependency order. Commit after each completed task group.
 
 ## 2. Billing Handoff Domain
 
-- [ ] 2.1 RED: add tests for checkout URL config, custom data decoration, and
+- [x] 2.1 RED: add tests for checkout URL config, custom data decoration, and
   safe HTTPS validation.
   - Files: `site/lib/billing/__tests__/handoff.test.ts`
   - Covers: R1-S2, R1-S3
   - Verification: `pnpm --dir site test -- handoff`
-- [ ] 2.2 GREEN: implement billing handoff helpers.
+- [x] 2.2 GREEN: implement billing handoff helpers.
   - Files: `site/lib/billing/handoff.ts`
   - Verification: `pnpm --dir site test -- handoff`
 - [ ] 2.3 RED: add repository helper tests for workspace subscription lookup.

@@ -19,13 +19,13 @@
 
 ## 2. Usage summary API
 
-- [ ] 2.1 写 `site/app/api/usage/summary/route.test.ts`
+- [x] 2.1 写 `site/app/api/usage/summary/route.test.ts`
   - 用例：R2-S1, R2-S2
   - covers：R2-S1, R2-S2
-- [ ] 2.2 实现 `site/app/api/usage/summary/route.ts`
+- [x] 2.2 实现 `site/app/api/usage/summary/route.ts`
   - 关键：GET only, session required, read snapshot only, dependency injection for tests
-- [ ] 2.3 跑 focused API tests
-- [ ] 2.4 commit：`feat(api): expose usage summary endpoint (task 2.4)`
+- [x] 2.3 跑 focused API tests
+- [x] 2.4 commit：`feat(api): expose usage summary endpoint (task 2.4)`
 
 ## 3. Billing UI integration
 

@@ -29,15 +29,15 @@
 
 ## 3. Billing UI integration
 
-- [ ] 3.1 更新 `site/components/billing/__tests__/billing.test.tsx`
+- [x] 3.1 更新 `site/components/billing/__tests__/billing.test.tsx`
   - 用例：R3-S1
   - covers：R3-S1
-- [ ] 3.2 更新 `site/components/billing/billing-cards.tsx`
+- [x] 3.2 更新 `site/components/billing/billing-cards.tsx`
   - 关键：render AI / exports / batch usage from summary
-- [ ] 3.3 更新 `site/app/app/repurpose/page.tsx`
+- [x] 3.3 更新 `site/app/app/repurpose/page.tsx`
   - 关键：server-read current usage summary for authenticated session
-- [ ] 3.4 跑 focused billing / app tests
-- [ ] 3.5 commit：`feat(billing): show customer usage summary in app (task 3.5)`
+- [x] 3.4 跑 focused billing / app tests
+- [x] 3.5 commit：`feat(billing): show customer usage summary in app (task 3.5)`
 
 ## 4. 复核与发布准备
 

@@ -7,6 +7,12 @@ import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui
 import { getSessionFromRequest, getSessionFromSearchParams } from '@/lib/auth';
 import type { ToolarsSession } from '@/lib/auth';
 import { getPlanById } from '@/lib/plans';
+import {
+  createMonthlyUsagePeriod,
+  type UsageMeterRepository,
+} from '@/lib/usage';
+import { createUsageMeterRuntimeRepository } from '@/lib/usage/runtime';
+import { buildUsageSummary, type UsageSummary } from '@/lib/usage/summary';
 
 export const metadata: Metadata = {
   title: 'AI Content Repurposer | toolars',
@@ -32,6 +38,12 @@ interface ResolveRepurposePageSessionInput {
   ) => Promise<ToolarsSession | null>;
 }
 
+interface ResolveRepurposeUsageSummaryInput {
+  session: ToolarsSession;
+  usageRepository?: UsageMeterRepository;
+  now?: () => Date;
+}
+
 function serializeCookieHeader(cookiesToSerialize: { name: string; value: string }[]) {
   return cookiesToSerialize
     .map(({ name, value }) => `${name}=${encodeURIComponent(value)}`)
@@ -54,6 +66,24 @@ export async function resolveRepurposePageSession({
       },
     }),
   );
+}
+
+export async function resolveRepurposeUsageSummary({
+  session,
+  usageRepository,
+  now,
+}: ResolveRepurposeUsageSummaryInput): Promise<UsageSummary> {
+  const repository = usageRepository ?? (await createUsageMeterRuntimeRepository());
+  const period = createMonthlyUsagePeriod(now?.() ?? new Date());
+  const snapshot = await repository.readUsageSnapshot({
+    workspaceId: session.workspaceId,
+    period,
+  });
+
+  return buildUsageSummary({
+    planId: session.planId,
+    snapshot,
+  });
 }
 
 function AuthGate() {
@@ -113,7 +143,7 @@ export default async function RepurposePage({ searchParams }: RepurposePageProps
   if (!session) return <AuthGate />;
 
   const plan = getPlanById(session.planId);
-  const remainingGenerations = plan.monthlyAiGenerations;
+  const usageSummary = await resolveRepurposeUsageSummary({ session });
 
   return (
     <section className="space-y-6">
@@ -139,7 +169,7 @@ export default async function RepurposePage({ searchParams }: RepurposePageProps
         <section aria-label="Usage limits" className="hidden md:block">
           <UsagePlanCard
             planId={session.planId}
-            remainingGenerations={remainingGenerations}
+            usageSummary={usageSummary}
           />
         </section>
       </div>

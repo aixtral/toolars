@@ -41,10 +41,10 @@
 
 ## 4. 复核与发布准备
 
-- [ ] 4.1 跑 `pnpm --dir site lint`
-- [ ] 4.2 跑 `pnpm --dir site type-check`
-- [ ] 4.3 跑 `pnpm --dir site test`
-- [ ] 4.4 跑 calculator isolation coverage for R4-S1
-- [ ] 4.5 更新 `progress.md` 和本 tasks 状态
-- [ ] 4.6 commit：`chore(spec): close customer usage summary pass (task 4.6)`
+- [x] 4.1 跑 `pnpm --dir site lint`
+- [x] 4.2 跑 `pnpm --dir site type-check`
+- [x] 4.3 跑 `pnpm --dir site test`
+- [x] 4.4 跑 calculator isolation coverage for R4-S1
+- [x] 4.5 更新 `progress.md` 和本 tasks 状态
+- [x] 4.6 commit：`chore(spec): close customer usage summary pass (task 4.6)`
 - [ ] 4.7 push branch and open draft PR

@@ -3,6 +3,7 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { getPlanById } from '@/lib/plans';
 import type { PlanId } from '@/lib/plans';
+import type { UsageSummary } from '@/lib/usage/summary';
 
 interface UpgradePromptProps {
   feature: string;
@@ -12,7 +13,28 @@ interface UpgradePromptProps {
 
 interface UsagePlanCardProps {
   planId: PlanId;
-  remainingGenerations: number;
+  usageSummary: UsageSummary;
+}
+
+interface UsageMeterRowProps {
+  label: string;
+  used: number;
+  limit: number;
+  remaining: number;
+}
+
+function UsageMeterRow({ label, used, limit, remaining }: UsageMeterRowProps) {
+  return (
+    <li className="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+      <div className="flex items-center justify-between gap-3 text-sm font-semibold text-ink">
+        <span>{label}</span>
+        <span>{remaining} {label.toLowerCase()} left</span>
+      </div>
+      <p className="mt-1 text-xs leading-4 text-neutral-600">
+        {used} of {limit} used
+      </p>
+    </li>
+  );
 }
 
 export function UpgradePrompt({ feature, reason, onUpgrade }: UpgradePromptProps) {
@@ -43,7 +65,7 @@ export function UpgradePrompt({ feature, reason, onUpgrade }: UpgradePromptProps
   );
 }
 
-export function UsagePlanCard({ planId, remainingGenerations }: UsagePlanCardProps) {
+export function UsagePlanCard({ planId, usageSummary }: UsagePlanCardProps) {
   const plan = getPlanById(planId);
 
   return (
@@ -57,8 +79,31 @@ export function UsagePlanCard({ planId, remainingGenerations }: UsagePlanCardPro
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-sm font-semibold text-neutral-700">
-          {remainingGenerations} AI generations left this month.
+          Current period usage
         </p>
+        <p className="text-xs leading-4 text-neutral-500">
+          Renews {usageSummary.period.periodEnd}
+        </p>
+        <ul className="grid gap-2">
+          <UsageMeterRow
+            label="AI generations"
+            limit={usageSummary.limits.aiGenerations}
+            remaining={usageSummary.remaining.aiGenerations}
+            used={usageSummary.used.aiGenerations}
+          />
+          <UsageMeterRow
+            label="Exports"
+            limit={usageSummary.limits.exports}
+            remaining={usageSummary.remaining.exports}
+            used={usageSummary.used.exports}
+          />
+          <UsageMeterRow
+            label="Batch runs"
+            limit={usageSummary.limits.batchRuns}
+            remaining={usageSummary.remaining.batchRuns}
+            used={usageSummary.used.batchRuns}
+          />
+        </ul>
         <ul className="grid gap-2 text-sm text-neutral-600">
           <li>PDF and CSV exports: {plan.features.includes('export.pdf') ? 'available' : 'Pro only'}</li>
           <li>Cross-device save: {plan.features.includes('save.crossDevice') ? 'available' : 'Pro only'}</li>

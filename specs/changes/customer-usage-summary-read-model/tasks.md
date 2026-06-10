@@ -9,13 +9,13 @@
 
 ## 1. Usage summary read model
 
-- [ ] 1.1 写 `site/lib/usage/__tests__/summary.test.ts`
+- [x] 1.1 写 `site/lib/usage/__tests__/summary.test.ts`
   - 用例：R1-S1, R1-S2
   - covers：R1-S1, R1-S2
-- [ ] 1.2 实现 `site/lib/usage/summary.ts`
+- [x] 1.2 实现 `site/lib/usage/summary.ts`
   - 关键：纯函数，不依赖 React / Next.js / Supabase / browser
-- [ ] 1.3 跑 focused usage tests
-- [ ] 1.4 commit：`feat(usage): add customer usage summary read model (task 1.4)`
+- [x] 1.3 跑 focused usage tests
+- [x] 1.4 commit：`feat(usage): add customer usage summary read model (task 1.4)`
 
 ## 2. Usage summary API
 

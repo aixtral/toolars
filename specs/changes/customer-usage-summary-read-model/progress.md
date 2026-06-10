@@ -10,6 +10,7 @@
 - Updated `UsagePlanCard` to render AI generation, export, and batch run usage from `UsageSummary`.
 - Updated `/app/repurpose` to server-read the current workspace usage snapshot and pass the summary into the billing card.
 - Preserved public calculator isolation; no public calculator modules import account, billing, usage, or AI runtime concerns.
+- Opened draft PR: https://github.com/aixtral/toolars/pull/23.
 
 ### Evidence
 

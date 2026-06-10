@@ -47,4 +47,4 @@
 - [x] 4.4 跑 calculator isolation coverage for R4-S1
 - [x] 4.5 更新 `progress.md` 和本 tasks 状态
 - [x] 4.6 commit：`chore(spec): close customer usage summary pass (task 4.6)`
-- [ ] 4.7 push branch and open draft PR
+- [x] 4.7 push branch and open draft PR

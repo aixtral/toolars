@@ -1,164 +1,55 @@
-# toolars Implementation Plan
+# Toolars Implementation Plan
 
-Status: planning baseline  
-TDD policy: production code requires failing tests first  
-Root app path: `site/`
+版本: v0.1
+日期: 2026-06-12
 
-## 0. Foundation
+## 1. 当前阶段
 
-- Initialize Next.js App Router in `site/`.
-- Add TypeScript, Tailwind, UI primitives, ESLint, Prettier, Vitest,
-  Playwright.
-- Add design tokens from `design/DESIGN.md`.
-- Add base app shell and global CSS.
+CDC router 对本轮大目标先路由为 Spike，因为需要跨项目分析；`cdc-workflow gate --mode standard --root .` 已通过。文档与首批实现准备完成后，执行阶段按 Standard/TDD 工作流推进。
 
-Evidence:
+## 2. 第一批开发切片
 
-- `pnpm lint`
-- `pnpm type-check`
-- `pnpm test`
+1. 初始化 `sites/toolars` Next.js + TypeScript + Vitest。
+2. 写 Red tests:
+   - registry 必须包含 PDF Toolkit、JSON Repair、Prompt Injection Scanner、LLM Cost Calculator、MCP Server Builder。
+   - command search 能搜索 `json`、`summarize pdf`、`mcp`。
+   - JSON Repair 能修复设计稿示例中的 unquoted keys、single quotes、trailing comma。
+3. 实现 registry、command search、JSON repair pure function。
+4. 实现 Shell、Explore 首页、PDF directory、AI Developer Lab directory、JSON Repair workspace。
+5. 运行 tests/typecheck/build。
+6. 启动 dev server，做桌面和 390px 移动视觉/交互冒烟。
 
-## 1. Registry
+## 3. 第二批
 
-- Add `ToolDefinition`.
-- Add `CalculatorDefinition`.
-- Add all 73 calculator entries.
-- Add AI tool entries.
-- Add category metadata.
-- Add search index builder.
+- PDF Toolkit workspace: 文件列表、操作选择、结果状态、AI consent panel。
+- Prompt Injection Scanner、LLM Cost Calculator、MCP Server Builder 三个代表工作台。
+- Tool detail template 和 featured tool detail pages。
+- Workflows index 和三个 Lab workflow。
 
-Tests:
+## 4. 第三批
 
-- Registry has unique slugs.
-- Every tool route is valid.
-- Every calculator has fields, result labels, SEO metadata, related tools.
-- Search index includes calculators, AI tools, and content records.
+- Collections index/detail。
+- My Tools、Settings、Billing、Pricing。
+- Submit Tool、Admin Review、States board。
+- 抽取 VitalCalc 计算器公式为 pure modules。
 
-## 2. Public Navigation
+## 5. 验证命令
 
-- Header.
-- Mega menu.
-- Command palette.
-- Mobile drawer.
-- Favorites/recent local storage.
+```bash
+cd sites/toolars
+pnpm test
+pnpm typecheck
+pnpm build
+```
 
-Tests:
+前端视觉验证:
 
-- Cmd/Ctrl+K opens search.
-- Esc closes overlays.
-- Keyboard can navigate results.
-- Search no-results state appears.
+- `/`
+- `/explore/pdf`
+- `/explore/ai-developer`
+- `/tools/json-repair`
+- 390px 移动宽度无横向滚动
 
-## 3. Public Pages
+## 6. TDD 例外
 
-- Home utility dashboard.
-- All tools directory.
-- AI directory.
-- Health category.
-- Finance category.
-- Pricing.
-- Blog index/article.
-- Compare.
-- Static/legal pages.
-- 404.
-
-Tests:
-
-- Core pages render.
-- No login needed for public calculator discovery.
-- Metadata generated for representative public pages.
-
-## 4. Calculator Engine
-
-- Port formulas into `lib/calculators/`.
-- Add shared field parsing/validation.
-- Add result formatting.
-- Add chart/table helpers.
-
-Tests:
-
-- Pure formula unit tests.
-- Edge cases for invalid ranges.
-- Representative calculators from every category.
-
-## 5. Calculator UI
-
-- Shared calculator page template.
-- Form fields.
-- Result panel.
-- Formula/explanation/FAQ blocks.
-- Related tools.
-- Save/compare/share.
-- PDF/CSV Pro hooks.
-
-Tests:
-
-- Empty/loading/success/error states.
-- Local save and compare.
-- Login prompt only for account sync/Pro exports.
-
-## 6. AI SaaS
-
-- Auth guard.
-- AI app shell.
-- Repurpose dashboard.
-- Streaming outputs.
-- Templates.
-- Brand voice manager.
-- History.
-- Analytics.
-- Settings.
-
-Tests:
-
-- Unauthenticated users are redirected for app routes.
-- Generation can start/cancel.
-- Output copy/regenerate controls work.
-- Plan limits are enforced.
-
-## 7. Billing And Account Data
-
-- Supabase Auth/Postgres setup.
-- Lemon Squeezy integration.
-- Usage counters.
-- API key management.
-- Subscription states.
-
-Tests:
-
-- Webhook signature verification.
-- Row-level ownership tests.
-- API key masking.
-- Plan gating.
-
-## 8. i18n Architecture
-
-- English default routes/content.
-- Locale-aware metadata utilities.
-- Future locale route strategy.
-- RTL-safe layout checks.
-
-Tests:
-
-- English routes canonicalize correctly.
-- Future locale helpers do not break default routes.
-
-## 9. QA And Ship
-
-- Unit tests.
-- Component tests.
-- E2E tests.
-- Accessibility checks.
-- SEO/schema validation.
-- Performance smoke checks.
-- CDC ship preview.
-
-Release evidence:
-
-- `pnpm lint`
-- `pnpm type-check`
-- `pnpm test`
-- `pnpm test:e2e`
-- `git diff --stat`
-- `cdc-workflow after-goal --change merge-toolars-platform --root .`
-
+文档、CDC spec、package/config/test setup 属于非生产代码或项目初始化，可在 Red 前创建。所有工具逻辑和 UI 生产代码必须先有失败测试。

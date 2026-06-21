@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Toolars States Board</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --ink: #111827;
+      --muted: #6b7280;
+      --subtle: #f3f4f6;
+      --border: #e5e7eb;
+      --green: #059669;
+      --green-soft: #ecfdf5;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --red: #dc2626;
+      --red-soft: #fef2f2;
+      --shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); }
+    .page { width: 1440px; min-height: 1024px; padding: 34px; }
+    .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 760; font-size: 24px; }
+    .mark { width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg, #059669, #14b8a6); position: relative; }
+    .mark:after { content: ""; position: absolute; inset: 9px 6px 6px 13px; border-radius: 3px; background: white; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-top: 2px; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 12px; background: white; }
+    h1 { margin: 0; font-size: 26px; letter-spacing: -.02em; }
+    h2 { margin: 0 0 14px; font-size: 15px; }
+    p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(15,23,42,.03); padding: 18px; min-height: 205px; }
+    .card.tall { min-height: 300px; }
+    .card.wide { grid-column: span 2; }
+    .icon { width: 42px; height: 42px; border-radius: 10px; background: var(--green-soft); color: var(--green); display: grid; place-items: center; font-weight: 800; margin-bottom: 14px; }
+    .button-row { display: flex; gap: 8px; margin-top: 16px; }
+    .btn { height: 34px; border-radius: 8px; padding: 0 12px; font-size: 12px; font-weight: 650; border: 1px solid var(--border); background: white; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; }
+    .btn.primary { background: var(--green); color: white; border-color: var(--green); }
+    .btn.danger { background: var(--red); color: white; border-color: var(--red); }
+    .skeleton { background: linear-gradient(90deg, #eef2f7, #f8fafc, #eef2f7); background-size: 200% 100%; border-radius: 8px; height: 16px; margin-bottom: 10px; }
+    .sk-row { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .sk-icon { width: 42px; height: 42px; border-radius: 10px; background: #eef2f7; }
+    .alert { border: 1px solid; border-radius: 10px; padding: 12px; display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; }
+    .alert.red { background: var(--red-soft); border-color: #fecaca; color: var(--red); }
+    .alert.amber { background: var(--amber-soft); border-color: #fde68a; color: var(--amber); }
+    .alert.blue { background: var(--blue-soft); border-color: #bfdbfe; color: var(--blue); }
+    .alert.green { background: var(--green-soft); border-color: #bbf7d0; color: var(--green); }
+    .alert strong { display:block; color: var(--ink); font-size: 13px; margin-bottom: 2px; }
+    .dot { width: 9px; height: 9px; border-radius: 99px; background: currentColor; margin-top: 5px; flex: none; }
+    .toast-stack { display: grid; gap: 8px; }
+    .toast { height: 42px; border-radius: 10px; background: white; border: 1px solid var(--border); box-shadow: 0 8px 18px rgba(15,23,42,.08); display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 12px; }
+    .toast .mini { width: 10px; height: 10px; border-radius: 99px; }
+    .mini.green { background: var(--green); } .mini.amber { background: var(--amber); } .mini.red { background: var(--red); } .mini.blue { background: var(--blue); }
+    .field { margin-top: 10px; }
+    label { display: flex; justify-content: space-between; color: var(--ink); font-size: 12px; font-weight: 650; margin-bottom: 6px; }
+    input { height: 38px; border-radius: 8px; border: 1px solid var(--border); width: 100%; padding: 0 10px; font-size: 13px; color: var(--ink); background: white; }
+    input.valid { border-color: #86efac; box-shadow: 0 0 0 3px rgba(5,150,105,.09); }
+    input.warn { border-color: #fcd34d; box-shadow: 0 0 0 3px rgba(217,119,6,.09); }
+    .hint { font-size: 11px; margin-top: 5px; color: var(--muted); }
+    .hint.ok { color: var(--green); } .hint.warn { color: var(--amber); } .hint.err { color: var(--red); }
+    .drawer { width: 260px; border: 1px solid var(--border); border-radius: 16px; background: white; box-shadow: var(--shadow); overflow: hidden; }
+    .drawer-head { padding: 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .drawer-nav { padding: 8px; }
+    .nav-item { height: 38px; display: flex; align-items: center; gap: 10px; border-radius: 8px; padding: 0 10px; color: var(--muted); font-size: 13px; font-weight: 600; }
+    .nav-item.active { color: var(--green); background: var(--green-soft); }
+    .modal { width: 345px; background: white; border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); padding: 18px; }
+    .modal-title { font-weight: 750; font-size: 16px; margin-bottom: 8px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .state-label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; font-weight: 760; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="top">
+      <div>
+        <div class="brand"><span class="mark"></span><span>Toolars</span></div>
+        <div class="subtitle">Essential states and overlays for implementation</div>
+      </div>
+      <div>
+        <h1>States & Overlays Board</h1>
+        <div class="subtitle">Empty, loading, errors, toasts, validation, mobile drawer, destructive confirm</div>
+      </div>
+      <span class="badge">Design system v1</span>
+    </div>
+
+    <section class="grid">
+      <div class="card">
+        <div class="state-label">Empty state</div>
+        <div class="icon">+</div>
+        <h2>No saved tools yet</h2>
+        <p>Save tools, workflows, and outputs here so your workspace is ready whenever you return.</p>
+        <div class="button-row">
+          <span class="btn primary">Explore tools</span>
+          <span class="btn">Import bookmarks</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="state-label">Loading</div>
+        <div class="skeleton" style="height:38px;margin-bottom:18px"></div>
+        <div class="sk-row"><div class="sk-icon"></div><div><div class="skeleton" style="width:80%"></div><div class="skeleton" style="width:55%"></div></div></div>
+        <div class="sk-row"><div class="sk-icon"></div><div><div class="skeleton" style="width:72%"></div><div class="skeleton" style="width:60%"></div></div></div>
+        <div class="sk-row" style="border-bottom:0"><div class="sk-icon"></div><div><div class="skeleton" style="width:90%"></div><div class="skeleton" style="width:45%"></div></div></div>
+      </div>
+
+      <div class="card">
+        <div class="state-label">Upload error</div>
+        <div class="alert red">
+          <span class="dot"></span>
+          <div><strong>Unsupported file type</strong><p>Toolars can process PDF, PNG, JPG, CSV, DOCX, and TXT for this workflow.</p></div>
+        </div>
+        <div class="button-row">
+          <span class="btn primary">Retry upload</span>
+          <span class="btn">View requirements</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="state-label">Offline mode</div>
+        <div class="alert blue">
+          <span class="dot"></span>
+          <div><strong>Local tools are still available</strong><p>AI and cloud tools are paused until your connection returns.</p></div>
+        </div>
+        <div class="button-row"><span class="btn">Open local tools</span></div>
+      </div>
+
+      <div class="card wide">
+        <div class="state-label">Toast stack</div>
+        <div class="toast-stack">
+          <div class="toast"><span class="mini green"></span><strong>Saved to PDF power user kit</strong><span style="margin-left:auto;color:var(--muted)">Undo</span></div>
+          <div class="toast"><span class="mini amber"></span><strong>AI consent required before summarizing</strong><span style="margin-left:auto;color:var(--muted)">Review</span></div>
+          <div class="toast"><span class="mini red"></span><strong>Upload failed. File exceeds 50 MB.</strong><span style="margin-left:auto;color:var(--muted)">Retry</span></div>
+          <div class="toast"><span class="mini blue"></span><strong>Share link copied</strong><span style="margin-left:auto;color:var(--muted)">Dismiss</span></div>
+        </div>
+      </div>
+
+      <div class="card wide">
+        <div class="state-label">Form validation</div>
+        <div class="field">
+          <label>Website URL <span class="hint ok">Verified</span></label>
+          <input class="valid" value="https://exampletool.com" />
+        </div>
+        <div class="field">
+          <label>Screenshot <span class="hint warn">Required for review</span></label>
+          <input class="warn" value="No screenshot uploaded" />
+        </div>
+        <div class="field">
+          <label>Description <span class="hint err">12 characters over limit</span></label>
+          <input value="An AI tool that summarizes documents, PDFs, and reports..." />
+        </div>
+      </div>
+
+      <div class="card tall">
+        <div class="state-label">Mobile drawer</div>
+        <div class="drawer">
+          <div class="drawer-head"><strong>Toolars</strong><span style="color:var(--muted)">Close</span></div>
+          <div class="drawer-nav">
+            <div class="nav-item active">Explore</div>
+            <div class="nav-item">Workflows</div>
+            <div class="nav-item">Collections</div>
+            <div class="nav-item">My tools</div>
+            <div class="nav-item">Submit tool</div>
+            <div class="nav-item">Settings</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tall">
+        <div class="state-label">Delete confirm</div>
+        <div class="modal">
+          <div class="modal-title">Delete saved output?</div>
+          <p>This will remove the PDF summary from your history. Shared links to this output will stop working.</p>
+          <div class="alert amber">
+            <span class="dot"></span>
+            <div><strong>This action cannot be undone</strong><p>You can export a copy before deleting.</p></div>
+          </div>
+          <div class="modal-actions">
+            <span class="btn">Cancel</span>
+            <span class="btn danger">Delete output</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card tall wide">
+        <div class="state-label">Mobile command overlay</div>
+        <div style="width:360px;background:white;border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden">
+          <div style="padding:14px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center">
+            <input value="summarize pdf" style="height:40px" />
+            <span class="btn">Cancel</span>
+          </div>
+          <div style="padding:12px">
+            <h2>Suggested</h2>
+            <div class="nav-item active">AI PDF Summarizer</div>
+            <div class="nav-item">PDF Toolkit</div>
+            <div class="nav-item">Turn PDF into summary</div>
+            <div class="nav-item">Recent: Q2 report summary</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

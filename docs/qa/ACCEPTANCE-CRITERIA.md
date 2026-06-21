@@ -1,100 +1,40 @@
-# toolars Acceptance Criteria
+# Toolars Acceptance Criteria
 
-Status: v1 quality gate baseline
+版本: v0.1
+日期: 2026-06-12
 
-## 1. Repository
+## 1. 产品验收
 
-- Application code exists only in `site/`.
-- Non-design documentation exists only in `docs/`.
-- Design handoff and visual assets remain in `design/`.
-- CDC context and architecture gates pass.
+- 首页显示 Toolars 品牌、Command Search、Explore/Workflows/Collections/My Tools nav、Submit tool、Sign in。
+- 首页包含 Toolars Picks、Popular tools、Popular workflows、信任模块和 AI Developer Lab 入口。
+- PDF directory 显示 PDF 子分类、筛选、Featured workflows、至少 10 个 PDF 工具卡、Recommended path。
+- AI Developer Lab directory 显示 merged inventory 标签、22 个代表工具、playbooks、Lab workflows。
+- JSON Repair workspace 可以从示例输入生成 repaired output。
 
-## 2. Public UX
+## 2. 信任与商业标识
 
-- Home is a tool discovery dashboard, not a marketing-only landing page.
-- Global search is visible above the fold on desktop.
-- Mobile search is reachable in one tap.
-- Category cards expose AI Content, Body, Fitness & Nutrition, Wellness,
-  Wealth, Finance Calculators.
-- Recent/favorites flows work locally without login.
+- 每个工具卡显示 type、processing、pricing 中至少两个关键信息。
+- Local 工具必须标明 local/on-device。
+- AI 工具必须标明 AI consent。
+- Freemium/Paid 不得伪装成 Free。
 
-## 3. Calculator UX
+## 3. 工程验收
 
-- All 73 calculators have routes.
-- Every calculator can be opened from search and at least one category page.
-- Basic calculation does not require login.
-- Form validation is specific and accessible.
-- Result panel shows primary value, interpretation, secondary metrics where
-  relevant, and actions.
-- Formula, example, FAQ, and related tools appear on calculator pages.
+- `pnpm test` 通过。
+- `pnpm typecheck` 通过。
+- `pnpm build` 通过。
+- `git diff --stat` 只包含本次 docs/spec/sites 变更和既有用户删除状态。
 
-## 4. AI SaaS UX
+## 4. 视觉验收
 
-- AI app routes require login.
-- Repurpose page supports URL/Text, platforms, tone, brand voice, model,
-  generate/cancel, streaming output.
-- Template Library, Brand Voice, History, Analytics, Settings pages exist.
-- Plan usage and subscription state are visible.
-- Output cards support copy, save, regenerate, status, and word count.
+- 桌面首屏布局与 `design/01-toolars-home-desktop.png` 保持同一信息架构。
+- JSON Repair 工作台布局与 `design/19-toolars-json-repair-workspace-desktop.png` 保持同一模块顺序。
+- 移动 JSON Repair 布局与 `design/45-toolars-json-repair-workspace-mobile.png` 一致: 顶部品牌/菜单/搜索，内容单列堆叠。
+- 不出现卡片套卡片、紫色主调、大面积渐变或装饰性光斑。
 
-## 5. Monetization
+## 5. 可访问性
 
-- Calculators stay free.
-- AI tools are subscription-gated.
-- Cross-device sync, advanced PDF/CSV export, and batch tools can be Pro.
-- Upgrade prompts do not block basic calculator use.
-
-## 6. Accessibility
-
-- WCAG 2.1 AA contrast.
-- 44px mobile tap targets.
-- Keyboard navigation for header, search, mega menu, drawer, modal, tabs, forms.
-- Visible focus rings.
-- Skip link exists.
-- Charts have text summaries or data alternatives.
-
-## 7. Responsive QA
-
-Check:
-
-- 320px
-- 390px
-- 768px
-- 1024px
-- 1440px
-
-Required:
-
-- No incoherent overlap.
-- No clipped button text.
-- No horizontal scrolling except intentional data tables/carousels.
-- Primary actions remain reachable.
-
-## 8. SEO
-
-- Public pages have unique titles/descriptions.
-- Calculator pages include breadcrumbs, FAQ, formula, related tools.
-- Category pages include crawlable tool links.
-- Structured data validates for representative pages.
-- English-first canonical routes work.
-- Future i18n helpers do not generate broken hreflang links.
-
-## 9. Security
-
-- AI input and URL fetch handling are treated as untrusted.
-- Billing webhooks verify signatures.
-- API keys are masked and not logged.
-- User-owned data is protected by database policies.
-- Sensitive AI source content is not logged by default.
-
-## 10. Verification Commands
-
-Expected once `site/` is implemented:
-
-```bash
-pnpm --dir site lint
-pnpm --dir site type-check
-pnpm --dir site test
-pnpm --dir site test:e2e
-```
-
+- 主要按钮和输入有可读 label。
+- Command Search 可由键盘打开。
+- JSON Repair 文本输入和输出区域可被屏幕阅读器识别。
+- 焦点状态可见。

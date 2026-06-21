@@ -1,0 +1,38 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { CoastFireWorkspace } from "./coast-fire-workspace";
+
+describe("CoastFireWorkspace", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it("renders the local VitalCalc Coast FIRE workspace sections", () => {
+    render(<CoastFireWorkspace />);
+
+    expect(screen.getByRole("heading", { name: "Coast FIRE Calculator" })).toBeInTheDocument();
+    expect(screen.getByText("Coast FIRE inputs")).toBeInTheDocument();
+    expect(screen.getByText("Coast checkpoint")).toBeInTheDocument();
+    expect(screen.getByText("Compounding notes")).toBeInTheDocument();
+    expect(screen.getByLabelText("Current age")).toHaveValue(30);
+    expect(screen.getByLabelText("Retirement age")).toHaveValue(55);
+    expect(screen.getByRole("link", { name: "Tool details" })).toHaveAttribute(
+      "href",
+      "/tools/coast-fire/about"
+    );
+  });
+
+  it("calculates the default Coast FIRE estimate and saves assumptions locally", () => {
+    render(<CoastFireWorkspace />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Calculate Coast FIRE" }));
+
+    expect(screen.getByText("$1,500,000")).toBeInTheDocument();
+    expect(screen.getByText("$276,374")).toBeInTheDocument();
+    expect(screen.getByText("180.9%")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Save coast plan" }));
+
+    expect(window.localStorage.getItem("toolars.coast-fire.plan")).toContain("500000");
+  });
+});

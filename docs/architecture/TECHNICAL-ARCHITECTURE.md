@@ -1,8 +1,8 @@
 # toolars Technical Architecture
 
-Status: approved direction for implementation planning  
-Framework decision: Next.js App Router  
-Last updated: 2026-05-30
+Status: approved direction for implementation planning
+Framework decision: Next.js App Router
+Last updated: 2026-06-21
 
 ## 1. Architecture Summary
 
@@ -268,3 +268,27 @@ Track:
 Do not log raw sensitive calculator inputs or full AI source content unless the
 user explicitly saves it to account history.
 
+## 12. Phase 4 Runtime Config
+
+v0.59 adds a production-runtime bridge for the current JSON/file fallback
+stores. Account profiles, signed auth sessions, AI consent/run ledger metadata,
+PDF upload metadata, and encrypted PDF temp objects can now be mounted outside
+`.next/cache` through explicit env paths or a shared `TOOLARS_DATA_DIR`.
+
+Supported env paths:
+
+- `TOOLARS_ACCOUNT_STORE_PATH`
+- `TOOLARS_AUTH_SESSION_LEDGER_PATH`
+- `TOOLARS_AI_CONSENT_LEDGER_PATH`
+- `TOOLARS_PDF_UPLOAD_TEMP_STORE_PATH`
+- `TOOLARS_PDF_UPLOAD_OBJECT_ROOT`
+
+`/api/system/production-health` reports auth, persistence, provider, object
+encryption, and upload handoff readiness as `configured`, `fallback`, or
+`missing`. The response must not include secret values, API keys, OAuth secrets,
+session secrets, upload handoff secrets, or filesystem paths.
+
+This is still a transition layer, not the final DB/object-storage architecture.
+Next production slices should replace account/session/AI ledger JSON stores with
+a database driver, connect encrypted PDF objects to the selected object storage
+service, and run scan/retention work in an async worker queue.

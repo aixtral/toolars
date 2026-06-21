@@ -1,269 +1,79 @@
-# toolars Product Requirements Document
+# Toolars PRD
 
-Status: Approved direction for v1 planning  
-Owner: toolars product/engineering  
-Source of truth: `design/DESIGN.md`  
-Last updated: 2026-05-30
+版本: v0.1
+日期: 2026-06-12
+状态: 重建启动版
+视觉来源: `design/*.png`, `design/Toolars-design-proposal.md`
 
-## 1. Summary
+## 1. 产品目标
 
-toolars is a commercial overseas independent tools website that combines a
-free public calculator/tools directory with a subscription-based AI content
-repurposing SaaS.
+Toolars 是一个全领域混合工具平台，产品承诺是:
 
-The product must not open with a marketing-only landing page. The first screen
-is a usable tool discovery dashboard: global search, popular tools, recent
-tools, favorites, quick actions, category cards, and a featured AI Content
-Repurposer entry.
+> All tools. One workspace.
 
-## 2. Goals
+它不是把两个旧站简单拼接，而是把 VitalCalc 的传统健康/金融/日常工具流量资产，和 Aixtral Lab 的 AI/开发者工具专业资产，统一进一个搜索优先、工作台优先、信任标识清晰的工具站。
 
-- Ship a unified Next.js App Router product under the `toolars` brand.
-- Include all 73 existing calculators in the v1 route and product scope.
-- Include all currently implemented AI SaaS pages in the v1 product scope.
-- Keep calculators free and usable without login.
-- Gate AI tools behind account/subscription.
-- Use English-first public copy while keeping i18n architecture ready.
-- Rebuild UI according to `design/DESIGN.md`; migrate only feature inventory,
-  formula logic, and content structure from source projects.
+## 2. 源项目事实
 
-## 3. Non-Goals
+| 来源 | 当前事实 | 迁移策略 |
+|---|---:|---|
+| `/Users/stanvl/Documents/dev/ai-repo/aixtral-calm/vitalcalc` | Astro 工具目录；当前 `src/pages/tools` 有 86 个根工具页，粗分 Finance 30、Health 36、Other 20；包含已有 Toolars 高保真原型数据 | 迁移工具清单、计算公式、SEO 经验和本地处理承诺；不迁移旧 UI |
+| `/Users/stanvl/Documents/dev/ai-repo/aixtral-lab` | Next.js AI/开发者工具站；`src/lib/tool-config.ts` 有 92 个工具，含 37 Developer、15 Frontend/Design、14 Text/Productivity、10 AI Security、6 RAG/MCP/Agent、5 LLM Cost、5 Prompt Engineering | 迁移工具清单、纯函数、测试资产和专业工具族；UI 重建为 Toolars AI Developer Lab |
+| `/Users/stanvl/Documents/dev/ai-repo/toolars/design` | 57 张桌面/移动高保真图，加核心状态板 | 作为视觉与产品架构合同 |
 
-- No direct clone of 10015.io, VitalCalc, or XtralRepurpose UI.
-- No launch-blocking multi-locale content migration for v1.
-- No native mobile apps in v1.
-- No CMS dependency in v1 unless explicitly approved later.
-- No account requirement for basic calculator use.
+## 3. 目标用户
 
-## 4. Target Users
+- 知识工作者: PDF、总结、邮件、翻译、表格处理。
+- 创作者和运营: 图片处理、社媒文案、视频笔记、配色、二维码。
+- 开发者和产品人员: JSON、CSS、正则、编码转换、LLM 成本、MCP、Prompt 安全。
+- 普通用户: 金融计算、健康计算、单位换算、日常工具。
 
-| Persona | Need | Primary flows |
-|---|---|---|
-| Utility seeker | Fast calculator/tool result without signup | Search, open calculator, calculate, share/save locally |
-| Creator/marketer | Repurpose one source into many platform outputs | Sign in, paste URL/text, select platforms/tone/model, generate |
-| Small business operator | Reuse calculators and AI tools repeatedly | Favorites, recent tools, compare results, Pro exports |
-| SEO visitor | Arrives from long-tail calculator/article search | Calculator result, formula, FAQ, related tools |
-| Power user/team | Uses AI workflow at volume | Subscription, API keys, history, analytics, brand voices |
+## 4. 核心用户路径
 
-## 5. Product Principles
+1. 用户知道工具名时，通过 Command Search 直接打开工具。
+2. 用户只知道任务时，输入自然语言任务，Toolars 推荐传统工具、AI 工具或工作流。
+3. 用户进入工具工作台后，在同一个页面完成输入、处理、输出、复制/下载、下一步推荐。
+4. 用户使用 AI 处理前，必须看到 AI consent gate，明确数据会被发送给模型。
+5. 用户可保存工具、输出或集合；匿名阶段优先本地保存，账号阶段同步到云端。
 
-- Search first: every major page should help users find a tool quickly.
-- Fast path to value: calculators show inputs above the fold and results
-  immediately after calculation.
-- Account only when useful: login is required for AI, sync, Pro exports, and
-  subscription features, not for basic calculator use.
-- Trust through clarity: show formulas, FAQ, source notes, privacy notes, and
-  last-updated metadata.
-- One design system: all public pages and app pages share tokens, spacing,
-  typography, icon style, and interaction states.
+## 5. MVP 范围
 
-## 6. Information Architecture
+首批重建必须完成:
 
-Public routes:
+- Route-aware Shell: `tools`, `workflows`, `collections`, `workspace`, `billing`, `settings`, `admin`, `none`。
+- Command Center: `Cmd/Ctrl+K`、搜索、分组、空状态、快捷动作。
+- Explore 首页: Toolars Picks、Popular tools、Popular workflows、信任模块、AI Developer Lab 入口。
+- PDF directory: 搜索、筛选、子分类、Featured workflows、Recommended path。
+- AI Developer Lab directory: 22 个代表工具、playbooks、Lab workflows。
+- JSON Repair workspace: 本地输入、修复、输出、复制、Next steps。
+- 数据 registry: tools、workflows、collections、source inventory metadata。
+- 设计/产品/技术文档和 CDC spec。
 
-```text
-/                         home utility dashboard
-/tools                    all tools directory
-/tools/[slug]             calculator/tool detail pages
-/categories/health        health tools
-/categories/finance       finance tools
-/ai                       public AI tools directory
-/pricing                  pricing
-/blog                     blog index
-/blog/[slug]              article template
-/compare                  saved calculator result comparison
-/about                    about
-/contact                  contact
-/privacy                  privacy
-/login                    login
-/register                 register
-/404                      not found
-```
+## 6. MVP 不包含
 
-App routes:
+- 不为 92 个 Aixtral Lab 长尾工具手写独立页面。
+- 不为 86 个 VitalCalc 工具逐个手写定制 UI。
+- 不在第一批接入真实账号、支付、文件上传存储、AI provider 调用。
+- 不复用旧站视觉、混合旧 Tailwind 样式或旧 Astro 页面结构。
 
-```text
-/app/repurpose            AI Content Repurposer
-/app/templates            Template Library
-/app/brand-voice          Brand Voice Manager
-/app/history              History
-/app/analytics            Analytics
-/app/settings             Settings
-```
+## 7. 商业化规则
 
-## 7. Calculator Scope
+- 免费: 本地传统工具、基础目录、基础 JSON/PDF/计算器工具。
+- Freemium: AI enhance、保存集合、历史输出、批量处理、专业导出。
+- Paid/Pro: API hooks、团队集合、审计日志、AI credits、MCP/Prompt/成本工作流高级能力。
 
-v1 must include all 73 calculator routes in the product scope.
+## 8. 成功指标
 
-Body:
-BMI Calculator, Body Fat Calculator, Ideal Weight Calculator, Waist-Hip Ratio,
-Blood Pressure, Child Growth, Lean Body Mass, Biological Age.
+| 指标 | MVP 目标 |
+|---|---|
+| 工具发现 | 首页和目录可以通过搜索找到 PDF Toolkit、JSON Repair、Prompt Injection Scanner、LLM Cost Calculator、MCP Server Builder |
+| 信任表达 | Local、Cloud、AI consent、Free/Freemium 标签出现在工具卡和工作台 |
+| 工作台闭环 | JSON Repair 可以从示例输入生成格式化输出 |
+| 响应式 | 390px 宽度无页面级横向滚动 |
+| 工程可验证性 | Registry、Command Search、JSON Repair 均有 Vitest 测试 |
 
-Fitness & Nutrition:
-BMR Calculator, TDEE Calculator, Calorie Deficit, Protein Calculator, Macro
-Calculator, Intermittent Fasting, Glycemic Load, Fiber Intake, Water Intake,
-HOMA-IR, 30-30-30 Method, Heart Rate Zones, One Rep Max, Steps to Calories,
-Body Recomposition, Running Pace, VO2 Max.
+## 9. Product Design brief 回放
 
-Wellness:
-Sleep Calculator, Drink Calories, Pregnancy Due Date, Ovulation Calculator,
-GLP-1 Eligibility, GLP-1 Nutrition, Alcohol Metabolism, Smoke Free, Caffeine
-Calculator, Testosterone Calculator, PHQ-9 Depression, GAD-7 Anxiety, PSS-10
-Stress.
-
-Wealth:
-Mortgage Calculator, Loan Calculator, Car Loan, Rent vs Buy, Compound
-Interest, APY Calculator, SIP Calculator, Investment Goal, Savings Goal, Rule
-of 72, Investment Fee, Dividend Reinvestment, Retirement Calculator, FIRE
-Calculator, Coast FIRE, Inflation Calculator, Net Worth Calculator, Emergency
-Fund, 50/30/20 Budget Rule, Habit Cost.
-
-Finance Calculators:
-Income Tax, Credit Card APR, Discount Calculator, Percentage Calculator, ROI
-Calculator, Tip Calculator, Currency Converter, Hourly to Salary, Side Income
-Tax, Crypto Tax, City Cost Comparison, Stock Average, Debt Payoff, DTI
-Calculator, Credit Score Simulator.
-
-## 8. AI SaaS Scope
-
-v1 must include:
-
-- AI Content Repurposer: URL/Text input, platform picker, tone selector, brand
-  voice selector, model picker, generation/cancel, streaming outputs.
-- Template Library: Social, Long-form, Email, Community templates.
-- Brand Voice Manager: create, edit, delete, limits by plan.
-- History: search, filter, detail modal, copy/regenerate.
-- Analytics: usage stats, platform breakdown, tone breakdown, activity.
-- Settings: profile, subscription, API keys, notifications, danger zone.
-- Auth: login and register.
-- Pricing: Free, Pro, Team.
-
-Supported platforms:
-Twitter Thread, LinkedIn Post, Newsletter, Medium Article, Reddit Post,
-Instagram, YouTube, Facebook, Hacker News, Indie Hackers, WeChat,
-Xiaohongshu, Jike, Zhihu.
-
-Supported tones:
-Professional, Casual, Viral.
-
-## 9. Monetization Requirements
-
-Free:
-
-- Basic calculator usage.
-- Local favorites/recent tools.
-- Local saved calculator comparisons.
-- Limited AI trial if approved later.
-
-Pro:
-
-- AI tools subscription.
-- Cross-device save/sync.
-- Advanced PDF/CSV exports.
-- Batch tools where useful.
-- More brand voices and usage limits.
-
-Team:
-
-- Shared brand voices.
-- Team usage analytics.
-- Higher AI limits.
-- Workspace administration.
-
-Basic calculators must not be hard-gated behind login or subscription.
-
-## 10. Functional Requirements
-
-### Home
-
-- Show global search above fold.
-- Show trust strip: free calculators, private/local where possible, no signup
-  for calculators, multilingual-ready, AI account required.
-- Show Featured AI Content Repurposer.
-- Show Popular Tools, Recent Tools, Favorites, Quick Actions.
-- Show category cards for AI Content, Body, Fitness & Nutrition, Wellness,
-  Wealth, Finance Calculators.
-- Show compact AI dashboard, templates, and analytics previews.
-
-### Global Search
-
-- Keyboard shortcut: Cmd/Ctrl+K.
-- Search tabs: All, Calculators, AI Tools, Health, Finance, Articles.
-- Include recent tools, favorites, popular searches, close matches.
-- No-results state must suggest next actions.
-- Keyboard navigation and accessible result count required.
-
-### Calculator Pages
-
-- Use shared calculator page template.
-- Inputs appear above the fold.
-- Results appear immediately after calculation.
-- Include validation, formula, example, FAQ, related tools, share/save/compare.
-- Basic calculation runs without account.
-- Formula logic must be pure and unit-tested.
-
-### AI App Pages
-
-- Require authenticated account.
-- Show subscription/usage state.
-- Streaming generation can be canceled.
-- Output cards support copy, save, regenerate, status, word count.
-- History and analytics reflect generated outputs and usage.
-
-### Blog/SEO
-
-- Blog index and article template must support calculator SEO.
-- Calculator/category pages must be crawlable.
-- Metadata, breadcrumbs, FAQ, HowTo/WebApplication/ItemList schema are required
-  where applicable.
-
-### i18n
-
-- v1 public copy is English-first.
-- Route/content architecture must preserve future locale expansion for
-  es/fr/zh/ja/ru/ar/pt/hi/zh-tw.
-- RTL support must be considered in layout and tokens, even if Arabic content
-  ships in phase two.
-
-## 11. Non-Functional Requirements
-
-- Accessibility: WCAG 2.1 AA minimum.
-- Mobile: no text overflow at 320px and 390px.
-- Performance: public calculator pages should be fast, cacheable, and
-  crawlable.
-- Security: AI/account/billing/API key surfaces require security review before
-  release.
-- Privacy: anonymous calculator inputs should stay local unless the user saves
-  to account.
-- Observability: track calculator usage, search queries, no-result searches,
-  AI generation status, errors, and billing events without leaking private input.
-
-## 12. Analytics Events
-
-- `tool_search_opened`
-- `tool_search_result_clicked`
-- `tool_search_no_results`
-- `calculator_opened`
-- `calculator_calculated`
-- `calculator_saved_local`
-- `calculator_saved_account`
-- `calculator_exported`
-- `ai_generation_started`
-- `ai_generation_canceled`
-- `ai_generation_completed`
-- `ai_output_copied`
-- `subscription_started`
-- `upgrade_prompt_viewed`
-
-## 13. Acceptance Criteria
-
-- All 73 calculator routes exist and are discoverable from search and category
-  pages.
-- All AI SaaS pages exist and use a consistent app shell.
-- Calculators are usable without login.
-- AI workflows require account/subscription according to plan.
-- Design matches `design/DESIGN.md` tokens and component behavior.
-- Public pages pass SEO crawlability checks.
-- Keyboard navigation works for search, menus, modals, tabs, drawers, and forms.
-- No page has incoherent overlap or text overflow at target breakpoints.
-
+- 要做什么: 重建 Toolars 工具站，将传统工具、AI 工具和工作流统一成一个可扩展工具工作台。
+- 视觉来源: `design/01-57` 高保真图和 `design/Toolars-design-proposal.md`，不生成新视觉方向。
+- 交互深度: 第一阶段核心路径完整可交互；未接后端的账号/支付/AI 以真实前端状态和清楚限制表达。

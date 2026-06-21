@@ -14,6 +14,7 @@ export interface ToolarsAuthContextOptions {
   allowPreviewHeaders?: boolean;
   environment?: string;
   now?: () => Date;
+  sessionPreviousSecrets?: string[];
   sessionSecret?: string;
 }
 
@@ -24,6 +25,7 @@ export function resolveToolarsAuthContext(
   const workspaceId = normalizeWorkspaceId(request?.headers.get("x-toolars-workspace-id"));
   const session = resolvePersistedToolarsAuthSessionFromRequest(request, {
     now: options.now,
+    previousSecrets: options.sessionPreviousSecrets,
     secret: options.sessionSecret
   });
 

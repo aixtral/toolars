@@ -270,10 +270,10 @@ user explicitly saves it to account history.
 
 ## 12. Phase 4 Runtime Config
 
-v0.59 adds a production-runtime bridge for the current JSON/file fallback
-stores. Account profiles, signed auth sessions, AI consent/run ledger metadata,
-PDF upload metadata, and encrypted PDF temp objects can now be mounted outside
-`.next/cache` through explicit env paths or a shared `TOOLARS_DATA_DIR`.
+v0.59 and v0.60 add a production-runtime bridge for the current JSON/file
+fallback stores. Account profiles, signed auth sessions, AI consent/run ledger
+metadata, PDF upload metadata, and encrypted PDF temp objects can now be mounted
+outside `.next/cache` through explicit env paths or a shared `TOOLARS_DATA_DIR`.
 
 Supported env paths:
 
@@ -283,10 +283,21 @@ Supported env paths:
 - `TOOLARS_PDF_UPLOAD_TEMP_STORE_PATH`
 - `TOOLARS_PDF_UPLOAD_OBJECT_ROOT`
 
+Supported auth/session secrets:
+
+- `TOOLARS_AUTH_SESSION_SECRET` signs newly issued Toolars session cookies and
+  is required in production.
+- `TOOLARS_AUTH_SESSION_SECRET_PREVIOUS` is an optional comma-separated rotation
+  list. The resolver verifies active ledger-backed cookies against the current
+  secret and then the previous secrets, but new cookies are always signed with
+  the current primary secret.
+
 `/api/system/production-health` reports auth, persistence, provider, object
 encryption, and upload handoff readiness as `configured`, `fallback`, or
 `missing`. The response must not include secret values, API keys, OAuth secrets,
-session secrets, upload handoff secrets, or filesystem paths.
+session secrets, upload handoff secrets, or filesystem paths. Session rotation
+is reported separately as `auth.sessionSecretRotation`, using `configured` when
+previous secrets are present and `fallback` when no rotation window is active.
 
 This is still a transition layer, not the final DB/object-storage architecture.
 Next production slices should replace account/session/AI ledger JSON stores with

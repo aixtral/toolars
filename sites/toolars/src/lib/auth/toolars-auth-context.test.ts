@@ -102,6 +102,42 @@ describe("resolveToolarsAuthContext", () => {
     });
   });
 
+  it("accepts previous session secrets when resolving an explicit auth context secret", () => {
+    resetToolarsAuthSessionLedger();
+    const { cookie, session } = createToolarsAuthSessionCookie({
+      accountEmail: "owner@example.com",
+      accountId: "acct_session_owner",
+      expiresAt: "2026-06-21T10:30:00Z",
+      issuedAt: "2026-06-21T09:30:00Z",
+      secret: "previous-session-secret",
+      sessionId: "sess_context_rotated"
+    });
+    persistToolarsAuthSession(session);
+
+    const context = resolveToolarsAuthContext(
+      new Request("http://toolars.test/api/billing/account", {
+        headers: {
+          cookie,
+          "x-toolars-workspace-id": "workspace alpha"
+        }
+      }),
+      {
+        environment: "production",
+        now: () => new Date("2026-06-21T09:45:00Z"),
+        sessionPreviousSecrets: ["previous-session-secret"],
+        sessionSecret: "current-session-secret"
+      }
+    );
+
+    expect(context).toMatchObject({
+      accountEmail: "owner@example.com",
+      accountId: "acct_session_owner",
+      isAuthenticated: true,
+      source: "session",
+      workspaceId: "workspace-alpha"
+    });
+  });
+
   it("rejects signed session cookies that are not present in the server session ledger", () => {
     resetToolarsAuthSessionLedger();
     const { cookie } = createToolarsAuthSessionCookie({

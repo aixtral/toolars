@@ -8,6 +8,7 @@ describe("/api/system/production-health", () => {
     aiProviderApiKey: process.env.TOOLARS_AI_PROVIDER_API_KEY,
     aiProviderEndpoint: process.env.TOOLARS_AI_PROVIDER_ENDPOINT,
     authSessionLedgerPath: process.env.TOOLARS_AUTH_SESSION_LEDGER_PATH,
+    authSessionPreviousSecret: process.env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS,
     authSessionSecret: process.env.TOOLARS_AUTH_SESSION_SECRET,
     billingProviderApiKey: process.env.TOOLARS_BILLING_PROVIDER_API_KEY,
     billingProviderEndpoint: process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT,
@@ -21,26 +22,28 @@ describe("/api/system/production-health", () => {
   };
 
   afterEach(() => {
-    process.env.TOOLARS_ACCOUNT_STORE_PATH = originalEnv.accountStorePath;
-    process.env.TOOLARS_AI_CONSENT_LEDGER_PATH = originalEnv.aiConsentLedgerPath;
-    process.env.TOOLARS_AI_PROVIDER_API_KEY = originalEnv.aiProviderApiKey;
-    process.env.TOOLARS_AI_PROVIDER_ENDPOINT = originalEnv.aiProviderEndpoint;
-    process.env.TOOLARS_AUTH_SESSION_LEDGER_PATH = originalEnv.authSessionLedgerPath;
-    process.env.TOOLARS_AUTH_SESSION_SECRET = originalEnv.authSessionSecret;
-    process.env.TOOLARS_BILLING_PROVIDER_API_KEY = originalEnv.billingProviderApiKey;
-    process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT = originalEnv.billingProviderEndpoint;
-    process.env.TOOLARS_DATA_DIR = originalEnv.dataDir;
-    process.env.GOOGLE_OAUTH_CLIENT_ID = originalEnv.googleClientId;
-    process.env.GOOGLE_OAUTH_CLIENT_SECRET = originalEnv.googleClientSecret;
-    process.env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY = originalEnv.objectEncryptionKey;
-    process.env.TOOLARS_PDF_UPLOAD_OBJECT_ROOT = originalEnv.pdfObjectRoot;
-    process.env.TOOLARS_PDF_UPLOAD_TEMP_STORE_PATH = originalEnv.pdfTempStorePath;
-    process.env.TOOLARS_UPLOAD_HANDOFF_SECRET = originalEnv.uploadHandoffSecret;
+    restoreEnvValue("TOOLARS_ACCOUNT_STORE_PATH", originalEnv.accountStorePath);
+    restoreEnvValue("TOOLARS_AI_CONSENT_LEDGER_PATH", originalEnv.aiConsentLedgerPath);
+    restoreEnvValue("TOOLARS_AI_PROVIDER_API_KEY", originalEnv.aiProviderApiKey);
+    restoreEnvValue("TOOLARS_AI_PROVIDER_ENDPOINT", originalEnv.aiProviderEndpoint);
+    restoreEnvValue("TOOLARS_AUTH_SESSION_LEDGER_PATH", originalEnv.authSessionLedgerPath);
+    restoreEnvValue("TOOLARS_AUTH_SESSION_SECRET_PREVIOUS", originalEnv.authSessionPreviousSecret);
+    restoreEnvValue("TOOLARS_AUTH_SESSION_SECRET", originalEnv.authSessionSecret);
+    restoreEnvValue("TOOLARS_BILLING_PROVIDER_API_KEY", originalEnv.billingProviderApiKey);
+    restoreEnvValue("TOOLARS_BILLING_PROVIDER_ENDPOINT", originalEnv.billingProviderEndpoint);
+    restoreEnvValue("TOOLARS_DATA_DIR", originalEnv.dataDir);
+    restoreEnvValue("GOOGLE_OAUTH_CLIENT_ID", originalEnv.googleClientId);
+    restoreEnvValue("GOOGLE_OAUTH_CLIENT_SECRET", originalEnv.googleClientSecret);
+    restoreEnvValue("TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY", originalEnv.objectEncryptionKey);
+    restoreEnvValue("TOOLARS_PDF_UPLOAD_OBJECT_ROOT", originalEnv.pdfObjectRoot);
+    restoreEnvValue("TOOLARS_PDF_UPLOAD_TEMP_STORE_PATH", originalEnv.pdfTempStorePath);
+    restoreEnvValue("TOOLARS_UPLOAD_HANDOFF_SECRET", originalEnv.uploadHandoffSecret);
   });
 
   it("reports production readiness without exposing secret values", async () => {
     process.env.TOOLARS_DATA_DIR = "/var/toolars/data";
     process.env.TOOLARS_AUTH_SESSION_SECRET = "super-secret-session-value";
+    process.env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS = "previous-super-secret-session-value";
     process.env.GOOGLE_OAUTH_CLIENT_ID = "google-client-id";
     process.env.GOOGLE_OAUTH_CLIENT_SECRET = "google-client-secret";
     process.env.TOOLARS_AI_PROVIDER_ENDPOINT = "https://ai-provider.toolars.test";
@@ -57,7 +60,8 @@ describe("/api/system/production-health", () => {
     expect(payload).toMatchObject({
       auth: {
         googleOAuth: "configured",
-        sessionSecret: "configured"
+        sessionSecret: "configured",
+        sessionSecretRotation: "configured"
       },
       persistence: {
         accountStore: "configured",
@@ -80,3 +84,12 @@ describe("/api/system/production-health", () => {
     expect(JSON.stringify(payload)).not.toContain("/var/toolars/data");
   });
 });
+
+function restoreEnvValue(key: string, value: string | undefined) {
+  if (value === undefined) {
+    delete process.env[key];
+    return;
+  }
+
+  process.env[key] = value;
+}

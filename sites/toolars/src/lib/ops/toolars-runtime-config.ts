@@ -53,7 +53,8 @@ export function getToolarsProductionRuntimeStatus(env = readToolarsRuntimeEnv())
   const status = {
     auth: {
       googleOAuth: getGroupedSecretStatus(env.GOOGLE_OAUTH_CLIENT_ID, env.GOOGLE_OAUTH_CLIENT_SECRET),
-      sessionSecret: hasRuntimeValue(env.TOOLARS_AUTH_SESSION_SECRET) ? "configured" : "missing"
+      sessionSecret: hasRuntimeValue(env.TOOLARS_AUTH_SESSION_SECRET) ? "configured" : "missing",
+      sessionSecretRotation: hasRuntimeValue(env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS) ? "configured" : "fallback"
     },
     missing: [] as string[],
     mode: {

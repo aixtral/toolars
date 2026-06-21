@@ -11,6 +11,7 @@ import { DELETE, GET, POST } from "./route";
 describe("/api/auth/session", () => {
   let tempDirectory: string;
   const originalSecret = process.env.TOOLARS_AUTH_SESSION_SECRET;
+  const originalPreviousSecret = process.env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS;
 
   beforeEach(() => {
     tempDirectory = mkdtempSync(join(tmpdir(), "toolars-api-auth-session-"));
@@ -27,7 +28,8 @@ describe("/api/auth/session", () => {
 
   afterEach(() => {
     vi.useRealTimers();
-    process.env.TOOLARS_AUTH_SESSION_SECRET = originalSecret;
+    restoreEnvValue("TOOLARS_AUTH_SESSION_SECRET", originalSecret);
+    restoreEnvValue("TOOLARS_AUTH_SESSION_SECRET_PREVIOUS", originalPreviousSecret);
     setToolarsAccountStoreStoragePathForTest(null);
     setServerConsentAuditLedgerStoragePathForTest(null);
     setToolarsAuthSessionLedgerStoragePathForTest(null);
@@ -200,4 +202,56 @@ describe("/api/auth/session", () => {
       source: "anonymous"
     });
   });
+
+  it("keeps active server sessions readable after rotating to a new primary session secret", async () => {
+    process.env.TOOLARS_AUTH_SESSION_SECRET = "previous-session-secret";
+    const created = await POST(
+      new Request("http://toolars.test/api/auth/session", {
+        body: JSON.stringify({
+          accountEmail: "owner@example.com",
+          accountId: "acct_owner_example_com"
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-toolars-workspace-id": "toolars_ws_rotation_test"
+        },
+        method: "POST"
+      })
+    );
+    const previousCookie = created.headers.get("set-cookie") ?? "";
+
+    process.env.TOOLARS_AUTH_SESSION_SECRET = "current-session-secret";
+    process.env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS = "previous-session-secret";
+
+    const response = await GET(
+      new Request("http://toolars.test/api/auth/session", {
+        headers: {
+          cookie: previousCookie,
+          "x-toolars-workspace-id": "toolars_ws_rotation_test"
+        }
+      })
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.auth).toMatchObject({
+      accountEmail: "owner@example.com",
+      accountId: "acct_owner_example_com",
+      isAuthenticated: true,
+      source: "session"
+    });
+    expect(payload.session).toMatchObject({
+      accountId: "acct_owner_example_com",
+      status: "active"
+    });
+  });
 });
+
+function restoreEnvValue(key: string, value: string | undefined) {
+  if (value === undefined) {
+    delete process.env[key];
+    return;
+  }
+
+  process.env[key] = value;
+}

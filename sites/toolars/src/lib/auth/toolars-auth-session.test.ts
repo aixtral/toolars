@@ -61,6 +61,32 @@ describe("toolars auth session cookies", () => {
     expect(resolved).toBeNull();
   });
 
+  it("accepts a previous session secret during a production rotation window", () => {
+    const { cookie, session } = createToolarsAuthSessionCookie({
+      accountEmail: "owner@example.com",
+      accountId: "acct_owner_example_com",
+      expiresAt: "2026-06-21T10:30:00Z",
+      issuedAt: "2026-06-21T09:30:00Z",
+      secret: "previous-session-secret",
+      sessionId: "sess_rotated"
+    });
+
+    const resolved = resolveToolarsAuthSessionFromRequest(
+      new Request("http://toolars.test/api/billing/account", {
+        headers: {
+          cookie
+        }
+      }),
+      {
+        now: () => new Date("2026-06-21T09:45:00Z"),
+        secret: "current-session-secret",
+        previousSecrets: ["previous-session-secret"]
+      }
+    );
+
+    expect(resolved).toEqual(session);
+  });
+
   it("rejects expired session cookies", () => {
     const { cookie } = createToolarsAuthSessionCookie({
       accountEmail: "owner@example.com",

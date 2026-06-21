@@ -23,6 +23,7 @@ export interface CreateToolarsAuthSessionCookieOptions {
 
 export interface ResolveToolarsAuthSessionOptions {
   now?: () => Date;
+  previousSecrets?: string[];
   secret?: string;
 }
 
@@ -77,8 +78,11 @@ export function resolveToolarsAuthSessionFromRequest(
   const [encodedPayload, signature] = cookieValue.split(".");
   if (!encodedPayload || !signature) return null;
 
-  const expectedSignature = signSessionPayload(encodedPayload, getSessionSecret(options.secret));
-  if (!isMatchingSignature(signature, expectedSignature)) return null;
+  const acceptedSecrets = getSessionSecrets({
+    explicitSecret: options.secret,
+    previousSecrets: options.previousSecrets
+  });
+  if (!acceptedSecrets.some((secret) => isMatchingSignature(signature, signSessionPayload(encodedPayload, secret)))) return null;
 
   const payload = parseSessionPayload(encodedPayload);
   if (!payload) return null;
@@ -188,12 +192,36 @@ function normalizeSessionId(sessionId: string) {
 }
 
 function getSessionSecret(explicitSecret?: string) {
-  const secret = explicitSecret ?? process.env.TOOLARS_AUTH_SESSION_SECRET;
+  const secret = normalizeSessionSecret(explicitSecret ?? process.env.TOOLARS_AUTH_SESSION_SECRET);
   if (secret) return secret;
   if (process.env.NODE_ENV === "production") {
     throw new Error("TOOLARS_AUTH_SESSION_SECRET is required in production");
   }
   return "toolars-local-auth-session-secret";
+}
+
+function getSessionSecrets({
+  explicitSecret,
+  previousSecrets
+}: {
+  explicitSecret?: string;
+  previousSecrets?: string[];
+}) {
+  const primarySecret = getSessionSecret(explicitSecret);
+  const rotationSecrets = previousSecrets ?? (explicitSecret ? [] : readPreviousSessionSecretsFromEnv());
+  return Array.from(new Set([primarySecret, ...rotationSecrets.map(normalizeSessionSecret).filter((secret) => secret !== null)]));
+}
+
+function readPreviousSessionSecretsFromEnv() {
+  const rawSecretList = process.env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS;
+  if (!rawSecretList) return [];
+  return rawSecretList.split(",");
+}
+
+function normalizeSessionSecret(secret: string | undefined) {
+  const trimmed = secret?.trim();
+  if (!trimmed || trimmed === "undefined" || trimmed === "null") return null;
+  return trimmed;
 }
 
 function shouldUseSecureCookie() {

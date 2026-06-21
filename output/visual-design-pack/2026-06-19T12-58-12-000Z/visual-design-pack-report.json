@@ -1,0 +1,147 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-19T12:58:24.459Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z",
+  "requested": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "04",
+      "design": "04-toolars-home-mobile.png",
+      "route": "/",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "home",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/04-toolars-home-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/04-home-mobile.png",
+      "ok": true,
+      "elapsedMs": 1608,
+      "error": null
+    },
+    {
+      "id": "34",
+      "design": "34-toolars-ai-developer-lab-collection-mobile.png",
+      "route": "/collections/ai-developer-lab",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "ai-developer-lab-collection",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/collections/ai-developer-lab",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/34-toolars-ai-developer-lab-collection-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/34-ai-developer-lab-collection-mobile.png",
+      "ok": true,
+      "elapsedMs": 1631,
+      "error": null
+    },
+    {
+      "id": "37",
+      "design": "37-toolars-pdf-ops-kit-collection-mobile.png",
+      "route": "/collections/pdf-ops-kit",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-ops-kit-collection",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/collections/pdf-ops-kit",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/37-toolars-pdf-ops-kit-collection-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/37-pdf-ops-kit-collection-mobile.png",
+      "ok": true,
+      "elapsedMs": 1585,
+      "error": null
+    },
+    {
+      "id": "49",
+      "design": "49-toolars-json-repair-detail-mobile.png",
+      "route": "/tools/json-repair/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "json-repair-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/json-repair/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/49-toolars-json-repair-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/49-json-repair-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1564,
+      "error": null
+    },
+    {
+      "id": "50",
+      "design": "50-toolars-prompt-injection-scanner-detail-mobile.png",
+      "route": "/tools/prompt-injection-scanner/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "prompt-injection-scanner-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/prompt-injection-scanner/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/50-toolars-prompt-injection-scanner-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/50-prompt-injection-scanner-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1490,
+      "error": null
+    },
+    {
+      "id": "51",
+      "design": "51-toolars-llm-cost-calculator-detail-mobile.png",
+      "route": "/tools/llm-cost-calculator/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "llm-cost-calculator-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/llm-cost-calculator/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/51-toolars-llm-cost-calculator-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/51-llm-cost-calculator-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1478,
+      "error": null
+    },
+    {
+      "id": "52",
+      "design": "52-toolars-mcp-server-builder-detail-mobile.png",
+      "route": "/tools/mcp-server-builder/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "mcp-server-builder-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/mcp-server-builder/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/52-toolars-mcp-server-builder-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/52-mcp-server-builder-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1501,
+      "error": null
+    },
+    {
+      "id": "57",
+      "design": "57-toolars-pdf-toolkit-detail-mobile.png",
+      "route": "/tools/pdf-toolkit/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-toolkit-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/pdf-toolkit/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/57-toolars-pdf-toolkit-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-58-12-000Z/57-pdf-toolkit-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1600,
+      "error": null
+    }
+  ]
+}

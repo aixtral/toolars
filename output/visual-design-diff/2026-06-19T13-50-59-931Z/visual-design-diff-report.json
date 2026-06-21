@@ -1,0 +1,98 @@
+{
+  "createdAt": "2026-06-19T13:51:00.335Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-50-48-231Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-50-48-231Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-50-59-931Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 2,
+  "compared": 2,
+  "failed": 0,
+  "averageMismatchRatio": 0.07907307514280337,
+  "maxMismatchRatio": 0.09477031927934526,
+  "maxMismatchEntry": {
+    "id": "37",
+    "route": "/collections/pdf-ops-kit",
+    "surface": "pdf-ops-kit-collection",
+    "formFactor": "mobile",
+    "mismatchRatio": 0.09477031927934526,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-50-59-931Z/37-pdf-ops-kit-collection-mobile-diff.png"
+  },
+  "results": [
+    {
+      "id": "34",
+      "design": "34-toolars-ai-developer-lab-collection-mobile.png",
+      "route": "/collections/ai-developer-lab",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "ai-developer-lab-collection",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/34-toolars-ai-developer-lab-collection-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-50-48-231Z/34-ai-developer-lab-collection-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-50-59-931Z/34-ai-developer-lab-collection-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 5948
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 99677,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.06337583100626147
+    },
+    {
+      "id": "37",
+      "design": "37-toolars-pdf-ops-kit-collection-mobile.png",
+      "route": "/collections/pdf-ops-kit",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-ops-kit-collection",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/37-toolars-pdf-ops-kit-collection-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-50-48-231Z/37-pdf-ops-kit-collection-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-50-59-931Z/37-pdf-ops-kit-collection-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 4416
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 149054,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.09477031927934526
+    }
+  ]
+}

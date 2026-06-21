@@ -1,0 +1,187 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T14:27:01.682Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z",
+  "requested": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "01",
+      "design": "01-toolars-home-desktop.png",
+      "route": "/",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "home",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/01-toolars-home-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/01-home-desktop.png",
+      "ok": true,
+      "elapsedMs": 1809,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "02",
+      "design": "02-toolars-pdf-directory-desktop.png",
+      "route": "/explore/pdf",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pdf-directory",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/explore/pdf",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/02-toolars-pdf-directory-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/02-pdf-directory-desktop.png",
+      "ok": true,
+      "elapsedMs": 1715,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "03",
+      "design": "03-toolars-pdf-ai-workspace-desktop.png",
+      "route": "/tools/pdf-toolkit",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pdf-toolkit-workspace",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/tools/pdf-toolkit",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/03-toolars-pdf-ai-workspace-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/03-pdf-toolkit-workspace-desktop.png",
+      "ok": true,
+      "elapsedMs": 1674,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "04",
+      "design": "04-toolars-home-mobile.png",
+      "route": "/",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "home",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/04-toolars-home-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/04-home-mobile.png",
+      "ok": true,
+      "elapsedMs": 1691,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    },
+    {
+      "id": "05",
+      "design": "05-toolars-workflows-index-desktop.png",
+      "route": "/workflows",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "workflows-index",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/workflows",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/05-toolars-workflows-index-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/05-workflows-index-desktop.png",
+      "ok": true,
+      "elapsedMs": 1723,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "40",
+      "design": "40-toolars-account-settings-mobile.png",
+      "route": "/settings",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "account-settings",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/settings",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/40-toolars-account-settings-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/40-account-settings-mobile.png",
+      "ok": true,
+      "elapsedMs": 1662,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    },
+    {
+      "id": "46",
+      "design": "46-toolars-prompt-injection-scanner-workspace-mobile.png",
+      "route": "/tools/prompt-injection-scanner",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "prompt-injection-scanner-workspace",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/prompt-injection-scanner",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/46-toolars-prompt-injection-scanner-workspace-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/46-prompt-injection-scanner-workspace-mobile.png",
+      "ok": true,
+      "elapsedMs": 1688,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    },
+    {
+      "id": "50",
+      "design": "50-toolars-prompt-injection-scanner-detail-mobile.png",
+      "route": "/tools/prompt-injection-scanner/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "prompt-injection-scanner-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/prompt-injection-scanner/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/50-toolars-prompt-injection-scanner-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-26-47-819Z/50-prompt-injection-scanner-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1768,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    }
+  ]
+}

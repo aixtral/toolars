@@ -1,0 +1,33 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T03:35:44.036Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T03-35-42-205Z",
+  "requested": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "id": "37",
+      "design": "37-toolars-pdf-ops-kit-collection-mobile.png",
+      "route": "/collections/pdf-ops-kit",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-ops-kit-collection",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/collections/pdf-ops-kit",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/37-toolars-pdf-ops-kit-collection-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T03-35-42-205Z/37-pdf-ops-kit-collection-mobile.png",
+      "ok": true,
+      "elapsedMs": 1723,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    }
+  ]
+}

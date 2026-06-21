@@ -1,0 +1,98 @@
+{
+  "createdAt": "2026-06-20T13:37:33.134Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T13-37-32-601Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 2,
+  "compared": 2,
+  "failed": 0,
+  "averageMismatchRatio": 0.08247625371466584,
+  "maxMismatchRatio": 0.10135668547703283,
+  "maxMismatchEntry": {
+    "id": "09",
+    "route": "/pricing",
+    "surface": "pricing",
+    "formFactor": "desktop",
+    "mismatchRatio": 0.10135668547703283,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T13-37-32-601Z/09-pricing-desktop-diff.png"
+  },
+  "results": [
+    {
+      "id": "09",
+      "design": "09-toolars-pricing-desktop.png",
+      "route": "/pricing",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pricing",
+      "formFactor": "desktop",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/09-toolars-pricing-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z/09-pricing-desktop.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T13-37-32-601Z/09-pricing-desktop-diff.png",
+      "designSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "implementationSize": {
+        "width": 1487,
+        "height": 1687
+      },
+      "comparedSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "deviceScaleFactor": 1,
+      "implementationCropSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 159459,
+      "totalPixels": 1573246,
+      "mismatchRatio": 0.10135668547703283
+    },
+    {
+      "id": "41",
+      "design": "41-toolars-pricing-mobile.png",
+      "route": "/pricing",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pricing",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/41-toolars-pricing-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z/41-pricing-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T13-37-32-601Z/41-pricing-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 12324
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 100023,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.06359582195229885
+    }
+  ]
+}

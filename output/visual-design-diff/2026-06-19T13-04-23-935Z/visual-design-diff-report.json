@@ -1,0 +1,204 @@
+{
+  "createdAt": "2026-06-19T13:04:24.774Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 5,
+  "compared": 5,
+  "failed": 0,
+  "averageMismatchRatio": 0.15787516721855147,
+  "maxMismatchRatio": 0.16412405454758164,
+  "maxMismatchEntry": {
+    "id": "52",
+    "route": "/tools/mcp-server-builder/about",
+    "surface": "mcp-server-builder-detail",
+    "formFactor": "mobile",
+    "mismatchRatio": 0.16412405454758164,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z/52-mcp-server-builder-detail-mobile-diff.png"
+  },
+  "results": [
+    {
+      "id": "49",
+      "design": "49-toolars-json-repair-detail-mobile.png",
+      "route": "/tools/json-repair/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "json-repair-detail",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/49-toolars-json-repair-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z/49-json-repair-detail-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z/49-json-repair-detail-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 426,
+        "height": 3556
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationCropSize": {
+        "width": 426,
+        "height": 923
+      },
+      "implementationResized": true,
+      "mismatchedPixels": 240020,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.15260759210372382
+    },
+    {
+      "id": "50",
+      "design": "50-toolars-prompt-injection-scanner-detail-mobile.png",
+      "route": "/tools/prompt-injection-scanner/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "prompt-injection-scanner-detail",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/50-toolars-prompt-injection-scanner-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z/50-prompt-injection-scanner-detail-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z/50-prompt-injection-scanner-detail-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 426,
+        "height": 3419
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationCropSize": {
+        "width": 426,
+        "height": 923
+      },
+      "implementationResized": true,
+      "mismatchedPixels": 254229,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.16164184456685946
+    },
+    {
+      "id": "51",
+      "design": "51-toolars-llm-cost-calculator-detail-mobile.png",
+      "route": "/tools/llm-cost-calculator/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "llm-cost-calculator-detail",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/51-toolars-llm-cost-calculator-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z/51-llm-cost-calculator-detail-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z/51-llm-cost-calculator-detail-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 426,
+        "height": 3436
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationCropSize": {
+        "width": 426,
+        "height": 923
+      },
+      "implementationResized": true,
+      "mismatchedPixels": 244582,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.15550816636910667
+    },
+    {
+      "id": "52",
+      "design": "52-toolars-mcp-server-builder-detail-mobile.png",
+      "route": "/tools/mcp-server-builder/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "mcp-server-builder-detail",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/52-toolars-mcp-server-builder-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z/52-mcp-server-builder-detail-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z/52-mcp-server-builder-detail-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 426,
+        "height": 3333
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationCropSize": {
+        "width": 426,
+        "height": 923
+      },
+      "implementationResized": true,
+      "mismatchedPixels": 258133,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.16412405454758164
+    },
+    {
+      "id": "57",
+      "design": "57-toolars-pdf-toolkit-detail-mobile.png",
+      "route": "/tools/pdf-toolkit/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-toolkit-detail",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/57-toolars-pdf-toolkit-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-04-07-306Z/57-pdf-toolkit-detail-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T13-04-23-935Z/57-pdf-toolkit-detail-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 426,
+        "height": 3566
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationCropSize": {
+        "width": 426,
+        "height": 923
+      },
+      "implementationResized": true,
+      "mismatchedPixels": 244560,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.15549417850548578
+    }
+  ]
+}

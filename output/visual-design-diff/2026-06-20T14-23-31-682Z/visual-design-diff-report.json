@@ -1,0 +1,61 @@
+{
+  "createdAt": "2026-06-20T14:23:31.883Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-23-29-546Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-23-29-546Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T14-23-31-682Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 1,
+  "compared": 1,
+  "failed": 0,
+  "averageMismatchRatio": 0.07905559031327727,
+  "maxMismatchRatio": 0.07905559031327727,
+  "maxMismatchEntry": {
+    "id": "46",
+    "route": "/tools/prompt-injection-scanner",
+    "surface": "prompt-injection-scanner-workspace",
+    "formFactor": "mobile",
+    "mismatchRatio": 0.07905559031327727,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T14-23-31-682Z/46-prompt-injection-scanner-workspace-mobile-diff.png"
+  },
+  "results": [
+    {
+      "id": "46",
+      "design": "46-toolars-prompt-injection-scanner-workspace-mobile.png",
+      "route": "/tools/prompt-injection-scanner",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "prompt-injection-scanner-workspace",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/46-toolars-prompt-injection-scanner-workspace-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-23-29-546Z/46-prompt-injection-scanner-workspace-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T14-23-31-682Z/46-prompt-injection-scanner-workspace-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 4152
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 124338,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.07905559031327727
+    }
+  ]
+}

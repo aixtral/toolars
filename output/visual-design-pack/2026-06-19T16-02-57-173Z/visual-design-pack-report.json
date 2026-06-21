@@ -1,0 +1,100 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-19T16:03:04.267Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T16-02-57-173Z",
+  "requested": 4,
+  "passed": 4,
+  "failed": 0,
+  "results": [
+    {
+      "id": "04",
+      "design": "04-toolars-home-mobile.png",
+      "route": "/",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "home",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/04-toolars-home-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T16-02-57-173Z/04-home-mobile.png",
+      "ok": true,
+      "elapsedMs": 1755,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    },
+    {
+      "id": "36",
+      "design": "36-toolars-collections-index-mobile.png",
+      "route": "/collections",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "collections-index",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/collections",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/36-toolars-collections-index-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T16-02-57-173Z/36-collections-index-mobile.png",
+      "ok": true,
+      "elapsedMs": 1770,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    },
+    {
+      "id": "40",
+      "design": "40-toolars-account-settings-mobile.png",
+      "route": "/settings",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "account-settings",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/settings",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/40-toolars-account-settings-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T16-02-57-173Z/40-account-settings-mobile.png",
+      "ok": true,
+      "elapsedMs": 1679,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    },
+    {
+      "id": "44",
+      "design": "44-toolars-states-board-mobile.png",
+      "route": "/states",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "states-board",
+      "formFactor": "mobile",
+      "kind": "board",
+      "url": "http://127.0.0.1:9321/states",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/44-toolars-states-board-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T16-02-57-173Z/44-states-board-mobile.png",
+      "ok": true,
+      "elapsedMs": 1763,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    }
+  ]
+}

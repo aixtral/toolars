@@ -1,0 +1,173 @@
+{
+  "createdAt": "2026-06-19T15:35:21.701Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T15-35-07-017Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T15-35-07-017Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T15-35-20-890Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 4,
+  "compared": 4,
+  "failed": 0,
+  "averageMismatchRatio": 0.08940978845263708,
+  "maxMismatchRatio": 0.11792849912766595,
+  "maxMismatchEntry": {
+    "id": "04",
+    "route": "/",
+    "surface": "home",
+    "formFactor": "mobile",
+    "mismatchRatio": 0.11792849912766595,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T15-35-20-890Z/04-home-mobile-diff.png"
+  },
+  "results": [
+    {
+      "id": "04",
+      "design": "04-toolars-home-mobile.png",
+      "route": "/",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "home",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/04-toolars-home-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T15-35-07-017Z/04-home-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T15-35-20-890Z/04-home-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 1862
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 185477,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.11792849912766595
+    },
+    {
+      "id": "36",
+      "design": "36-toolars-collections-index-mobile.png",
+      "route": "/collections",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "collections-index",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/36-toolars-collections-index-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T15-35-07-017Z/36-collections-index-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T15-35-20-890Z/36-collections-index-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 3712
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 118057,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.07506205524951805
+    },
+    {
+      "id": "40",
+      "design": "40-toolars-account-settings-mobile.png",
+      "route": "/settings",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "account-settings",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/40-toolars-account-settings-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T15-35-07-017Z/40-account-settings-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T15-35-20-890Z/40-account-settings-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 3598
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 113907,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.07242343552103521
+    },
+    {
+      "id": "44",
+      "design": "44-toolars-states-board-mobile.png",
+      "route": "/states",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "states-board",
+      "formFactor": "mobile",
+      "kind": "board",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/44-toolars-states-board-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T15-35-07-017Z/44-states-board-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-19T15-35-20-890Z/44-states-board-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 9024
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 145051,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.09222516391232916
+    }
+  ]
+}

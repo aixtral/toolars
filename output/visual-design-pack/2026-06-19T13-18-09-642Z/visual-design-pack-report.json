@@ -1,0 +1,33 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-19T13:18:11.536Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-18-09-642Z",
+  "requested": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "id": "49",
+      "design": "49-toolars-json-repair-detail-mobile.png",
+      "route": "/tools/json-repair/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "json-repair-detail",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/json-repair/about",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/49-toolars-json-repair-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T13-18-09-642Z/49-json-repair-detail-mobile.png",
+      "ok": true,
+      "elapsedMs": 1781,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    }
+  ]
+}

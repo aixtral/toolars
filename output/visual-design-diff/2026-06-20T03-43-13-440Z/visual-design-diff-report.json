@@ -1,0 +1,61 @@
+{
+  "createdAt": "2026-06-20T03:43:13.668Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T03-42-58-184Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T03-42-58-184Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T03-43-13-440Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 1,
+  "compared": 1,
+  "failed": 0,
+  "averageMismatchRatio": 0.05275840670603615,
+  "maxMismatchRatio": 0.05275840670603615,
+  "maxMismatchEntry": {
+    "id": "57",
+    "route": "/tools/pdf-toolkit/about",
+    "surface": "pdf-toolkit-detail",
+    "formFactor": "mobile",
+    "mismatchRatio": 0.05275840670603615,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T03-43-13-440Z/57-pdf-toolkit-detail-mobile-diff.png"
+  },
+  "results": [
+    {
+      "id": "57",
+      "design": "57-toolars-pdf-toolkit-detail-mobile.png",
+      "route": "/tools/pdf-toolkit/about",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-toolkit-detail",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/57-toolars-pdf-toolkit-detail-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T03-42-58-184Z/57-pdf-toolkit-detail-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T03-43-13-440Z/57-pdf-toolkit-detail-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 6696
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 82978,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.05275840670603615
+    }
+  ]
+}

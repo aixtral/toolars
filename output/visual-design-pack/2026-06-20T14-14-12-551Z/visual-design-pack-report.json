@@ -1,0 +1,99 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T14:14:19.547Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-12-551Z",
+  "requested": 4,
+  "passed": 4,
+  "failed": 0,
+  "results": [
+    {
+      "id": "01",
+      "design": "01-toolars-home-desktop.png",
+      "route": "/",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "home",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/01-toolars-home-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-12-551Z/01-home-desktop.png",
+      "ok": true,
+      "elapsedMs": 1786,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "02",
+      "design": "02-toolars-pdf-directory-desktop.png",
+      "route": "/explore/pdf",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pdf-directory",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/explore/pdf",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/02-toolars-pdf-directory-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-12-551Z/02-pdf-directory-desktop.png",
+      "ok": true,
+      "elapsedMs": 1714,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "03",
+      "design": "03-toolars-pdf-ai-workspace-desktop.png",
+      "route": "/tools/pdf-toolkit",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pdf-toolkit-workspace",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/tools/pdf-toolkit",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/03-toolars-pdf-ai-workspace-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-12-551Z/03-pdf-toolkit-workspace-desktop.png",
+      "ok": true,
+      "elapsedMs": 1655,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "05",
+      "design": "05-toolars-workflows-index-desktop.png",
+      "route": "/workflows",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "workflows-index",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/workflows",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/05-toolars-workflows-index-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-12-551Z/05-workflows-index-desktop.png",
+      "ok": true,
+      "elapsedMs": 1700,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T04:12:38.318Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T04-12-36-273Z",
+  "requested": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "id": "32",
+      "design": "32-toolars-pdf-toolkit-mobile.png",
+      "route": "/tools/pdf-toolkit",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pdf-toolkit-workspace",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/tools/pdf-toolkit",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/32-toolars-pdf-toolkit-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T04-12-36-273Z/32-pdf-toolkit-workspace-mobile.png",
+      "ok": true,
+      "elapsedMs": 1806,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    }
+  ]
+}

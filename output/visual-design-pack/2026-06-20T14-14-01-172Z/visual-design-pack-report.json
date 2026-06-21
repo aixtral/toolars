@@ -1,0 +1,33 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T14:14:03.078Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-01-172Z",
+  "requested": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "id": "02",
+      "design": "02-toolars-pdf-directory-desktop.png",
+      "route": "/explore/pdf",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pdf-directory",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/explore/pdf",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/02-toolars-pdf-directory-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-14-01-172Z/02-pdf-directory-desktop.png",
+      "ok": true,
+      "elapsedMs": 1773,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    }
+  ]
+}

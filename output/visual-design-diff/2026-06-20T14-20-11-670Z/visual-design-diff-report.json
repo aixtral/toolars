@@ -1,0 +1,61 @@
+{
+  "createdAt": "2026-06-20T14:20:11.868Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "captureReportPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-20-09-518Z/visual-design-pack-report.json",
+  "captureOutputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-20-09-518Z",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T14-20-11-670Z",
+  "threshold": 0.1,
+  "maxRatio": null,
+  "requested": 1,
+  "compared": 1,
+  "failed": 0,
+  "averageMismatchRatio": 0.08536920330215311,
+  "maxMismatchRatio": 0.08536920330215311,
+  "maxMismatchEntry": {
+    "id": "40",
+    "route": "/settings",
+    "surface": "account-settings",
+    "formFactor": "mobile",
+    "mismatchRatio": 0.08536920330215311,
+    "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T14-20-11-670Z/40-account-settings-mobile-diff.png"
+  },
+  "results": [
+    {
+      "id": "40",
+      "design": "40-toolars-account-settings-mobile.png",
+      "route": "/settings",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "account-settings",
+      "formFactor": "mobile",
+      "ok": true,
+      "error": null,
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/40-toolars-account-settings-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-20-09-518Z/40-account-settings-mobile.png",
+      "diffPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-diff/2026-06-20T14-20-11-670Z/40-account-settings-mobile-diff.png",
+      "designSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationSize": {
+        "width": 852,
+        "height": 3710
+      },
+      "comparedSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "deviceScaleFactor": 2,
+      "implementationCropSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "implementationResized": false,
+      "mismatchedPixels": 134268,
+      "totalPixels": 1572792,
+      "mismatchRatio": 0.08536920330215311
+    }
+  ]
+}

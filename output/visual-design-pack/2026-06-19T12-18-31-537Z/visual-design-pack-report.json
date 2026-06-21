@@ -1,0 +1,28 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-19T12:18:33.803Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-18-31-537Z",
+  "requested": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "id": "01",
+      "design": "01-toolars-home-desktop.png",
+      "route": "/",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "home",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/01-toolars-home-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-19T12-18-31-537Z/01-home-desktop.png",
+      "ok": true,
+      "elapsedMs": 2262,
+      "error": null
+    }
+  ]
+}

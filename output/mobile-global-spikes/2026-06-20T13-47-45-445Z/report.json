@@ -1,0 +1,304 @@
+[
+  {
+    "name": "topbar-pad12",
+    "avg": 0.0641450045524138,
+    "max": {
+      "id": "04",
+      "route": "/",
+      "ratio": 0.09893043708258943
+    },
+    "rows": [
+      {
+        "id": "04",
+        "route": "/",
+        "ratio": 0.09893043708258943
+      },
+      {
+        "id": "54",
+        "route": "/workflows/ai-prompt-hardening",
+        "ratio": 0.07201079354421945
+      },
+      {
+        "id": "40",
+        "route": "/settings",
+        "ratio": 0.07149896489809206
+      },
+      {
+        "id": "46",
+        "route": "/tools/prompt-injection-scanner",
+        "ratio": 0.0709458084730848
+      },
+      {
+        "id": "36",
+        "route": "/collections",
+        "ratio": 0.06900912517357667
+      },
+      {
+        "id": "52",
+        "route": "/tools/mcp-server-builder/about",
+        "ratio": 0.0689410932914206
+      },
+      {
+        "id": "56",
+        "route": "/workflows/mcp-tool-launch",
+        "ratio": 0.06888704927288541
+      },
+      {
+        "id": "38",
+        "route": "/workflows/pdf-summary",
+        "ratio": 0.06836822669494759
+      },
+      {
+        "id": "35",
+        "route": "/workflows",
+        "ratio": 0.06828366370123957
+      },
+      {
+        "id": "51",
+        "route": "/tools/llm-cost-calculator/about",
+        "ratio": 0.06827857720537744
+      },
+      {
+        "id": "55",
+        "route": "/workflows/llm-cost-review",
+        "ratio": 0.06799373343709784
+      },
+      {
+        "id": "44",
+        "route": "/states",
+        "ratio": 0.06774385932787044
+      },
+      {
+        "id": "50",
+        "route": "/tools/prompt-injection-scanner/about",
+        "ratio": 0.06757409752847165
+      },
+      {
+        "id": "32",
+        "route": "/tools/pdf-toolkit",
+        "ratio": 0.06672147365958118
+      },
+      {
+        "id": "33",
+        "route": "/explore/ai-developer",
+        "ratio": 0.06647223536233653
+      },
+      {
+        "id": "31",
+        "route": "/explore/pdf",
+        "ratio": 0.06618993484198801
+      },
+      {
+        "id": "49",
+        "route": "/tools/json-repair/about",
+        "ratio": 0.06614987868707368
+      },
+      {
+        "id": "45",
+        "route": "/tools/json-repair",
+        "ratio": 0.0632944470724673
+      },
+      {
+        "id": "41",
+        "route": "/pricing",
+        "ratio": 0.0626713513293557
+      },
+      {
+        "id": "34",
+        "route": "/collections/ai-developer-lab",
+        "ratio": 0.060555369050707276
+      },
+      {
+        "id": "37",
+        "route": "/collections/pdf-ops-kit",
+        "ratio": 0.0575651452957543
+      },
+      {
+        "id": "47",
+        "route": "/tools/llm-cost-calculator",
+        "ratio": 0.05717030605445603
+      },
+      {
+        "id": "48",
+        "route": "/tools/mcp-server-builder",
+        "ratio": 0.05355507912044313
+      },
+      {
+        "id": "42",
+        "route": "/submit",
+        "ratio": 0.05274251140646697
+      },
+      {
+        "id": "57",
+        "route": "/tools/pdf-toolkit/about",
+        "ratio": 0.051833936083092995
+      },
+      {
+        "id": "43",
+        "route": "/admin/review",
+        "ratio": 0.04942039379650965
+      },
+      {
+        "id": "39",
+        "route": "/my-tools",
+        "ratio": 0.049414035676681976
+      },
+      {
+        "id": "53",
+        "route": "/settings/billing",
+        "ratio": 0.043838600399798575
+      }
+    ]
+  },
+  {
+    "name": "topbar-pad12-ai-hero",
+    "avg": 0.06414227964391624,
+    "max": {
+      "id": "04",
+      "route": "/",
+      "ratio": 0.09893043708258943
+    },
+    "rows": [
+      {
+        "id": "04",
+        "route": "/",
+        "ratio": 0.09893043708258943
+      },
+      {
+        "id": "40",
+        "route": "/settings",
+        "ratio": 0.07149896489809206
+      },
+      {
+        "id": "54",
+        "route": "/workflows/ai-prompt-hardening",
+        "ratio": 0.07142457489610832
+      },
+      {
+        "id": "46",
+        "route": "/tools/prompt-injection-scanner",
+        "ratio": 0.0709458084730848
+      },
+      {
+        "id": "56",
+        "route": "/workflows/mcp-tool-launch",
+        "ratio": 0.06943639082599606
+      },
+      {
+        "id": "36",
+        "route": "/collections",
+        "ratio": 0.06900912517357667
+      },
+      {
+        "id": "52",
+        "route": "/tools/mcp-server-builder/about",
+        "ratio": 0.0689410932914206
+      },
+      {
+        "id": "38",
+        "route": "/workflows/pdf-summary",
+        "ratio": 0.06836822669494759
+      },
+      {
+        "id": "35",
+        "route": "/workflows",
+        "ratio": 0.06828366370123957
+      },
+      {
+        "id": "51",
+        "route": "/tools/llm-cost-calculator/about",
+        "ratio": 0.06827857720537744
+      },
+      {
+        "id": "55",
+        "route": "/workflows/llm-cost-review",
+        "ratio": 0.0679543130941663
+      },
+      {
+        "id": "44",
+        "route": "/states",
+        "ratio": 0.06774385932787044
+      },
+      {
+        "id": "50",
+        "route": "/tools/prompt-injection-scanner/about",
+        "ratio": 0.06757409752847165
+      },
+      {
+        "id": "32",
+        "route": "/tools/pdf-toolkit",
+        "ratio": 0.06672147365958118
+      },
+      {
+        "id": "33",
+        "route": "/explore/ai-developer",
+        "ratio": 0.06647223536233653
+      },
+      {
+        "id": "31",
+        "route": "/explore/pdf",
+        "ratio": 0.06618993484198801
+      },
+      {
+        "id": "49",
+        "route": "/tools/json-repair/about",
+        "ratio": 0.06614987868707368
+      },
+      {
+        "id": "45",
+        "route": "/tools/json-repair",
+        "ratio": 0.0632944470724673
+      },
+      {
+        "id": "41",
+        "route": "/pricing",
+        "ratio": 0.0626713513293557
+      },
+      {
+        "id": "34",
+        "route": "/collections/ai-developer-lab",
+        "ratio": 0.060555369050707276
+      },
+      {
+        "id": "37",
+        "route": "/collections/pdf-ops-kit",
+        "ratio": 0.0575651452957543
+      },
+      {
+        "id": "47",
+        "route": "/tools/llm-cost-calculator",
+        "ratio": 0.05717030605445603
+      },
+      {
+        "id": "48",
+        "route": "/tools/mcp-server-builder",
+        "ratio": 0.05355507912044313
+      },
+      {
+        "id": "42",
+        "route": "/submit",
+        "ratio": 0.05274251140646697
+      },
+      {
+        "id": "57",
+        "route": "/tools/pdf-toolkit/about",
+        "ratio": 0.051833936083092995
+      },
+      {
+        "id": "43",
+        "route": "/admin/review",
+        "ratio": 0.04942039379650965
+      },
+      {
+        "id": "39",
+        "route": "/my-tools",
+        "ratio": 0.049414035676681976
+      },
+      {
+        "id": "53",
+        "route": "/settings/billing",
+        "ratio": 0.043838600399798575
+      }
+    ]
+  }
+]

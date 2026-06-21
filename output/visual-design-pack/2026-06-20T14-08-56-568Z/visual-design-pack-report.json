@@ -1,0 +1,33 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T14:08:58.484Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-08-56-568Z",
+  "requested": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "id": "05",
+      "design": "05-toolars-workflows-index-desktop.png",
+      "route": "/workflows",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "workflows-index",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/workflows",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/05-toolars-workflows-index-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T14-08-56-568Z/05-workflows-index-desktop.png",
+      "ok": true,
+      "elapsedMs": 1785,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    }
+  ]
+}

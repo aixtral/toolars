@@ -1,0 +1,55 @@
+{
+  "baseUrl": "http://127.0.0.1:9321",
+  "createdAt": "2026-06-20T13:37:25.304Z",
+  "designRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/design",
+  "outputRoot": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z",
+  "requested": 2,
+  "passed": 2,
+  "failed": 0,
+  "results": [
+    {
+      "id": "09",
+      "design": "09-toolars-pricing-desktop.png",
+      "route": "/pricing",
+      "viewport": {
+        "width": 1487,
+        "height": 1058
+      },
+      "surface": "pricing",
+      "formFactor": "desktop",
+      "url": "http://127.0.0.1:9321/pricing",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/09-toolars-pricing-desktop.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z/09-pricing-desktop.png",
+      "ok": true,
+      "elapsedMs": 1756,
+      "deviceScaleFactor": 1,
+      "expectedFirstViewportSize": {
+        "width": 1487,
+        "height": 1058
+      },
+      "error": null
+    },
+    {
+      "id": "41",
+      "design": "41-toolars-pricing-mobile.png",
+      "route": "/pricing",
+      "viewport": {
+        "width": 426,
+        "height": 923
+      },
+      "surface": "pricing",
+      "formFactor": "mobile",
+      "url": "http://127.0.0.1:9321/pricing",
+      "designPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/design/41-toolars-pricing-mobile.png",
+      "screenshotPath": "/Users/stanvl/Documents/dev/ai-repo/toolars/output/visual-design-pack/2026-06-20T13-37-21-497Z/41-pricing-mobile.png",
+      "ok": true,
+      "elapsedMs": 1878,
+      "deviceScaleFactor": 2,
+      "expectedFirstViewportSize": {
+        "width": 852,
+        "height": 1846
+      },
+      "error": null
+    }
+  ]
+}

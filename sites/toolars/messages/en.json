@@ -1224,5 +1224,35 @@
       "providerRoute": "Provider route",
       "artifactState": "Artifact state"
     }
+  },
+  "settings": {
+    "common": {
+      "eyebrow": "Settings",
+      "cancel": "Cancel",
+      "copy": "Copy",
+      "manage": "Manage",
+      "active": "Active",
+      "connected": "Connected",
+      "on": "On",
+      "enabled": "Enabled",
+      "pending": "Pending",
+      "today": "Today",
+      "yesterday": "Yesterday"
+    },
+    "main": {
+      "hero": {
+        "eyebrow": "Account controls",
+        "titleDesktop": "Settings",
+        "titleMobile": "Account settings",
+        "subtitleDesktop": "Manage your Toolars workspace, free trial, and data preferences."
+      }
+    }
+  },
+  "adminReview": {
+    "hero": {
+      "eyebrow": "Internal console",
+      "title": "Review queue",
+      "subtitle": "Review submitted tools, inspect automated checks, request changes, and approve listings."
+    }
   }
 }

@@ -1224,5 +1224,35 @@
       "providerRoute": "提供商路由",
       "artifactState": "製品狀態"
     }
+  },
+  "settings": {
+    "common": {
+      "eyebrow": "設置",
+      "cancel": "取消",
+      "copy": "復制",
+      "manage": "管理",
+      "active": "活躍",
+      "connected": "已连接",
+      "on": "開启",
+      "enabled": "已启用",
+      "pending": "待處理",
+      "today": "今天",
+      "yesterday": "昨天"
+    },
+    "main": {
+      "hero": {
+        "eyebrow": "賬户控制",
+        "titleDesktop": "設置",
+        "titleMobile": "賬户設置",
+        "subtitleDesktop": "管理你的 Toolars 工作区、免費試用和数據偏好。"
+      }
+    }
+  },
+  "adminReview": {
+    "hero": {
+      "eyebrow": "内部控制台",
+      "title": "審核隊列",
+      "subtitle": "審核提交的工具、檢查自动化檢查、请求修改并批準上架。"
+    }
   }
 }

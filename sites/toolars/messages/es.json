@@ -1224,5 +1224,35 @@
       "providerRoute": "Ruta del proveedor",
       "artifactState": "Estado del artefacto"
     }
+  },
+  "settings": {
+    "common": {
+      "eyebrow": "Configuración",
+      "cancel": "Cancelar",
+      "copy": "Copiar",
+      "manage": "Administrar",
+      "active": "Activo",
+      "connected": "Conectado",
+      "on": "Activado",
+      "enabled": "Activado",
+      "pending": "Pendiente",
+      "today": "Hoy",
+      "yesterday": "Ayer"
+    },
+    "main": {
+      "hero": {
+        "eyebrow": "Controles de cuenta",
+        "titleDesktop": "Configuración",
+        "titleMobile": "Ajustes de cuenta",
+        "subtitleDesktop": "Administra tu espacio de trabajo de Toolars, la prueba gratuita y las preferencias de datos."
+      }
+    }
+  },
+  "adminReview": {
+    "hero": {
+      "eyebrow": "Consola interna",
+      "title": "Cola de revisión",
+      "subtitle": "Revisa herramientas enviadas, inspecciona comprobaciones automatizadas, solicita cambios y aprueba listados."
+    }
   }
 }

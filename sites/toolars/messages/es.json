@@ -1,0 +1,868 @@
+{
+  "common": {
+    "brandName": "Toolars",
+    "tagline": "Todas las herramientas. Un solo espacio.",
+    "open": "Abrir",
+    "readArticle": "Leer artículo",
+    "viewAll": "Ver todo",
+    "back": "Atrás",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "share": "Compartir",
+    "menu": "Menú"
+  },
+  "nav": {
+    "explore": "Explorar",
+    "workflows": "Flujos",
+    "collections": "Colecciones",
+    "myTools": "Mis herramientas",
+    "submitTool": "Enviar herramienta",
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "admin": "Administrador",
+    "pricing": "Precios"
+  },
+  "footer": {
+    "columns": {
+      "tools": "Herramientas",
+      "resources": "Recursos",
+      "legal": "Legal"
+    },
+    "tools": {
+      "pdfTools": "Herramientas PDF",
+      "aiDeveloperLab": "Laboratorio de IA para desarrolladores",
+      "workflows": "Flujos",
+      "collections": "Colecciones",
+      "submitTool": "Enviar una herramienta"
+    },
+    "resources": {
+      "blog": "Blog",
+      "pricing": "Precios",
+      "myTools": "Mis herramientas"
+    },
+    "legal": {
+      "privacy": "Política de privacidad",
+      "terms": "Términos del servicio"
+    },
+    "rights": "Todos los derechos reservados."
+  },
+  "auth": {
+    "signIn": {
+      "title": "Inicia sesión en Toolars",
+      "eyebrow": "Cuenta",
+      "description": "Usa Google para sincronizar el historial de prueba, las colecciones guardadas y la configuración de la cuenta.",
+      "google": "Continuar con Google",
+      "googleDescription": "Inicia un espacio de prueba gratuito con tu cuenta de Google.",
+      "freeTrial": "Modo de prueba gratuito",
+      "freeTrialDescription": "No se necesita tarjeta durante la versión beta."
+    },
+    "signUp": {
+      "title": "Crea tu cuenta de Toolars",
+      "eyebrow": "Cuenta",
+      "description": "Crea un espacio gratuito de Toolars con tu cuenta de Google para sincronizar el historial y las colecciones guardadas.",
+      "google": "Continuar con Google",
+      "googleDescription": "Crea un espacio de prueba gratuito con tu cuenta de Google.",
+      "freeTrial": "Modo de prueba gratuito",
+      "freeTrialDescription": "No se necesita tarjeta durante la versión beta."
+    }
+  },
+  "commandCenter": {
+    "placeholder": "Busca herramientas, tareas o pega cualquier cosa...",
+    "groups": {
+      "tools": "Herramientas",
+      "workflows": "Flujos",
+      "collections": "Colecciones",
+      "actions": "Acciones"
+    },
+    "empty": "No se encontraron herramientas ni flujos",
+    "hint": "para buscar",
+    "selectHint": "para seleccionar"
+  },
+  "modal": {
+    "close": "Cerrar",
+    "share": {
+      "eyebrow": "Enlace público",
+      "title": "Compartir esta herramienta",
+      "description": "Copia un enlace estable de Toolars para esta superficie pública.",
+      "fieldLabel": "Enlace público",
+      "copyLink": "Copiar enlace",
+      "openPage": "Abrir página"
+    },
+    "saveCollection": {
+      "eyebrow": "Espacio de trabajo",
+      "title": "Guardar colección",
+      "description": "Elige dónde debe aparecer esta colección en tu espacio de trabajo.",
+      "personal": "Espacio personal",
+      "personalDescription": "Guarda para tus propias herramientas y flujos fijados.",
+      "team": "Espacio de equipo",
+      "teamDescription": "Prepara la colección para revisión compartida.",
+      "save": "Guardar colección"
+    },
+    "upgrade": {
+      "eyebrow": "Mejora de plan",
+      "title": "Mejorar espacio de trabajo",
+      "description": "Revisa los beneficios de planes futuros. Las mejoras de pago están en espera mientras la versión beta esté activa.",
+      "futurePlan": "Plan futuro",
+      "start": "Iniciar mejora"
+    }
+  },
+  "cookie": {
+    "message": "Usamos cookies estrictamente necesarias para mantener tu sesión iniciada, y cookies opcionales de análisis para saber qué herramientas son útiles. Consulta nuestra <privacyLink>Política de privacidad</privacyLink>. Puedes cambiar esta opción en cualquier momento en Configuración.",
+    "accept": "Aceptar",
+    "reject": "Rechazar"
+  },
+  "home": {
+    "heroDesktop": {
+      "title": "Explora herramientas para cada tarea",
+      "subtitle": "Encuentra la herramienta adecuada, haz las cosas más rápido y construye tu mejor trabajo con utilidades tradicionales, herramientas de IA y flujos repetibles.",
+      "inputLabel": "¿Qué quieres hacer hoy?",
+      "placeholder": "Busca o describe tu tarea..."
+    },
+    "heroMobile": {
+      "title": "¿Qué quieres hacer?",
+      "subtitle": "Encuentra la herramienta, IA o flujo adecuado en segundos.",
+      "placeholder": "Busca o describe tu tarea..."
+    },
+    "chips": {
+      "traditionalTools": "Herramientas tradicionales",
+      "aiTools": "Herramientas de IA",
+      "workflows": "Flujos",
+      "localFirst": "Local primero"
+    },
+    "sections": {
+      "toolarsPicks": "Selecciones de Toolars",
+      "popularTools": "Herramientas populares",
+      "aiDeveloperLab": "Laboratorio de IA para desarrolladores",
+      "popularWorkflows": "Flujos populares",
+      "curatedVerified": "Curado y verificado",
+      "startFast": "Empieza rápido",
+      "fromTheBlog": "Del blog",
+      "continue": "Continuar"
+    },
+    "badges": {
+      "verifiedByToolars": "Verificado por Toolars",
+      "freemium": "Freemium",
+      "free": "Gratis"
+    },
+    "actions": {
+      "open": "Abrir",
+      "viewAllPicks": "Ver todas las selecciones",
+      "readArticle": "Leer artículo"
+    },
+    "curated": {
+      "title": "Curado y verificado",
+      "subtitle": "Cada herramienta se revisa por calidad, seguridad y usabilidad.",
+      "qualityReview": "Revisión de calidad",
+      "qualityReviewDescription": "Cada herramienta se prueba antes de publicarse.",
+      "safeByDesign": "Seguro por diseño",
+      "safeByDesignDescription": "Las herramientas locales mantienen tus datos en tu dispositivo.",
+      "aiConsent": "Consentimiento de IA",
+      "aiConsentDescription": "Los pasos de IA preguntan antes de enviar cualquier contenido."
+    }
+  },
+  "pricing": {
+    "badge": {
+      "freeTrialMode": "Modo de prueba gratuito",
+      "alwaysFree": "Siempre gratis",
+      "mostPopular": "Más popular",
+      "forTeams": "Para equipos"
+    },
+    "cta": {
+      "startFreeTrial": "Iniciar prueba gratuita",
+      "getStartedFree": "Empezar gratis",
+      "upgradeToPro": "Mejorar a Pro",
+      "chooseTeam": "Elegir Team"
+    },
+    "units": {
+      "perMonth": "/ mes",
+      "perUserPerMonth": "/ usuario / mes"
+    },
+    "plans": {
+      "trial": {
+        "name": "Espacio de prueba",
+        "description": "No se necesita tarjeta mientras Toolars esté en versión beta."
+      },
+      "free": {
+        "name": "Gratis"
+      },
+      "pro": {
+        "name": "Pro",
+        "note": "Facturado anualmente a $69.90"
+      },
+      "team": {
+        "name": "Team",
+        "note": "Facturado anualmente"
+      }
+    },
+    "features": {
+      "allTraditionalTools": "Todas las herramientas tradicionales",
+      "trialAiCredits": "5.000 créditos de IA de prueba",
+      "pdfUploads200mb": "Cargas de PDF de hasta 200 MB",
+      "everythingInFree": "Todo lo de Gratis",
+      "workflowRuns500": "Hasta 500 ejecuciones de flujo al mes"
+    },
+    "hero": {
+      "trialEyebrow": "Modo de prueba gratuito",
+      "trialTitleDesktop": "Comienza tu prueba gratuita de Toolars.",
+      "trialTitleMobile": "Prueba gratuita para herramientas mixtas",
+      "trialCopyDesktop": "Las herramientas locales tradicionales siguen siendo gratuitas. Iniciar sesión con Google desbloquea créditos de IA de prueba, historial sincronizado y transferencia de flujos PDF durante la versión beta.",
+      "trialCopyMobile": "Las herramientas locales tradicionales siguen siendo gratuitas. Inicia una prueba con Google para créditos de IA, historial de flujos y pruebas de transferencia de PDF.",
+      "trialNote": "No se necesita tarjeta durante la versión beta."
+    },
+    "trialPlan": {
+      "badge": "Modo de prueba gratuito",
+      "mobileBadge": "Prueba gratuita",
+      "description": "Iniciar sesión con Google desbloquea créditos de IA beta, historial sincronizado y pruebas de transferencia de carga durante la prueba gratuita.",
+      "price": "$0",
+      "unit": "/ beta",
+      "note": "No se necesita tarjeta mientras Toolars esté en versión beta.",
+      "cta": "Iniciar prueba gratuita",
+      "features": [
+        "Todas las herramientas tradicionales",
+        "5.000 créditos de IA de prueba",
+        "Cargas de PDF de hasta 200 MB",
+        "Historial sincronizado de 14 días",
+        "Ejecuciones de flujo beta"
+      ],
+      "tags": [
+        "Inicio de sesión con Google",
+        "Prueba gratuita",
+        "No se necesita tarjeta",
+        "Uso beta"
+      ]
+    },
+    "trust": {
+      "localFirst": {
+        "title": "Las herramientas locales siguen siendo gratuitas",
+        "description": "Tus archivos permanecen en tu dispositivo siempre que sea posible."
+      },
+      "aiConsent": {
+        "title": "Procesamiento de IA solo tras el consentimiento",
+        "description": "Tú controlas qué llega a los modelos de IA."
+      },
+      "noUploads": {
+        "title": "Sin cargas ocultas",
+        "description": "No guardamos tus archivos después del procesamiento."
+      }
+    },
+    "usage": {
+      "trialTitle": "Estima tu uso de prueba",
+      "aiCredits": "Créditos de IA",
+      "workflowRuns": "Ejecuciones de flujo",
+      "fileStorage": "Almacenamiento de archivos",
+      "recommended": "Plan recomendado",
+      "trialRecommendation": "$0 beta · Se requiere inicio de sesión con Google",
+      "parkedPhase2": "Los planes de pago están reservados para la Fase 2"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "items": [
+        {
+          "question": "¿Las herramientas tradicionales son realmente gratuitas?",
+          "answer": "Sí. Las herramientas tradicionales y locales siguen siendo gratuitas, incluidas calculadoras, conversores y utilidades."
+        },
+        {
+          "question": "¿Cómo funciona el uso de créditos de IA de prueba?",
+          "answer": "Los créditos de prueba se usan cuando ejecutas herramientas de IA o pasos de flujo que requieren procesamiento de IA."
+        },
+        {
+          "question": "¿Necesito una tarjeta?",
+          "answer": "No. La versión beta usa inicio de sesión con Google y los planes de pago están reservados para la Fase 2."
+        },
+        {
+          "question": "¿Procesan mis archivos?",
+          "answer": "Las herramientas locales se ejecutan en tu dispositivo. Las herramientas de IA solo procesan contenido tras tu consentimiento."
+        },
+        {
+          "question": "¿Qué pasa con mis datos?",
+          "answer": "Eliminamos los archivos temporales tras el procesamiento y conservamos las salidas guardadas solo cuando eliges guardarlas."
+        }
+      ]
+    }
+  },
+  "blog": {
+    "title": "Blog de Toolars",
+    "subtitle": "Guías para herramientas, IA y flujos de desarrollo",
+    "intro": "Guías prácticas y sin anuncios del equipo de Toolars. Cada artículo enlaza a herramientas gratuitas que puedes usar de inmediato.",
+    "backToBlog": "← Volver al blog",
+    "readTime": "{minutes} min de lectura",
+    "mentionedTools": "Herramientas mencionadas en este artículo",
+    "faq": "Preguntas frecuentes"
+  },
+  "legal": {
+    "lastUpdated": "Última actualización: {date}"
+  },
+  "directories": {
+    "pdf": {
+      "title": "Herramientas PDF",
+      "subtitle": "Fusiona, divide, comprime, convierte, resume y protege archivos PDF.",
+      "eyebrow": "Explorar / PDF",
+      "heroTitle": "Herramientas PDF y flujos de IA",
+      "heroSubtitle": "Todas las mejores herramientas PDF en un solo lugar. Realiza operaciones locales rápidas o usa IA para resúmenes, extracción de datos, traducción y más."
+    },
+    "aiDeveloper": {
+      "title": "Laboratorio de IA para desarrolladores",
+      "subtitle": "Herramientas de IA para desarrolladores: seguridad de prompts, coste de LLM, MCP y utilidades JSON.",
+      "eyebrow": "Explorar / Laboratorio de IA",
+      "heroTitle": "Herramientas del Laboratorio de IA",
+      "heroSubtitle": "Seguridad, coste de LLM, ingeniería de prompts, RAG, MCP, agentes y utilidades para desarrolladores fusionadas en Toolars como la familia profesional para creadores."
+    },
+    "collections": {
+      "title": "Colecciones",
+      "subtitle": "Paquetes curados de herramientas y flujos para cada tipo de tarea."
+    },
+    "workflows": {
+      "title": "Flujos",
+      "subtitle": "Cadenas de herramientas de varios pasos para tareas repetibles en PDF, datos, escritura y desarrollo."
+    }
+  },
+  "collectionsPage": {
+    "eyebrow": "Paquetes curados",
+    "heroTitleDesktop": "Colecciones para cada tipo de trabajo",
+    "heroTitleMobile": "Colecciones para trabajo repetido",
+    "heroCopyDesktop": "Kits curados de las mejores herramientas y flujos para tareas y objetivos comunes.",
+    "heroCopyMobile": "Guarda herramientas y flujos en kits reutilizables para operaciones PDF, desarrollo de IA, revisiones financieras y salud.",
+    "createPrivate": "Crear colección privada",
+    "createCollection": "Crear colección",
+    "importBookmarks": "Importar marcadores",
+    "browsePublic": "Explorar colecciones públicas",
+    "featured": "Colecciones destacadas",
+    "viewAllFeatured": "Ver todas las destacadas",
+    "allCollections": "Todas las colecciones",
+    "sortByPopular": "Ordenar por: Populares",
+    "recentlyUpdated": "Actualizadas recientemente",
+    "viewAll": "Ver todo",
+    "suggested": "Sugeridas para ti",
+    "suggestedDescription": "Según tus herramientas guardadas",
+    "createPrivateTitle": "Crea una colección privada",
+    "createPrivateDescription": "Construye tu propia colección de herramientas y flujos. Mantenla privada o compártela con tu equipo.",
+    "syncTitle": "Las colecciones se sincronizan entre dispositivos",
+    "syncDescription": "Accede a tus colecciones guardadas desde cualquier lugar.",
+    "curatedBy": "Curada por {curator}",
+    "official": "Oficial",
+    "updatedHoursAgo": "Actualizada hace {hours} horas",
+    "updatedToday": "Actualizada hoy",
+    "updatedYesterday": "Actualizada ayer"
+  },
+  "workflowsPage": {
+    "eyebrow": "Cadenas repetibles",
+    "heroTitleDesktop": "Flujos para tareas repetibles",
+    "heroTitleMobile": "Flujos para trabajo repetido",
+    "heroCopyDesktop": "Encadena herramientas de PDF, IA, calculadoras y desarrollo en una sola ejecución que puedes repetir cuando quieras.",
+    "heroCopyMobile": "Convierte secuencias de herramientas de varios pasos en flujos de un clic que puedes ejecutar una y otra vez.",
+    "browseAll": "Explorar todos los flujos",
+    "popularWorkflows": "Flujos populares",
+    "allWorkflows": "Todos los flujos",
+    "recentlyUpdated": "Actualizados recientemente",
+    "viewAll": "Ver todo",
+    "runWorkflow": "Ejecutar flujo",
+    "openWorkflow": "Abrir",
+    "pageEyebrow": "Rutas de automatización reutilizables",
+    "pageHeroTitle": "Flujos que terminan el trabajo",
+    "pageHeroCopy": "Encadena utilidades clásicas, procesamiento local y pasos de IA con consentimiento en flujos repetibles para PDF, seguridad de IA, coste de LLM, finanzas, salud y MCP.",
+    "createWorkflow": "Crear flujo",
+    "browseTemplates": "Explorar plantillas",
+    "buildFromScratch": "Construir desde cero",
+    "searchPrompt": "¿Qué intentas automatizar?",
+    "examples": "Ejemplos:",
+    "featuredDesktop": "Flujos destacados",
+    "featuredMobile": "Plantillas de flujos destacadas",
+    "viewAllFeatured": "Ver todas las destacadas",
+    "popularTemplates": "Plantillas de flujos populares",
+    "browseCollections": "Explorar colecciones",
+    "trending": "Tendencias esta semana",
+    "buildTitle": "Construir desde cero",
+    "buildDescription": "Diseña un flujo personalizado encadenando las herramientas que quieras.",
+    "createCustom": "Crear flujo personalizado",
+    "trustTitle": "Confianza en los flujos",
+    "trustAi": "IA solo tras el consentimiento",
+    "trustAiDescription": "Tú eliges cuándo usar funciones de IA. Nada se envía sin aprobación.",
+    "trustLocal": "Pasos locales primero",
+    "trustLocalDescription": "Muchos pasos del flujo se ejecutan en tu dispositivo por velocidad y privacidad.",
+    "trustFiles": "Archivos eliminados tras la sesión",
+    "trustFilesDescription": "Tus archivos se eliminan automáticamente al terminar la sesión.",
+    "startFast": "Empieza rápido"
+  },
+  "tools": {
+    "pdf-toolkit": {
+      "name": "PDF Toolkit",
+      "description": "Fusionar, dividir, comprimir, convertir, resumir y exportar PDF en un solo espacio."
+    },
+    "ai-pdf-summarizer": {
+      "name": "AI PDF Summarizer",
+      "description": "Convierte PDF largos en resúmenes citados, tareas accionables y borradores de correo."
+    },
+    "pdf-merger": {
+      "name": "PDF Merger",
+      "description": "Combina varios PDF en un solo archivo en segundos."
+    },
+    "pdf-compressor": {
+      "name": "PDF Compressor",
+      "description": "Reduce el tamaño del PDF sin perder calidad visual."
+    },
+    "pdf-to-word": {
+      "name": "PDF to Word",
+      "description": "Convierte archivos PDF en documentos Word editables."
+    },
+    "extract-tables": {
+      "name": "Extract Tables",
+      "description": "Extrae tablas estructuradas de PDF y hojas de cálculo."
+    },
+    "pdf-signer": {
+      "name": "PDF Signer",
+      "description": "Añade una firma o rellena formularios PDF localmente."
+    },
+    "pdf-password-remover": {
+      "name": "PDF Password Remover",
+      "description": "Elimina la protección por contraseña de PDF que posees."
+    },
+    "ocr-scanner": {
+      "name": "OCR Scanner",
+      "description": "Extrae texto de imágenes y PDF escaneados."
+    },
+    "pdf-translator": {
+      "name": "PDF Translator",
+      "description": "Traduce el contenido del PDF manteniendo el diseño original."
+    },
+    "mortgage-calculator": {
+      "name": "Mortgage Calculator",
+      "description": "Estima los pagos mensuales de la hipoteca y el interés total."
+    },
+    "bmi-calculator": {
+      "name": "BMI Calculator",
+      "description": "Calcula el índice de masa corporal y consulta tu categoría de salud localmente.",
+      "category": {
+        "unavailable": {
+          "label": "No disponible",
+          "recommendation": "Introduce altura y peso"
+        },
+        "underweight": {
+          "label": "Bajo peso",
+          "recommendation": "Revisar con contexto"
+        },
+        "normal": {
+          "label": "Normal",
+          "recommendation": "Rango saludable"
+        },
+        "overweight": {
+          "label": "Sobrepeso",
+          "recommendation": "Revisar con contexto"
+        },
+        "obesity": {
+          "label": "Obesidad",
+          "recommendation": "Revisar con contexto"
+        }
+      }
+    },
+    "compound-interest": {
+      "name": "Compound Interest Calculator",
+      "description": "Mira cómo el interés compuesto hace crecer tus ahorros con el tiempo."
+    },
+    "loan-calculator": {
+      "name": "Loan Calculator",
+      "description": "Estima los pagos mensuales del préstamo y el interés total."
+    },
+    "bmr-calculator": {
+      "name": "BMR Calculator",
+      "description": "Calcula tu tasa metabólica basal a partir de edad, altura y peso."
+    },
+    "water-intake": {
+      "name": "Water Intake Calculator",
+      "description": "Estima la ingesta diaria de agua según tu peso y actividad."
+    },
+    "retirement-calculator": {
+      "name": "Retirement Calculator",
+      "description": "Proyecta tus ahorros de jubilación y la aportación mensual necesaria."
+    },
+    "debt-payoff": {
+      "name": "Debt Payoff Calculator",
+      "description": "Crea un plan de pago de deudas con el método bola de nieve o avalancha."
+    },
+    "roi-calculator": {
+      "name": "ROI Calculator",
+      "description": "Calcula el retorno de inversión de un proyecto o compra."
+    },
+    "tdee-calculator": {
+      "name": "TDEE Calculator",
+      "description": "Estima el gasto energético diario total según tu nivel de actividad."
+    },
+    "body-fat-calculator": {
+      "name": "Body Fat Calculator",
+      "description": "Estima el porcentaje de grasa corporal a partir de mediciones."
+    },
+    "protein-calculator": {
+      "name": "Protein Calculator",
+      "description": "Estima las necesidades diarias de proteína según peso y actividad."
+    },
+    "income-tax": {
+      "name": "Income Tax Calculator",
+      "description": "Estima tu obligación fiscal sobre la renta del año."
+    },
+    "fire-calculator": {
+      "name": "FIRE Calculator",
+      "description": "Proyecta tu independencia financiera y jubilación anticipada."
+    },
+    "discount-calculator": {
+      "name": "Discount Calculator",
+      "description": "Calcula el precio final tras un descuento o margen."
+    },
+    "heart-rate-zone": {
+      "name": "Heart Rate Zone Calculator",
+      "description": "Encuentra tus zonas de frecuencia cardíaca de entrenamiento."
+    },
+    "sleep-calculator": {
+      "name": "Sleep Calculator",
+      "description": "Planifica la hora de dormir o despertar según los ciclos de sueño."
+    },
+    "ideal-weight-calculator": {
+      "name": "Ideal Weight Calculator",
+      "description": "Estima tu rango de peso ideal según altura y complexión."
+    },
+    "car-loan": {
+      "name": "Car Loan Calculator",
+      "description": "Estima los pagos mensuales del préstamo del coche y el coste total."
+    },
+    "rent-vs-buy": {
+      "name": "Rent vs Buy Calculator",
+      "description": "Compara el coste de alquilar frente a comprar una vivienda."
+    },
+    "home-affordability-calculator": {
+      "name": "Home Affordability Calculator",
+      "description": "Estima cuánta vivienda puedes permitirte."
+    },
+    "waist-hip-ratio": {
+      "name": "Waist-Hip Ratio Calculator",
+      "description": "Calcula tu relación cintura-cadera y la categoría de riesgo."
+    },
+    "blood-pressure": {
+      "name": "Blood Pressure Calculator",
+      "description": "Lee tus cifras de presión arterial y consulta la categoría.",
+      "category": {
+        "normal": {
+          "label": "Normal",
+          "reason": "Sistólica por debajo de 120 y diastólica por debajo de 80.",
+          "advice": "La presión arterial es normal. Mantén el estilo de vida saludable."
+        },
+        "elevated": {
+          "label": "Elevada",
+          "reason": "Sistólica 120-129 y diastólica por debajo de 80.",
+          "advice": "Se recomiendan mejoras preventivas en dieta y ejercicio."
+        },
+        "stage1": {
+          "label": "Etapa 1",
+          "reason": "Sistólica 130-139 o diastólica 80-89.",
+          "advice": "Mejora el estilo de vida: reduce la sal, mantén un peso saludable, haz ejercicio y monitoriza con regularidad."
+        },
+        "stage2": {
+          "label": "Etapa 2",
+          "reason": "Sistólica >=140 o diastólica >=90.",
+          "advice": "Consulta a un médico pronto. Puede ser necesario medicamento. Mejora el estilo de vida."
+        },
+        "crisis": {
+          "label": "Crisis",
+          "reason": "Sistólica >=180 o diastólica >=120. Emergencia médica.",
+          "advice": "Busca atención médica de emergencia de inmediato. No esperes."
+        }
+      }
+    },
+    "child-growth": {
+      "name": "Child Growth Calculator",
+      "description": "Sigue los percentiles de crecimiento infantil en altura y peso."
+    },
+    "student-loan-calculator": {
+      "name": "Student Loan Calculator",
+      "description": "Estima los pagos del préstamo estudiantil y el tiempo de amortización."
+    },
+    "apy-calculator": {
+      "name": "APY Calculator",
+      "description": "Calcula la tasa anual efectiva a partir de tu tipo de interés."
+    },
+    "rule-of-72": {
+      "name": "Rule of 72 Calculator",
+      "description": "Estima cuánto tiempo tardas en duplicar tu dinero."
+    },
+    "calorie-deficit": {
+      "name": "Calorie Deficit Calculator",
+      "description": "Planifica un déficit calórico para una pérdida de peso constante."
+    },
+    "macro-calculator": {
+      "name": "Macro Calculator",
+      "description": "Calcula tus objetivos diarios de macronutrientes."
+    },
+    "lean-body-mass": {
+      "name": "Lean Body Mass Calculator",
+      "description": "Estima la masa corporal magra a partir del peso y la grasa."
+    },
+    "emergency-fund": {
+      "name": "Emergency Fund Calculator",
+      "description": "Estima cuántos ahorros de emergencia necesitas."
+    },
+    "savings-goal": {
+      "name": "Savings Goal Calculator",
+      "description": "Planifica cuánto ahorrar cada mes para alcanzar tu meta."
+    },
+    "dti-calculator": {
+      "name": "DTI Calculator",
+      "description": "Calcula tu ratio de deuda sobre ingresos."
+    },
+    "net-worth-calculator": {
+      "name": "Net Worth Calculator",
+      "description": "Calcula tu patrimonio neto a partir de activos y pasivos."
+    },
+    "budget-rule": {
+      "name": "50/30/20 Budget Calculator",
+      "description": "Reparte tus ingresos con la regla presupuestaria 50/30/20."
+    },
+    "side-income-tax": {
+      "name": "Side Income Tax Calculator",
+      "description": "Estima los impuestos de tus ingresos freelance o secundarios."
+    },
+    "intermittent-fasting": {
+      "name": "Intermittent Fasting Calculator",
+      "description": "Planifica tus ventanas de ayuno y comida."
+    },
+    "creatine-calculator": {
+      "name": "Creatine Calculator",
+      "description": "Calcula tu dosis diaria de creatina."
+    },
+    "vo2-max": {
+      "name": "VO2 Max Calculator",
+      "description": "Estima tu nivel de condición cardiovascular."
+    },
+    "biological-age": {
+      "name": "Biological Age Calculator",
+      "description": "Estima tu edad biológica a partir de factores de estilo de vida."
+    },
+    "glycemic-load": {
+      "name": "Glycemic Load Calculator",
+      "description": "Calcula la carga glucémica de tus comidas."
+    },
+    "30-30-30-method": {
+      "name": "30-30-30 Morning Method",
+      "description": "Planifica el método de desayuno con proteína 30-30-30 para perder peso."
+    },
+    "tip-calculator": {
+      "name": "Tip Calculator",
+      "description": "Calcula la propina y el total para cualquier importe."
+    },
+    "bill-split-calculator": {
+      "name": "Bill Split Calculator",
+      "description": "Divide una cuenta de forma equitativa entre cualquier número de personas."
+    },
+    "unit-converter": {
+      "name": "Unit Converter",
+      "description": "Convierte entre longitud, peso, temperatura y más."
+    },
+    "hourly-to-salary": {
+      "name": "Hourly to Salary Calculator",
+      "description": "Convert hourly wage into annual, monthly, and weekly salary with overtime assumptions."
+    },
+    "inflation-calculator": {
+      "name": "Inflation Calculator",
+      "description": "Estimate future purchasing power and cumulative inflation from amount, rate, and years."
+    },
+    "habit-cost": {
+      "name": "Habit Cost Calculator",
+      "description": "Estimate long-term spending and opportunity cost for repeated daily or weekly habits."
+    },
+    "caffeine-calculator": {
+      "name": "Caffeine Safe Limit Calculator",
+      "description": "Calculate daily caffeine allowance from weight, pregnancy status, and common drink intake."
+    },
+    "alcohol-metabolism": {
+      "name": "Alcohol Metabolism Calculator",
+      "description": "Estima cuánto tiempo permanece el alcohol en tu sistema."
+    },
+    "blood-sugar-calculator": {
+      "name": "Blood Sugar / A1C Calculator",
+      "description": "Convierte unidades de glucosa en sangre y comprueba el rango."
+    },
+    "drink-calories": {
+      "name": "Drink Calories Calculator",
+      "description": "Calculate calories and sugar in boba tea, coffee, juice, alcohol, and other beverages."
+    },
+    "fiber-intake": {
+      "name": "Fiber Intake Calculator",
+      "description": "Estimate daily fiber recommendations from weight, age, and sex context with food-source guidance."
+    },
+    "steps-to-calories": {
+      "name": "Steps to Calories Calculator",
+      "description": "Estimate calories burned from steps, weight, walking speed, and stride assumptions."
+    },
+    "currency-converter": {
+      "name": "Currency Converter",
+      "description": "Convert between major currencies with manually entered exchange rates and reference-rate context."
+    },
+    "percentage-calculator": {
+      "name": "Percentage Calculator",
+      "description": "Calcula porcentajes, incrementos y disminuciones."
+    },
+    "stock-average": {
+      "name": "Stock Average Calculator",
+      "description": "Calculate average cost per share, total cost basis, and breakeven after multiple purchases."
+    },
+    "credit-card-apr": {
+      "name": "Credit Card APR Calculator",
+      "description": "Reveal the true annual percentage rate behind credit card installment monthly fees."
+    },
+    "investment-fee": {
+      "name": "Investment Fee Calculator",
+      "description": "Estimate how annual management fees erode long-term investment returns."
+    },
+    "investment-goal": {
+      "name": "Investment Goal Calculator",
+      "description": "Calculate the monthly investment needed to reach a financial target over time."
+    },
+    "credit-score-simulator": {
+      "name": "Credit Score Simulator",
+      "description": "Simula cómo las decisiones financieras afectan tu puntuación de crédito."
+    },
+    "crypto-tax": {
+      "name": "Crypto Tax Calculator",
+      "description": "Estima el impuesto sobre plusvalías de operaciones con criptomonedas."
+    },
+    "freelance-rate": {
+      "name": "Freelance Rate Calculator",
+      "description": "Calculate hourly, daily, and project rates from income goals, billable hours, taxes, and operating costs."
+    },
+    "subscription-audit": {
+      "name": "Subscription Audit Calculator",
+      "description": "Track recurring subscriptions, normalize monthly cost, and identify duplicate or unused services."
+    },
+    "savings-challenge": {
+      "name": "Savings Challenge Calculator",
+      "description": "Generate 52-week, envelope, no-spend month, or reverse savings plans for habit building."
+    },
+    "city-cost-comparison": {
+      "name": "City Cost Comparison",
+      "description": "Compare rent, food, transport, income, and surplus between two cities for relocation planning."
+    },
+    "social-insurance-calculator": {
+      "name": "China Social Insurance Calculator",
+      "description": "Estima las cotizaciones a la seguridad social desde tu salario."
+    },
+    "dividend-reinvestment": {
+      "name": "Dividend Reinvestment Calculator",
+      "description": "Estimate DRIP growth, total dividends, tax drag, and reinvestment impact over long holding periods."
+    },
+    "mortgage-refinance-calculator": {
+      "name": "Mortgage Refinance Calculator",
+      "description": "Compare current and new mortgage terms to estimate monthly savings, interest savings, and break-even time."
+    },
+    "coast-fire": {
+      "name": "Coast FIRE Calculator",
+      "description": "Estimate the portfolio needed today to stop saving and coast to a future retirement target."
+    },
+    "sip-calculator": {
+      "name": "Fund SIP Calculator",
+      "description": "Project systematic investment plan growth from monthly investment, expected return, duration, and principal."
+    },
+    "smoke-free": {
+      "name": "Quit Smoking Tracker",
+      "description": "Track smoke-free days, money saved, cigarettes avoided, life extension, and recovery milestones."
+    },
+    "adhd-screener": {
+      "name": "ADHD Adult Screener ASRS-v1.1",
+      "description": "Evalúa los síntomas de TDAH en adultos con una lista de autoinforme."
+    },
+    "burnout-assessment": {
+      "name": "Burnout Assessment",
+      "description": "Evalúa el riesgo de burnout en agotamiento y desconexión."
+    },
+    "gad7-anxiety": {
+      "name": "GAD-7 Anxiety Screening",
+      "description": "Evalúa la gravedad de la ansiedad con el cuestionario GAD-7."
+    },
+    "phq9-depression": {
+      "name": "PHQ-9 Depression Screening",
+      "description": "Evalúa la gravedad de la depresión con el cuestionario PHQ-9."
+    },
+    "pss10-stress": {
+      "name": "PSS-10 Perceived Stress Scale",
+      "description": "Mide el estrés percibido con la escala PSS-10."
+    },
+    "glp1-eligibility": {
+      "name": "GLP-1 Eligibility Check",
+      "description": "Comprueba los criterios clínicos para hablar del tratamiento GLP-1."
+    },
+    "body-recomposition": {
+      "name": "Body Recomposition Calculator",
+      "description": "Set simultaneous fat-loss and muscle-gain goals with TDEE, calorie target, and macro split estimates."
+    },
+    "glp1-nutrition": {
+      "name": "GLP-1 Nutrition Calculator",
+      "description": "Planifica los objetivos nutricionales durante el tratamiento GLP-1."
+    },
+    "homa-ir": {
+      "name": "HOMA-IR Calculator",
+      "description": "Estima la resistencia a la insulina a partir de glucosa e insulina."
+    },
+    "one-rep-max": {
+      "name": "1RM Calculator",
+      "description": "Estimate one-repetition maximum and percentage-based working sets from lifted weight and reps."
+    },
+    "ovulation-calculator": {
+      "name": "Ovulation Calculator",
+      "description": "Predice tu ventana fértil y la fecha de ovulación."
+    },
+    "pregnancy-due-date": {
+      "name": "Pregnancy Due Date Calculator",
+      "description": "Estima tu fecha probable de parto y el calendario del embarazo."
+    },
+    "running-pace": {
+      "name": "Running Pace Calculator",
+      "description": "Calculate race pace, speed, track splits, and equivalent performance estimates from distance and time."
+    },
+    "testosterone-calculator": {
+      "name": "Testosterone Calculator",
+      "description": "Estima los niveles de testosterona por rango de edad."
+    },
+    "json-repair": {
+      "name": "JSON Repair",
+      "description": "Repara la salida JSON mal formada de LLM, comas finales, comillas y arrays."
+    },
+    "prompt-injection-scanner": {
+      "name": "Prompt Injection Scanner",
+      "description": "Escanea prompts en busca de jailbreaks, anulaciones de instrucciones y payloads ocultos."
+    },
+    "llm-cost-calculator": {
+      "name": "LLM Cost Calculator",
+      "description": "Estima el coste de tokens entre proveedores, modelos, ventanas de contexto y tráfico."
+    },
+    "mcp-server-builder": {
+      "name": "MCP Server Builder",
+      "description": "Construye manifiestos, esquemas de herramientas, prompts, recursos y documentación de lanzamiento."
+    }
+  },
+  "workspace": {
+    "localCalculationModel": "Modelo de cálculo local",
+    "localScreeningModel": "Modelo de evaluación local",
+    "localScheduleModel": "Modelo de programación local",
+    "local": "Local",
+    "cloud": "Nube",
+    "aiConsent": "Consentimiento de IA",
+    "inputSummary": "Resumen de entrada",
+    "result": "Resultado",
+    "progress": "Progreso",
+    "reference": "Referencia",
+    "category": "Categoría",
+    "male": "Masculino",
+    "female": "Femenino",
+    "yes": "Sí",
+    "no": "No",
+    "saveProfile": "Guardar perfil",
+    "calculate": "Calcular",
+    "exportNote": "Exportar nota",
+    "toolDetails": "Detalles de la herramienta",
+    "saveSnapshot": "Guardar instantánea",
+    "reset": "Reiniciar",
+    "reviewChecklist": "Lista de verificación",
+    "healthReferenceNotes": "Notas de referencia de salud",
+    "supportNotes": "Notas de apoyo",
+    "localFirst": "Local primero",
+    "waitingForCalculation": "Esperando cálculo",
+    "pending": "Pendiente",
+    "runCalculation": "Ejecuta el cálculo para ver los resultados.",
+    "notMedicalAdvice": "Los resultados son referencias y no deben tratarse como un diagnóstico. Consulta a un profesional cualificado."
+  }
+}

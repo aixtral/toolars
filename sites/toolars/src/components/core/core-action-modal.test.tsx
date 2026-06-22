@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { CoreActionModalButton } from "./core-action-modal";
 
 describe("CoreActionModalButton", () => {
@@ -13,7 +14,7 @@ describe("CoreActionModalButton", () => {
   });
 
   it("moves focus into the dialog and restores the trigger after Close", () => {
-    render(
+    renderWithIntl(
       <CoreActionModalButton
         className="button button-outline-neutral"
         itemName="PDF Toolkit"
@@ -40,7 +41,7 @@ describe("CoreActionModalButton", () => {
   });
 
   it("closes with Escape and restores focus to the opener", () => {
-    render(
+    renderWithIntl(
       <CoreActionModalButton className="button button-solid" itemName="PDF Ops Kit" kind="save-collection">
         Save collection
       </CoreActionModalButton>
@@ -60,7 +61,7 @@ describe("CoreActionModalButton", () => {
   });
 
   it("keeps only one core modal mounted when another action opens", () => {
-    render(
+    renderWithIntl(
       <>
         <CoreActionModalButton
           className="button button-outline-neutral"
@@ -86,7 +87,7 @@ describe("CoreActionModalButton", () => {
   });
 
   it("keeps sign-in Google-only for free trial accounts", () => {
-    render(
+    renderWithIntl(
       <CoreActionModalButton className="button button-solid" kind="sign-in">
         Sign in
       </CoreActionModalButton>
@@ -101,5 +102,25 @@ describe("CoreActionModalButton", () => {
       expect.stringMatching(/^\/api\/auth\/google\/start\?workspaceId=toolars_ws_/)
     );
     expect(screen.getByText("Start a free trial workspace with your Google account.")).toBeInTheDocument();
+  });
+
+  it("renders the sign-up modal with the Google account creation entry", () => {
+    renderWithIntl(
+      <CoreActionModalButton className="button button-solid" kind="sign-up">
+        Sign up
+      </CoreActionModalButton>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign up" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Create your Toolars account" });
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(screen.getByText("Account")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Continue with Google" })).toHaveAttribute(
+      "href",
+      expect.stringMatching(/^\/api\/auth\/google\/start\?workspaceId=toolars_ws_/)
+    );
+    expect(screen.getByText("Create a free trial workspace with your Google account.")).toBeInTheDocument();
+    expect(screen.queryByText("Start a free trial workspace with your Google account.")).not.toBeInTheDocument();
   });
 });

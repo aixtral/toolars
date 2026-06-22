@@ -1,0 +1,868 @@
+{
+  "common": {
+    "brandName": "Toolars",
+    "tagline": "All tools. One workspace.",
+    "open": "Open",
+    "readArticle": "Read article",
+    "viewAll": "View all",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "share": "Share",
+    "menu": "Menu"
+  },
+  "nav": {
+    "explore": "Explore",
+    "workflows": "Workflows",
+    "collections": "Collections",
+    "myTools": "My Tools",
+    "submitTool": "Submit tool",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "admin": "Admin",
+    "pricing": "Pricing"
+  },
+  "footer": {
+    "columns": {
+      "tools": "Tools",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "tools": {
+      "pdfTools": "PDF tools",
+      "aiDeveloperLab": "AI Developer Lab",
+      "workflows": "Workflows",
+      "collections": "Collections",
+      "submitTool": "Submit a tool"
+    },
+    "resources": {
+      "blog": "Blog",
+      "pricing": "Pricing",
+      "myTools": "My Tools"
+    },
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in to Toolars",
+      "eyebrow": "Account",
+      "description": "Use Google to keep trial history, saved collections, and account settings in sync.",
+      "google": "Continue with Google",
+      "googleDescription": "Start a free trial workspace with your Google account.",
+      "freeTrial": "Free trial mode",
+      "freeTrialDescription": "No card is required during the beta."
+    },
+    "signUp": {
+      "title": "Create your Toolars account",
+      "eyebrow": "Account",
+      "description": "Create a free Toolars workspace with your Google account to sync history and saved collections.",
+      "google": "Continue with Google",
+      "googleDescription": "Create a free trial workspace with your Google account.",
+      "freeTrial": "Free trial mode",
+      "freeTrialDescription": "No card is required during the beta."
+    }
+  },
+  "commandCenter": {
+    "placeholder": "Search tools, tasks, or paste anything...",
+    "groups": {
+      "tools": "Tools",
+      "workflows": "Workflows",
+      "collections": "Collections",
+      "actions": "Actions"
+    },
+    "empty": "No matching tools or workflows",
+    "hint": "to search",
+    "selectHint": "to select"
+  },
+  "modal": {
+    "close": "Close",
+    "share": {
+      "eyebrow": "Public link",
+      "title": "Share this tool",
+      "description": "Copy a stable Toolars link for this public surface.",
+      "fieldLabel": "Public link",
+      "copyLink": "Copy link",
+      "openPage": "Open page"
+    },
+    "saveCollection": {
+      "eyebrow": "Workspace",
+      "title": "Save collection",
+      "description": "Choose where this collection should appear in your workspace.",
+      "personal": "Personal workspace",
+      "personalDescription": "Save for your own pinned tools and workflows.",
+      "team": "Team workspace",
+      "teamDescription": "Prepare the collection for shared review.",
+      "save": "Save collection"
+    },
+    "upgrade": {
+      "eyebrow": "Plan upgrade",
+      "title": "Upgrade workspace",
+      "description": "Review future plan benefits. Paid upgrades are parked while the beta trial is active.",
+      "futurePlan": "Future plan",
+      "start": "Start upgrade"
+    }
+  },
+  "cookie": {
+    "message": "We use strictly necessary cookies to keep you signed in, and optional analytics cookies to understand which tools are useful. See our <privacyLink>Privacy Policy</privacyLink>. You can change this choice anytime in Settings.",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "home": {
+    "heroDesktop": {
+      "title": "Explore tools for every task",
+      "subtitle": "Find the right tool, get things done faster, and build your best work across traditional utilities, AI tools, and repeatable workflows.",
+      "inputLabel": "What do you want to do today?",
+      "placeholder": "Search or describe your task..."
+    },
+    "heroMobile": {
+      "title": "What do you want to do?",
+      "subtitle": "Find the right tool, AI or workflow in seconds.",
+      "placeholder": "Search or describe your task..."
+    },
+    "chips": {
+      "traditionalTools": "Traditional Tools",
+      "aiTools": "AI Tools",
+      "workflows": "Workflows",
+      "localFirst": "Local-first"
+    },
+    "sections": {
+      "toolarsPicks": "Toolars Picks",
+      "popularTools": "Popular tools",
+      "aiDeveloperLab": "AI Developer Lab",
+      "popularWorkflows": "Popular workflows",
+      "curatedVerified": "Curated & Verified",
+      "startFast": "Start fast",
+      "fromTheBlog": "From the blog",
+      "continue": "Continue"
+    },
+    "badges": {
+      "verifiedByToolars": "Verified by Toolars",
+      "freemium": "Freemium",
+      "free": "Free"
+    },
+    "actions": {
+      "open": "Open",
+      "viewAllPicks": "View all picks",
+      "readArticle": "Read article"
+    },
+    "curated": {
+      "title": "Curated & Verified",
+      "subtitle": "Every tool is reviewed for quality, safety, and usability.",
+      "qualityReview": "Quality review",
+      "qualityReviewDescription": "Each tool is tested before it is published.",
+      "safeByDesign": "Safe by design",
+      "safeByDesignDescription": "Local-first tools keep your data on your device.",
+      "aiConsent": "AI consent",
+      "aiConsentDescription": "AI steps ask before any content is sent."
+    }
+  },
+  "pricing": {
+    "badge": {
+      "freeTrialMode": "Free trial mode",
+      "alwaysFree": "Always free",
+      "mostPopular": "Most popular",
+      "forTeams": "For teams"
+    },
+    "cta": {
+      "startFreeTrial": "Start free trial",
+      "getStartedFree": "Get started free",
+      "upgradeToPro": "Upgrade to Pro",
+      "chooseTeam": "Choose Team"
+    },
+    "units": {
+      "perMonth": "/ month",
+      "perUserPerMonth": "/ user / month"
+    },
+    "plans": {
+      "trial": {
+        "name": "Trial workspace",
+        "description": "No card required while Toolars is in beta."
+      },
+      "free": {
+        "name": "Free"
+      },
+      "pro": {
+        "name": "Pro",
+        "note": "Billed yearly at $69.90"
+      },
+      "team": {
+        "name": "Team",
+        "note": "Billed yearly"
+      }
+    },
+    "features": {
+      "allTraditionalTools": "All traditional tools",
+      "trialAiCredits": "5,000 trial AI credits",
+      "pdfUploads200mb": "PDF uploads up to 200 MB",
+      "everythingInFree": "Everything in Free",
+      "workflowRuns500": "Workflow runs up to 500/month"
+    },
+    "hero": {
+      "trialEyebrow": "Free trial mode",
+      "trialTitleDesktop": "Start your free Toolars trial.",
+      "trialTitleMobile": "Free trial for mixed tools",
+      "trialCopyDesktop": "Traditional local tools stay free. Google sign-in unlocks trial AI credits, synced history, and PDF workflow handoff during beta.",
+      "trialCopyMobile": "Traditional local tools stay free. Start a Google-backed trial for AI credits, workflow history, and PDF handoff testing.",
+      "trialNote": "No card required during the beta trial."
+    },
+    "trialPlan": {
+      "badge": "Free trial mode",
+      "mobileBadge": "Free trial",
+      "description": "Google sign-in unlocks beta AI credits, synced history, and upload handoff testing during the free trial.",
+      "price": "$0",
+      "unit": "/ beta",
+      "note": "No card required while Toolars is in beta.",
+      "cta": "Start free trial",
+      "features": [
+        "All traditional tools",
+        "5,000 trial AI credits",
+        "PDF uploads up to 200 MB",
+        "14 day synced history",
+        "Beta workflow runs"
+      ],
+      "tags": [
+        "Google sign-in",
+        "Free trial",
+        "No card required",
+        "Beta usage"
+      ]
+    },
+    "trust": {
+      "localFirst": {
+        "title": "Local-first tools remain free",
+        "description": "Your files stay on your device whenever possible."
+      },
+      "aiConsent": {
+        "title": "AI processing only after consent",
+        "description": "You control what goes to AI models."
+      },
+      "noUploads": {
+        "title": "No hidden uploads",
+        "description": "We do not store your files after processing."
+      }
+    },
+    "usage": {
+      "trialTitle": "Estimate your trial usage",
+      "aiCredits": "AI credits",
+      "workflowRuns": "Workflow runs",
+      "fileStorage": "File storage",
+      "recommended": "Recommended plan",
+      "trialRecommendation": "$0 beta · Google sign-in required",
+      "parkedPhase2": "Paid plans are parked for Phase 2"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "question": "Are traditional tools really free?",
+          "answer": "Yes. Traditional and local tools stay free, including calculators, converters, and utilities."
+        },
+        {
+          "question": "How does trial AI credit usage work?",
+          "answer": "Trial credits are used when you run AI tools or workflow steps that require AI processing."
+        },
+        {
+          "question": "Do I need a card?",
+          "answer": "No. The beta trial uses Google sign-in and paid plans are parked for Phase 2."
+        },
+        {
+          "question": "Do you process my files?",
+          "answer": "Local tools run on your device. AI tools only process content after your consent."
+        },
+        {
+          "question": "What happens to my data?",
+          "answer": "We remove temporary files after processing and keep saved outputs only when you choose to save them."
+        }
+      ]
+    }
+  },
+  "blog": {
+    "title": "Toolars Blog",
+    "subtitle": "Guides for tools, AI, and developer workflows",
+    "intro": "Practical, ad-free guides from the Toolars team. Every article links to free tools you can use right away.",
+    "backToBlog": "← Back to blog",
+    "readTime": "{minutes} min read",
+    "mentionedTools": "Tools mentioned in this article",
+    "faq": "Frequently asked questions"
+  },
+  "legal": {
+    "lastUpdated": "Last updated: {date}"
+  },
+  "directories": {
+    "pdf": {
+      "title": "PDF Tools",
+      "subtitle": "Merge, split, compress, convert, summarize, and protect PDF files.",
+      "eyebrow": "Explore / PDF",
+      "heroTitle": "PDF tools and AI workflows",
+      "heroSubtitle": "All the best PDF tools in one place. Perform fast local operations or use AI for summaries, data extraction, translation, and more."
+    },
+    "aiDeveloper": {
+      "title": "AI Developer Lab",
+      "subtitle": "Developer-focused AI tools: prompt security, LLM cost, MCP, and JSON utilities.",
+      "eyebrow": "Explore / AI Developer Lab",
+      "heroTitle": "AI Developer Lab tools",
+      "heroSubtitle": "Security, LLM cost, prompt engineering, RAG, MCP, agent, and developer utilities merged into Toolars as the professional tool family for builders."
+    },
+    "collections": {
+      "title": "Collections",
+      "subtitle": "Curated bundles of tools and workflows for every kind of task."
+    },
+    "workflows": {
+      "title": "Workflows",
+      "subtitle": "Multi-step tool chains for repeatable tasks across PDF, data, writing, and development."
+    }
+  },
+  "collectionsPage": {
+    "eyebrow": "Curated stacks",
+    "heroTitleDesktop": "Collections for every kind of work",
+    "heroTitleMobile": "Collections for repeated work",
+    "heroCopyDesktop": "Curated toolkits of the best tools and workflows for common jobs and goals.",
+    "heroCopyMobile": "Save tools and workflows into reusable kits for PDF operations, AI development, finance reviews, and health snapshots.",
+    "createPrivate": "Create private collection",
+    "createCollection": "Create collection",
+    "importBookmarks": "Import bookmarks",
+    "browsePublic": "Browse public collections",
+    "featured": "Featured collections",
+    "viewAllFeatured": "View all featured",
+    "allCollections": "All collections",
+    "sortByPopular": "Sort by: Popular",
+    "recentlyUpdated": "Recently updated",
+    "viewAll": "View all",
+    "suggested": "Suggested for you",
+    "suggestedDescription": "Based on your saved tools",
+    "createPrivateTitle": "Create a private collection",
+    "createPrivateDescription": "Build your own collection of tools and workflows. Keep it private or share with your team.",
+    "syncTitle": "Collections sync across devices",
+    "syncDescription": "Access your saved collections anywhere.",
+    "curatedBy": "Curated by {curator}",
+    "official": "Official",
+    "updatedHoursAgo": "Updated {hours} hours ago",
+    "updatedToday": "Updated today",
+    "updatedYesterday": "Updated yesterday"
+  },
+  "workflowsPage": {
+    "eyebrow": "Repeatable chains",
+    "heroTitleDesktop": "Workflows for repeatable tasks",
+    "heroTitleMobile": "Workflows for repeat work",
+    "heroCopyDesktop": "Chain PDF, AI, calculator, and developer tools into a single run you can repeat anytime.",
+    "heroCopyMobile": "Turn multi-step tool sequences into one-click workflows you can run again and again.",
+    "browseAll": "Browse all workflows",
+    "popularWorkflows": "Popular workflows",
+    "allWorkflows": "All workflows",
+    "recentlyUpdated": "Recently updated",
+    "viewAll": "View all",
+    "runWorkflow": "Run workflow",
+    "openWorkflow": "Open",
+    "pageEyebrow": "Reusable automation paths",
+    "pageHeroTitle": "Workflows that finish the job",
+    "pageHeroCopy": "Chain classic utilities, local processing, and consent-gated AI steps into repeatable workflows for PDF, AI security, LLM cost, finance, health, and MCP work.",
+    "createWorkflow": "Create workflow",
+    "browseTemplates": "Browse templates",
+    "buildFromScratch": "Build from scratch",
+    "searchPrompt": "What are you trying to automate?",
+    "examples": "Examples:",
+    "featuredDesktop": "Featured workflows",
+    "featuredMobile": "Featured workflow templates",
+    "viewAllFeatured": "View all featured",
+    "popularTemplates": "Popular workflow templates",
+    "browseCollections": "Browse collections",
+    "trending": "Trending this week",
+    "buildTitle": "Build from scratch",
+    "buildDescription": "Design a custom workflow by chaining any tools you like.",
+    "createCustom": "Create custom workflow",
+    "trustTitle": "Workflow trust",
+    "trustAi": "AI only after consent",
+    "trustAiDescription": "You choose when to use AI features. Nothing is sent without approval.",
+    "trustLocal": "Local-first steps",
+    "trustLocalDescription": "Many workflow steps run on your device for speed and privacy.",
+    "trustFiles": "Files removed after session",
+    "trustFilesDescription": "Your files are removed automatically when the session ends.",
+    "startFast": "Start fast"
+  },
+  "tools": {
+    "pdf-toolkit": {
+      "name": "PDF Toolkit",
+      "description": "Merge, split, compress, convert, summarize, and export PDFs in one workspace."
+    },
+    "ai-pdf-summarizer": {
+      "name": "AI PDF Summarizer",
+      "description": "Turn long PDFs into cited summaries, action items, and email drafts."
+    },
+    "pdf-merger": {
+      "name": "PDF Merger",
+      "description": "Combine multiple PDFs into one file in seconds."
+    },
+    "pdf-compressor": {
+      "name": "PDF Compressor",
+      "description": "Reduce PDF size without losing visual quality."
+    },
+    "pdf-to-word": {
+      "name": "PDF to Word",
+      "description": "Convert PDF files to editable Word documents."
+    },
+    "extract-tables": {
+      "name": "Extract Tables",
+      "description": "Extract tables from PDFs to CSV using AI."
+    },
+    "pdf-signer": {
+      "name": "PDF Signer",
+      "description": "Add signatures to PDF files online."
+    },
+    "pdf-password-remover": {
+      "name": "PDF Password Remover",
+      "description": "Remove password protection from PDF files you own."
+    },
+    "ocr-scanner": {
+      "name": "OCR Scanner",
+      "description": "Scan images and PDFs into editable text with OCR."
+    },
+    "pdf-translator": {
+      "name": "PDF Translator",
+      "description": "Translate PDF content into 100+ languages with AI."
+    },
+    "mortgage-calculator": {
+      "name": "Mortgage Calculator",
+      "description": "Calculate payments, total interest, and amortization schedules."
+    },
+    "bmi-calculator": {
+      "name": "BMI Calculator",
+      "description": "Calculate body mass index and health ranges locally.",
+      "category": {
+        "unavailable": {
+          "label": "Unavailable",
+          "recommendation": "Enter height and weight"
+        },
+        "underweight": {
+          "label": "Underweight",
+          "recommendation": "Review with context"
+        },
+        "normal": {
+          "label": "Normal",
+          "recommendation": "Healthy range"
+        },
+        "overweight": {
+          "label": "Overweight",
+          "recommendation": "Review with context"
+        },
+        "obesity": {
+          "label": "Obesity",
+          "recommendation": "Review with context"
+        }
+      }
+    },
+    "compound-interest": {
+      "name": "Compound Interest Calculator",
+      "description": "Model investment growth and recurring contributions."
+    },
+    "loan-calculator": {
+      "name": "Loan Calculator",
+      "description": "Calculate monthly payments, total interest, and payoff schedules for personal, auto, or student loans."
+    },
+    "bmr-calculator": {
+      "name": "BMR Calculator",
+      "description": "Estimate basal metabolic rate from age, sex, height, and weight using the Mifflin-St Jeor formula."
+    },
+    "water-intake": {
+      "name": "Water Intake Calculator",
+      "description": "Estimate daily hydration needs from body and activity data."
+    },
+    "retirement-calculator": {
+      "name": "Retirement Calculator",
+      "description": "Estimate how much you need to save for retirement and whether you are on track."
+    },
+    "debt-payoff": {
+      "name": "Debt Payoff Calculator",
+      "description": "Compare avalanche and snowball payoff plans for credit cards, loans, and other debt."
+    },
+    "roi-calculator": {
+      "name": "ROI Calculator",
+      "description": "Calculate return on investment percentage and profit for any investment scenario."
+    },
+    "tdee-calculator": {
+      "name": "TDEE Calculator",
+      "description": "Calculate total daily energy expenditure from BMR and activity level."
+    },
+    "body-fat-calculator": {
+      "name": "Body Fat Calculator",
+      "description": "Estimate body fat percentage from body measurements using the US Navy method."
+    },
+    "protein-calculator": {
+      "name": "Protein Calculator",
+      "description": "Calculate daily protein needs from weight, activity level, and fitness goals."
+    },
+    "income-tax": {
+      "name": "Income Tax Calculator",
+      "description": "Estimate take-home pay from gross income, deductions, and tax assumptions."
+    },
+    "fire-calculator": {
+      "name": "FIRE Calculator",
+      "description": "Estimate the savings target needed to reach financial independence and retire early."
+    },
+    "discount-calculator": {
+      "name": "Discount Calculator",
+      "description": "Calculate sale price, discount amount, tax, and final checkout savings."
+    },
+    "heart-rate-zone": {
+      "name": "Heart Rate Zone Calculator",
+      "description": "Calculate target heart rate zones for training intensity and recovery planning."
+    },
+    "sleep-calculator": {
+      "name": "Sleep Calculator",
+      "description": "Calculate bedtime and wake-up windows from sleep cycles and schedule goals."
+    },
+    "ideal-weight-calculator": {
+      "name": "Ideal Weight Calculator",
+      "description": "Estimate healthy weight ranges from height, sex, and reference formulas."
+    },
+    "car-loan": {
+      "name": "Car Loan Calculator",
+      "description": "Calculate monthly payments, total interest, and true vehicle financing cost."
+    },
+    "rent-vs-buy": {
+      "name": "Rent vs Buy Calculator",
+      "description": "Compare renting and buying costs, break-even timing, and housing assumptions."
+    },
+    "home-affordability-calculator": {
+      "name": "Home Affordability Calculator",
+      "description": "Estimate affordable home price from income, debt, down payment, and rates."
+    },
+    "waist-hip-ratio": {
+      "name": "Waist-Hip Ratio Calculator",
+      "description": "Calculate waist-to-hip ratio and reference risk categories from body measurements."
+    },
+    "blood-pressure": {
+      "name": "Blood Pressure Calculator",
+      "description": "Classify blood pressure ranges from systolic and diastolic readings.",
+      "category": {
+        "normal": {
+          "label": "Normal",
+          "reason": "Systolic below 120 and diastolic below 80.",
+          "advice": "Blood pressure is normal. Keep up the healthy lifestyle."
+        },
+        "elevated": {
+          "label": "Elevated",
+          "reason": "Systolic 120-129 and diastolic below 80.",
+          "advice": "Preventive diet and exercise improvements are recommended."
+        },
+        "stage1": {
+          "label": "Stage 1",
+          "reason": "Systolic 130-139 or diastolic 80-89.",
+          "advice": "Improve lifestyle: reduce salt, maintain healthy weight, exercise, and monitor regularly."
+        },
+        "stage2": {
+          "label": "Stage 2",
+          "reason": "Systolic >=140 or diastolic >=90.",
+          "advice": "Consult a doctor soon. Medication may be needed. Improve lifestyle."
+        },
+        "crisis": {
+          "label": "Crisis",
+          "reason": "Systolic >=180 or diastolic >=120. Medical emergency.",
+          "advice": "Seek emergency medical care immediately. Do not wait."
+        }
+      }
+    },
+    "child-growth": {
+      "name": "Child Growth Calculator",
+      "description": "Estimate child BMI percentile context from age, sex, height, and weight inputs."
+    },
+    "student-loan-calculator": {
+      "name": "Student Loan Calculator",
+      "description": "Compare student loan payments, interest, and repayment timeline assumptions."
+    },
+    "apy-calculator": {
+      "name": "APY Calculator",
+      "description": "Compare annual percentage yield across rates, balances, and compounding frequency."
+    },
+    "rule-of-72": {
+      "name": "Rule of 72 Calculator",
+      "description": "Estimate how long it takes money to double from an annual return rate."
+    },
+    "calorie-deficit": {
+      "name": "Calorie Deficit Calculator",
+      "description": "Estimate daily calorie targets for weight change from TDEE and goal pace."
+    },
+    "macro-calculator": {
+      "name": "Macro Calculator",
+      "description": "Calculate protein, carbohydrate, and fat targets from calories and goals."
+    },
+    "lean-body-mass": {
+      "name": "Lean Body Mass Calculator",
+      "description": "Estimate lean body mass from body weight and body fat assumptions."
+    },
+    "emergency-fund": {
+      "name": "Emergency Fund Calculator",
+      "description": "Estimate emergency savings targets from monthly expenses and coverage months."
+    },
+    "savings-goal": {
+      "name": "Savings Goal Calculator",
+      "description": "Calculate how long it takes to reach a savings target from current and monthly savings."
+    },
+    "dti-calculator": {
+      "name": "DTI Calculator",
+      "description": "Estimate front-end and back-end debt-to-income ratios from income and monthly debts."
+    },
+    "net-worth-calculator": {
+      "name": "Net Worth Calculator",
+      "description": "Calculate assets minus liabilities to track personal financial position."
+    },
+    "budget-rule": {
+      "name": "50/30/20 Budget Calculator",
+      "description": "Split monthly income into needs, wants, savings, and debt repayment targets."
+    },
+    "side-income-tax": {
+      "name": "Side Income Tax Calculator",
+      "description": "Estimate freelancer side income tax, self-employment tax, and quarterly payments."
+    },
+    "intermittent-fasting": {
+      "name": "Intermittent Fasting Calculator",
+      "description": "Calculate eating and fasting windows for 16:8, 18:6, 20:4, OMAD, and related protocols."
+    },
+    "creatine-calculator": {
+      "name": "Creatine Calculator",
+      "description": "Estimate creatine monohydrate loading and maintenance doses from body weight and training context."
+    },
+    "vo2-max": {
+      "name": "VO2 Max Calculator",
+      "description": "Estimate maximum oxygen uptake from Cooper test distance or resting heart rate assumptions."
+    },
+    "biological-age": {
+      "name": "Biological Age Calculator",
+      "description": "Estimate biological age from BMI, blood pressure, exercise, sleep, and lifestyle factors."
+    },
+    "glycemic-load": {
+      "name": "Glycemic Load Calculator",
+      "description": "Calculate glycemic load from a food's glycemic index, carbohydrate content, and serving size."
+    },
+    "30-30-30-method": {
+      "name": "30-30-30 Morning Method",
+      "description": "Estimate a morning protein target and low-intensity exercise burn for the 30-30-30 routine."
+    },
+    "tip-calculator": {
+      "name": "Tip Calculator",
+      "description": "Calculate tip amount, total bill, and per-person split for restaurants, delivery, and group outings."
+    },
+    "bill-split-calculator": {
+      "name": "Bill Split Calculator",
+      "description": "Split group bills equally or by item with tips, taxes, and per-person breakdowns."
+    },
+    "unit-converter": {
+      "name": "Unit Converter",
+      "description": "Convert length, weight, temperature, area, volume, speed, and data storage units."
+    },
+    "hourly-to-salary": {
+      "name": "Hourly to Salary Calculator",
+      "description": "Convert hourly wage into annual, monthly, and weekly salary with overtime assumptions."
+    },
+    "inflation-calculator": {
+      "name": "Inflation Calculator",
+      "description": "Estimate future purchasing power and cumulative inflation from amount, rate, and years."
+    },
+    "habit-cost": {
+      "name": "Habit Cost Calculator",
+      "description": "Estimate long-term spending and opportunity cost for repeated daily or weekly habits."
+    },
+    "caffeine-calculator": {
+      "name": "Caffeine Safe Limit Calculator",
+      "description": "Calculate daily caffeine allowance from weight, pregnancy status, and common drink intake."
+    },
+    "alcohol-metabolism": {
+      "name": "Alcohol Metabolism Calculator",
+      "description": "Estimate BAC and alcohol metabolism time from drinks, weight, sex context, and drinking duration."
+    },
+    "blood-sugar-calculator": {
+      "name": "Blood Sugar / A1C Calculator",
+      "description": "Convert fasting glucose, A1C, and estimated average glucose with reference risk bands."
+    },
+    "drink-calories": {
+      "name": "Drink Calories Calculator",
+      "description": "Calculate calories and sugar in boba tea, coffee, juice, alcohol, and other beverages."
+    },
+    "fiber-intake": {
+      "name": "Fiber Intake Calculator",
+      "description": "Estimate daily fiber recommendations from weight, age, and sex context with food-source guidance."
+    },
+    "steps-to-calories": {
+      "name": "Steps to Calories Calculator",
+      "description": "Estimate calories burned from steps, weight, walking speed, and stride assumptions."
+    },
+    "currency-converter": {
+      "name": "Currency Converter",
+      "description": "Convert between major currencies with manually entered exchange rates and reference-rate context."
+    },
+    "percentage-calculator": {
+      "name": "Percentage Calculator",
+      "description": "Calculate percentages, percentage increase or decrease, and what percent one number is of another."
+    },
+    "stock-average": {
+      "name": "Stock Average Calculator",
+      "description": "Calculate average cost per share, total cost basis, and breakeven after multiple purchases."
+    },
+    "credit-card-apr": {
+      "name": "Credit Card APR Calculator",
+      "description": "Reveal the true annual percentage rate behind credit card installment monthly fees."
+    },
+    "investment-fee": {
+      "name": "Investment Fee Calculator",
+      "description": "Estimate how annual management fees erode long-term investment returns."
+    },
+    "investment-goal": {
+      "name": "Investment Goal Calculator",
+      "description": "Calculate the monthly investment needed to reach a financial target over time."
+    },
+    "credit-score-simulator": {
+      "name": "Credit Score Simulator",
+      "description": "Simulate how debt payoff, new credit, missed payments, and utilization changes may affect a credit score."
+    },
+    "crypto-tax": {
+      "name": "Crypto Tax Calculator",
+      "description": "Estimate crypto cost basis, realized gains or losses, and unrealized PnL from buy and sell records."
+    },
+    "freelance-rate": {
+      "name": "Freelance Rate Calculator",
+      "description": "Calculate hourly, daily, and project rates from income goals, billable hours, taxes, and operating costs."
+    },
+    "subscription-audit": {
+      "name": "Subscription Audit Calculator",
+      "description": "Track recurring subscriptions, normalize monthly cost, and identify duplicate or unused services."
+    },
+    "savings-challenge": {
+      "name": "Savings Challenge Calculator",
+      "description": "Generate 52-week, envelope, no-spend month, or reverse savings plans for habit building."
+    },
+    "city-cost-comparison": {
+      "name": "City Cost Comparison",
+      "description": "Compare rent, food, transport, income, and surplus between two cities for relocation planning."
+    },
+    "social-insurance-calculator": {
+      "name": "China Social Insurance Calculator",
+      "description": "Calculate employee and employer five-insurance plus housing-fund contributions from pre-tax salary."
+    },
+    "dividend-reinvestment": {
+      "name": "Dividend Reinvestment Calculator",
+      "description": "Estimate DRIP growth, total dividends, tax drag, and reinvestment impact over long holding periods."
+    },
+    "mortgage-refinance-calculator": {
+      "name": "Mortgage Refinance Calculator",
+      "description": "Compare current and new mortgage terms to estimate monthly savings, interest savings, and break-even time."
+    },
+    "coast-fire": {
+      "name": "Coast FIRE Calculator",
+      "description": "Estimate the portfolio needed today to stop saving and coast to a future retirement target."
+    },
+    "sip-calculator": {
+      "name": "Fund SIP Calculator",
+      "description": "Project systematic investment plan growth from monthly investment, expected return, duration, and principal."
+    },
+    "smoke-free": {
+      "name": "Quit Smoking Tracker",
+      "description": "Track smoke-free days, money saved, cigarettes avoided, life extension, and recovery milestones."
+    },
+    "adhd-screener": {
+      "name": "ADHD Adult Screener ASRS-v1.1",
+      "description": "Screen adult ADHD symptoms with the WHO ASRS-v1.1 6-item short form for reference only."
+    },
+    "burnout-assessment": {
+      "name": "Burnout Assessment",
+      "description": "Assess work burnout risk with a 10-item short form based on core MBI and OLBI dimensions."
+    },
+    "gad7-anxiety": {
+      "name": "GAD-7 Anxiety Screening",
+      "description": "Estimate anxiety symptom severity over the last two weeks with the 7-question GAD-7 screener."
+    },
+    "phq9-depression": {
+      "name": "PHQ-9 Depression Screening",
+      "description": "Estimate depression symptom severity over the last two weeks with the 9-question PHQ-9 screener."
+    },
+    "pss10-stress": {
+      "name": "PSS-10 Perceived Stress Scale",
+      "description": "Assess perceived stress over the last month with the 10-question Cohen PSS-10 scale."
+    },
+    "glp1-eligibility": {
+      "name": "GLP-1 Eligibility Check",
+      "description": "Check common BMI and comorbidity criteria for GLP-1 medication discussions with a clinician."
+    },
+    "body-recomposition": {
+      "name": "Body Recomposition Calculator",
+      "description": "Set simultaneous fat-loss and muscle-gain goals with TDEE, calorie target, and macro split estimates."
+    },
+    "glp1-nutrition": {
+      "name": "GLP-1 Nutrition Calculator",
+      "description": "Estimate calorie floor, protein target, fiber goal, and hydration needs while using GLP-1 medication."
+    },
+    "homa-ir": {
+      "name": "HOMA-IR Calculator",
+      "description": "Estimate insulin resistance from fasting glucose and fasting insulin values for reference-only review."
+    },
+    "one-rep-max": {
+      "name": "1RM Calculator",
+      "description": "Estimate one-repetition maximum and percentage-based working sets from lifted weight and reps."
+    },
+    "ovulation-calculator": {
+      "name": "Ovulation Calculator",
+      "description": "Predict ovulation day, fertile window, next period, and cycle milestones from last period date."
+    },
+    "pregnancy-due-date": {
+      "name": "Pregnancy Due Date Calculator",
+      "description": "Estimate due date, gestational week, trimester, and days remaining from last menstrual period."
+    },
+    "running-pace": {
+      "name": "Running Pace Calculator",
+      "description": "Calculate race pace, speed, track splits, and equivalent performance estimates from distance and time."
+    },
+    "testosterone-calculator": {
+      "name": "Testosterone Calculator",
+      "description": "Calculate free and bioavailable testosterone from total testosterone, SHBG, albumin, and gender."
+    },
+    "json-repair": {
+      "name": "JSON Repair",
+      "description": "Fix malformed LLM JSON output, trailing commas, quotes, and arrays."
+    },
+    "prompt-injection-scanner": {
+      "name": "Prompt Injection Scanner",
+      "description": "Scan prompts for jailbreaks, instruction overrides, and hidden payloads."
+    },
+    "llm-cost-calculator": {
+      "name": "LLM Cost Calculator",
+      "description": "Estimate token cost across providers, models, context windows, and traffic."
+    },
+    "mcp-server-builder": {
+      "name": "MCP Server Builder",
+      "description": "Build manifests, tool schemas, prompts, resources, and launch docs."
+    }
+  },
+  "workspace": {
+    "localCalculationModel": "Local calculation model",
+    "localScreeningModel": "Local screening model",
+    "localScheduleModel": "Local schedule model",
+    "local": "Local",
+    "cloud": "Cloud",
+    "aiConsent": "AI consent",
+    "inputSummary": "Input summary",
+    "result": "Result",
+    "progress": "Progress",
+    "reference": "Reference",
+    "category": "Category",
+    "male": "Male",
+    "female": "Female",
+    "yes": "Yes",
+    "no": "No",
+    "saveProfile": "Save profile",
+    "calculate": "Calculate",
+    "exportNote": "Export note",
+    "toolDetails": "Tool details",
+    "saveSnapshot": "Save snapshot",
+    "reset": "Reset",
+    "reviewChecklist": "Review checklist",
+    "healthReferenceNotes": "Health reference notes",
+    "supportNotes": "Support notes",
+    "localFirst": "Local-first",
+    "waitingForCalculation": "Waiting for calculation",
+    "pending": "Pending",
+    "runCalculation": "Run calculation to see results.",
+    "notMedicalAdvice": "Results are references and should not be treated as a diagnosis. Consult a qualified professional."
+  }
+}

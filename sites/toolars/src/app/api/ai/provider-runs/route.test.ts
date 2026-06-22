@@ -11,6 +11,18 @@ import {
 } from "@/lib/auth/toolars-auth-session-ledger";
 import { POST } from "./route";
 
+/**
+ * Build ISO timestamps anchored to the current time so session fixtures never
+ * go stale. Sessions are issued 1 hour ago and expire 1 hour from now.
+ */
+function buildSessionTimestamps() {
+  const now = Date.now();
+  return {
+    issuedAt: new Date(now - 60 * 60 * 1000).toISOString(),
+    expiresAt: new Date(now + 60 * 60 * 1000).toISOString()
+  };
+}
+
 const event = {
   approvedAt: "2026-06-21T10:10:00Z",
   contentSummary: "Only extracted text from the selected workflow step is sent.",
@@ -64,8 +76,7 @@ describe("/api/ai/provider-runs", () => {
     const { cookie, session } = createToolarsAuthSessionCookie({
       accountEmail: "owner@example.com",
       accountId: "acct_ai_owner",
-      expiresAt: "2026-06-21T11:00:00Z",
-      issuedAt: "2026-06-21T10:00:00Z",
+      ...buildSessionTimestamps(),
       secret: "test-session-secret",
       sessionId: "sess_ai_provider"
     });

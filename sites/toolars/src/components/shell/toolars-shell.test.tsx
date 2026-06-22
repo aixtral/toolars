@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { ToolarsShell } from "./toolars-shell";
 
 describe("ToolarsShell", () => {
   it("renders the workspace sidebar for personal workspace pages", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="my-tools" sidebarVariant="workspace">
         <h1>Workspace content</h1>
       </ToolarsShell>
@@ -18,7 +19,7 @@ describe("ToolarsShell", () => {
   });
 
   it("renders the PDF workspace chrome from the high-fidelity desktop design", () => {
-    const { container } = render(
+    const { container } = renderWithIntl(
       <ToolarsShell active="pdf" sidebarVariant="pdf-workspace">
         <h1>PDF workspace content</h1>
       </ToolarsShell>
@@ -34,7 +35,7 @@ describe("ToolarsShell", () => {
   });
 
   it("can render route content without a sidebar", () => {
-    const { container } = render(
+    const { container } = renderWithIntl(
       <ToolarsShell active="explore" sidebarVariant="none">
         <h1>Submit page</h1>
       </ToolarsShell>
@@ -46,7 +47,7 @@ describe("ToolarsShell", () => {
   });
 
   it("opens the sign-in modal from the topbar", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="explore" sidebarVariant="none">
         <h1>Explore content</h1>
       </ToolarsShell>
@@ -59,8 +60,38 @@ describe("ToolarsShell", () => {
     expect(screen.getByRole("link", { name: "Continue with Google" })).toBeInTheDocument();
   });
 
+  it("renders paired Sign in and Sign up buttons in the auth region of the topbar", () => {
+    renderWithIntl(
+      <ToolarsShell active="explore" sidebarVariant="none">
+        <h1>Explore content</h1>
+      </ToolarsShell>
+    );
+
+    const signIn = screen.getByRole("button", { name: "Sign in" });
+    const signUp = screen.getByRole("button", { name: "Sign up" });
+
+    expect(signIn).toBeInTheDocument();
+    expect(signUp).toBeInTheDocument();
+    expect(signIn.closest(".topbar-auth")).toBe(signUp.closest(".topbar-auth"));
+    expect(signUp).toHaveClass("button-solid");
+    expect(signIn).toHaveClass("button-outline");
+  });
+
+  it("opens the sign-up account modal from the topbar Sign up button", () => {
+    renderWithIntl(
+      <ToolarsShell active="explore" sidebarVariant="none">
+        <h1>Explore content</h1>
+      </ToolarsShell>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign up" }));
+
+    expect(screen.getByRole("dialog", { name: "Create your Toolars account" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Continue with Google" })).toBeInTheDocument();
+  });
+
   it("renders free trial sidebar copy instead of paid billing navigation in free trial mode", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="pricing" sidebarVariant="billing">
         <h1>Pricing content</h1>
       </ToolarsShell>
@@ -75,7 +106,7 @@ describe("ToolarsShell", () => {
   });
 
   it("renders the settings sidebar for account settings surfaces", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="settings" sidebarVariant="settings">
         <h1>Settings content</h1>
       </ToolarsShell>
@@ -95,7 +126,7 @@ describe("ToolarsShell", () => {
   });
 
   it("marks the active settings sidebar item when a settings subpage is open", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="settings" sidebarActiveHref="/settings/privacy-ai" sidebarVariant="settings">
         <h1>Privacy settings content</h1>
       </ToolarsShell>
@@ -106,7 +137,7 @@ describe("ToolarsShell", () => {
   });
 
   it("marks new settings subpages as active from their real routes", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="settings" sidebarActiveHref="/settings/security" sidebarVariant="settings">
         <h1>Security settings content</h1>
       </ToolarsShell>
@@ -117,7 +148,7 @@ describe("ToolarsShell", () => {
   });
 
   it("renders the admin review sidebar and admin navigation", () => {
-    render(
+    renderWithIntl(
       <ToolarsShell active="admin" sidebarVariant="admin">
         <h1>Admin content</h1>
       </ToolarsShell>

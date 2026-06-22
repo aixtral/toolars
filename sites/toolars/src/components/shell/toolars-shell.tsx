@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import {
   AlertTriangle,
   Bell,
@@ -48,10 +49,10 @@ type Active = "explore" | "pdf" | "ai-developer" | "workflows" | "collections" |
 type SidebarVariant = "tools" | "workflows" | "collections" | "workspace" | "pdf-workspace" | "billing" | "settings" | "admin" | "none";
 
 const nav = [
-  { label: "Explore", href: "/", key: "explore" },
-  { label: "Workflows", href: "/workflows", key: "workflows" },
-  { label: "Collections", href: "/collections", key: "collections" },
-  { label: "My Tools", href: "/my-tools", key: "my-tools" }
+  { labelKey: "nav.explore", label: "Explore", href: "/", key: "explore" },
+  { labelKey: "nav.workflows", label: "Workflows", href: "/workflows", key: "workflows" },
+  { labelKey: "nav.collections", label: "Collections", href: "/collections", key: "collections" },
+  { labelKey: "nav.myTools", label: "My Tools", href: "/my-tools", key: "my-tools" }
 ];
 
 const adminNav = [
@@ -173,7 +174,8 @@ export function ToolarsShell({
   children: React.ReactNode;
 }>) {
   const freeTrialMode = isFreeTrialMode();
-  const visibleNav = active === "admin" ? adminNav : active === "pricing" && !freeTrialMode ? [...nav, { label: "Pricing", href: "/pricing", key: "pricing" }] : nav;
+  const t = useTranslations();
+  const visibleNav = active === "admin" ? adminNav : active === "pricing" && !freeTrialMode ? [...nav, { labelKey: "nav.pricing", label: "Pricing", href: "/pricing", key: "pricing" }] : nav;
   const brandName = active === "admin" ? "Toolars Admin" : "Toolars";
   const sidebarLabel =
     sidebarVariant === "pdf-workspace"
@@ -222,9 +224,14 @@ export function ToolarsShell({
             <button className="button button-outline-neutral" type="button">
               <Share2 size={16} aria-hidden="true" /> Share
             </button>
-            <CoreActionModalButton className="button button-solid" kind="sign-in">
-              Sign in
-            </CoreActionModalButton>
+            <span className="topbar-auth">
+              <CoreActionModalButton className="button button-outline" kind="sign-in">
+                Sign in
+              </CoreActionModalButton>
+              <CoreActionModalButton className="button button-solid" kind="sign-up">
+                Sign up
+              </CoreActionModalButton>
+            </span>
             <button className="menu-button" type="button">
               Menu
             </button>
@@ -240,25 +247,28 @@ export function ToolarsShell({
                 href={item.href}
                 key={item.key}
               >
-                {item.label}
+                {"labelKey" in item && typeof item.labelKey === "string" ? t(item.labelKey) : item.label}
               </a>
             ))}
-            {active === "admin" ? null : (
-              <a className="button button-outline" href="/submit">
-                <Plus size={16} aria-hidden="true" /> Submit tool
-              </a>
-            )}
             {active === "admin" ? (
               <button className="button button-solid" type="button">
-                Admin
+                {t("nav.admin")}
               </button>
             ) : (
-              <CoreActionModalButton className="button button-solid" kind="sign-in">
-                Sign in
-              </CoreActionModalButton>
+              <span className="topbar-auth">
+                <a className="button button-outline" href="/submit">
+                  <Plus size={16} aria-hidden="true" /> {t("nav.submitTool")}
+                </a>
+                <CoreActionModalButton className="button button-outline" kind="sign-in">
+                  {t("nav.signIn")}
+                </CoreActionModalButton>
+                <CoreActionModalButton className="button button-solid" kind="sign-up">
+                  {t("nav.signUp")}
+                </CoreActionModalButton>
+              </span>
             )}
             <button className="menu-button" type="button">
-              Menu
+              {t("common.menu")}
             </button>
           </nav>
         )}

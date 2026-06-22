@@ -1,10 +1,11 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { CommandCenter } from "./command-center";
 
 describe("CommandCenter", () => {
   it("opens from the shell trigger and focuses search", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
 
@@ -15,7 +16,7 @@ describe("CommandCenter", () => {
   });
 
   it("opens with the keyboard shortcut and closes with Escape", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     fireEvent.keyDown(document, { key: "k", metaKey: true });
     expect(screen.getByRole("dialog", { name: "Command Center" })).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("CommandCenter", () => {
   });
 
   it("traps Tab focus inside the command dialog", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
 
@@ -43,7 +44,7 @@ describe("CommandCenter", () => {
   });
 
   it("restores focus to the command trigger after closing", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     const trigger = screen.getByRole("button", { name: "Open command search" });
     trigger.focus();
@@ -58,7 +59,7 @@ describe("CommandCenter", () => {
   });
 
   it("routes JSON searches to the JSON Repair tool", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
     fireEvent.change(screen.getByRole("searchbox", { name: "Search tools and workflows" }), {
@@ -71,7 +72,7 @@ describe("CommandCenter", () => {
   });
 
   it("shows an empty state for unmatched tasks", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
     fireEvent.change(screen.getByRole("searchbox", { name: "Search tools and workflows" }), {
@@ -83,7 +84,7 @@ describe("CommandCenter", () => {
   });
 
   it("renders long search results in the scroll region while keeping the footer mounted", () => {
-    render(<CommandCenter />);
+    renderWithIntl(<CommandCenter />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
     fireEvent.change(screen.getByRole("searchbox", { name: "Search tools and workflows" }), {

@@ -1,6 +1,7 @@
 "use client";
 
 import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ArrowDown, ArrowUp, CornerDownLeft, Search, X } from "lucide-react";
 import { searchCommandResults, type CommandResult } from "@/lib/command-search";
 
@@ -17,6 +18,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("commandCenter");
 
   const results = useMemo(() => searchCommandResults(query, { limit: resultLimit }), [query, resultLimit]);
   const groupedResults = useMemo(() => groupResults(results), [results]);
@@ -114,7 +116,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
         onClick={openCommandCenter}
       >
         <Search size={18} aria-hidden="true" />
-        <span>Search tools, tasks, or paste anything...</span>
+        <span>{t("placeholder")}</span>
         <kbd className="kbd">CMD K</kbd>
       </button>
 
@@ -137,7 +139,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
                 aria-label="Search tools and workflows"
                 className="command-input"
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search tools, tasks, or paste anything..."
+                placeholder={t("placeholder")}
                 role="searchbox"
                 value={query}
               />
@@ -180,7 +182,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
                 )
               ) : (
                 <div className="command-empty">
-                  <strong>No matching tools or workflows</strong>
+                  <strong>{t("empty")}</strong>
                   <p>Try a tool name, file type, or task like summarize pdf.</p>
                 </div>
               )}
@@ -211,9 +213,11 @@ function CommandGroup({
   results: CommandResult[];
   setActiveIndex: (index: number) => void;
 }) {
+  const t = useTranslations("commandCenter");
+  const groupKey = `${group.charAt(0).toLowerCase()}${group.slice(1)}` as "tools" | "workflows" | "collections";
   return (
     <section className="command-group">
-      <h2>{group}</h2>
+      <h2>{t(`groups.${groupKey}`)}</h2>
       {items.map((result) => {
         const index = results.findIndex((item) => item.group === result.group && item.slug === result.slug);
         return (

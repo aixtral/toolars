@@ -1,4 +1,5 @@
 import { ArrowRight, Bookmark } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ToolDefinition } from "@/data/registry";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { ToolIcon } from "./tool-icon";
@@ -17,6 +18,9 @@ function pricingLabel(tool: ToolDefinition): string {
 }
 
 export function ToolCard({ tool }: { tool: ToolDefinition }) {
+  const t = useTranslations(`tools.${tool.slug}`);
+  const name = t("name");
+  const description = t("description");
   return (
     <article className="tool-card">
       <div className="tool-card-top">
@@ -24,11 +28,11 @@ export function ToolCard({ tool }: { tool: ToolDefinition }) {
           <ToolIcon tool={tool} />
         </span>
         <div>
-          <h3 className="tool-name">{tool.name}</h3>
-          <p className="tool-description">{tool.description}</p>
+          <h3 className="tool-name">{name}</h3>
+          <p className="tool-description">{description}</p>
         </div>
       </div>
-      <div className="tag-list" aria-label={`${tool.name} tags`}>
+      <div className="tag-list" aria-label={`${name} tags`}>
         {tool.tags.slice(0, 3).map((tag) => (
           <span className="badge" key={tag}>
             {tag}

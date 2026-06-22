@@ -11,6 +11,18 @@ import {
 import { setToolarsBillingDriverForTest } from "@/lib/billing/billing-account";
 import { GET } from "./route";
 
+/**
+ * Build ISO timestamps anchored to the current time so session fixtures never
+ * go stale. Sessions are issued 1 hour ago and expire 1 hour from now.
+ */
+function buildSessionTimestamps() {
+  const now = Date.now();
+  return {
+    issuedAt: new Date(now - 60 * 60 * 1000).toISOString(),
+    expiresAt: new Date(now + 60 * 60 * 1000).toISOString()
+  };
+}
+
 describe("/api/billing/account", () => {
   let tempDirectory: string | null = null;
   const originalEndpoint = process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT;
@@ -94,8 +106,7 @@ describe("/api/billing/account", () => {
     const { cookie, session } = createToolarsAuthSessionCookie({
       accountEmail: "owner@example.com",
       accountId: "acct_session_owner",
-      expiresAt: "2026-06-21T10:30:00Z",
-      issuedAt: "2026-06-21T09:30:00Z",
+      ...buildSessionTimestamps(),
       secret: "test-session-secret",
       sessionId: "sess_billing"
     });
@@ -187,8 +198,7 @@ describe("/api/billing/account", () => {
     const { cookie, session } = createToolarsAuthSessionCookie({
       accountEmail: "owner@example.com",
       accountId: "acct_session_owner",
-      expiresAt: "2026-06-21T10:30:00Z",
-      issuedAt: "2026-06-21T09:30:00Z",
+      ...buildSessionTimestamps(),
       secret: "test-session-secret",
       sessionId: "sess_billing_failure"
     });

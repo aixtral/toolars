@@ -7,6 +7,14 @@ import { DELETE, GET, POST } from "./route";
 import { GET as GET_OBJECT } from "./object/route";
 import { POST as POST_SCAN } from "./scan/route";
 
+/**
+ * Anchor upload timestamps to the current time so signed-object URLs never
+ * go stale between the time the fixture is written and the test asserts.
+ */
+function recentTimestamp() {
+  return new Date().toISOString();
+}
+
 describe("/api/pdf/uploads", () => {
   let tempDirectory: string;
 
@@ -142,7 +150,7 @@ describe("/api/pdf/uploads", () => {
           type: "application/pdf"
         }
       ],
-      uploadedAt: "2026-06-21T10:45:00Z",
+      uploadedAt: recentTimestamp(),
       workspaceId: "toolars_ws_api_object_test"
     });
 
@@ -182,7 +190,7 @@ describe("/api/pdf/uploads", () => {
           type: "application/pdf"
         }
       ],
-      uploadedAt: "2026-06-21T10:55:00Z",
+      uploadedAt: recentTimestamp(),
       workspaceId: "toolars_ws_api_object_audit_test"
     });
 

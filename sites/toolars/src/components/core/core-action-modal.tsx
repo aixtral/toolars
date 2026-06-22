@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { CheckCircle2, Copy, LockKeyhole, Sparkles } from "lucide-react";
 import { getOrCreateWorkspaceIdentity } from "@/lib/workspace/workspace-identity";
 
-type CoreModalKind = "share" | "save-collection" | "sign-in" | "upgrade";
+type CoreModalKind = "share" | "save-collection" | "sign-in" | "sign-up" | "upgrade";
 
 const activeCoreModalClosers = new Map<string, () => void>();
 
@@ -31,13 +32,14 @@ export function CoreActionModalButton({
   planPrice,
   planFeatures = []
 }: CoreActionModalButtonProps) {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const instanceId = useId();
   const titleId = `${instanceId}-title`;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
-  const title = modalTitle(kind, shareTitle);
+  const title = kind === "share" && shareTitle ? shareTitle : t(modalTitleKey(kind));
 
   const close = useCallback((options: { restoreFocus?: boolean } = {}) => {
     setOpen(false);
@@ -134,25 +136,25 @@ export function CoreActionModalButton({
             tabIndex={-1}
           >
             <div className="core-modal-head">
-              <span className="eyebrow">{modalEyebrow(kind)}</span>
+              <span className="eyebrow">{t(modalEyebrowKey(kind))}</span>
               <h2 id={titleId}>{title}</h2>
-              <p>{modalDescription(kind)}</p>
+              <p>{t(modalDescriptionKey(kind))}</p>
             </div>
 
             {kind === "share" ? (
               <div className="core-modal-body">
                 {itemName ? <strong className="core-modal-subject">{itemName}</strong> : null}
                 <label className="core-modal-field">
-                  <span>Public link</span>
+                  <span>{t("modal.share.fieldLabel")}</span>
                   <input readOnly value={sharePath ?? ""} />
                 </label>
                 <div className="core-modal-action-row">
                   <button className="button button-solid" type="button" onClick={copyShareLink}>
-                    <Copy size={15} aria-hidden="true" /> Copy link
+                    <Copy size={15} aria-hidden="true" /> {t("modal.share.copyLink")}
                   </button>
                   {sharePath ? (
                     <a className="button button-outline-neutral" href={sharePath}>
-                      Open page
+                      {t("modal.share.openPage")}
                     </a>
                   ) : null}
                 </div>
@@ -166,20 +168,20 @@ export function CoreActionModalButton({
                   <label>
                     <input defaultChecked name="save-destination" type="radio" />
                     <span>
-                      <strong>Personal workspace</strong>
-                      <small>Save for your own pinned tools and workflows.</small>
+                      <strong>{t("modal.saveCollection.personal")}</strong>
+                      <small>{t("modal.saveCollection.personalDescription")}</small>
                     </span>
                   </label>
                   <label>
                     <input name="save-destination" type="radio" />
                     <span>
-                      <strong>Team workspace</strong>
-                      <small>Prepare the collection for shared review.</small>
+                      <strong>{t("modal.saveCollection.team")}</strong>
+                      <small>{t("modal.saveCollection.teamDescription")}</small>
                     </span>
                   </label>
                 </div>
                 <button className="button button-solid" type="button" onClick={saveCollection}>
-                  <CheckCircle2 size={15} aria-hidden="true" /> Save collection
+                  <CheckCircle2 size={15} aria-hidden="true" /> {t("modal.saveCollection.save")}
                 </button>
               </div>
             ) : null}
@@ -188,21 +190,46 @@ export function CoreActionModalButton({
               <div className="core-modal-body">
                 <div className="core-modal-option-list">
                   <a
-                    aria-label="Continue with Google"
+                    aria-label={t("auth.signIn.google")}
                     className="core-modal-auth-option"
                     href={buildGoogleSignInHref()}
                   >
                     <LockKeyhole size={16} aria-hidden="true" />
                     <span>
-                      <strong>Continue with Google</strong>
-                      <small>Start a free trial workspace with your Google account.</small>
+                      <strong>{t("auth.signIn.google")}</strong>
+                      <small>{t("auth.signIn.googleDescription")}</small>
                     </span>
                   </a>
-                  <div className="core-modal-auth-option" aria-label="Free trial account">
+                  <div className="core-modal-auth-option" aria-label={t("auth.signIn.freeTrial")}>
                     <Sparkles size={16} aria-hidden="true" />
                     <span>
-                      <strong>Free trial mode</strong>
-                      <small>No card is required during the beta.</small>
+                      <strong>{t("auth.signIn.freeTrial")}</strong>
+                      <small>{t("auth.signIn.freeTrialDescription")}</small>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {kind === "sign-up" ? (
+              <div className="core-modal-body">
+                <div className="core-modal-option-list">
+                  <a
+                    aria-label={t("auth.signUp.google")}
+                    className="core-modal-auth-option"
+                    href={buildGoogleSignInHref()}
+                  >
+                    <LockKeyhole size={16} aria-hidden="true" />
+                    <span>
+                      <strong>{t("auth.signUp.google")}</strong>
+                      <small>{t("auth.signUp.googleDescription")}</small>
+                    </span>
+                  </a>
+                  <div className="core-modal-auth-option" aria-label={t("auth.signUp.freeTrial")}>
+                    <Sparkles size={16} aria-hidden="true" />
+                    <span>
+                      <strong>{t("auth.signUp.freeTrial")}</strong>
+                      <small>{t("auth.signUp.freeTrialDescription")}</small>
                     </span>
                   </div>
                 </div>
@@ -211,7 +238,7 @@ export function CoreActionModalButton({
 
             {kind === "upgrade" ? (
               <div className="core-modal-body">
-                <strong className="core-modal-subject">{planName ? `${planName} plan` : "Future plan"}</strong>
+                <strong className="core-modal-subject">{planName ? `${planName} plan` : t("modal.upgrade.futurePlan")}</strong>
                 {planPrice ? <p className="core-modal-price">{planPrice}</p> : null}
                 <ul className="core-modal-feature-list">
                   {planFeatures.slice(0, 5).map((feature) => (
@@ -222,7 +249,7 @@ export function CoreActionModalButton({
                   ))}
                 </ul>
                 <button className="button button-solid" type="button" onClick={startUpgrade}>
-                  Start upgrade
+                  {t("modal.upgrade.start")}
                 </button>
               </div>
             ) : null}
@@ -230,7 +257,7 @@ export function CoreActionModalButton({
             <footer className="core-modal-footer">
               {status ? <span role="status">{status}</span> : <span />}
               <button className="button button-outline-neutral" type="button" onClick={() => close()}>
-                Close
+                {t("modal.close")}
               </button>
             </footer>
           </section>
@@ -240,25 +267,27 @@ export function CoreActionModalButton({
   );
 }
 
-function modalTitle(kind: CoreModalKind, shareTitle?: string): string {
-  if (kind === "share") return shareTitle ?? "Share this tool";
-  if (kind === "save-collection") return "Save collection";
-  if (kind === "sign-in") return "Sign in to Toolars";
-  return "Upgrade workspace";
+function modalTitleKey(kind: CoreModalKind): string {
+  if (kind === "share") return "modal.share.title";
+  if (kind === "save-collection") return "modal.saveCollection.title";
+  if (kind === "sign-in") return "auth.signIn.title";
+  if (kind === "sign-up") return "auth.signUp.title";
+  return "modal.upgrade.title";
 }
 
-function modalEyebrow(kind: CoreModalKind): string {
-  if (kind === "share") return "Public link";
-  if (kind === "save-collection") return "Workspace";
-  if (kind === "sign-in") return "Account";
-  return "Plan upgrade";
+function modalEyebrowKey(kind: CoreModalKind): string {
+  if (kind === "share") return "modal.share.eyebrow";
+  if (kind === "save-collection") return "modal.saveCollection.eyebrow";
+  if (kind === "sign-in" || kind === "sign-up") return "auth.signIn.eyebrow";
+  return "modal.upgrade.eyebrow";
 }
 
-function modalDescription(kind: CoreModalKind): string {
-  if (kind === "share") return "Copy a stable Toolars link for this public surface.";
-  if (kind === "save-collection") return "Choose where this collection should appear in your workspace.";
-  if (kind === "sign-in") return "Use Google to keep trial history, saved collections, and account settings in sync.";
-  return "Review future plan benefits. Paid upgrades are parked while the beta trial is active.";
+function modalDescriptionKey(kind: CoreModalKind): string {
+  if (kind === "share") return "modal.share.description";
+  if (kind === "save-collection") return "modal.saveCollection.description";
+  if (kind === "sign-in") return "auth.signIn.description";
+  if (kind === "sign-up") return "auth.signUp.description";
+  return "modal.upgrade.description";
 }
 
 function buildGoogleSignInHref() {

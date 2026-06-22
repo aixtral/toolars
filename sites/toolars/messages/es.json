@@ -763,23 +763,324 @@
     },
     "adhd-screener": {
       "name": "ADHD Adult Screener ASRS-v1.1",
-      "description": "Evalúa los síntomas de TDAH en adultos con una lista de autoinforme."
+      "description": "Evalúa los síntomas de TDAH en adultos con una lista de autoinforme.",
+      "outcome": {
+        "negative": {
+          "label": "Cribado negativo",
+          "guidance": "Tu cribado ASRS no sugiere síntomas significativos de TDAH en este modelo breve de cribado."
+        },
+        "borderline": {
+          "label": "Límite / incierto",
+          "guidance": "Tu cribado ASRS está por debajo del umbral positivo pero muestra algunos síntomas. Considera consejo profesional si los síntomas afectan la vida diaria."
+        },
+        "positive": {
+          "label": "Cribado positivo",
+          "guidance": "Tu cribado ASRS sugiere que los síntomas de TDAH pueden ser significativos. Considera una evaluación profesional con un clínico cualificado."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Dificultad para terminar los detalles finales de un proyecto",
+          "description": "Durante los últimos 6 meses"
+        },
+        "1": {
+          "label": "Dificultad para poner en orden las cosas que hay que hacer",
+          "description": "Durante los últimos 6 meses"
+        },
+        "2": {
+          "label": "Problemas para recordar citas u obligaciones",
+          "description": "Durante los últimos 6 meses"
+        },
+        "3": {
+          "label": "Evitar o retrasar tareas que requieren pensar",
+          "description": "Durante los últimos 6 meses"
+        },
+        "4": {
+          "label": "Inquietud cuando hay que estar sentado mucho tiempo",
+          "description": "Durante los últimos 6 meses"
+        },
+        "5": {
+          "label": "Sentirse hiperactivo como impulsado por un motor",
+          "description": "Durante los últimos 6 meses"
+        }
+      },
+      "answerLabels": {
+        "0": "Nunca",
+        "1": "Rara vez",
+        "2": "A veces",
+        "3": "A menudo",
+        "4": "Muy a menudo"
+      }
     },
     "burnout-assessment": {
       "name": "Burnout Assessment",
-      "description": "Evalúa el riesgo de burnout en agotamiento y desconexión."
+      "description": "Evalúa el riesgo de burnout en agotamiento y desconexión.",
+      "severity": {
+        "none": {
+          "label": "Sin burnout significativo",
+          "guidance": "Tu puntuación no sugiere un burnout significativo en este modelo breve de cribado. Sigue protegiendo el descanso y el equilibrio entre trabajo y vida personal."
+        },
+        "mild": {
+          "label": "Burnout leve",
+          "guidance": "Tu puntuación sugiere signos tempranos de burnout. Revisa las fuentes de estrés, el descanso, los límites y las rutinas de recuperación."
+        },
+        "moderate": {
+          "label": "Burnout moderado",
+          "guidance": "Tu puntuación sugiere un riesgo de burnout notable. Habla pronto sobre la carga de trabajo, la recuperación y las opciones de apoyo."
+        },
+        "severe": {
+          "label": "Burnout grave",
+          "guidance": "Tu puntuación sugiere un alto riesgo de burnout. Considera apoyo profesional, cambios en la carga de trabajo y planificación de recuperación a corto plazo."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Sentirse físicamente agotado",
+          "description": "Durante el último mes"
+        },
+        "1": {
+          "label": "Dificultad para concentrarse o sensación de lentitud mental",
+          "description": "Durante el último mes"
+        },
+        "2": {
+          "label": "Perdida el entusiasmo y el interés por el trabajo",
+          "description": "Durante el último mes"
+        },
+        "3": {
+          "label": "Sentirse frío o cínico hacia el trabajo",
+          "description": "Durante el último mes"
+        },
+        "4": {
+          "label": "Sentirse agotado al final de cada jornada laboral",
+          "description": "Durante el último mes"
+        },
+        "5": {
+          "label": "Sentirse cansado incluso tras una noche completa de sueño",
+          "description": "Durante el último mes"
+        },
+        "6": {
+          "label": "Ya no sentirse orgulloso ni satisfecho con los resultados del trabajo",
+          "description": "Dimensión de desapego"
+        },
+        "7": {
+          "label": "Sentirse emocionalmente agotado por la presión laboral",
+          "description": "Dimensión de desapego"
+        },
+        "8": {
+          "label": "Las exigencias laborales parecen superar lo que puedes manejar",
+          "description": "Dimensión de desapego"
+        },
+        "9": {
+          "label": "Cuestionar el sentido y el valor de tu trabajo",
+          "description": "Dimensión de desapego"
+        }
+      },
+      "answerLabels": {
+        "0": "Nunca",
+        "1": "Rara vez",
+        "2": "A veces",
+        "3": "A menudo",
+        "4": "Muy a menudo"
+      }
     },
     "gad7-anxiety": {
       "name": "GAD-7 Anxiety Screening",
-      "description": "Evalúa la gravedad de la ansiedad con el cuestionario GAD-7."
+      "description": "Evalúa la gravedad de la ansiedad con el cuestionario GAD-7.",
+      "severity": {
+        "minimal": {
+          "label": "Ansiedad mínima",
+          "guidance": "Tu puntuación no sugiere síntomas evidentes de ansiedad en este modelo de cribado. Sigue vigilando el sueño, el estrés y el funcionamiento diario."
+        },
+        "mild": {
+          "label": "Ansiedad leve",
+          "guidance": "Tu puntuación sugiere posibles síntomas leves de ansiedad. Identifica los factores de estrés y prueba rutinas de relajación o de apoyo."
+        },
+        "moderate": {
+          "label": "Ansiedad moderada",
+          "guidance": "Tu puntuación sugiere posibles síntomas moderados de ansiedad. Considera reservar una cita con un consejero, médico o profesional sanitario cualificado."
+        },
+        "severe": {
+          "label": "Ansiedad grave",
+          "guidance": "Tu puntuación sugiere posibles síntomas graves de ansiedad. Busca ayuda médica profesional con prontitud."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Sentirse nervioso, ansioso o con los nervios de punta",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "1": {
+          "label": "No poder dejar de preocuparse o controlar la preocupación",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "2": {
+          "label": "Preocuparse demasiado por diferentes cosas",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "3": {
+          "label": "Dificultad para relajarse",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "4": {
+          "label": "Estar tan inquieto que es difícil quedarse quieto",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "5": {
+          "label": "Irritarse o molestarse fácilmente",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "6": {
+          "label": "Sentir miedo como si fuera a suceder algo terrible",
+          "description": "Durante las últimas 2 semanas"
+        }
+      },
+      "answerLabels": {
+        "0": "En absoluto",
+        "1": "Varios días",
+        "2": "Más de la mitad de los días",
+        "3": "Casi todos los días"
+      }
     },
     "phq9-depression": {
       "name": "PHQ-9 Depression Screening",
-      "description": "Evalúa la gravedad de la depresión con el cuestionario PHQ-9."
+      "description": "Evalúa la gravedad de la depresión con el cuestionario PHQ-9.",
+      "severity": {
+        "minimal": {
+          "label": "Depresión mínima",
+          "guidance": "Tu puntuación no sugiere síntomas evidentes de depresión en este modelo de cribado. Sigue vigilando el sueño, el estado de ánimo y el funcionamiento diario."
+        },
+        "mild": {
+          "label": "Depresión leve",
+          "guidance": "Tu puntuación sugiere posibles síntomas leves de depresión. Identifica los cambios de ánimo y considera rutinas de apoyo o hablar con un profesional."
+        },
+        "moderate": {
+          "label": "Depresión moderada",
+          "guidance": "Tu puntuación sugiere posibles síntomas moderados de depresión. Considera reservar una cita con un consejero, médico o profesional sanitario cualificado."
+        },
+        "moderately-severe": {
+          "label": "Depresión moderada-grave",
+          "guidance": "Tu puntuación sugiere posibles síntomas de depresión moderada-grave. Busca ayuda médica profesional con prontitud."
+        },
+        "severe": {
+          "label": "Depresión grave",
+          "guidance": "Tu puntuación sugiere posibles síntomas graves de depresión. Contacta con un psiquiatra, médico o servicio de emergencia con prontitud."
+        }
+      },
+      "crisisNote": {
+        "flagged": "La pregunta 9 no es cero. Trátalo como urgente y contacta con emergencias, crisis o apoyo clínico cualificado ahora mismo.",
+        "clear": "Sin indicador de autolesión en la pregunta 9 en este cribado local."
+      },
+      "questions": {
+        "0": {
+          "label": "Poco interés o placer en hacer cosas",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "1": {
+          "label": "Sentirse desanimado, deprimido o sin esperanza",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "2": {
+          "label": "Dificultad para dormirse o para mantener el sueño, o dormir demasiado",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "3": {
+          "label": "Sentirse cansado o con poca energía",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "4": {
+          "label": "Poco apetito o comer en exceso",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "5": {
+          "label": "Sentirse mal consigo mismo o que es un fracasado",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "6": {
+          "label": "Dificultad para concentrarse en las cosas",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "7": {
+          "label": "Moverse o hablar despacio, o estar inquieto o agitado",
+          "description": "Durante las últimas 2 semanas"
+        },
+        "8": {
+          "label": "Pensamientos de que estaría mejor muerto o de hacerse daño",
+          "description": "Indicador de seguridad pregunta 9"
+        }
+      },
+      "answerLabels": {
+        "0": "En absoluto",
+        "1": "Varios días",
+        "2": "Más de la mitad de los días",
+        "3": "Casi todos los días"
+      }
     },
     "pss10-stress": {
       "name": "PSS-10 Perceived Stress Scale",
-      "description": "Mide el estrés percibido con la escala PSS-10."
+      "description": "Mide el estrés percibido con la escala PSS-10.",
+      "severity": {
+        "low": {
+          "label": "Estrés bajo",
+          "guidance": "Tu puntuación sugiere un nivel de estrés percibido más bajo. Sigue manteniendo rutinas de descanso, movimiento y recuperación."
+        },
+        "moderate": {
+          "label": "Estrés moderado",
+          "guidance": "Tu puntuación sugiere un estrés percibido moderado. Añade tiempo de recuperación, ejercicio, apoyo social o rutinas estructuradas de manejo del estrés."
+        },
+        "high": {
+          "label": "Estrés alto",
+          "guidance": "Tu puntuación sugiere un estrés percibido alto. Considera medidas activas de manejo del estrés y apoyo profesional cuando el estrés afecta la vida diaria."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Alterado por algo inesperado",
+          "description": "Durante el último mes"
+        },
+        "1": {
+          "label": "Incapaz de controlar las cosas importantes de la vida",
+          "description": "Durante el último mes"
+        },
+        "2": {
+          "label": "Se ha sentido nervioso y estresado",
+          "description": "Durante el último mes"
+        },
+        "3": {
+          "label": "Ha manejado con éxito las pequeñas irritaciones de la vida",
+          "description": "Puntuación inversa"
+        },
+        "4": {
+          "label": "Sintió que las cosas iban por buen camino",
+          "description": "Puntuación inversa"
+        },
+        "5": {
+          "label": "No pudo hacer frente a todas las cosas que tenía que hacer",
+          "description": "Durante el último mes"
+        },
+        "6": {
+          "label": "Pudo controlar las irritaciones de su vida",
+          "description": "Puntuación inversa"
+        },
+        "7": {
+          "label": "Sintió que las dificultades se acumulaban demasiado",
+          "description": "Durante el último mes"
+        },
+        "8": {
+          "label": "Pudo manejar los problemas personales",
+          "description": "Puntuación inversa"
+        },
+        "9": {
+          "label": "Pudo controlar la forma en que emplea su tiempo",
+          "description": "Puntuación inversa"
+        }
+      },
+      "answerLabels": {
+        "0": "Nunca",
+        "1": "Casi nunca",
+        "2": "A veces",
+        "3": "Bastante a menudo",
+        "4": "Muy a menudo"
+      }
     },
     "glp1-eligibility": {
       "name": "GLP-1 Eligibility Check",

@@ -763,23 +763,324 @@
     },
     "adhd-screener": {
       "name": "ADHD Adult Screener ASRS-v1.1",
-      "description": "Screen adult ADHD symptoms with the WHO ASRS-v1.1 6-item short form for reference only."
+      "description": "Screen adult ADHD symptoms with the WHO ASRS-v1.1 6-item short form for reference only.",
+      "outcome": {
+        "negative": {
+          "label": "Screening negative",
+          "guidance": "Your ASRS screen does not suggest significant ADHD symptoms in this short screening model."
+        },
+        "borderline": {
+          "label": "Borderline / uncertain",
+          "guidance": "Your ASRS screen is below the positive threshold but shows some symptoms. Consider professional advice if symptoms impair daily life."
+        },
+        "positive": {
+          "label": "Screening positive",
+          "guidance": "Your ASRS screen suggests ADHD symptoms may be significant. Consider a professional evaluation with a qualified clinician."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Trouble wrapping up final details",
+          "description": "Over the last 6 months"
+        },
+        "1": {
+          "label": "Difficulty getting things in order",
+          "description": "Over the last 6 months"
+        },
+        "2": {
+          "label": "Problems remembering appointments or obligations",
+          "description": "Over the last 6 months"
+        },
+        "3": {
+          "label": "Avoiding or delaying tasks that require thought",
+          "description": "Over the last 6 months"
+        },
+        "4": {
+          "label": "Fidgeting when you must sit for a long time",
+          "description": "Over the last 6 months"
+        },
+        "5": {
+          "label": "Feeling overly active as if driven by a motor",
+          "description": "Over the last 6 months"
+        }
+      },
+      "answerLabels": {
+        "0": "Never",
+        "1": "Rarely",
+        "2": "Sometimes",
+        "3": "Often",
+        "4": "Very often"
+      }
     },
     "burnout-assessment": {
       "name": "Burnout Assessment",
-      "description": "Assess work burnout risk with a 10-item short form based on core MBI and OLBI dimensions."
+      "description": "Assess work burnout risk with a 10-item short form based on core MBI and OLBI dimensions.",
+      "severity": {
+        "none": {
+          "label": "No significant burnout",
+          "guidance": "Your score does not suggest significant burnout in this short screening model. Keep protecting rest and work-life balance."
+        },
+        "mild": {
+          "label": "Mild burnout",
+          "guidance": "Your score suggests early burnout signs. Review stress sources, rest, boundaries, and recovery routines."
+        },
+        "moderate": {
+          "label": "Moderate burnout",
+          "guidance": "Your score suggests a noticeable burnout risk. Discuss workload, recovery, and support options soon."
+        },
+        "severe": {
+          "label": "Severe burnout",
+          "guidance": "Your score suggests a high burnout risk. Consider professional support, workload changes, and short-term recovery planning."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Feeling physically drained and exhausted",
+          "description": "Over the last month"
+        },
+        "1": {
+          "label": "Difficulty concentrating or feeling mentally slowed",
+          "description": "Over the last month"
+        },
+        "2": {
+          "label": "Lost enthusiasm and interest in work",
+          "description": "Over the last month"
+        },
+        "3": {
+          "label": "Feeling cold or cynical toward work",
+          "description": "Over the last month"
+        },
+        "4": {
+          "label": "Feeling exhausted at the end of each workday",
+          "description": "Over the last month"
+        },
+        "5": {
+          "label": "Feeling tired even after a full night of sleep",
+          "description": "Over the last month"
+        },
+        "6": {
+          "label": "No longer feeling proud or satisfied with work outcomes",
+          "description": "Detachment dimension"
+        },
+        "7": {
+          "label": "Feeling emotionally drained by work pressure",
+          "description": "Detachment dimension"
+        },
+        "8": {
+          "label": "Work demands feel beyond what you can handle",
+          "description": "Detachment dimension"
+        },
+        "9": {
+          "label": "Questioning the meaning and value of your work",
+          "description": "Detachment dimension"
+        }
+      },
+      "answerLabels": {
+        "0": "Never",
+        "1": "Rarely",
+        "2": "Sometimes",
+        "3": "Often",
+        "4": "Very often"
+      }
     },
     "gad7-anxiety": {
       "name": "GAD-7 Anxiety Screening",
-      "description": "Estimate anxiety symptom severity over the last two weeks with the 7-question GAD-7 screener."
+      "description": "Estimate anxiety symptom severity over the last two weeks with the 7-question GAD-7 screener.",
+      "severity": {
+        "minimal": {
+          "label": "Minimal anxiety",
+          "guidance": "Your score suggests no obvious anxiety symptoms in this screening model. Keep watching sleep, stress, and daily functioning."
+        },
+        "mild": {
+          "label": "Mild anxiety",
+          "guidance": "Your score suggests possible mild anxiety symptoms. Notice stressors and try relaxation or support routines."
+        },
+        "moderate": {
+          "label": "Moderate anxiety",
+          "guidance": "Your score suggests possible moderate anxiety symptoms. Consider booking a counselor, doctor, or qualified clinician."
+        },
+        "severe": {
+          "label": "Severe anxiety",
+          "guidance": "Your score suggests possible severe anxiety symptoms. Please seek professional medical help promptly."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Feeling nervous, anxious, or on edge",
+          "description": "Over the last 2 weeks"
+        },
+        "1": {
+          "label": "Not being able to stop or control worrying",
+          "description": "Over the last 2 weeks"
+        },
+        "2": {
+          "label": "Worrying too much about different things",
+          "description": "Over the last 2 weeks"
+        },
+        "3": {
+          "label": "Trouble relaxing",
+          "description": "Over the last 2 weeks"
+        },
+        "4": {
+          "label": "Being so restless that it is hard to sit still",
+          "description": "Over the last 2 weeks"
+        },
+        "5": {
+          "label": "Becoming easily annoyed or irritable",
+          "description": "Over the last 2 weeks"
+        },
+        "6": {
+          "label": "Feeling afraid as if something awful might happen",
+          "description": "Over the last 2 weeks"
+        }
+      },
+      "answerLabels": {
+        "0": "Not at all",
+        "1": "Several days",
+        "2": "More than half the days",
+        "3": "Nearly every day"
+      }
     },
     "phq9-depression": {
       "name": "PHQ-9 Depression Screening",
-      "description": "Estimate depression symptom severity over the last two weeks with the 9-question PHQ-9 screener."
+      "description": "Estimate depression symptom severity over the last two weeks with the 9-question PHQ-9 screener.",
+      "severity": {
+        "minimal": {
+          "label": "Minimal depression",
+          "guidance": "Your score suggests no obvious depression symptoms in this screening model. Keep watching sleep, mood, and daily functioning."
+        },
+        "mild": {
+          "label": "Mild depression",
+          "guidance": "Your score suggests possible mild depression symptoms. Notice mood changes and consider supportive routines or a clinician conversation."
+        },
+        "moderate": {
+          "label": "Moderate depression",
+          "guidance": "Your score suggests possible moderate depression symptoms. Consider booking a counselor, doctor, or qualified clinician."
+        },
+        "moderately-severe": {
+          "label": "Moderately severe depression",
+          "guidance": "Your score suggests possible moderately severe depression symptoms. Please seek professional medical help promptly."
+        },
+        "severe": {
+          "label": "Severe depression",
+          "guidance": "Your score suggests possible severe depression symptoms. Please contact a psychiatrist, doctor, or emergency support promptly."
+        }
+      },
+      "crisisNote": {
+        "flagged": "Item 9 is non-zero. Treat this as urgent and contact emergency, crisis, or qualified clinical support now.",
+        "clear": "No item 9 self-harm flag in this local screening snapshot."
+      },
+      "questions": {
+        "0": {
+          "label": "Little interest or pleasure in doing things",
+          "description": "Over the last 2 weeks"
+        },
+        "1": {
+          "label": "Feeling down, depressed, or hopeless",
+          "description": "Over the last 2 weeks"
+        },
+        "2": {
+          "label": "Trouble falling or staying asleep, or sleeping too much",
+          "description": "Over the last 2 weeks"
+        },
+        "3": {
+          "label": "Feeling tired or having little energy",
+          "description": "Over the last 2 weeks"
+        },
+        "4": {
+          "label": "Poor appetite or overeating",
+          "description": "Over the last 2 weeks"
+        },
+        "5": {
+          "label": "Feeling bad about yourself or that you are a failure",
+          "description": "Over the last 2 weeks"
+        },
+        "6": {
+          "label": "Trouble concentrating on things",
+          "description": "Over the last 2 weeks"
+        },
+        "7": {
+          "label": "Moving or speaking slowly, or being fidgety or restless",
+          "description": "Over the last 2 weeks"
+        },
+        "8": {
+          "label": "Thoughts that you would be better off dead or of hurting yourself",
+          "description": "Item 9 safety flag"
+        }
+      },
+      "answerLabels": {
+        "0": "Not at all",
+        "1": "Several days",
+        "2": "More than half the days",
+        "3": "Nearly every day"
+      }
     },
     "pss10-stress": {
       "name": "PSS-10 Perceived Stress Scale",
-      "description": "Assess perceived stress over the last month with the 10-question Cohen PSS-10 scale."
+      "description": "Assess perceived stress over the last month with the 10-question Cohen PSS-10 scale.",
+      "severity": {
+        "low": {
+          "label": "Low stress",
+          "guidance": "Your score suggests a lower perceived stress level. Keep maintaining rest, movement, and recovery routines."
+        },
+        "moderate": {
+          "label": "Moderate stress",
+          "guidance": "Your score suggests moderate perceived stress. Add recovery time, exercise, social support, or structured stress-management routines."
+        },
+        "high": {
+          "label": "High stress",
+          "guidance": "Your score suggests high perceived stress. Consider active stress-management steps and professional support when stress affects daily life."
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "Upset because of something unexpected",
+          "description": "Over the last month"
+        },
+        "1": {
+          "label": "Unable to control important things in life",
+          "description": "Over the last month"
+        },
+        "2": {
+          "label": "Felt nervous and stressed",
+          "description": "Over the last month"
+        },
+        "3": {
+          "label": "Successfully handled irritating life hassles",
+          "description": "Reverse scored"
+        },
+        "4": {
+          "label": "Felt things were going your way",
+          "description": "Reverse scored"
+        },
+        "5": {
+          "label": "Could not cope with all the things you had to do",
+          "description": "Over the last month"
+        },
+        "6": {
+          "label": "Able to control irritations in your life",
+          "description": "Reverse scored"
+        },
+        "7": {
+          "label": "Felt difficulties were piling up too high",
+          "description": "Over the last month"
+        },
+        "8": {
+          "label": "Able to handle personal problems",
+          "description": "Reverse scored"
+        },
+        "9": {
+          "label": "Able to control the way you spend your time",
+          "description": "Reverse scored"
+        }
+      },
+      "answerLabels": {
+        "0": "Never",
+        "1": "Almost never",
+        "2": "Sometimes",
+        "3": "Fairly often",
+        "4": "Very often"
+      }
     },
     "glp1-eligibility": {
       "name": "GLP-1 Eligibility Check",

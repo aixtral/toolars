@@ -1,12 +1,12 @@
 "use client";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
   calculateGad7Anxiety,
   defaultGad7Answers,
-  gad7AnswerLabels,
-  gad7Questions,
+  gad7AnswerOptions,
   type Gad7Answer,
   type Gad7Result
 } from "@/lib/tools/gad7-anxiety";
@@ -26,6 +26,7 @@ const supportNotes = [
 ];
 
 export function Gad7AnxietyWorkspace() {
+  const t = useTranslations("tools.gad7-anxiety");
   const [answers, setAnswers] = useState<Gad7Answer[]>(() => defaultGad7Answers);
   const [result, setResult] = useState<Gad7Result | null>(null);
 
@@ -79,16 +80,16 @@ export function Gad7AnxietyWorkspace() {
           </div>
 
           <div className="profile-list">
-            {gad7Questions.map((question, index) => (
-              <label className="profile-row gad7-question-row" htmlFor={`gad7-answer-${index}`} key={question.label}>
+            {answers.map((_, index) => (
+              <label className="profile-row gad7-question-row" htmlFor={`gad7-answer-${index}`} key={index}>
                 <span>
-                  <strong>{question.label}</strong>
-                  <small>{question.description}</small>
+                  <strong>{t(`questions.${index}.label`)}</strong>
+                  <small>{t(`questions.${index}.description`)}</small>
                 </span>
-                <select aria-label={question.label} className="input" id={`gad7-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
-                  {(Object.keys(gad7AnswerLabels) as unknown as Gad7Answer[]).map((answer) => (
+                <select aria-label={t(`questions.${index}.label`)} className="input" id={`gad7-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
+                  {gad7AnswerOptions.map((answer) => (
                     <option key={answer} value={answer}>
-                      {gad7AnswerLabels[answer]}
+                      {t(`answerLabels.${answer}`)}
                     </option>
                   ))}
                 </select>
@@ -110,7 +111,7 @@ export function Gad7AnxietyWorkspace() {
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
               <h2>Screening result</h2>
-              <p className="tool-description">{result ? result.summary : "Run scoring to show GAD-7 total and severity band."}</p>
+              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show GAD-7 total and severity band."}</p>
             </div>
             <span className="badge warn">Screening only</span>
           </div>
@@ -121,11 +122,11 @@ export function Gad7AnxietyWorkspace() {
               <span>GAD-7 score</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.severity ?? "--"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
               <span>Severity band</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.supportLevel ?? "--"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
               <span>Support level</span>
             </article>
             <article className="llm-metric">
@@ -137,7 +138,7 @@ export function Gad7AnxietyWorkspace() {
           <div className="llm-plan-callout">
             <Heart size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.guidance ?? "Waiting for score"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.guidance`) : "Waiting for score"}</strong>
               <small>{result ? "Discuss persistent symptoms with a doctor, therapist, or qualified clinician." : "Score answers first to review support guidance."}</small>
             </span>
           </div>

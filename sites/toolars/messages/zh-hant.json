@@ -763,23 +763,324 @@
     },
     "adhd-screener": {
       "name": "ADHD Adult Screener ASRS-v1.1",
-      "description": "用自評量表筛查成人 ADHD 症狀。"
+      "description": "用自評量表筛查成人 ADHD 症狀。",
+      "outcome": {
+        "negative": {
+          "label": "筛查陰性",
+          "guidance": "在此簡短筛查模型中，您的 ASRS 筛查未提示明显的 ADHD 症狀。"
+        },
+        "borderline": {
+          "label": "臨界 / 不確定",
+          "guidance": "您的 ASRS 筛查低于陽性阈值，但存在部分症狀。若症狀影響日常生活，建議寻求專业意見。"
+        },
+        "positive": {
+          "label": "筛查陽性",
+          "guidance": "您的 ASRS 筛查提示 ADHD 症狀可能较明显。建議由有资質的臨床醫師進行專业評估。"
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "难以收尾項目的最後細節",
+          "description": "在過去 6 個月内"
+        },
+        "1": {
+          "label": "难以把要做的事情安排得井井有條",
+          "description": "在過去 6 個月内"
+        },
+        "2": {
+          "label": "記不住預約或義務",
+          "description": "在過去 6 個月内"
+        },
+        "3": {
+          "label": "回避或拖延需要思考的任務",
+          "description": "在過去 6 個月内"
+        },
+        "4": {
+          "label": "必須久坐時手脚动個不停",
+          "description": "在過去 6 個月内"
+        },
+        "5": {
+          "label": "感覺過度活躍，像被馬达驱动一樣",
+          "description": "在過去 6 個月内"
+        }
+      },
+      "answerLabels": {
+        "0": "从不",
+        "1": "很少",
+        "2": "有時",
+        "3": "經常",
+        "4": "很經常"
+      }
     },
     "burnout-assessment": {
       "name": "Burnout Assessment",
-      "description": "從耗竭和疏離兩個維度評估倦怠風險。"
+      "description": "從耗竭和疏離兩個維度評估倦怠風險。",
+      "severity": {
+        "none": {
+          "label": "無明显倦怠",
+          "guidance": "在此簡短筛查模型中，您的得分未提示明显倦怠。请繼續保持休息與工作生活平衡。"
+        },
+        "mild": {
+          "label": "轻度倦怠",
+          "guidance": "您的得分提示早期倦怠迹象。建議檢視壓力来源、休息、邊界與恢復習惯。"
+        },
+        "moderate": {
+          "label": "中度倦怠",
+          "guidance": "您的得分提示明显的倦怠風險。建議盡快討論工作量、恢復和支持選項。"
+        },
+        "severe": {
+          "label": "重度倦怠",
+          "guidance": "您的得分提示高倦怠風險。建議考慮專业支持、调整工作量并制定短期恢復計划。"
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "感到身體被掏空和疲惫",
+          "description": "在過去一個月内"
+        },
+        "1": {
+          "label": "难以集中注意力或感覺思維變慢",
+          "description": "在過去一個月内"
+        },
+        "2": {
+          "label": "对工作失去熱情和興趣",
+          "description": "在過去一個月内"
+        },
+        "3": {
+          "label": "对工作感到冷漠或憤世嫉俗",
+          "description": "在過去一個月内"
+        },
+        "4": {
+          "label": "每個工作日结束時都感到精疲力竭",
+          "description": "在過去一個月内"
+        },
+        "5": {
+          "label": "即使睡了一整夜仍感到疲倦",
+          "description": "在過去一個月内"
+        },
+        "6": {
+          "label": "不再对工作成果感到自豪或滿意",
+          "description": "疏離維度"
+        },
+        "7": {
+          "label": "因工作壓力而感到情感耗竭",
+          "description": "疏離維度"
+        },
+        "8": {
+          "label": "工作要求感覺超出了你能承受的范圍",
+          "description": "疏離維度"
+        },
+        "9": {
+          "label": "質疑自己工作的意義和價值",
+          "description": "疏離維度"
+        }
+      },
+      "answerLabels": {
+        "0": "从不",
+        "1": "很少",
+        "2": "有時",
+        "3": "經常",
+        "4": "很經常"
+      }
     },
     "gad7-anxiety": {
       "name": "GAD-7 Anxiety Screening",
-      "description": "用 GAD-7 量表評估焦慮嚴重程度。"
+      "description": "用 GAD-7 量表評估焦慮嚴重程度。",
+      "severity": {
+        "minimal": {
+          "label": "極轻度焦慮",
+          "guidance": "在此筛查模型中，您的得分未提示明显的焦慮症狀。请繼續關注睡眠、壓力和日常功能。"
+        },
+        "mild": {
+          "label": "轻度焦慮",
+          "guidance": "您的得分提示可能存在轻度焦慮症狀。请注意壓力源，尝試放松或支持性日常练習。"
+        },
+        "moderate": {
+          "label": "中度焦慮",
+          "guidance": "您的得分提示可能存在中度焦慮症狀。建議預約心理咨詢師、醫生或有资質的臨床醫師。"
+        },
+        "severe": {
+          "label": "重度焦慮",
+          "guidance": "您的得分提示可能存在重度焦慮症狀。请盡快寻求專业醫療幫助。"
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "感到緊張、焦慮或烦躁不安",
+          "description": "在過去 2 周内"
+        },
+        "1": {
+          "label": "無法停止或控制擔憂",
+          "description": "在過去 2 周内"
+        },
+        "2": {
+          "label": "对各種各樣的事情擔憂過多",
+          "description": "在過去 2 周内"
+        },
+        "3": {
+          "label": "难以放松",
+          "description": "在過去 2 周内"
+        },
+        "4": {
+          "label": "烦躁得难以静坐",
+          "description": "在過去 2 周内"
+        },
+        "5": {
+          "label": "容易烦恼或易怒",
+          "description": "在過去 2 周内"
+        },
+        "6": {
+          "label": "感到害怕，好像會有可怕的事情發生",
+          "description": "在過去 2 周内"
+        }
+      },
+      "answerLabels": {
+        "0": "完全没有",
+        "1": "有几天",
+        "2": "一半以上的天数",
+        "3": "几乎每天"
+      }
     },
     "phq9-depression": {
       "name": "PHQ-9 Depression Screening",
-      "description": "用 PHQ-9 量表評估抑郁嚴重程度。"
+      "description": "用 PHQ-9 量表評估抑郁嚴重程度。",
+      "severity": {
+        "minimal": {
+          "label": "極轻度抑郁",
+          "guidance": "在此筛查模型中，您的得分未提示明显的抑郁症狀。请繼續關注睡眠、情绪和日常功能。"
+        },
+        "mild": {
+          "label": "轻度抑郁",
+          "guidance": "您的得分提示可能存在轻度抑郁症狀。请注意情绪變化，考慮支持性日常或與臨床醫師交流。"
+        },
+        "moderate": {
+          "label": "中度抑郁",
+          "guidance": "您的得分提示可能存在中度抑郁症狀。建議預約心理咨詢師、醫生或有资質的臨床醫師。"
+        },
+        "moderately-severe": {
+          "label": "中重度抑郁",
+          "guidance": "您的得分提示可能存在中重度抑郁症狀。请盡快寻求專业醫療幫助。"
+        },
+        "severe": {
+          "label": "重度抑郁",
+          "guidance": "您的得分提示可能存在重度抑郁症狀。请盡快联系精神科醫生、醫生或緊急支持服務。"
+        }
+      },
+      "crisisNote": {
+        "flagged": "第 9 题不為零。请按緊急情况處理，立即联系急救、危机干預或有资質的臨床支持。",
+        "clear": "在此本地筛查中，第 9 题未提示自傷風險。"
+      },
+      "questions": {
+        "0": {
+          "label": "做事時缺乏興趣或愉悦感",
+          "description": "在過去 2 周内"
+        },
+        "1": {
+          "label": "感到情绪低落、抑郁或絕望",
+          "description": "在過去 2 周内"
+        },
+        "2": {
+          "label": "入睡或保持睡眠困难，或睡得過多",
+          "description": "在過去 2 周内"
+        },
+        "3": {
+          "label": "感到疲倦或精力不足",
+          "description": "在過去 2 周内"
+        },
+        "4": {
+          "label": "食欲不振或暴飲暴食",
+          "description": "在過去 2 周内"
+        },
+        "5": {
+          "label": "对自己評價很差，或覺得自己是個失败者",
+          "description": "在過去 2 周内"
+        },
+        "6": {
+          "label": "难以集中注意力做事",
+          "description": "在過去 2 周内"
+        },
+        "7": {
+          "label": "动作或說话缓慢，或烦躁不安",
+          "description": "在過去 2 周内"
+        },
+        "8": {
+          "label": "想到自己不如死去或傷害自己",
+          "description": "第 9 题安全標記"
+        }
+      },
+      "answerLabels": {
+        "0": "完全没有",
+        "1": "有几天",
+        "2": "一半以上的天数",
+        "3": "几乎每天"
+      }
     },
     "pss10-stress": {
       "name": "PSS-10 Perceived Stress Scale",
-      "description": "用 PSS-10 量表测量感知壓力。"
+      "description": "用 PSS-10 量表测量感知壓力。",
+      "severity": {
+        "low": {
+          "label": "低壓力",
+          "guidance": "您的得分提示感知壓力水平较低。请繼續保持休息、運动和恢復的日常習惯。"
+        },
+        "moderate": {
+          "label": "中度壓力",
+          "guidance": "您的得分提示中度感知壓力。建議增加恢復時间、運动、社會支持或结構化的壓力管理日常。"
+        },
+        "high": {
+          "label": "高壓力",
+          "guidance": "您的得分提示高感知壓力。当壓力影響日常生活時，建議采取積極的壓力管理措施并寻求專业支持。"
+        }
+      },
+      "questions": {
+        "0": {
+          "label": "因意外發生的事而心烦",
+          "description": "在過去一個月内"
+        },
+        "1": {
+          "label": "無法控制生活中的重要事情",
+          "description": "在過去一個月内"
+        },
+        "2": {
+          "label": "感到緊張和有壓力",
+          "description": "在過去一個月内"
+        },
+        "3": {
+          "label": "成功應对了恼人的生活琐事",
+          "description": "反向計分"
+        },
+        "4": {
+          "label": "感到事情如自己所願",
+          "description": "反向計分"
+        },
+        "5": {
+          "label": "無法應付所有要做的事情",
+          "description": "在過去一個月内"
+        },
+        "6": {
+          "label": "能够控制生活中的烦恼",
+          "description": "反向計分"
+        },
+        "7": {
+          "label": "感到困难堆積如山",
+          "description": "在過去一個月内"
+        },
+        "8": {
+          "label": "能够處理個人問题",
+          "description": "反向計分"
+        },
+        "9": {
+          "label": "能够掌控自己支配時间的方式",
+          "description": "反向計分"
+        }
+      },
+      "answerLabels": {
+        "0": "从不",
+        "1": "几乎从不",
+        "2": "有時",
+        "3": "經常",
+        "4": "很經常"
+      }
     },
     "glp1-eligibility": {
       "name": "GLP-1 Eligibility Check",

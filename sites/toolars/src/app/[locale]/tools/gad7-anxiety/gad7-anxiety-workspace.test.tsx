@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { Gad7AnxietyWorkspace } from "./gad7-anxiety-workspace";
 
@@ -8,7 +9,7 @@ describe("Gad7AnxietyWorkspace", () => {
   });
 
   it("renders the local VitalCalc GAD-7 workspace sections", () => {
-    render(<Gad7AnxietyWorkspace />);
+    renderWithIntl(<Gad7AnxietyWorkspace />);
 
     expect(screen.getByRole("heading", { name: "GAD-7 Anxiety Screening" })).toBeInTheDocument();
     expect(screen.getByText("Screening answers")).toBeInTheDocument();
@@ -19,12 +20,12 @@ describe("Gad7AnxietyWorkspace", () => {
   });
 
   it("scores answers and saves the local GAD-7 snapshot", () => {
-    render(<Gad7AnxietyWorkspace />);
+    renderWithIntl(<Gad7AnxietyWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Score GAD-7" }));
 
-    expect(screen.getByText("7 / 21")).toBeInTheDocument();
-    expect(screen.getByText("Mild anxiety")).toBeInTheDocument();
+    expect(screen.getAllByText("7 / 21").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Mild anxiety").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Screening only").length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole("button", { name: "Save screening snapshot" }));

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { Phq9DepressionWorkspace } from "./phq9-depression-workspace";
 
@@ -8,7 +9,7 @@ describe("Phq9DepressionWorkspace", () => {
   });
 
   it("renders the local VitalCalc PHQ-9 workspace sections", () => {
-    render(<Phq9DepressionWorkspace />);
+    renderWithIntl(<Phq9DepressionWorkspace />);
 
     expect(screen.getByRole("heading", { name: "PHQ-9 Depression Screening" })).toBeInTheDocument();
     expect(screen.getByText("Screening answers")).toBeInTheDocument();
@@ -19,12 +20,12 @@ describe("Phq9DepressionWorkspace", () => {
   });
 
   it("scores answers and saves the local PHQ-9 snapshot", () => {
-    render(<Phq9DepressionWorkspace />);
+    renderWithIntl(<Phq9DepressionWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Score PHQ-9" }));
 
-    expect(screen.getByText("8 / 27")).toBeInTheDocument();
-    expect(screen.getByText("Mild depression")).toBeInTheDocument();
+    expect(screen.getAllByText("8 / 27")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("Mild depression")[0]).toBeInTheDocument();
     expect(screen.getAllByText("Screening only").length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole("button", { name: "Save screening snapshot" }));

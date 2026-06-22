@@ -1,13 +1,12 @@
 "use client";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
   calculatePhq9Depression,
   defaultPhq9Answers,
-  phq9AnswerLabels,
   phq9AnswerOptions,
-  phq9Questions,
   type Phq9Answer,
   type Phq9Result
 } from "@/lib/tools/phq9-depression";
@@ -27,6 +26,7 @@ const supportNotes = [
 ];
 
 export function Phq9DepressionWorkspace() {
+  const t = useTranslations("tools.phq9-depression");
   const [answers, setAnswers] = useState<Phq9Answer[]>(() => defaultPhq9Answers);
   const [result, setResult] = useState<Phq9Result | null>(null);
 
@@ -80,16 +80,16 @@ export function Phq9DepressionWorkspace() {
           </div>
 
           <div className="profile-list">
-            {phq9Questions.map((question, index) => (
-              <label className="profile-row screener-question-row" htmlFor={`phq9-answer-${index}`} key={question.label}>
+            {answers.map((_, index) => (
+              <label className="profile-row screener-question-row" htmlFor={`phq9-answer-${index}`} key={index}>
                 <span>
-                  <strong>{question.label}</strong>
-                  <small>{question.description}</small>
+                  <strong>{t(`questions.${index}.label`)}</strong>
+                  <small>{t(`questions.${index}.description`)}</small>
                 </span>
-                <select aria-label={question.label} className="input" id={`phq9-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
+                <select aria-label={t(`questions.${index}.label`)} className="input" id={`phq9-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
                   {phq9AnswerOptions.map((answer) => (
                     <option key={answer} value={answer}>
-                      {phq9AnswerLabels[answer]}
+                      {t(`answerLabels.${answer}`)}
                     </option>
                   ))}
                 </select>
@@ -111,7 +111,7 @@ export function Phq9DepressionWorkspace() {
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
               <h2>Screening result</h2>
-              <p className="tool-description">{result ? result.summary : "Run scoring to show PHQ-9 total, severity band, and item 9 status."}</p>
+              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show PHQ-9 total, severity band, and item 9 status."}</p>
             </div>
             <span className="badge warn">Screening only</span>
           </div>
@@ -122,7 +122,7 @@ export function Phq9DepressionWorkspace() {
               <span>PHQ-9 score</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.severity ?? "--"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
               <span>Severity band</span>
             </article>
             <article className="llm-metric">
@@ -138,8 +138,8 @@ export function Phq9DepressionWorkspace() {
           <div className="llm-plan-callout">
             <Heart size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.guidance ?? "Waiting for score"}</strong>
-              <small>{result ? result.crisisNote : "Score answers first to review PHQ-9 support guidance."}</small>
+              <strong>{result ? t(`severity.${result.severity}.guidance`) : "Waiting for score"}</strong>
+              <small>{result ? (result.hasSelfHarmRisk ? t("crisisNote.flagged") : t("crisisNote.clear")) : "Score answers first to review PHQ-9 support guidance."}</small>
             </span>
           </div>
         </section>

@@ -1,11 +1,10 @@
 "use client";
 
 import { Brain, Calculator, Save, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
-  adhdAnswerLabels,
   adhdAnswerOptions,
-  adhdQuestions,
   calculateAdhdScreener,
   defaultAdhdScreenerAnswers,
   type AdhdAnswer,
@@ -27,6 +26,7 @@ const supportNotes = [
 ];
 
 export function AdhdScreenerWorkspace() {
+  const t = useTranslations("tools.adhd-screener");
   const [answers, setAnswers] = useState<AdhdAnswer[]>(() => defaultAdhdScreenerAnswers);
   const [result, setResult] = useState<AdhdScreenerResult | null>(null);
 
@@ -80,16 +80,16 @@ export function AdhdScreenerWorkspace() {
           </div>
 
           <div className="profile-list">
-            {adhdQuestions.map((question, index) => (
-              <label className="profile-row screener-question-row" htmlFor={`adhd-answer-${index}`} key={question.label}>
+            {answers.map((_, index) => (
+              <label className="profile-row screener-question-row" htmlFor={`adhd-answer-${index}`} key={index}>
                 <span>
-                  <strong>{question.label}</strong>
-                  <small>{question.description}</small>
+                  <strong>{t(`questions.${index}.label`)}</strong>
+                  <small>{t(`questions.${index}.description`)}</small>
                 </span>
-                <select aria-label={question.label} className="input" id={`adhd-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
+                <select aria-label={t(`questions.${index}.label`)} className="input" id={`adhd-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
                   {adhdAnswerOptions.map((answer) => (
                     <option key={answer} value={answer}>
-                      {adhdAnswerLabels[answer]}
+                      {t(`answerLabels.${answer}`)}
                     </option>
                   ))}
                 </select>
@@ -111,7 +111,7 @@ export function AdhdScreenerWorkspace() {
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
               <h2>Screening result</h2>
-              <p className="tool-description">{result ? result.summary : "Run scoring to show ASRS positive-answer count and dimensional scores."}</p>
+              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show ASRS positive-answer count and dimensional scores."}</p>
             </div>
             <span className="badge warn">Screening only</span>
           </div>
@@ -122,7 +122,7 @@ export function AdhdScreenerWorkspace() {
               <span>Total score</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.outcome ?? "--"}</strong>
+              <strong>{result ? t(`outcome.${result.outcome}.label`) : "--"}</strong>
               <span>Source outcome</span>
             </article>
             <article className="llm-metric">
@@ -149,7 +149,7 @@ export function AdhdScreenerWorkspace() {
           <div className="llm-plan-callout">
             <Brain size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.guidance ?? "Waiting for score"}</strong>
+              <strong>{result ? t(`outcome.${result.outcome}.guidance`) : "Waiting for score"}</strong>
               <small>{result ? "Use this as a screening reference and seek professional evaluation when symptoms impair life." : "Score answers first to review ASRS guidance."}</small>
             </span>
           </div>

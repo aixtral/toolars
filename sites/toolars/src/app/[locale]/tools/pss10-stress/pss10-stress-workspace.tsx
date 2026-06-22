@@ -1,13 +1,12 @@
 "use client";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
   calculatePss10Stress,
   defaultPss10Answers,
-  pss10AnswerLabels,
   pss10AnswerOptions,
-  pss10Questions,
   type Pss10Answer,
   type Pss10Result
 } from "@/lib/tools/pss10-stress";
@@ -27,6 +26,7 @@ const supportNotes = [
 ];
 
 export function Pss10StressWorkspace() {
+  const t = useTranslations("tools.pss10-stress");
   const [answers, setAnswers] = useState<Pss10Answer[]>(() => defaultPss10Answers);
   const [result, setResult] = useState<Pss10Result | null>(null);
 
@@ -80,16 +80,16 @@ export function Pss10StressWorkspace() {
           </div>
 
           <div className="profile-list">
-            {pss10Questions.map((question, index) => (
-              <label className="profile-row screener-question-row" htmlFor={`pss10-answer-${index}`} key={question.label}>
+            {answers.map((_, index) => (
+              <label className="profile-row screener-question-row" htmlFor={`pss10-answer-${index}`} key={index}>
                 <span>
-                  <strong>{question.label}</strong>
-                  <small>{question.description}</small>
+                  <strong>{t(`questions.${index}.label`)}</strong>
+                  <small>{t(`questions.${index}.description`)}</small>
                 </span>
-                <select aria-label={question.label} className="input" id={`pss10-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
+                <select aria-label={t(`questions.${index}.label`)} className="input" id={`pss10-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
                   {pss10AnswerOptions.map((answer) => (
                     <option key={answer} value={answer}>
-                      {pss10AnswerLabels[answer]}
+                      {t(`answerLabels.${answer}`)}
                     </option>
                   ))}
                 </select>
@@ -111,7 +111,7 @@ export function Pss10StressWorkspace() {
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
               <h2>Stress result</h2>
-              <p className="tool-description">{result ? result.summary : "Run scoring to show PSS-10 total and perceived-stress band."}</p>
+              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show PSS-10 total and perceived-stress band."}</p>
             </div>
             <span className="badge warn">Screening only</span>
           </div>
@@ -122,7 +122,7 @@ export function Pss10StressWorkspace() {
               <span>PSS-10 score</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.severity ?? "--"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
               <span>Stress band</span>
             </article>
             <article className="llm-metric">
@@ -138,7 +138,7 @@ export function Pss10StressWorkspace() {
           <div className="llm-plan-callout">
             <Activity size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.guidance ?? "Waiting for score"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.guidance`) : "Waiting for score"}</strong>
               <small>{result ? "Use this as a perceived-stress reference and seek help when stress affects daily functioning." : "Score answers first to review stress guidance."}</small>
             </span>
           </div>

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BurnoutAssessmentWorkspace } from "./burnout-assessment-workspace";
 
@@ -8,7 +9,7 @@ describe("BurnoutAssessmentWorkspace", () => {
   });
 
   it("renders the local VitalCalc burnout workspace sections", () => {
-    render(<BurnoutAssessmentWorkspace />);
+    renderWithIntl(<BurnoutAssessmentWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Burnout Assessment" })).toBeInTheDocument();
     expect(screen.getByText("Work-state answers")).toBeInTheDocument();
@@ -19,12 +20,12 @@ describe("BurnoutAssessmentWorkspace", () => {
   });
 
   it("scores answers and saves the local burnout snapshot", () => {
-    render(<BurnoutAssessmentWorkspace />);
+    renderWithIntl(<BurnoutAssessmentWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Score burnout" }));
 
-    expect(screen.getByText("20 / 40")).toBeInTheDocument();
-    expect(screen.getByText("Mild burnout")).toBeInTheDocument();
+    expect(screen.getAllByText("20 / 40")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("Mild burnout")[0]).toBeInTheDocument();
     expect(screen.getByText("12 / 24")).toBeInTheDocument();
     expect(screen.getByText("8 / 16")).toBeInTheDocument();
 

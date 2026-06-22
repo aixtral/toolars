@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AdhdScreenerWorkspace } from "./adhd-screener-workspace";
 
@@ -8,7 +9,7 @@ describe("AdhdScreenerWorkspace", () => {
   });
 
   it("renders the local VitalCalc ADHD screener workspace sections", () => {
-    render(<AdhdScreenerWorkspace />);
+    renderWithIntl(<AdhdScreenerWorkspace />);
 
     expect(screen.getByRole("heading", { name: "ADHD Adult Screener" })).toBeInTheDocument();
     expect(screen.getByText("ASRS answers")).toBeInTheDocument();
@@ -19,12 +20,12 @@ describe("AdhdScreenerWorkspace", () => {
   });
 
   it("scores answers and saves the local ADHD snapshot", () => {
-    render(<AdhdScreenerWorkspace />);
+    renderWithIntl(<AdhdScreenerWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Score ASRS" }));
 
-    expect(screen.getByText("10 / 24")).toBeInTheDocument();
-    expect(screen.getByText("Screening positive")).toBeInTheDocument();
+    expect(screen.getAllByText("10 / 24")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("Screening positive")[0]).toBeInTheDocument();
     expect(screen.getByText("4 / 6")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Save screener snapshot" }));

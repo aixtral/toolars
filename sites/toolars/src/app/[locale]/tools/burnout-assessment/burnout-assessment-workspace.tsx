@@ -1,11 +1,10 @@
 "use client";
 
 import { Calculator, Flame, Save, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
-  burnoutAnswerLabels,
   burnoutAnswerOptions,
-  burnoutQuestions,
   calculateBurnoutAssessment,
   defaultBurnoutAnswers,
   type BurnoutAnswer,
@@ -27,6 +26,7 @@ const supportNotes = [
 ];
 
 export function BurnoutAssessmentWorkspace() {
+  const t = useTranslations("tools.burnout-assessment");
   const [answers, setAnswers] = useState<BurnoutAnswer[]>(() => defaultBurnoutAnswers);
   const [result, setResult] = useState<BurnoutResult | null>(null);
 
@@ -80,16 +80,16 @@ export function BurnoutAssessmentWorkspace() {
           </div>
 
           <div className="profile-list">
-            {burnoutQuestions.map((question, index) => (
-              <label className="profile-row screener-question-row" htmlFor={`burnout-answer-${index}`} key={question.label}>
+            {answers.map((_, index) => (
+              <label className="profile-row screener-question-row" htmlFor={`burnout-answer-${index}`} key={index}>
                 <span>
-                  <strong>{question.label}</strong>
-                  <small>{question.description}</small>
+                  <strong>{t(`questions.${index}.label`)}</strong>
+                  <small>{t(`questions.${index}.description`)}</small>
                 </span>
-                <select aria-label={question.label} className="input" id={`burnout-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
+                <select aria-label={t(`questions.${index}.label`)} className="input" id={`burnout-answer-${index}`} onChange={(event) => updateAnswer(index, event.target.value)} value={answers[index]}>
                   {burnoutAnswerOptions.map((answer) => (
                     <option key={answer} value={answer}>
-                      {burnoutAnswerLabels[answer]}
+                      {t(`answerLabels.${answer}`)}
                     </option>
                   ))}
                 </select>
@@ -111,7 +111,7 @@ export function BurnoutAssessmentWorkspace() {
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
               <h2>Assessment result</h2>
-              <p className="tool-description">{result ? result.summary : "Run scoring to show burnout total, exhaustion, and detachment scores."}</p>
+              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show burnout total, exhaustion, and detachment scores."}</p>
             </div>
             <span className="badge warn">Screening only</span>
           </div>
@@ -122,7 +122,7 @@ export function BurnoutAssessmentWorkspace() {
               <span>Total score</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.severity ?? "--"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
               <span>Burnout band</span>
             </article>
             <article className="llm-metric">
@@ -138,7 +138,7 @@ export function BurnoutAssessmentWorkspace() {
           <div className="llm-plan-callout">
             <Flame size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.guidance ?? "Waiting for score"}</strong>
+              <strong>{result ? t(`severity.${result.severity}.guidance`) : "Waiting for score"}</strong>
               <small>{result ? "Use this as a work-health screening reference and seek professional help when symptoms persist." : "Score answers first to review burnout guidance."}</small>
             </span>
           </div>

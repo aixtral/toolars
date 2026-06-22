@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { JsonRepairWorkspace } from "./json-repair-workspace";
 
 describe("JsonRepairWorkspace", () => {
   it("renders inside the AI Developer Lab workbench shell", () => {
-    render(<JsonRepairWorkspace />);
+    renderWithIntl(<JsonRepairWorkspace />);
 
     expect(screen.getByTestId("ai-lab-workbench")).toHaveAttribute("data-ai-lab-tool", "json-repair");
     expect(screen.getByText("Run mode")).toBeInTheDocument();
@@ -14,7 +15,7 @@ describe("JsonRepairWorkspace", () => {
   });
 
   it("repairs the sample JSON payload", () => {
-    render(<JsonRepairWorkspace />);
+    renderWithIntl(<JsonRepairWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Repair JSON" }));
 

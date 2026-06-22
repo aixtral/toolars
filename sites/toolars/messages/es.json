@@ -864,5 +864,64 @@
     "pending": "Pendiente",
     "runCalculation": "Ejecuta el cálculo para ver los resultados.",
     "notMedicalAdvice": "Los resultados son referencias y no deben tratarse como un diagnóstico. Consulta a un profesional cualificado."
+  },
+  "toolWorkspace": {
+    "eyebrow": "Espacio de herramienta",
+    "workspaceTitle": "Espacio de {name}",
+    "toolDetails": "Detalles de la herramienta",
+    "openWorkflow": "Abrir flujo recomendado",
+    "processing": {
+      "local": "Local",
+      "cloud": "Nube",
+      "aiConsent": "Consentimiento de IA"
+    },
+    "pricing": {
+      "freeTrial": "Prueba gratuita",
+      "freemium": "Freemium",
+      "paid": "De pago",
+      "free": "Gratis"
+    },
+    "badges": {
+      "sourceBacked": "Respaldado por fuente",
+      "plan": "Plan",
+      "buildReady": "Listo para construir",
+      "now": "Ahora",
+      "next": "Siguiente",
+      "review": "Revisar"
+    },
+    "sections": {
+      "workspacePath": "Ruta del espacio",
+      "sourceHandoff": "Transferencia de fuente",
+      "fullPath": "Ruta completa de calculadora",
+      "relatedTools": "Herramientas relacionadas",
+      "trustBoundary": "Límite de confianza"
+    },
+    "fullPath": {
+      "next": "Promueve fórmulas fuente, entradas, validación, escenarios guardados y estado de exportación a un espacio interactivo dedicado.",
+      "review": "Mantén las advertencias visibles antes de que los usuarios dependan de resultados financieros, de salud, fiscales o de planificación."
+    },
+    "trustBoundaryNote": "Este espacio mantiene el CTA de listado público accesible preservando las etiquetas local-first y AI-consent del detalle fuente."
+  },
+  "aiConsent": {
+    "eyebrow": "Consentimiento de IA",
+    "title": "Revisar consentimiento de IA",
+    "intro": "Aprueba este paso antes de que cualquier contenido salga del espacio local de Toolars para procesamiento del modelo.",
+    "checklist": {
+      "whenSent": "Cuándo se envían datos",
+      "whatSent": "Qué se envía",
+      "deletion": "Eliminación y cancelación",
+      "providerRoute": "Ruta del proveedor"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "approve": "Aprobar consentimiento de IA"
+    }
+  },
+  "aiLab": {
+    "metadata": {
+      "runMode": "Modo de ejecución",
+      "providerRoute": "Ruta del proveedor",
+      "artifactState": "Estado del artefacto"
+    }
   }
 }

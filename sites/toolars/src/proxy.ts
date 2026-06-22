@@ -11,7 +11,15 @@ function detectLocale(acceptLanguage: string | null): string {
     .split(",")
     .map((part) => {
       const [tag, quality] = part.trim().split(";q=");
-      return { tag: tag.split("-")[0].toLowerCase(), quality: quality ? parseFloat(quality) : 1 };
+      const fullTag = tag.toLowerCase();
+      // Map Chinese variants to Simplified/Traditional.
+      const primary = fullTag.split("-")[0];
+      let resolved = primary;
+      if (primary === "zh") {
+        const region = fullTag.split("-")[1];
+        resolved = ["tw", "hk", "mo"].includes(region) ? "zh-hant" : "zh-hans";
+      }
+      return { tag: resolved, quality: quality ? parseFloat(quality) : 1 };
     })
     .sort((a, b) => b.quality - a.quality);
 

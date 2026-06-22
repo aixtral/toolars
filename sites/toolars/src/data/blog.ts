@@ -194,7 +194,7 @@ async function resolveArticlesForLocale(locale: string): Promise<BlogArticle[]> 
     const { articlesEs } = await import("./blog-es");
     return [...articlesEs].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
   }
-  if (locale === "zh") {
+  if (locale === "zh-hans" || locale === "zh-hant") {
     const { articlesZh } = await import("./blog-zh");
     return [...articlesZh].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
   }

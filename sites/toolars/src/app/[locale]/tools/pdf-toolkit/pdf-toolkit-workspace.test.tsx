@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { WORKSPACE_IDENTITY_STORAGE_KEY } from "@/lib/workspace/workspace-identity";
 import { PdfToolkitWorkspace } from "./pdf-toolkit-workspace";
@@ -14,7 +15,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("renders the design-contract sections for the PDF workspace", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     expect(screen.getByRole("heading", { name: "PDF Toolkit" })).toBeInTheDocument();
     expect(screen.getByText("Add & organize PDF files")).toBeInTheDocument();
@@ -33,7 +34,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("requires explicit consent before generating an AI summary", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Summarize" }));
     fireEvent.click(screen.getByRole("button", { name: "Generate summary" }));
@@ -49,7 +50,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("opens an AI consent dialog and restores focus when dismissed", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     const trigger = screen.getByRole("button", { name: "I consent" });
 
@@ -69,7 +70,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("opens a local PDF upload overlay from Add files and restores focus on close", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     const trigger = screen.getByRole("button", { name: "Add files" });
 
@@ -89,7 +90,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("keeps upload guidance separate from AI consent copy", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Add files" }));
 
@@ -106,7 +107,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("queues selected File API PDFs after scan and applies session retention", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Add files" }));
     const fileInput = screen.getByLabelText("Choose PDF files");
@@ -157,7 +158,7 @@ describe("PdfToolkitWorkspace", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Add files" }));
     fireEvent.change(screen.getByLabelText("Choose PDF files"), {
@@ -225,7 +226,7 @@ describe("PdfToolkitWorkspace", () => {
       });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Add files" }));
     fireEvent.change(screen.getByLabelText("Choose PDF files"), {
@@ -243,7 +244,7 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("shows scan rejection and lets users delete uploaded files from the local queue", () => {
-    render(<PdfToolkitWorkspace />);
+    renderWithIntl(<PdfToolkitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Add files" }));
     const fileInput = screen.getByLabelText("Choose PDF files");

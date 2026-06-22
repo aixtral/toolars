@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, type KeyboardEvent as ReactKeyboardEvent, type RefObject } from "react";
+import { useTranslations } from "next-intl";
 import { LockKeyhole, ShieldCheck } from "lucide-react";
 
 interface AiConsentDialogProps {
@@ -24,6 +25,7 @@ export function AiConsentDialog({
   retentionSummary,
   scopeSummary
 }: AiConsentDialogProps) {
+  const t = useTranslations("aiConsent");
   const titleId = useId();
 
   if (!isOpen) return null;
@@ -46,30 +48,30 @@ export function AiConsentDialog({
         tabIndex={-1}
       >
         <div className="core-modal-head">
-          <span className="eyebrow">AI consent</span>
-          <h2 id={titleId}>Review AI consent</h2>
-          <p>Approve this step before any content leaves the local Toolars workspace for model processing.</p>
+          <span className="eyebrow">{t("eyebrow")}</span>
+          <h2 id={titleId}>{t("title")}</h2>
+          <p>{t("intro")}</p>
         </div>
 
         <div className="ai-consent-checklist" aria-label="AI consent details">
           <article>
             <ShieldCheck size={16} aria-hidden="true" />
             <span>
-              <strong>When data is sent</strong>
+              <strong>{t("checklist.whenSent")}</strong>
               <small>{scopeSummary}</small>
             </span>
           </article>
           <article>
             <LockKeyhole size={16} aria-hidden="true" />
             <span>
-              <strong>What is sent</strong>
+              <strong>{t("checklist.whatSent")}</strong>
               <small>{contentSummary}</small>
             </span>
           </article>
           <article>
             <ShieldCheck size={16} aria-hidden="true" />
             <span>
-              <strong>Deletion and cancel</strong>
+              <strong>{t("checklist.deletion")}</strong>
               <small>{retentionSummary}</small>
             </span>
           </article>
@@ -77,7 +79,7 @@ export function AiConsentDialog({
             <article>
               <LockKeyhole size={16} aria-hidden="true" />
               <span>
-                <strong>Provider route</strong>
+                <strong>{t("checklist.providerRoute")}</strong>
                 <small>{providerSummary}</small>
               </span>
             </article>
@@ -86,10 +88,10 @@ export function AiConsentDialog({
 
         <footer className="core-modal-footer">
           <button className="button button-outline-neutral" type="button" onClick={onClose}>
-            Cancel
+            {t("actions.cancel")}
           </button>
           <button className="button button-solid" type="button" onClick={onApprove}>
-            Approve AI consent
+            {t("actions.approve")}
           </button>
         </footer>
       </section>

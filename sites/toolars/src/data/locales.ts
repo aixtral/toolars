@@ -1,4 +1,4 @@
-export type LocaleCode = "en" | "es" | "zh";
+export type LocaleCode = "en" | "es" | "zh-hans" | "zh-hant";
 
 export interface LocaleDefinition {
   code: LocaleCode;
@@ -15,8 +15,9 @@ export interface LocaleDefinition {
 
 /**
  * Supported locales. English is the default (no path prefix). Spanish and
- * Chinese ship as launch locales for the overseas audience. Add locales here
- * and they automatically flow into sitemap alternates and hreflang tags.
+ * Chinese (Simplified + Traditional) ship as launch locales for the overseas
+ * audience. Locale codes are lowercase in URLs (/zh-hans/, /zh-hant/).
+ * hreflang tags use the canonical BCP-47 casing (zh-Hans, zh-Hant).
  */
 export const LOCALES: LocaleDefinition[] = [
   {
@@ -36,10 +37,18 @@ export const LOCALES: LocaleDefinition[] = [
     phase: "launch"
   },
   {
-    code: "zh",
-    label: "中文",
-    englishLabel: "Chinese",
-    hreflang: "zh",
+    code: "zh-hans",
+    label: "简体中文",
+    englishLabel: "Chinese (Simplified)",
+    hreflang: "zh-Hans",
+    default: false,
+    phase: "launch"
+  },
+  {
+    code: "zh-hant",
+    label: "繁體中文",
+    englishLabel: "Chinese (Traditional)",
+    hreflang: "zh-Hant",
     default: false,
     phase: "launch"
   }

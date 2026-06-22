@@ -14,11 +14,12 @@ describe("i18n", () => {
     expect(LOCALES.find((locale) => locale.code === "en")?.default).toBe(true);
   });
 
-  it("ships at least en, es, and zh as launch locales", () => {
+  it("ships at least en, es, zh-Hans, and zh-Hant as launch locales", () => {
     const codes = LOCALES.map((locale) => locale.code);
     expect(codes).toContain("en");
     expect(codes).toContain("es");
-    expect(codes).toContain("zh");
+    expect(codes).toContain("zh-hans");
+    expect(codes).toContain("zh-hant");
   });
 
   it("keeps the default locale path free of a prefix", () => {
@@ -27,7 +28,7 @@ describe("i18n", () => {
 
   it("prefixes non-default locales", () => {
     expect(localizePath("/tools/bmi-calculator", "es")).toBe("/es/tools/bmi-calculator");
-    expect(localizePath("/tools/bmi-calculator", "zh")).toBe("/zh/tools/bmi-calculator");
+    expect(localizePath("/tools/bmi-calculator", "zh-hans")).toBe("/zh-hans/tools/bmi-calculator");
   });
 
   it("normalizes the homepage path for a non-default locale", () => {
@@ -51,7 +52,8 @@ describe("i18n", () => {
 
     expect(hreflangMap.get("en")).toBe("https://toolars.app/tools/bmi-calculator");
     expect(hreflangMap.get("es")).toBe("https://toolars.app/es/tools/bmi-calculator");
-    expect(hreflangMap.get("zh")).toBe("https://toolars.app/zh/tools/bmi-calculator");
+    expect(hreflangMap.get("zh-Hans")).toBe("https://toolars.app/zh-hans/tools/bmi-calculator");
+    expect(hreflangMap.get("zh-Hant")).toBe("https://toolars.app/zh-hant/tools/bmi-calculator");
     expect(hreflangMap.get("x-default")).toBe("https://toolars.app/tools/bmi-calculator");
   });
 });

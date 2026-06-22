@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AI_CONSENT_AUDIT_STORAGE_KEY } from "@/lib/ai/consent-audit-storage";
 import { WORKSPACE_IDENTITY_STORAGE_KEY } from "@/lib/workspace/workspace-identity";
@@ -15,7 +16,7 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("renders the PDF summary workflow builder sections from the design", () => {
-    render(<PdfSummaryWorkflow />);
+    renderWithIntl(<PdfSummaryWorkflow />);
 
     expect(screen.getByRole("heading", { name: "PDF Summary Workflow Builder" })).toBeInTheDocument();
     expect(screen.getByText("Recommended variations")).toBeInTheDocument();
@@ -29,7 +30,7 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("simulates the PDF summary run when the user runs the workflow", () => {
-    render(<PdfSummaryWorkflow />);
+    renderWithIntl(<PdfSummaryWorkflow />);
 
     fireEvent.click(screen.getByRole("button", { name: "Run workflow" }));
 
@@ -40,7 +41,7 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("opens the step-scoped AI consent dialog from Review consent", () => {
-    render(<PdfSummaryWorkflow />);
+    renderWithIntl(<PdfSummaryWorkflow />);
 
     const trigger = screen.getByRole("button", { name: "Review consent" });
 
@@ -58,7 +59,7 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("persists the approved AI provider route in the consent audit log", () => {
-    render(<PdfSummaryWorkflow />);
+    renderWithIntl(<PdfSummaryWorkflow />);
 
     fireEvent.click(screen.getByRole("button", { name: "Review consent" }));
 
@@ -89,7 +90,7 @@ describe("PdfSummaryWorkflow", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<PdfSummaryWorkflow />);
+    renderWithIntl(<PdfSummaryWorkflow />);
 
     fireEvent.click(screen.getByRole("button", { name: "Review consent" }));
     fireEvent.click(screen.getByRole("button", { name: "Approve AI consent" }));
@@ -155,7 +156,7 @@ describe("PdfSummaryWorkflow", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<PdfSummaryWorkflow />);
+    renderWithIntl(<PdfSummaryWorkflow />);
 
     expect(await screen.findByText("Board Pack.pdf")).toBeInTheDocument();
     expect(screen.getByText("Server handoff ready")).toBeInTheDocument();

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { McpServerBuilderWorkspace } from "./mcp-server-builder-workspace";
 
@@ -8,7 +9,7 @@ describe("McpServerBuilderWorkspace", () => {
   });
 
   it("renders the Toolars MCP builder workspace sections", () => {
-    render(<McpServerBuilderWorkspace />);
+    renderWithIntl(<McpServerBuilderWorkspace />);
 
     expect(screen.getByTestId("ai-lab-workbench")).toHaveAttribute("data-ai-lab-tool", "mcp-server-builder");
     expect(screen.getByText("Run mode")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("McpServerBuilderWorkspace", () => {
   });
 
   it("generates the default manifest preview", () => {
-    render(<McpServerBuilderWorkspace />);
+    renderWithIntl(<McpServerBuilderWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Generate manifest" }));
 
@@ -35,7 +36,7 @@ describe("McpServerBuilderWorkspace", () => {
   });
 
   it("updates the manifest when the tool name changes", () => {
-    render(<McpServerBuilderWorkspace />);
+    renderWithIntl(<McpServerBuilderWorkspace />);
 
     fireEvent.change(screen.getByLabelText("Primary tool"), {
       target: { value: "lookup_customer_docs" }
@@ -46,7 +47,7 @@ describe("McpServerBuilderWorkspace", () => {
   });
 
   it("saves the draft locally without changing fields", () => {
-    render(<McpServerBuilderWorkspace />);
+    renderWithIntl(<McpServerBuilderWorkspace />);
 
     fireEvent.change(screen.getByLabelText("Server name"), {
       target: { value: "customer-support-kit" }

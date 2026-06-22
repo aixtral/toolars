@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 
 type AiLabWorkbenchShellProps = {
   artifactState: string;
@@ -15,10 +16,11 @@ export function AiLabWorkbenchShell({
   runMode,
   toolSlug
 }: AiLabWorkbenchShellProps) {
+  const t = useTranslations("aiLab");
   const metadata = [
-    ["Run mode", runMode],
-    ["Provider route", providerRoute],
-    ["Artifact state", artifactState]
+    [t("metadata.runMode"), runMode],
+    [t("metadata.providerRoute"), providerRoute],
+    [t("metadata.artifactState"), artifactState]
   ] as const;
 
   return (

@@ -864,5 +864,64 @@
     "pending": "Pending",
     "runCalculation": "Run calculation to see results.",
     "notMedicalAdvice": "Results are references and should not be treated as a diagnosis. Consult a qualified professional."
+  },
+  "toolWorkspace": {
+    "eyebrow": "Tool workspace",
+    "workspaceTitle": "{name} workspace",
+    "toolDetails": "Tool details",
+    "openWorkflow": "Open recommended workflow",
+    "processing": {
+      "local": "Local",
+      "cloud": "Cloud",
+      "aiConsent": "AI consent"
+    },
+    "pricing": {
+      "freeTrial": "Free trial",
+      "freemium": "Freemium",
+      "paid": "Paid",
+      "free": "Free"
+    },
+    "badges": {
+      "sourceBacked": "Source-backed",
+      "plan": "Plan",
+      "buildReady": "Build-ready",
+      "now": "Now",
+      "next": "Next",
+      "review": "Review"
+    },
+    "sections": {
+      "workspacePath": "Workspace path",
+      "sourceHandoff": "Source handoff",
+      "fullPath": "Full calculator path",
+      "relatedTools": "Related tools",
+      "trustBoundary": "Trust boundary"
+    },
+    "fullPath": {
+      "next": "Promote source formulas, inputs, validation, saved scenarios, and export state into a dedicated interactive workspace.",
+      "review": "Keep caveats visible before users rely on financial, health, tax, or planning outputs."
+    },
+    "trustBoundaryNote": "This workspace keeps the public listing CTA reachable while preserving the local-first and AI-consent labels from the source detail."
+  },
+  "aiConsent": {
+    "eyebrow": "AI consent",
+    "title": "Review AI consent",
+    "intro": "Approve this step before any content leaves the local Toolars workspace for model processing.",
+    "checklist": {
+      "whenSent": "When data is sent",
+      "whatSent": "What is sent",
+      "deletion": "Deletion and cancel",
+      "providerRoute": "Provider route"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "approve": "Approve AI consent"
+    }
+  },
+  "aiLab": {
+    "metadata": {
+      "runMode": "Run mode",
+      "providerRoute": "Provider route",
+      "artifactState": "Artifact state"
+    }
   }
 }

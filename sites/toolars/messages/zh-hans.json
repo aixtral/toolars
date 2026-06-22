@@ -864,5 +864,64 @@
     "pending": "待定",
     "runCalculation": "运行计算以查看结果。",
     "notMedicalAdvice": "结果仅供参考，不应视为诊断。请咨询合格的专业人员。"
+  },
+  "toolWorkspace": {
+    "eyebrow": "工具工作区",
+    "workspaceTitle": "{name} 工作区",
+    "toolDetails": "工具详情",
+    "openWorkflow": "打开推荐工作流",
+    "processing": {
+      "local": "本地",
+      "cloud": "云端",
+      "aiConsent": "AI 同意"
+    },
+    "pricing": {
+      "freeTrial": "免费试用",
+      "freemium": "免费增值",
+      "paid": "付费",
+      "free": "免费"
+    },
+    "badges": {
+      "sourceBacked": "源 backed",
+      "plan": "计划",
+      "buildReady": "构建就绪",
+      "now": "现在",
+      "next": "下一步",
+      "review": "审查"
+    },
+    "sections": {
+      "workspacePath": "工作区路径",
+      "sourceHandoff": "源交接",
+      "fullPath": "完整计算器路径",
+      "relatedTools": "相关工具",
+      "trustBoundary": "信任边界"
+    },
+    "fullPath": {
+      "next": "将源公式、输入、验证、保存场景和导出状态提升到专用的交互式工作区。",
+      "review": "在用户依赖财务、健康、税务或规划输出之前保持注意事项可见。"
+    },
+    "trustBoundaryNote": "此工作区保持公开列表 CTA 可达，同时保留源详情中的本地优先和 AI 同意标签。"
+  },
+  "aiConsent": {
+    "eyebrow": "AI 同意",
+    "title": "审查 AI 同意",
+    "intro": "在任何内容离开本地 Toolars 工作区进行模型处理之前批准此步骤。",
+    "checklist": {
+      "whenSent": "何时发送数据",
+      "whatSent": "发送什么",
+      "deletion": "删除和取消",
+      "providerRoute": "提供商路由"
+    },
+    "actions": {
+      "cancel": "取消",
+      "approve": "批准 AI 同意"
+    }
+  },
+  "aiLab": {
+    "metadata": {
+      "runMode": "运行模式",
+      "providerRoute": "提供商路由",
+      "artifactState": "制品状态"
+    }
   }
 }

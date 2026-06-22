@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { PromptInjectionScannerWorkspace } from "./prompt-injection-scanner-workspace";
 
@@ -8,7 +9,7 @@ describe("PromptInjectionScannerWorkspace", () => {
   });
 
   it("renders the Toolars AI security workspace sections", () => {
-    render(<PromptInjectionScannerWorkspace />);
+    renderWithIntl(<PromptInjectionScannerWorkspace />);
 
     expect(screen.getByTestId("ai-lab-workbench")).toHaveAttribute("data-ai-lab-tool", "prompt-injection-scanner");
     expect(document.querySelector(".prompt-overview-panel")).toHaveAttribute("data-prompt-mobile-density", "title-single-line-v2");
@@ -24,7 +25,7 @@ describe("PromptInjectionScannerWorkspace", () => {
   });
 
   it("scans the sample prompt and shows a critical risk report", () => {
-    render(<PromptInjectionScannerWorkspace />);
+    renderWithIntl(<PromptInjectionScannerWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Scan prompt" }));
 
@@ -35,7 +36,7 @@ describe("PromptInjectionScannerWorkspace", () => {
   });
 
   it("shows a safe local result for ordinary prompts", () => {
-    render(<PromptInjectionScannerWorkspace />);
+    renderWithIntl(<PromptInjectionScannerWorkspace />);
 
     fireEvent.change(screen.getByLabelText("Prompt content"), {
       target: { value: "Summarize this product changelog into three customer-friendly bullets." }
@@ -47,7 +48,7 @@ describe("PromptInjectionScannerWorkspace", () => {
   });
 
   it("saves a draft without replacing the current prompt", () => {
-    render(<PromptInjectionScannerWorkspace />);
+    renderWithIntl(<PromptInjectionScannerWorkspace />);
 
     const textarea = screen.getByLabelText("Prompt content");
     fireEvent.change(textarea, {

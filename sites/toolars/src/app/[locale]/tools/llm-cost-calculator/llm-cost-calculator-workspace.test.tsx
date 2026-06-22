@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { LlmCostCalculatorWorkspace } from "./llm-cost-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("LlmCostCalculatorWorkspace", () => {
   });
 
   it("renders the Toolars LLM cost planning workspace sections", () => {
-    render(<LlmCostCalculatorWorkspace />);
+    renderWithIntl(<LlmCostCalculatorWorkspace />);
 
     expect(screen.getByTestId("ai-lab-workbench")).toHaveAttribute("data-ai-lab-tool", "llm-cost-calculator");
     expect(screen.getByText("Run mode")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("LlmCostCalculatorWorkspace", () => {
   });
 
   it("calculates the default balanced-model estimate", () => {
-    render(<LlmCostCalculatorWorkspace />);
+    renderWithIntl(<LlmCostCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate cost" }));
 
@@ -35,7 +36,7 @@ describe("LlmCostCalculatorWorkspace", () => {
   });
 
   it("updates estimates when the model profile changes", () => {
-    render(<LlmCostCalculatorWorkspace />);
+    renderWithIntl(<LlmCostCalculatorWorkspace />);
 
     fireEvent.change(screen.getByLabelText("Model profile"), {
       target: { value: "small" }
@@ -47,7 +48,7 @@ describe("LlmCostCalculatorWorkspace", () => {
   });
 
   it("saves the usage scenario locally without changing inputs", () => {
-    render(<LlmCostCalculatorWorkspace />);
+    renderWithIntl(<LlmCostCalculatorWorkspace />);
 
     fireEvent.change(screen.getByLabelText("Requests / month"), {
       target: { value: "250000" }

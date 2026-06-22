@@ -1,21 +1,11 @@
 import { ArrowRight, CheckCircle2, CircleHelp, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ProcessingMode, ToolDefinition } from "@/data/registry";
 import type { DetailBadgeTone, ToolDetailDefinition, ToolDetailRow } from "@/data/tool-details";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 
-const processingLabel: Record<ProcessingMode, string> = {
-  local: "Local",
-  cloud: "Cloud",
-  "ai-consent": "AI consent"
-};
-
 function badgeClass(tone?: DetailBadgeTone): string {
   return tone ? `badge ${tone}` : "badge";
-}
-
-function pricingLabel(tool: ToolDefinition): string {
-  if (isFreeTrialMode() && tool.pricing !== "free") return "Free trial";
-  return tool.pricing === "freemium" ? "Freemium" : tool.pricing === "paid" ? "Paid" : "Free";
 }
 
 function initials(label: string): string {
@@ -41,25 +31,35 @@ function DetailRows({ rows }: { rows: ToolDetailRow[] }) {
 }
 
 export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinition }) {
+  const t = useTranslations("toolWorkspace");
   const primaryProcessing = detail.tool.processing[0];
+  const freeTrial = isFreeTrialMode();
+  const pricing = freeTrial && detail.tool.pricing !== "free"
+    ? t("pricing.freeTrial")
+    : detail.tool.pricing === "freemium"
+      ? t("pricing.freemium")
+      : detail.tool.pricing === "paid"
+        ? t("pricing.paid")
+        : t("pricing.free");
+  const procLabel = primaryProcessing === "local" ? t("processing.local") : primaryProcessing === "cloud" ? t("processing.cloud") : t("processing.aiConsent");
 
   return (
     <div className="tool-workspace-shell" data-tool-workspace-shell={detail.tool.slug}>
       <div className="llm-cost-layout tool-workspace-handoff-layout">
         <aside className="workspace-panel llm-cost-overview">
-          <span className="eyebrow">Tool workspace</span>
-          <h1>{detail.tool.name} workspace</h1>
+          <span className="eyebrow">{t("eyebrow")}</span>
+          <h1>{t("workspaceTitle", { name: detail.tool.name })}</h1>
           <p className="subtitle">{detail.overview}</p>
           <div className="badge-row detail-badge-row">
             <span className={badgeClass(detail.listingBadge.tone)}>{detail.listingBadge.badge}</span>
-            <span className="badge">{pricingLabel(detail.tool)}</span>
+            <span className="badge">{pricing}</span>
             <span className={badgeClass(primaryProcessing === "ai-consent" ? "ai" : primaryProcessing === "local" ? "local" : "cloud")}>
-              {processingLabel[primaryProcessing]}
+              {procLabel}
             </span>
           </div>
           <div className="button-row tool-workspace-action-row">
             <a className="button button-solid" href={detail.tool.aboutHref}>
-              Tool details <ArrowRight size={16} aria-hidden="true" />
+              {t("toolDetails")} <ArrowRight size={16} aria-hidden="true" />
             </a>
             {detail.recommendedWorkflow ? (
               <a className="button button-outline-neutral" href={detail.recommendedWorkflow.href}>

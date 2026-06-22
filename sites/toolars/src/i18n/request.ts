@@ -5,9 +5,10 @@ import { isValidLocale, DEFAULT_LOCALE, type LocaleCode } from "@/lib/i18n";
 // build time. Dynamic template-string imports are not supported by Turbopack.
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
-import zh from "../../messages/zh.json";
+import zhHans from "../../messages/zh-hans.json";
+import zhHant from "../../messages/zh-hant.json";
 
-const messageBundles = { en, es, zh } as const;
+const messageBundles = { en, es, "zh-hans": zhHans, "zh-hant": zhHant } as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;
@@ -15,6 +16,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale,
-    messages: messageBundles[locale]
+    messages: messageBundles[locale] ?? messageBundles[DEFAULT_LOCALE] ?? {}
   };
 });

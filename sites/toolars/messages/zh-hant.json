@@ -1,0 +1,927 @@
+{
+  "common": {
+    "brandName": "Toolars",
+    "tagline": "全部工具，一個工作台。",
+    "open": "打開",
+    "readArticle": "閱讀文章",
+    "viewAll": "查看全部",
+    "back": "返回",
+    "cancel": "取消",
+    "save": "保存",
+    "share": "分享",
+    "menu": "菜單"
+  },
+  "nav": {
+    "explore": "探索",
+    "workflows": "工作流",
+    "collections": "集合",
+    "myTools": "我的工具",
+    "submitTool": "提交工具",
+    "signIn": "登錄",
+    "signUp": "注冊",
+    "admin": "管理",
+    "pricing": "定價"
+  },
+  "footer": {
+    "columns": {
+      "tools": "工具",
+      "resources": "資源",
+      "legal": "法律"
+    },
+    "tools": {
+      "pdfTools": "PDF 工具",
+      "aiDeveloperLab": "AI 開發者實驗室",
+      "workflows": "工作流",
+      "collections": "集合",
+      "submitTool": "提交工具"
+    },
+    "resources": {
+      "blog": "博客",
+      "pricing": "定價",
+      "myTools": "我的工具"
+    },
+    "legal": {
+      "privacy": "隱私政策",
+      "terms": "服務條款"
+    },
+    "rights": "保留所有权利。"
+  },
+  "auth": {
+    "signIn": {
+      "title": "登錄 Toolars",
+      "eyebrow": "賬户",
+      "description": "使用 Google 同步試用記錄、已保存的集合和賬户設置。",
+      "google": "使用 Google 繼續",
+      "googleDescription": "用你的 Google 賬號開始一個免費試用工作區。",
+      "freeTrial": "免費試用模式",
+      "freeTrialDescription": "测試期間無需信用卡。"
+    },
+    "signUp": {
+      "title": "創建你的 Toolars 賬户",
+      "eyebrow": "賬户",
+      "description": "用你的 Google 賬號創建一個免費的 Toolars 工作區，同步記錄和已保存的集合。",
+      "google": "使用 Google 繼續",
+      "googleDescription": "用你的 Google 賬號創建一個免費試用工作區。",
+      "freeTrial": "免費試用模式",
+      "freeTrialDescription": "测試期間無需信用卡。"
+    }
+  },
+  "commandCenter": {
+    "placeholder": "搜索工具、任務，或粘貼任何内容...",
+    "groups": {
+      "tools": "工具",
+      "workflows": "工作流",
+      "collections": "集合",
+      "actions": "操作"
+    },
+    "empty": "未找到匹配的工具或工作流",
+    "hint": "搜索",
+    "selectHint": "選择"
+  },
+  "modal": {
+    "close": "關闭",
+    "share": {
+      "eyebrow": "公開链接",
+      "title": "分享此工具",
+      "description": "復制一個穩定的 Toolars 链接用於此公開頁面。",
+      "fieldLabel": "公開链接",
+      "copyLink": "復制链接",
+      "openPage": "打開頁面"
+    },
+    "saveCollection": {
+      "eyebrow": "工作區",
+      "title": "保存集合",
+      "description": "選择此集合應出现在工作區的哪個位置。",
+      "personal": "個人工作區",
+      "personalDescription": "保存到你固定的工具和工作流。",
+      "team": "團隊工作區",
+      "teamDescription": "準備集合以供共享審閱。",
+      "save": "保存集合"
+    },
+    "upgrade": {
+      "eyebrow": "計划升級",
+      "title": "升級工作區",
+      "description": "查看未來計划权益。测試期間付費升級暂停。",
+      "futurePlan": "未來計划",
+      "start": "開始升級"
+    }
+  },
+  "cookie": {
+    "message": "我們使用必要 cookie 保持你的登錄狀態，以及可選的分析 cookie 來了解哪些工具更有用。請參閱我們的<privacyLink>隱私政策</privacyLink>。你可以随時在設置中更改此選择。",
+    "accept": "接受",
+    "reject": "拒絕"
+  },
+  "home": {
+    "heroDesktop": {
+      "title": "探索適合每項任務的工具",
+      "subtitle": "找到合適的工具，更快完成事情，在傳統工具、AI 工具和可重復工作流中構建你的最佳成果。",
+      "inputLabel": "你今天想做什么？",
+      "placeholder": "搜索或描述你的任務..."
+    },
+    "heroMobile": {
+      "title": "你想做什么？",
+      "subtitle": "幾秒内找到合適的工具、AI 或工作流。",
+      "placeholder": "搜索或描述你的任務..."
+    },
+    "chips": {
+      "traditionalTools": "傳統工具",
+      "aiTools": "AI 工具",
+      "workflows": "工作流",
+      "localFirst": "本地優先"
+    },
+    "sections": {
+      "toolarsPicks": "Toolars 精選",
+      "popularTools": "熱門工具",
+      "aiDeveloperLab": "AI 開發者實驗室",
+      "popularWorkflows": "熱門工作流",
+      "curatedVerified": "精選與驗證",
+      "startFast": "快速開始",
+      "fromTheBlog": "來自博客",
+      "continue": "繼續"
+    },
+    "badges": {
+      "verifiedByToolars": "Toolars 驗證",
+      "freemium": "免費增值",
+      "free": "免費"
+    },
+    "actions": {
+      "open": "打開",
+      "viewAllPicks": "查看全部精選",
+      "readArticle": "閱讀文章"
+    },
+    "curated": {
+      "title": "精選與驗證",
+      "subtitle": "每個工具都經過質量、安全和可用性審查。",
+      "qualityReview": "質量審查",
+      "qualityReviewDescription": "每個工具在發布前都經過测試。",
+      "safeByDesign": "設計安全",
+      "safeByDesignDescription": "本地優先工具讓你的数據留在你的設備上。",
+      "aiConsent": "AI 同意",
+      "aiConsentDescription": "AI 步骤在發送任何内容前會先詢問。"
+    }
+  },
+  "pricing": {
+    "badge": {
+      "freeTrialMode": "免費試用模式",
+      "alwaysFree": "永久免費",
+      "mostPopular": "最受歡迎",
+      "forTeams": "面向團隊"
+    },
+    "cta": {
+      "startFreeTrial": "開始免費試用",
+      "getStartedFree": "免費開始",
+      "upgradeToPro": "升級到 Pro",
+      "chooseTeam": "選择 Team"
+    },
+    "units": {
+      "perMonth": "/ 月",
+      "perUserPerMonth": "/ 用户 / 月"
+    },
+    "plans": {
+      "trial": {
+        "name": "試用工作區",
+        "description": "Toolars 测試期間無需信用卡。"
+      },
+      "free": {
+        "name": "免費"
+      },
+      "pro": {
+        "name": "Pro",
+        "note": "按年計費 $69.90"
+      },
+      "team": {
+        "name": "Team",
+        "note": "按年計費"
+      }
+    },
+    "features": {
+      "allTraditionalTools": "全部傳統工具",
+      "trialAiCredits": "5,000 試用 AI 積分",
+      "pdfUploads200mb": "PDF 上傳最高 200 MB",
+      "everythingInFree": "免費版全部功能",
+      "workflowRuns500": "每月最多 500 次工作流運行"
+    },
+    "hero": {
+      "trialEyebrow": "免費試用模式",
+      "trialTitleDesktop": "開始你的免費 Toolars 試用。",
+      "trialTitleMobile": "混合工具免費試用",
+      "trialCopyDesktop": "傳統本地工具永久免費。Google 登錄在测試期間解鎖試用 AI 積分、同步記錄和 PDF 工作流交接。",
+      "trialCopyMobile": "傳統本地工具永久免費。用 Google 開始試用，獲取 AI 積分、工作流記錄和 PDF 交接测試。",
+      "trialNote": "测試期間無需信用卡。"
+    },
+    "trialPlan": {
+      "badge": "免費試用模式",
+      "mobileBadge": "免費試用",
+      "description": "Google 登錄在免費試用期間解鎖测試版 AI 積分、同步記錄和上傳交接测試。",
+      "price": "$0",
+      "unit": "/ 测試",
+      "note": "Toolars 测試期間無需信用卡。",
+      "cta": "開始免費試用",
+      "features": [
+        "全部傳統工具",
+        "5,000 試用 AI 積分",
+        "PDF 上傳最高 200 MB",
+        "14 天同步記錄",
+        "测試版工作流運行"
+      ],
+      "tags": [
+        "Google 登錄",
+        "免費試用",
+        "無需信用卡",
+        "测試版用量"
+      ]
+    },
+    "trust": {
+      "localFirst": {
+        "title": "本地優先工具保持免費",
+        "description": "你的文件盡可能留在你的設備上。"
+      },
+      "aiConsent": {
+        "title": "僅在同意後進行 AI 處理",
+        "description": "你控制什么内容發送到 AI 模型。"
+      },
+      "noUploads": {
+        "title": "無隱藏上傳",
+        "description": "處理完成後我們不存儲你的文件。"
+      }
+    },
+    "usage": {
+      "trialTitle": "估算你的試用用量",
+      "aiCredits": "AI 積分",
+      "workflowRuns": "工作流運行",
+      "fileStorage": "文件存儲",
+      "recommended": "推荐計划",
+      "trialRecommendation": "$0 测試 · 需要 Google 登錄",
+      "parkedPhase2": "付費計划保留至第二階段"
+    },
+    "faq": {
+      "title": "常見問题",
+      "items": [
+        {
+          "question": "傳統工具真的是免費的吗？",
+          "answer": "是的。傳統和本地工具保持免費，包括計算器、转換器和實用工具。"
+        },
+        {
+          "question": "試用 AI 積分用量如何運作？",
+          "answer": "運行 AI 工具或需要 AI 處理的工作流步骤時會消耗試用積分。"
+        },
+        {
+          "question": "需要信用卡吗？",
+          "answer": "不需要。测試版使用 Google 登錄，付費計划保留至第二階段。"
+        },
+        {
+          "question": "你們會處理我的文件吗？",
+          "answer": "本地工具在你的設備上運行。AI 工具僅在獲得你的同意後處理内容。"
+        },
+        {
+          "question": "我的数據會怎樣？",
+          "answer": "處理完成後我們會删除臨時文件，僅在你選择保存時保留已保存的输出。"
+        }
+      ]
+    }
+  },
+  "blog": {
+    "title": "Toolars 博客",
+    "subtitle": "工具、AI 和開發者工作流指南",
+    "intro": "來自 Toolars 團隊的實用、無廣告指南。每篇文章都链接到你可以立即使用的免費工具。",
+    "backToBlog": "← 返回博客",
+    "readTime": "{minutes} 分鐘閱讀",
+    "mentionedTools": "本文提及的工具",
+    "faq": "常見問题"
+  },
+  "legal": {
+    "lastUpdated": "最後更新：{date}"
+  },
+  "directories": {
+    "pdf": {
+      "title": "PDF 工具",
+      "subtitle": "合并、拆分、壓缩、转換、摘要和保護 PDF 文件。",
+      "eyebrow": "探索 / PDF",
+      "heroTitle": "PDF 工具和 AI 工作流",
+      "heroSubtitle": "所有最佳 PDF 工具集中一處。執行快速本地操作，或使用 AI 進行摘要、数據提取、翻譯等。"
+    },
+    "aiDeveloper": {
+      "title": "AI 開發者實驗室",
+      "subtitle": "面向開發者的 AI 工具：提示詞安全、LLM 成本、MCP 和 JSON 工具。",
+      "eyebrow": "探索 / AI 開發者實驗室",
+      "heroTitle": "AI 開發者實驗室工具",
+      "heroSubtitle": "安全、LLM 成本、提示詞工程、RAG、MCP、智能體和開發者工具融合為 Toolars 的專業構建者工具家族。"
+    },
+    "collections": {
+      "title": "集合",
+      "subtitle": "為各類任務精選的工具和工作流組合。"
+    },
+    "workflows": {
+      "title": "工作流",
+      "subtitle": "跨 PDF、数據、寫作和開發的可重復多步骤工具链。"
+    }
+  },
+  "collectionsPage": {
+    "eyebrow": "精選合集",
+    "heroTitleDesktop": "適合各種工作的集合",
+    "heroTitleMobile": "用於重復工作的集合",
+    "heroCopyDesktop": "為常見任務和目標精選的最佳工具和工作流工具包。",
+    "heroCopyMobile": "將工具和工作流保存為可復用的工具包，用於 PDF 操作、AI 開發、财務審查和健康記錄。",
+    "createPrivate": "創建私有集合",
+    "createCollection": "創建集合",
+    "importBookmarks": "導入書签",
+    "browsePublic": "浏览公開集合",
+    "featured": "精選集合",
+    "viewAllFeatured": "查看全部精選",
+    "allCollections": "全部集合",
+    "sortByPopular": "排序：熱門",
+    "recentlyUpdated": "最近更新",
+    "viewAll": "查看全部",
+    "suggested": "為你推荐",
+    "suggestedDescription": "基於你保存的工具",
+    "createPrivateTitle": "創建私有集合",
+    "createPrivateDescription": "構建你自己的工具和工作流集合。保持私有或與團隊分享。",
+    "syncTitle": "集合跨設備同步",
+    "syncDescription": "随時随地访問你保存的集合。",
+    "curatedBy": "由 {curator} 策展",
+    "official": "官方",
+    "updatedHoursAgo": "{hours} 小時前更新",
+    "updatedToday": "今天更新",
+    "updatedYesterday": "昨天更新"
+  },
+  "workflowsPage": {
+    "eyebrow": "可重復链",
+    "heroTitleDesktop": "用於重復任務的工作流",
+    "heroTitleMobile": "用於重復工作的工作流",
+    "heroCopyDesktop": "將 PDF、AI、計算器和開發工具链接成可随時重復運行的單次執行。",
+    "heroCopyMobile": "將多步骤工具序列转變為可一次又一次運行的一键工作流。",
+    "browseAll": "浏览全部工作流",
+    "popularWorkflows": "熱門工作流",
+    "allWorkflows": "全部工作流",
+    "recentlyUpdated": "最近更新",
+    "viewAll": "查看全部",
+    "runWorkflow": "運行工作流",
+    "openWorkflow": "打開",
+    "pageEyebrow": "可復用自動化路径",
+    "pageHeroTitle": "完成工作的工作流",
+    "pageHeroCopy": "將經典工具、本地處理和經同意的 AI 步骤链接成可重復的工作流，用於 PDF、AI 安全、LLM 成本、财務、健康和 MCP。",
+    "createWorkflow": "創建工作流",
+    "browseTemplates": "浏览模板",
+    "buildFromScratch": "從零構建",
+    "searchPrompt": "你想自動化什么？",
+    "examples": "示例：",
+    "featuredDesktop": "精選工作流",
+    "featuredMobile": "精選工作流模板",
+    "viewAllFeatured": "查看全部精選",
+    "popularTemplates": "熱門工作流模板",
+    "browseCollections": "浏览集合",
+    "trending": "本周熱門",
+    "buildTitle": "從零構建",
+    "buildDescription": "通過链接你喜歡的任何工具來設計自定義工作流。",
+    "createCustom": "創建自定義工作流",
+    "trustTitle": "工作流信任",
+    "trustAi": "僅在同意後使用 AI",
+    "trustAiDescription": "你選择何時使用 AI 功能。未經批準不會發送任何内容。",
+    "trustLocal": "本地優先步骤",
+    "trustLocalDescription": "許多工作流步骤在你的設備上運行，以確保速度和隱私。",
+    "trustFiles": "會話後删除文件",
+    "trustFilesDescription": "會話结束時你的文件會自動删除。",
+    "startFast": "快速開始"
+  },
+  "tools": {
+    "pdf-toolkit": {
+      "name": "PDF Toolkit",
+      "description": "在一個工作台中合并、拆分、壓缩、转換、摘要和導出 PDF。"
+    },
+    "ai-pdf-summarizer": {
+      "name": "AI PDF Summarizer",
+      "description": "將长篇 PDF 转化為带引用的摘要、待辦事項和郵件草稿。"
+    },
+    "pdf-merger": {
+      "name": "PDF Merger",
+      "description": "幾秒内將多個 PDF 合并為一個文件。"
+    },
+    "pdf-compressor": {
+      "name": "PDF Compressor",
+      "description": "在不损失視覺質量的情況下壓缩 PDF 體積。"
+    },
+    "pdf-to-word": {
+      "name": "PDF to Word",
+      "description": "將 PDF 文件转換為可编辑的 Word 文檔。"
+    },
+    "extract-tables": {
+      "name": "Extract Tables",
+      "description": "從 PDF 和電子表格中提取结構化表格。"
+    },
+    "pdf-signer": {
+      "name": "PDF Signer",
+      "description": "在本地為 PDF 添加签名或填寫表單。"
+    },
+    "pdf-password-remover": {
+      "name": "PDF Password Remover",
+      "description": "移除你擁有的 PDF 的密码保護。"
+    },
+    "ocr-scanner": {
+      "name": "OCR Scanner",
+      "description": "從圖片和掃描版 PDF 中提取文字。"
+    },
+    "pdf-translator": {
+      "name": "PDF Translator",
+      "description": "翻譯 PDF 内容同時保留原始排版。"
+    },
+    "mortgage-calculator": {
+      "name": "Mortgage Calculator",
+      "description": "估算每月房貸還款额和總利息。"
+    },
+    "bmi-calculator": {
+      "name": "BMI Calculator",
+      "description": "在本地計算身體質量指数并查看健康分類。",
+      "category": {
+        "unavailable": {
+          "label": "不可用",
+          "recommendation": "請输入身高和體重"
+        },
+        "underweight": {
+          "label": "偏瘦",
+          "recommendation": "结合情況評估"
+        },
+        "normal": {
+          "label": "正常",
+          "recommendation": "健康范圍"
+        },
+        "overweight": {
+          "label": "超重",
+          "recommendation": "结合情況評估"
+        },
+        "obesity": {
+          "label": "肥胖",
+          "recommendation": "结合情況評估"
+        }
+      }
+    },
+    "compound-interest": {
+      "name": "Compound Interest Calculator",
+      "description": "查看復利如何随時間增长你的儲蓄。"
+    },
+    "loan-calculator": {
+      "name": "Loan Calculator",
+      "description": "估算每月貸款還款额和總利息。"
+    },
+    "bmr-calculator": {
+      "name": "BMR Calculator",
+      "description": "根據年龄、身高和體重計算基础代謝率。"
+    },
+    "water-intake": {
+      "name": "Water Intake Calculator",
+      "description": "根據體重和活動量估算每日飲水量。"
+    },
+    "retirement-calculator": {
+      "name": "Retirement Calculator",
+      "description": "預测退休儲蓄和所需每月缴費。"
+    },
+    "debt-payoff": {
+      "name": "Debt Payoff Calculator",
+      "description": "用雪球法或雪崩法制定债務償還計划。"
+    },
+    "roi-calculator": {
+      "name": "ROI Calculator",
+      "description": "計算項目或購買的投資回報率。"
+    },
+    "tdee-calculator": {
+      "name": "TDEE Calculator",
+      "description": "根據活動水平估算每日總能量消耗。"
+    },
+    "body-fat-calculator": {
+      "name": "Body Fat Calculator",
+      "description": "根據测量数據估算體脂率。"
+    },
+    "protein-calculator": {
+      "name": "Protein Calculator",
+      "description": "根據體重和活動量估算每日蛋白質需求。"
+    },
+    "income-tax": {
+      "name": "Income Tax Calculator",
+      "description": "估算你本年度的所得税额。"
+    },
+    "fire-calculator": {
+      "name": "FIRE Calculator",
+      "description": "預测财務獨立和提前退休的時間線。"
+    },
+    "discount-calculator": {
+      "name": "Discount Calculator",
+      "description": "計算折扣或加價後的最終價格。"
+    },
+    "heart-rate-zone": {
+      "name": "Heart Rate Zone Calculator",
+      "description": "根據最大心率找到你的訓練心率區間。"
+    },
+    "sleep-calculator": {
+      "name": "Sleep Calculator",
+      "description": "根據睡眠周期規划入睡或起床時間。"
+    },
+    "ideal-weight-calculator": {
+      "name": "Ideal Weight Calculator",
+      "description": "根據身高和體型估算理想體重范圍。"
+    },
+    "car-loan": {
+      "name": "Car Loan Calculator",
+      "description": "估算車貸月供和總成本。"
+    },
+    "rent-vs-buy": {
+      "name": "Rent vs Buy Calculator",
+      "description": "比较租房和買房的成本。"
+    },
+    "home-affordability-calculator": {
+      "name": "Home Affordability Calculator",
+      "description": "估算你能負擔的房價。"
+    },
+    "waist-hip-ratio": {
+      "name": "Waist-Hip Ratio Calculator",
+      "description": "計算腰臀比和風險分類。"
+    },
+    "blood-pressure": {
+      "name": "Blood Pressure Calculator",
+      "description": "讀取血壓数值并查看分類。",
+      "category": {
+        "normal": {
+          "label": "正常",
+          "reason": "收缩壓低於 120 且舒張壓低於 80。",
+          "advice": "血壓正常。保持健康的生活方式。"
+        },
+        "elevated": {
+          "label": "偏高",
+          "reason": "收缩壓 120-129 且舒張壓低於 80。",
+          "advice": "建議改善飲食和運動以預防。"
+        },
+        "stage1": {
+          "label": "1 期",
+          "reason": "收缩壓 130-139 或舒張壓 80-89。",
+          "advice": "改善生活方式：減少鹽摄入、保持健康體重、運動并定期監测。"
+        },
+        "stage2": {
+          "label": "2 期",
+          "reason": "收缩壓 >=140 或舒張壓 >=90。",
+          "advice": "盡快就醫。可能需要药物。改善生活方式。"
+        },
+        "crisis": {
+          "label": "危机",
+          "reason": "收缩壓 >=180 或舒張壓 >=120。醫療緊急情況。",
+          "advice": "立即寻求緊急醫療救助。不要等待。"
+        }
+      }
+    },
+    "child-growth": {
+      "name": "Child Growth Calculator",
+      "description": "追踪兒童身高和體重的生长百分位。"
+    },
+    "student-loan-calculator": {
+      "name": "Student Loan Calculator",
+      "description": "估算助學貸款還款和還清時間。"
+    },
+    "apy-calculator": {
+      "name": "APY Calculator",
+      "description": "根據利率計算年收益率。"
+    },
+    "rule-of-72": {
+      "name": "Rule of 72 Calculator",
+      "description": "估算資金翻倍所需時間。"
+    },
+    "calorie-deficit": {
+      "name": "Calorie Deficit Calculator",
+      "description": "規划穩定減重的熱量缺口。"
+    },
+    "macro-calculator": {
+      "name": "Macro Calculator",
+      "description": "計算每日宏量營養素目標。"
+    },
+    "lean-body-mass": {
+      "name": "Lean Body Mass Calculator",
+      "description": "根據體重和體脂估算瘦體重。"
+    },
+    "emergency-fund": {
+      "name": "Emergency Fund Calculator",
+      "description": "估算你需要的應急儲蓄金额。"
+    },
+    "savings-goal": {
+      "name": "Savings Goal Calculator",
+      "description": "規划每月儲蓄以达到目標。"
+    },
+    "dti-calculator": {
+      "name": "DTI Calculator",
+      "description": "計算你的負债收入比。"
+    },
+    "net-worth-calculator": {
+      "name": "Net Worth Calculator",
+      "description": "根據資產和負债計算淨資產。"
+    },
+    "budget-rule": {
+      "name": "50/30/20 Budget Calculator",
+      "description": "用 50/30/20 預算規則分配收入。"
+    },
+    "side-income-tax": {
+      "name": "Side Income Tax Calculator",
+      "description": "估算副業或自由职業收入的税費。"
+    },
+    "intermittent-fasting": {
+      "name": "Intermittent Fasting Calculator",
+      "description": "規划你的斷食和進食時間窗。"
+    },
+    "creatine-calculator": {
+      "name": "Creatine Calculator",
+      "description": "計算你的每日肌酸剂量。"
+    },
+    "vo2-max": {
+      "name": "VO2 Max Calculator",
+      "description": "估算你的心肺健康水平。"
+    },
+    "biological-age": {
+      "name": "Biological Age Calculator",
+      "description": "根據生活方式因素估算生理年龄。"
+    },
+    "glycemic-load": {
+      "name": "Glycemic Load Calculator",
+      "description": "計算你餐食的血糖負荷。"
+    },
+    "30-30-30-method": {
+      "name": "30-30-30 Morning Method",
+      "description": "規划 30-30-30 蛋白早餐減重法。"
+    },
+    "tip-calculator": {
+      "name": "Tip Calculator",
+      "description": "計算任何金额的小費和總额。"
+    },
+    "bill-split-calculator": {
+      "name": "Bill Split Calculator",
+      "description": "在任意人数之間公平分摊賬單。"
+    },
+    "unit-converter": {
+      "name": "Unit Converter",
+      "description": "在长度、重量、温度等單位間转換。"
+    },
+    "hourly-to-salary": {
+      "name": "Hourly to Salary Calculator",
+      "description": "Convert hourly wage into annual, monthly, and weekly salary with overtime assumptions."
+    },
+    "inflation-calculator": {
+      "name": "Inflation Calculator",
+      "description": "Estimate future purchasing power and cumulative inflation from amount, rate, and years."
+    },
+    "habit-cost": {
+      "name": "Habit Cost Calculator",
+      "description": "Estimate long-term spending and opportunity cost for repeated daily or weekly habits."
+    },
+    "caffeine-calculator": {
+      "name": "Caffeine Safe Limit Calculator",
+      "description": "Calculate daily caffeine allowance from weight, pregnancy status, and common drink intake."
+    },
+    "alcohol-metabolism": {
+      "name": "Alcohol Metabolism Calculator",
+      "description": "估算酒精在你體内停留的時間。"
+    },
+    "blood-sugar-calculator": {
+      "name": "Blood Sugar / A1C Calculator",
+      "description": "转換血糖單位并檢查范圍。"
+    },
+    "drink-calories": {
+      "name": "Drink Calories Calculator",
+      "description": "Calculate calories and sugar in boba tea, coffee, juice, alcohol, and other beverages."
+    },
+    "fiber-intake": {
+      "name": "Fiber Intake Calculator",
+      "description": "Estimate daily fiber recommendations from weight, age, and sex context with food-source guidance."
+    },
+    "steps-to-calories": {
+      "name": "Steps to Calories Calculator",
+      "description": "Estimate calories burned from steps, weight, walking speed, and stride assumptions."
+    },
+    "currency-converter": {
+      "name": "Currency Converter",
+      "description": "Convert between major currencies with manually entered exchange rates and reference-rate context."
+    },
+    "percentage-calculator": {
+      "name": "Percentage Calculator",
+      "description": "計算百分比、增減幅度。"
+    },
+    "stock-average": {
+      "name": "Stock Average Calculator",
+      "description": "Calculate average cost per share, total cost basis, and breakeven after multiple purchases."
+    },
+    "credit-card-apr": {
+      "name": "Credit Card APR Calculator",
+      "description": "Reveal the true annual percentage rate behind credit card installment monthly fees."
+    },
+    "investment-fee": {
+      "name": "Investment Fee Calculator",
+      "description": "Estimate how annual management fees erode long-term investment returns."
+    },
+    "investment-goal": {
+      "name": "Investment Goal Calculator",
+      "description": "Calculate the monthly investment needed to reach a financial target over time."
+    },
+    "credit-score-simulator": {
+      "name": "Credit Score Simulator",
+      "description": "模拟财務決策如何影響你的信用分。"
+    },
+    "crypto-tax": {
+      "name": "Crypto Tax Calculator",
+      "description": "估算加密貨幣交易的資本利得税。"
+    },
+    "freelance-rate": {
+      "name": "Freelance Rate Calculator",
+      "description": "Calculate hourly, daily, and project rates from income goals, billable hours, taxes, and operating costs."
+    },
+    "subscription-audit": {
+      "name": "Subscription Audit Calculator",
+      "description": "Track recurring subscriptions, normalize monthly cost, and identify duplicate or unused services."
+    },
+    "savings-challenge": {
+      "name": "Savings Challenge Calculator",
+      "description": "Generate 52-week, envelope, no-spend month, or reverse savings plans for habit building."
+    },
+    "city-cost-comparison": {
+      "name": "City Cost Comparison",
+      "description": "Compare rent, food, transport, income, and surplus between two cities for relocation planning."
+    },
+    "social-insurance-calculator": {
+      "name": "China Social Insurance Calculator",
+      "description": "根據工資估算社保缴費。"
+    },
+    "dividend-reinvestment": {
+      "name": "Dividend Reinvestment Calculator",
+      "description": "Estimate DRIP growth, total dividends, tax drag, and reinvestment impact over long holding periods."
+    },
+    "mortgage-refinance-calculator": {
+      "name": "Mortgage Refinance Calculator",
+      "description": "Compare current and new mortgage terms to estimate monthly savings, interest savings, and break-even time."
+    },
+    "coast-fire": {
+      "name": "Coast FIRE Calculator",
+      "description": "Estimate the portfolio needed today to stop saving and coast to a future retirement target."
+    },
+    "sip-calculator": {
+      "name": "Fund SIP Calculator",
+      "description": "Project systematic investment plan growth from monthly investment, expected return, duration, and principal."
+    },
+    "smoke-free": {
+      "name": "Quit Smoking Tracker",
+      "description": "Track smoke-free days, money saved, cigarettes avoided, life extension, and recovery milestones."
+    },
+    "adhd-screener": {
+      "name": "ADHD Adult Screener ASRS-v1.1",
+      "description": "用自評量表筛查成人 ADHD 症狀。"
+    },
+    "burnout-assessment": {
+      "name": "Burnout Assessment",
+      "description": "從耗竭和疏離兩個維度評估倦怠風險。"
+    },
+    "gad7-anxiety": {
+      "name": "GAD-7 Anxiety Screening",
+      "description": "用 GAD-7 量表評估焦慮嚴重程度。"
+    },
+    "phq9-depression": {
+      "name": "PHQ-9 Depression Screening",
+      "description": "用 PHQ-9 量表評估抑郁嚴重程度。"
+    },
+    "pss10-stress": {
+      "name": "PSS-10 Perceived Stress Scale",
+      "description": "用 PSS-10 量表测量感知壓力。"
+    },
+    "glp1-eligibility": {
+      "name": "GLP-1 Eligibility Check",
+      "description": "檢查討論 GLP-1 治療的臨床標準。"
+    },
+    "body-recomposition": {
+      "name": "Body Recomposition Calculator",
+      "description": "Set simultaneous fat-loss and muscle-gain goals with TDEE, calorie target, and macro split estimates."
+    },
+    "glp1-nutrition": {
+      "name": "GLP-1 Nutrition Calculator",
+      "description": "規划 GLP-1 治療期間的營養目標。"
+    },
+    "homa-ir": {
+      "name": "HOMA-IR Calculator",
+      "description": "根據血糖和胰島素估算胰島素抵抗。"
+    },
+    "one-rep-max": {
+      "name": "1RM Calculator",
+      "description": "Estimate one-repetition maximum and percentage-based working sets from lifted weight and reps."
+    },
+    "ovulation-calculator": {
+      "name": "Ovulation Calculator",
+      "description": "預测易孕期和排卵日。"
+    },
+    "pregnancy-due-date": {
+      "name": "Pregnancy Due Date Calculator",
+      "description": "估算預產期和懷孕時間線。"
+    },
+    "running-pace": {
+      "name": "Running Pace Calculator",
+      "description": "Calculate race pace, speed, track splits, and equivalent performance estimates from distance and time."
+    },
+    "testosterone-calculator": {
+      "name": "Testosterone Calculator",
+      "description": "按年龄段估算睾酮水平。"
+    },
+    "json-repair": {
+      "name": "JSON Repair",
+      "description": "修復 LLM 输出的损壞 JSON、尾随逗號、引號和数組。"
+    },
+    "prompt-injection-scanner": {
+      "name": "Prompt Injection Scanner",
+      "description": "掃描提示詞中的越狱、指令覆盖和隱藏負载。"
+    },
+    "llm-cost-calculator": {
+      "name": "LLM Cost Calculator",
+      "description": "估算跨提供商、模型、上下文窗口和流量的 token 成本。"
+    },
+    "mcp-server-builder": {
+      "name": "MCP Server Builder",
+      "description": "構建清單、工具架構、提示詞、資源和發布文檔。"
+    }
+  },
+  "workspace": {
+    "localCalculationModel": "本地計算模型",
+    "localScreeningModel": "本地筛查模型",
+    "localScheduleModel": "本地計划模型",
+    "local": "本地",
+    "cloud": "雲端",
+    "aiConsent": "AI 同意",
+    "inputSummary": "输入摘要",
+    "result": "结果",
+    "progress": "進度",
+    "reference": "參考",
+    "category": "分類",
+    "male": "男",
+    "female": "女",
+    "yes": "是",
+    "no": "否",
+    "saveProfile": "保存資料",
+    "calculate": "計算",
+    "exportNote": "導出筆記",
+    "toolDetails": "工具詳情",
+    "saveSnapshot": "保存快照",
+    "reset": "重置",
+    "reviewChecklist": "檢查清單",
+    "healthReferenceNotes": "健康參考說明",
+    "supportNotes": "支持說明",
+    "localFirst": "本地優先",
+    "waitingForCalculation": "等待計算",
+    "pending": "待定",
+    "runCalculation": "運行計算以查看结果。",
+    "notMedicalAdvice": "结果僅供參考，不應視為診斷。請咨詢合格的專業人员。"
+  },
+  "toolWorkspace": {
+    "eyebrow": "工具工作區",
+    "workspaceTitle": "{name} 工作區",
+    "toolDetails": "工具詳情",
+    "openWorkflow": "打開推薦工作流",
+    "processing": {
+      "local": "本地",
+      "cloud": "雲端",
+      "aiConsent": "AI 同意"
+    },
+    "pricing": {
+      "freeTrial": "免費試用",
+      "freemium": "免費增值",
+      "paid": "付費",
+      "free": "免費"
+    },
+    "badges": {
+      "sourceBacked": "源 backed",
+      "plan": "计劃",
+      "buildReady": "構建就绪",
+      "now": "現在",
+      "next": "下一步",
+      "review": "審查"
+    },
+    "sections": {
+      "workspacePath": "工作區路徑",
+      "sourceHandoff": "源交接",
+      "fullPath": "完整计算器路徑",
+      "relatedTools": "相關工具",
+      "trustBoundary": "信任邊界"
+    },
+    "fullPath": {
+      "next": "將源公式、輸入、驗證、保存場景和導出狀態提升到专用的交互式工作區。",
+      "review": "在用户依赖財務、健康、稅務或規劃輸出之前保持注意事項可見。"
+    },
+    "trustBoundaryNote": "此工作區保持公開列表 CTA 可達，同时保留源詳情中的本地優先和 AI 同意标籤。"
+  },
+  "aiConsent": {
+    "eyebrow": "AI 同意",
+    "title": "審查 AI 同意",
+    "intro": "在任何内容离開本地 Toolars 工作區进行模型处理之前批準此步骤。",
+    "checklist": {
+      "whenSent": "何时發送数据",
+      "whatSent": "發送什么",
+      "deletion": "刪除和取消",
+      "providerRoute": "提供商路由"
+    },
+    "actions": {
+      "cancel": "取消",
+      "approve": "批準 AI 同意"
+    }
+  },
+  "aiLab": {
+    "metadata": {
+      "runMode": "運行模式",
+      "providerRoute": "提供商路由",
+      "artifactState": "製品狀態"
+    }
+  }
+}

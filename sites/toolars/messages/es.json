@@ -1135,6 +1135,82 @@
     "mcp-server-builder": {
       "name": "MCP Server Builder",
       "description": "Construye manifiestos, esquemas de herramientas, prompts, recursos y documentación de lanzamiento."
+    },
+    "pii-scanner": {
+      "name": "PII Scanner",
+      "description": "Detecta y redacta información personal identificable de texto."
+    },
+    "hallucination-checker": {
+      "name": "Hallucination Checker",
+      "description": "Verifica las afirmaciones de la IA frente a textos fuente."
+    },
+    "schema-validator": {
+      "name": "Schema Validator",
+      "description": "Valida datos JSON contra esquemas JSON Schema."
+    },
+    "model-comparator": {
+      "name": "Model Comparator",
+      "description": "Compara respuestas de modelos entre varios proveedores de LLM."
+    },
+    "context-window": {
+      "name": "Context Window Visualizer",
+      "description": "Cuenta tokens y estima el uso de la ventana de contexto."
+    },
+    "token-budget-planner": {
+      "name": "Token Budget Planner",
+      "description": "Planifica presupuestos de tokens para prompts complejos."
+    },
+    "mcp-tester": {
+      "name": "MCP Tester",
+      "description": "Prueba herramientas y recursos de servidores MCP."
+    },
+    "agent-workflow-builder": {
+      "name": "Agent Workflow Builder",
+      "description": "Diseña flujos de trabajo de agentes multi-paso."
+    },
+    "rag-eval-bench": {
+      "name": "RAG Eval Bench",
+      "description": "Evalúa pipelines de RAG con conjuntos de prueba."
+    },
+    "prompt-templates": {
+      "name": "Prompt Templates",
+      "description": "Gestiona y versiona bibliotecas de plantillas de prompts."
+    },
+    "function-call-builder": {
+      "name": "Function Call Builder",
+      "description": "Construye y prueba payloads de llamadas a funciones."
+    },
+    "structured-output-formatter": {
+      "name": "Structured Output Formatter",
+      "description": "Formatea la salida del modelo en estructuras JSON."
+    },
+    "vision-prompt-builder": {
+      "name": "Vision Prompt Builder",
+      "description": "Construye prompts de visión para modelos multimodales."
+    },
+    "synthetic-dataset-generator": {
+      "name": "Synthetic Dataset Generator",
+      "description": "Genera conjuntos de datos sintéticos con IA."
+    },
+    "json-formatter": {
+      "name": "JSON Formatter",
+      "description": "Formatea, valida y minifica documentos JSON."
+    },
+    "json-tree-viewer": {
+      "name": "JSON Tree Viewer",
+      "description": "Explora datos JSON en una vista de árbol interactiva."
+    },
+    "json-path-tester": {
+      "name": "JSON Path Tester",
+      "description": "Prueba expresiones JSONPath contra datos JSON."
+    },
+    "css-gradient-generator": {
+      "name": "CSS Gradient Generator",
+      "description": "Genera gradientes CSS con vista previa en vivo."
+    },
+    "ai-prompt-hardening": {
+      "name": "llm-cost-review",
+      "description": "Flujo de IA para escanear prompts en busca de inyección."
     }
   },
   "workspace": {

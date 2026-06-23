@@ -1135,6 +1135,82 @@
     "mcp-server-builder": {
       "name": "MCP Server Builder",
       "description": "Build manifests, tool schemas, prompts, resources, and launch docs."
+    },
+    "pii-scanner": {
+      "name": "PII Scanner",
+      "description": "Detect emails, phone numbers, IDs, and sensitive entities before AI upload."
+    },
+    "hallucination-checker": {
+      "name": "Hallucination Checker",
+      "description": "Compare claims against sources and flag unsupported output."
+    },
+    "schema-validator": {
+      "name": "Schema Validator",
+      "description": "Validate JSON schema and function-calling payloads before production."
+    },
+    "model-comparator": {
+      "name": "Model Comparator",
+      "description": "Compare model price, latency, context, and fit for a workload."
+    },
+    "context-window": {
+      "name": "Context Window Visualizer",
+      "description": "See how prompt, retrieval, tools, and output fit into context."
+    },
+    "token-budget-planner": {
+      "name": "Token Budget Planner",
+      "description": "Plan context allocation across system, user, retrieval, tools, and output."
+    },
+    "mcp-tester": {
+      "name": "MCP Tester",
+      "description": "Validate MCP manifests, sample payloads, and tool response contracts."
+    },
+    "agent-workflow-builder": {
+      "name": "Agent Workflow Builder",
+      "description": "Map multi-agent steps, tools, handoffs, and review gates."
+    },
+    "rag-eval-bench": {
+      "name": "RAG Eval Bench",
+      "description": "Create retrieval evaluation sets and compare grounded answer quality."
+    },
+    "prompt-templates": {
+      "name": "Prompt Templates",
+      "description": "Browse production prompt structures for common AI tasks."
+    },
+    "function-call-builder": {
+      "name": "Function Call Builder",
+      "description": "Turn API payloads into tool schemas and function-calling specs."
+    },
+    "structured-output-formatter": {
+      "name": "Structured Output Formatter",
+      "description": "Normalize model output into typed JSON response formats."
+    },
+    "vision-prompt-builder": {
+      "name": "Vision Prompt Builder",
+      "description": "Draft multimodal prompts with camera, crop, and object instructions."
+    },
+    "synthetic-dataset-generator": {
+      "name": "Synthetic Dataset Generator",
+      "description": "Generate structured sample rows for testing apps and prompts."
+    },
+    "json-formatter": {
+      "name": "JSON Formatter",
+      "description": "Format, validate, and beautify JSON data."
+    },
+    "json-tree-viewer": {
+      "name": "JSON Tree Viewer",
+      "description": "Inspect nested JSON with collapsible tree views."
+    },
+    "json-path-tester": {
+      "name": "JSON Path Tester",
+      "description": "Test JSONPath expressions against sample payloads."
+    },
+    "css-gradient-generator": {
+      "name": "CSS Gradient Generator",
+      "description": "Create implementation-ready gradients for UI surfaces."
+    },
+    "ai-prompt-hardening": {
+      "name": "llm-cost-review",
+      "description": "mcp-tool-launch"
     }
   },
   "workspace": {

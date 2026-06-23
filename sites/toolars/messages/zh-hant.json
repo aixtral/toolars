@@ -1135,6 +1135,82 @@
     "mcp-server-builder": {
       "name": "MCP Server Builder",
       "description": "構建清單、工具架構、提示詞、資源和發布文檔。"
+    },
+    "pii-scanner": {
+      "name": "PII Scanner",
+      "description": "檢测并脫敏文本中的個人身份信息。"
+    },
+    "hallucination-checker": {
+      "name": "Hallucination Checker",
+      "description": "对照源文本驗證 AI 的聲明。"
+    },
+    "schema-validator": {
+      "name": "Schema Validator",
+      "description": "根據 JSON Schema 驗證 JSON 数據。"
+    },
+    "model-comparator": {
+      "name": "Model Comparator",
+      "description": "比较多個 LLM 提供商的模型響應。"
+    },
+    "context-window": {
+      "name": "Context Window Visualizer",
+      "description": "計算 token 并估算上下文窗口使用量。"
+    },
+    "token-budget-planner": {
+      "name": "Token Budget Planner",
+      "description": "為復雜提示詞規划 token 預算。"
+    },
+    "mcp-tester": {
+      "name": "MCP Tester",
+      "description": "测試 MCP 服務器的工具和资源。"
+    },
+    "agent-workflow-builder": {
+      "name": "Agent Workflow Builder",
+      "description": "設計多步骤智能體工作流。"
+    },
+    "rag-eval-bench": {
+      "name": "RAG Eval Bench",
+      "description": "用测試集評估 RAG 管道。"
+    },
+    "prompt-templates": {
+      "name": "Prompt Templates",
+      "description": "管理和版本化提示詞模板库。"
+    },
+    "function-call-builder": {
+      "name": "Function Call Builder",
+      "description": "構建并测試函数调用負载。"
+    },
+    "structured-output-formatter": {
+      "name": "Structured Output Formatter",
+      "description": "將模型输出格式化為 JSON 结構。"
+    },
+    "vision-prompt-builder": {
+      "name": "Vision Prompt Builder",
+      "description": "為多模態模型構建視覺提示詞。"
+    },
+    "synthetic-dataset-generator": {
+      "name": "Synthetic Dataset Generator",
+      "description": "用 AI 生成合成数據集。"
+    },
+    "json-formatter": {
+      "name": "JSON Formatter",
+      "description": "格式化、驗證和壓缩 JSON 文檔。"
+    },
+    "json-tree-viewer": {
+      "name": "JSON Tree Viewer",
+      "description": "以交互式樹視圖浏览 JSON 数據。"
+    },
+    "json-path-tester": {
+      "name": "JSON Path Tester",
+      "description": "針对 JSON 数據测試 JSONPath 表达式。"
+    },
+    "css-gradient-generator": {
+      "name": "CSS Gradient Generator",
+      "description": "生成带實時預览的 CSS 渐變。"
+    },
+    "ai-prompt-hardening": {
+      "name": "llm-cost-review",
+      "description": "掃描提示詞注入的 AI 工作流。"
     }
   },
   "workspace": {

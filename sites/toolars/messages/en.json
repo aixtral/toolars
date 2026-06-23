@@ -1245,6 +1245,86 @@
         "titleDesktop": "Settings",
         "titleMobile": "Account settings",
         "subtitleDesktop": "Manage your Toolars workspace, free trial, and data preferences."
+      },
+      "planCard": {
+        "title": "Free trial workspace",
+        "note": "Beta trial active",
+        "planName": "Free trial",
+        "windowLabel": "Trial window",
+        "windowValue": "14 days",
+        "viewTrialUsage": "View trial usage",
+        "accountSecurity": "Account security",
+        "trialUsageTitle": "Trial usage",
+        "trustNote": "All traditional tools remain free and unlimited."
+      },
+      "usageDetails": {
+        "title": "Trial usage details",
+        "trialStateLabel": "Trial state",
+        "trialStateValue": "Free beta trial",
+        "trialStateAction": "Review",
+        "googleAccountLabel": "Google account",
+        "googleAccountValue": "Required for synced trial history",
+        "googleAccountAction": "Connect",
+        "aiCreditsLabel": "AI credits",
+        "aiCreditsValue": "2,000 trial credits included",
+        "aiCreditsAction": "View usage",
+        "paidPlansLabel": "Paid plans",
+        "paidPlansValue": "Parked for Phase 2",
+        "paidPlansAction": "Learn more"
+      },
+      "planCompare": {
+        "title": "Phase 2 plan preview",
+        "badge": "Free trial mode",
+        "traditionalName": "Traditional tools",
+        "traditionalPrice": "Always free",
+        "traditionalDesc": "Local calculators, converters, and utilities remain available.",
+        "betaName": "Beta trial",
+        "betaPrice": "Google sign-in",
+        "betaDesc": "Trial credits, synced history, and upload handoff testing.",
+        "phase2Name": "Phase 2 plans",
+        "phase2Price": "Parked",
+        "phase2Desc": "Team, invoices, and provider billing will return after beta."
+      },
+      "cards": {
+        "apiKeys": "API keys",
+        "apiKeysDesc": "Use API keys to integrate Toolars into your apps and automation.",
+        "createNewKey": "Create new API key",
+        "teamWorkspace": "Team workspace",
+        "teamWorkspaceDesc": "Invite your team and share collections, workflows, and outputs.",
+        "connectedApps": "Connected apps",
+        "manageConnectedApps": "Manage connected apps"
+      },
+      "dangerZone": {
+        "title": "Danger zone",
+        "description": "Permanently delete your account or export your data.",
+        "exportData": "Export data",
+        "deleteAccount": "Delete account",
+        "coverageLabel": "Account data coverage",
+        "archiveBadge": "Archive"
+      },
+      "privacyDefaults": {
+        "title": "Privacy & AI defaults",
+        "managePrivacy": "Manage privacy preferences",
+        "toggleLocalLabel": "Prefer local tools",
+        "toggleLocalDesc": "Prioritize tools that run on your device whenever possible.",
+        "toggleConsentLabel": "Ask before AI processing",
+        "toggleConsentDesc": "Always ask for consent before sending content to AI models.",
+        "toggleAutoDeleteLabel": "Auto-delete uploads after session",
+        "toggleAutoDeleteDesc": "Remove uploaded files automatically when the session ends.",
+        "toggleSaveHistoryLabel": "Save output history",
+        "toggleSaveHistoryDesc": "Keep a history of your outputs in your workspace."
+      },
+      "side": {
+        "aiResponsiblyTitle": "AI tools run responsibly",
+        "aiResponsiblyDesc": "Your data is protected. We never use your content to train AI models without consent.",
+        "storageTitle": "Your storage",
+        "manageSecurity": "Manage security",
+        "notificationsTitle": "Notifications",
+        "securityTitle": "Security",
+        "workflowAlerts": "Workflow completion alerts",
+        "workflowAlertsDesc": "Email me when long workflow runs finish.",
+        "uploadDeletion": "Upload deletion policy",
+        "uploadDeletionDesc": "Temporary uploaded files are cleared automatically."
       }
     }
   },

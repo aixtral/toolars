@@ -1245,6 +1245,86 @@
         "titleDesktop": "設置",
         "titleMobile": "賬户設置",
         "subtitleDesktop": "管理你的 Toolars 工作区、免費試用和数據偏好。"
+      },
+      "planCard": {
+        "title": "免費試用工作区",
+        "note": "Beta 試用進行中",
+        "planName": "免費試用",
+        "windowLabel": "試用窗口",
+        "windowValue": "14 天",
+        "viewTrialUsage": "查看試用用量",
+        "accountSecurity": "賬户安全",
+        "trialUsageTitle": "試用用量",
+        "trustNote": "所有传統工具保持免費且無限制。"
+      },
+      "usageDetails": {
+        "title": "試用用量詳情",
+        "trialStateLabel": "試用狀態",
+        "trialStateValue": "免費 Beta 試用",
+        "trialStateAction": "查看",
+        "googleAccountLabel": "Google 賬户",
+        "googleAccountValue": "同步試用歷史記錄所必需",
+        "googleAccountAction": "连接",
+        "aiCreditsLabel": "AI 额度",
+        "aiCreditsValue": "包含 2,000 個試用额度",
+        "aiCreditsAction": "查看用量",
+        "paidPlansLabel": "付費套餐",
+        "paidPlansValue": "已搁置至第二階段",
+        "paidPlansAction": "了解更多"
+      },
+      "planCompare": {
+        "title": "第二階段套餐預览",
+        "badge": "免費試用模式",
+        "traditionalName": "传統工具",
+        "traditionalPrice": "永久免費",
+        "traditionalDesc": "本地計算器、转換器和實用工具保持可用。",
+        "betaName": "Beta 試用",
+        "betaPrice": "Google 登錄",
+        "betaDesc": "試用额度、同步歷史記錄和上传交接测試。",
+        "phase2Name": "第二階段套餐",
+        "phase2Price": "已搁置",
+        "phase2Desc": "團隊、發票和提供商計費將在 Beta 後回歸。"
+      },
+      "cards": {
+        "apiKeys": "API 密钥",
+        "apiKeysDesc": "使用 API 密钥將 Toolars 集成到你的應用和自动化中。",
+        "createNewKey": "创建新 API 密钥",
+        "teamWorkspace": "團隊工作区",
+        "teamWorkspaceDesc": "邀请你的團隊并共享集合、工作流和结果。",
+        "connectedApps": "已连接的應用",
+        "manageConnectedApps": "管理已连接的應用"
+      },
+      "dangerZone": {
+        "title": "危險操作区",
+        "description": "永久删除你的賬户或導出你的数據。",
+        "exportData": "導出数據",
+        "deleteAccount": "删除賬户",
+        "coverageLabel": "賬户数據覆盖范圍",
+        "archiveBadge": "歸檔"
+      },
+      "privacyDefaults": {
+        "title": "隱私與 AI 默認設置",
+        "managePrivacy": "管理隱私偏好",
+        "toggleLocalLabel": "优先使用本地工具",
+        "toggleLocalDesc": "盡可能优先使用在你的設備上運行的工具。",
+        "toggleConsentLabel": "AI 處理前詢問",
+        "toggleConsentDesc": "在向 AI 模型發送内容前始終征求同意。",
+        "toggleAutoDeleteLabel": "會话後自动删除上传",
+        "toggleAutoDeleteDesc": "會话结束時自动删除已上传的文件。",
+        "toggleSaveHistoryLabel": "保存结果歷史",
+        "toggleSaveHistoryDesc": "在你的工作区中保留结果歷史。"
+      },
+      "side": {
+        "aiResponsiblyTitle": "AI 工具負責任地運行",
+        "aiResponsiblyDesc": "你的数據受到保護。未經同意，我們絕不使用你的内容来訓练 AI 模型。",
+        "storageTitle": "你的存储",
+        "manageSecurity": "管理安全",
+        "notificationsTitle": "通知",
+        "securityTitle": "安全",
+        "workflowAlerts": "工作流完成提醒",
+        "workflowAlertsDesc": "长時间運行的工作流结束時發送郵件通知我。",
+        "uploadDeletion": "上传删除策略",
+        "uploadDeletionDesc": "臨時上传的文件會被自动清除。"
       }
     }
   },

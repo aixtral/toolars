@@ -96,6 +96,7 @@ function EnabledSwitch({ label }: Readonly<{ label: string }>) {
 }
 
 export function SettingsView() {
+  const t = useTranslations("settings.main");
   const freeTrialMode = isFreeTrialMode();
   const [accountSession, setAccountSession] = useState<SettingsAuthSessionPayload | null>(null);
   const [accountSessionStatus, setAccountSessionStatus] = useState("Checking account session");
@@ -177,10 +178,10 @@ export function SettingsView() {
   return (
     <div className="settings-page" data-settings-page="true" data-settings-mobile-layout="account-controls">
       <section className="section landing-hero">
-        <span className="eyebrow">Account controls</span>
-        <h1 className="title settings-title-desktop">Settings</h1>
-        <h1 className="title settings-title-mobile">Account settings</h1>
-        <p className="subtitle settings-copy-desktop">Manage your Toolars workspace, free trial, and data preferences.</p>
+        <span className="eyebrow">{t("hero.eyebrow")}</span>
+        <h1 className="title settings-title-desktop">{t("hero.titleDesktop")}</h1>
+        <h1 className="title settings-title-mobile">{t("hero.titleMobile")}</h1>
+        <p className="subtitle settings-copy-desktop">{t("hero.subtitleDesktop")}</p>
         <p className="subtitle settings-copy-mobile">Manage trial usage, privacy defaults, API access, and team handoffs from one focused mobile control surface.</p>
         <a className="button button-solid settings-mobile-plan-action" href="/settings/billing">
           View trial usage
@@ -256,8 +257,8 @@ export function SettingsView() {
         <div className="settings-main">
           <section className="panel settings-plan-card">
             <div className="landing-section-head">
-              <h2>{freeTrialMode ? "Free trial workspace" : "Your current plan"}</h2>
-              <span className="pricing-note">{freeTrialMode ? "Beta trial active" : "Reset on Jun 1, 2026"}</span>
+              <h2>{freeTrialMode ? t("planCard.title") : "Your current plan"}</h2>
+              <span className="pricing-note">{freeTrialMode ? t("planCard.note") : "Reset on Jun 1, 2026"}</span>
             </div>
             <div className="settings-plan-grid">
               <article className="settings-current-plan">
@@ -265,11 +266,11 @@ export function SettingsView() {
                   <CreditCard size={22} aria-hidden="true" />
                 </span>
                 <h3>{freeTrialMode ? "Free trial" : "Pro"}</h3>
-                <p>{freeTrialMode ? "Trial window" : "Your plan renews on"}</p>
-                <strong>{freeTrialMode ? "14 days" : "Jun 20, 2026"}</strong>
+                <p>{freeTrialMode ? t("planCard.windowLabel") : "Your plan renews on"}</p>
+                <strong>{freeTrialMode ? t("planCard.windowValue") : "Jun 20, 2026"}</strong>
                 <div className="settings-button-row">
                   <a className="button button-solid" href="/settings/billing">
-                    {freeTrialMode ? "View trial usage" : "Change plan"}
+                    {freeTrialMode ? t("planCard.viewTrialUsage") : "Change plan"}
                   </a>
                   {freeTrialMode ? (
                     <a className="button button-outline-neutral" href="/settings/security">
@@ -296,7 +297,7 @@ export function SettingsView() {
               </article>
             </div>
             <p className="settings-trust-note">
-              <CheckCircle2 size={15} aria-hidden="true" /> All traditional tools remain free and unlimited.
+              <CheckCircle2 size={15} aria-hidden="true" /> {t("planCard.trustNote")}
             </p>
           </section>
 
@@ -392,8 +393,8 @@ export function SettingsView() {
 
           <section className="panel settings-danger-zone">
             <div className="settings-danger-content">
-              <h2>Danger zone</h2>
-              <p className="tool-description">Permanently delete your account or export your data.</p>
+              <h2>{t("dangerZone.title")}</h2>
+              <p className="tool-description">{t("dangerZone.description")}</p>
               <div className="settings-row-list compact">
                 <div className="settings-detail-row compact-row">
                   <Download size={15} aria-hidden="true" />
@@ -418,7 +419,7 @@ export function SettingsView() {
             </div>
             <div className="settings-danger-actions">
               <button className="button button-outline-neutral" onClick={prepareExport} type="button">
-                <Download size={15} aria-hidden="true" /> Export data
+                <Download size={15} aria-hidden="true" /> {t("dangerZone.exportData")}
               </button>
               <button
                 ref={deleteDialogTriggerRef}
@@ -426,7 +427,7 @@ export function SettingsView() {
                 onClick={() => setIsDeleteDialogOpen(true)}
                 type="button"
               >
-                <Trash2 size={15} aria-hidden="true" /> Delete account
+                <Trash2 size={15} aria-hidden="true" /> {t("dangerZone.deleteAccount")}
               </button>
             </div>
           </section>
@@ -434,7 +435,7 @@ export function SettingsView() {
 
         <aside className="settings-side">
           <section className="panel" id="privacy-ai">
-            <h2>Privacy & AI defaults</h2>
+            <h2>{t("privacyDefaults.title")}</h2>
             <div className="settings-toggle-list">
               {trustDefaults.map(([label, description]) => (
                 <article className="settings-toggle-row" key={label}>
@@ -458,7 +459,7 @@ export function SettingsView() {
             <span className="icon-tile green">
               <LockKeyhole size={18} aria-hidden="true" />
             </span>
-            <h2>AI tools run responsibly</h2>
+            <h2>{t("side.aiResponsiblyTitle")}</h2>
             <p className="tool-description">Your data is protected. We never use your content to train AI models without consent.</p>
             <a className="text-link" href="/settings/privacy-ai">
               Learn more about privacy
@@ -466,7 +467,7 @@ export function SettingsView() {
           </section>
 
           <section className="panel" id="storage">
-            <h2>Your storage</h2>
+            <h2>{t("side.storageTitle")}</h2>
             <div className="workspace-meter large" aria-label="Storage used">
               <span style={{ width: "42%" }} />
             </div>
@@ -477,7 +478,7 @@ export function SettingsView() {
           </section>
 
           <section className="panel" id="notifications">
-            <h2>Notifications</h2>
+              <h2>{t("side.notificationsTitle")}</h2>
             <div className="settings-toggle-row compact">
               <Bell size={18} aria-hidden="true" />
               <span>
@@ -493,7 +494,7 @@ export function SettingsView() {
 
           <section className="panel" id="security">
             <div className="landing-section-head">
-              <h2>Security</h2>
+              <h2>{t("side.securityTitle")}</h2>
               <span className={isAccountSessionSynced ? "badge local" : "badge"}>{accountSessionStatus}</span>
             </div>
             <div className="settings-toggle-row compact">

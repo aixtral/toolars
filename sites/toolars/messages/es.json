@@ -1245,6 +1245,86 @@
         "titleDesktop": "Configuración",
         "titleMobile": "Ajustes de cuenta",
         "subtitleDesktop": "Administra tu espacio de trabajo de Toolars, la prueba gratuita y las preferencias de datos."
+      },
+      "planCard": {
+        "title": "Espacio de prueba gratuita",
+        "note": "Prueba beta activa",
+        "planName": "Prueba gratuita",
+        "windowLabel": "Ventana de prueba",
+        "windowValue": "14 días",
+        "viewTrialUsage": "Ver uso de prueba",
+        "accountSecurity": "Seguridad de cuenta",
+        "trialUsageTitle": "Uso de prueba",
+        "trustNote": "Todas las herramientas tradicionales siguen siendo gratuitas e ilimitadas."
+      },
+      "usageDetails": {
+        "title": "Detalles del uso de prueba",
+        "trialStateLabel": "Estado de prueba",
+        "trialStateValue": "Prueba beta gratuita",
+        "trialStateAction": "Revisar",
+        "googleAccountLabel": "Cuenta de Google",
+        "googleAccountValue": "Necesario para el historial de prueba sincronizado",
+        "googleAccountAction": "Conectar",
+        "aiCreditsLabel": "Créditos de IA",
+        "aiCreditsValue": "2.000 créditos de prueba incluidos",
+        "aiCreditsAction": "Ver uso",
+        "paidPlansLabel": "Planes de pago",
+        "paidPlansValue": "Aparcados para la Fase 2",
+        "paidPlansAction": "Más información"
+      },
+      "planCompare": {
+        "title": "Vista previa de planes de la Fase 2",
+        "badge": "Modo de prueba gratuita",
+        "traditionalName": "Herramientas tradicionales",
+        "traditionalPrice": "Siempre gratis",
+        "traditionalDesc": "Calculadoras, conversores y utilidades locales siguen disponibles.",
+        "betaName": "Prueba beta",
+        "betaPrice": "Inicio de sesión con Google",
+        "betaDesc": "Créditos de prueba, historial sincronizado y pruebas de entrega de cargas.",
+        "phase2Name": "Planes de la Fase 2",
+        "phase2Price": "Aparcados",
+        "phase2Desc": "Equipo, facturas y facturación del proveedor volverán tras la beta."
+      },
+      "cards": {
+        "apiKeys": "Claves de API",
+        "apiKeysDesc": "Usa claves de API para integrar Toolars en tus apps y automatizaciones.",
+        "createNewKey": "Crear nueva clave de API",
+        "teamWorkspace": "Espacio de trabajo de equipo",
+        "teamWorkspaceDesc": "Invita a tu equipo y comparte colecciones, flujos de trabajo y resultados.",
+        "connectedApps": "Apps conectadas",
+        "manageConnectedApps": "Administrar apps conectadas"
+      },
+      "dangerZone": {
+        "title": "Zona de peligro",
+        "description": "Elimina permanentemente tu cuenta o exporta tus datos.",
+        "exportData": "Exportar datos",
+        "deleteAccount": "Eliminar cuenta",
+        "coverageLabel": "Cobertura de datos de cuenta",
+        "archiveBadge": "Archivo"
+      },
+      "privacyDefaults": {
+        "title": "Privacidad y valores de IA",
+        "managePrivacy": "Administrar preferencias de privacidad",
+        "toggleLocalLabel": "Preferir herramientas locales",
+        "toggleLocalDesc": "Prioriza las herramientas que se ejecutan en tu dispositivo siempre que sea posible.",
+        "toggleConsentLabel": "Preguntar antes del procesamiento de IA",
+        "toggleConsentDesc": "Solicitar siempre consentimiento antes de enviar contenido a modelos de IA.",
+        "toggleAutoDeleteLabel": "Eliminar cargas automáticamente tras la sesión",
+        "toggleAutoDeleteDesc": "Eliminar los archivos cargados automáticamente cuando finalice la sesión.",
+        "toggleSaveHistoryLabel": "Guardar historial de resultados",
+        "toggleSaveHistoryDesc": "Mantén un historial de tus resultados en tu espacio de trabajo."
+      },
+      "side": {
+        "aiResponsiblyTitle": "Las herramientas de IA funcionan de forma responsable",
+        "aiResponsiblyDesc": "Tus datos están protegidos. Nunca usamos tu contenido para entrenar modelos de IA sin consentimiento.",
+        "storageTitle": "Tu almacenamiento",
+        "manageSecurity": "Administrar seguridad",
+        "notificationsTitle": "Notificaciones",
+        "securityTitle": "Seguridad",
+        "workflowAlerts": "Alertas de finalización de flujo de trabajo",
+        "workflowAlertsDesc": "Envíame un correo cuando terminen las ejecuciones largas de flujos de trabajo.",
+        "uploadDeletion": "Política de eliminación de cargas",
+        "uploadDeletionDesc": "Los archivos cargados temporalmente se eliminan automáticamente."
       }
     }
   },

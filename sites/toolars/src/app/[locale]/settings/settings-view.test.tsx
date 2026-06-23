@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { SettingsView } from "./settings-view";
 
 describe("SettingsView", () => {
@@ -13,7 +14,7 @@ describe("SettingsView", () => {
   });
 
   it("renders account settings modules from the design", () => {
-    const { container } = render(<SettingsView />);
+    const { container } = renderWithIntl(<SettingsView />);
 
     expect(container.querySelector('[data-settings-page="true"]')).toBeInTheDocument();
     expect(container.querySelector('[data-settings-mobile-layout="account-controls"]')).toBeInTheDocument();
@@ -33,7 +34,7 @@ describe("SettingsView", () => {
   });
 
   it("renders the high-fidelity mobile account preview modules", () => {
-    const { container } = render(<SettingsView />);
+    const { container } = renderWithIntl(<SettingsView />);
 
     expect(screen.getByText("Trust defaults on")).toBeInTheDocument();
     expect(container.querySelector('[data-settings-mobile-list="trust-defaults"]')).toBeInTheDocument();
@@ -44,7 +45,7 @@ describe("SettingsView", () => {
   });
 
   it("shows trust defaults, trial usage, and beta handoffs", () => {
-    const { container } = render(<SettingsView />);
+    const { container } = renderWithIntl(<SettingsView />);
 
     expect(screen.getByText("Free trial")).toBeInTheDocument();
     expect(screen.queryByText("Pro")).not.toBeInTheDocument();
@@ -70,7 +71,7 @@ describe("SettingsView", () => {
   });
 
   it("prepares account data export from the danger zone", () => {
-    render(<SettingsView />);
+    renderWithIntl(<SettingsView />);
 
     expect(screen.getByText("Account data coverage")).toBeInTheDocument();
 
@@ -116,7 +117,7 @@ describe("SettingsView", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<SettingsView />);
+    renderWithIntl(<SettingsView />);
 
     expect(await screen.findByText("Account session synced")).toBeInTheDocument();
     expect(screen.getByText("ops@example.com")).toBeInTheDocument();
@@ -134,7 +135,7 @@ describe("SettingsView", () => {
   });
 
   it("confirms before queuing account deletion", () => {
-    render(<SettingsView />);
+    renderWithIntl(<SettingsView />);
 
     fireEvent.click(screen.getByRole("button", { name: "Delete account" }));
 
@@ -154,7 +155,7 @@ describe("SettingsView", () => {
   });
 
   it("focuses the delete confirmation dialog and restores the opener with Escape", () => {
-    render(<SettingsView />);
+    renderWithIntl(<SettingsView />);
 
     const trigger = screen.getByRole("button", { name: "Delete account" });
 

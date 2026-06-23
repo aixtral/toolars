@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
+import { PostHogProviderWrapper } from "@/components/analytics/posthog-provider";
 import { CookieConsentBanner } from "@/components/consent/cookie-consent-banner";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { LAUNCH_LOCALES, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
@@ -101,7 +102,9 @@ export default async function LocaleLayout({
     <html lang={hreflang}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <PostHogProviderWrapper>
+            {children}
+          </PostHogProviderWrapper>
           <SiteFooter />
           <CookieConsentBanner />
         </NextIntlClientProvider>

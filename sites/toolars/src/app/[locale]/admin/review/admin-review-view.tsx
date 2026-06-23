@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { AlertTriangle, CheckCircle2, Download, FileCheck2, FileText, MoreHorizontal, ShieldCheck, UploadCloud } from "lucide-react";
 
 const kpis = [
@@ -43,13 +44,14 @@ const checklist = [
 ] as const;
 
 export function AdminReviewView() {
+  const t = useTranslations("adminReview");
   return (
     <div className="admin-review-page" data-admin-review-page="true">
       <section className="section admin-review-hero">
         <div>
-          <span className="eyebrow">Internal console</span>
-          <h1 className="title">Review queue</h1>
-          <p className="subtitle">Review submitted tools, inspect automated checks, request changes, and approve listings.</p>
+          <span className="eyebrow">{t("hero.eyebrow")}</span>
+          <h1 className="title">{t("hero.title")}</h1>
+          <p className="subtitle">{t("hero.subtitle")}</p>
         </div>
         <a className="button button-outline-neutral" href="/submit">
           Open submit form

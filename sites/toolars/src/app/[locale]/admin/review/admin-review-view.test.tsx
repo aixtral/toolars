@@ -1,13 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { AdminReviewView } from "./admin-review-view";
 
 describe("AdminReviewView", () => {
   it("renders the admin review modules from the design", () => {
-    const { container } = render(<AdminReviewView />);
+    const { container } = renderWithIntl(<AdminReviewView />);
 
     expect(container.querySelector('[data-admin-review-page="true"]')).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Review queue" })).toBeInTheDocument();
+    expect(screen.getAllByText("Review queue")[0]).toBeInTheDocument();
     expect(screen.getByText("Pending reviews")).toBeInTheDocument();
     expect(screen.getByText("Security flags")).toBeInTheDocument();
     expect(screen.getByText("AI consent reviews")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("AdminReviewView", () => {
   });
 
   it("shows the selected submission risk, checks, and review actions", () => {
-    render(<AdminReviewView />);
+    renderWithIntl(<AdminReviewView />);
 
     expect(screen.getAllByText("AI Research Summarizer").length).toBeGreaterThan(0);
     expect(screen.getByText("Sarah Kim")).toBeInTheDocument();

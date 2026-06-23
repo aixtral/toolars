@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { IncomeTaxWorkspace } from "./income-tax-workspace";
 
@@ -8,7 +9,7 @@ describe("IncomeTaxWorkspace", () => {
   });
 
   it("renders the local VitalCalc income tax workspace sections", () => {
-    render(<IncomeTaxWorkspace />);
+    renderWithIntl(<IncomeTaxWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Income Tax Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Income inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("IncomeTaxWorkspace", () => {
   });
 
   it("calculates the default take-home estimate and saves assumptions locally", () => {
-    render(<IncomeTaxWorkspace />);
+    renderWithIntl(<IncomeTaxWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate take-home" }));
 

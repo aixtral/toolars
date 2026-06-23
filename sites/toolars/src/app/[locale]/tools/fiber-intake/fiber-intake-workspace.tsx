@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Wheat } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const fiberNotes = [
 ];
 
 export function FiberIntakeWorkspace() {
+  const t = useTranslations("tools.fiber-intake");
   const [values, setValues] = useState<FiberIntakeInput>(() => defaultFiberIntakeScenario);
   const [result, setResult] = useState<FiberIntakeResult | null>(null);
 

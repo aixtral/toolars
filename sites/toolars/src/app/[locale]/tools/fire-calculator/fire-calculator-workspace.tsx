@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Flame, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const fireNotes = [
 ];
 
 export function FireCalculatorWorkspace() {
+  const t = useTranslations("tools.fire-calculator");
   const [plan, setPlan] = useState<FireInput>(defaultFireScenario);
   const [result, setResult] = useState<FireResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, WalletCards } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const policyNotes = [
 ];
 
 export function SocialInsuranceCalculatorWorkspace() {
+  const t = useTranslations("tools.social-insurance-calculator");
   const [plan, setPlan] = useState<SocialInsuranceInput>(defaultSocialInsuranceScenario);
   const [result, setResult] = useState<SocialInsuranceResult | null>(null);
 

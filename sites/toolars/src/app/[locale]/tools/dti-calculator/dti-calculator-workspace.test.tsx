@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DtiCalculatorWorkspace } from "./dti-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("DtiCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc DTI workspace sections", () => {
-    render(<DtiCalculatorWorkspace />);
+    renderWithIntl(<DtiCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Debt-to-Income Calculator" })).toBeInTheDocument();
     expect(screen.getByText("DTI inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("DtiCalculatorWorkspace", () => {
   });
 
   it("calculates the default DTI ratios and saves assumptions locally", () => {
-    render(<DtiCalculatorWorkspace />);
+    renderWithIntl(<DtiCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate DTI" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BiologicalAgeWorkspace } from "./biological-age-workspace";
 
@@ -8,7 +9,7 @@ describe("BiologicalAgeWorkspace", () => {
   });
 
   it("renders the local VitalCalc biological age workspace sections", () => {
-    render(<BiologicalAgeWorkspace />);
+    renderWithIntl(<BiologicalAgeWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Biological Age Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Lifestyle inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("BiologicalAgeWorkspace", () => {
   });
 
   it("calculates biological age and saves the lifestyle sample locally", () => {
-    render(<BiologicalAgeWorkspace />);
+    renderWithIntl(<BiologicalAgeWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate biological age" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { MacroCalculatorWorkspace } from "./macro-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("MacroCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc macro workspace sections", () => {
-    render(<MacroCalculatorWorkspace />);
+    renderWithIntl(<MacroCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Macro Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Macro inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("MacroCalculatorWorkspace", () => {
   });
 
   it("calculates macro grams and saves the split locally", () => {
-    render(<MacroCalculatorWorkspace />);
+    renderWithIntl(<MacroCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate macros" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DividendReinvestmentWorkspace } from "./dividend-reinvestment-workspace";
 
@@ -8,7 +9,7 @@ describe("DividendReinvestmentWorkspace", () => {
   });
 
   it("renders the local VitalCalc dividend reinvestment workspace sections", () => {
-    render(<DividendReinvestmentWorkspace />);
+    renderWithIntl(<DividendReinvestmentWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Dividend Reinvestment Calculator" })).toBeInTheDocument();
     expect(screen.getByText("DRIP inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("DividendReinvestmentWorkspace", () => {
   });
 
   it("calculates the default DRIP projection and saves assumptions locally", () => {
-    render(<DividendReinvestmentWorkspace />);
+    renderWithIntl(<DividendReinvestmentWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate DRIP" }));
 

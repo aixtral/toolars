@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Download, Home, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const affordabilityNotes = [
 ];
 
 export function MortgageCalculatorWorkspace() {
+  const t = useTranslations("tools.mortgage-calculator");
   const [scenario, setScenario] = useState<MortgageInput>(defaultMortgageScenario);
   const [result, setResult] = useState<MortgageResult | null>(null);
 

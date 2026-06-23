@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ProteinCalculatorWorkspace } from "./protein-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("ProteinCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc protein workspace sections", () => {
-    render(<ProteinCalculatorWorkspace />);
+    renderWithIntl(<ProteinCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Protein Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Nutrition inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("ProteinCalculatorWorkspace", () => {
   });
 
   it("calculates daily protein needs and saves the plan locally", () => {
-    render(<ProteinCalculatorWorkspace />);
+    renderWithIntl(<ProteinCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate protein" }));
 

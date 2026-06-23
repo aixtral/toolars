@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Ruler, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const measurementNotes = [
 ];
 
 export function BodyFatCalculatorWorkspace() {
+  const t = useTranslations("tools.body-fat-calculator");
   const [measurements, setMeasurements] = useState<BodyFatInput>(defaultBodyFatScenario);
   const [result, setResult] = useState<BodyFatResult | null>(null);
 

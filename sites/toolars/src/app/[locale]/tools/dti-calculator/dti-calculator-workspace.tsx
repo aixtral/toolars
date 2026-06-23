@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Home, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const dtiNotes = [
 ];
 
 export function DtiCalculatorWorkspace() {
+  const t = useTranslations("tools.dti-calculator");
   const [plan, setPlan] = useState<DtiInput>(defaultDtiScenario);
   const [result, setResult] = useState<DtiResult | null>(null);
 

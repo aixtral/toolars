@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, CreditCard, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,7 @@ const debtNotes = [
 ];
 
 export function DebtPayoffWorkspace() {
+  const t = useTranslations("tools.debt-payoff");
   const [plan, setPlan] = useState<DebtPayoffInput>(defaultDebtPayoffScenario);
   const [result, setResult] = useState<DebtPayoffResult | null>(null);
 

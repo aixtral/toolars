@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { WaistHipRatioWorkspace } from "./waist-hip-ratio-workspace";
 
@@ -8,7 +9,7 @@ describe("WaistHipRatioWorkspace", () => {
   });
 
   it("renders the local VitalCalc waist-hip ratio workspace sections", () => {
-    render(<WaistHipRatioWorkspace />);
+    renderWithIntl(<WaistHipRatioWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Waist-to-Hip Ratio Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Measurement inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("WaistHipRatioWorkspace", () => {
   });
 
   it("calculates the default WHR and saves assumptions locally", () => {
-    render(<WaistHipRatioWorkspace />);
+    renderWithIntl(<WaistHipRatioWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate WHR" }));
 

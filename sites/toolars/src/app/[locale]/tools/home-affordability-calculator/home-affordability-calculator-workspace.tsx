@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Home, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const readinessNotes = [
 ];
 
 export function HomeAffordabilityCalculatorWorkspace() {
+  const t = useTranslations("tools.home-affordability-calculator");
   const [plan, setPlan] = useState<HomeAffordabilityInput>(defaultHomeAffordabilityScenario);
   const [result, setResult] = useState<HomeAffordabilityResult | null>(null);
 

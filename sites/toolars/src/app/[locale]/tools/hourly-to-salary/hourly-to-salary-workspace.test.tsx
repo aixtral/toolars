@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { HourlyToSalaryWorkspace } from "./hourly-to-salary-workspace";
 
@@ -8,7 +9,7 @@ describe("HourlyToSalaryWorkspace", () => {
   });
 
   it("renders the local VitalCalc hourly to salary workspace sections", () => {
-    render(<HourlyToSalaryWorkspace />);
+    renderWithIntl(<HourlyToSalaryWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Hourly to Salary Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Wage inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("HourlyToSalaryWorkspace", () => {
   });
 
   it("calculates the default salary estimate and saves assumptions locally", () => {
-    render(<HourlyToSalaryWorkspace />);
+    renderWithIntl(<HourlyToSalaryWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate salary" }));
 

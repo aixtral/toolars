@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TestTube2 } from "lucide-react";
 import { useState } from "react";
@@ -28,6 +29,7 @@ const clinicalNotes = [
 ];
 
 export function TestosteroneCalculatorWorkspace() {
+  const t = useTranslations("tools.testosterone-calculator");
   const [lab, setLab] = useState<TestosteroneInput>(() => defaultTestosteroneScenario);
   const [result, setResult] = useState<TestosteroneResult | null>(null);
 

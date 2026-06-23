@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, PieChart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const comparisonNotes = [
 ];
 
 export function RoiCalculatorWorkspace() {
+  const t = useTranslations("tools.roi-calculator");
   const [plan, setPlan] = useState<RoiInput>(defaultRoiScenario);
   const [result, setResult] = useState<RoiResult | null>(null);
 

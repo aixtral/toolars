@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BodyRecompositionWorkspace } from "./body-recomposition-workspace";
 
@@ -8,7 +9,7 @@ describe("BodyRecompositionWorkspace", () => {
   });
 
   it("renders the local VitalCalc body recomposition workspace sections", () => {
-    render(<BodyRecompositionWorkspace />);
+    renderWithIntl(<BodyRecompositionWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Body Recomposition Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Recomposition inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("BodyRecompositionWorkspace", () => {
   });
 
   it("calculates recomp calories and saves the plan locally", () => {
-    render(<BodyRecompositionWorkspace />);
+    renderWithIntl(<BodyRecompositionWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate recomp plan" }));
 

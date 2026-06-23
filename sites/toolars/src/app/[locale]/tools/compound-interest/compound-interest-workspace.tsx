@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Download, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const investmentNotes = [
 ];
 
 export function CompoundInterestWorkspace() {
+  const t = useTranslations("tools.compound-interest");
   const [plan, setPlan] = useState<CompoundInterestInput>(defaultCompoundInterestScenario);
   const [result, setResult] = useState<CompoundInterestResult | null>(null);
 

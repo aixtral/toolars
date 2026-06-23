@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { StepsToCaloriesWorkspace } from "./steps-to-calories-workspace";
 
@@ -8,7 +9,7 @@ describe("StepsToCaloriesWorkspace", () => {
   });
 
   it("renders the local VitalCalc steps to calories workspace sections", () => {
-    render(<StepsToCaloriesWorkspace />);
+    renderWithIntl(<StepsToCaloriesWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Steps to Calories Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Activity inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("StepsToCaloriesWorkspace", () => {
   });
 
   it("calculates calorie burn and saves the activity sample locally", () => {
-    render(<StepsToCaloriesWorkspace />);
+    renderWithIntl(<StepsToCaloriesWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate burn" }));
 

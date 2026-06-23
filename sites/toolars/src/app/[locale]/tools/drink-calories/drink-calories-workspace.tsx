@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Coffee, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const drinkNotes = [
 ];
 
 export function DrinkCaloriesWorkspace() {
+  const t = useTranslations("tools.drink-calories");
   const [values, setValues] = useState<DrinkCaloriesInput>(() => defaultDrinkCaloriesScenario);
   const [result, setResult] = useState<DrinkCaloriesResult | null>(null);
 

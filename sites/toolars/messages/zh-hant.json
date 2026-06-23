@@ -1342,6 +1342,10 @@
         "loginActivity": "登錄活动",
         "checklist": "安全檢查清单",
         "riskActions": "風險操作"
+      },
+      "labels": {
+        "Authenticator app": "身份驗證器應用",
+        "Review sensitive changes": "審查敏感更改"
       }
     },
     "privacy-ai": {
@@ -1361,6 +1365,9 @@
         "privacyLog": "隱私日志",
         "auditTrail": "AI 審計追踪",
         "guardrails": "負責任的 AI 護栏"
+      },
+      "labels": {
+        "Before AI processing": "AI 處理之前"
       }
     },
     "api-keys": {
@@ -1394,6 +1401,18 @@
         "usagePolicy": "用量政策",
         "paymentMethod": "付款方式",
         "invoiceExport": "發票導出"
+      },
+      "labels": {
+        "Google sign-in": "Google 登錄",
+        "Paid plan access": "付費套餐访問",
+        "Paid plans": "付費套餐",
+        "Date": "日期",
+        "Subscription": "订閱",
+        "Amount": "金额",
+        "Status": "狀態",
+        "Receipt status": "收據狀態",
+        "Primary card": "主卡",
+        "Download tax-ready invoices": "下载税務就绪發票"
       }
     },
     "connected-apps": {
@@ -1409,6 +1428,12 @@
         "syncPolicy": "同步策略",
         "appActivity": "應用活动",
         "integrationHealth": "集成健康度"
+      },
+      "labels": {
+        "Drive imports": "Drive 導入",
+        "Browser capture": "浏览器捕獲",
+        "Output exports": "结果導出",
+        "Security review": "安全審查"
       }
     },
     "notifications": {
@@ -1426,6 +1451,9 @@
         "trialRouting": "試用用量路由",
         "releaseNotes": "版本說明",
         "preview": "通知預览"
+      },
+      "labels": {
+        "PDF Summary Workflow finished": "PDF 摘要工作流已完成"
       }
     },
     "storage": {
@@ -1458,6 +1486,10 @@
         "sharedCollections": "共享集合",
         "activityLog": "活动日志",
         "ownership": "所有权"
+      },
+      "labels": {
+        "Today": "今天",
+        "Yesterday": "昨天"
       }
     }
   },

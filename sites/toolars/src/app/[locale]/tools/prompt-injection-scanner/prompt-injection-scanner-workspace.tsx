@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { useState } from "react";
 import { ClipboardCheck, FileWarning, Save, ShieldAlert, ShieldCheck, Sparkles } from "lucide-react";
@@ -14,6 +15,7 @@ const profileRows = [
 ] as const;
 
 export function PromptInjectionScannerWorkspace() {
+  const t = useTranslations("tools.prompt-injection-scanner");
   const [prompt, setPrompt] = useState(samplePrompt);
   const [result, setResult] = useState<PromptInjectionScanResult | null>(null);
 

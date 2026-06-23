@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BodyFatCalculatorWorkspace } from "./body-fat-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("BodyFatCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc body fat workspace sections", () => {
-    render(<BodyFatCalculatorWorkspace />);
+    renderWithIntl(<BodyFatCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Body Fat Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Measurement inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("BodyFatCalculatorWorkspace", () => {
   });
 
   it("calculates body fat percentage and saves measurements locally", () => {
-    render(<BodyFatCalculatorWorkspace />);
+    renderWithIntl(<BodyFatCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate body fat" }));
 

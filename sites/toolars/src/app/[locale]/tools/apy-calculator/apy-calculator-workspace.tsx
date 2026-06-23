@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const apyNotes = [
 ];
 
 export function ApyCalculatorWorkspace() {
+  const t = useTranslations("tools.apy-calculator");
   const [plan, setPlan] = useState<ApyInput>(defaultApyScenario);
   const [result, setResult] = useState<ApyResult | null>(null);
 

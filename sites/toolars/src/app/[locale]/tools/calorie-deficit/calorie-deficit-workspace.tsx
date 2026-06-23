@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Flame, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const deficitNotes = [
 ];
 
 export function CalorieDeficitWorkspace() {
+  const t = useTranslations("tools.calorie-deficit");
   const [plan, setPlan] = useState<CalorieDeficitInput>(defaultCalorieDeficitScenario);
   const [result, setResult] = useState<CalorieDeficitResult | null>(null);
 

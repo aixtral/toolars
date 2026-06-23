@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CityCostComparisonWorkspace } from "./city-cost-comparison-workspace";
 
@@ -8,7 +9,7 @@ describe("CityCostComparisonWorkspace", () => {
   });
 
   it("renders the local VitalCalc city cost workspace sections", () => {
-    render(<CityCostComparisonWorkspace />);
+    renderWithIntl(<CityCostComparisonWorkspace />);
 
     expect(screen.getByRole("heading", { name: "City Cost Comparison" })).toBeInTheDocument();
     expect(screen.getByText("City assumptions")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("CityCostComparisonWorkspace", () => {
   });
 
   it("calculates the default relocation comparison and saves assumptions locally", () => {
-    render(<CityCostComparisonWorkspace />);
+    renderWithIntl(<CityCostComparisonWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Compare cities" }));
 

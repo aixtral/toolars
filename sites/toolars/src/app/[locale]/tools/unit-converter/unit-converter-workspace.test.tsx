@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { UnitConverterWorkspace } from "./unit-converter-workspace";
 
@@ -8,7 +9,7 @@ describe("UnitConverterWorkspace", () => {
   });
 
   it("renders the local VitalCalc unit converter workspace sections", () => {
-    render(<UnitConverterWorkspace />);
+    renderWithIntl(<UnitConverterWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Unit Converter" })).toBeInTheDocument();
     expect(screen.getByText("Conversion inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("UnitConverterWorkspace", () => {
   });
 
   it("converts the default value and saves assumptions locally", () => {
-    render(<UnitConverterWorkspace />);
+    renderWithIntl(<UnitConverterWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Convert units" }));
 

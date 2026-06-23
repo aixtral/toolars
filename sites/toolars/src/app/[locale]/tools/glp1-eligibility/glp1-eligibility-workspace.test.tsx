@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { Glp1EligibilityWorkspace } from "./glp1-eligibility-workspace";
 
@@ -8,7 +9,7 @@ describe("Glp1EligibilityWorkspace", () => {
   });
 
   it("renders the local VitalCalc GLP-1 eligibility workspace sections", () => {
-    render(<Glp1EligibilityWorkspace />);
+    renderWithIntl(<Glp1EligibilityWorkspace />);
 
     expect(screen.getByRole("heading", { name: "GLP-1 Eligibility Check" })).toBeInTheDocument();
     expect(screen.getByText("Eligibility inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("Glp1EligibilityWorkspace", () => {
   });
 
   it("calculates criteria status and saves the local eligibility snapshot", () => {
-    render(<Glp1EligibilityWorkspace />);
+    renderWithIntl(<Glp1EligibilityWorkspace />);
 
     fireEvent.click(screen.getByLabelText("Hypertension"));
     fireEvent.click(screen.getByRole("button", { name: "Check common criteria" }));

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { LeanBodyMassWorkspace } from "./lean-body-mass-workspace";
 
@@ -8,7 +9,7 @@ describe("LeanBodyMassWorkspace", () => {
   });
 
   it("renders the local VitalCalc lean body mass workspace sections", () => {
-    render(<LeanBodyMassWorkspace />);
+    renderWithIntl(<LeanBodyMassWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Lean Body Mass Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Composition inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("LeanBodyMassWorkspace", () => {
   });
 
   it("calculates lean mass and saves composition assumptions locally", () => {
-    render(<LeanBodyMassWorkspace />);
+    renderWithIntl(<LeanBodyMassWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate lean mass" }));
 

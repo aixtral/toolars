@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Home, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const housingNotes = [
 ];
 
 export function RentVsBuyWorkspace() {
+  const t = useTranslations("tools.rent-vs-buy");
   const [plan, setPlan] = useState<RentVsBuyInput>(defaultRentVsBuyScenario);
   const [result, setResult] = useState<RentVsBuyResult | null>(null);
 

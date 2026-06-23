@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SavingsChallengeWorkspace } from "./savings-challenge-workspace";
 
@@ -8,7 +9,7 @@ describe("SavingsChallengeWorkspace", () => {
   });
 
   it("renders the local VitalCalc savings challenge workspace sections", () => {
-    render(<SavingsChallengeWorkspace />);
+    renderWithIntl(<SavingsChallengeWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Savings Challenge Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Challenge inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("SavingsChallengeWorkspace", () => {
   });
 
   it("calculates the default 52-week challenge and saves assumptions locally", () => {
-    render(<SavingsChallengeWorkspace />);
+    renderWithIntl(<SavingsChallengeWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Generate savings challenge" }));
 

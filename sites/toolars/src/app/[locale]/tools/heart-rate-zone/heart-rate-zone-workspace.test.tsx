@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { HeartRateZoneWorkspace } from "./heart-rate-zone-workspace";
 
@@ -8,7 +9,7 @@ describe("HeartRateZoneWorkspace", () => {
   });
 
   it("renders the local VitalCalc heart rate zone workspace sections", () => {
-    render(<HeartRateZoneWorkspace />);
+    renderWithIntl(<HeartRateZoneWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Heart Rate Zone Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Training inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("HeartRateZoneWorkspace", () => {
   });
 
   it("calculates zones and saves the training profile locally", () => {
-    render(<HeartRateZoneWorkspace />);
+    renderWithIntl(<HeartRateZoneWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate zones" }));
 

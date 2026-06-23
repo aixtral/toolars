@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { OneRepMaxWorkspace } from "./one-rep-max-workspace";
 
@@ -8,7 +9,7 @@ describe("OneRepMaxWorkspace", () => {
   });
 
   it("renders the local VitalCalc one rep max workspace sections", () => {
-    render(<OneRepMaxWorkspace />);
+    renderWithIntl(<OneRepMaxWorkspace />);
 
     expect(screen.getByRole("heading", { name: "1RM Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Lift inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("OneRepMaxWorkspace", () => {
   });
 
   it("calculates the default Epley estimate and saves the lift locally", () => {
-    render(<OneRepMaxWorkspace />);
+    renderWithIntl(<OneRepMaxWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate 1RM" }));
 

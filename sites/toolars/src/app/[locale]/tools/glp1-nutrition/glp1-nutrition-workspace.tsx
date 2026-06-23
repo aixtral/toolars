@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Heart } from "lucide-react";
 import { useState } from "react";
@@ -28,6 +29,7 @@ const medicationNotes = [
 ];
 
 export function Glp1NutritionWorkspace() {
+  const t = useTranslations("tools.glp1-nutrition");
   const [values, setValues] = useState<Glp1NutritionInput>(() => defaultGlp1NutritionScenario);
   const [result, setResult] = useState<Glp1NutritionResult | null>(null);
 

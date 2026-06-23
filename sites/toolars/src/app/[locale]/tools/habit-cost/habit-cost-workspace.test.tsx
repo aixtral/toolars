@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { HabitCostWorkspace } from "./habit-cost-workspace";
 
@@ -8,7 +9,7 @@ describe("HabitCostWorkspace", () => {
   });
 
   it("renders the local VitalCalc habit cost workspace sections", () => {
-    render(<HabitCostWorkspace />);
+    renderWithIntl(<HabitCostWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Habit Cost Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Habit inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("HabitCostWorkspace", () => {
   });
 
   it("calculates the default habit cost and saves assumptions locally", () => {
-    render(<HabitCostWorkspace />);
+    renderWithIntl(<HabitCostWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate habit cost" }));
 

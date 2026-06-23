@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SipCalculatorWorkspace } from "./sip-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("SipCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc SIP workspace sections", () => {
-    render(<SipCalculatorWorkspace />);
+    renderWithIntl(<SipCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Fund SIP Calculator" })).toBeInTheDocument();
     expect(screen.getByText("SIP inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("SipCalculatorWorkspace", () => {
   });
 
   it("calculates the default SIP projection and saves assumptions locally", () => {
-    render(<SipCalculatorWorkspace />);
+    renderWithIntl(<SipCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate SIP returns" }));
 

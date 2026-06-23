@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DebtPayoffWorkspace } from "./debt-payoff-workspace";
 
@@ -8,7 +9,7 @@ describe("DebtPayoffWorkspace", () => {
   });
 
   it("renders the local VitalCalc debt payoff workspace sections", () => {
-    render(<DebtPayoffWorkspace />);
+    renderWithIntl(<DebtPayoffWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Debt Payoff Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Debt inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("DebtPayoffWorkspace", () => {
   });
 
   it("calculates the default payoff schedule and saves assumptions locally", () => {
-    render(<DebtPayoffWorkspace />);
+    renderWithIntl(<DebtPayoffWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate payoff" }));
 

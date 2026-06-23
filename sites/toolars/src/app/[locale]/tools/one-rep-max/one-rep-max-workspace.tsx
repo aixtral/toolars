@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Dumbbell, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const strengthNotes = [
 ];
 
 export function OneRepMaxWorkspace() {
+  const t = useTranslations("tools.one-rep-max");
   const [lift, setLift] = useState<OneRepMaxInput>(() => defaultOneRepMaxScenario);
   const [result, setResult] = useState<OneRepMaxResult | null>(null);
 

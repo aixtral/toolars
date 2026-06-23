@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { useState } from "react";
 import { Calculator, Download, Save, TrendingUp } from "lucide-react";
@@ -31,6 +32,7 @@ const checklistRows = [
 ];
 
 export function LlmCostCalculatorWorkspace() {
+  const t = useTranslations("tools.llm-cost-calculator");
   const [scenario, setScenario] = useState<LlmCostInput>(defaultScenario);
   const [result, setResult] = useState<LlmCostResult | null>(null);
 

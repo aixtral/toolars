@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const activityNotes = [
 ];
 
 export function StepsToCaloriesWorkspace() {
+  const t = useTranslations("tools.steps-to-calories");
   const [activity, setActivity] = useState<StepsToCaloriesInput>(() => defaultStepsToCaloriesScenario);
   const [result, setResult] = useState<StepsToCaloriesResult | null>(null);
 

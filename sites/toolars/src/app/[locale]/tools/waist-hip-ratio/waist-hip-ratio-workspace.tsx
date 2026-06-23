@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Ruler, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const whrNotes = [
 ];
 
 export function WaistHipRatioWorkspace() {
+  const t = useTranslations("tools.waist-hip-ratio");
   const [measurements, setMeasurements] = useState<WaistHipInput>(() => defaultWaistHipScenario);
   const [result, setResult] = useState<WaistHipResult | null>(null);
 

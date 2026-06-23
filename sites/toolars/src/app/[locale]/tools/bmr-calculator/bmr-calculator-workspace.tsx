@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Flame, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const formulaNotes = [
 ];
 
 export function BmrCalculatorWorkspace() {
+  const t = useTranslations("tools.bmr-calculator");
   const [profile, setProfile] = useState<BmrInput>(defaultBmrScenario);
   const [result, setResult] = useState<BmrResult | null>(null);
 

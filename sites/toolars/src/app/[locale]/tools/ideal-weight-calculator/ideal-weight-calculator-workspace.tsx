@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Target } from "lucide-react";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const bodyNotes = [
 ];
 
 export function IdealWeightCalculatorWorkspace() {
+  const t = useTranslations("tools.ideal-weight-calculator");
   const [profile, setProfile] = useState<IdealWeightInput>(() => defaultIdealWeightScenario);
   const [result, setResult] = useState<IdealWeightResult | null>(null);
 

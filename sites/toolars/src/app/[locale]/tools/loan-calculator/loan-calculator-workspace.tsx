@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Download, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const amortizationNotes = [
 ];
 
 export function LoanCalculatorWorkspace() {
+  const t = useTranslations("tools.loan-calculator");
   const [scenario, setScenario] = useState<LoanInput>(defaultLoanScenario);
   const [result, setResult] = useState<LoanResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingDown } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const feeNotes = [
 ];
 
 export function InvestmentFeeWorkspace() {
+  const t = useTranslations("tools.investment-fee");
   const [plan, setPlan] = useState<InvestmentFeeInput>(defaultInvestmentFeeScenario);
   const [result, setResult] = useState<InvestmentFeeResult | null>(null);
 

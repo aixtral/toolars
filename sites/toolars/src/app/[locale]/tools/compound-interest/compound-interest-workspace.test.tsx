@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CompoundInterestWorkspace } from "./compound-interest-workspace";
 
@@ -8,7 +9,7 @@ describe("CompoundInterestWorkspace", () => {
   });
 
   it("renders the local VitalCalc compound interest workspace sections", () => {
-    render(<CompoundInterestWorkspace />);
+    renderWithIntl(<CompoundInterestWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Compound Interest Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Investment inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("CompoundInterestWorkspace", () => {
   });
 
   it("calculates the default growth plan and saves it locally", () => {
-    render(<CompoundInterestWorkspace />);
+    renderWithIntl(<CompoundInterestWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate growth" }));
 

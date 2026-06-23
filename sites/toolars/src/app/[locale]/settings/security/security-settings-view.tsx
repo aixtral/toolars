@@ -144,7 +144,7 @@ export function SecuritySettingsView() {
                 <LockKeyhole size={18} aria-hidden="true" />
               </span>
               <span>
-                <strong>Authenticator app</strong>
+                <strong>{t("labels.Authenticator app")}</strong>
                 <small>Require a second factor when signing in or changing sensitive settings.</small>
               </span>
               <button
@@ -252,7 +252,7 @@ export function SecuritySettingsView() {
             <h2>{t("sections.riskActions")}</h2>
             <div className="consent-preview-box">
               <ShieldAlert size={18} aria-hidden="true" />
-              <strong>Review sensitive changes</strong>
+              <strong>{t("labels.Review sensitive changes")}</strong>
               <p>Password, API key, and billing authority changes require a fresh two-factor challenge.</p>
               <button className="button button-outline-neutral" type="button">
                 Download security log

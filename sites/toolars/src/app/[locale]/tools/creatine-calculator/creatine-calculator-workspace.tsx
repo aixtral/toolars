@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Droplets, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const supplementNotes = [
 ];
 
 export function CreatineCalculatorWorkspace() {
+  const t = useTranslations("tools.creatine-calculator");
   const [plan, setPlan] = useState<CreatineInput>(() => defaultCreatineScenario);
   const [result, setResult] = useState<CreatineResult | null>(null);
 

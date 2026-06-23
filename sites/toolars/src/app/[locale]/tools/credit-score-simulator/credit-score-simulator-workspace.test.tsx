@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CreditScoreSimulatorWorkspace } from "./credit-score-simulator-workspace";
 
@@ -8,7 +9,7 @@ describe("CreditScoreSimulatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc credit score simulator workspace sections", () => {
-    render(<CreditScoreSimulatorWorkspace />);
+    renderWithIntl(<CreditScoreSimulatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Credit Score Simulator" })).toBeInTheDocument();
     expect(screen.getByText("Credit scenario inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("CreditScoreSimulatorWorkspace", () => {
   });
 
   it("simulates the default score change and saves assumptions locally", () => {
-    render(<CreditScoreSimulatorWorkspace />);
+    renderWithIntl(<CreditScoreSimulatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Simulate score change" }));
 

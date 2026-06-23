@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Clock, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const salaryNotes = [
 ];
 
 export function HourlyToSalaryWorkspace() {
+  const t = useTranslations("tools.hourly-to-salary");
   const [plan, setPlan] = useState<HourlyToSalaryInput>(defaultHourlyToSalaryScenario);
   const [result, setResult] = useState<HourlyToSalaryResult | null>(null);
 

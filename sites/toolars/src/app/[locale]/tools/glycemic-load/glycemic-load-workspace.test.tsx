@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { GlycemicLoadWorkspace } from "./glycemic-load-workspace";
 
@@ -8,7 +9,7 @@ describe("GlycemicLoadWorkspace", () => {
   });
 
   it("renders the local VitalCalc glycemic load workspace sections", () => {
-    render(<GlycemicLoadWorkspace />);
+    renderWithIntl(<GlycemicLoadWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Glycemic Load Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Food inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("GlycemicLoadWorkspace", () => {
   });
 
   it("calculates the default GL result and saves the food sample locally", () => {
-    render(<GlycemicLoadWorkspace />);
+    renderWithIntl(<GlycemicLoadWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate glycemic load" }));
 

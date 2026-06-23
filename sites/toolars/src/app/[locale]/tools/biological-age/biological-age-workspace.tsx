@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Clock3, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const lifestyleNotes = [
 ];
 
 export function BiologicalAgeWorkspace() {
+  const t = useTranslations("tools.biological-age");
   const [sample, setSample] = useState<BiologicalAgeInput>(() => defaultBiologicalAgeScenario);
   const [result, setResult] = useState<BiologicalAgeResult | null>(null);
 

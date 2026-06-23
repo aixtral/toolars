@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, RefreshCw, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -35,6 +36,7 @@ const defaultUnitByCategory: Record<UnitCategory, { fromUnit: string; toUnit: st
 };
 
 export function UnitConverterWorkspace() {
+  const t = useTranslations("tools.unit-converter");
   const [plan, setPlan] = useState<UnitConversionInput>(defaultUnitConversionScenario);
   const [result, setResult] = useState<UnitConversionResult | null>(null);
   const unitOptions = getUnitOptions(plan.category);

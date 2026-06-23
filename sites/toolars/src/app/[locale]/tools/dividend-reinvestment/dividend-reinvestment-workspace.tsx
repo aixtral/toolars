@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const dividendNotes = [
 ];
 
 export function DividendReinvestmentWorkspace() {
+  const t = useTranslations("tools.dividend-reinvestment");
   const [plan, setPlan] = useState<DividendReinvestmentInput>(() => defaultDividendReinvestmentScenario);
   const [result, setResult] = useState<DividendReinvestmentResult | null>(null);
 

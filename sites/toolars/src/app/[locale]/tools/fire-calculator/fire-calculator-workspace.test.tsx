@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { FireCalculatorWorkspace } from "./fire-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("FireCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc FIRE workspace sections", () => {
-    render(<FireCalculatorWorkspace />);
+    renderWithIntl(<FireCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "FIRE Calculator" })).toBeInTheDocument();
     expect(screen.getByText("FIRE inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("FireCalculatorWorkspace", () => {
   });
 
   it("calculates the default FIRE estimate and saves assumptions locally", () => {
-    render(<FireCalculatorWorkspace />);
+    renderWithIntl(<FireCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate FIRE" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { TdeeCalculatorWorkspace } from "./tdee-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("TdeeCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc TDEE workspace sections", () => {
-    render(<TdeeCalculatorWorkspace />);
+    renderWithIntl(<TdeeCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "TDEE Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Energy inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("TdeeCalculatorWorkspace", () => {
   });
 
   it("calculates the default TDEE targets and saves the profile locally", () => {
-    render(<TdeeCalculatorWorkspace />);
+    renderWithIntl(<TdeeCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate TDEE" }));
 

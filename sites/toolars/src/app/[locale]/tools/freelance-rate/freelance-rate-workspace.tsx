@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TimerReset } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const pricingNotes = [
 ];
 
 export function FreelanceRateWorkspace() {
+  const t = useTranslations("tools.freelance-rate");
   const [plan, setPlan] = useState<FreelanceRateInput>(defaultFreelanceRateScenario);
   const [result, setResult] = useState<FreelanceRateResult | null>(null);
 

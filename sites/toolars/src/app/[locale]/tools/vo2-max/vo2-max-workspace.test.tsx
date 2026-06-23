@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { Vo2MaxWorkspace } from "./vo2-max-workspace";
 
@@ -8,7 +9,7 @@ describe("Vo2MaxWorkspace", () => {
   });
 
   it("renders the local VitalCalc VO2 Max workspace sections", () => {
-    render(<Vo2MaxWorkspace />);
+    renderWithIntl(<Vo2MaxWorkspace />);
 
     expect(screen.getByRole("heading", { name: "VO2 Max Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Fitness inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("Vo2MaxWorkspace", () => {
   });
 
   it("calculates the Cooper estimate and saves the scenario locally", () => {
-    render(<Vo2MaxWorkspace />);
+    renderWithIntl(<Vo2MaxWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate VO2 Max" }));
 

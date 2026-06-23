@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { PercentageCalculatorWorkspace } from "./percentage-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("PercentageCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc percentage workspace sections", () => {
-    render(<PercentageCalculatorWorkspace />);
+    renderWithIntl(<PercentageCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Percentage Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Percentage inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("PercentageCalculatorWorkspace", () => {
   });
 
   it("calculates the default percent-of value and saves assumptions locally", () => {
-    render(<PercentageCalculatorWorkspace />);
+    renderWithIntl(<PercentageCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate percentage" }));
 

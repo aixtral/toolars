@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CreatineCalculatorWorkspace } from "./creatine-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("CreatineCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc creatine workspace sections", () => {
-    render(<CreatineCalculatorWorkspace />);
+    renderWithIntl(<CreatineCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Creatine Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Supplement inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("CreatineCalculatorWorkspace", () => {
   });
 
   it("calculates the default maintenance dose and saves the plan locally", () => {
-    render(<CreatineCalculatorWorkspace />);
+    renderWithIntl(<CreatineCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate creatine dose" }));
 

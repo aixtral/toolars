@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Car, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const ownershipNotes = [
 ];
 
 export function CarLoanWorkspace() {
+  const t = useTranslations("tools.car-loan");
   const [plan, setPlan] = useState<CarLoanInput>(defaultCarLoanScenario);
   const [result, setResult] = useState<CarLoanResult | null>(null);
 

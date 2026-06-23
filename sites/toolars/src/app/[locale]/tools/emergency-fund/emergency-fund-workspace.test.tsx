@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { EmergencyFundWorkspace } from "./emergency-fund-workspace";
 
@@ -8,7 +9,7 @@ describe("EmergencyFundWorkspace", () => {
   });
 
   it("renders the local VitalCalc emergency fund workspace sections", () => {
-    render(<EmergencyFundWorkspace />);
+    renderWithIntl(<EmergencyFundWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Emergency Fund Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Emergency inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("EmergencyFundWorkspace", () => {
   });
 
   it("calculates the default emergency target and saves assumptions locally", () => {
-    render(<EmergencyFundWorkspace />);
+    renderWithIntl(<EmergencyFundWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate fund" }));
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Wine } from "lucide-react";
 import { useState } from "react";
@@ -28,6 +29,7 @@ const safetyNotes = [
 ];
 
 export function AlcoholMetabolismWorkspace() {
+  const t = useTranslations("tools.alcohol-metabolism");
   const [values, setValues] = useState<AlcoholMetabolismInput>(() => defaultAlcoholMetabolismScenario);
   const [result, setResult] = useState<AlcoholMetabolismResult | null>(null);
 

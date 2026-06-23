@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CryptoTaxWorkspace } from "./crypto-tax-workspace";
 
@@ -8,7 +9,7 @@ describe("CryptoTaxWorkspace", () => {
   });
 
   it("renders the local VitalCalc crypto tax workspace sections", () => {
-    render(<CryptoTaxWorkspace />);
+    renderWithIntl(<CryptoTaxWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Crypto Tax Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Transaction inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("CryptoTaxWorkspace", () => {
   });
 
   it("calculates the default PnL and saves transactions locally", () => {
-    render(<CryptoTaxWorkspace />);
+    renderWithIntl(<CryptoTaxWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate crypto PnL" }));
 

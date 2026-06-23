@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BudgetRuleWorkspace } from "./budget-rule-workspace";
 
@@ -8,7 +9,7 @@ describe("BudgetRuleWorkspace", () => {
   });
 
   it("renders the local VitalCalc budget rule workspace sections", () => {
-    render(<BudgetRuleWorkspace />);
+    renderWithIntl(<BudgetRuleWorkspace />);
 
     expect(screen.getByRole("heading", { name: "50/30/20 Budget Rule" })).toBeInTheDocument();
     expect(screen.getByText("Budget inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("BudgetRuleWorkspace", () => {
   });
 
   it("calculates the default budget split and saves assumptions locally", () => {
-    render(<BudgetRuleWorkspace />);
+    renderWithIntl(<BudgetRuleWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Generate budget" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CoastFireWorkspace } from "./coast-fire-workspace";
 
@@ -8,7 +9,7 @@ describe("CoastFireWorkspace", () => {
   });
 
   it("renders the local VitalCalc Coast FIRE workspace sections", () => {
-    render(<CoastFireWorkspace />);
+    renderWithIntl(<CoastFireWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Coast FIRE Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Coast FIRE inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("CoastFireWorkspace", () => {
   });
 
   it("calculates the default Coast FIRE estimate and saves assumptions locally", () => {
-    render(<CoastFireWorkspace />);
+    renderWithIntl(<CoastFireWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate Coast FIRE" }));
 

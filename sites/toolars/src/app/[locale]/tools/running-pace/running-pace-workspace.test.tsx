@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { RunningPaceWorkspace } from "./running-pace-workspace";
 
@@ -8,7 +9,7 @@ describe("RunningPaceWorkspace", () => {
   });
 
   it("renders the local VitalCalc running pace workspace sections", () => {
-    render(<RunningPaceWorkspace />);
+    renderWithIntl(<RunningPaceWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Running Pace Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Race inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("RunningPaceWorkspace", () => {
   });
 
   it("calculates the default pace and saves the race plan locally", () => {
-    render(<RunningPaceWorkspace />);
+    renderWithIntl(<RunningPaceWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate pace" }));
 

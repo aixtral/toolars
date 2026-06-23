@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Percent, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const denominatorNotes = [
 ];
 
 export function PercentageCalculatorWorkspace() {
+  const t = useTranslations("tools.percentage-calculator");
   const [plan, setPlan] = useState<PercentageInput>(defaultPercentageScenarios.percentOf);
   const [result, setResult] = useState<PercentageResult | null>(null);
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { OvulationCalculatorWorkspace } from "./ovulation-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("OvulationCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc ovulation workspace sections", () => {
-    render(<OvulationCalculatorWorkspace />);
+    renderWithIntl(<OvulationCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Ovulation Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Cycle inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("OvulationCalculatorWorkspace", () => {
   });
 
   it("calculates the default fertile window and saves the cycle locally", () => {
-    render(<OvulationCalculatorWorkspace />);
+    renderWithIntl(<OvulationCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate cycle" }));
 

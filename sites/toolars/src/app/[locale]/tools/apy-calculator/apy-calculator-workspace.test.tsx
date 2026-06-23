@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ApyCalculatorWorkspace } from "./apy-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("ApyCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc APY workspace sections", () => {
-    render(<ApyCalculatorWorkspace />);
+    renderWithIntl(<ApyCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "APY Calculator" })).toBeInTheDocument();
     expect(screen.getByText("APY inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("ApyCalculatorWorkspace", () => {
   });
 
   it("calculates the default APY and saves assumptions locally", () => {
-    render(<ApyCalculatorWorkspace />);
+    renderWithIntl(<ApyCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate APY" }));
 

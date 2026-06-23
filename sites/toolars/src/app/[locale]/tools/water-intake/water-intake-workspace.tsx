@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Droplets, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const hydrationNotes = [
 ];
 
 export function WaterIntakeWorkspace() {
+  const t = useTranslations("tools.water-intake");
   const [plan, setPlan] = useState<WaterIntakeInput>(defaultWaterIntakeScenario);
   const [result, setResult] = useState<WaterIntakeResult | null>(null);
 

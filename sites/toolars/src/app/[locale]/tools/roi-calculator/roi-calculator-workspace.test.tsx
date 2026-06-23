@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { RoiCalculatorWorkspace } from "./roi-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("RoiCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc ROI workspace sections", () => {
-    render(<RoiCalculatorWorkspace />);
+    renderWithIntl(<RoiCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "ROI Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Return inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("RoiCalculatorWorkspace", () => {
   });
 
   it("calculates the default ROI and saves assumptions locally", () => {
-    render(<RoiCalculatorWorkspace />);
+    renderWithIntl(<RoiCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate ROI" }));
 

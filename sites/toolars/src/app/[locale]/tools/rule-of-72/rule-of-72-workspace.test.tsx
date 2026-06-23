@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { RuleOf72Workspace } from "./rule-of-72-workspace";
 
@@ -8,7 +9,7 @@ describe("RuleOf72Workspace", () => {
   });
 
   it("renders the local VitalCalc Rule of 72 workspace sections", () => {
-    render(<RuleOf72Workspace />);
+    renderWithIntl(<RuleOf72Workspace />);
 
     expect(screen.getByRole("heading", { name: "Rule of 72 Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Doubling inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("RuleOf72Workspace", () => {
   });
 
   it("calculates the default doubling time and saves assumptions locally", () => {
-    render(<RuleOf72Workspace />);
+    renderWithIntl(<RuleOf72Workspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate doubling time" }));
 

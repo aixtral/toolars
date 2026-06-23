@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, ReceiptText, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const taxNotes = [
 ];
 
 export function IncomeTaxWorkspace() {
+  const t = useTranslations("tools.income-tax");
   const [plan, setPlan] = useState<IncomeTaxInput>(defaultIncomeTaxScenario);
   const [result, setResult] = useState<IncomeTaxResult | null>(null);
 

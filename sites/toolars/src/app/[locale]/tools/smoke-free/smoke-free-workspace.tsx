@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const recoveryNotes = [
 ];
 
 export function SmokeFreeWorkspace() {
+  const t = useTranslations("tools.smoke-free");
   const [values, setValues] = useState<SmokeFreeInput>(() => defaultSmokeFreeScenario);
   const [result, setResult] = useState<SmokeFreeResult | null>(null);
 

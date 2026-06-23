@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SmokeFreeWorkspace } from "./smoke-free-workspace";
 
@@ -14,7 +15,7 @@ describe("SmokeFreeWorkspace", () => {
   });
 
   it("renders the local VitalCalc smoke-free workspace sections", () => {
-    render(<SmokeFreeWorkspace />);
+    renderWithIntl(<SmokeFreeWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Quit Smoking Tracker" })).toBeInTheDocument();
     expect(screen.getByText("Quit inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("SmokeFreeWorkspace", () => {
   });
 
   it("calculates smoke-free progress and saves the quit plan locally", () => {
-    render(<SmokeFreeWorkspace />);
+    renderWithIntl(<SmokeFreeWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Track recovery" }));
 

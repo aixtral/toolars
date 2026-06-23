@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CarLoanWorkspace } from "./car-loan-workspace";
 
@@ -8,7 +9,7 @@ describe("CarLoanWorkspace", () => {
   });
 
   it("renders the local VitalCalc car loan workspace sections", () => {
-    render(<CarLoanWorkspace />);
+    renderWithIntl(<CarLoanWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Car Loan Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Vehicle loan inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("CarLoanWorkspace", () => {
   });
 
   it("calculates the default car loan estimate and saves assumptions locally", () => {
-    render(<CarLoanWorkspace />);
+    renderWithIntl(<CarLoanWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate car loan" }));
 

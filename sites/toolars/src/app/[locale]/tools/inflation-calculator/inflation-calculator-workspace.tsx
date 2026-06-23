@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingDown } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const assumptionNotes = [
 ];
 
 export function InflationCalculatorWorkspace() {
+  const t = useTranslations("tools.inflation-calculator");
   const [plan, setPlan] = useState<InflationInput>(defaultInflationScenario);
   const [result, setResult] = useState<InflationResult | null>(null);
 

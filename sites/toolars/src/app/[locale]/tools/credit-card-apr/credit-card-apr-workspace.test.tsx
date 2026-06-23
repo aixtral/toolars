@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CreditCardAprWorkspace } from "./credit-card-apr-workspace";
 
@@ -8,7 +9,7 @@ describe("CreditCardAprWorkspace", () => {
   });
 
   it("renders the local VitalCalc credit card APR workspace sections", () => {
-    render(<CreditCardAprWorkspace />);
+    renderWithIntl(<CreditCardAprWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Credit Card APR Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Installment inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("CreditCardAprWorkspace", () => {
   });
 
   it("calculates the default true APR and saves assumptions locally", () => {
-    render(<CreditCardAprWorkspace />);
+    renderWithIntl(<CreditCardAprWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Reveal true APR" }));
 

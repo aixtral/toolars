@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Baby, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const growthNotes = [
 ];
 
 export function ChildGrowthWorkspace() {
+  const t = useTranslations("tools.child-growth");
   const [profile, setProfile] = useState<ChildGrowthInput>(() => defaultChildGrowthProfile);
   const [result, setResult] = useState<ChildGrowthResult | null>(null);
 

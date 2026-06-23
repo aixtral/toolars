@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, PieChart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const netWorthNotes = [
 ];
 
 export function NetWorthCalculatorWorkspace() {
+  const t = useTranslations("tools.net-worth-calculator");
   const [plan, setPlan] = useState<NetWorthInput>(defaultNetWorthScenario);
   const [result, setResult] = useState<NetWorthResult | null>(null);
 

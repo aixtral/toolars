@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SocialInsuranceCalculatorWorkspace } from "./social-insurance-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("SocialInsuranceCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc social insurance workspace sections", () => {
-    render(<SocialInsuranceCalculatorWorkspace />);
+    renderWithIntl(<SocialInsuranceCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "China Social Insurance Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Salary assumptions")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("SocialInsuranceCalculatorWorkspace", () => {
   });
 
   it("calculates the default contribution estimate and saves assumptions locally", () => {
-    render(<SocialInsuranceCalculatorWorkspace />);
+    renderWithIntl(<SocialInsuranceCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate contributions" }));
 

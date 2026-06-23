@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Clock, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const retirementNotes = [
 ];
 
 export function RetirementCalculatorWorkspace() {
+  const t = useTranslations("tools.retirement-calculator");
   const [plan, setPlan] = useState<RetirementInput>(defaultRetirementScenario);
   const [result, setResult] = useState<RetirementResult | null>(null);
 

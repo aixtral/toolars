@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SubscriptionAuditWorkspace } from "./subscription-audit-workspace";
 
@@ -8,7 +9,7 @@ describe("SubscriptionAuditWorkspace", () => {
   });
 
   it("renders the local VitalCalc subscription audit workspace sections", () => {
-    render(<SubscriptionAuditWorkspace />);
+    renderWithIntl(<SubscriptionAuditWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Subscription Audit Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Subscription inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("SubscriptionAuditWorkspace", () => {
   });
 
   it("calculates the default subscription audit and saves assumptions locally", () => {
-    render(<SubscriptionAuditWorkspace />);
+    renderWithIntl(<SubscriptionAuditWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate audit" }));
 

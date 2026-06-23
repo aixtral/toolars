@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CurrencyConverterWorkspace } from "./currency-converter-workspace";
 
@@ -8,7 +9,7 @@ describe("CurrencyConverterWorkspace", () => {
   });
 
   it("renders the local VitalCalc currency converter workspace sections", () => {
-    render(<CurrencyConverterWorkspace />);
+    renderWithIntl(<CurrencyConverterWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Currency Converter" })).toBeInTheDocument();
     expect(screen.getByText("Exchange inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("CurrencyConverterWorkspace", () => {
   });
 
   it("converts the default currency amount and saves assumptions locally", () => {
-    render(<CurrencyConverterWorkspace />);
+    renderWithIntl(<CurrencyConverterWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Convert currency" }));
 

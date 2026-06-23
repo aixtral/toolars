@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { Glp1NutritionWorkspace } from "./glp1-nutrition-workspace";
 
@@ -8,7 +9,7 @@ describe("Glp1NutritionWorkspace", () => {
   });
 
   it("renders the local VitalCalc GLP-1 nutrition workspace sections", () => {
-    render(<Glp1NutritionWorkspace />);
+    renderWithIntl(<Glp1NutritionWorkspace />);
 
     expect(screen.getByRole("heading", { name: "GLP-1 Nutrition Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Nutrition inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("Glp1NutritionWorkspace", () => {
   });
 
   it("calculates targets and saves the local nutrition plan", () => {
-    render(<Glp1NutritionWorkspace />);
+    renderWithIntl(<Glp1NutritionWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate nutrition targets" }));
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, CalendarDays, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const cycleNotes = [
 ];
 
 export function OvulationCalculatorWorkspace() {
+  const t = useTranslations("tools.ovulation-calculator");
   const [cycle, setCycle] = useState<OvulationInput>(() => defaultOvulationScenario);
   const [result, setResult] = useState<OvulationResult | null>(null);
 

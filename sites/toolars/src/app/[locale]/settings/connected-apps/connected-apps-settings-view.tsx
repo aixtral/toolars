@@ -156,22 +156,22 @@ export function ConnectedAppsSettingsView() {
             <div className="scope-grid">
               <article>
                 <Cloud size={16} aria-hidden="true" />
-                <strong>Drive imports</strong>
+                <strong>{t("labels.Drive imports")}</strong>
                 <p>Read selected files only when a workflow step asks for external content.</p>
               </article>
               <article>
                 <Globe2 size={16} aria-hidden="true" />
-                <strong>Browser capture</strong>
+                <strong>{t("labels.Browser capture")}</strong>
                 <p>Send selected page text to local tools and request consent before AI processing.</p>
               </article>
               <article>
                 <Link2 size={16} aria-hidden="true" />
-                <strong>Output exports</strong>
+                <strong>{t("labels.Output exports")}</strong>
                 <p>Write approved summaries and saved outputs back to chosen workspace destinations.</p>
               </article>
               <article>
                 <ShieldCheck size={16} aria-hidden="true" />
-                <strong>Security review</strong>
+                <strong>{t("labels.Security review")}</strong>
                 <p>Rotate tokens, review scope changes, and disconnect apps from one place.</p>
               </article>
             </div>

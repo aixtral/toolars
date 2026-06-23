@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { StockAverageWorkspace } from "./stock-average-workspace";
 
@@ -8,7 +9,7 @@ describe("StockAverageWorkspace", () => {
   });
 
   it("renders the local VitalCalc stock average workspace sections", () => {
-    render(<StockAverageWorkspace />);
+    renderWithIntl(<StockAverageWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Stock Average Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Purchase lots")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("StockAverageWorkspace", () => {
   });
 
   it("calculates the default stock average and saves assumptions locally", () => {
-    render(<StockAverageWorkspace />);
+    renderWithIntl(<StockAverageWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate average" }));
 

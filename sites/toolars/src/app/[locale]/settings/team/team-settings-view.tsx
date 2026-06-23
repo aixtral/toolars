@@ -143,14 +143,14 @@ export function TeamSettingsView() {
               <article>
                 <Users size={15} aria-hidden="true" />
                 <span>
-                  <strong>Today</strong>
+                  <strong>{t("labels.Today")}</strong>
                   <small>Mina updated PDF Ops Kit sharing.</small>
                 </span>
               </article>
               <article>
                 <UserPlus size={15} aria-hidden="true" />
                 <span>
-                  <strong>Yesterday</strong>
+                  <strong>{t("labels.Yesterday")}</strong>
                   <small>Ravi joined the workspace.</small>
                 </span>
               </article>

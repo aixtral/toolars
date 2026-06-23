@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Receipt, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const tipNotes = [
 ];
 
 export function TipCalculatorWorkspace() {
+  const t = useTranslations("tools.tip-calculator");
   const [plan, setPlan] = useState<TipInput>(defaultTipScenario);
   const [result, setResult] = useState<TipResult | null>(null);
 

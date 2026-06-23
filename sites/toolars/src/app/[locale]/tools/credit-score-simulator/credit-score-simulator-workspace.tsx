@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, CreditCard, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -32,6 +33,7 @@ const actions: Array<{ label: string; value: CreditScoreAction }> = [
 ];
 
 export function CreditScoreSimulatorWorkspace() {
+  const t = useTranslations("tools.credit-score-simulator");
   const [plan, setPlan] = useState<CreditScoreInput>(defaultCreditScoreScenario);
   const [result, setResult] = useState<CreditScoreResult | null>(null);
 

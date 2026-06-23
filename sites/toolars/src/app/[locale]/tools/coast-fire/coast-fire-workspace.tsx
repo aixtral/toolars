@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, SunMedium } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const coastNotes = [
 ];
 
 export function CoastFireWorkspace() {
+  const t = useTranslations("tools.coast-fire");
   const [plan, setPlan] = useState<CoastFireInput>(defaultCoastFireScenario);
   const [result, setResult] = useState<CoastFireResult | null>(null);
 

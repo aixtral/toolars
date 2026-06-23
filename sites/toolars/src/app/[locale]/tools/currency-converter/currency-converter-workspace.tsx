@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, RefreshCw, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const rateNotes = [
 ];
 
 export function CurrencyConverterWorkspace() {
+  const t = useTranslations("tools.currency-converter");
   const [plan, setPlan] = useState<CurrencyInput>(defaultCurrencyScenario);
   const [result, setResult] = useState<CurrencyResult | null>(null);
 

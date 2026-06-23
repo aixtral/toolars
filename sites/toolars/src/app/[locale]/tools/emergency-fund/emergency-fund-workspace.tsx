@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, PiggyBank, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const emergencyNotes = [
 ];
 
 export function EmergencyFundWorkspace() {
+  const t = useTranslations("tools.emergency-fund");
   const [plan, setPlan] = useState<EmergencyFundInput>(defaultEmergencyFundScenario);
   const [result, setResult] = useState<EmergencyFundResult | null>(null);
 

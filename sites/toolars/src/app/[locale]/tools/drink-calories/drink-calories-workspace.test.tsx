@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DrinkCaloriesWorkspace } from "./drink-calories-workspace";
 
@@ -8,7 +9,7 @@ describe("DrinkCaloriesWorkspace", () => {
   });
 
   it("renders the local VitalCalc drink calories workspace sections", () => {
-    render(<DrinkCaloriesWorkspace />);
+    renderWithIntl(<DrinkCaloriesWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Drink Calories Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Drink inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("DrinkCaloriesWorkspace", () => {
   });
 
   it("calculates the default drink calories and saves the drink plan locally", () => {
-    render(<DrinkCaloriesWorkspace />);
+    renderWithIntl(<DrinkCaloriesWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate calories" }));
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const taxNotes = [
 ];
 
 export function CryptoTaxWorkspace() {
+  const t = useTranslations("tools.crypto-tax");
   const [values, setValues] = useState<CryptoTaxInput>(() => defaultCryptoTaxScenario);
   const [result, setResult] = useState<CryptoTaxResult | null>(null);
 

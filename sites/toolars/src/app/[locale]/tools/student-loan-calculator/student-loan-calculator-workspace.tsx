@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, GraduationCap, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const repaymentNotes = [
 ];
 
 export function StudentLoanCalculatorWorkspace() {
+  const t = useTranslations("tools.student-loan-calculator");
   const [plan, setPlan] = useState<StudentLoanInput>(defaultStudentLoanScenario);
   const [result, setResult] = useState<StudentLoanResult | null>(null);
 

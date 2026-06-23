@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, SunMedium } from "lucide-react";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const routineNotes = [
 ];
 
 export function ThirtyThirtyThirtyMethodWorkspace() {
+  const t = useTranslations("tools.30-30-30-method");
   const [plan, setPlan] = useState<ThirtyThirtyThirtyInput>(() => defaultThirtyThirtyThirtyScenario);
   const [result, setResult] = useState<ThirtyThirtyThirtyResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, ReceiptText, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,7 @@ const splitNotes = [
 ];
 
 export function BillSplitCalculatorWorkspace() {
+  const t = useTranslations("tools.bill-split-calculator");
   const [plan, setPlan] = useState<BillSplitInput>(defaultBillSplitScenario);
   const [result, setResult] = useState<BillSplitResult | null>(null);
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PregnancyDueDateWorkspace } from "./pregnancy-due-date-workspace";
 
@@ -14,7 +15,7 @@ describe("PregnancyDueDateWorkspace", () => {
   });
 
   it("renders the local VitalCalc pregnancy due date workspace sections", () => {
-    render(<PregnancyDueDateWorkspace />);
+    renderWithIntl(<PregnancyDueDateWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Pregnancy Due Date Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Pregnancy timeline")).toBeInTheDocument();
@@ -28,7 +29,7 @@ describe("PregnancyDueDateWorkspace", () => {
   });
 
   it("calculates the default due date and saves timeline locally", () => {
-    render(<PregnancyDueDateWorkspace />);
+    renderWithIntl(<PregnancyDueDateWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate due date" }));
 

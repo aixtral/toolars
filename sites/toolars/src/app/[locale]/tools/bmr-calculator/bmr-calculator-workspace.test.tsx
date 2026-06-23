@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BmrCalculatorWorkspace } from "./bmr-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("BmrCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc BMR workspace sections", () => {
-    render(<BmrCalculatorWorkspace />);
+    renderWithIntl(<BmrCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "BMR Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Metabolism inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("BmrCalculatorWorkspace", () => {
   });
 
   it("calculates the default BMR targets and saves assumptions locally", () => {
-    render(<BmrCalculatorWorkspace />);
+    renderWithIntl(<BmrCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate BMR" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ChildGrowthWorkspace } from "./child-growth-workspace";
 
@@ -8,7 +9,7 @@ describe("ChildGrowthWorkspace", () => {
   });
 
   it("renders the local VitalCalc child growth workspace sections", () => {
-    render(<ChildGrowthWorkspace />);
+    renderWithIntl(<ChildGrowthWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Child BMI Growth Chart" })).toBeInTheDocument();
     expect(screen.getByText("Growth inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("ChildGrowthWorkspace", () => {
   });
 
   it("assesses the default growth profile and saves it locally", () => {
-    render(<ChildGrowthWorkspace />);
+    renderWithIntl(<ChildGrowthWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Assess growth curve" }));
 

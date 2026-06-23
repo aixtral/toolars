@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SideIncomeTaxWorkspace } from "./side-income-tax-workspace";
 
@@ -8,7 +9,7 @@ describe("SideIncomeTaxWorkspace", () => {
   });
 
   it("renders the local VitalCalc side-income tax workspace sections", () => {
-    render(<SideIncomeTaxWorkspace />);
+    renderWithIntl(<SideIncomeTaxWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Side Income Tax Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Side income inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("SideIncomeTaxWorkspace", () => {
   });
 
   it("calculates the default side-income estimate and saves assumptions locally", () => {
-    render(<SideIncomeTaxWorkspace />);
+    renderWithIntl(<SideIncomeTaxWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate side tax" }));
 

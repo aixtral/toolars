@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DiscountCalculatorWorkspace } from "./discount-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("DiscountCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc discount workspace sections", () => {
-    render(<DiscountCalculatorWorkspace />);
+    renderWithIntl(<DiscountCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Discount Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Checkout inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("DiscountCalculatorWorkspace", () => {
   });
 
   it("calculates the default checkout discount and saves assumptions locally", () => {
-    render(<DiscountCalculatorWorkspace />);
+    renderWithIntl(<DiscountCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate discount" }));
 

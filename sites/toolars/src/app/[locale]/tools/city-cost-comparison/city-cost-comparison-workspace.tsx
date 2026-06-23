@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, MapPin, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,7 @@ const relocationNotes = [
 ];
 
 export function CityCostComparisonWorkspace() {
+  const t = useTranslations("tools.city-cost-comparison");
   const [plan, setPlan] = useState<CityCostComparisonInput>(defaultCityCostComparisonScenario);
   const [result, setResult] = useState<CityCostComparisonResult | null>(null);
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CalorieDeficitWorkspace } from "./calorie-deficit-workspace";
 
@@ -8,7 +9,7 @@ describe("CalorieDeficitWorkspace", () => {
   });
 
   it("renders the local VitalCalc calorie deficit workspace sections", () => {
-    render(<CalorieDeficitWorkspace />);
+    renderWithIntl(<CalorieDeficitWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Calorie Deficit Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Weight-loss inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("CalorieDeficitWorkspace", () => {
   });
 
   it("calculates daily intake and saves the deficit plan locally", () => {
-    render(<CalorieDeficitWorkspace />);
+    renderWithIntl(<CalorieDeficitWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate deficit" }));
 

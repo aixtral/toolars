@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CaffeineCalculatorWorkspace } from "./caffeine-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("CaffeineCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc caffeine workspace sections", () => {
-    render(<CaffeineCalculatorWorkspace />);
+    renderWithIntl(<CaffeineCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Caffeine Safe Limit Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Caffeine inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("CaffeineCalculatorWorkspace", () => {
   });
 
   it("calculates caffeine allowance and saves selected drinks locally", () => {
-    render(<CaffeineCalculatorWorkspace />);
+    renderWithIntl(<CaffeineCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate safe limit" }));
 

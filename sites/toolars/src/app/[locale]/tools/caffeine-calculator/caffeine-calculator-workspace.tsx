@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Coffee, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const caffeineNotes = [
 ];
 
 export function CaffeineCalculatorWorkspace() {
+  const t = useTranslations("tools.caffeine-calculator");
   const [values, setValues] = useState<CaffeineInput>(() => defaultCaffeineScenario);
   const [result, setResult] = useState<CaffeineResult | null>(null);
 

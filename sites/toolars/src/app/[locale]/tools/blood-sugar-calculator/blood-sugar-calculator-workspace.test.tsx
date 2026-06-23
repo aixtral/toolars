@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BloodSugarCalculatorWorkspace } from "./blood-sugar-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("BloodSugarCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc blood sugar workspace sections", () => {
-    render(<BloodSugarCalculatorWorkspace />);
+    renderWithIntl(<BloodSugarCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Blood Sugar / A1C Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Lab inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("BloodSugarCalculatorWorkspace", () => {
   });
 
   it("converts the default fasting glucose value and saves it locally", () => {
-    render(<BloodSugarCalculatorWorkspace />);
+    renderWithIntl(<BloodSugarCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Convert blood sugar" }));
 

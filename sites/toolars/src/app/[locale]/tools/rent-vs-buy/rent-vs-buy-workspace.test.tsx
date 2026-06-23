@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { RentVsBuyWorkspace } from "./rent-vs-buy-workspace";
 
@@ -8,7 +9,7 @@ describe("RentVsBuyWorkspace", () => {
   });
 
   it("renders the local VitalCalc rent vs buy workspace sections", () => {
-    render(<RentVsBuyWorkspace />);
+    renderWithIntl(<RentVsBuyWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Rent vs Buy Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Housing comparison inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("RentVsBuyWorkspace", () => {
   });
 
   it("calculates the default rent vs buy comparison and saves assumptions locally", () => {
-    render(<RentVsBuyWorkspace />);
+    renderWithIntl(<RentVsBuyWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Compare rent vs buy" }));
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Droplet, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const glycemicNotes = [
 ];
 
 export function GlycemicLoadWorkspace() {
+  const t = useTranslations("tools.glycemic-load");
   const [values, setValues] = useState<GlycemicLoadInput>(() => defaultGlycemicLoadScenario);
   const [result, setResult] = useState<GlycemicLoadResult | null>(null);
 

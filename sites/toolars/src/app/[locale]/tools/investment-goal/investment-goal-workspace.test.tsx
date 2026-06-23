@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { InvestmentGoalWorkspace } from "./investment-goal-workspace";
 
@@ -8,7 +9,7 @@ describe("InvestmentGoalWorkspace", () => {
   });
 
   it("renders the local VitalCalc investment goal workspace sections", () => {
-    render(<InvestmentGoalWorkspace />);
+    renderWithIntl(<InvestmentGoalWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Investment Goal Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Goal inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("InvestmentGoalWorkspace", () => {
   });
 
   it("calculates the default monthly investment and saves assumptions locally", () => {
-    render(<InvestmentGoalWorkspace />);
+    renderWithIntl(<InvestmentGoalWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate monthly investment" }));
 

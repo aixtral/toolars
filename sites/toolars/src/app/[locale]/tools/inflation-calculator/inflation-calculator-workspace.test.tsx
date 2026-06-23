@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { InflationCalculatorWorkspace } from "./inflation-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("InflationCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc inflation workspace sections", () => {
-    render(<InflationCalculatorWorkspace />);
+    renderWithIntl(<InflationCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Inflation Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Inflation inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("InflationCalculatorWorkspace", () => {
   });
 
   it("calculates the default purchasing-power scenario and saves assumptions locally", () => {
-    render(<InflationCalculatorWorkspace />);
+    renderWithIntl(<InflationCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate inflation" }));
 

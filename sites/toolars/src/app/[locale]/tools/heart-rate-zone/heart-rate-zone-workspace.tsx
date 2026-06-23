@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const measurementNotes = [
 ];
 
 export function HeartRateZoneWorkspace() {
+  const t = useTranslations("tools.heart-rate-zone");
   const [profile, setProfile] = useState<HeartRateZoneInput>(() => defaultHeartRateZoneScenario);
   const [result, setResult] = useState<HeartRateZoneResult | null>(null);
 

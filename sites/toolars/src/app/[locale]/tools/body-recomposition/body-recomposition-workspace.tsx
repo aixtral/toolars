@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const recompNotes = [
 ];
 
 export function BodyRecompositionWorkspace() {
+  const t = useTranslations("tools.body-recomposition");
   const [plan, setPlan] = useState<BodyRecompositionInput>(defaultBodyRecompositionScenario);
   const [result, setResult] = useState<BodyRecompositionResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const sipNotes = [
 ];
 
 export function SipCalculatorWorkspace() {
+  const t = useTranslations("tools.sip-calculator");
   const [plan, setPlan] = useState<SipInput>(() => defaultSipScenario);
   const [result, setResult] = useState<SipResult | null>(null);
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { NetWorthCalculatorWorkspace } from "./net-worth-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("NetWorthCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc net worth workspace sections", () => {
-    render(<NetWorthCalculatorWorkspace />);
+    renderWithIntl(<NetWorthCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Net Worth Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Asset inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("NetWorthCalculatorWorkspace", () => {
   });
 
   it("calculates the default net worth and saves assumptions locally", () => {
-    render(<NetWorthCalculatorWorkspace />);
+    renderWithIntl(<NetWorthCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate net worth" }));
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, Scale, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const prescriptionNotes = [
 ];
 
 export function Glp1EligibilityWorkspace() {
+  const t = useTranslations("tools.glp1-eligibility");
   const [values, setValues] = useState<Glp1EligibilityInput>(() => defaultGlp1EligibilityScenario);
   const [result, setResult] = useState<Glp1EligibilityResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, PiggyBank, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -33,6 +34,7 @@ const challengeNotes = [
 ];
 
 export function SavingsChallengeWorkspace() {
+  const t = useTranslations("tools.savings-challenge");
   const [plan, setPlan] = useState<SavingsChallengeInput>(() => defaultSavingsChallengeScenario);
   const [result, setResult] = useState<SavingsChallengeResult | null>(null);
 

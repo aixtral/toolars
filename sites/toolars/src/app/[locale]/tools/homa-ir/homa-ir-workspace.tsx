@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const homaNotes = [
 ];
 
 export function HomaIrWorkspace() {
+  const t = useTranslations("tools.homa-ir");
   const [values, setValues] = useState<HomaIrInput>(() => defaultHomaIrScenario);
   const [result, setResult] = useState<HomaIrResult | null>(null);
 

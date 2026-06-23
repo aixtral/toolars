@@ -1342,6 +1342,10 @@
         "loginActivity": "Login activity",
         "checklist": "Security checklist",
         "riskActions": "Risk actions"
+      },
+      "labels": {
+        "Authenticator app": "Authenticator app",
+        "Review sensitive changes": "Review sensitive changes"
       }
     },
     "privacy-ai": {
@@ -1361,6 +1365,9 @@
         "privacyLog": "Privacy log",
         "auditTrail": "AI audit trail",
         "guardrails": "Responsible AI guardrails"
+      },
+      "labels": {
+        "Before AI processing": "Before AI processing"
       }
     },
     "api-keys": {
@@ -1394,6 +1401,18 @@
         "usagePolicy": "Usage policy",
         "paymentMethod": "Payment method",
         "invoiceExport": "Invoice export"
+      },
+      "labels": {
+        "Google sign-in": "Google sign-in",
+        "Paid plan access": "Paid plan access",
+        "Paid plans": "Paid plans",
+        "Date": "Date",
+        "Subscription": "Subscription",
+        "Amount": "Amount",
+        "Status": "Status",
+        "Receipt status": "Receipt status",
+        "Primary card": "Primary card",
+        "Download tax-ready invoices": "Download tax-ready invoices"
       }
     },
     "connected-apps": {
@@ -1409,6 +1428,12 @@
         "syncPolicy": "Sync policy",
         "appActivity": "App activity",
         "integrationHealth": "Integration health"
+      },
+      "labels": {
+        "Drive imports": "Drive imports",
+        "Browser capture": "Browser capture",
+        "Output exports": "Output exports",
+        "Security review": "Security review"
       }
     },
     "notifications": {
@@ -1426,6 +1451,9 @@
         "trialRouting": "Trial usage routing",
         "releaseNotes": "Release notes",
         "preview": "Notification preview"
+      },
+      "labels": {
+        "PDF Summary Workflow finished": "PDF Summary Workflow finished"
       }
     },
     "storage": {
@@ -1458,6 +1486,10 @@
         "sharedCollections": "Shared collections",
         "activityLog": "Activity log",
         "ownership": "Ownership"
+      },
+      "labels": {
+        "Today": "Today",
+        "Yesterday": "Yesterday"
       }
     }
   },

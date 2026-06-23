@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Droplet, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const sugarNotes = [
 ];
 
 export function BloodSugarCalculatorWorkspace() {
+  const t = useTranslations("tools.blood-sugar-calculator");
   const [values, setValues] = useState<BloodSugarInput>(() => defaultBloodSugarScenario);
   const [result, setResult] = useState<BloodSugarResult | null>(null);
 

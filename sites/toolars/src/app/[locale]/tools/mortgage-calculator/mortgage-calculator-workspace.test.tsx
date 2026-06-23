@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { MortgageCalculatorWorkspace } from "./mortgage-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("MortgageCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc mortgage workspace sections", () => {
-    render(<MortgageCalculatorWorkspace />);
+    renderWithIntl(<MortgageCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Mortgage Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Loan inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("MortgageCalculatorWorkspace", () => {
   });
 
   it("calculates the default monthly payment and interest summary", () => {
-    render(<MortgageCalculatorWorkspace />);
+    renderWithIntl(<MortgageCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate payment" }));
 
@@ -35,7 +36,7 @@ describe("MortgageCalculatorWorkspace", () => {
   });
 
   it("updates the scenario and saves it locally", () => {
-    render(<MortgageCalculatorWorkspace />);
+    renderWithIntl(<MortgageCalculatorWorkspace />);
 
     fireEvent.change(screen.getByLabelText("Down payment"), {
       target: { value: "100000" }

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { StudentLoanCalculatorWorkspace } from "./student-loan-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("StudentLoanCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc student loan workspace sections", () => {
-    render(<StudentLoanCalculatorWorkspace />);
+    renderWithIntl(<StudentLoanCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Student Loan Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Repayment inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("StudentLoanCalculatorWorkspace", () => {
   });
 
   it("calculates the default student loan repayment plan and saves assumptions locally", () => {
-    render(<StudentLoanCalculatorWorkspace />);
+    renderWithIntl(<StudentLoanCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate repayment plan" }));
 

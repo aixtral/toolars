@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { FreelanceRateWorkspace } from "./freelance-rate-workspace";
 
@@ -8,7 +9,7 @@ describe("FreelanceRateWorkspace", () => {
   });
 
   it("renders the local VitalCalc freelance rate workspace sections", () => {
-    render(<FreelanceRateWorkspace />);
+    renderWithIntl(<FreelanceRateWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Freelance Rate Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Rate inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("FreelanceRateWorkspace", () => {
   });
 
   it("calculates the default rate floor and saves assumptions locally", () => {
-    render(<FreelanceRateWorkspace />);
+    renderWithIntl(<FreelanceRateWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate rate floor" }));
 

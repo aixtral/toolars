@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { AlcoholMetabolismWorkspace } from "./alcohol-metabolism-workspace";
 
@@ -8,7 +9,7 @@ describe("AlcoholMetabolismWorkspace", () => {
   });
 
   it("renders the local VitalCalc alcohol metabolism workspace sections", () => {
-    render(<AlcoholMetabolismWorkspace />);
+    renderWithIntl(<AlcoholMetabolismWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Alcohol Metabolism Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Drink inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("AlcoholMetabolismWorkspace", () => {
   });
 
   it("calculates alcohol metabolism and saves the scenario locally", () => {
-    render(<AlcoholMetabolismWorkspace />);
+    renderWithIntl(<AlcoholMetabolismWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate alcohol metabolism" }));
 

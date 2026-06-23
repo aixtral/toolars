@@ -169,17 +169,17 @@ export function BillingSettingsView() {
             <h2>{t("sections.trialControls")}</h2>
             <div className="settings-row-list">
               <div className="settings-detail-row">
-                <strong>Google sign-in</strong>
+                <strong>{t("labels.Google sign-in")}</strong>
                 <span>Required for synced trial history and account settings.</span>
                 <span className="badge local">Enabled</span>
               </div>
               <div className="settings-detail-row">
-                <strong>Paid plan access</strong>
+                <strong>{t("labels.Paid plan access")}</strong>
                 <span>Paid plans are parked during the beta trial.</span>
                 <span className="badge">Phase 2</span>
               </div>
               <div className="settings-detail-row">
-                <strong>Paid plans</strong>
+                <strong>{t("labels.Paid plans")}</strong>
                 <span>Pro, Team, invoices, and customer portal are hidden for launch.</span>
                 <span className="badge">Parked</span>
               </div>
@@ -207,10 +207,10 @@ export function BillingSettingsView() {
             <h2>{t("sections.invoices")}</h2>
             <div className="billing-invoice-table">
               <div className="billing-invoice-head">
-                <strong>Date</strong>
-                <strong>Subscription</strong>
-                <strong>Amount</strong>
-                <strong>Status</strong>
+                <strong>{t("labels.Date")}</strong>
+                <strong>{t("labels.Subscription")}</strong>
+                <strong>{t("labels.Amount")}</strong>
+                <strong>{t("labels.Status")}</strong>
               </div>
               {invoiceRows.map(([date, plan, amount, status]) => (
                 <div className="billing-invoice-row" key={`${date}-${plan}`}>
@@ -244,7 +244,7 @@ export function BillingSettingsView() {
             </div>
             <div className="billing-receipt-strip">
               <span>
-                <strong>Receipt status</strong>
+                <strong>{t("labels.Receipt status")}</strong>
                 <small>{receiptStatus}</small>
               </span>
               <button className="button button-outline-neutral" type="button">
@@ -301,7 +301,7 @@ export function BillingSettingsView() {
             <div className="settings-api-row">
               <CreditCard size={22} aria-hidden="true" />
               <span>
-                <strong>Primary card</strong>
+                <strong>{t("labels.Primary card")}</strong>
                 <small>Primary payment method</small>
               </span>
             </div>
@@ -314,7 +314,7 @@ export function BillingSettingsView() {
             <div className="settings-api-row">
               <ReceiptText size={22} aria-hidden="true" />
               <span>
-                <strong>Download tax-ready invoices</strong>
+                <strong>{t("labels.Download tax-ready invoices")}</strong>
                 <small>Includes plan, payment, and receipt metadata.</small>
               </span>
             </div>

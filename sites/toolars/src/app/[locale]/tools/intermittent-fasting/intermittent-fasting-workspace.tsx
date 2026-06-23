@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Clock3, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const fastingNotes = [
 ];
 
 export function IntermittentFastingWorkspace() {
+  const t = useTranslations("tools.intermittent-fasting");
   const [plan, setPlan] = useState<IntermittentFastingInput>(() => defaultIntermittentFastingScenario);
   const [result, setResult] = useState<IntermittentFastingResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Coffee, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const reflectionNotes = [
 ];
 
 export function HabitCostWorkspace() {
+  const t = useTranslations("tools.habit-cost");
   const [plan, setPlan] = useState<HabitCostInput>(defaultHabitCostScenario);
   const [result, setResult] = useState<HabitCostResult | null>(null);
 

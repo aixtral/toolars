@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, RefreshCw, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const refinanceNotes = [
 ];
 
 export function MortgageRefinanceCalculatorWorkspace() {
+  const t = useTranslations("tools.mortgage-refinance-calculator");
   const [plan, setPlan] = useState<MortgageRefinanceInput>(defaultMortgageRefinanceScenario);
   const [result, setResult] = useState<MortgageRefinanceResult | null>(null);
 

@@ -135,7 +135,7 @@ export function NotificationsSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.preview")}</h2>
             <div className="consent-preview-box">
-              <strong>PDF Summary Workflow finished</strong>
+              <strong>{t("labels.PDF Summary Workflow finished")}</strong>
               <p>Your summary is ready. It used 18 AI credits and saved the output to PDF Ops Kit.</p>
               <button className="button button-outline-neutral" type="button">
                 <MessageSquare size={15} aria-hidden="true" /> Preview message

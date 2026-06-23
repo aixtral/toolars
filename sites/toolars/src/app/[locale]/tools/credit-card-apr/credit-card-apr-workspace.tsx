@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, CreditCard, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const creditCostNotes = [
 ];
 
 export function CreditCardAprWorkspace() {
+  const t = useTranslations("tools.credit-card-apr");
   const [plan, setPlan] = useState<CreditCardAprInput>(defaultCreditCardAprScenario);
   const [result, setResult] = useState<CreditCardAprResult | null>(null);
 

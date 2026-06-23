@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent, type RefObject, useId, useMemo, useState } from "react";
 import { CheckCircle2, Download, FileText, Link2, LockKeyhole, Mail, MoreHorizontal, RotateCcw, Sparkles, Table2, Trash2, Upload } from "lucide-react";
@@ -35,6 +36,7 @@ const designTakeaways = [
 const designCitations = ["p. 3 Q2 Performance Overview", "p. 8 Campaign Results - Paid Search", "p. 12 Budget Summary", "p. 18 Recommendations"];
 
 export function PdfToolkitWorkspace() {
+  const t = useTranslations("tools.pdf-toolkit");
   const [operation, setOperation] = useState<PdfOperation>("merge");
   const [aiSummarySelected, setAiSummarySelected] = useState(false);
   const [consentGranted, setConsentGranted] = useState(false);

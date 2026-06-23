@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { TipCalculatorWorkspace } from "./tip-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("TipCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc tip workspace sections", () => {
-    render(<TipCalculatorWorkspace />);
+    renderWithIntl(<TipCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Tip Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Tip inputs")).toBeInTheDocument();
@@ -24,7 +25,7 @@ describe("TipCalculatorWorkspace", () => {
   });
 
   it("calculates the default tip split and saves assumptions locally", () => {
-    render(<TipCalculatorWorkspace />);
+    renderWithIntl(<TipCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate tip" }));
 

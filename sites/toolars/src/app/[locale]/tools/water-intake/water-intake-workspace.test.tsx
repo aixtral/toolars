@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { WaterIntakeWorkspace } from "./water-intake-workspace";
 
@@ -8,7 +9,7 @@ describe("WaterIntakeWorkspace", () => {
   });
 
   it("renders the local VitalCalc water intake workspace sections", () => {
-    render(<WaterIntakeWorkspace />);
+    renderWithIntl(<WaterIntakeWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Water Intake Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Hydration inputs")).toBeInTheDocument();
@@ -22,7 +23,7 @@ describe("WaterIntakeWorkspace", () => {
   });
 
   it("calculates water intake and saves the hydration plan locally", () => {
-    render(<WaterIntakeWorkspace />);
+    renderWithIntl(<WaterIntakeWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate water intake" }));
 

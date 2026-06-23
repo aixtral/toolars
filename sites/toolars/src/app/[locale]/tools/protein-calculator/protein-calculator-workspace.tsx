@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Dumbbell, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const nutritionNotes = [
 ];
 
 export function ProteinCalculatorWorkspace() {
+  const t = useTranslations("tools.protein-calculator");
   const [plan, setPlan] = useState<ProteinInput>(defaultProteinScenario);
   const [result, setResult] = useState<ProteinResult | null>(null);
 

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Target } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const marketNotes = [
 ];
 
 export function InvestmentGoalWorkspace() {
+  const t = useTranslations("tools.investment-goal");
   const [plan, setPlan] = useState<InvestmentGoalInput>(defaultInvestmentGoalScenario);
   const [result, setResult] = useState<InvestmentGoalResult | null>(null);
 

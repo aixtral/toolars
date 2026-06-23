@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { useMemo, useState } from "react";
 import { Clipboard, Save, ServerCog } from "lucide-react";
@@ -25,6 +26,7 @@ const builderStages = [
 ] as const;
 
 export function McpServerBuilderWorkspace() {
+  const t = useTranslations("tools.mcp-server-builder");
   const [draft, setDraft] = useState<McpServerDraft>(() => buildMcpServerDraft());
   const [manifestText, setManifestText] = useState(initialPreview);
   const [status, setStatus] = useState("Waiting for generation.");

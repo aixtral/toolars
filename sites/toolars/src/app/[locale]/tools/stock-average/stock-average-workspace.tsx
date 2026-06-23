@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const costBasisNotes = [
 ];
 
 export function StockAverageWorkspace() {
+  const t = useTranslations("tools.stock-average");
   const [plan, setPlan] = useState<StockAverageInput>(defaultStockAverageScenario);
   const [result, setResult] = useState<StockAverageResult | null>(null);
 

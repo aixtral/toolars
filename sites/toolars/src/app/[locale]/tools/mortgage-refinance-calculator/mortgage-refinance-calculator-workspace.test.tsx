@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { MortgageRefinanceCalculatorWorkspace } from "./mortgage-refinance-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("MortgageRefinanceCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc mortgage refinance workspace sections", () => {
-    render(<MortgageRefinanceCalculatorWorkspace />);
+    renderWithIntl(<MortgageRefinanceCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Mortgage Refinance Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Refinance inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("MortgageRefinanceCalculatorWorkspace", () => {
   });
 
   it("calculates default refinance savings and saves assumptions locally", () => {
-    render(<MortgageRefinanceCalculatorWorkspace />);
+    renderWithIntl(<MortgageRefinanceCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate refinance savings" }));
 

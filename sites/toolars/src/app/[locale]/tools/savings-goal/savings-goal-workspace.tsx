@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Target } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const savingsNotes = [
 ];
 
 export function SavingsGoalWorkspace() {
+  const t = useTranslations("tools.savings-goal");
   const [plan, setPlan] = useState<SavingsGoalInput>(defaultSavingsGoalScenario);
   const [result, setResult] = useState<SavingsGoalResult | null>(null);
 

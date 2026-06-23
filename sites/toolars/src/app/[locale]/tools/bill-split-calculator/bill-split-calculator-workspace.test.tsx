@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { BillSplitCalculatorWorkspace } from "./bill-split-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("BillSplitCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc bill split workspace sections", () => {
-    render(<BillSplitCalculatorWorkspace />);
+    renderWithIntl(<BillSplitCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Bill Split Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Bill inputs")).toBeInTheDocument();
@@ -25,7 +26,7 @@ describe("BillSplitCalculatorWorkspace", () => {
   });
 
   it("calculates the default split and saves assumptions locally", () => {
-    render(<BillSplitCalculatorWorkspace />);
+    renderWithIntl(<BillSplitCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate split" }));
 

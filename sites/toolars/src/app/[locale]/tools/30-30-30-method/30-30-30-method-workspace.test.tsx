@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { ThirtyThirtyThirtyMethodWorkspace } from "./30-30-30-method-workspace";
 
@@ -8,7 +9,7 @@ describe("ThirtyThirtyThirtyMethodWorkspace", () => {
   });
 
   it("renders the local VitalCalc 30-30-30 workspace sections", () => {
-    render(<ThirtyThirtyThirtyMethodWorkspace />);
+    renderWithIntl(<ThirtyThirtyThirtyMethodWorkspace />);
 
     expect(screen.getByRole("heading", { name: "30-30-30 Morning Method" })).toBeInTheDocument();
     expect(screen.getByText("Morning inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("ThirtyThirtyThirtyMethodWorkspace", () => {
   });
 
   it("calculates the routine and saves the local morning plan", () => {
-    render(<ThirtyThirtyThirtyMethodWorkspace />);
+    renderWithIntl(<ThirtyThirtyThirtyMethodWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate routine" }));
 

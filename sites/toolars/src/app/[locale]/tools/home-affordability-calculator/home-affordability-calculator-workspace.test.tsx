@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { HomeAffordabilityCalculatorWorkspace } from "./home-affordability-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("HomeAffordabilityCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc home affordability workspace sections", () => {
-    render(<HomeAffordabilityCalculatorWorkspace />);
+    renderWithIntl(<HomeAffordabilityCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Home Affordability Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Affordability inputs")).toBeInTheDocument();
@@ -23,7 +24,7 @@ describe("HomeAffordabilityCalculatorWorkspace", () => {
   });
 
   it("calculates the default affordability estimate and saves assumptions locally", () => {
-    render(<HomeAffordabilityCalculatorWorkspace />);
+    renderWithIntl(<HomeAffordabilityCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate affordability" }));
 

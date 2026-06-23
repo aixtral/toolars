@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Moon, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const sleepNotes = [
 ];
 
 export function SleepCalculatorWorkspace() {
+  const t = useTranslations("tools.sleep-calculator");
   const [plan, setPlan] = useState<SleepInput>(() => defaultSleepScenario);
   const [result, setResult] = useState<SleepResult | null>(null);
 

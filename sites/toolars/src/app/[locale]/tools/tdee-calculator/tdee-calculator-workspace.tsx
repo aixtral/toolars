@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,7 @@ const nutritionNotes = [
 ];
 
 export function TdeeCalculatorWorkspace() {
+  const t = useTranslations("tools.tdee-calculator");
   const [profile, setProfile] = useState<TdeeInput>(defaultTdeeScenario);
   const [result, setResult] = useState<TdeeResult | null>(null);
 

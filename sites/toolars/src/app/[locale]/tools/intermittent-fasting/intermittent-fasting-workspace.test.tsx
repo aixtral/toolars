@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { IntermittentFastingWorkspace } from "./intermittent-fasting-workspace";
 
@@ -8,7 +9,7 @@ describe("IntermittentFastingWorkspace", () => {
   });
 
   it("renders the local VitalCalc intermittent fasting workspace sections", () => {
-    render(<IntermittentFastingWorkspace />);
+    renderWithIntl(<IntermittentFastingWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Intermittent Fasting Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Schedule inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("IntermittentFastingWorkspace", () => {
   });
 
   it("calculates the default window and saves the fasting plan locally", () => {
-    render(<IntermittentFastingWorkspace />);
+    renderWithIntl(<IntermittentFastingWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate windows" }));
 

@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { HomaIrWorkspace } from "./homa-ir-workspace";
 
@@ -8,7 +9,7 @@ describe("HomaIrWorkspace", () => {
   });
 
   it("renders the local VitalCalc HOMA-IR workspace sections", () => {
-    render(<HomaIrWorkspace />);
+    renderWithIntl(<HomaIrWorkspace />);
 
     expect(screen.getByRole("heading", { name: "HOMA-IR Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Lab inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("HomaIrWorkspace", () => {
   });
 
   it("calculates the default HOMA-IR result and saves lab values locally", () => {
-    render(<HomaIrWorkspace />);
+    renderWithIntl(<HomaIrWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate HOMA-IR" }));
 

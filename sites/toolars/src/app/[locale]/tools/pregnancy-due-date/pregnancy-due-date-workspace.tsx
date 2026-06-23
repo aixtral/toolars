@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { CalendarDays, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const medicalNotes = [
 ];
 
 export function PregnancyDueDateWorkspace() {
+  const t = useTranslations("tools.pregnancy-due-date");
   const [timeline, setTimeline] = useState<PregnancyDueDateInput>(defaultPregnancyDueDateScenario);
   const [result, setResult] = useState<PregnancyDueDateResult | null>(null);
 

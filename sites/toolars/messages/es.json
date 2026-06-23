@@ -1342,6 +1342,10 @@
         "loginActivity": "Actividad de inicio de sesión",
         "checklist": "Lista de comprobación de seguridad",
         "riskActions": "Acciones de riesgo"
+      },
+      "labels": {
+        "Authenticator app": "App de autenticación",
+        "Review sensitive changes": "Revisar cambios sensibles"
       }
     },
     "privacy-ai": {
@@ -1361,6 +1365,9 @@
         "privacyLog": "Registro de privacidad",
         "auditTrail": "Pista de auditoría de IA",
         "guardrails": "Salvaguardas de IA responsable"
+      },
+      "labels": {
+        "Before AI processing": "Antes del procesamiento de IA"
       }
     },
     "api-keys": {
@@ -1394,6 +1401,18 @@
         "usagePolicy": "Política de uso",
         "paymentMethod": "Método de pago",
         "invoiceExport": "Exportación de facturas"
+      },
+      "labels": {
+        "Google sign-in": "Inicio de sesión con Google",
+        "Paid plan access": "Acceso a planes de pago",
+        "Paid plans": "Planes de pago",
+        "Date": "Fecha",
+        "Subscription": "Suscripción",
+        "Amount": "Importe",
+        "Status": "Estado",
+        "Receipt status": "Estado del recibo",
+        "Primary card": "Tarjeta principal",
+        "Download tax-ready invoices": "Descargar facturas listas para impuestos"
       }
     },
     "connected-apps": {
@@ -1409,6 +1428,12 @@
         "syncPolicy": "Política de sincronización",
         "appActivity": "Actividad de apps",
         "integrationHealth": "Estado de integración"
+      },
+      "labels": {
+        "Drive imports": "Importaciones de Drive",
+        "Browser capture": "Captura del navegador",
+        "Output exports": "Exportaciones de resultados",
+        "Security review": "Revisión de seguridad"
       }
     },
     "notifications": {
@@ -1426,6 +1451,9 @@
         "trialRouting": "Enrutamiento de uso de prueba",
         "releaseNotes": "Notas de la versión",
         "preview": "Vista previa de notificación"
+      },
+      "labels": {
+        "PDF Summary Workflow finished": "Flujo Resumen PDF finalizado"
       }
     },
     "storage": {
@@ -1458,6 +1486,10 @@
         "sharedCollections": "Colecciones compartidas",
         "activityLog": "Registro de actividad",
         "ownership": "Propiedad"
+      },
+      "labels": {
+        "Today": "Hoy",
+        "Yesterday": "Ayer"
       }
     }
   },

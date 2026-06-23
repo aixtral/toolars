@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, PieChart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const budgetNotes = [
 ];
 
 export function BudgetRuleWorkspace() {
+  const t = useTranslations("tools.budget-rule");
   const [plan, setPlan] = useState<BudgetRuleInput>(defaultBudgetRuleScenario);
   const [result, setResult] = useState<BudgetRuleResult | null>(null);
 

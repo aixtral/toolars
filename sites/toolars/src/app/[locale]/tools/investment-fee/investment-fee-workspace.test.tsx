@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { InvestmentFeeWorkspace } from "./investment-fee-workspace";
 
@@ -8,7 +9,7 @@ describe("InvestmentFeeWorkspace", () => {
   });
 
   it("renders the local VitalCalc investment fee workspace sections", () => {
-    render(<InvestmentFeeWorkspace />);
+    renderWithIntl(<InvestmentFeeWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Investment Fee Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Fee drag inputs")).toBeInTheDocument();
@@ -26,7 +27,7 @@ describe("InvestmentFeeWorkspace", () => {
   });
 
   it("calculates the default fee drag and saves assumptions locally", () => {
-    render(<InvestmentFeeWorkspace />);
+    renderWithIntl(<InvestmentFeeWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate fee impact" }));
 

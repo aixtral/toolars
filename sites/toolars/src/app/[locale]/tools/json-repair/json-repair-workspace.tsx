@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { useMemo, useState } from "react";
 import { Copy, FileJson, RotateCcw, ShieldCheck } from "lucide-react";
@@ -8,6 +9,7 @@ import { repairJson, type JsonRepairResult } from "@/lib/tools/json-repair";
 const sample = "{\n  user: 'ada',\n  score: 42,\n  flags: ['beta', 'pro'],\n}";
 
 export function JsonRepairWorkspace() {
+  const t = useTranslations("tools.json-repair");
   const [input, setInput] = useState(sample);
   const [result, setResult] = useState<JsonRepairResult | null>(null);
   const [copied, setCopied] = useState(false);

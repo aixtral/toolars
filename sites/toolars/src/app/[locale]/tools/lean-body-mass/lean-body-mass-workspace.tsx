@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, Scale, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const compositionNotes = [
 ];
 
 export function LeanBodyMassWorkspace() {
+  const t = useTranslations("tools.lean-body-mass");
   const [composition, setComposition] = useState<LeanBodyMassInput>(defaultLeanBodyMassScenario);
   const [result, setResult] = useState<LeanBodyMassResult | null>(null);
 

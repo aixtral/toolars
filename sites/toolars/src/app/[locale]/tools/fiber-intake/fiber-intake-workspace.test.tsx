@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { FiberIntakeWorkspace } from "./fiber-intake-workspace";
 
@@ -8,7 +9,7 @@ describe("FiberIntakeWorkspace", () => {
   });
 
   it("renders the local VitalCalc fiber intake workspace sections", () => {
-    render(<FiberIntakeWorkspace />);
+    renderWithIntl(<FiberIntakeWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Fiber Intake Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Profile inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("FiberIntakeWorkspace", () => {
   });
 
   it("calculates the default fiber target and saves the profile locally", () => {
-    render(<FiberIntakeWorkspace />);
+    renderWithIntl(<FiberIntakeWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate fiber needs" }));
 

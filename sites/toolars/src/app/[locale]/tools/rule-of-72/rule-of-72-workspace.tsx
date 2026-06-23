@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Clock, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const shortcutNotes = [
 ];
 
 export function RuleOf72Workspace() {
+  const t = useTranslations("tools.rule-of-72");
   const [plan, setPlan] = useState<RuleOf72Input>(defaultRuleOf72Scenario);
   const [result, setResult] = useState<RuleOf72Result | null>(null);
 

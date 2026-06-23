@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Timer } from "lucide-react";
 import { useState } from "react";
@@ -26,6 +27,7 @@ const raceNotes = [
 ];
 
 export function RunningPaceWorkspace() {
+  const t = useTranslations("tools.running-pace");
   const [plan, setPlan] = useState<RunningPaceInput>(() => defaultRunningPaceScenario);
   const [result, setResult] = useState<RunningPaceResult | null>(null);
 

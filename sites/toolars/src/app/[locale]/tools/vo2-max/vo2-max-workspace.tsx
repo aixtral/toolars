@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const trainingNotes = [
 ];
 
 export function Vo2MaxWorkspace() {
+  const t = useTranslations("tools.vo2-max");
   const [test, setTest] = useState<Vo2MaxInput>(() => defaultVo2MaxScenario);
   const [result, setResult] = useState<Vo2MaxResult | null>(null);
 

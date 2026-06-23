@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, ReceiptText, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -34,6 +35,7 @@ const frequencies: Array<{ value: SubscriptionFrequency; label: string }> = [
 const categories = Object.entries(categoryLabels) as Array<[SubscriptionCategory, string]>;
 
 export function SubscriptionAuditWorkspace() {
+  const t = useTranslations("tools.subscription-audit");
   const [entries, setEntries] = useState<SubscriptionEntry[]>(() => defaultSubscriptionAuditEntries);
   const [result, setResult] = useState<SubscriptionAuditResult | null>(null);
 

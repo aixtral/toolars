@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, PieChart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ const macroNotes = [
 ];
 
 export function MacroCalculatorWorkspace() {
+  const t = useTranslations("tools.macro-calculator");
   const [split, setSplit] = useState<MacroInput>(defaultMacroScenario);
   const [result, setResult] = useState<MacroResult | null>(null);
 

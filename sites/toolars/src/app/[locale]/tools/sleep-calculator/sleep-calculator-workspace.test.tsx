@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SleepCalculatorWorkspace } from "./sleep-calculator-workspace";
 
@@ -8,7 +9,7 @@ describe("SleepCalculatorWorkspace", () => {
   });
 
   it("renders the local VitalCalc sleep workspace sections", () => {
-    render(<SleepCalculatorWorkspace />);
+    renderWithIntl(<SleepCalculatorWorkspace />);
 
     expect(screen.getByRole("heading", { name: "Sleep Calculator" })).toBeInTheDocument();
     expect(screen.getByText("Sleep inputs")).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("SleepCalculatorWorkspace", () => {
   });
 
   it("calculates the default bedtime and saves the sleep plan locally", () => {
-    render(<SleepCalculatorWorkspace />);
+    renderWithIntl(<SleepCalculatorWorkspace />);
 
     fireEvent.click(screen.getByRole("button", { name: "Calculate sleep time" }));
 

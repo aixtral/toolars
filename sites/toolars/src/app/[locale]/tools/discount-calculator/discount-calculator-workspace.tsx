@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Percent, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const checkoutNotes = [
 ];
 
 export function DiscountCalculatorWorkspace() {
+  const t = useTranslations("tools.discount-calculator");
   const [plan, setPlan] = useState<DiscountInput>(defaultDiscountScenario);
   const [result, setResult] = useState<DiscountResult | null>(null);
 

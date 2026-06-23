@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { Calculator, Receipt, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,7 @@ const taxNotes = [
 ];
 
 export function SideIncomeTaxWorkspace() {
+  const t = useTranslations("tools.side-income-tax");
   const [plan, setPlan] = useState<SideIncomeTaxInput>(defaultSideIncomeTaxScenario);
   const [result, setResult] = useState<SideIncomeTaxResult | null>(null);
 

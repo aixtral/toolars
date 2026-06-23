@@ -285,7 +285,7 @@ export function PrivacyAiSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.consentPreview")}</h2>
             <div className="consent-preview-box">
-              <strong>Before AI processing</strong>
+              <strong>{t("labels.Before AI processing")}</strong>
               <p>This workflow wants to summarize one uploaded PDF using an AI model. Review extracted text, model provider, retention, and estimated credits before continuing.</p>
               <div className="settings-button-row">
                 <button className="button button-solid" type="button">

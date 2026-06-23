@@ -1,9 +1,12 @@
 import { useTranslations } from "next-intl";
 import {
   AlertTriangle,
+  BarChart3,
   Bell,
   Bot,
   Box,
+  Briefcase,
+  Calculator,
   CheckCircle2,
   Code2,
   CircleHelp,
@@ -15,13 +18,16 @@ import {
   Grid2X2,
   Headphones,
   HardDrive,
+  Heart,
   Home,
   Image as ImageIcon,
   Inbox,
   KeyRound,
   Link,
   ListChecks,
+  MessageSquare,
   MoreHorizontal,
+  Palette,
   PenLine,
   Plus,
   Plug,
@@ -41,9 +47,33 @@ import {
   Workflow
 } from "lucide-react";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
+import { LanguageSwitcher } from "@/components/shell/language-switcher";
 import { CommandCenter } from "@/components/search/command-center";
 import { categories } from "@/data/registry";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
+
+/** Map a category label to its lucide icon for the sidebar. */
+const categoryIcons: Record<string, typeof Grid2X2> = {
+  "All": Grid2X2,
+  "AI": Sparkles,
+  "AI Security": ShieldCheck,
+  "Developer": Code2,
+  "RAG / MCP / Agent": Bot,
+  "LLM Cost": Calculator,
+  "Prompt Engineering": MessageSquare,
+  "Frontend & Design": Palette,
+  "PDF": FileText,
+  "Image": ImageIcon,
+  "Finance": Wallet,
+  "Health": Heart,
+  "Productivity": Briefcase,
+  "Writing": PenLine,
+  "Data": BarChart3
+};
+
+function getCategoryIcon(label: string) {
+  return categoryIcons[label] ?? Grid2X2;
+}
 
 type Active = "explore" | "pdf" | "ai-developer" | "workflows" | "collections" | "my-tools" | "pricing" | "settings" | "admin";
 type SidebarVariant = "tools" | "workflows" | "collections" | "workspace" | "pdf-workspace" | "billing" | "settings" | "admin" | "none";
@@ -231,6 +261,7 @@ export function ToolarsShell({
               <CoreActionModalButton className="button button-solid" kind="sign-up">
                 Sign up
               </CoreActionModalButton>
+              <LanguageSwitcher />
             </span>
             <button className="menu-button" type="button">
               Menu
@@ -256,8 +287,8 @@ export function ToolarsShell({
               </button>
             ) : (
               <span className="topbar-auth">
-                <a className="button button-outline" href="/submit">
-                  <Plus size={16} aria-hidden="true" /> {t("nav.submitTool")}
+                <a className="topbar-text-link" href="/submit">
+                  <Plus size={15} aria-hidden="true" /> {t("nav.submitTool")}
                 </a>
                 <CoreActionModalButton className="button button-outline" kind="sign-in">
                   {t("nav.signIn")}
@@ -265,6 +296,7 @@ export function ToolarsShell({
                 <CoreActionModalButton className="button button-solid" kind="sign-up">
                   {t("nav.signUp")}
                 </CoreActionModalButton>
+                <LanguageSwitcher />
               </span>
             )}
             <button className="menu-button" type="button">
@@ -594,7 +626,7 @@ export function ToolarsShell({
                   return (
                     <a className={`side-link ${active === key ? "is-active" : ""}`} href={href} key={category.label}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                        <Grid2X2 size={14} aria-hidden="true" />
+                        {(() => { const Icon = getCategoryIcon(category.label); return <Icon size={14} aria-hidden="true" />; })()}
                         {category.label}
                       </span>
                       <span className="side-count">{category.count.toLocaleString()}</span>

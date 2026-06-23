@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { CheckCircle2, Crown, Folder, ShieldCheck, UserPlus, Users } from "lucide-react";
 
@@ -22,6 +23,7 @@ const sharedCollections = [
 ] as const;
 
 export function TeamSettingsView() {
+  const t = useTranslations("settings.team");
   const [email, setEmail] = useState("");
   const [pendingInvites, setPendingInvites] = useState(["ops@example.com"]);
   const [status, setStatus] = useState("Invite teammates with role-scoped access to shared Toolars workflows.");

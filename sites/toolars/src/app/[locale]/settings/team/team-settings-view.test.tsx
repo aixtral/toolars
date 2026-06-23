@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { TeamSettingsView } from "./team-settings-view";
 
 describe("TeamSettingsView", () => {
   it("renders team settings modules from the design", () => {
-    const { container } = render(<TeamSettingsView />);
+    const { container } = renderWithIntl(<TeamSettingsView />);
 
     expect(container.querySelector('[data-team-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Team workspace" })).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("TeamSettingsView", () => {
   });
 
   it("adds a pending invite when an email is submitted", () => {
-    render(<TeamSettingsView />);
+    renderWithIntl(<TeamSettingsView />);
 
     fireEvent.change(screen.getByLabelText("Invite email"), { target: { value: "mira@example.com" } });
     fireEvent.click(screen.getByRole("button", { name: "Send invite" }));

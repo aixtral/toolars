@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AI_CONSENT_AUDIT_STORAGE_KEY } from "@/lib/ai/consent-audit-storage";
 import { WORKSPACE_IDENTITY_STORAGE_KEY, bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
@@ -15,7 +16,7 @@ describe("PrivacyAiSettingsView", () => {
   });
 
   it("renders privacy and AI settings modules from the design", () => {
-    const { container } = render(<PrivacyAiSettingsView />);
+    const { container } = renderWithIntl(<PrivacyAiSettingsView />);
 
     expect(container.querySelector('[data-privacy-ai-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Privacy & AI" })).toBeInTheDocument();
@@ -36,7 +37,7 @@ describe("PrivacyAiSettingsView", () => {
   });
 
   it("updates visible consent state when a trust default is toggled", () => {
-    render(<PrivacyAiSettingsView />);
+    renderWithIntl(<PrivacyAiSettingsView />);
 
     const askConsent = screen.getByRole("button", { name: "Ask before AI processing" });
     expect(askConsent).toHaveAttribute("aria-pressed", "true");
@@ -66,7 +67,7 @@ describe("PrivacyAiSettingsView", () => {
       })
     );
 
-    render(<PrivacyAiSettingsView />);
+    renderWithIntl(<PrivacyAiSettingsView />);
 
     expect(screen.getByText("1 AI consent event retained locally")).toBeInTheDocument();
     expect(screen.getByText("PDF Summary Workflow")).toBeInTheDocument();
@@ -135,7 +136,7 @@ describe("PrivacyAiSettingsView", () => {
       })
     );
 
-    render(<PrivacyAiSettingsView />);
+    renderWithIntl(<PrivacyAiSettingsView />);
 
     expect(await screen.findByText("Server ledger synced")).toBeInTheDocument();
     expect(screen.getByText("1 AI consent event retained locally")).toBeInTheDocument();
@@ -200,7 +201,7 @@ describe("PrivacyAiSettingsView", () => {
       });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<PrivacyAiSettingsView />);
+    renderWithIntl(<PrivacyAiSettingsView />);
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
 
@@ -292,7 +293,7 @@ describe("PrivacyAiSettingsView", () => {
     vi.stubGlobal("fetch", fetchMock);
     vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
 
-    render(<PrivacyAiSettingsView />);
+    renderWithIntl(<PrivacyAiSettingsView />);
 
     expect(await screen.findByText("Server ledger synced")).toBeInTheDocument();
 

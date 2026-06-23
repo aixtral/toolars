@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { ApiKeysSettingsView } from "./api-keys-settings-view";
 
 describe("ApiKeysSettingsView", () => {
   it("renders API key management modules from the design", () => {
-    const { container } = render(<ApiKeysSettingsView />);
+    const { container } = renderWithIntl(<ApiKeysSettingsView />);
 
     expect(container.querySelector('[data-api-keys-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "API keys" })).toBeInTheDocument();
@@ -18,7 +19,7 @@ describe("ApiKeysSettingsView", () => {
   });
 
   it("creates and revokes keys with visible local state", () => {
-    render(<ApiKeysSettingsView />);
+    renderWithIntl(<ApiKeysSettingsView />);
 
     fireEvent.click(screen.getByRole("button", { name: "Create key" }));
 

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SecuritySettingsView } from "./security-settings-view";
 
@@ -24,7 +25,7 @@ describe("SecuritySettingsView", () => {
   });
 
   it("renders security modules from the settings design", () => {
-    const { container } = render(<SecuritySettingsView />);
+    const { container } = renderWithIntl(<SecuritySettingsView />);
 
     expect(container.querySelector('[data-security-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Security" })).toBeInTheDocument();
@@ -39,7 +40,7 @@ describe("SecuritySettingsView", () => {
   });
 
   it("updates two-factor state", () => {
-    render(<SecuritySettingsView />);
+    renderWithIntl(<SecuritySettingsView />);
 
     const twoFactor = screen.getByRole("button", { name: "Two-factor authentication" });
     expect(twoFactor).toHaveAttribute("aria-pressed", "true");
@@ -51,7 +52,7 @@ describe("SecuritySettingsView", () => {
   });
 
   it("confirms before revoking the active auth session", async () => {
-    render(<SecuritySettingsView />);
+    renderWithIntl(<SecuritySettingsView />);
 
     fireEvent.click(screen.getByRole("button", { name: "Sign out all sessions" }));
 
@@ -83,7 +84,7 @@ describe("SecuritySettingsView", () => {
       ok: true
     });
     vi.stubGlobal("fetch", fetchMock);
-    render(<SecuritySettingsView />);
+    renderWithIntl(<SecuritySettingsView />);
 
     fireEvent.click(screen.getByRole("button", { name: "Sign out all sessions" }));
     fireEvent.click(screen.getByRole("button", { name: "Sign out other sessions" }));
@@ -104,7 +105,7 @@ describe("SecuritySettingsView", () => {
   });
 
   it("focuses the sign-out confirmation dialog and restores the opener with Escape", () => {
-    render(<SecuritySettingsView />);
+    renderWithIntl(<SecuritySettingsView />);
 
     const trigger = screen.getByRole("button", { name: "Sign out all sessions" });
 

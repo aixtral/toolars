@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Bell, CheckCircle2, Clock, Mail, MessageSquare, Moon, Smartphone } from "lucide-react";
 
@@ -17,6 +18,7 @@ const channels = [
 ] as const;
 
 export function NotificationsSettingsView() {
+  const t = useTranslations("settings.notifications");
   const [enabled, setEnabled] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(alertDefaults.map(([label]) => [label, true]))
   );

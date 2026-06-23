@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { CreditCard, ExternalLink, FileText, Info, ReceiptText, ShieldCheck } from "lucide-react";
 import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
@@ -57,6 +58,7 @@ const fallbackInvoiceDetailRows: BillingInvoiceDetailRow[] = [
 ];
 
 export function BillingSettingsView() {
+  const t = useTranslations("settings.billing");
   const freeTrialMode = isFreeTrialMode();
   const [authContext, setAuthContext] = useState<ToolarsAuthContext | null>(null);
   const [billingAccount, setBillingAccount] = useState<ToolarsBillingAccount | null>(null);

@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { ConnectedAppsSettingsView } from "./connected-apps-settings-view";
 
 describe("ConnectedAppsSettingsView", () => {
   it("renders connected apps modules from the settings design", () => {
-    const { container } = render(<ConnectedAppsSettingsView />);
+    const { container } = renderWithIntl(<ConnectedAppsSettingsView />);
 
     expect(container.querySelector('[data-connected-apps-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Connected apps" })).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("ConnectedAppsSettingsView", () => {
   });
 
   it("confirms before disconnecting an app", () => {
-    render(<ConnectedAppsSettingsView />);
+    renderWithIntl(<ConnectedAppsSettingsView />);
 
     fireEvent.click(screen.getByRole("button", { name: "Disconnect Notion" }));
 
@@ -41,7 +42,7 @@ describe("ConnectedAppsSettingsView", () => {
   });
 
   it("focuses the disconnect confirmation dialog and restores the opener with Escape", () => {
-    render(<ConnectedAppsSettingsView />);
+    renderWithIntl(<ConnectedAppsSettingsView />);
 
     const trigger = screen.getByRole("button", { name: "Disconnect Notion" });
 

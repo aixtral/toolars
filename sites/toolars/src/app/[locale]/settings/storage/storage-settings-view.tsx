@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Archive, CheckCircle2, Clock, Download, FileArchive, FileText, HardDrive, Sparkles, Trash2, Upload } from "lucide-react";
 
@@ -24,6 +25,7 @@ const fileTypes = [
 ] as const;
 
 export function StorageSettingsView() {
+  const t = useTranslations("settings.storage");
   const [temporaryFiles, setTemporaryFiles] = useState(6);
   const [status, setStatus] = useState("Temporary uploads will be removed when the active session ends.");
 

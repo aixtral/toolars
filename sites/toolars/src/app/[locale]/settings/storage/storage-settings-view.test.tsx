@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { StorageSettingsView } from "./storage-settings-view";
 
 describe("StorageSettingsView", () => {
   it("renders storage settings modules from the design", () => {
-    const { container } = render(<StorageSettingsView />);
+    const { container } = renderWithIntl(<StorageSettingsView />);
 
     expect(container.querySelector('[data-storage-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Storage" })).toBeInTheDocument();
@@ -18,7 +19,7 @@ describe("StorageSettingsView", () => {
   });
 
   it("clears temporary uploads with visible local state", () => {
-    render(<StorageSettingsView />);
+    renderWithIntl(<StorageSettingsView />);
 
     expect(screen.getByText("6 temporary files")).toBeInTheDocument();
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Activity, AlertTriangle, CheckCircle2, Cloud, Globe2, Link2, Plug, RefreshCw, ShieldCheck, Unplug } from "lucide-react";
 import { useDialogFocus } from "@/components/core/use-dialog-focus";
@@ -52,6 +53,7 @@ const healthRows = [
 ] as const;
 
 export function ConnectedAppsSettingsView() {
+  const t = useTranslations("settings.connected-apps");
   const [integrations, setIntegrations] = useState<Integration[]>(initialIntegrations);
   const [status, setStatus] = useState("All connected apps are scoped and monitored.");
   const [pendingDisconnect, setPendingDisconnect] = useState<string | null>(null);

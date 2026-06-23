@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Bot, CheckCircle2, Download, FileClock, HardDrive, LockKeyhole, ShieldCheck, Trash2 } from "lucide-react";
 import { clearAiConsentAuditLog, loadAiConsentAuditLog } from "@/lib/ai/consent-audit-storage";
@@ -52,6 +53,7 @@ const providerRouteRows = [
 ] as const;
 
 export function PrivacyAiSettingsView() {
+  const t = useTranslations("settings.privacy-ai");
   const [enabled, setEnabled] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(trustDefaults.map((item) => [item.label, true]))
   );

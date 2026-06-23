@@ -1,10 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { NotificationsSettingsView } from "./notifications-settings-view";
 
 describe("NotificationsSettingsView", () => {
   it("renders notification settings modules from the design", () => {
-    const { container } = render(<NotificationsSettingsView />);
+    const { container } = renderWithIntl(<NotificationsSettingsView />);
 
     expect(container.querySelector('[data-notifications-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Notifications" })).toBeInTheDocument();
@@ -19,7 +20,7 @@ describe("NotificationsSettingsView", () => {
   });
 
   it("updates visible state when workflow alerts are toggled", () => {
-    render(<NotificationsSettingsView />);
+    renderWithIntl(<NotificationsSettingsView />);
 
     const workflowAlerts = screen.getByRole("button", { name: "Workflow completion alerts" });
     expect(workflowAlerts).toHaveAttribute("aria-pressed", "true");

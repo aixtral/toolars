@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
   Activity,
@@ -45,6 +46,7 @@ const checklist = [
 ] as const;
 
 export function SecuritySettingsView() {
+  const t = useTranslations("settings.security");
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
   const [sessionCount, setSessionCount] = useState<number>(initialSessions.length);
   const [revokedSessionId, setRevokedSessionId] = useState<string | null>(null);

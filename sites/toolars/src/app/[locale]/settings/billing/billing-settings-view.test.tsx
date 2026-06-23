@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
 import { BillingSettingsView } from "./billing-settings-view";
@@ -22,7 +23,7 @@ describe("BillingSettingsView", () => {
   });
 
   it("renders billing settings modules from the design", () => {
-    const { container } = render(<BillingSettingsView />);
+    const { container } = renderWithIntl(<BillingSettingsView />);
 
     expect(container.querySelector('[data-billing-settings-page="true"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Trial usage" })).toBeInTheDocument();
@@ -40,7 +41,7 @@ describe("BillingSettingsView", () => {
   });
 
   it("shows free trial values without paid portal or invoice handoffs", () => {
-    render(<BillingSettingsView />);
+    renderWithIntl(<BillingSettingsView />);
 
     expect(screen.getByText("Free trial")).toBeInTheDocument();
     expect(screen.getByText("68%")).toBeInTheDocument();
@@ -99,7 +100,7 @@ describe("BillingSettingsView", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<BillingSettingsView />);
+    renderWithIntl(<BillingSettingsView />);
 
     expect(await screen.findByText("Billing account synced")).toBeInTheDocument();
     expect(screen.getByText("Toolars Team")).toBeInTheDocument();
@@ -163,7 +164,7 @@ describe("BillingSettingsView", () => {
       });
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<BillingSettingsView />);
+    renderWithIntl(<BillingSettingsView />);
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
 

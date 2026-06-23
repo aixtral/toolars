@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Activity, CheckCircle2, Clipboard, Code2, KeyRound, LockKeyhole, Plus, ShieldCheck, Trash2 } from "lucide-react";
 
@@ -45,6 +46,7 @@ const activityRows = [
 ] as const;
 
 export function ApiKeysSettingsView() {
+  const t = useTranslations("settings.api-keys");
   const [keys, setKeys] = useState<ApiKey[]>(initialKeys);
   const [feedback, setFeedback] = useState("API keys are masked by default. Copy the key after creation and store it securely.");
 

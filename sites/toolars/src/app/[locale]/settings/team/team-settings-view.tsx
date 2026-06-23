@@ -59,7 +59,7 @@ export function TeamSettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Members</h2>
+                <h2>{t("sections.members")}</h2>
                 <p className="tool-description">Active workspace members and their current access level.</p>
               </span>
               <span className="badge local">Seat usage</span>
@@ -81,7 +81,7 @@ export function TeamSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Invite members</h2>
+            <h2>{t("sections.inviteMembers")}</h2>
             <div className="team-invite-form">
               <label htmlFor="team-invite-email">
                 Invite email
@@ -97,7 +97,7 @@ export function TeamSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Roles and permissions</h2>
+            <h2>{t("sections.rolesPermissions")}</h2>
             <div className="scope-grid">
               {roles.map(([role, description]) => (
                 <article key={role}>
@@ -112,7 +112,7 @@ export function TeamSettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>Pending invites</h2>
+            <h2>{t("sections.pendingInvites")}</h2>
             <div className="settings-row-list compact">
               {pendingInvites.map((invite) => (
                 <div className="settings-detail-row compact-row" key={invite}>
@@ -125,7 +125,7 @@ export function TeamSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Shared collections</h2>
+            <h2>{t("sections.sharedCollections")}</h2>
             <div className="settings-row-list compact">
               {sharedCollections.map(([name, detail]) => (
                 <div className="settings-detail-row compact-row" key={name}>
@@ -138,7 +138,7 @@ export function TeamSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Activity log</h2>
+            <h2>{t("sections.activityLog")}</h2>
             <div className="key-activity-list">
               <article>
                 <Users size={15} aria-hidden="true" />
@@ -158,7 +158,7 @@ export function TeamSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Ownership</h2>
+            <h2>{t("sections.ownership")}</h2>
             <p className="tool-description">Only the current owner can transfer billing, deletion, and API key authority.</p>
             <button className="button button-outline-neutral" type="button">
               <Crown size={15} aria-hidden="true" /> Transfer ownership

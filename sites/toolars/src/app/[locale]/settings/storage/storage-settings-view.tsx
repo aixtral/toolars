@@ -54,7 +54,7 @@ export function StorageSettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Storage usage</h2>
+                <h2>{t("sections.storageUsage")}</h2>
                 <p className="tool-description">Your beta trial workspace is using 42% of the included storage allocation.</p>
               </span>
               <span className="badge local">4.2 GB / 10 GB</span>
@@ -74,7 +74,7 @@ export function StorageSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Recent uploads</h2>
+            <h2>{t("sections.recentUploads")}</h2>
             <div className="settings-row-list">
               {recentUploads.map(([name, type, size, state]) => (
                 <div className="settings-detail-row" key={name}>
@@ -93,7 +93,7 @@ export function StorageSettingsView() {
               <span className="icon-tile green">
                 <Upload size={18} aria-hidden="true" />
               </span>
-              <h2>Upload cleanup policy</h2>
+              <h2>{t("sections.cleanupPolicy")}</h2>
               <p className="tool-description">{temporaryFiles} temporary files</p>
               <button className="button button-outline-neutral" onClick={clearTemporaryUploads} type="button">
                 <Trash2 size={15} aria-hidden="true" /> Clear temporary uploads
@@ -107,7 +107,7 @@ export function StorageSettingsView() {
               <span className="icon-tile green">
                 <Sparkles size={18} aria-hidden="true" />
               </span>
-              <h2>Storage automation</h2>
+              <h2>{t("sections.automation")}</h2>
               <p className="tool-description">Automatically compress image outputs, delete expired temp uploads, and warn before workflows exceed storage limits.</p>
               <span className="badge local">Automation active</span>
             </section>
@@ -116,7 +116,7 @@ export function StorageSettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>File types</h2>
+            <h2>{t("sections.fileTypes")}</h2>
             <div className="settings-row-list compact">
               {fileTypes.map(([type, limit]) => (
                 <div className="settings-detail-row compact-row" key={type}>
@@ -129,7 +129,7 @@ export function StorageSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Export archive</h2>
+            <h2>{t("sections.exportArchive")}</h2>
             <p className="tool-description">Download saved outputs, uploaded files, workflow metadata, and collection exports as one archive.</p>
             <button className="button button-outline-neutral" type="button">
               <Download size={15} aria-hidden="true" /> Prepare archive
@@ -137,7 +137,7 @@ export function StorageSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Retention window</h2>
+            <h2>{t("sections.retentionWindow")}</h2>
             <div className="settings-row-list compact">
               <div className="settings-detail-row compact-row">
                 <Clock size={15} aria-hidden="true" />

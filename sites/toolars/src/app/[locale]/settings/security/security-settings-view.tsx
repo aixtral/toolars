@@ -121,7 +121,7 @@ export function SecuritySettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Security overview</h2>
+                <h2>{t("sections.overview")}</h2>
                 <p className="tool-description">Your workspace has strong protection across sessions, recovery, and data retention.</p>
               </span>
               <span className="badge local">No critical alerts</span>
@@ -138,7 +138,7 @@ export function SecuritySettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Two-factor authentication</h2>
+            <h2>{t("sections.twoFactor")}</h2>
             <article className="privacy-toggle-row">
               <span className="icon-tile green">
                 <LockKeyhole size={18} aria-hidden="true" />
@@ -163,7 +163,7 @@ export function SecuritySettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Active sessions</h2>
+                <h2>{t("sections.activeSessions")}</h2>
                 <p className="tool-description">{sessionCount} active sessions are currently trusted for this account.</p>
               </span>
               <button
@@ -203,7 +203,7 @@ export function SecuritySettingsView() {
               <span className="icon-tile green">
                 <Database size={18} aria-hidden="true" />
               </span>
-              <h2>Upload deletion policy</h2>
+              <h2>{t("sections.uploadDeletion")}</h2>
               <p className="tool-description">Temporary uploaded files are cleared automatically when the active session ends.</p>
               <span className="badge local">Auto-delete on</span>
             </section>
@@ -212,7 +212,7 @@ export function SecuritySettingsView() {
               <span className="icon-tile green">
                 <KeyRound size={18} aria-hidden="true" />
               </span>
-              <h2>Recovery methods</h2>
+              <h2>{t("sections.recovery")}</h2>
               <p className="tool-description">Recovery email and authenticator backup codes are configured for account recovery.</p>
               <span className="badge local">2 methods</span>
             </section>
@@ -221,7 +221,7 @@ export function SecuritySettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>Login activity</h2>
+            <h2>{t("sections.loginActivity")}</h2>
             <div className="key-activity-list">
               {loginActivity.map(([time, detail]) => (
                 <article key={`${time}-${detail}`}>
@@ -236,7 +236,7 @@ export function SecuritySettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Security checklist</h2>
+            <h2>{t("sections.checklist")}</h2>
             <div className="settings-row-list compact">
               {checklist.map((item) => (
                 <div className="settings-detail-row compact-row" key={item}>
@@ -249,7 +249,7 @@ export function SecuritySettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Risk actions</h2>
+            <h2>{t("sections.riskActions")}</h2>
             <div className="consent-preview-box">
               <ShieldAlert size={18} aria-hidden="true" />
               <strong>Review sensitive changes</strong>

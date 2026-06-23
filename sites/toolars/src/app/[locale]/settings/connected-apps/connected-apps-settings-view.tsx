@@ -110,7 +110,7 @@ export function ConnectedAppsSettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>App integrations</h2>
+                <h2>{t("sections.integrations")}</h2>
                 <p className="tool-description">Review connection state, last sync, and granted access before routing content into workflows.</p>
               </span>
               <span className="badge local">OAuth scoped</span>
@@ -152,7 +152,7 @@ export function ConnectedAppsSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Connection scopes</h2>
+            <h2>{t("sections.connectionScopes")}</h2>
             <div className="scope-grid">
               <article>
                 <Cloud size={16} aria-hidden="true" />
@@ -178,7 +178,7 @@ export function ConnectedAppsSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Connect new app</h2>
+            <h2>{t("sections.connectNew")}</h2>
             <p className="tool-description">Add Slack, Linear, Dropbox, or a private MCP connector after reviewing the requested scopes.</p>
             <div className="settings-button-row">
               <button className="button button-solid" type="button">
@@ -193,7 +193,7 @@ export function ConnectedAppsSettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>Sync policy</h2>
+            <h2>{t("sections.syncPolicy")}</h2>
             <div className="settings-row-list compact">
               <div className="settings-detail-row compact-row">
                 <RefreshCw size={15} aria-hidden="true" />
@@ -214,7 +214,7 @@ export function ConnectedAppsSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>App activity</h2>
+            <h2>{t("sections.appActivity")}</h2>
             <div className="key-activity-list">
               {activityRows.map(([time, detail]) => (
                 <article key={`${time}-${detail}`}>
@@ -229,7 +229,7 @@ export function ConnectedAppsSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Integration health</h2>
+            <h2>{t("sections.integrationHealth")}</h2>
             <div className="settings-row-list compact">
               {healthRows.map(([label, value]) => (
                 <div className="settings-detail-row compact-row" key={label}>

@@ -143,7 +143,7 @@ export function BillingSettingsView() {
           <section className="panel billing-usage-card" id="usage">
             <div className="landing-section-head">
               <span>
-                <h2>Usage analytics</h2>
+                <h2>{t("sections.usageAnalytics")}</h2>
                 <p className="tool-description">Track AI credits, storage, and workspace activity before the next billing cycle closes.</p>
               </span>
               <span className="badge local">{freeTrialMode ? "Trial resets Jun 28" : billingCycleClose}</span>
@@ -166,7 +166,7 @@ export function BillingSettingsView() {
 
           {freeTrialMode ? (
           <section className="panel billing-detail-card">
-            <h2>Trial controls</h2>
+            <h2>{t("sections.trialControls")}</h2>
             <div className="settings-row-list">
               <div className="settings-detail-row">
                 <strong>Google sign-in</strong>
@@ -187,7 +187,7 @@ export function BillingSettingsView() {
           </section>
           ) : (
           <section className="panel billing-detail-card">
-            <h2>Billing details</h2>
+            <h2>{t("sections.billingDetails")}</h2>
             <div className="settings-row-list">
               {detailRows.map(([label, value, action]) => (
                 <div className="settings-detail-row" key={label}>
@@ -204,7 +204,7 @@ export function BillingSettingsView() {
 
           {freeTrialMode ? null : (
           <section className="panel billing-invoice-card">
-            <h2>Invoices</h2>
+            <h2>{t("sections.invoices")}</h2>
             <div className="billing-invoice-table">
               <div className="billing-invoice-head">
                 <strong>Date</strong>
@@ -228,7 +228,7 @@ export function BillingSettingsView() {
           <section className="panel billing-invoice-detail-card">
             <div className="landing-section-head">
               <span>
-                <h2>Invoice detail</h2>
+                <h2>{t("sections.invoiceDetail")}</h2>
                 <p className="tool-description">Selected invoice handoff with line items, receipt metadata, and tax-ready export fields.</p>
               </span>
               <span className="badge local">{selectedInvoiceId}</span>
@@ -258,7 +258,7 @@ export function BillingSettingsView() {
         <aside className="billing-settings-side">
           {freeTrialMode ? (
           <section className="panel billing-portal-card">
-            <h2>Trial status</h2>
+            <h2>{t("sections.trialStatus")}</h2>
             <p className="tool-description">Toolars is currently in free trial mode. Usage is tracked for product quality and future plan design.</p>
             <span className="badge local">Free trial mode</span>
           </section>
@@ -280,7 +280,7 @@ export function BillingSettingsView() {
           )}
 
           <section className="panel">
-            <h2>Usage policy</h2>
+            <h2>{t("sections.usagePolicy")}</h2>
             <div className="settings-row-list compact">
               <div className="settings-detail-row">
                 <span className="badge local">AI</span>
@@ -297,7 +297,7 @@ export function BillingSettingsView() {
 
           {freeTrialMode ? null : (
           <section className="panel">
-            <h2>Payment method</h2>
+            <h2>{t("sections.paymentMethod")}</h2>
             <div className="settings-api-row">
               <CreditCard size={22} aria-hidden="true" />
               <span>
@@ -310,7 +310,7 @@ export function BillingSettingsView() {
 
           {freeTrialMode ? null : (
           <section className="panel">
-            <h2>Invoice export</h2>
+            <h2>{t("sections.invoiceExport")}</h2>
             <div className="settings-api-row">
               <ReceiptText size={22} aria-hidden="true" />
               <span>

@@ -50,7 +50,7 @@ export function NotificationsSettingsView() {
       <div className="settings-subpage-layout">
         <div className="settings-subpage-main">
           <section className="panel settings-subpage-card">
-            <h2>Delivery channels</h2>
+            <h2>{t("sections.deliveryChannels")}</h2>
             <div className="settings-stat-grid">
               {channels.map(([label, detail, Icon]) => (
                 <article className="settings-stat-card" key={label}>
@@ -63,7 +63,7 @@ export function NotificationsSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Workflow alerts</h2>
+            <h2>{t("sections.workflowAlerts")}</h2>
             <div className="settings-toggle-list">
               {alertDefaults.map(([label, description]) => {
                 const isEnabled = enabled[label];
@@ -97,7 +97,7 @@ export function NotificationsSettingsView() {
               <span className="icon-tile green">
                 <Clock size={18} aria-hidden="true" />
               </span>
-              <h2>Digest schedule</h2>
+              <h2>{t("sections.digest")}</h2>
               <p className="tool-description">Send a daily digest at 8:30 AM with completed workflows, submitted tool decisions, and shared collection changes.</p>
               <span className="badge local">Daily</span>
             </section>
@@ -106,7 +106,7 @@ export function NotificationsSettingsView() {
               <span className="icon-tile green">
                 <Moon size={18} aria-hidden="true" />
               </span>
-              <h2>Quiet hours</h2>
+              <h2>{t("sections.quietHours")}</h2>
               <p className="tool-description">Pause non-critical notifications from 10:00 PM to 7:00 AM in your workspace timezone.</p>
               <span className="badge">Scheduled</span>
             </section>
@@ -115,25 +115,25 @@ export function NotificationsSettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>Review routing</h2>
+            <h2>{t("sections.reviewRouting")}</h2>
             <p className="tool-description">Submitted tool review decisions and required-change requests are sent immediately.</p>
             <span className="badge local">Enabled</span>
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Trial usage routing</h2>
+            <h2>{t("sections.trialRouting")}</h2>
             <p className="tool-description">Beta credit, storage, and usage threshold warnings go to workspace owners.</p>
             <span className="badge local">Enabled</span>
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Release notes</h2>
+            <h2>{t("sections.releaseNotes")}</h2>
             <p className="tool-description">New workflows, collections, and Toolars release notes are grouped into the product digest.</p>
             <span className="badge">Digest only</span>
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Notification preview</h2>
+            <h2>{t("sections.preview")}</h2>
             <div className="consent-preview-box">
               <strong>PDF Summary Workflow finished</strong>
               <p>Your summary is ready. It used 18 AI credits and saved the output to PDF Ops Kit.</p>

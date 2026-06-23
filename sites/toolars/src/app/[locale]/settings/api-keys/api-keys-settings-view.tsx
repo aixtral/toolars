@@ -95,7 +95,7 @@ export function ApiKeysSettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Key inventory</h2>
+                <h2>{t("sections.inventory")}</h2>
                 <p className="tool-description">Keys stay masked after creation. Use scoped permissions and revoke unused credentials quickly.</p>
               </span>
               <span className="badge local">2 active</span>
@@ -137,7 +137,7 @@ export function ApiKeysSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Create API key</h2>
+            <h2>{t("sections.createKey")}</h2>
             <div className="api-create-grid">
               <label>
                 Key name
@@ -165,7 +165,7 @@ export function ApiKeysSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Scopes</h2>
+            <h2>{t("sections.scopes")}</h2>
             <div className="scope-grid">
               {scopeRows.map(([scope, description]) => (
                 <article key={scope}>
@@ -180,7 +180,7 @@ export function ApiKeysSettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>Webhook signing secret</h2>
+            <h2>{t("sections.webhook")}</h2>
             <div className="settings-api-row">
               <LockKeyhole size={22} aria-hidden="true" />
               <span>
@@ -194,7 +194,7 @@ export function ApiKeysSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Key activity</h2>
+            <h2>{t("sections.activity")}</h2>
             <div className="key-activity-list">
               {activityRows.map(([time, detail]) => (
                 <article key={`${time}-${detail}`}>
@@ -209,7 +209,7 @@ export function ApiKeysSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Security checklist</h2>
+            <h2>{t("sections.secChecklist")}</h2>
             <div className="settings-row-list compact">
               {["Use one key per environment", "Rotate production keys every 90 days", "Never expose keys in client bundles", "Revoke keys that have not run this month"].map((item) => (
                 <div className="settings-detail-row compact-row" key={item}>

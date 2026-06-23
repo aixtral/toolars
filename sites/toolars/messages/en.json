@@ -1331,48 +1331,133 @@
       "hero": {
         "title": "Security",
         "subtitle": "Review account protection, sessions, login activity, recovery methods, upload deletion, and risk actions."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "overview": "Security overview",
+        "twoFactor": "Two-factor authentication",
+        "activeSessions": "Active sessions",
+        "uploadDeletion": "Upload deletion policy",
+        "recovery": "Recovery methods",
+        "loginActivity": "Login activity",
+        "checklist": "Security checklist",
+        "riskActions": "Risk actions"
       }
     },
     "privacy-ai": {
       "hero": {
         "title": "Privacy & AI",
         "subtitle": "Control consent, AI processing, local-first routing, retention, exports, and deletion policies for your workspace."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "consentDefaults": "Consent defaults",
+        "processingPolicy": "AI processing policy",
+        "providerRouting": "Provider routing matrix",
+        "localFirst": "Local-first routing",
+        "trainingControls": "Training controls",
+        "consentPreview": "Consent preview",
+        "dataRetention": "Data retention",
+        "privacyLog": "Privacy log",
+        "auditTrail": "AI audit trail",
+        "guardrails": "Responsible AI guardrails"
       }
     },
     "api-keys": {
       "hero": {
         "title": "API keys",
         "subtitle": "Create scoped keys for Toolars automations, inspect usage, and revoke access without leaving account settings."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "inventory": "Key inventory",
+        "createKey": "Create API key",
+        "scopes": "Scopes",
+        "webhook": "Webhook signing secret",
+        "activity": "Key activity",
+        "secChecklist": "Security checklist"
       }
     },
     "billing": {
       "hero": {
         "title": "Trial usage",
         "subtitle": "Review beta trial credits, storage, workflow usage, and account sync. Invoices and paid plans are parked for Phase 2."
+      },
+      "sections": {
+        "eyebrow": "Free trial mode",
+        "usageAnalytics": "Usage analytics",
+        "trialControls": "Trial controls",
+        "billingDetails": "Billing details",
+        "invoices": "Invoices",
+        "invoiceDetail": "Invoice detail",
+        "trialStatus": "Trial status",
+        "usagePolicy": "Usage policy",
+        "paymentMethod": "Payment method",
+        "invoiceExport": "Invoice export"
       }
     },
     "connected-apps": {
       "hero": {
         "title": "Connected apps",
         "subtitle": "Manage app integrations, scopes, sync policy, extension status, and integration health."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "integrations": "App integrations",
+        "connectionScopes": "Connection scopes",
+        "connectNew": "Connect new app",
+        "syncPolicy": "Sync policy",
+        "appActivity": "App activity",
+        "integrationHealth": "Integration health"
       }
     },
     "notifications": {
       "hero": {
         "title": "Notifications",
         "subtitle": "Tune workflow, review, trial usage, digest, quiet-hour, and delivery channel preferences."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "deliveryChannels": "Delivery channels",
+        "workflowAlerts": "Workflow alerts",
+        "digest": "Digest schedule",
+        "quietHours": "Quiet hours",
+        "reviewRouting": "Review routing",
+        "trialRouting": "Trial usage routing",
+        "releaseNotes": "Release notes",
+        "preview": "Notification preview"
       }
     },
     "storage": {
       "hero": {
         "title": "Storage",
         "subtitle": "Review workspace storage, upload retention, file limits, archive exports, and beta trial usage."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "storageUsage": "Storage usage",
+        "recentUploads": "Recent uploads",
+        "cleanupPolicy": "Upload cleanup policy",
+        "automation": "Storage automation",
+        "fileTypes": "File types",
+        "exportArchive": "Export archive",
+        "retentionWindow": "Retention window"
       }
     },
     "team": {
       "hero": {
         "title": "Team workspace",
         "subtitle": "Manage members, roles, seats, shared collections, pending invites, and ownership controls."
+      },
+      "sections": {
+        "eyebrow": "Settings",
+        "members": "Members",
+        "inviteMembers": "Invite members",
+        "rolesPermissions": "Roles and permissions",
+        "pendingInvites": "Pending invites",
+        "sharedCollections": "Shared collections",
+        "activityLog": "Activity log",
+        "ownership": "Ownership"
       }
     }
   },

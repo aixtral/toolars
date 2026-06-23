@@ -192,7 +192,7 @@ export function PrivacyAiSettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Consent defaults</h2>
+                <h2>{t("sections.consentDefaults")}</h2>
                 <p className="tool-description">These defaults shape every AI workflow, uploaded file, and saved output in Toolars.</p>
               </span>
             </div>
@@ -225,7 +225,7 @@ export function PrivacyAiSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>AI processing policy</h2>
+            <h2>{t("sections.processingPolicy")}</h2>
             <div className="settings-row-list">
               {policyRows.map(([label, value, description]) => (
                 <div className="settings-detail-row" key={label}>
@@ -240,7 +240,7 @@ export function PrivacyAiSettingsView() {
           <section className="panel settings-subpage-card">
             <div className="landing-section-head">
               <span>
-                <h2>Provider routing matrix</h2>
+                <h2>{t("sections.providerRouting")}</h2>
                 <p className="tool-description">Production routing shows the primary provider, fallback path, consent gate, and retention window before AI work leaves the workspace.</p>
               </span>
               <span className="badge ai">Consent required</span>
@@ -261,7 +261,7 @@ export function PrivacyAiSettingsView() {
               <span className="icon-tile green">
                 <HardDrive size={18} aria-hidden="true" />
               </span>
-              <h2>Local-first routing</h2>
+              <h2>{t("sections.localFirst")}</h2>
               <p className="tool-description">Toolars ranks local calculators, converters, and browser workflows before tools that require uploads or AI processing.</p>
               <div className="privacy-route-strip">
                 <span>Local</span>
@@ -274,7 +274,7 @@ export function PrivacyAiSettingsView() {
               <span className="icon-tile green">
                 <Bot size={18} aria-hidden="true" />
               </span>
-              <h2>Training controls</h2>
+              <h2>{t("sections.trainingControls")}</h2>
               <p className="tool-description">Workspace content stays out of training by default. Team owners can require admin approval before any data-sharing policy changes.</p>
               <span className="badge local">Training opt-out active</span>
             </section>
@@ -283,7 +283,7 @@ export function PrivacyAiSettingsView() {
 
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
-            <h2>Consent preview</h2>
+            <h2>{t("sections.consentPreview")}</h2>
             <div className="consent-preview-box">
               <strong>Before AI processing</strong>
               <p>This workflow wants to summarize one uploaded PDF using an AI model. Review extracted text, model provider, retention, and estimated credits before continuing.</p>
@@ -299,7 +299,7 @@ export function PrivacyAiSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Data retention</h2>
+            <h2>{t("sections.dataRetention")}</h2>
             <div className="settings-row-list compact">
               {retentionRows.map(([label, value]) => (
                 <div className="settings-detail-row compact-row" key={label}>
@@ -315,7 +315,7 @@ export function PrivacyAiSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>Privacy log</h2>
+            <h2>{t("sections.privacyLog")}</h2>
             <p className="tool-description">Export a workspace audit of AI consent events, uploads, retention updates, and deletion requests.</p>
             <div className="privacy-audit-summary">
               <strong>
@@ -374,7 +374,7 @@ export function PrivacyAiSettingsView() {
           </section>
 
           <section className="panel settings-subpage-card">
-            <h2>AI audit trail</h2>
+            <h2>{t("sections.auditTrail")}</h2>
             <div className="ai-audit-trail-list">
               <article>
                 <span className="badge local">Identity</span>
@@ -403,7 +403,7 @@ export function PrivacyAiSettingsView() {
             <span className="icon-tile green">
               <LockKeyhole size={18} aria-hidden="true" />
             </span>
-            <h2>Responsible AI guardrails</h2>
+            <h2>{t("sections.guardrails")}</h2>
             <p className="tool-description">Sensitive content requires an explicit consent step, and admins can inspect AI usage from the privacy log.</p>
           </section>
         </aside>

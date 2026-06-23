@@ -1331,48 +1331,133 @@
       "hero": {
         "title": "安全",
         "subtitle": "查看賬户保護、會话、登錄活动、恢復方式、上传删除和風險操作。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "overview": "安全概览",
+        "twoFactor": "雙重身份驗證",
+        "activeSessions": "活躍會话",
+        "uploadDeletion": "上传删除策略",
+        "recovery": "恢復方式",
+        "loginActivity": "登錄活动",
+        "checklist": "安全檢查清单",
+        "riskActions": "風險操作"
       }
     },
     "privacy-ai": {
       "hero": {
         "title": "隱私與 AI",
         "subtitle": "為你的工作区控制同意、AI 處理、本地优先路由、保留、導出和删除策略。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "consentDefaults": "同意默認設置",
+        "processingPolicy": "AI 處理策略",
+        "providerRouting": "提供商路由矩陣",
+        "localFirst": "本地优先路由",
+        "trainingControls": "訓练控制",
+        "consentPreview": "同意預览",
+        "dataRetention": "数據保留",
+        "privacyLog": "隱私日志",
+        "auditTrail": "AI 審計追踪",
+        "guardrails": "負責任的 AI 護栏"
       }
     },
     "api-keys": {
       "hero": {
         "title": "API 密钥",
         "subtitle": "為 Toolars 自动化创建带权限范圍的密钥，查看用量并撤销访問，無需離開賬户設置。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "inventory": "密钥清单",
+        "createKey": "创建 API 密钥",
+        "scopes": "权限范圍",
+        "webhook": "Webhook 签名密钥",
+        "activity": "密钥活动",
+        "secChecklist": "安全檢查清单"
       }
     },
     "billing": {
       "hero": {
         "title": "試用用量",
         "subtitle": "查看 Beta 試用额度、存储、工作流用量和賬户同步。發票和付費套餐已搁置至第二階段。"
+      },
+      "sections": {
+        "eyebrow": "免費試用模式",
+        "usageAnalytics": "用量分析",
+        "trialControls": "試用控制",
+        "billingDetails": "賬单詳情",
+        "invoices": "發票",
+        "invoiceDetail": "發票詳情",
+        "trialStatus": "試用狀態",
+        "usagePolicy": "用量政策",
+        "paymentMethod": "付款方式",
+        "invoiceExport": "發票導出"
       }
     },
     "connected-apps": {
       "hero": {
         "title": "已连接的應用",
         "subtitle": "管理應用集成、权限范圍、同步策略、扩展狀態和集成健康度。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "integrations": "應用集成",
+        "connectionScopes": "连接权限范圍",
+        "connectNew": "连接新應用",
+        "syncPolicy": "同步策略",
+        "appActivity": "應用活动",
+        "integrationHealth": "集成健康度"
       }
     },
     "notifications": {
       "hero": {
         "title": "通知",
         "subtitle": "调整工作流、審查、試用用量、摘要、免打擾時段和送达渠道偏好。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "deliveryChannels": "送达渠道",
+        "workflowAlerts": "工作流提醒",
+        "digest": "摘要計划",
+        "quietHours": "免打擾時段",
+        "reviewRouting": "審查路由",
+        "trialRouting": "試用用量路由",
+        "releaseNotes": "版本說明",
+        "preview": "通知預览"
       }
     },
     "storage": {
       "hero": {
         "title": "存储",
         "subtitle": "查看工作区存储、上传保留、文件限制、歸檔導出和 Beta 試用用量。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "storageUsage": "存储用量",
+        "recentUploads": "最近上传",
+        "cleanupPolicy": "上传清理策略",
+        "automation": "存储自动化",
+        "fileTypes": "文件類型",
+        "exportArchive": "導出歸檔",
+        "retentionWindow": "保留窗口"
       }
     },
     "team": {
       "hero": {
         "title": "團隊工作区",
         "subtitle": "管理成员、角色、席位、共享集合、待處理邀请和所有权控制。"
+      },
+      "sections": {
+        "eyebrow": "設置",
+        "members": "成员",
+        "inviteMembers": "邀请成员",
+        "rolesPermissions": "角色和权限",
+        "pendingInvites": "待處理邀请",
+        "sharedCollections": "共享集合",
+        "activityLog": "活动日志",
+        "ownership": "所有权"
       }
     }
   },

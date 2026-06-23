@@ -1331,48 +1331,133 @@
       "hero": {
         "title": "Seguridad",
         "subtitle": "Revisa la protección de la cuenta, las sesiones, la actividad de inicio de sesión, los métodos de recuperación, la eliminación de cargas y las acciones de riesgo."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "overview": "Resumen de seguridad",
+        "twoFactor": "Autenticación de dos factores",
+        "activeSessions": "Sesiones activas",
+        "uploadDeletion": "Política de eliminación de cargas",
+        "recovery": "Métodos de recuperación",
+        "loginActivity": "Actividad de inicio de sesión",
+        "checklist": "Lista de comprobación de seguridad",
+        "riskActions": "Acciones de riesgo"
       }
     },
     "privacy-ai": {
       "hero": {
         "title": "Privacidad e IA",
         "subtitle": "Controla el consentimiento, el procesamiento de IA, el enrutamiento local, la retención, las exportaciones y las políticas de eliminación de tu espacio de trabajo."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "consentDefaults": "Valores predeterminados de consentimiento",
+        "processingPolicy": "Política de procesamiento de IA",
+        "providerRouting": "Matriz de enrutamiento de proveedores",
+        "localFirst": "Enrutamiento local primero",
+        "trainingControls": "Controles de entrenamiento",
+        "consentPreview": "Vista previa de consentimiento",
+        "dataRetention": "Retención de datos",
+        "privacyLog": "Registro de privacidad",
+        "auditTrail": "Pista de auditoría de IA",
+        "guardrails": "Salvaguardas de IA responsable"
       }
     },
     "api-keys": {
       "hero": {
         "title": "Claves de API",
         "subtitle": "Crea claves con permisos para automatizaciones de Toolars, inspecciona el uso y revoca el acceso sin salir de los ajustes de cuenta."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "inventory": "Inventario de claves",
+        "createKey": "Crear clave de API",
+        "scopes": "Permisos",
+        "webhook": "Secreto de firma de webhook",
+        "activity": "Actividad de claves",
+        "secChecklist": "Lista de comprobación de seguridad"
       }
     },
     "billing": {
       "hero": {
         "title": "Uso de prueba",
         "subtitle": "Revisa los créditos de prueba beta, el almacenamiento, el uso de flujos de trabajo y la sincronización de cuenta. Las facturas y los planes de pago están aparcados para la Fase 2."
+      },
+      "sections": {
+        "eyebrow": "Modo de prueba gratuita",
+        "usageAnalytics": "Analítica de uso",
+        "trialControls": "Controles de prueba",
+        "billingDetails": "Detalles de facturación",
+        "invoices": "Facturas",
+        "invoiceDetail": "Detalle de factura",
+        "trialStatus": "Estado de la prueba",
+        "usagePolicy": "Política de uso",
+        "paymentMethod": "Método de pago",
+        "invoiceExport": "Exportación de facturas"
       }
     },
     "connected-apps": {
       "hero": {
         "title": "Apps conectadas",
         "subtitle": "Administra integraciones de apps, permisos, política de sincronización, estado de la extensión y estado de integración."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "integrations": "Integraciones de apps",
+        "connectionScopes": "Permisos de conexión",
+        "connectNew": "Conectar nueva app",
+        "syncPolicy": "Política de sincronización",
+        "appActivity": "Actividad de apps",
+        "integrationHealth": "Estado de integración"
       }
     },
     "notifications": {
       "hero": {
         "title": "Notificaciones",
         "subtitle": "Ajusta las preferencias de flujo de trabajo, revisión, uso de prueba, resumen, horas tranquilas y canales de entrega."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "deliveryChannels": "Canales de entrega",
+        "workflowAlerts": "Alertas de flujo de trabajo",
+        "digest": "Programación del resumen",
+        "quietHours": "Horas tranquilas",
+        "reviewRouting": "Enrutamiento de revisión",
+        "trialRouting": "Enrutamiento de uso de prueba",
+        "releaseNotes": "Notas de la versión",
+        "preview": "Vista previa de notificación"
       }
     },
     "storage": {
       "hero": {
         "title": "Almacenamiento",
         "subtitle": "Revisa el almacenamiento del espacio de trabajo, la retención de cargas, los límites de archivos, las exportaciones de archivo y el uso de prueba beta."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "storageUsage": "Uso de almacenamiento",
+        "recentUploads": "Cargas recientes",
+        "cleanupPolicy": "Política de limpieza de cargas",
+        "automation": "Automatización de almacenamiento",
+        "fileTypes": "Tipos de archivo",
+        "exportArchive": "Exportar archivo",
+        "retentionWindow": "Ventana de retención"
       }
     },
     "team": {
       "hero": {
         "title": "Espacio de trabajo de equipo",
         "subtitle": "Administra miembros, roles, puestos, colecciones compartidas, invitaciones pendientes y controles de propiedad."
+      },
+      "sections": {
+        "eyebrow": "Configuración",
+        "members": "Miembros",
+        "inviteMembers": "Invitar miembros",
+        "rolesPermissions": "Roles y permisos",
+        "pendingInvites": "Invitaciones pendientes",
+        "sharedCollections": "Colecciones compartidas",
+        "activityLog": "Registro de actividad",
+        "ownership": "Propiedad"
       }
     }
   },

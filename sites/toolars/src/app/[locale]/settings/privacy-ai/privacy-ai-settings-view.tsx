@@ -178,7 +178,7 @@ export function PrivacyAiSettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">Privacy & AI</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Control consent, AI processing, local-first routing, retention, exports, and deletion policies for your workspace.</p>
           </span>
           <span className="settings-trust-note">

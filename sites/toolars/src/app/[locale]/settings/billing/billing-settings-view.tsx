@@ -115,7 +115,7 @@ export function BillingSettingsView() {
         <span className="eyebrow">{freeTrialMode ? "Free trial mode" : "Billing settings"}</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">{freeTrialMode ? "Trial usage" : "Billing and usage"}</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">
               {freeTrialMode
                 ? "Review beta trial credits, storage, workflow usage, and account sync. Invoices and paid plans are parked for Phase 2."

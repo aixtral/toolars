@@ -38,7 +38,7 @@ export function NotificationsSettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">Notifications</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Tune workflow, review, trial usage, digest, quiet-hour, and delivery channel preferences.</p>
           </span>
           <span className="settings-trust-note">

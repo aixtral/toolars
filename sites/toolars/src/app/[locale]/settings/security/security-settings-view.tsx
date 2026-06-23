@@ -107,7 +107,7 @@ export function SecuritySettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">Security</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Review account protection, sessions, login activity, recovery methods, upload deletion, and risk actions.</p>
           </span>
           <span className="settings-trust-note">

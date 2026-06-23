@@ -45,7 +45,7 @@ export function TeamSettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">Team workspace</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Manage members, roles, seats, shared collections, pending invites, and ownership controls.</p>
           </span>
           <span className="settings-trust-note">

@@ -81,7 +81,7 @@ export function ApiKeysSettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">API keys</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Create scoped keys for Toolars automations, inspect usage, and revoke access without leaving account settings.</p>
           </span>
           <button className="button button-solid" onClick={createKey} type="button">

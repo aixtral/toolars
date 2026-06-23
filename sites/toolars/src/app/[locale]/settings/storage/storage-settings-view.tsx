@@ -40,7 +40,7 @@ export function StorageSettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">Storage</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Review workspace storage, upload retention, file limits, archive exports, and beta trial usage.</p>
           </span>
           <a className="button button-solid" href="/settings/billing#usage">

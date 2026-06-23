@@ -1326,6 +1326,54 @@
         "uploadDeletion": "Política de eliminación de cargas",
         "uploadDeletionDesc": "Los archivos cargados temporalmente se eliminan automáticamente."
       }
+    },
+    "security": {
+      "hero": {
+        "title": "Seguridad",
+        "subtitle": "Revisa la protección de la cuenta, las sesiones, la actividad de inicio de sesión, los métodos de recuperación, la eliminación de cargas y las acciones de riesgo."
+      }
+    },
+    "privacy-ai": {
+      "hero": {
+        "title": "Privacidad e IA",
+        "subtitle": "Controla el consentimiento, el procesamiento de IA, el enrutamiento local, la retención, las exportaciones y las políticas de eliminación de tu espacio de trabajo."
+      }
+    },
+    "api-keys": {
+      "hero": {
+        "title": "Claves de API",
+        "subtitle": "Crea claves con permisos para automatizaciones de Toolars, inspecciona el uso y revoca el acceso sin salir de los ajustes de cuenta."
+      }
+    },
+    "billing": {
+      "hero": {
+        "title": "Uso de prueba",
+        "subtitle": "Revisa los créditos de prueba beta, el almacenamiento, el uso de flujos de trabajo y la sincronización de cuenta. Las facturas y los planes de pago están aparcados para la Fase 2."
+      }
+    },
+    "connected-apps": {
+      "hero": {
+        "title": "Apps conectadas",
+        "subtitle": "Administra integraciones de apps, permisos, política de sincronización, estado de la extensión y estado de integración."
+      }
+    },
+    "notifications": {
+      "hero": {
+        "title": "Notificaciones",
+        "subtitle": "Ajusta las preferencias de flujo de trabajo, revisión, uso de prueba, resumen, horas tranquilas y canales de entrega."
+      }
+    },
+    "storage": {
+      "hero": {
+        "title": "Almacenamiento",
+        "subtitle": "Revisa el almacenamiento del espacio de trabajo, la retención de cargas, los límites de archivos, las exportaciones de archivo y el uso de prueba beta."
+      }
+    },
+    "team": {
+      "hero": {
+        "title": "Espacio de trabajo de equipo",
+        "subtitle": "Administra miembros, roles, puestos, colecciones compartidas, invitaciones pendientes y controles de propiedad."
+      }
     }
   },
   "adminReview": {

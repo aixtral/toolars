@@ -96,7 +96,7 @@ export function ConnectedAppsSettingsView() {
         <span className="eyebrow">Settings</span>
         <div className="landing-section-head">
           <span>
-            <h1 className="title">Connected apps</h1>
+            <h1 className="title">{t("hero.title")}</h1>
             <p className="subtitle">Manage app integrations, scopes, sync policy, extension status, and integration health.</p>
           </span>
           <span className="settings-trust-note">

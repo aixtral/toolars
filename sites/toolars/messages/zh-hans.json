@@ -1326,6 +1326,54 @@
         "uploadDeletion": "上传删除策略",
         "uploadDeletionDesc": "临时上传的文件会被自动清除。"
       }
+    },
+    "security": {
+      "hero": {
+        "title": "安全",
+        "subtitle": "查看账户保护、会话、登录活动、恢复方式、上传删除和风险操作。"
+      }
+    },
+    "privacy-ai": {
+      "hero": {
+        "title": "隐私与 AI",
+        "subtitle": "为你的工作区控制同意、AI 处理、本地优先路由、保留、导出和删除策略。"
+      }
+    },
+    "api-keys": {
+      "hero": {
+        "title": "API 密钥",
+        "subtitle": "为 Toolars 自动化创建带权限范围的密钥，查看用量并撤销访问，无需离开账户设置。"
+      }
+    },
+    "billing": {
+      "hero": {
+        "title": "试用用量",
+        "subtitle": "查看 Beta 试用额度、存储、工作流用量和账户同步。发票和付费套餐已搁置至第二阶段。"
+      }
+    },
+    "connected-apps": {
+      "hero": {
+        "title": "已连接的应用",
+        "subtitle": "管理应用集成、权限范围、同步策略、扩展状态和集成健康度。"
+      }
+    },
+    "notifications": {
+      "hero": {
+        "title": "通知",
+        "subtitle": "调整工作流、审查、试用用量、摘要、免打扰时段和送达渠道偏好。"
+      }
+    },
+    "storage": {
+      "hero": {
+        "title": "存储",
+        "subtitle": "查看工作区存储、上传保留、文件限制、归档导出和 Beta 试用用量。"
+      }
+    },
+    "team": {
+      "hero": {
+        "title": "团队工作区",
+        "subtitle": "管理成员、角色、席位、共享集合、待处理邀请和所有权控制。"
+      }
     }
   },
   "adminReview": {

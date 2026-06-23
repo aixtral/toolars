@@ -1326,6 +1326,54 @@
         "uploadDeletion": "Upload deletion policy",
         "uploadDeletionDesc": "Temporary uploaded files are cleared automatically."
       }
+    },
+    "security": {
+      "hero": {
+        "title": "Security",
+        "subtitle": "Review account protection, sessions, login activity, recovery methods, upload deletion, and risk actions."
+      }
+    },
+    "privacy-ai": {
+      "hero": {
+        "title": "Privacy & AI",
+        "subtitle": "Control consent, AI processing, local-first routing, retention, exports, and deletion policies for your workspace."
+      }
+    },
+    "api-keys": {
+      "hero": {
+        "title": "API keys",
+        "subtitle": "Create scoped keys for Toolars automations, inspect usage, and revoke access without leaving account settings."
+      }
+    },
+    "billing": {
+      "hero": {
+        "title": "Trial usage",
+        "subtitle": "Review beta trial credits, storage, workflow usage, and account sync. Invoices and paid plans are parked for Phase 2."
+      }
+    },
+    "connected-apps": {
+      "hero": {
+        "title": "Connected apps",
+        "subtitle": "Manage app integrations, scopes, sync policy, extension status, and integration health."
+      }
+    },
+    "notifications": {
+      "hero": {
+        "title": "Notifications",
+        "subtitle": "Tune workflow, review, trial usage, digest, quiet-hour, and delivery channel preferences."
+      }
+    },
+    "storage": {
+      "hero": {
+        "title": "Storage",
+        "subtitle": "Review workspace storage, upload retention, file limits, archive exports, and beta trial usage."
+      }
+    },
+    "team": {
+      "hero": {
+        "title": "Team workspace",
+        "subtitle": "Manage members, roles, seats, shared collections, pending invites, and ownership controls."
+      }
     }
   },
   "adminReview": {

@@ -42,7 +42,9 @@
     },
     "legal": {
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "dataRights": "Data Rights",
+      "doNotSell": "Do Not Sell My Info"
     },
     "rights": "All rights reserved."
   },

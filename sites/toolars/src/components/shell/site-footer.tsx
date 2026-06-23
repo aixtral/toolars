@@ -35,7 +35,9 @@ const FOOTER_COLUMNS: FooterColumn[] = [
     headingKey: "footer.columns.legal",
     links: [
       { labelKey: "footer.legal.privacy", href: "/privacy" },
-      { labelKey: "footer.legal.terms", href: "/terms" }
+      { labelKey: "footer.legal.terms", href: "/terms" },
+      { labelKey: "footer.legal.dataRights", href: "/data-rights" },
+      { labelKey: "footer.legal.doNotSell", href: "mailto:privacy@toolars.app?subject=Do Not Sell My Personal Information" }
     ]
   }
 ];

@@ -18,7 +18,8 @@ const STATIC_DIRECTORIES: Array<{ path: string; changeFrequency: SitemapEntry["c
   { path: "/pricing", changeFrequency: "monthly", priority: 0.5 },
   { path: "/submit", changeFrequency: "monthly", priority: 0.4 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
-  { path: "/terms", changeFrequency: "yearly", priority: 0.3 }
+  { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/data-rights", changeFrequency: "yearly", priority: 0.3 }
 ];
 
 /**

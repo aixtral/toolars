@@ -8607,3 +8607,33 @@ select {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+.data-rights-page {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.data-rights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin: 24px 0;
+}
+
+.data-rights-card {
+  padding: 22px 24px;
+  background: var(--canvas);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 16px);
+}
+
+.data-rights-card h2 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.data-rights-card .button {
+  margin-top: 12px;
+}

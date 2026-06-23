@@ -42,7 +42,9 @@
     },
     "legal": {
       "privacy": "隱私政策",
-      "terms": "服務條款"
+      "terms": "服務條款",
+      "dataRights": "數據權利",
+      "doNotSell": "勿出售我的資訊"
     },
     "rights": "保留所有权利。"
   },

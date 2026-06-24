@@ -25,6 +25,8 @@ const bmiTool: ToolDefinition = {
   tags: ["Health", "BMI"],
   source: "vitalcalc",
   accent: "teal",
+  status: "ready",
+  visibility: "public",
   href: "/tools/bmi-calculator",
   aboutHref: "/tools/bmi-calculator/about"
 } as const;

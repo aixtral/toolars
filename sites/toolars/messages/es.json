@@ -7,6 +7,8 @@
     "viewAll": "Ver todo",
     "back": "Atrás",
     "cancel": "Cancelar",
+    "language": "Idioma",
+    "switchLanguage": "Cambiar idioma",
     "save": "Guardar",
     "share": "Compartir",
     "menu": "Menú"
@@ -657,19 +659,19 @@
     },
     "hourly-to-salary": {
       "name": "Hourly to Salary Calculator",
-      "description": "Convert hourly wage into annual, monthly, and weekly salary with overtime assumptions."
+      "description": "Convierte un salario por hora en sueldo anual, mensual y semanal con supuestos de horas extra."
     },
     "inflation-calculator": {
       "name": "Inflation Calculator",
-      "description": "Estimate future purchasing power and cumulative inflation from amount, rate, and years."
+      "description": "Estima poder adquisitivo futuro e inflación acumulada a partir de importe, tasa y años."
     },
     "habit-cost": {
       "name": "Habit Cost Calculator",
-      "description": "Estimate long-term spending and opportunity cost for repeated daily or weekly habits."
+      "description": "Estima gasto a largo plazo y coste de oportunidad de hábitos diarios o semanales repetidos."
     },
     "caffeine-calculator": {
       "name": "Caffeine Safe Limit Calculator",
-      "description": "Calculate daily caffeine allowance from weight, pregnancy status, and common drink intake."
+      "description": "Calcula el límite diario de cafeína según peso, embarazo y consumo de bebidas comunes."
     },
     "alcohol-metabolism": {
       "name": "Alcohol Metabolism Calculator",
@@ -681,19 +683,19 @@
     },
     "drink-calories": {
       "name": "Drink Calories Calculator",
-      "description": "Calculate calories and sugar in boba tea, coffee, juice, alcohol, and other beverages."
+      "description": "Calcula calorías y azúcar en bubble tea, café, jugo, alcohol y otras bebidas."
     },
     "fiber-intake": {
       "name": "Fiber Intake Calculator",
-      "description": "Estimate daily fiber recommendations from weight, age, and sex context with food-source guidance."
+      "description": "Estima recomendaciones diarias de fibra según peso, edad y sexo, con guía de fuentes alimentarias."
     },
     "steps-to-calories": {
       "name": "Steps to Calories Calculator",
-      "description": "Estimate calories burned from steps, weight, walking speed, and stride assumptions."
+      "description": "Estima calorías quemadas por pasos, peso, velocidad de caminata y supuestos de zancada."
     },
     "currency-converter": {
       "name": "Currency Converter",
-      "description": "Convert between major currencies with manually entered exchange rates and reference-rate context."
+      "description": "Convierte entre monedas principales con tipos de cambio introducidos manualmente y contexto de referencia."
     },
     "percentage-calculator": {
       "name": "Percentage Calculator",
@@ -701,19 +703,19 @@
     },
     "stock-average": {
       "name": "Stock Average Calculator",
-      "description": "Calculate average cost per share, total cost basis, and breakeven after multiple purchases."
+      "description": "Calcula coste medio por acción, base de coste total y punto de equilibrio tras varias compras."
     },
     "credit-card-apr": {
       "name": "Credit Card APR Calculator",
-      "description": "Reveal the true annual percentage rate behind credit card installment monthly fees."
+      "description": "Revela la tasa anual efectiva detrás de comisiones mensuales en cuotas de tarjeta de crédito."
     },
     "investment-fee": {
       "name": "Investment Fee Calculator",
-      "description": "Estimate how annual management fees erode long-term investment returns."
+      "description": "Estima cómo las comisiones anuales de gestión erosionan el rendimiento de inversión a largo plazo."
     },
     "investment-goal": {
       "name": "Investment Goal Calculator",
-      "description": "Calculate the monthly investment needed to reach a financial target over time."
+      "description": "Calcula la inversión mensual necesaria para alcanzar una meta financiera con el tiempo."
     },
     "credit-score-simulator": {
       "name": "Credit Score Simulator",
@@ -725,19 +727,19 @@
     },
     "freelance-rate": {
       "name": "Freelance Rate Calculator",
-      "description": "Calculate hourly, daily, and project rates from income goals, billable hours, taxes, and operating costs."
+      "description": "Calcula tarifas por hora, día y proyecto a partir de metas de ingresos, horas facturables, impuestos y costes operativos."
     },
     "subscription-audit": {
       "name": "Subscription Audit Calculator",
-      "description": "Track recurring subscriptions, normalize monthly cost, and identify duplicate or unused services."
+      "description": "Rastrea suscripciones recurrentes, normaliza el coste mensual e identifica servicios duplicados o sin uso."
     },
     "savings-challenge": {
       "name": "Savings Challenge Calculator",
-      "description": "Generate 52-week, envelope, no-spend month, or reverse savings plans for habit building."
+      "description": "Genera planes de 52 semanas, sobres, mes sin gasto o ahorro inverso para crear hábito."
     },
     "city-cost-comparison": {
       "name": "City Cost Comparison",
-      "description": "Compare rent, food, transport, income, and surplus between two cities for relocation planning."
+      "description": "Compara alquiler, comida, transporte, ingresos y excedente entre dos ciudades para planificar una mudanza."
     },
     "social-insurance-calculator": {
       "name": "China Social Insurance Calculator",
@@ -745,23 +747,23 @@
     },
     "dividend-reinvestment": {
       "name": "Dividend Reinvestment Calculator",
-      "description": "Estimate DRIP growth, total dividends, tax drag, and reinvestment impact over long holding periods."
+      "description": "Estima crecimiento con reinversión de dividendos, dividendos totales, impacto fiscal y reinversión a largo plazo."
     },
     "mortgage-refinance-calculator": {
       "name": "Mortgage Refinance Calculator",
-      "description": "Compare current and new mortgage terms to estimate monthly savings, interest savings, and break-even time."
+      "description": "Compara la hipoteca actual y la nueva para estimar ahorro mensual, ahorro de intereses y punto de equilibrio."
     },
     "coast-fire": {
       "name": "Coast FIRE Calculator",
-      "description": "Estimate the portfolio needed today to stop saving and coast to a future retirement target."
+      "description": "Estima la cartera necesaria hoy para dejar de ahorrar y llegar por inercia a una jubilación futura."
     },
     "sip-calculator": {
       "name": "Fund SIP Calculator",
-      "description": "Project systematic investment plan growth from monthly investment, expected return, duration, and principal."
+      "description": "Proyecta el crecimiento de un plan de inversión sistemática desde aporte mensual, rendimiento esperado, duración y capital."
     },
     "smoke-free": {
       "name": "Quit Smoking Tracker",
-      "description": "Track smoke-free days, money saved, cigarettes avoided, life extension, and recovery milestones."
+      "description": "Rastrea días sin fumar, dinero ahorrado, cigarrillos evitados, extensión de vida e hitos de recuperación."
     },
     "adhd-screener": {
       "name": "ADHD Adult Screener ASRS-v1.1",
@@ -1090,7 +1092,7 @@
     },
     "body-recomposition": {
       "name": "Body Recomposition Calculator",
-      "description": "Set simultaneous fat-loss and muscle-gain goals with TDEE, calorie target, and macro split estimates."
+      "description": "Define metas simultáneas de pérdida de grasa y ganancia muscular con TDEE, calorías objetivo y estimaciones de macros."
     },
     "glp1-nutrition": {
       "name": "GLP-1 Nutrition Calculator",
@@ -1102,7 +1104,7 @@
     },
     "one-rep-max": {
       "name": "1RM Calculator",
-      "description": "Estimate one-repetition maximum and percentage-based working sets from lifted weight and reps."
+      "description": "Estima el máximo de una repetición y series por porcentaje a partir de peso levantado y repeticiones."
     },
     "ovulation-calculator": {
       "name": "Ovulation Calculator",
@@ -1114,7 +1116,7 @@
     },
     "running-pace": {
       "name": "Running Pace Calculator",
-      "description": "Calculate race pace, speed, track splits, and equivalent performance estimates from distance and time."
+      "description": "Calcula ritmo de carrera, velocidad, parciales en pista y estimaciones equivalentes desde distancia y tiempo."
     },
     "testosterone-calculator": {
       "name": "Testosterone Calculator",

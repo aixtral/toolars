@@ -1,6 +1,9 @@
 import { fireEvent, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
+import es from "../../../messages/es.json";
 import { ToolarsShell } from "./toolars-shell";
 
 describe("ToolarsShell", () => {
@@ -60,8 +63,8 @@ describe("ToolarsShell", () => {
     expect(screen.getByRole("link", { name: "Continue with Google" })).toBeInTheDocument();
   });
 
-  it("renders paired Sign in and Sign up buttons in the auth region of the topbar", () => {
-    renderWithIntl(
+  it("renders a grouped account and language action cluster in the topbar", () => {
+    const { container } = renderWithIntl(
       <ToolarsShell active="explore" sidebarVariant="none">
         <h1>Explore content</h1>
       </ToolarsShell>
@@ -69,12 +72,44 @@ describe("ToolarsShell", () => {
 
     const signIn = screen.getByRole("button", { name: "Sign in" });
     const signUp = screen.getByRole("button", { name: "Sign up" });
+    const cluster = container.querySelector("[data-topbar-actions='account-language-v3']");
 
+    expect(cluster).toBeInTheDocument();
     expect(signIn).toBeInTheDocument();
     expect(signUp).toBeInTheDocument();
-    expect(signIn.closest(".topbar-auth")).toBe(signUp.closest(".topbar-auth"));
+    expect(signIn.closest(".topbar-account-actions")).toBe(signUp.closest(".topbar-account-actions"));
+    expect(cluster).toContainElement(signIn);
+    expect(cluster).toContainElement(signUp);
     expect(signUp).toHaveClass("button-solid");
-    expect(signIn).toHaveClass("button-outline");
+    expect(signUp).toHaveClass("topbar-sign-up");
+    expect(signIn).toHaveClass("topbar-sign-in");
+  });
+
+  it("marks the active topbar navigation item with a visible state class", () => {
+    renderWithIntl(
+      <ToolarsShell active="workflows" sidebarVariant="workflows">
+        <h1>Workflow content</h1>
+      </ToolarsShell>
+    );
+
+    const activeLink = screen.getByRole("link", { name: "Workflows" });
+    expect(activeLink).toHaveAttribute("aria-current", "page");
+    expect(activeLink).toHaveClass("topbar-nav-link", "is-active");
+  });
+
+  it("keeps shell navigation inside the active locale", () => {
+    render(
+      <NextIntlClientProvider locale="es" messages={es}>
+        <ToolarsShell active="settings" sidebarVariant="settings">
+          <h1>Settings content</h1>
+        </ToolarsShell>
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByRole("link", { name: /Workflows|Flujos/ })).toHaveAttribute("href", "/es/workflows");
+    expect(screen.getByRole("link", { name: /Collections|Colecciones/ })).toHaveAttribute("href", "/es/collections");
+    expect(screen.getByRole("link", { name: /Trial usage/ })).toHaveAttribute("href", "/es/settings/billing");
+    expect(screen.getByRole("link", { name: /Privacy & AI/ })).toHaveAttribute("href", "/es/settings/privacy-ai");
   });
 
   it("opens the sign-up account modal from the topbar Sign up button", () => {

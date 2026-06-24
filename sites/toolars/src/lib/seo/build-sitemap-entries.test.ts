@@ -12,7 +12,7 @@ describe("buildSitemapEntries", () => {
     expect(paths).toContain("https://toolars.app/workflows");
     expect(paths).toContain("https://toolars.app/collections");
     expect(paths).toContain("https://toolars.app/pricing");
-    expect(paths).toContain("https://toolars.app/submit");
+    expect(paths).not.toContain("https://toolars.app/submit");
   });
 
   it("emits an entry for every tool workspace and about page", () => {

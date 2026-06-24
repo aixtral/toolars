@@ -1,5 +1,9 @@
 # Toolars Current Status And Phase 4 Roadmap
 
+> Historical snapshot only. This document is no longer the launch-readiness
+> source of truth. Use `docs/architecture/LAUNCH-READINESS-ROADMAP.md` and
+> `cd sites/toolars && pnpm audit:tool-inventory` for the current project state.
+
 版本: v0.60
 日期: 2026-06-21
 来源: `specs/changes/rebuild-toolars-platform/tasks.md`, `specs/changes/rebuild-toolars-platform/progress.md`, `.cdc/state/evidence.jsonl`, `design/Toolars-high-fidelity-coverage-review.md`, `sites/toolars/scripts/visual-design-pack-map.json`, latest visual capture / pixelmatch reports

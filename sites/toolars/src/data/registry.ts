@@ -3,6 +3,8 @@ export type ProcessingMode = "local" | "cloud" | "ai-consent";
 export type PricingMode = "free" | "freemium" | "paid";
 export type ToolSource = "vitalcalc" | "aixtral-lab" | "toolars";
 export type ToolGroup = "General" | "VitalCalc" | "AI Developer Lab" | "Toolars";
+export type ToolLaunchStatus = "ready" | "trial-ready" | "preview" | "hidden" | "planned";
+export type ToolVisibility = "public" | "beta" | "hidden";
 
 export interface ToolDefinition {
   slug: string;
@@ -16,6 +18,8 @@ export interface ToolDefinition {
   tags: string[];
   source: ToolSource;
   accent: string;
+  status: ToolLaunchStatus;
+  visibility: ToolVisibility;
   featured?: boolean;
   href: string;
   aboutHref: string;
@@ -69,33 +73,72 @@ export const sourceInventory = {
   }
 } as const;
 
-export const categories = [
-  { label: "All", count: 2643 },
-  { label: "AI", count: 487 },
-  { label: "AI Security", count: 92 },
-  { label: "Developer", count: 578 },
-  { label: "RAG / MCP / Agent", count: 61 },
-  { label: "LLM Cost", count: 42 },
-  { label: "Prompt Engineering", count: 73 },
-  { label: "Frontend & Design", count: 121 },
-  { label: "PDF", count: 189 },
-  { label: "Image", count: 256 },
-  { label: "Finance", count: 235 },
-  { label: "Health", count: 124 },
-  { label: "Productivity", count: 326 },
-  { label: "Writing", count: 312 },
-  { label: "Data", count: 164 }
-];
+const previewToolSlugs = new Set([
+  "agent-workflow-builder",
+  "ai-pdf-summarizer",
+  "context-window",
+  "css-gradient-generator",
+  "extract-tables",
+  "function-call-builder",
+  "hallucination-checker",
+  "json-formatter",
+  "json-path-tester",
+  "json-tree-viewer",
+  "mcp-tester",
+  "model-comparator",
+  "ocr-scanner",
+  "pdf-compressor",
+  "pdf-merger",
+  "pdf-password-remover",
+  "pdf-signer",
+  "pdf-to-word",
+  "pdf-translator",
+  "pii-scanner",
+  "prompt-templates",
+  "rag-eval-bench",
+  "schema-validator",
+  "structured-output-formatter",
+  "synthetic-dataset-generator",
+  "token-budget-planner",
+  "vision-prompt-builder"
+]);
 
 const makeHref = (slug: string) => `/tools/${slug}`;
 
+type ToolDefinitionInput = Omit<ToolDefinition, "href" | "aboutHref" | "status" | "visibility"> &
+  Partial<Pick<ToolDefinition, "status" | "visibility">>;
+
 const tool = (
-  definition: Omit<ToolDefinition, "href" | "aboutHref">
-): ToolDefinition => ({
-  ...definition,
-  href: makeHref(definition.slug),
-  aboutHref: `/tools/${definition.slug}/about`
-});
+  definition: ToolDefinitionInput
+): ToolDefinition => {
+  const status = definition.status ?? getDefaultToolStatus(definition);
+
+  return {
+    ...definition,
+    status,
+    visibility: definition.visibility ?? getDefaultToolVisibility(status),
+    href: makeHref(definition.slug),
+    aboutHref: `/tools/${definition.slug}/about`
+  };
+};
+
+function getDefaultToolStatus(definition: Pick<ToolDefinitionInput, "slug" | "pricing">): ToolLaunchStatus {
+  if (previewToolSlugs.has(definition.slug)) {
+    return "preview";
+  }
+
+  return definition.pricing === "freemium" ? "trial-ready" : "ready";
+}
+
+function getDefaultToolVisibility(status: ToolLaunchStatus): ToolVisibility {
+  if (status === "ready" || status === "trial-ready") {
+    return "public";
+  }
+  if (status === "preview") {
+    return "beta";
+  }
+  return "hidden";
+}
 
 export const tools: ToolDefinition[] = [
   tool({
@@ -1390,6 +1433,47 @@ export const tools: ToolDefinition[] = [
   )
 ];
 
+export function isPublicTool(tool: ToolDefinition): boolean {
+  return tool.visibility === "public" && (tool.status === "ready" || tool.status === "trial-ready");
+}
+
+export const publicTools = tools.filter(isPublicTool);
+
+const categoryDefinitions: Array<{
+  label: string;
+  matches: (tool: ToolDefinition) => boolean;
+}> = [
+  { label: "All", matches: () => true },
+  { label: "AI", matches: (tool) => tool.group === "AI Developer Lab" },
+  { label: "AI Security", matches: (tool) => tool.category === "AI Security" },
+  { label: "Developer", matches: (tool) => tool.category === "Developer" },
+  { label: "RAG / MCP / Agent", matches: (tool) => tool.category === "RAG / MCP / Agent" },
+  { label: "LLM Cost", matches: (tool) => tool.category === "LLM Cost" },
+  { label: "Prompt Engineering", matches: (tool) => tool.category === "Prompt Engineering" },
+  { label: "Frontend & Design", matches: (tool) => tool.category === "Frontend & Design" },
+  { label: "PDF", matches: (tool) => tool.category === "PDF" },
+  { label: "Image", matches: (tool) => tool.category === "Image" },
+  { label: "Finance", matches: (tool) => tool.category === "Finance" },
+  { label: "Health", matches: (tool) => tool.category === "Health" },
+  { label: "Productivity", matches: (tool) => tool.category === "Productivity" },
+  { label: "Writing", matches: (tool) => tool.category === "Writing" },
+  { label: "Data", matches: (tool) => tool.category === "Data" }
+];
+
+export function getPublicToolsByCategory(category: string): ToolDefinition[] {
+  const definition = categoryDefinitions.find((item) => item.label === category);
+  const matches = definition?.matches ?? ((tool: ToolDefinition) => tool.category === category);
+
+  return publicTools.filter(matches);
+}
+
+export const categories = categoryDefinitions
+  .map((category) => ({
+    label: category.label,
+    count: getPublicToolsByCategory(category.label).length
+  }))
+  .filter((category) => category.count > 0);
+
 export const workflows: WorkflowDefinition[] = [
   {
     slug: "pdf-summary",
@@ -1466,9 +1550,9 @@ export const collections: CollectionDefinition[] = [
   }
 ];
 
-export const featuredTools = tools.filter((item) => item.featured);
-export const pdfTools = tools.filter((item) => item.category === "PDF");
-export const aiDeveloperLabTools = tools.filter((item) => item.group === "AI Developer Lab");
+export const featuredTools = publicTools.filter((item) => item.featured);
+export const pdfTools = getPublicToolsByCategory("PDF");
+export const aiDeveloperLabTools = publicTools.filter((item) => item.group === "AI Developer Lab");
 
 export function getToolsByGroup(group: ToolGroup): ToolDefinition[] {
   return tools.filter((item) => item.group === group);

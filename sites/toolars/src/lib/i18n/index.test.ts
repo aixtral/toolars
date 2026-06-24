@@ -4,6 +4,7 @@ import {
   getAlternateLanguageLinks,
   isDefaultLocale,
   isValidLocale,
+  localizeCurrentPathForLocale,
   localizePath,
   LOCALES
 } from "./index";
@@ -55,5 +56,15 @@ describe("i18n", () => {
     expect(hreflangMap.get("zh-Hans")).toBe("https://toolars.app/zh-hans/tools/bmi-calculator");
     expect(hreflangMap.get("zh-Hant")).toBe("https://toolars.app/zh-hant/tools/bmi-calculator");
     expect(hreflangMap.get("x-default")).toBe("https://toolars.app/tools/bmi-calculator");
+  });
+
+  it("switches localized paths back to the unprefixed default locale", () => {
+    expect(localizeCurrentPathForLocale("/es/tools/pdf-toolkit", "en")).toBe("/tools/pdf-toolkit");
+    expect(localizeCurrentPathForLocale("/zh-hans/settings/billing", "en")).toBe("/settings/billing");
+  });
+
+  it("replaces an existing locale prefix instead of nesting locale segments", () => {
+    expect(localizeCurrentPathForLocale("/zh-hans/tools/json-repair", "es")).toBe("/es/tools/json-repair");
+    expect(localizeCurrentPathForLocale("/tools/json-repair", "zh-hant")).toBe("/zh-hant/tools/json-repair");
   });
 });

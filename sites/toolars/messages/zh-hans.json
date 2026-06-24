@@ -7,6 +7,8 @@
     "viewAll": "查看全部",
     "back": "返回",
     "cancel": "取消",
+    "language": "语言",
+    "switchLanguage": "切换语言",
     "save": "保存",
     "share": "分享",
     "menu": "菜单"
@@ -657,19 +659,19 @@
     },
     "hourly-to-salary": {
       "name": "Hourly to Salary Calculator",
-      "description": "Convert hourly wage into annual, monthly, and weekly salary with overtime assumptions."
+      "description": "将时薪换算为年薪、月薪和周薪，并包含加班假设。"
     },
     "inflation-calculator": {
       "name": "Inflation Calculator",
-      "description": "Estimate future purchasing power and cumulative inflation from amount, rate, and years."
+      "description": "根据金额、通胀率和年限估算未来购买力与累计通胀。"
     },
     "habit-cost": {
       "name": "Habit Cost Calculator",
-      "description": "Estimate long-term spending and opportunity cost for repeated daily or weekly habits."
+      "description": "估算日常或每周重复习惯的长期支出和机会成本。"
     },
     "caffeine-calculator": {
       "name": "Caffeine Safe Limit Calculator",
-      "description": "Calculate daily caffeine allowance from weight, pregnancy status, and common drink intake."
+      "description": "根据体重、孕期状态和常见饮品摄入计算每日咖啡因安全限量。"
     },
     "alcohol-metabolism": {
       "name": "Alcohol Metabolism Calculator",
@@ -681,19 +683,19 @@
     },
     "drink-calories": {
       "name": "Drink Calories Calculator",
-      "description": "Calculate calories and sugar in boba tea, coffee, juice, alcohol, and other beverages."
+      "description": "计算奶茶、咖啡、果汁、酒精和其他饮品中的热量与糖分。"
     },
     "fiber-intake": {
       "name": "Fiber Intake Calculator",
-      "description": "Estimate daily fiber recommendations from weight, age, and sex context with food-source guidance."
+      "description": "根据体重、年龄和性别背景估算每日膳食纤维建议，并提供食物来源提示。"
     },
     "steps-to-calories": {
       "name": "Steps to Calories Calculator",
-      "description": "Estimate calories burned from steps, weight, walking speed, and stride assumptions."
+      "description": "根据步数、体重、步行速度和步幅假设估算消耗热量。"
     },
     "currency-converter": {
       "name": "Currency Converter",
-      "description": "Convert between major currencies with manually entered exchange rates and reference-rate context."
+      "description": "使用手动输入汇率和参考汇率背景，在主要货币之间换算。"
     },
     "percentage-calculator": {
       "name": "Percentage Calculator",
@@ -701,19 +703,19 @@
     },
     "stock-average": {
       "name": "Stock Average Calculator",
-      "description": "Calculate average cost per share, total cost basis, and breakeven after multiple purchases."
+      "description": "计算多次买入后的每股平均成本、总成本基础和盈亏平衡点。"
     },
     "credit-card-apr": {
       "name": "Credit Card APR Calculator",
-      "description": "Reveal the true annual percentage rate behind credit card installment monthly fees."
+      "description": "揭示信用卡分期月费背后的真实年化利率。"
     },
     "investment-fee": {
       "name": "Investment Fee Calculator",
-      "description": "Estimate how annual management fees erode long-term investment returns."
+      "description": "估算年度管理费如何侵蚀长期投资回报。"
     },
     "investment-goal": {
       "name": "Investment Goal Calculator",
-      "description": "Calculate the monthly investment needed to reach a financial target over time."
+      "description": "计算在指定时间内达到财务目标所需的每月投资额。"
     },
     "credit-score-simulator": {
       "name": "Credit Score Simulator",
@@ -725,19 +727,19 @@
     },
     "freelance-rate": {
       "name": "Freelance Rate Calculator",
-      "description": "Calculate hourly, daily, and project rates from income goals, billable hours, taxes, and operating costs."
+      "description": "根据收入目标、可计费小时、税费和运营成本计算小时、日和项目报价。"
     },
     "subscription-audit": {
       "name": "Subscription Audit Calculator",
-      "description": "Track recurring subscriptions, normalize monthly cost, and identify duplicate or unused services."
+      "description": "跟踪周期性订阅，统一为月成本，并识别重复或闲置服务。"
     },
     "savings-challenge": {
       "name": "Savings Challenge Calculator",
-      "description": "Generate 52-week, envelope, no-spend month, or reverse savings plans for habit building."
+      "description": "生成 52 周、信封、无消费月或反向储蓄计划，帮助建立习惯。"
     },
     "city-cost-comparison": {
       "name": "City Cost Comparison",
-      "description": "Compare rent, food, transport, income, and surplus between two cities for relocation planning."
+      "description": "比较两个城市的租金、饮食、交通、收入和结余，用于搬迁规划。"
     },
     "social-insurance-calculator": {
       "name": "China Social Insurance Calculator",
@@ -745,23 +747,23 @@
     },
     "dividend-reinvestment": {
       "name": "Dividend Reinvestment Calculator",
-      "description": "Estimate DRIP growth, total dividends, tax drag, and reinvestment impact over long holding periods."
+      "description": "估算长期持有中的股息再投资增长、总股息、税费拖累和再投资影响。"
     },
     "mortgage-refinance-calculator": {
       "name": "Mortgage Refinance Calculator",
-      "description": "Compare current and new mortgage terms to estimate monthly savings, interest savings, and break-even time."
+      "description": "比较当前与新房贷条款，估算月供节省、利息节省和回本时间。"
     },
     "coast-fire": {
       "name": "Coast FIRE Calculator",
-      "description": "Estimate the portfolio needed today to stop saving and coast to a future retirement target."
+      "description": "估算今天需要多少投资组合，才能停止储蓄并自然增长到未来退休目标。"
     },
     "sip-calculator": {
       "name": "Fund SIP Calculator",
-      "description": "Project systematic investment plan growth from monthly investment, expected return, duration, and principal."
+      "description": "根据每月投资、预期收益、期限和本金预测定投计划增长。"
     },
     "smoke-free": {
       "name": "Quit Smoking Tracker",
-      "description": "Track smoke-free days, money saved, cigarettes avoided, life extension, and recovery milestones."
+      "description": "跟踪无烟天数、节省金额、少抽香烟、寿命延长和恢复里程碑。"
     },
     "adhd-screener": {
       "name": "ADHD Adult Screener ASRS-v1.1",
@@ -1090,7 +1092,7 @@
     },
     "body-recomposition": {
       "name": "Body Recomposition Calculator",
-      "description": "Set simultaneous fat-loss and muscle-gain goals with TDEE, calorie target, and macro split estimates."
+      "description": "用 TDEE、目标热量和宏量营养素估算，同时设定减脂与增肌目标。"
     },
     "glp1-nutrition": {
       "name": "GLP-1 Nutrition Calculator",
@@ -1102,7 +1104,7 @@
     },
     "one-rep-max": {
       "name": "1RM Calculator",
-      "description": "Estimate one-repetition maximum and percentage-based working sets from lifted weight and reps."
+      "description": "根据已举重量和次数估算一次最大重量及不同百分比训练组。"
     },
     "ovulation-calculator": {
       "name": "Ovulation Calculator",
@@ -1114,7 +1116,7 @@
     },
     "running-pace": {
       "name": "Running Pace Calculator",
-      "description": "Calculate race pace, speed, track splits, and equivalent performance estimates from distance and time."
+      "description": "根据距离和时间计算比赛配速、速度、跑道分段和等效表现估算。"
     },
     "testosterone-calculator": {
       "name": "Testosterone Calculator",

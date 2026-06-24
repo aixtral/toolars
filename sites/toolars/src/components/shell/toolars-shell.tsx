@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   AlertTriangle,
   BarChart3,
@@ -50,7 +50,9 @@ import { CoreActionModalButton } from "@/components/core/core-action-modal";
 import { LanguageSwitcher } from "@/components/shell/language-switcher";
 import { CommandCenter } from "@/components/search/command-center";
 import { categories } from "@/data/registry";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
+import { isFeatureEnabled } from "@/lib/product/feature-flags";
 
 /** Map a category label to its lucide icon for the sidebar. */
 const categoryIcons: Record<string, typeof Grid2X2> = {
@@ -205,6 +207,9 @@ export function ToolarsShell({
 }>) {
   const freeTrialMode = isFreeTrialMode();
   const t = useTranslations();
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizeShellHref(href, localeCode);
   const visibleNav = active === "admin" ? adminNav : active === "pricing" && !freeTrialMode ? [...nav, { labelKey: "nav.pricing", label: "Pricing", href: "/pricing", key: "pricing" }] : nav;
   const brandName = active === "admin" ? "Toolars Admin" : "Toolars";
   const sidebarLabel =
@@ -229,7 +234,7 @@ export function ToolarsShell({
         data-desktop-layout={sidebarVariant === "pdf-workspace" ? "pdf-workspace-v2" : undefined}
         data-mobile-layout="brand-menu-command-compact-v2"
       >
-        <a className="brand" href={active === "admin" ? "/admin/review" : "/"} aria-label={active === "admin" ? "Toolars admin home" : "Toolars home"}>
+        <a className="brand" href={localizedHref(active === "admin" ? "/admin/review" : "/")} aria-label={active === "admin" ? "Toolars admin home" : "Toolars home"}>
           <span className="brand-mark">
             <SquareTerminal size={22} aria-hidden="true" />
           </span>
@@ -254,13 +259,15 @@ export function ToolarsShell({
             <button className="button button-outline-neutral" type="button">
               <Share2 size={16} aria-hidden="true" /> Share
             </button>
-            <span className="topbar-auth">
-              <CoreActionModalButton className="button button-outline" kind="sign-in">
-                Sign in
-              </CoreActionModalButton>
-              <CoreActionModalButton className="button button-solid" kind="sign-up">
-                Sign up
-              </CoreActionModalButton>
+            <span className="topbar-actions-cluster" data-topbar-actions="account-language-v3">
+              <span className="topbar-account-actions" aria-label={t("auth.signIn.eyebrow")}>
+                <CoreActionModalButton className="button topbar-sign-in" kind="sign-in">
+                  Sign in
+                </CoreActionModalButton>
+                <CoreActionModalButton className="button button-solid topbar-sign-up" kind="sign-up">
+                  Sign up
+                </CoreActionModalButton>
+              </span>
               <LanguageSwitcher />
             </span>
             <button className="menu-button" type="button">
@@ -272,30 +279,38 @@ export function ToolarsShell({
           </nav>
         ) : (
           <nav className="nav" aria-label="Primary navigation">
-            {visibleNav.map((item) => (
-              <a
-                aria-current={active === item.key || (item.key === "explore" && ["pdf", "ai-developer"].includes(active)) ? "page" : undefined}
-                href={item.href}
-                key={item.key}
-              >
-                {"labelKey" in item && typeof item.labelKey === "string" ? t(item.labelKey) : item.label}
-              </a>
-            ))}
+            {visibleNav.map((item) => {
+              const isActive = active === item.key || (item.key === "explore" && ["pdf", "ai-developer"].includes(active));
+              return (
+                <a
+                  aria-current={isActive ? "page" : undefined}
+                  className={`topbar-nav-link ${isActive ? "is-active" : ""}`}
+                  href={localizedHref(item.href)}
+                  key={item.key}
+                >
+                  {"labelKey" in item && typeof item.labelKey === "string" ? t(item.labelKey) : item.label}
+                </a>
+              );
+            })}
             {active === "admin" ? (
               <button className="button button-solid" type="button">
                 {t("nav.admin")}
               </button>
             ) : (
-              <span className="topbar-auth">
-                <a className="topbar-text-link" href="/submit">
-                  <Plus size={15} aria-hidden="true" /> {t("nav.submitTool")}
-                </a>
-                <CoreActionModalButton className="button button-outline" kind="sign-in">
-                  {t("nav.signIn")}
-                </CoreActionModalButton>
-                <CoreActionModalButton className="button button-solid" kind="sign-up">
-                  {t("nav.signUp")}
-                </CoreActionModalButton>
+              <span className="topbar-actions-cluster" data-topbar-actions="account-language-v3">
+                {isFeatureEnabled("submit") ? (
+                  <a className="topbar-submit-link" href={localizedHref("/submit")}>
+                    <Plus size={15} aria-hidden="true" /> {t("nav.submitTool")}
+                  </a>
+                ) : null}
+                <span className="topbar-account-actions" aria-label={t("auth.signIn.eyebrow")}>
+                  <CoreActionModalButton className="button topbar-sign-in" kind="sign-in">
+                    {t("nav.signIn")}
+                  </CoreActionModalButton>
+                  <CoreActionModalButton className="button button-solid topbar-sign-up" kind="sign-up">
+                    {t("nav.signUp")}
+                  </CoreActionModalButton>
+                </span>
                 <LanguageSwitcher />
               </span>
             )}
@@ -313,7 +328,7 @@ export function ToolarsShell({
               <section className="side-section">
                 <p className="side-title">Workflow categories</p>
                 {workflowCategories.map(([label, count, icon, href]) => (
-                  <a className={`side-link ${label === "All workflows" ? "is-active" : ""}`} href={href} key={label}>
+                  <a className={`side-link ${label === "All workflows" ? "is-active" : ""}`} href={localizedHref(href)} key={label}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                       <span className="side-icon">{icon}</span>
                       {label}
@@ -340,7 +355,7 @@ export function ToolarsShell({
               <section className="side-section">
                 <p className="side-title">Collection categories</p>
                 {collectionCategories.map(([label, count, icon, href]) => (
-                  <a className={`side-link ${label === "Featured" ? "is-active" : ""}`} href={href} key={label}>
+                  <a className={`side-link ${label === "Featured" ? "is-active" : ""}`} href={localizedHref(href)} key={label}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                       <span className="side-icon">{icon}</span>
                       {label}
@@ -371,7 +386,7 @@ export function ToolarsShell({
                 <section className="side-section">
                   <p className="side-title">Free trial</p>
                   {trialLinks.map(({ label, href, icon: Icon }, index) => (
-                    <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={href} key={label}>
+                    <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={label}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                         <Icon size={14} aria-hidden="true" />
                         {label}
@@ -397,7 +412,7 @@ export function ToolarsShell({
                 <section className="side-section">
                   <p className="side-title">Billing</p>
                   {billingLinks.slice(0, 4).map(({ label, href, icon: Icon }, index) => (
-                    <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={href} key={label}>
+                    <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={label}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                         <Icon size={14} aria-hidden="true" />
                         {label}
@@ -408,7 +423,7 @@ export function ToolarsShell({
                 <section className="side-section">
                   <p className="side-title">Workspace</p>
                   {billingLinks.slice(4).map(({ label, href, icon: Icon }) => (
-                    <a className="side-link" href={href} key={label}>
+                    <a className="side-link" href={localizedHref(href)} key={label}>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                         <Icon size={14} aria-hidden="true" />
                         {label}
@@ -421,7 +436,7 @@ export function ToolarsShell({
                     <GraduationCap size={16} aria-hidden="true" /> Students & educators
                   </h3>
                   <p className="tool-description">Get 50% off Pro when you verify your learning workspace.</p>
-                  <a className="text-link" href="/pricing#education">
+                  <a className="text-link" href={localizedHref("/pricing#education")}>
                     Verify now
                   </a>
                 </section>
@@ -430,7 +445,7 @@ export function ToolarsShell({
                     <Headphones size={16} aria-hidden="true" /> Need help choosing?
                   </h3>
                   <p className="tool-description">Compare plans or talk to us before upgrading.</p>
-                  <a className="text-link" href="/pricing#faq">
+                  <a className="text-link" href={localizedHref("/pricing#faq")}>
                     Contact support
                   </a>
                 </section>
@@ -450,7 +465,7 @@ export function ToolarsShell({
                   <a
                     aria-current={(sidebarActiveHref ? href === sidebarActiveHref : index === 0) ? "page" : undefined}
                     className={`side-link ${(sidebarActiveHref ? href === sidebarActiveHref : index === 0) ? "is-active" : ""}`}
-                    href={href}
+                    href={localizedHref(href)}
                     key={label}
                   >
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -465,7 +480,7 @@ export function ToolarsShell({
                   <Box size={16} aria-hidden="true" /> Need help?
                 </h3>
                 <p className="tool-description">Visit our help center or contact support.</p>
-                <a className="text-link" href="/settings#support">
+                <a className="text-link" href={localizedHref("/settings#support")}>
                   Go to help center
                 </a>
               </section>
@@ -475,7 +490,7 @@ export function ToolarsShell({
               <section className="side-section">
                 <p className="side-title">Review queues</p>
                 {adminReviewLinks.map(({ label, href, count, icon: Icon }, index) => (
-                  <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={href} key={label}>
+                  <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={label}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                       <Icon size={14} aria-hidden="true" />
                       {label}
@@ -498,7 +513,7 @@ export function ToolarsShell({
                   <ListChecks size={16} aria-hidden="true" /> Review SLA
                 </h3>
                 <p className="tool-description">New submissions should get a first decision within 24 hours.</p>
-                <a className="text-link" href="/admin/review#reports">
+                <a className="text-link" href={localizedHref("/admin/review#reports")}>
                   View report
                 </a>
               </section>
@@ -510,7 +525,7 @@ export function ToolarsShell({
                   <a
                     aria-current={label === "PDF Toolkit" ? "page" : undefined}
                     className={`side-link ${label === "PDF Toolkit" ? "is-active" : ""}`}
-                    href={href}
+                    href={localizedHref(href)}
                     key={label}
                   >
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
@@ -524,10 +539,10 @@ export function ToolarsShell({
               <section className="side-section pdf-recent-outputs">
                 <div className="side-section-head">
                   <p className="side-title">Recent Outputs</p>
-                  <a href="/my-tools#recent">View all</a>
+                  <a href={localizedHref("/my-tools#recent")}>View all</a>
                 </div>
                 {pdfRecentOutputs.map(([title, meta, time]) => (
-                  <a className="pdf-recent-output" href="/my-tools#recent" key={title}>
+                  <a className="pdf-recent-output" href={localizedHref("/my-tools#recent")} key={title}>
                     <span className="pdf-mini-file">PDF</span>
                     <span>
                       <strong>{title}</strong>
@@ -540,7 +555,7 @@ export function ToolarsShell({
               <section className="panel pdf-plan-card">
                 <div className="side-section-head">
                   <strong>{freeTrialMode ? "Trial usage" : "Free Plan"}</strong>
-                  {freeTrialMode ? <span className="badge local">Beta</span> : <a href="/pricing">Upgrade</a>}
+                  {freeTrialMode ? <span className="badge local">Beta</span> : <a href={localizedHref("/pricing")}>Upgrade</a>}
                 </div>
                 <div className="workspace-meter" aria-label="PDF workspace storage">
                   <span style={{ width: "42%" }} />
@@ -568,7 +583,7 @@ export function ToolarsShell({
               <section className="side-section">
                 <p className="side-title">My workspace</p>
                 {workspaceLinks.map(({ label, href, icon: Icon }, index) => (
-                  <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={href} key={label}>
+                  <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={label}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                       <Icon size={14} aria-hidden="true" />
                       {label}
@@ -622,43 +637,31 @@ export function ToolarsShell({
                 <p className="side-title">Categories</p>
                 {categories.map((category) => {
                   const key = category.label === "PDF" ? "pdf" : category.label === "AI" ? "ai-developer" : category.label.toLowerCase();
-                  const href = category.label === "PDF" ? "/explore/pdf" : category.label === "AI" ? "/explore/ai-developer" : "/";
-                  return (
-                    <a className={`side-link ${active === key ? "is-active" : ""}`} href={href} key={category.label}>
+                  const hasExplorePage = category.label === "PDF" || category.label === "AI" || category.label === "All";
+                  const href = category.label === "PDF" ? "/explore/pdf" : category.label === "AI" ? "/explore/ai-developer" : category.label === "All" ? "/" : null;
+                  const Icon = getCategoryIcon(category.label);
+                  const content = (
+                    <>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                        {(() => { const Icon = getCategoryIcon(category.label); return <Icon size={14} aria-hidden="true" />; })()}
+                        <Icon size={14} aria-hidden="true" />
                         {category.label}
                       </span>
                       <span className="side-count">{category.count.toLocaleString()}</span>
-                    </a>
+                    </>
+                  );
+                  if (href) {
+                    return (
+                      <a className={`side-link ${active === key ? "is-active" : ""}`} href={localizedHref(href)} key={category.label}>
+                        {content}
+                      </a>
+                    );
+                  }
+                  return (
+                    <div className="side-link side-link-static" key={category.label}>
+                      {content}
+                    </div>
                   );
                 })}
-              </section>
-              <section className="side-section">
-                <p className="side-title">Tool type</p>
-                {[
-                  ["Traditional", "1,325"],
-                  ["AI-powered", "843"],
-                  ["Workflow", "475"]
-                ].map(([label, count]) => (
-                  <div className="filter-row" key={label}>
-                    <span>{label}</span>
-                    <span className="side-count">{count}</span>
-                  </div>
-                ))}
-              </section>
-              <section className="side-section">
-                <p className="side-title">Processing</p>
-                {[
-                  ["Local (on device)", "61"],
-                  ["Cloud", "67"],
-                  ["AI consent required", "29"]
-                ].map(([label, count]) => (
-                  <div className="filter-row" key={label}>
-                    <span>{label}</span>
-                    <span className="side-count">{count}</span>
-                  </div>
-                ))}
               </section>
               <section className="panel">
                 <h3>
@@ -674,4 +677,9 @@ export function ToolarsShell({
       </div>
     </div>
   );
+}
+
+function localizeShellHref(href: string, locale: LocaleCode) {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  return localizePath(href, locale);
 }

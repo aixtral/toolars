@@ -25,6 +25,14 @@ export function localizePath(path: string, locale: LocaleCode): string {
   return `/${locale}${trimmed}`;
 }
 
+export function localizeCurrentPathForLocale(pathname: string, targetLocale: LocaleCode): string {
+  const normalizedPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const [firstSegment, ...restSegments] = normalizedPath.split("/").filter(Boolean);
+  const unprefixedPath = firstSegment && isValidLocale(firstSegment) ? `/${restSegments.join("/")}` : normalizedPath;
+  const safePath = unprefixedPath === "/" || unprefixedPath === "" ? "/" : unprefixedPath;
+  return localizePath(safePath, targetLocale);
+}
+
 export interface AlternateLink {
   hreflang: string;
   href: string;

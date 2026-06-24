@@ -1,16 +1,20 @@
-import type { Metadata } from "next";
-import { ToolarsShell } from "@/components/shell/toolars-shell";
-import { SubmitToolView } from "./submit-tool-view";
+import { redirect } from "next/navigation";
+import { isFeatureEnabled } from "@/lib/product/feature-flags";
 
-export const metadata: Metadata = {
-  title: "Submit a tool",
-  description:
-    "Submit a calculator, AI tool, or workflow to the Toolars directory. Submissions are reviewed for quality, safety, and usability before publishing.",
-  alternates: { canonical: "/submit" },
-  robots: { index: true, follow: true }
-};
-
+/**
+ * Submit tool page. Feature is gated behind FEATURE_FLAGS.submit.
+ * When disabled, redirects to home. The view component is preserved
+ * for when the feature is re-enabled.
+ */
 export default function SubmitPage() {
+  if (!isFeatureEnabled("submit")) {
+    redirect("/");
+  }
+
+  // Lazy import only when feature is enabled (code preserved but not bundled in main chunk)
+  const { SubmitToolView } = require("./submit-tool-view");
+  const { ToolarsShell } = require("@/components/shell/toolars-shell");
+
   return (
     <ToolarsShell active="explore" sidebarVariant="none">
       <SubmitToolView />

@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  aiDeveloperLabTools,
+  categories,
   collections,
+  publicTools,
   sourceInventory,
   tools,
   workflows,
+  getPublicToolsByCategory,
   getToolsByGroup
 } from "./registry";
 
@@ -27,7 +31,43 @@ describe("Toolars registry", () => {
       expect(tool.pricing).toMatch(/free|freemium|paid/);
       expect(tool.tags.length).toBeGreaterThan(0);
       expect(tool.source).toMatch(/vitalcalc|aixtral-lab|toolars/);
+      expect(tool.status).toMatch(/ready|trial-ready|preview|hidden|planned/);
+      expect(tool.visibility).toMatch(/public|beta|hidden/);
     }
+  });
+
+  it("keeps only launch-ready or trial-ready tools in the public catalog", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+
+    expect(tools).toHaveLength(118);
+    expect(publicTools).toHaveLength(91);
+    expect(publicSlugs).toEqual(
+      expect.arrayContaining(["pdf-toolkit", "json-repair", "prompt-injection-scanner", "llm-cost-calculator", "mcp-server-builder"])
+    );
+    expect(publicSlugs).not.toEqual(expect.arrayContaining(["ai-pdf-summarizer", "pdf-merger", "pii-scanner"]));
+    expect(tools.find((tool) => tool.slug === "ai-pdf-summarizer")).toMatchObject({
+      status: "preview",
+      visibility: "beta"
+    });
+  });
+
+  it("derives public category counts from launch-visible tools", () => {
+    expect(categories[0]).toEqual({ label: "All", count: publicTools.length });
+    expect(categories).not.toEqual(expect.arrayContaining([{ label: "All", count: 2643 }]));
+    expect(categories.every((category) => category.count > 0)).toBe(true);
+
+    for (const category of categories) {
+      expect(category.count).toBe(getPublicToolsByCategory(category.label).length);
+    }
+
+    expect(categories).toEqual(
+      expect.arrayContaining([
+        { label: "AI", count: 4 },
+        { label: "PDF", count: 1 },
+        { label: "Finance", count: 42 },
+        { label: "Health", count: 42 }
+      ])
+    );
   });
 
   it("keeps the AI Developer Lab as a first-class merged inventory", () => {
@@ -36,6 +76,12 @@ describe("Toolars registry", () => {
     expect(labTools).toHaveLength(22);
     expect(labTools.map((tool) => tool.slug)).toContain("json-repair");
     expect(labTools.map((tool) => tool.slug)).toContain("mcp-server-builder");
+    expect(aiDeveloperLabTools.map((tool) => tool.slug)).toEqual([
+      "json-repair",
+      "prompt-injection-scanner",
+      "llm-cost-calculator",
+      "mcp-server-builder"
+    ]);
   });
 
   it("keeps representative VitalCalc finance and health tools in the merged inventory", () => {

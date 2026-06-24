@@ -23,13 +23,14 @@ import {
   Tag,
   Workflow
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ResourceCard } from "@/components/tools/resource-card";
 import { ToolCard } from "@/components/tools/tool-card";
 import { getAllArticlesSync as getAllArticles } from "@/data/blog";
 import { aiDeveloperLabTools, tools, workflows } from "@/data/registry";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { buildGraph, buildOrganizationSchema, buildWebSiteSchema } from "@/lib/seo/json-ld";
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
 
@@ -98,6 +99,9 @@ const homeTabs = [
 
 export default function HomePage() {
   const t = useTranslations();
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizeHomeHref(href, localeCode);
   const popularTools = tools.filter((tool) => ["json-repair", "mortgage-calculator", "llm-cost-calculator", "pdf-toolkit", "prompt-injection-scanner", "mcp-server-builder"].includes(tool.slug));
 
   const baseUrl = getSiteBaseUrl();
@@ -117,7 +121,7 @@ export default function HomePage() {
               <div className="hero-input">
                 <Sparkles size={18} aria-hidden="true" />
                 <span>{t("home.heroDesktop.inputLabel")}</span>
-                <a className="open-link" href="/explore/pdf" aria-label="Search">
+                <a className="open-link" href={localizedHref("/explore/pdf")} aria-label="Search">
                   <ArrowRight size={16} aria-hidden="true" />
                 </a>
               </div>
@@ -133,13 +137,13 @@ export default function HomePage() {
           <section className="section">
             <div className="home-section-head">
               <h2>{t("home.sections.toolarsPicks")} <span className="badge local">{t("home.badges.verifiedByToolars")}</span></h2>
-              <a className="text-link" href="/collections">
+              <a className="text-link" href={localizedHref("/collections")}>
                 {t("home.actions.viewAllPicks")} <ArrowRight size={14} aria-hidden="true" />
               </a>
             </div>
             <div className="home-desktop-pick-grid">
               {homePicks.map(({ title, description, href, icon: Icon, tone, badges }) => (
-                <a className="home-desktop-pick-card" data-tone={tone} href={href} key={title}>
+                <a className="home-desktop-pick-card" data-tone={tone} href={localizedHref(href)} key={title}>
                   <span>
                     <strong>{title}</strong>
                     <small>{description}</small>
@@ -187,7 +191,7 @@ export default function HomePage() {
               {workflows.map((workflow) => (
                 <ResourceCard
                   description={workflow.description}
-                  href={workflow.href}
+                  href={localizedHref(workflow.href)}
                   icon={<Workflow size={20} aria-hidden="true" />}
                   key={workflow.slug}
                   meta={`${workflow.estimatedMinutes} min`}
@@ -200,7 +204,7 @@ export default function HomePage() {
             <h2>{t("home.curated.title")}</h2>
             <ResourceCard
               description={t("home.curated.subtitle")}
-              href="/collections"
+              href={localizedHref("/collections")}
               icon={<ShieldCheck size={20} aria-hidden="true" />}
               title={t("home.curated.qualityReview")}
             />
@@ -208,8 +212,8 @@ export default function HomePage() {
           <section className="panel">
             <h2>{t("home.sections.startFast")}</h2>
             <div className="resource-list">
-              <ResourceCard description="Merge, compress, summarize, and export PDFs." href="/explore/pdf" icon={<FileText size={20} aria-hidden="true" />} title="PDF tools" />
-              <ResourceCard description="Repair LLM JSON locally before validation." href="/tools/json-repair" icon={<FileJson size={20} aria-hidden="true" />} title="JSON Repair" />
+              <ResourceCard description="Merge, compress, summarize, and export PDFs." href={localizedHref("/explore/pdf")} icon={<FileText size={20} aria-hidden="true" />} title="PDF tools" />
+              <ResourceCard description="Repair LLM JSON locally before validation." href={localizedHref("/tools/json-repair")} icon={<FileJson size={20} aria-hidden="true" />} title="JSON Repair" />
             </div>
           </section>
           <section className="panel">
@@ -218,7 +222,7 @@ export default function HomePage() {
               {getAllArticles().slice(0, 3).map((article) => (
                 <ResourceCard
                   description={article.description}
-                  href={`/blog/${article.slug}`}
+                  href={localizedHref(`/blog/${article.slug}`)}
                   icon={<FileText size={20} aria-hidden="true" />}
                   key={article.slug}
                   meta={`${article.readTimeMinutes} min`}
@@ -236,13 +240,16 @@ export default function HomePage() {
 
 function MobileHomeApp() {
   const t = useTranslations();
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizeHomeHref(href, localeCode);
   return (
     <div className="home-mobile-app" data-home-asset-parity="icon-font-v5" data-home-mobile-layout="explore-app">
       <main className="home-mobile-main">
         <section className="home-mobile-hero">
           <h1>{t("home.heroMobile.title")}</h1>
           <p>{t("home.heroMobile.subtitle")}</p>
-          <a className="home-mobile-search" href="/explore/pdf">
+          <a className="home-mobile-search" href={localizedHref("/explore/pdf")}>
             <Search size={26} aria-hidden="true" />
             <span>{t("home.heroMobile.placeholder")}</span>
             <Mic size={24} aria-hidden="true" />
@@ -252,7 +259,7 @@ function MobileHomeApp() {
           </a>
           <div className="home-mobile-quick-row" aria-label="Suggested tasks">
             {homeQuickTasks.map(({ label, href, icon: Icon, tone }) => (
-              <a className="home-mobile-quick-chip" data-tone={tone} href={href} key={label}>
+              <a className="home-mobile-quick-chip" data-tone={tone} href={localizedHref(href)} key={label}>
                 <Icon size={18} aria-hidden="true" />
                 <span>{label}</span>
               </a>
@@ -274,13 +281,13 @@ function MobileHomeApp() {
         <section className="home-mobile-section">
           <div className="home-mobile-section-head">
             <h2>{t("home.sections.continue")}</h2>
-            <a href="/my-tools">
+            <a href={localizedHref("/my-tools")}>
               View all <ChevronRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="home-mobile-list-card">
             {homeContinueItems.map(({ title, detail, meta, icon: Icon, tone }) => (
-              <a className="home-mobile-continue-row" href="/my-tools" key={title}>
+              <a className="home-mobile-continue-row" href={localizedHref("/my-tools")} key={title}>
                 <span className="home-mobile-soft-icon" data-tone={tone}>
                   <Icon size={24} aria-hidden="true" />
                 </span>
@@ -298,13 +305,13 @@ function MobileHomeApp() {
         <section className="home-mobile-section">
           <div className="home-mobile-section-head">
             <h2>{t("home.sections.toolarsPicks")}</h2>
-            <a href="/explore/pdf">
+            <a href={localizedHref("/explore/pdf")}>
               See all <ChevronRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="home-mobile-pick-list">
             {homePicks.map(({ title, description, href, icon: Icon, tone, badges }) => (
-              <a className="home-mobile-pick-row" href={href} key={title}>
+              <a className="home-mobile-pick-row" href={localizedHref(href)} key={title}>
                 <span className="home-mobile-pick-icon" data-tone={tone}>
                   <Icon size={36} aria-hidden="true" />
                 </span>
@@ -327,7 +334,7 @@ function MobileHomeApp() {
 
         <nav className="home-mobile-category-rail" aria-label="Home categories">
           {homeCategories.map(({ label, href, icon: Icon }) => (
-            <a href={href} key={label}>
+            <a href={localizedHref(href)} key={label}>
               <span>
                 <Icon size={26} aria-hidden="true" />
               </span>
@@ -339,13 +346,13 @@ function MobileHomeApp() {
         <section className="home-mobile-section">
           <div className="home-mobile-section-head">
             <h2>{t("home.sections.popularWorkflows")}</h2>
-            <a href="/workflows">
+            <a href={localizedHref("/workflows")}>
               See all <ChevronRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="home-mobile-list-card">
             {homeWorkflowRows.map(({ title, detail, href, icon: Icon, tone, heat }) => (
-              <a className="home-mobile-workflow-row" href={href} key={title}>
+              <a className="home-mobile-workflow-row" href={localizedHref(href)} key={title}>
                 <span className="home-mobile-soft-icon" data-tone={tone}>
                   <Icon size={22} aria-hidden="true" />
                 </span>
@@ -377,7 +384,7 @@ function MobileHomeApp() {
 
       <nav className="home-mobile-bottom-tabs" aria-label="Mobile home tabs">
         {homeTabs.map(({ label, href, icon: Icon, active }) => (
-          <a aria-current={active ? "page" : undefined} href={href} key={label}>
+          <a aria-current={active ? "page" : undefined} href={localizedHref(href)} key={label}>
             <Icon size={25} aria-hidden="true" />
             <span>{label}</span>
           </a>
@@ -385,4 +392,9 @@ function MobileHomeApp() {
       </nav>
     </div>
   );
+}
+
+function localizeHomeHref(href: string, locale: LocaleCode) {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  return localizePath(href, locale);
 }

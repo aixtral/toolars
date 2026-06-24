@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
+import { isFeatureEnabled } from "@/lib/product/feature-flags";
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
 
 interface FooterLink {
@@ -70,6 +71,7 @@ export async function SiteFooter() {
               <ul>
                 {column.links
                   .filter((link) => !(freeTrialMode && link.href === "/pricing"))
+                  .filter((link) => !(!isFeatureEnabled("submit") && link.href === "/submit"))
                   .map((link) => (
                     <li key={link.href}>
                       <a href={link.href}>{t(link.labelKey)}</a>

@@ -1,6 +1,9 @@
 import { screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { renderWithIntl } from "@/test/i18n-test-utils";
+import es from "../../../messages/es.json";
 import HomePage from "./page";
 
 describe("HomePage", () => {
@@ -42,5 +45,21 @@ describe("HomePage", () => {
     );
     expect(container.querySelectorAll(".home-mobile-workflow-row em svg")).toHaveLength(3);
     expect(screen.getByRole("navigation", { name: "Mobile home tabs" })).toBeInTheDocument();
+  });
+
+  it("keeps home page internal links inside the active locale", () => {
+    const { container } = render(
+      <NextIntlClientProvider locale="es" messages={es}>
+        <HomePage />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByRole("link", { name: "Compress image" })).toHaveAttribute("href", "/es/tools/pdf-toolkit");
+    expect(container.querySelector(".hero-input .open-link")).toHaveAttribute("href", "/es/explore/pdf");
+    expect(container.querySelector(".home-section-head .text-link")).toHaveAttribute("href", "/es/collections");
+    expect(screen.getAllByRole("link", { name: /Turn PDF into summary/ })[0]).toHaveAttribute(
+      "href",
+      "/es/workflows/pdf-summary"
+    );
   });
 });

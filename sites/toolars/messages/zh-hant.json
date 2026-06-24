@@ -24,6 +24,30 @@
     "admin": "管理",
     "pricing": "定價"
   },
+  "categories": {
+    "all": "全部",
+    "ai": "AI",
+    "ai-security": "AI 安全",
+    "developer": "開發者",
+    "rag-mcp-agent": "RAG / MCP / 智能體",
+    "llm-cost": "LLM 成本",
+    "prompt-engineering": "提示詞工程",
+    "frontend-design": "前端與設計",
+    "pdf": "PDF",
+    "image": "圖像",
+    "finance": "財務",
+    "health": "健康",
+    "productivity": "效率",
+    "writing": "寫作",
+    "data": "資料"
+  },
+  "shell": {
+    "sidebar": {
+      "categories": "分類",
+      "localFirstTitle": "本地優先",
+      "localFirstDescription": "工具會清楚標明哪些在本地運行、哪些使用雲端、哪些需要 AI 同意。"
+    }
+  },
   "footer": {
     "columns": {
       "tools": "工具",
@@ -318,6 +342,15 @@
     "workflows": {
       "title": "工作流",
       "subtitle": "跨 PDF、数據、寫作和開發的可重復多步骤工具链。"
+    },
+    "category": {
+      "eyebrow": "工具分類",
+      "title": "{category}工具",
+      "subtitle": "瀏覽此分類中的 {count} 個 Toolars 工具。每個條目都會在打開前展示處理模式、價格和 AI 同意狀態。",
+      "workflowPaths": "分類工作流路徑",
+      "relatedWorkflowTitle": "查找相關工作流",
+      "relatedWorkflowDescription": "使用命令搜索組合此分類中的工具、集合和工作流。",
+      "relatedWorkflowMeta": "探索"
     }
   },
   "collectionsPage": {

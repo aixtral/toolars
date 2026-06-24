@@ -163,8 +163,8 @@ describe("ToolarsShell", () => {
       </NextIntlClientProvider>
     );
 
-    expect(screen.getByRole("link", { name: /Finance/ })).toHaveAttribute("href", "/es/explore/finance");
-    expect(screen.getByRole("link", { name: /AI Security/ })).toHaveAttribute("href", "/es/explore/ai-security");
+    expect(screen.getByRole("link", { name: /Finanzas/ })).toHaveAttribute("href", "/es/explore/finance");
+    expect(screen.getByRole("link", { name: /Seguridad de IA/ })).toHaveAttribute("href", "/es/explore/ai-security");
   });
 
   it("renders the settings sidebar for account settings surfaces", () => {

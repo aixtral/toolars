@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { FolderSearch, Workflow } from "lucide-react";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
 import { ResourceCard } from "@/components/tools/resource-card";
@@ -43,19 +44,25 @@ export default async function ExploreCategoryPage({ params }: { params: Promise<
 
   if (!label) notFound();
 
+  return (
+    <ExploreCategoryView category={category} label={label} />
+  );
+}
+
+function ExploreCategoryView({ category, label }: Readonly<{ category: string; label: string }>) {
   const categoryTools = getPublicToolsByCategory(label);
   const categoryWorkflows = workflows.filter((workflow) => workflow.category === label);
+  const t = useTranslations();
+  const categoryName = t(`categories.${category}`);
 
   return (
     <ToolarsShell active="explore" sidebarActiveHref={getCategoryHref(label)}>
       <div className="page-grid" data-explore-category={category}>
         <div>
           <section className="section">
-            <span className="eyebrow">Tool category</span>
-            <h1 className="title">{label} tools</h1>
-            <p className="subtitle">
-              Browse {categoryTools.length.toLocaleString()} Toolars tools in this category. Every listing keeps processing mode, pricing, and AI consent visible before you open it.
-            </p>
+            <span className="eyebrow">{t("directories.category.eyebrow")}</span>
+            <h1 className="title">{t("directories.category.title", { category: categoryName })}</h1>
+            <p className="subtitle">{t("directories.category.subtitle", { category: categoryName, count: categoryTools.length.toLocaleString() })}</p>
           </section>
 
           <section className="section">
@@ -69,7 +76,7 @@ export default async function ExploreCategoryPage({ params }: { params: Promise<
 
         <aside className="right-rail">
           <section className="panel">
-            <h2>Category workflow paths</h2>
+            <h2>{t("directories.category.workflowPaths")}</h2>
             <div className="resource-list">
               {categoryWorkflows.length > 0 ? (
                 categoryWorkflows.map((workflow) => (
@@ -84,11 +91,11 @@ export default async function ExploreCategoryPage({ params }: { params: Promise<
                 ))
               ) : (
                 <ResourceCard
-                  description="Use command search to combine tools, collections, and workflows from this category."
+                  description={t("directories.category.relatedWorkflowDescription")}
                   href="/"
                   icon={<FolderSearch size={20} aria-hidden="true" />}
-                  meta="Explore"
-                  title="Find related workflows"
+                  meta={t("directories.category.relatedWorkflowMeta")}
+                  title={t("directories.category.relatedWorkflowTitle")}
                 />
               )}
             </div>

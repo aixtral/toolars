@@ -7,6 +7,9 @@ import {
   sourceInventory,
   tools,
   workflows,
+  getCategoryHref,
+  getCategoryLabelBySlug,
+  getCategorySlug,
   getPublicToolsByCategory,
   getToolsByGroup
 } from "./registry";
@@ -52,7 +55,7 @@ describe("Toolars registry", () => {
   });
 
   it("derives public category counts from launch-visible tools", () => {
-    expect(categories[0]).toEqual({ label: "All", count: publicTools.length });
+    expect(categories[0]).toMatchObject({ label: "All", slug: "all", href: "/", count: publicTools.length });
     expect(categories).not.toEqual(expect.arrayContaining([{ label: "All", count: 2643 }]));
     expect(categories.every((category) => category.count > 0)).toBe(true);
 
@@ -62,12 +65,26 @@ describe("Toolars registry", () => {
 
     expect(categories).toEqual(
       expect.arrayContaining([
-        { label: "AI", count: 4 },
-        { label: "PDF", count: 1 },
-        { label: "Finance", count: 42 },
-        { label: "Health", count: 42 }
+        expect.objectContaining({ label: "AI", count: 4 }),
+        expect.objectContaining({ label: "PDF", count: 1 }),
+        expect.objectContaining({ label: "Finance", count: 42 }),
+        expect.objectContaining({ label: "Health", count: 42 })
       ])
     );
+  });
+
+  it("builds stable explore links for every public category", () => {
+    expect(getCategorySlug("RAG / MCP / Agent")).toBe("rag-mcp-agent");
+    expect(getCategoryHref("All")).toBe("/");
+    expect(getCategoryHref("AI")).toBe("/explore/ai-developer");
+    expect(getCategoryHref("Finance")).toBe("/explore/finance");
+    expect(getCategoryLabelBySlug("llm-cost")).toBe("LLM Cost");
+
+    expect(categories.every((category) => category.href)).toBe(true);
+    expect(categories.find((category) => category.label === "AI Security")).toMatchObject({
+      slug: "ai-security",
+      href: "/explore/ai-security"
+    });
   });
 
   it("keeps the AI Developer Lab as a first-class merged inventory", () => {

@@ -24,6 +24,30 @@
     "admin": "Admin",
     "pricing": "Pricing"
   },
+  "categories": {
+    "all": "All",
+    "ai": "AI",
+    "ai-security": "AI Security",
+    "developer": "Developer",
+    "rag-mcp-agent": "RAG / MCP / Agent",
+    "llm-cost": "LLM Cost",
+    "prompt-engineering": "Prompt Engineering",
+    "frontend-design": "Frontend & Design",
+    "pdf": "PDF",
+    "image": "Image",
+    "finance": "Finance",
+    "health": "Health",
+    "productivity": "Productivity",
+    "writing": "Writing",
+    "data": "Data"
+  },
+  "shell": {
+    "sidebar": {
+      "categories": "Categories",
+      "localFirstTitle": "Local-first",
+      "localFirstDescription": "Tools clearly label what runs locally, what uses cloud, and what needs AI consent."
+    }
+  },
   "footer": {
     "columns": {
       "tools": "Tools",
@@ -318,6 +342,15 @@
     "workflows": {
       "title": "Workflows",
       "subtitle": "Multi-step tool chains for repeatable tasks across PDF, data, writing, and development."
+    },
+    "category": {
+      "eyebrow": "Tool category",
+      "title": "{category} tools",
+      "subtitle": "Browse {count} Toolars tools in this category. Every listing keeps processing mode, pricing, and AI consent visible before you open it.",
+      "workflowPaths": "Category workflow paths",
+      "relatedWorkflowTitle": "Find related workflows",
+      "relatedWorkflowDescription": "Use command search to combine tools, collections, and workflows from this category.",
+      "relatedWorkflowMeta": "Explore"
     }
   },
   "collectionsPage": {

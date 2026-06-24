@@ -49,7 +49,7 @@ import {
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
 import { LanguageSwitcher } from "@/components/shell/language-switcher";
 import { CommandCenter } from "@/components/search/command-center";
-import { categories } from "@/data/registry";
+import { categories, getCategoryHref } from "@/data/registry";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { isFeatureEnabled } from "@/lib/product/feature-flags";
@@ -240,7 +240,7 @@ export function ToolarsShell({
           </span>
           <span>
             <span className="brand-name">{brandName}</span>
-            <span className="brand-tagline">All tools. One workspace.</span>
+            <span className="brand-tagline">{t("common.tagline")}</span>
           </span>
         </a>
         {sidebarVariant === "pdf-workspace" ? (
@@ -634,40 +634,38 @@ export function ToolarsShell({
           ) : (
             <>
               <section className="side-section">
-                <p className="side-title">Categories</p>
+                <p className="side-title">{t("shell.sidebar.categories")}</p>
                 {categories.map((category) => {
                   const key = category.label === "PDF" ? "pdf" : category.label === "AI" ? "ai-developer" : category.label.toLowerCase();
-                  const hasExplorePage = category.label === "PDF" || category.label === "AI" || category.label === "All";
-                  const href = category.label === "PDF" ? "/explore/pdf" : category.label === "AI" ? "/explore/ai-developer" : category.label === "All" ? "/" : null;
+                  const href = getCategoryHref(category.label);
                   const Icon = getCategoryIcon(category.label);
+                  const displayLabel = t(`categories.${category.slug}`);
                   const content = (
                     <>
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                         <Icon size={14} aria-hidden="true" />
-                        {category.label}
+                        {displayLabel}
                       </span>
                       <span className="side-count">{category.count.toLocaleString()}</span>
                     </>
                   );
-                  if (href) {
-                    return (
-                      <a className={`side-link ${active === key ? "is-active" : ""}`} href={localizedHref(href)} key={category.label}>
-                        {content}
-                      </a>
-                    );
-                  }
                   return (
-                    <div className="side-link side-link-static" key={category.label}>
+                    <a
+                      aria-current={(sidebarActiveHref ? href === sidebarActiveHref : active === key) ? "page" : undefined}
+                      className={`side-link ${(sidebarActiveHref ? href === sidebarActiveHref : active === key) ? "is-active" : ""}`}
+                      href={localizedHref(href)}
+                      key={category.label}
+                    >
                       {content}
-                    </div>
+                    </a>
                   );
                 })}
               </section>
               <section className="panel">
                 <h3>
-                  <ShieldCheck size={16} aria-hidden="true" /> Local-first
+                  <ShieldCheck size={16} aria-hidden="true" /> {t("shell.sidebar.localFirstTitle")}
                 </h3>
-                <p className="tool-description">Tools clearly label what runs locally, what uses cloud, and what needs AI consent.</p>
+                <p className="tool-description">{t("shell.sidebar.localFirstDescription")}</p>
               </section>
             </>
             )}

@@ -24,6 +24,30 @@
     "admin": "Administrador",
     "pricing": "Precios"
   },
+  "categories": {
+    "all": "Todo",
+    "ai": "IA",
+    "ai-security": "Seguridad de IA",
+    "developer": "Desarrollo",
+    "rag-mcp-agent": "RAG / MCP / Agentes",
+    "llm-cost": "Coste de LLM",
+    "prompt-engineering": "Ingeniería de prompts",
+    "frontend-design": "Frontend y diseño",
+    "pdf": "PDF",
+    "image": "Imagen",
+    "finance": "Finanzas",
+    "health": "Salud",
+    "productivity": "Productividad",
+    "writing": "Escritura",
+    "data": "Datos"
+  },
+  "shell": {
+    "sidebar": {
+      "categories": "Categorías",
+      "localFirstTitle": "Local primero",
+      "localFirstDescription": "Las herramientas indican claramente qué se ejecuta localmente, qué usa la nube y qué necesita consentimiento de IA."
+    }
+  },
   "footer": {
     "columns": {
       "tools": "Herramientas",
@@ -318,6 +342,15 @@
     "workflows": {
       "title": "Flujos",
       "subtitle": "Cadenas de herramientas de varios pasos para tareas repetibles en PDF, datos, escritura y desarrollo."
+    },
+    "category": {
+      "eyebrow": "Categoría de herramientas",
+      "title": "Herramientas de {category}",
+      "subtitle": "Explora {count} herramientas de Toolars en esta categoría. Cada ficha muestra el modo de procesamiento, el precio y el consentimiento de IA antes de abrirla.",
+      "workflowPaths": "Rutas de flujo de la categoría",
+      "relatedWorkflowTitle": "Buscar flujos relacionados",
+      "relatedWorkflowDescription": "Usa la búsqueda de comandos para combinar herramientas, colecciones y flujos de esta categoría.",
+      "relatedWorkflowMeta": "Explorar"
     }
   },
   "collectionsPage": {

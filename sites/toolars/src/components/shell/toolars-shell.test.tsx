@@ -140,6 +140,33 @@ describe("ToolarsShell", () => {
     expect(screen.queryByText("30-day money-back guarantee")).not.toBeInTheDocument();
   });
 
+  it("renders every tool category in the default sidebar as a navigable link", () => {
+    renderWithIntl(
+      <ToolarsShell active="explore">
+        <h1>Explore content</h1>
+      </ToolarsShell>
+    );
+
+    expect(screen.getByRole("link", { name: /Finance/ })).toHaveAttribute("href", "/explore/finance");
+    expect(screen.getByRole("link", { name: /Health/ })).toHaveAttribute("href", "/explore/health");
+    expect(screen.getByRole("link", { name: /AI Security/ })).toHaveAttribute("href", "/explore/ai-security");
+    expect(screen.getByRole("link", { name: /LLM Cost/ })).toHaveAttribute("href", "/explore/llm-cost");
+    expect(screen.queryByText("Finance")?.closest(".side-link-static")).not.toBeInTheDocument();
+  });
+
+  it("keeps tool category sidebar links inside the active locale", () => {
+    render(
+      <NextIntlClientProvider locale="es" messages={es}>
+        <ToolarsShell active="explore">
+          <h1>Explore content</h1>
+        </ToolarsShell>
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByRole("link", { name: /Finance/ })).toHaveAttribute("href", "/es/explore/finance");
+    expect(screen.getByRole("link", { name: /AI Security/ })).toHaveAttribute("href", "/es/explore/ai-security");
+  });
+
   it("renders the settings sidebar for account settings surfaces", () => {
     renderWithIntl(
       <ToolarsShell active="settings" sidebarVariant="settings">

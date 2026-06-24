@@ -1470,9 +1470,33 @@ export function getPublicToolsByCategory(category: string): ToolDefinition[] {
 export const categories = categoryDefinitions
   .map((category) => ({
     label: category.label,
+    slug: getCategorySlug(category.label),
+    href: getCategoryHref(category.label),
     count: getPublicToolsByCategory(category.label).length
   }))
   .filter((category) => category.count > 0);
+
+export function getCategorySlug(label: string): string {
+  return label
+    .toLowerCase()
+    .replace(/&/g, " ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+export function getCategoryHref(label: string): string {
+  if (label === "All") return "/";
+  if (label === "AI") return "/explore/ai-developer";
+  return `/explore/${getCategorySlug(label)}`;
+}
+
+export function getCategoryLabelBySlug(slug: string): string | undefined {
+  return categoryDefinitions.find((category) => getCategorySlug(category.label) === slug)?.label;
+}
+
+export const exploreCategorySlugs = categoryDefinitions
+  .map((category) => getCategorySlug(category.label))
+  .filter((slug) => slug !== "all" && slug !== "ai" && slug !== "pdf");
 
 export const workflows: WorkflowDefinition[] = [
   {

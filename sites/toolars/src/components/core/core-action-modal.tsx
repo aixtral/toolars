@@ -38,7 +38,7 @@ export function CoreActionModalButton({
   const instanceId = useId();
   const titleId = `${instanceId}-title`;
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLElement>(null);
+  const dialogRef = useRef(null as HTMLElement | null);
   const title = kind === "share" && shareTitle ? shareTitle : t(modalTitleKey(kind));
 
   const close = useCallback((options: { restoreFocus?: boolean } = {}) => {

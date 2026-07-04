@@ -1,0 +1,176 @@
+{
+  "change_id": "complete-source-migration",
+  "note": "Parallel execution is delegated through Codex multi-agent forked workspaces. This file tracks the execution plane for CDC recovery.",
+  "tasks": [
+    {
+      "task_id": "audit-source-migration",
+      "agent_id": "019efbfb-2f4f-7ff0-92ed-55865af04c28",
+      "isolation": "multi-agent-fork",
+      "status": "completed"
+    },
+    {
+      "task_id": "vitalcalc-blog-en",
+      "agent_id": "019efbfc-2bd3-78a2-8b0c-985592c6a18e",
+      "isolation": "multi-agent-fork",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch-plan",
+      "agent_id": "019efbfc-684f-7020-b03e-1523b33e94bc",
+      "isolation": "read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch1-detail",
+      "agent_id": "019efc0b-0101-7c73-a438-66220d62d630",
+      "isolation": "multi-agent-fork",
+      "status": "completed"
+    },
+    {
+      "task_id": "blog-ui-i18n-links",
+      "agent_id": "019efc0b-2ca8-7b23-8233-493b8c6419f6",
+      "isolation": "multi-agent-fork",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch2-detail",
+      "agent_id": "019efc19-9604-7e40-8fe2-a11aa0de9b95",
+      "isolation": "multi-agent-fork",
+      "status": "completed"
+    },
+    {
+      "task_id": "left-category-clickability-diagnosis",
+      "agent_id": "019efc19-97d1-7573-ad5c-ad8dcd093258",
+      "isolation": "read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "i18n-hardcoded-copy-triage",
+      "agent_id": "019efc19-9973-7ed3-8a58-744ddc3fa864",
+      "isolation": "read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "pdf-toolkit-workspace-i18n",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch3-discovery",
+      "agent_id": "019efddc-8aae-71a2-b763-4dedc06c822f",
+      "isolation": "read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "locale-expansion-plan",
+      "agent_id": "019efddc-8c72-7823-b9bb-6ae10b13cf07",
+      "isolation": "read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch3-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "locale-staging-foundation",
+      "agent_id": "main-thread",
+      "supporting_agent_id": "019efe64-43b3-7933-9255-daf1ef7cecc0",
+      "isolation": "shared-workspace-plus-read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch4-discovery",
+      "agent_id": "019efe64-41eb-71f3-82c7-f05cf9b53ffd",
+      "isolation": "read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch4-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch5-candidate-scan",
+      "agent_id": "main-thread",
+      "supporting_agent_id": "019efe70-9d56-7bc2-985b-36067e8b0922",
+      "isolation": "shared-workspace-plus-closed-read-only-agent",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch5-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch6-source-check",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch6-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch7-source-check",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch7-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch8-source-check",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch8-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch9-source-check",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "aixtral-batch9-detail",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "token-counter-native-workspace",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "system-prompt-compressor-native-workspace",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    },
+    {
+      "task_id": "system-prompt-guard-native-workspace",
+      "agent_id": "main-thread",
+      "isolation": "shared-workspace",
+      "status": "completed"
+    }
+  ]
+}

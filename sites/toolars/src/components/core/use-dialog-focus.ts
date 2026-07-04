@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 
 export function useDialogFocus(isOpen: boolean) {
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLElement>(null);
+  const dialogRef = useRef(null as HTMLElement | null);
 
   useEffect(() => {
     if (!isOpen) return;

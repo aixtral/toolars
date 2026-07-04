@@ -10,66 +10,70 @@ import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
 import { buildWorkspaceAuditHeaders, subscribeWorkspaceIdentityChanges } from "@/lib/workspace/workspace-identity";
 
 const trustDefaults = [
-  {
-    label: "Ask before AI processing",
-    description: "Show a consent prompt before content leaves your device for AI processing."
-  },
-  {
-    label: "Auto-delete uploads after session",
-    description: "Remove temporary uploads after the active workflow session ends."
-  },
-  {
-    label: "Prefer local tools",
-    description: "Route work to local tools before cloud or AI-powered alternatives."
-  },
-  {
-    label: "Save output history",
-    description: "Keep outputs in your workspace so you can return to prior runs."
-  }
+  { key: "askBeforeAi" },
+  { key: "autoDeleteUploads" },
+  { key: "preferLocalTools" },
+  { key: "saveOutputHistory" }
 ] as const;
 
-const policyRows = [
-  ["Consent gate", "Consent required", "Every AI workflow displays what content will be sent and why."],
-  ["Routing order", "Preferred", "Traditional and browser-local tools stay first in matching and workflow suggestions."],
-  ["Model training", "Opt-out", "Workspace content is not used for model training without explicit consent."]
-] as const;
+type TrustDefaultKey = (typeof trustDefaults)[number]["key"];
 
-const retentionRows = [
-  ["Uploads", "Deleted after session"],
-  ["AI prompts", "Stored for 30 days"],
-  ["Generated outputs", "Saved until removed"],
-  ["Audit events", "Retained for 1 year"]
-] as const;
+const policyRows = ["consentGate", "routingOrder", "modelTraining"] as const;
+
+const retentionRows = ["uploads", "aiPrompts", "generatedOutputs", "auditEvents"] as const;
+
+type ServerAuditStatus = "pending" | "synced" | "unavailable";
+const initialServerAuditStatus: ServerAuditStatus = "pending";
+const initialServerAuthContext = null as ToolarsAuthContext | null;
+const initialServerAuditLedger = null as ServerConsentAuditLedger | null;
 
 const defaultProviderRoute = selectAiProviderRoute({
   stepId: "summarize-with-ai",
   workflowSlug: "pdf-summary"
 });
 
-const providerRouteRows = [
-  ["Primary route", defaultProviderRoute.providerRouteId, "Managed gateway"],
-  ["Fallback route", defaultProviderRoute.fallbackRouteId, "Local extract only"],
-  ["Retention", `Retention ${defaultProviderRoute.retentionDays} days`, defaultProviderRoute.modelFamily]
-] as const;
+function buildInitialTrustDefaults(): Record<TrustDefaultKey, boolean> {
+  const defaults = {} as Record<TrustDefaultKey, boolean>;
+  for (const item of trustDefaults) {
+    defaults[item.key] = true;
+  }
+
+  return defaults;
+}
 
 export function PrivacyAiSettingsView() {
   const t = useTranslations("settings.privacy-ai");
-  const [enabled, setEnabled] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(trustDefaults.map((item) => [item.label, true]))
-  );
+  const [enabled, setEnabled] = useState(buildInitialTrustDefaults);
   const [auditLog, setAuditLog] = useState(() => loadAiConsentAuditLog(null));
-  const [serverAuthContext, setServerAuthContext] = useState<ToolarsAuthContext | null>(null);
-  const [serverAuditLedger, setServerAuditLedger] = useState<ServerConsentAuditLedger | null>(null);
-  const [serverAuditStatus, setServerAuditStatus] = useState("Server ledger pending");
-  const [status, setStatus] = useState("All privacy defaults are active for this workspace.");
+  const [serverAuthContext, setServerAuthContext] = useState(initialServerAuthContext);
+  const [serverAuditLedger, setServerAuditLedger] = useState(initialServerAuditLedger);
+  const [serverAuditStatus, setServerAuditStatus] = useState(initialServerAuditStatus);
+  const [status, setStatus] = useState(() => t("status.allActive"));
   const latestAuditEvent = auditLog.events[auditLog.events.length - 1];
   const latestServerRun = serverAuditLedger?.runs[serverAuditLedger.runs.length - 1];
   const serverDeletionCount = serverAuditLedger?.deletions?.length ?? 0;
   const latestDeletion = serverDeletionCount > 0 ? serverAuditLedger?.deletions[serverDeletionCount - 1] : undefined;
-  const serverIdentityLabel = serverAuthContext?.isAuthenticated ? "Account ledger connected" : "Anonymous workspace ledger";
-  const serverIdentityPrimary = serverAuthContext?.accountId ?? serverAuthContext?.workspaceId ?? "Workspace-scoped local identity";
-  const serverIdentitySecondary = serverAuthContext?.accountEmail ?? serverAuthContext?.workspaceId ?? "Run metadata is bound before account linking.";
-  const serverIdentitySource = serverAuthContext?.source ?? "anonymous";
+  const serverIdentityLabel = serverAuthContext?.isAuthenticated ? t("audit.identity.accountLedgerConnected") : t("audit.identity.anonymousWorkspaceLedger");
+  const serverIdentityPrimary = serverAuthContext?.accountId ?? serverAuthContext?.workspaceId ?? t("audit.identity.workspaceScopedLocalIdentity");
+  const serverIdentitySecondary = serverAuthContext?.accountEmail ?? serverAuthContext?.workspaceId ?? t("audit.identity.runMetadataBeforeLinking");
+  const serverIdentitySource = serverAuthContext?.source ?? t("audit.identity.anonymousSource");
+  const providerRouteRows = [
+    {
+      detail: t("providerRouteRows.primary.detail"),
+      key: "primary",
+      value: defaultProviderRoute.providerRouteId
+    },
+    {
+      detail: t("providerRouteRows.fallback.detail"),
+      key: "fallback",
+      value: defaultProviderRoute.fallbackRouteId
+    },
+    {
+      detail: defaultProviderRoute.modelFamily,
+      key: "retention",
+      value: t("providerRouteRows.retention.value", { days: defaultProviderRoute.retentionDays })
+    }
+  ] as const;
 
   useEffect(() => {
     setAuditLog(loadAiConsentAuditLog());
@@ -88,9 +92,9 @@ export function PrivacyAiSettingsView() {
         if (!isActive || payload.ledger?.version !== 1) return;
         if (payload.auth) setServerAuthContext(payload.auth);
         setServerAuditLedger(payload.ledger);
-        setServerAuditStatus("Server ledger synced");
+        setServerAuditStatus("synced");
       } catch {
-        if (isActive) setServerAuditStatus("Server ledger unavailable");
+        if (isActive) setServerAuditStatus("unavailable");
       }
     }
 
@@ -106,15 +110,19 @@ export function PrivacyAiSettingsView() {
     };
   }, []);
 
-  function toggleDefault(label: string) {
+  function toggleDefault(key: TrustDefaultKey) {
+    const label = t(`trustDefaults.${key}.label`);
     setEnabled((current) => {
-      const nextValue = !current[label];
+      const nextValue = !current[key];
       setStatus(
-        label === "Ask before AI processing" && !nextValue
-          ? "Consent prompt paused for this workspace."
-          : `${label} ${nextValue ? "enabled" : "paused"} for this workspace.`
+        key === "askBeforeAi" && !nextValue
+          ? t("status.consentPromptPaused")
+          : t("status.defaultChanged", {
+              label,
+              state: t(nextValue ? "status.enabled" : "status.paused")
+            })
       );
-      return { ...current, [label]: nextValue };
+      return { ...current, [key]: nextValue };
     });
   }
 
@@ -139,18 +147,16 @@ export function PrivacyAiSettingsView() {
       URL.revokeObjectURL(url);
     }
 
-    const localEventLabel = auditLog.events.length === 1 ? "local event" : "local events";
     const serverRunCount = serverAuditLedger?.runs.length ?? 0;
-    const serverRunLabel = serverRunCount === 1 ? "server run" : "server runs";
-    setStatus(`Privacy log export prepared with ${auditLog.events.length} ${localEventLabel} and ${serverRunCount} ${serverRunLabel}.`);
+    setStatus(t("status.exportPrepared", { localEvents: auditLog.events.length, serverRuns: serverRunCount }));
   }
 
   async function handleDeleteAiHistory() {
     setAuditLog(clearAiConsentAuditLog());
 
     if (typeof fetch !== "function") {
-      setServerAuditStatus("Server ledger unavailable");
-      setStatus("AI history deleted locally; server deletion audit unavailable.");
+      setServerAuditStatus("unavailable");
+      setStatus(t("status.deleteUnavailable"));
       return;
     }
 
@@ -164,25 +170,25 @@ export function PrivacyAiSettingsView() {
       if (payload.ledger?.version !== 1) throw new Error("Invalid server audit ledger response");
       if (payload.auth) setServerAuthContext(payload.auth);
       setServerAuditLedger(payload.ledger);
-      setServerAuditStatus("Server ledger synced");
-      setStatus("AI history deleted locally; server deletion audit retained.");
+      setServerAuditStatus("synced");
+      setStatus(t("status.deleteRetained"));
     } catch {
-      setServerAuditStatus("Server ledger unavailable");
-      setStatus("AI history deleted locally; server deletion audit unavailable.");
+      setServerAuditStatus("unavailable");
+      setStatus(t("status.deleteUnavailable"));
     }
   }
 
   return (
     <div className="settings-subpage privacy-ai-settings-page" data-privacy-ai-settings-page="true">
       <section className="section landing-hero settings-subpage-hero">
-        <span className="eyebrow">Settings</span>
+        <span className="eyebrow">{t("sections.eyebrow")}</span>
         <div className="landing-section-head">
           <span>
             <h1 className="title">{t("hero.title")}</h1>
-            <p className="subtitle">Control consent, AI processing, local-first routing, retention, exports, and deletion policies for your workspace.</p>
+            <p className="subtitle">{t("hero.subtitle")}</p>
           </span>
           <span className="settings-trust-note">
-            <ShieldCheck size={15} aria-hidden="true" /> AI consent is on
+            <ShieldCheck size={15} aria-hidden="true" /> {t("hero.consentOn")}
           </span>
         </div>
       </section>
@@ -193,26 +199,27 @@ export function PrivacyAiSettingsView() {
             <div className="landing-section-head">
               <span>
                 <h2>{t("sections.consentDefaults")}</h2>
-                <p className="tool-description">These defaults shape every AI workflow, uploaded file, and saved output in Toolars.</p>
+                <p className="tool-description">{t("copy.consentDefaultsDescription")}</p>
               </span>
             </div>
             <div className="settings-toggle-list">
               {trustDefaults.map((item) => {
-                const isEnabled = enabled[item.label];
+                const isEnabled = enabled[item.key];
+                const label = t(`trustDefaults.${item.key}.label`);
                 return (
-                  <article className="privacy-toggle-row" key={item.label}>
+                  <article className="privacy-toggle-row" key={item.key}>
                     <span className="icon-tile green">
                       <ShieldCheck size={18} aria-hidden="true" />
                     </span>
                     <span>
-                      <strong>{item.label}</strong>
-                      <small>{item.description}</small>
+                      <strong>{label}</strong>
+                      <small>{t(`trustDefaults.${item.key}.description`)}</small>
                     </span>
                     <button
-                      aria-label={item.label}
+                      aria-label={label}
                       aria-pressed={isEnabled}
                       className={`privacy-switch-button ${isEnabled ? "is-on" : ""}`}
-                      onClick={() => toggleDefault(item.label)}
+                      onClick={() => toggleDefault(item.key)}
                       type="button"
                     />
                   </article>
@@ -227,11 +234,11 @@ export function PrivacyAiSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.processingPolicy")}</h2>
             <div className="settings-row-list">
-              {policyRows.map(([label, value, description]) => (
-                <div className="settings-detail-row" key={label}>
-                  <strong>{label}</strong>
-                  <span>{description}</span>
-                  <span className="badge local">{value}</span>
+              {policyRows.map((key) => (
+                <div className="settings-detail-row" key={key}>
+                  <strong>{t(`policyRows.${key}.label`)}</strong>
+                  <span>{t(`policyRows.${key}.description`)}</span>
+                  <span className="badge local">{t(`policyRows.${key}.value`)}</span>
                 </div>
               ))}
             </div>
@@ -241,16 +248,16 @@ export function PrivacyAiSettingsView() {
             <div className="landing-section-head">
               <span>
                 <h2>{t("sections.providerRouting")}</h2>
-                <p className="tool-description">Production routing shows the primary provider, fallback path, consent gate, and retention window before AI work leaves the workspace.</p>
+                <p className="tool-description">{t("copy.providerRoutingDescription")}</p>
               </span>
-              <span className="badge ai">Consent required</span>
+              <span className="badge ai">{t("badges.consentRequired")}</span>
             </div>
             <div className="provider-route-matrix">
-              {providerRouteRows.map(([label, value, detail]) => (
-                <article className="provider-route-row" key={label}>
-                  <strong>{label}</strong>
-                  <code>{value}</code>
-                  <span>{detail}</span>
+              {providerRouteRows.map((row) => (
+                <article className="provider-route-row" key={row.key}>
+                  <strong>{t(`providerRouteRows.${row.key}.label`)}</strong>
+                  <code>{row.value}</code>
+                  <span>{row.detail}</span>
                 </article>
               ))}
             </div>
@@ -262,11 +269,11 @@ export function PrivacyAiSettingsView() {
                 <HardDrive size={18} aria-hidden="true" />
               </span>
               <h2>{t("sections.localFirst")}</h2>
-              <p className="tool-description">Toolars ranks local calculators, converters, and browser workflows before tools that require uploads or AI processing.</p>
+              <p className="tool-description">{t("copy.localFirstDescription")}</p>
               <div className="privacy-route-strip">
-                <span>Local</span>
-                <span>Cloud</span>
-                <span>AI</span>
+                <span>{t("routeStrip.local")}</span>
+                <span>{t("routeStrip.cloud")}</span>
+                <span>{t("routeStrip.ai")}</span>
               </div>
             </section>
 
@@ -275,8 +282,8 @@ export function PrivacyAiSettingsView() {
                 <Bot size={18} aria-hidden="true" />
               </span>
               <h2>{t("sections.trainingControls")}</h2>
-              <p className="tool-description">Workspace content stays out of training by default. Team owners can require admin approval before any data-sharing policy changes.</p>
-              <span className="badge local">Training opt-out active</span>
+              <p className="tool-description">{t("copy.trainingControlsDescription")}</p>
+              <span className="badge local">{t("badges.trainingOptOutActive")}</span>
             </section>
           </div>
         </div>
@@ -285,14 +292,14 @@ export function PrivacyAiSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.consentPreview")}</h2>
             <div className="consent-preview-box">
-              <strong>{t("labels.Before AI processing")}</strong>
-              <p>This workflow wants to summarize one uploaded PDF using an AI model. Review extracted text, model provider, retention, and estimated credits before continuing.</p>
+              <strong>{t("labels.beforeAiProcessing")}</strong>
+              <p>{t("copy.consentPreviewDescription")}</p>
               <div className="settings-button-row">
                 <button className="button button-solid" type="button">
-                  Allow once
+                  {t("actions.allowOnce")}
                 </button>
                 <button className="button button-outline-neutral" type="button">
-                  Use local tool
+                  {t("actions.useLocalTool")}
                 </button>
               </div>
             </div>
@@ -301,28 +308,24 @@ export function PrivacyAiSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.dataRetention")}</h2>
             <div className="settings-row-list compact">
-              {retentionRows.map(([label, value]) => (
-                <div className="settings-detail-row compact-row" key={label}>
-                  <strong>{label}</strong>
-                  <span>{value}</span>
+              {retentionRows.map((key) => (
+                <div className="settings-detail-row compact-row" key={key}>
+                  <strong>{t(`retentionRows.${key}.label`)}</strong>
+                  <span>{t(`retentionRows.${key}.value`)}</span>
                   <FileClock size={15} aria-hidden="true" />
                 </div>
               ))}
             </div>
             <button className="button button-outline-neutral" onClick={handleDeleteAiHistory} type="button">
-              <Trash2 size={15} aria-hidden="true" /> Delete AI history
+              <Trash2 size={15} aria-hidden="true" /> {t("actions.deleteAiHistory")}
             </button>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.privacyLog")}</h2>
-            <p className="tool-description">Export a workspace audit of AI consent events, uploads, retention updates, and deletion requests.</p>
+            <p className="tool-description">{t("copy.privacyLogDescription")}</p>
             <div className="privacy-audit-summary">
-              <strong>
-                {auditLog.events.length === 1
-                  ? "1 AI consent event retained locally"
-                  : `${auditLog.events.length} AI consent events retained locally`}
-              </strong>
+              <strong>{t("audit.localEvents", { count: auditLog.events.length })}</strong>
               {latestAuditEvent ? (
                 <div className="settings-detail-row compact-row">
                   <strong>{latestAuditEvent.workflowTitle}</strong>
@@ -330,24 +333,16 @@ export function PrivacyAiSettingsView() {
                   <span className="badge ai">{latestAuditEvent.providerRouteId}</span>
                 </div>
               ) : (
-                <small>No approved AI provider routes have been recorded in this browser yet.</small>
+                <small>{t("audit.noApprovedRoutes")}</small>
               )}
             </div>
             <div className="privacy-audit-summary">
-              <strong>{serverAuditStatus}</strong>
+              <strong>{t(`audit.serverStatus.${serverAuditStatus}`)}</strong>
               {serverAuditLedger ? (
                 <>
-                  <small>
-                    {serverAuditLedger.runs.length === 1
-                      ? "1 server audit run with metadata"
-                      : `${serverAuditLedger.runs.length} server audit runs with metadata`}
-                  </small>
+                  <small>{t("audit.serverRuns", { count: serverAuditLedger.runs.length })}</small>
                   {serverDeletionCount > 0 ? (
-                    <small>
-                      {serverDeletionCount === 1
-                        ? "1 deletion request retained in server ledger"
-                        : `${serverDeletionCount} deletion requests retained in server ledger`}
-                    </small>
+                    <small>{t("audit.serverDeletionRequests", { count: serverDeletionCount })}</small>
                   ) : null}
                   {latestServerRun ? (
                     <div className="settings-detail-row compact-row">
@@ -365,11 +360,11 @@ export function PrivacyAiSettingsView() {
                   ) : null}
                 </>
               ) : (
-                <small>Server-side run metadata appears after the audit route responds.</small>
+                <small>{t("audit.serverMetadataPending")}</small>
               )}
             </div>
             <button className="button button-outline-neutral" onClick={handleDownloadPrivacyLog} type="button">
-              <Download size={15} aria-hidden="true" /> Download privacy log
+              <Download size={15} aria-hidden="true" /> {t("actions.downloadPrivacyLog")}
             </button>
           </section>
 
@@ -377,9 +372,9 @@ export function PrivacyAiSettingsView() {
             <h2>{t("sections.auditTrail")}</h2>
             <div className="ai-audit-trail-list">
               <article>
-                <span className="badge local">Identity</span>
+                <span className="badge local">{t("badges.identity")}</span>
                 <strong>{serverIdentityLabel}</strong>
-                <small>Run metadata is bound to workspace identity headers before account linking.</small>
+                <small>{t("audit.identity.description")}</small>
                 <div className="settings-detail-row compact-row">
                   <strong>{serverIdentityPrimary}</strong>
                   <span>{serverIdentitySecondary}</span>
@@ -387,14 +382,29 @@ export function PrivacyAiSettingsView() {
                 </div>
               </article>
               <article>
-                <span className="badge ai">Run metadata</span>
-                <strong>{latestServerRun ? "Latest server run" : "No server run recorded"}</strong>
-                <small>{latestServerRun ? `Run id ${latestServerRun.runId} - ${latestServerRun.modelFamily} - ${latestServerRun.status}` : "Server runs appear after a consent-gated workflow completes."}</small>
+                <span className="badge ai">{t("badges.runMetadata")}</span>
+                <strong>{latestServerRun ? t("audit.latestRun.title") : t("audit.latestRun.emptyTitle")}</strong>
+                <small>
+                  {latestServerRun
+                    ? t("audit.latestRun.description", {
+                        modelFamily: latestServerRun.modelFamily,
+                        runId: latestServerRun.runId,
+                        status: latestServerRun.status
+                      })
+                    : t("audit.latestRun.emptyDescription")}
+                </small>
               </article>
               <article>
-                <span className="badge">Deletion</span>
-                <strong>{latestDeletion?.scope ?? "No deletion request"}</strong>
-                <small>{latestDeletion ? `${latestDeletion.status} at ${latestDeletion.requestedAt}` : "Deletion requests stay as ledger events even after local history is cleared."}</small>
+                <span className="badge">{t("badges.deletion")}</span>
+                <strong>{latestDeletion?.scope ?? t("audit.deletion.emptyTitle")}</strong>
+                <small>
+                  {latestDeletion
+                    ? t("audit.deletion.description", {
+                        requestedAt: latestDeletion.requestedAt,
+                        status: latestDeletion.status
+                      })
+                    : t("audit.deletion.emptyDescription")}
+                </small>
               </article>
             </div>
           </section>
@@ -404,7 +414,7 @@ export function PrivacyAiSettingsView() {
               <LockKeyhole size={18} aria-hidden="true" />
             </span>
             <h2>{t("sections.guardrails")}</h2>
-            <p className="tool-description">Sensitive content requires an explicit consent step, and admins can inspect AI usage from the privacy log.</p>
+            <p className="tool-description">{t("copy.guardrailsDescription")}</p>
           </section>
         </aside>
       </div>

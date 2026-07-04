@@ -1,0 +1,921 @@
+[
+  {
+    "slug": "protein-intake-guide",
+    "title": "How Much Protein Do You Need Per Day?",
+    "description": "Learn how much protein you need daily based on weight, activity level, and fitness goals. Discover the best protein sources and optimal timing.",
+    "category": "Guides",
+    "publishedAt": "2026-05-18",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "protein-calculator",
+      "tdee-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Protein is essential for muscle repair, immune function, and hormone synthesis. But most people do not know how much they actually need.",
+          "Learn how much protein you need daily based on weight, activity level, and fitness goals. Discover the best protein sources and optimal timing."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide starts with baseline protein requirements, then adjusts the target by activity level and fitness goal.",
+          "It separates weight loss, muscle gain, and maintenance scenarios so readers can avoid a one-size-fits-all target.",
+          "It also covers protein source quality and timing, with a practical 20-40 g per meal pattern."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: protein-calculator, tdee-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Can I eat too much protein?",
+        "answer": "For healthy individuals, excess protein is generally safe. However, extremely high intake (>3 g/kg) may strain kidneys in those with pre-existing kidney conditions. Most people can safely consume up to 2 g/kg daily."
+      },
+      {
+        "question": "Is plant protein as good as animal protein?",
+        "answer": "Plant proteins can be just as effective when you consume a variety of sources. Combining grains and legumes, like rice and beans, provides all essential amino acids. Some plant proteins like soy are complete on their own."
+      }
+    ]
+  },
+  {
+    "slug": "heart-rate-zones-guide",
+    "title": "Target Heart Rate Zones for Exercise",
+    "description": "Learn the five heart rate training zones, their effects, and how to calculate your personalized target heart rate using the Karvonen formula.",
+    "category": "Guides",
+    "publishedAt": "2026-05-18",
+    "readTimeMinutes": 7,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "heart-rate-zone",
+      "tdee-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Not all exercise intensities are equal. Understanding five heart rate zones makes every workout more targeted and efficient.",
+          "Learn the five heart rate training zones, their effects, and how to calculate your personalized target heart rate using the Karvonen formula."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide explains why heart rate is a personalized signal for exercise intensity.",
+          "It distinguishes the five training zones, with extra emphasis on Zone 2 endurance work.",
+          "It shows how max heart rate and resting heart rate feed into more tailored zone estimates."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: heart-rate-zone, tdee-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "How do I measure my heart rate during exercise?",
+        "answer": "You can use a fitness tracker, smartwatch, or chest strap heart rate monitor. Alternatively, check your pulse manually at your wrist or neck for 15 seconds and multiply by 4."
+      },
+      {
+        "question": "What if my heart rate goes above my max?",
+        "answer": "The 220-age formula is an estimate. Some people naturally have higher or lower max heart rates. If you consistently exceed your calculated max during intense exercise, your actual max may be higher than the estimate."
+      }
+    ]
+  },
+  {
+    "slug": "what-is-bmi",
+    "title": "What Is BMI? How to Understand Body Mass Index",
+    "description": "Learn what BMI is, how it is calculated, what the categories mean, and why it is just one piece of the health puzzle.",
+    "category": "Guides",
+    "publishedAt": "2026-05-20",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "bmi-calculator",
+      "body-fat-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Body Mass Index (BMI) is the most widely used screening tool for healthy weight. But what does your number actually mean?",
+          "Learn what BMI is, how it is calculated, what the categories mean, and why it is just one piece of the health puzzle."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide defines BMI as weight in kilograms divided by height in meters squared.",
+          "It summarizes common BMI categories and explains why BMI is a screening tool rather than a diagnosis.",
+          "It recommends pairing BMI with body fat and waist measurements when body composition matters."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: bmi-calculator, body-fat-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Is BMI accurate for everyone?",
+        "answer": "No. BMI is a population-level screening tool, not a perfect individual metric. It may overestimate body fat in muscular individuals and underestimate it in elderly people who have lost muscle mass."
+      },
+      {
+        "question": "What BMI is considered obese?",
+        "answer": "According to WHO standards: BMI 25-29.9 is overweight, 30-34.9 is Class I obesity, 35-39.9 is Class II obesity, and 40+ is Class III obesity. Asian populations may use lower thresholds."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-calculate-bmr",
+    "title": "How to Calculate Your Basal Metabolic Rate (BMR)",
+    "description": "Learn how to calculate your Basal Metabolic Rate, why it matters for weight management, and how to use it to build a personalized diet plan.",
+    "category": "Guides",
+    "publishedAt": "2026-05-18",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "bmr-calculator",
+      "tdee-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Your Basal Metabolic Rate is the foundation of every diet and fitness plan. Understanding your BMR helps you eat the right amount of calories.",
+          "Learn how to calculate your Basal Metabolic Rate, why it matters for weight management, and how to use it to build a personalized diet plan."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide defines BMR as the calories burned at complete rest for basic life functions.",
+          "It highlights the Mifflin-St Jeor formula as the practical calculation method.",
+          "It explains why BMR changes with body size, muscle mass, weight loss, and activity planning."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: bmr-calculator, tdee-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "What is the difference between BMR and TDEE?",
+        "answer": "BMR is your baseline calorie burn at rest. TDEE includes BMR plus calories burned through daily activities and exercise. TDEE is what you use for meal planning."
+      },
+      {
+        "question": "Why did my BMR go down after losing weight?",
+        "answer": "Weight loss, especially muscle loss, reduces BMR. This is why weight loss plateaus occur. Strength training and adequate protein intake help preserve muscle and maintain BMR during dieting."
+      }
+    ]
+  },
+  {
+    "slug": "tdee-guide",
+    "title": "TDEE Explained: How Many Calories Do You Really Need?",
+    "description": "Understand Total Daily Energy Expenditure, how activity level affects calorie needs, and how to use TDEE for effective weight management.",
+    "category": "Guides",
+    "publishedAt": "2026-05-15",
+    "readTimeMinutes": 7,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "tdee-calculator",
+      "bmr-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "If BMR is your body's idle speed, TDEE is your full operating speed. Understanding TDEE is the single most important step in designing a diet that works.",
+          "Understand Total Daily Energy Expenditure, how activity level affects calorie needs, and how to use TDEE for effective weight management."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide breaks TDEE into BMR, daily movement, exercise, and digestion.",
+          "It explains activity multipliers and why two people at the same weight can need different calories.",
+          "It uses TDEE as the starting point for fat loss, maintenance, and muscle gain targets."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: tdee-calculator, bmr-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "How often should I recalculate my TDEE?",
+        "answer": "Recalculate whenever your weight changes by 5+ lbs or 2+ kg, or if your activity level changes significantly. Most people benefit from recalculating every 4-6 weeks during active weight management."
+      },
+      {
+        "question": "Why am I not losing weight despite eating below TDEE?",
+        "answer": "Common reasons include underestimating portion sizes, not counting liquid calories, metabolic adaptation from prolonged dieting, and inconsistent tracking. Try tracking everything for 2 weeks to identify hidden calories."
+      }
+    ]
+  },
+  {
+    "slug": "what-is-body-fat",
+    "title": "What Is Body Fat Percentage? How to Measure It",
+    "description": "Learn what body fat percentage means, healthy ranges by gender, measurement methods (US Navy method, DEXA, BIA), and why body fat matters more than BMI.",
+    "category": "Guides",
+    "publishedAt": "2026-05-10",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "body-fat-calculator",
+      "bmi-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "BMI tells you if your weight is normal, but body fat percentage reveals your true body composition.",
+          "Learn what body fat percentage means, healthy ranges by gender, measurement methods (US Navy method, DEXA, BIA), and why body fat matters more than BMI."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide distinguishes essential fat from storage fat and explains why the percentage matters.",
+          "It compares common methods, including tape-measure estimates, BIA, DEXA, and visual ranges.",
+          "It positions body fat percentage as a useful companion to BMI when tracking health and fitness."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: body-fat-calculator, bmi-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "What is the healthiest body fat percentage?",
+        "answer": "For men: 10-20% is considered healthy. For women: 20-30% is healthy. Going below essential fat levels can harm hormonal and immune function."
+      },
+      {
+        "question": "Can I target fat loss in specific areas?",
+        "answer": "No. Spot reduction is a myth. Fat loss occurs throughout the body based on genetics and hormones. Consistent exercise and a calorie deficit reduce overall body fat, including stubborn areas over time."
+      }
+    ]
+  },
+  {
+    "slug": "ideal-weight-guide",
+    "title": "What Is Your Ideal Weight? Scientific Calculation Methods",
+    "description": "Learn how to calculate ideal weight using the Devine formula, BMI method, and body fat approach. Find your healthy weight range.",
+    "category": "Guides",
+    "publishedAt": "2026-05-05",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "ideal-weight-calculator",
+      "bmi-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "\"Ideal weight\" is not a fixed number - it is a range. Learn three mainstream methods to find the healthy weight that fits you.",
+          "Learn how to calculate ideal weight using the Devine formula, BMI method, and body fat approach. Find your healthy weight range."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide presents the Devine formula as a common height-based estimate.",
+          "It adds a reverse BMI method to show a range rather than a single target.",
+          "It closes by emphasizing body composition and health markers over one perfect number."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: ideal-weight-calculator, bmi-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Is there one ideal weight for my height?",
+        "answer": "No. Ideal weight varies by body frame, muscle mass, age, and sex. The Devine formula gives a good estimate, but your personal healthy range may differ by 10-15 lbs."
+      },
+      {
+        "question": "Should I focus on weight or body composition?",
+        "answer": "Body composition is more important. Two people can weigh the same but have very different health profiles based on muscle-to-fat ratio. Focus on strength, energy levels, and health markers alongside weight."
+      }
+    ]
+  },
+  {
+    "slug": "water-and-metabolism",
+    "title": "Can Drinking Water Help You Lose Weight?",
+    "description": "Does drinking water boost metabolism and aid weight loss? We break down the science behind water intake, metabolism, satiety, and exercise performance.",
+    "category": "Guides",
+    "publishedAt": "2026-04-28",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "water-intake"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "\"Drinking more water boosts metabolism\" has been around forever. But what does the science actually say?",
+          "Does drinking water boost metabolism and aid weight loss? We break down the science behind water intake, metabolism, satiety, and exercise performance."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide separates the short-term metabolic effect of water from long-term fat loss claims.",
+          "It explains that hydration can support satiety, exercise performance, and daily energy levels.",
+          "It recommends personalized water targets instead of a universal glass-count rule."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: water-intake."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "How much water should I drink daily?",
+        "answer": "The common recommendation is 8 glasses, but individual needs vary. Use a personalized estimate based on your weight, activity level, and climate."
+      },
+      {
+        "question": "Does cold water burn more calories?",
+        "answer": "Yes, slightly. Your body uses energy to warm cold water to body temperature. However, the effect is small and not significant for weight loss on its own."
+      }
+    ]
+  },
+  {
+    "slug": "waist-hip-ratio-guide",
+    "title": "Waist-to-Hip Ratio: A Better Health Indicator Than BMI",
+    "description": "Why waist-to-hip ratio predicts cardiovascular disease risk better than BMI. Learn about abdominal obesity, measurement methods, and how to assess your health using WHR.",
+    "category": "Guides",
+    "publishedAt": "2026-04-22",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "waist-hip-ratio",
+      "bmi-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "People with normal BMI but excessive waist circumference may face higher cardiovascular risk than those with higher BMI but normal waist size.",
+          "Why waist-to-hip ratio predicts cardiovascular disease risk better than BMI. Learn about abdominal obesity, measurement methods, and how to assess your health using WHR."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide explains why fat distribution can matter more than body weight alone.",
+          "It contrasts apple-shaped and pear-shaped fat patterns through the waist-to-hip ratio.",
+          "It gives measurement guidance for waist and hip circumference so the ratio is consistent."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: waist-hip-ratio, bmi-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Why is waist-hip ratio better than BMI?",
+        "answer": "WHR specifically measures abdominal fat, which is more strongly linked to heart disease and diabetes than total body weight. BMI cannot distinguish between harmful belly fat and harmless fat stored elsewhere."
+      },
+      {
+        "question": "How do I measure waist and hip correctly?",
+        "answer": "Waist: measure at the narrowest point, usually just above the belly button. Hip: measure at the widest point of your buttocks. Use a flexible tape measure, keep it level, and do not pull too tight."
+      }
+    ]
+  },
+  {
+    "slug": "fat-loss-vs-weight-loss",
+    "title": "Fat Loss vs Weight Loss: The Difference Matters",
+    "description": "Fat loss and weight loss are completely different concepts. Learn why the scale can lie, and how to track body changes scientifically.",
+    "category": "Guides",
+    "publishedAt": "2026-05-02",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "body-fat-calculator",
+      "bmi-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "The number on the scale has not moved, but that does not mean you are not making progress.",
+          "Fat loss and weight loss are completely different concepts. Learn why the scale can lie, and how to track body changes scientifically."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide defines weight loss as a change in total mass, including water and muscle.",
+          "It defines fat loss as the more useful goal when body composition is the real outcome.",
+          "It recommends tracking body fat, measurements, strength, and photos rather than scale weight alone."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: body-fat-calculator, bmi-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Why is my weight going up but I look leaner?",
+        "answer": "This is common when starting strength training. Muscle is denser than fat, so you may gain muscle weight while losing fat volume. Use body measurements and progress photos alongside the scale for a complete picture."
+      },
+      {
+        "question": "How do I know if I am losing fat or muscle?",
+        "answer": "Track body fat percentage, strength levels, and body measurements. If your lifts are maintained or increasing while losing weight, you are likely preserving muscle."
+      }
+    ]
+  },
+  {
+    "slug": "what-is-compound-interest",
+    "title": "What Is Compound Interest? Why It Matters",
+    "description": "Learn what compound interest is, how it works, see real examples, and understand why starting early makes a massive difference in wealth building.",
+    "category": "Guides",
+    "publishedAt": "2026-05-18",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "compound-interest",
+      "apy-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Einstein allegedly called compound interest the \"eighth wonder of the world.\" True or not, the math behind it is undeniably powerful.",
+          "Learn what compound interest is, how it works, see real examples, and understand why starting early makes a massive difference in wealth building."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide contrasts simple interest with compound interest and its interest-on-interest effect.",
+          "It uses a start-early investing example to show how time changes the ending balance.",
+          "It introduces the Rule of 72 as a quick way to estimate doubling time."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: compound-interest, apy-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "How is compound interest different from simple interest?",
+        "answer": "Simple interest is calculated only on the principal amount. Compound interest is calculated on the principal plus accumulated interest. Over time, compound interest grows exponentially while simple interest grows linearly."
+      },
+      {
+        "question": "What is the best compound frequency?",
+        "answer": "More frequent compounding yields slightly higher returns. However, the difference between monthly and daily compounding is usually small. Focus more on the interest rate than the frequency."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-calculate-mortgage",
+    "title": "How to Calculate Mortgage Payments",
+    "description": "Understanding how mortgage payments are calculated helps you budget and compare loan options. We break down the formula, amortization, and key factors.",
+    "category": "Guides",
+    "publishedAt": "2026-05-15",
+    "readTimeMinutes": 7,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "mortgage-calculator",
+      "loan-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Buying a home is the biggest purchase most people ever make. Understanding how payments are calculated helps you make smarter loan decisions.",
+          "Understanding how mortgage payments are calculated helps you budget and compare loan options. We break down the formula, amortization, and key factors."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide explains the amortization formula behind a fixed mortgage payment.",
+          "It shows how principal, interest rate, and loan term change the monthly payment and total interest.",
+          "It calls out down payment, PMI, and extra principal payments as practical levers for borrowers."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: mortgage-calculator, loan-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Should I choose a 15-year or 30-year mortgage?",
+        "answer": "15-year mortgages have lower rates and save tens of thousands in interest, but higher monthly payments. Choose 15-year if you can comfortably afford the payments. Otherwise, take 30-year and make extra principal payments when possible."
+      },
+      {
+        "question": "How much should my down payment be?",
+        "answer": "Ideally 20% to avoid Private Mortgage Insurance. However, many programs allow 3-10% down. Consider your emergency fund, closing costs, and maintenance reserves when deciding your down payment amount."
+      }
+    ]
+  },
+  {
+    "slug": "how-to-calculate-loan",
+    "title": "How to Calculate Loan Payments",
+    "description": "Learn how loan payments are calculated, amortization principles, and how interest rates and terms affect your total borrowing cost.",
+    "category": "Guides",
+    "publishedAt": "2026-05-05",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "loan-calculator",
+      "mortgage-calculator"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Understanding payment calculations helps you choose the most cost-effective loan option.",
+          "Learn how loan payments are calculated, amortization principles, and how interest rates and terms affect your total borrowing cost."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide uses the same amortization logic as mortgages for personal and auto loans.",
+          "It shows how principal, APR, and term combine into a predictable monthly payment.",
+          "It explains why larger down payments, shorter terms, and extra principal payments reduce interest."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: loan-calculator, mortgage-calculator."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "What is the difference between interest rate and APR?",
+        "answer": "The interest rate is the cost of borrowing the principal. APR includes the interest rate plus fees and closing costs. APR gives you a more accurate comparison between different loan offers."
+      },
+      {
+        "question": "Should I choose a longer or shorter loan term?",
+        "answer": "Shorter terms have higher monthly payments but lower total interest. Choose the shortest term you can comfortably afford. If cash flow is tight, a longer term provides flexibility, and you can always make extra payments."
+      }
+    ]
+  },
+  {
+    "slug": "retirement-4-percent-rule",
+    "title": "How to Use the 4% Rule for Retirement",
+    "description": "Learn the origins, principles, limitations, and practical applications of the 4% retirement withdrawal rule.",
+    "category": "Guides",
+    "publishedAt": "2026-04-25",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "retirement-calculator",
+      "compound-interest"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "The 4% rule is the most famous rule of thumb in retirement planning. Where did it come from? Is it reliable?",
+          "Learn the origins, principles, limitations, and practical applications of the 4% retirement withdrawal rule."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide summarizes the origin of the 4% withdrawal rule and the Trinity Study framing.",
+          "It explains the core idea: withdraw 4% in year one, then adjust that amount for inflation.",
+          "It covers limitations such as market sequence risk, long retirements, and lower expected returns."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: retirement-calculator, compound-interest."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Is the 4% rule still valid today?",
+        "answer": "Many experts now recommend 3.3-3.5% for 30-year retirements due to lower expected future returns and longer lifespans. The original 4% rule was based on historical US data that may not repeat."
+      },
+      {
+        "question": "Does the 4% rule account for inflation?",
+        "answer": "Yes. You increase your withdrawal each year by inflation. So if you withdraw $40,000 in year 1 and inflation is 3%, you withdraw $41,200 in year 2. The initial 4% is calculated once at retirement."
+      }
+    ]
+  },
+  {
+    "slug": "retirement-saving-guide",
+    "title": "How Much Do You Need to Retire?",
+    "description": "Learn how much you need to save for retirement, the 4% withdrawal rule, and strategies to accelerate your retirement savings.",
+    "category": "Guides",
+    "publishedAt": "2026-05-08",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "retirement-calculator",
+      "investment-goal"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Retirement savings is one of the most stressful financial questions. The good news: there is a simple way to estimate what you need.",
+          "Learn how much you need to save for retirement, the 4% withdrawal rule, and strategies to accelerate your retirement savings."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide uses the 4% rule to turn annual spending into a retirement savings target.",
+          "It compares lifestyle-based savings needs instead of assuming the same number for everyone.",
+          "It suggests savings-rate increases, expense control, and investment planning as acceleration levers."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: retirement-calculator, investment-goal."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "How much do I need to retire comfortably?",
+        "answer": "A common rule is 25x your annual expenses. If you need $50,000/year, aim for $1.25 million. However, this varies by lifestyle, location, healthcare needs, and desired retirement age."
+      },
+      {
+        "question": "What if I started saving late?",
+        "answer": "It is never too late. Increase your savings rate to 20-30%, delay retirement by a few years, downsize your lifestyle, or consider part-time work in early retirement."
+      }
+    ]
+  },
+  {
+    "slug": "rule-of-72-explained",
+    "title": "What Is the Rule of 72? How to Use It",
+    "description": "The Rule of 72 is a simple mental math trick to estimate how long it takes to double your money. Learn when it works and how accurate it is.",
+    "category": "Guides",
+    "publishedAt": "2026-05-18",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "rule-of-72",
+      "compound-interest"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "A simple mental math trick investors have used for centuries to estimate doubling time.",
+          "The Rule of 72 is a simple mental math trick to estimate how long it takes to double your money. Learn when it works and how accurate it is."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide explains the shortcut: years to double equals 72 divided by annual return percent.",
+          "It describes where the approximation is accurate and when a more precise calculator is better.",
+          "It also reverses the formula to estimate the annual return needed for a target doubling time."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: rule-of-72, compound-interest."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Does the Rule of 72 work for any investment?",
+        "answer": "It works for anything that compounds: savings accounts, bonds, stocks, GDP growth, and inflation. It is an approximation, but accurate enough for quick mental math across most realistic return ranges."
+      },
+      {
+        "question": "Why 72 and not a round number?",
+        "answer": "72 is divisible by many numbers, making mental math easy. For very low rates, 70 is slightly more accurate. For high rates, 69.3 is mathematically precise."
+      }
+    ]
+  },
+  {
+    "slug": "what-is-roi",
+    "title": "What Is ROI? How to Calculate Return on Investment",
+    "description": "ROI is the simplest, most universal metric for evaluating whether an investment is worth it. Learn the calculation method and real-world applications.",
+    "category": "Guides",
+    "publishedAt": "2026-05-10",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "roi-calculator",
+      "compound-interest"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Whether you are buying stocks, real estate, or starting a business, ROI is the most basic metric for judging if the money was well spent.",
+          "ROI is the simplest, most universal metric for evaluating whether an investment is worth it. Learn the calculation method and real-world applications."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide defines ROI as gain minus cost, divided by cost, expressed as a percentage.",
+          "It applies ROI to stocks, real estate, business projects, and marketing decisions.",
+          "It warns that ROI ignores time and risk unless you add more context."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: roi-calculator, compound-interest."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "What is a good ROI?",
+        "answer": "It depends on the investment type and risk level. Stocks historically return 7-10% annually. Real estate often yields 8-12%. A good ROI should exceed the risk-free rate plus a suitable risk premium."
+      },
+      {
+        "question": "Does ROI include all costs?",
+        "answer": "It should, but often does not. Include purchase price, transaction fees, maintenance costs, taxes, and opportunity cost. Forgetting hidden costs is the most common mistake when calculating ROI."
+      }
+    ]
+  },
+  {
+    "slug": "what-is-good-roi",
+    "title": "What Is a Good ROI? Benchmarks by Investment Type",
+    "description": "Learn what ROI is considered good for stocks, real estate, bonds, and business investments. Reasonable return expectations vary widely by asset class.",
+    "category": "Guides",
+    "publishedAt": "2026-05-01",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "roi-calculator",
+      "compound-interest"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "\"Good\" ROI depends entirely on what you are investing in. Stocks, real estate, bonds, and startups have completely different reasonable return expectations.",
+          "Learn what ROI is considered good for stocks, real estate, bonds, and business investments. Reasonable return expectations vary widely by asset class."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide compares ROI expectations across stocks, real estate, bonds, and savings.",
+          "It separates nominal returns from real returns after inflation.",
+          "It frames high returns as a risk signal, especially when they are promised consistently."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: roi-calculator, compound-interest."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Is 5% ROI good?",
+        "answer": "For low-risk investments like bonds or savings accounts, 5% is excellent. For stocks, 5% is below the historical average of 7-10%. Context matters: compare ROI to similar investments with similar risk levels."
+      },
+      {
+        "question": "Can I get 20% ROI consistently?",
+        "answer": "Very few investors achieve 20% consistently over long periods. Promises of 20%+ returns are often signs of scams or extremely high-risk investments."
+      }
+    ]
+  },
+  {
+    "slug": "apy-vs-apr",
+    "title": "APY vs APR: What Is the Difference?",
+    "description": "APY and APR sound similar but mean very different things. Learn which metric matters for savings, loans, and credit cards.",
+    "category": "Guides",
+    "publishedAt": "2026-05-12",
+    "readTimeMinutes": 5,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "apy-calculator",
+      "compound-interest"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "These two acronyms differ by just one letter, but choosing the wrong one could cost you thousands.",
+          "APY and APR sound similar but mean very different things. Learn which metric matters for savings, loans, and credit cards."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide defines APR as the annual borrowing rate before compounding.",
+          "It defines APY as the annual yield after compounding, which is more useful for savings products.",
+          "It gives a simple memory rule: APR is usually what you pay, APY is what you earn."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: apy-calculator, compound-interest."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "Which is better for comparing savings accounts?",
+        "answer": "Always use APY for savings. Two accounts can have the same APR but different APYs if they compound at different frequencies. APY reflects the actual amount you will earn in a year."
+      },
+      {
+        "question": "Why do credit cards show APR instead of APY?",
+        "answer": "Credit cards use APR because regulations require it, and it makes the rate appear lower than the actual cost. Credit card interest compounds daily, so the effective APY is typically 1-2% higher than the stated APR."
+      }
+    ]
+  },
+  {
+    "slug": "debt-avalanche-vs-snowball",
+    "title": "Debt Avalanche vs Snowball: Which Is Better?",
+    "description": "Compare the debt avalanche and debt snowball methods. Learn which saves the most money and which keeps you motivated to become debt-free.",
+    "category": "Guides",
+    "publishedAt": "2026-05-18",
+    "readTimeMinutes": 6,
+    "author": "VitalCalc Editorial Team",
+    "featuredToolSlugs": [
+      "debt-payoff",
+      "compound-interest"
+    ],
+    "sections": [
+      {
+        "heading": "Guide overview",
+        "paragraphs": [
+          "Two popular debt payoff methods. One saves the most money. The other gives you the fastest sense of accomplishment.",
+          "Compare the debt avalanche and debt snowball methods. Learn which saves the most money and which keeps you motivated to become debt-free."
+        ]
+      },
+      {
+        "heading": "Key points from the source guide",
+        "paragraphs": [
+          "The source guide explains avalanche as paying extra toward the highest-interest debt first.",
+          "It explains snowball as paying extra toward the smallest balance first for motivational wins.",
+          "It recommends choosing the strategy you can stick with, then comparing the interest tradeoff."
+        ]
+      },
+      {
+        "heading": "Try the related Toolars calculators",
+        "paragraphs": [
+          "This migrated guide links to these Toolars tools: debt-payoff, compound-interest."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "question": "How much money does avalanche save vs snowball?",
+        "answer": "It depends on your debt amounts and rates. For typical credit card debt, avalanche can save hundreds to thousands in interest. Use a debt payoff calculator to see the exact difference for your situation."
+      },
+      {
+        "question": "What if I have only one debt?",
+        "answer": "Focus on paying it off as fast as possible. Consider a balance transfer to a 0% APR card, or a debt consolidation loan at a lower rate. Even one debt can be tackled faster with the right strategy."
+      }
+    ]
+  }
+]

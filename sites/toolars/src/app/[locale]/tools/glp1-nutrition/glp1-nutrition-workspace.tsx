@@ -1,37 +1,43 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Heart } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateGlp1Nutrition,
   defaultGlp1NutritionScenario,
-  glp1ActivityLabels,
-  glp1MedicationLabels,
   type Glp1Medication,
   type Glp1NutritionInput,
-  type Glp1NutritionResult,
   type Glp1NutritionSex
 } from "@/lib/tools/glp1-nutrition";
 
 const storageKey = "toolars.glp1-nutrition.plan:v1";
 
 const trustRows = [
-  ["Local", "Nutrition context stays in this browser session", "local"],
-  ["Medical", "Targets require clinician and dietitian adjustment", "warn"],
-  ["Private", "Save stores only this local nutrition plan", ""]
+  { key: "local", tone: "local" },
+  { key: "medical", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const medicationNotes = [
-  "VitalCalc uses Mifflin-St Jeor BMR, TDEE x 0.75, and a sex-specific calorie floor.",
-  "Protein uses 1.4g/kg; water uses 35ml/kg plus 500ml above lightly active.",
-  "GLP-1 medication side effects, under-eating risk, and muscle loss need professional supervision."
-];
+const medicationNotes = ["model", "protein", "supervision"] as const;
+const sexOptions = ["male", "female"] as const;
+const medicationOptions = ["semaglutide", "tirzepatide", "liraglutide", "dulaglutide", "other"] as const;
+const activityOptions = [
+  { value: 1.2, key: "sedentary" },
+  { value: 1.375, key: "light" },
+  { value: 1.55, key: "moderate" },
+  { value: 1.725, key: "veryActive" }
+] as const;
 
 export function Glp1NutritionWorkspace() {
-  const t = useTranslations("tools.glp1-nutrition");
-  const [values, setValues] = useState<Glp1NutritionInput>(() => defaultGlp1NutritionScenario);
-  const [result, setResult] = useState<Glp1NutritionResult | null>(null);
+  const t = useTranslations("tools.glp1-nutrition.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/glp1-nutrition/about", localeCode);
+  const [values, setValues] = useState(defaultGlp1NutritionScenario);
+  const [result, setResult] = useState<ReturnType<typeof calculateGlp1Nutrition> | null>(null);
+  const activityKey = activityOptions.find((option) => option.value === Number(values.activityFactor))?.key ?? "light";
 
   const calculate = () => {
     setResult(calculateGlp1Nutrition(values));
@@ -51,23 +57,23 @@ export function Glp1NutritionWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="glp1-nutrition">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc GLP-1 nutrition workspace</span>
-        <h1>GLP-1 Nutrition Calculator</h1>
-        <p className="subtitle">Estimate calorie floor, protein, fiber, and hydration targets for clinician-supervised GLP-1 nutrition planning.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local nutrition model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/glp1-nutrition/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -76,48 +82,51 @@ export function Glp1NutritionWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Nutrition inputs</h2>
-              <p className="tool-description">Enter body profile, medication context, and activity level for source target estimates.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="glp1-nutrition-weight">
-              Weight (kg)
+              {t("fields.weightKg")}
               <input className="input" id="glp1-nutrition-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} step="0.1" type="number" value={values.weightKg} />
             </label>
             <label className="field-label" htmlFor="glp1-nutrition-height">
-              Height (cm)
+              {t("fields.heightCm")}
               <input className="input" id="glp1-nutrition-height" min={0} onChange={(event) => updateNumber("heightCm", event.target.value)} step="0.1" type="number" value={values.heightCm} />
             </label>
             <label className="field-label" htmlFor="glp1-nutrition-age">
-              Age
+              {t("fields.age")}
               <input className="input" id="glp1-nutrition-age" min={0} onChange={(event) => updateNumber("age", event.target.value)} type="number" value={values.age} />
             </label>
             <label className="field-label" htmlFor="glp1-nutrition-sex">
-              Sex
+              {t("fields.sex")}
               <select className="input" id="glp1-nutrition-sex" onChange={(event) => setValues((current) => ({ ...current, sex: event.target.value as Glp1NutritionSex }))} value={values.sex}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                {sexOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {t(`options.sex.${option}`)}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="field-label" htmlFor="glp1-nutrition-medication">
-              GLP-1 medication
+              {t("fields.medication")}
               <select className="input" id="glp1-nutrition-medication" onChange={(event) => setValues((current) => ({ ...current, medication: event.target.value as Glp1Medication }))} value={values.medication}>
-                {(Object.keys(glp1MedicationLabels) as Glp1Medication[]).map((key) => (
-                  <option key={key} value={key}>
-                    {glp1MedicationLabels[key]}
+                {medicationOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {t(`options.medication.${option}`)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="field-label" htmlFor="glp1-nutrition-activity">
-              Activity level
+              {t("fields.activityFactor")}
               <select className="input" id="glp1-nutrition-activity" onChange={(event) => updateNumber("activityFactor", event.target.value)} value={values.activityFactor}>
-                {Object.entries(glp1ActivityLabels).map(([factor, label]) => (
-                  <option key={factor} value={factor}>
-                    {label}
+                {activityOptions.map((option) => (
+                  <option key={option.key} value={option.value}>
+                    {t(`options.activityFactor.${option.key}`)}
                   </option>
                 ))}
               </select>
@@ -126,10 +135,10 @@ export function Glp1NutritionWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save nutrition plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate nutrition targets
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -137,73 +146,77 @@ export function Glp1NutritionWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Nutrition targets</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show minimum targets and activity context."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.calculatedDescription", { calorieFloor: result.formattedCalorieFloor, protein: result.proteinGrams })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Medical nutrition</span>
+            <span className="badge warn">{t("badges.medical")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedCalorieFloor ?? "0 kcal"}</strong>
-              <span>Calorie floor</span>
+              <strong>{result?.formattedCalorieFloor ?? t("metrics.emptyKcal")}</strong>
+              <span>{t("metrics.calorieFloor")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedProtein ?? "0 g"}</strong>
-              <span>Protein</span>
+              <strong>{result?.formattedProtein ?? t("metrics.emptyGrams")}</strong>
+              <span>{t("metrics.protein")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedWater ?? "0 ml"}</strong>
-              <span>Hydration</span>
+              <strong>{result?.formattedWater ?? t("metrics.emptyWater")}</strong>
+              <span>{t("metrics.hydration")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedFiber ?? "0 g"}</strong>
-              <span>Fiber</span>
+              <strong>{result?.formattedFiber ?? t("metrics.emptyGrams")}</strong>
+              <span>{t("metrics.fiber")}</span>
             </article>
           </div>
 
           <div className="profile-list" style={{ marginTop: 18 }}>
             <div className="profile-row">
-              <span>BMR</span>
-              <strong>{result?.formattedBmr ?? "0 kcal"}</strong>
+              <span>{t("metrics.bmr")}</span>
+              <strong>{result?.formattedBmr ?? t("metrics.emptyKcal")}</strong>
             </div>
             <div className="profile-row">
-              <span>Medication</span>
-              <strong>{result?.medicationLabel ?? glp1MedicationLabels[values.medication]}</strong>
+              <span>{t("metrics.medication")}</span>
+              <strong>{t(`options.medication.${values.medication}`)}</strong>
             </div>
             <div className="profile-row">
-              <span>Activity</span>
-              <strong>{result?.activityLabel ?? glp1ActivityLabels[String(values.activityFactor)]}</strong>
+              <span>{t("metrics.activity")}</span>
+              <strong>{t(`options.activityFactor.${activityKey}`)}</strong>
             </div>
           </div>
 
           <div className="llm-plan-callout">
             <Heart size={18} aria-hidden="true" />
             <span>
-              <strong>{result ? "Use targets as a clinician-supervised floor, not a diet prescription." : "Waiting for calculation"}</strong>
-              <small>{result ? "Escalate persistent nausea, very low intake, rapid weakness, or dehydration symptoms to a clinician." : "Calculate first to build the target summary."}</small>
+              <strong>{result ? t("callout.calculatedTitle") : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Medication notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {medicationNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Nutrition inputs stay local. Results are educational and should not replace advice from a healthcare provider.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

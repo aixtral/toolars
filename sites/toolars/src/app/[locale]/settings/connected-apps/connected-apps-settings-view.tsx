@@ -6,66 +6,103 @@ import { Activity, AlertTriangle, CheckCircle2, Cloud, Globe2, Link2, Plug, Refr
 import { useDialogFocus } from "@/components/core/use-dialog-focus";
 import type { KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent } from "react";
 
-type IntegrationStatus = "Connected" | "Active" | "Disconnected";
+type IntegrationId = "googleDrive" | "browserExtension" | "notion";
+type IntegrationStatus = "connected" | "active" | "disconnected";
 
 type Integration = {
-  name: string;
-  description: string;
+  id: IntegrationId;
   scopes: string[];
   status: IntegrationStatus;
-  lastSync: string;
 };
 
 const initialIntegrations: Integration[] = [
   {
-    name: "Google Drive",
-    description: "Import PDFs, spreadsheets, and shared documents into local-first workflows.",
+    id: "googleDrive",
     scopes: ["files.read", "exports.write"],
-    status: "Connected",
-    lastSync: "18 minutes ago"
+    status: "connected"
   },
   {
-    name: "Browser extension",
-    description: "Send selected page text to Toolars tools with explicit AI consent gates.",
+    id: "browserExtension",
     scopes: ["activeTab", "clipboard.write"],
-    status: "Active",
-    lastSync: "Live"
+    status: "active"
   },
   {
-    name: "Notion",
-    description: "Save summaries, prompts, and workflow outputs back to team knowledge pages.",
+    id: "notion",
     scopes: ["pages.read", "pages.write"],
-    status: "Connected",
-    lastSync: "Yesterday"
+    status: "connected"
   }
 ];
 
-const activityRows = [
-  ["18 minutes ago", "Google Drive synced quarterly-report.pdf"],
-  ["2 hours ago", "Browser extension sent a page excerpt to JSON Repair"],
-  ["Yesterday", "Notion saved PDF Summary Workflow output"]
-] as const;
+const activityRows = ["googleDriveSync", "browserJsonRepair", "notionPdfSummary"] as const;
+type ActivityRowId = (typeof activityRows)[number];
 
-const healthRows = [
-  ["OAuth tokens", "Healthy"],
-  ["Extension version", "Current"],
-  ["Sync queue", "0 pending"]
-] as const;
+const healthRows = ["oauthTokens", "extensionVersion", "syncQueue"] as const;
+type HealthRowId = (typeof healthRows)[number];
+
+type StatusNote =
+  | { kind: "initial" }
+  | { kind: "disconnected"; id: IntegrationId }
+  | { kind: "reconnected"; id: IntegrationId };
 
 export function ConnectedAppsSettingsView() {
   const t = useTranslations("settings.connected-apps");
-  const [integrations, setIntegrations] = useState<Integration[]>(initialIntegrations);
-  const [status, setStatus] = useState("All connected apps are scoped and monitored.");
-  const [pendingDisconnect, setPendingDisconnect] = useState<string | null>(null);
+  const integrationCopy = {
+    googleDrive: {
+      name: t("integrations.googleDrive.name"),
+      description: t("integrations.googleDrive.description"),
+      lastSync: t("integrations.googleDrive.lastSync")
+    },
+    browserExtension: {
+      name: t("integrations.browserExtension.name"),
+      description: t("integrations.browserExtension.description"),
+      lastSync: t("integrations.browserExtension.lastSync")
+    },
+    notion: {
+      name: t("integrations.notion.name"),
+      description: t("integrations.notion.description"),
+      lastSync: t("integrations.notion.lastSync")
+    }
+  } satisfies Record<IntegrationId, { name: string; description: string; lastSync: string }>;
+  const activityCopy = {
+    googleDriveSync: {
+      time: t("activity.googleDriveSync.time"),
+      detail: t("activity.googleDriveSync.detail")
+    },
+    browserJsonRepair: {
+      time: t("activity.browserJsonRepair.time"),
+      detail: t("activity.browserJsonRepair.detail")
+    },
+    notionPdfSummary: {
+      time: t("activity.notionPdfSummary.time"),
+      detail: t("activity.notionPdfSummary.detail")
+    }
+  } satisfies Record<ActivityRowId, { time: string; detail: string }>;
+  const healthCopy = {
+    oauthTokens: {
+      label: t("health.oauthTokens.label"),
+      value: t("health.oauthTokens.value")
+    },
+    extensionVersion: {
+      label: t("health.extensionVersion.label"),
+      value: t("health.extensionVersion.value")
+    },
+    syncQueue: {
+      label: t("health.syncQueue.label"),
+      value: t("health.syncQueue.value")
+    }
+  } satisfies Record<HealthRowId, { label: string; value: string }>;
+  const [integrations, setIntegrations] = useState(initialIntegrations as Integration[]);
+  const [status, setStatus] = useState({ kind: "initial" } as StatusNote);
+  const [pendingDisconnect, setPendingDisconnect] = useState(null as IntegrationId | null);
   const {
     dialogRef: disconnectDialogRef,
     rememberTrigger: rememberDisconnectTrigger,
     restoreTriggerFocus: restoreDisconnectTriggerFocus
   } = useDialogFocus(Boolean(pendingDisconnect));
 
-  function openDisconnectDialog(event: ReactMouseEvent<HTMLButtonElement>, name: string) {
+  function openDisconnectDialog(event: ReactMouseEvent<HTMLButtonElement>, id: IntegrationId) {
     rememberDisconnectTrigger(event.currentTarget);
-    setPendingDisconnect(name);
+    setPendingDisconnect(id);
   }
 
   function closeDisconnectDialog() {
@@ -79,28 +116,52 @@ export function ConnectedAppsSettingsView() {
     }
   }
 
-  function disconnectApp(name: string) {
-    setIntegrations((current) => current.map((app) => (app.name === name ? { ...app, status: "Disconnected" } : app)));
-    setStatus(`${name} disconnected.`);
+  function disconnectApp(id: IntegrationId) {
+    setIntegrations((current) => current.map((app) => (app.id === id ? { ...app, status: "disconnected" } : app)));
+    setStatus({ kind: "disconnected", id });
     closeDisconnectDialog();
   }
 
-  function reconnectApp(name: string) {
-    setIntegrations((current) => current.map((app) => (app.name === name ? { ...app, status: "Connected" } : app)));
-    setStatus(`${name} reconnected.`);
+  function reconnectApp(id: IntegrationId) {
+    setIntegrations((current) => current.map((app) => (app.id === id ? { ...app, status: "connected" } : app)));
+    setStatus({ kind: "reconnected", id });
   }
+
+  function statusLabel(statusValue: IntegrationStatus) {
+    switch (statusValue) {
+      case "active":
+        return t("statusLabels.active");
+      case "connected":
+        return t("statusLabels.connected");
+      case "disconnected":
+        return t("statusLabels.disconnected");
+    }
+  }
+
+  function statusMessage() {
+    switch (status.kind) {
+      case "disconnected":
+        return t("statusMessages.disconnected", { name: integrationCopy[status.id].name });
+      case "reconnected":
+        return t("statusMessages.reconnected", { name: integrationCopy[status.id].name });
+      case "initial":
+        return t("statusMessages.initial");
+    }
+  }
+
+  const pendingDisconnectName = pendingDisconnect ? integrationCopy[pendingDisconnect].name : "";
 
   return (
     <div className="settings-subpage connected-apps-settings-page" data-connected-apps-settings-page="true">
       <section className="section landing-hero settings-subpage-hero">
-        <span className="eyebrow">Settings</span>
+        <span className="eyebrow">{t("sections.eyebrow")}</span>
         <div className="landing-section-head">
           <span>
             <h1 className="title">{t("hero.title")}</h1>
-            <p className="subtitle">Manage app integrations, scopes, sync policy, extension status, and integration health.</p>
+            <p className="subtitle">{t("hero.subtitle")}</p>
           </span>
           <span className="settings-trust-note">
-            <Plug size={15} aria-hidden="true" /> 3 integrations monitored
+            <Plug size={15} aria-hidden="true" /> {t("trustNote", { count: integrations.length })}
           </span>
         </div>
       </section>
@@ -111,43 +172,48 @@ export function ConnectedAppsSettingsView() {
             <div className="landing-section-head">
               <span>
                 <h2>{t("sections.integrations")}</h2>
-                <p className="tool-description">Review connection state, last sync, and granted access before routing content into workflows.</p>
+                <p className="tool-description">{t("integrationsCard.description")}</p>
               </span>
-              <span className="badge local">OAuth scoped</span>
+              <span className="badge local">{t("integrationsCard.badge")}</span>
             </div>
             <div className="integration-app-list">
-              {integrations.map((app) => (
-                <article className={`integration-app-row ${app.status === "Disconnected" ? "is-disconnected" : ""}`} key={app.name}>
-                  <span className="icon-tile green">
-                    {app.status === "Disconnected" ? <Unplug size={18} aria-hidden="true" /> : <Plug size={18} aria-hidden="true" />}
-                  </span>
-                  <div className="integration-app-content">
-                    <div className="api-key-head">
-                      <strong>{app.name}</strong>
-                      <span className={app.status === "Disconnected" ? "badge warn" : "badge local"}>{app.status}</span>
+              {integrations.map((app) => {
+                const copy = integrationCopy[app.id];
+                const isDisconnected = app.status === "disconnected";
+
+                return (
+                  <article className={`integration-app-row ${isDisconnected ? "is-disconnected" : ""}`} key={app.id}>
+                    <span className="icon-tile green">
+                      {isDisconnected ? <Unplug size={18} aria-hidden="true" /> : <Plug size={18} aria-hidden="true" />}
+                    </span>
+                    <div className="integration-app-content">
+                      <div className="api-key-head">
+                        <strong>{copy.name}</strong>
+                        <span className={isDisconnected ? "badge warn" : "badge local"}>{statusLabel(app.status)}</span>
+                      </div>
+                      <p>{copy.description}</p>
+                      <div className="api-key-meta">
+                        <span>{t("metadata.lastSync", { time: copy.lastSync })}</span>
+                        <span>{app.scopes.join(", ")}</span>
+                      </div>
                     </div>
-                    <p>{app.description}</p>
-                    <div className="api-key-meta">
-                      <span>Last sync {app.lastSync}</span>
-                      <span>{app.scopes.join(", ")}</span>
+                    <div className="integration-app-actions">
+                      {isDisconnected ? (
+                        <button className="button button-outline-neutral" onClick={() => reconnectApp(app.id)} type="button">
+                          <RefreshCw size={15} aria-hidden="true" /> {t("actions.reconnect", { name: copy.name })}
+                        </button>
+                      ) : (
+                        <button className="button button-outline-neutral" onClick={(event) => openDisconnectDialog(event, app.id)} type="button">
+                          <Unplug size={15} aria-hidden="true" /> {t("actions.disconnect", { name: copy.name })}
+                        </button>
+                      )}
                     </div>
-                  </div>
-                  <div className="integration-app-actions">
-                    {app.status === "Disconnected" ? (
-                      <button className="button button-outline-neutral" onClick={() => reconnectApp(app.name)} type="button">
-                        <RefreshCw size={15} aria-hidden="true" /> Reconnect {app.name}
-                      </button>
-                    ) : (
-                      <button className="button button-outline-neutral" onClick={(event) => openDisconnectDialog(event, app.name)} type="button">
-                        <Unplug size={15} aria-hidden="true" /> Disconnect {app.name}
-                      </button>
-                    )}
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
             <p className="settings-status-note" aria-live="polite">
-              <CheckCircle2 size={15} aria-hidden="true" /> {status}
+              <CheckCircle2 size={15} aria-hidden="true" /> {statusMessage()}
             </p>
           </section>
 
@@ -156,36 +222,36 @@ export function ConnectedAppsSettingsView() {
             <div className="scope-grid">
               <article>
                 <Cloud size={16} aria-hidden="true" />
-                <strong>{t("labels.Drive imports")}</strong>
-                <p>Read selected files only when a workflow step asks for external content.</p>
+                <strong>{t("scopeCards.driveImports.title")}</strong>
+                <p>{t("scopeCards.driveImports.description")}</p>
               </article>
               <article>
                 <Globe2 size={16} aria-hidden="true" />
-                <strong>{t("labels.Browser capture")}</strong>
-                <p>Send selected page text to local tools and request consent before AI processing.</p>
+                <strong>{t("scopeCards.browserCapture.title")}</strong>
+                <p>{t("scopeCards.browserCapture.description")}</p>
               </article>
               <article>
                 <Link2 size={16} aria-hidden="true" />
-                <strong>{t("labels.Output exports")}</strong>
-                <p>Write approved summaries and saved outputs back to chosen workspace destinations.</p>
+                <strong>{t("scopeCards.outputExports.title")}</strong>
+                <p>{t("scopeCards.outputExports.description")}</p>
               </article>
               <article>
                 <ShieldCheck size={16} aria-hidden="true" />
-                <strong>{t("labels.Security review")}</strong>
-                <p>Rotate tokens, review scope changes, and disconnect apps from one place.</p>
+                <strong>{t("scopeCards.securityReview.title")}</strong>
+                <p>{t("scopeCards.securityReview.description")}</p>
               </article>
             </div>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.connectNew")}</h2>
-            <p className="tool-description">Add Slack, Linear, Dropbox, or a private MCP connector after reviewing the requested scopes.</p>
+            <p className="tool-description">{t("connectNew.description")}</p>
             <div className="settings-button-row">
               <button className="button button-solid" type="button">
-                <Plug size={15} aria-hidden="true" /> Connect Slack
+                <Plug size={15} aria-hidden="true" /> {t("connectNew.connectSlack")}
               </button>
               <button className="button button-outline-neutral" type="button">
-                Request private connector
+                {t("connectNew.requestPrivateConnector")}
               </button>
             </div>
           </section>
@@ -197,18 +263,18 @@ export function ConnectedAppsSettingsView() {
             <div className="settings-row-list compact">
               <div className="settings-detail-row compact-row">
                 <RefreshCw size={15} aria-hidden="true" />
-                <span>Manual review before AI workflows</span>
-                <span className="badge local">On</span>
+                <span>{t("syncPolicy.manualReview.label")}</span>
+                <span className="badge local">{t("syncPolicy.manualReview.value")}</span>
               </div>
               <div className="settings-detail-row compact-row">
                 <ShieldCheck size={15} aria-hidden="true" />
-                <span>Auto-expire unused tokens</span>
-                <span className="badge local">90 days</span>
+                <span>{t("syncPolicy.tokenExpiry.label")}</span>
+                <span className="badge local">{t("syncPolicy.tokenExpiry.value")}</span>
               </div>
               <div className="settings-detail-row compact-row">
                 <Cloud size={15} aria-hidden="true" />
-                <span>File sync mode</span>
-                <span className="badge">Selected files</span>
+                <span>{t("syncPolicy.fileSync.label")}</span>
+                <span className="badge">{t("syncPolicy.fileSync.value")}</span>
               </div>
             </div>
           </section>
@@ -216,12 +282,12 @@ export function ConnectedAppsSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.appActivity")}</h2>
             <div className="key-activity-list">
-              {activityRows.map(([time, detail]) => (
-                <article key={`${time}-${detail}`}>
+              {activityRows.map((activityId) => (
+                <article key={activityId}>
                   <Activity size={15} aria-hidden="true" />
                   <span>
-                    <strong>{time}</strong>
-                    <small>{detail}</small>
+                    <strong>{activityCopy[activityId].time}</strong>
+                    <small>{activityCopy[activityId].detail}</small>
                   </span>
                 </article>
               ))}
@@ -231,11 +297,11 @@ export function ConnectedAppsSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.integrationHealth")}</h2>
             <div className="settings-row-list compact">
-              {healthRows.map(([label, value]) => (
-                <div className="settings-detail-row compact-row" key={label}>
+              {healthRows.map((healthId) => (
+                <div className="settings-detail-row compact-row" key={healthId}>
                   <CheckCircle2 size={15} aria-hidden="true" />
-                  <span>{label}</span>
-                  <span className="badge local">{value}</span>
+                  <span>{healthCopy[healthId].label}</span>
+                  <span className="badge local">{healthCopy[healthId].value}</span>
                 </div>
               ))}
             </div>
@@ -256,18 +322,18 @@ export function ConnectedAppsSettingsView() {
             <span className="icon-tile amber">
               <AlertTriangle size={20} aria-hidden="true" />
             </span>
-            <h2 id="disconnect-app-title">Disconnect {pendingDisconnect}?</h2>
-            <p>{pendingDisconnect} will stop syncing saved workflow outputs until you reconnect it.</p>
+            <h2 id="disconnect-app-title">{t("dialog.title", { name: pendingDisconnectName })}</h2>
+            <p>{t("dialog.description", { name: pendingDisconnectName })}</p>
             <div className="states-alert amber">
               <AlertTriangle size={16} aria-hidden="true" />
-              <span>Existing saved Toolars outputs stay in your workspace.</span>
+              <span>{t("dialog.retention")}</span>
             </div>
             <div className="settings-button-row">
               <button className="button button-outline-neutral" onClick={closeDisconnectDialog} type="button">
-                Cancel
+                {t("dialog.cancel")}
               </button>
               <button className="button button-danger" onClick={() => disconnectApp(pendingDisconnect)} type="button">
-                Disconnect app
+                {t("dialog.confirm")}
               </button>
             </div>
           </section>

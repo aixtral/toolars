@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Coffee, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateDrinkCalories,
   defaultDrinkCaloriesScenario,
@@ -15,21 +16,27 @@ import {
 const storageKey = "toolars.drink-calories.plan:v1";
 
 const trustRows = [
-  ["Local", "Drink choices stay in this browser session", "local"],
-  ["Nutrition", "Vendor recipes and portion sizes vary", "warn"],
-  ["Private", "Save stores only this drink plan locally", ""]
+  { key: "local", tone: "local" },
+  { key: "nutrition", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const drinkNotes = [
-  "VitalCalc uses calories and sugar per 100ml from common beverage references.",
-  "Steps to burn uses the source estimate of about 0.05 kcal per step.",
-  "WHO recommends keeping added sugar around 25g per day; many sweet drinks exceed that alone."
-];
+  "references",
+  "steps",
+  "who"
+] as const;
 
 export function DrinkCaloriesWorkspace() {
-  const t = useTranslations("tools.drink-calories");
-  const [values, setValues] = useState<DrinkCaloriesInput>(() => defaultDrinkCaloriesScenario);
-  const [result, setResult] = useState<DrinkCaloriesResult | null>(null);
+  const t = useTranslations("tools.drink-calories.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [values, setValues] = useState(defaultDrinkCaloriesScenario);
+  const [result, setResult] = useState(null as DrinkCaloriesResult | null);
+  const effectiveServingSizeMl = getEffectiveServingSizeMl(values);
+  const effectiveCups = getEffectiveCups(values);
+  const cupLabel = effectiveCups === 1 ? t("units.cup") : t("units.cups");
 
   const calculate = () => {
     setResult(calculateDrinkCalories(values));
@@ -49,23 +56,23 @@ export function DrinkCaloriesWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="drink-calories">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc drink nutrition workspace</span>
-        <h1>Drink Calories Calculator</h1>
-        <p className="subtitle">Estimate liquid calories, sugar, steps to burn, and daily calorie percentage.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/drink-calories/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/drink-calories/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -74,43 +81,43 @@ export function DrinkCaloriesWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Drink inputs</h2>
-              <p className="tool-description">Use source drink references, serving size, and cups today.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="drink-calories-type">
-              Drink type
+              {t("fields.drinkType")}
               <select className="input" id="drink-calories-type" onChange={(event) => setValues((current) => ({ ...current, drinkId: event.target.value as DrinkCaloriesId }))} value={values.drinkId}>
                 {drinkCaloriesReferences.map((drink) => (
                   <option key={drink.id} value={drink.id}>
-                    {drink.label}
+                    {t(`drinkOptions.${drink.id}`)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="field-label" htmlFor="drink-calories-size">
-              Serving size (ml)
+              {t("fields.servingSize")}
               <input className="input" id="drink-calories-size" min={0} onChange={(event) => updateNumber("servingSizeMl", event.target.value)} step="1" type="number" value={values.servingSizeMl} />
             </label>
             <label className="field-label" htmlFor="drink-calories-cups">
-              Cups drank today
+              {t("fields.cups")}
               <input className="input" id="drink-calories-cups" min={0} onChange={(event) => updateNumber("cups", event.target.value)} step="0.5" type="number" value={values.cups} />
             </label>
             <label className="field-label" htmlFor="drink-custom-calories">
-              Custom kcal / 100ml
+              {t("fields.customCalories")}
               <input className="input" id="drink-custom-calories" min={0} onChange={(event) => updateNumber("customCaloriesPer100Ml", event.target.value)} step="1" type="number" value={values.customCaloriesPer100Ml} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveValues} type="button">
-              <Save size={16} aria-hidden="true" /> Save drink plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate calories
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -118,60 +125,101 @@ export function DrinkCaloriesWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Liquid calorie summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show today's drink calories and sugar."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      calories: result.formattedTotalCalories,
+                      cups: formatNumber(effectiveCups),
+                      cupLabel
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Sugar reference</span>
+            <span className="badge warn">{t("badges.sugarReference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedTotalCalories ?? "0 kcal"}</strong>
-              <span>Total calories</span>
+              <span>{t("metrics.totalCalories")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedSugar ?? "0 g"}</strong>
-              <span>Sugar</span>
+              <span>{t("metrics.sugar")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedSteps ?? "--"}</strong>
-              <span>Steps to burn</span>
+              <span>{t("metrics.stepsToBurn")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedDailyPercent ?? "0.0%"}</strong>
-              <span>Daily calories</span>
+              <span>{t("metrics.dailyCalories")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Coffee size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.tip ?? "Waiting for calculation"}</strong>
-              <small>{result?.perCupDescription ?? "Calculate first to review beverage assumptions."}</small>
+              <strong>{result ? t(`tips.${getDrinkTipKey(result)}`, { percent: ((result.totalCalories / 2000) * 100).toFixed(0) }) : t("resultSection.waitingTitle")}</strong>
+              <small>
+                {result
+                  ? t("resultSection.perCupDescription", {
+                      drink: t(`drinkOptions.${values.drinkId}`),
+                      servingSize: effectiveServingSizeMl,
+                      cups: formatNumber(effectiveCups)
+                    })
+                  : t("resultSection.waitingDescription")}
+              </small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Drink calorie notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {drinkNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Drink plans stay local and can be paired with calorie deficit or glycemic tools.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function getDrinkTipKey(result: DrinkCaloriesResult) {
+  if (result.totalSugarGrams > 25) return "sugarHigh";
+  if (result.totalCalories > 500) return "caloriesHigh";
+  return "healthy";
+}
+
+function getEffectiveServingSizeMl(values: DrinkCaloriesInput) {
+  const servingSizeMl = cleanNumber(values.servingSizeMl);
+  return servingSizeMl || 500;
+}
+
+function getEffectiveCups(values: DrinkCaloriesInput) {
+  const cups = cleanNumber(values.cups);
+  return cups || 1;
+}
+
+function cleanNumber(value: number) {
+  if (!Number.isFinite(value) || value < 0) return 0;
+  return value;
+}
+
+function formatNumber(value: number): string {
+  return Number.isInteger(value) ? value.toString() : value.toFixed(1);
 }

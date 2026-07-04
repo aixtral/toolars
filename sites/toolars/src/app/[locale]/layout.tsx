@@ -2,35 +2,50 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
 import { PostHogProviderWrapper } from "@/components/analytics/posthog-provider";
 import { CookieConsentBanner } from "@/components/consent/cookie-consent-banner";
 import { SiteFooter } from "@/components/shell/site-footer";
-import { LAUNCH_LOCALES, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
+import { LAUNCH_LOCALES, getLocaleDirection, isLaunchLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { getAlternateLanguageLinks } from "@/lib/i18n";
+import { TOOLARS_FAVICON_URL } from "@/lib/seo/brand-icons";
+import { getLocalizedSiteMetadataCopy } from "@/lib/seo/localized-page-metadata";
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
-
-const SITE_NAME = "Toolars";
-const SITE_DESCRIPTION =
-  "Toolars unifies traditional calculators, AI tools, and repeatable workflows into one search-first workspace. Local-first, AI clearly labeled, free to start.";
 
 export function generateStaticParams() {
   return LAUNCH_LOCALES.map((locale) => ({ locale: locale.code }));
 }
 
+export function resolveLayoutLocale(locale: string): {
+  localeCode: LocaleCode;
+  hreflang: string;
+  dir: ReturnType<typeof getLocaleDirection>;
+} {
+  if (!isLaunchLocale(locale)) notFound();
+
+  const localeCode: LocaleCode = locale;
+  const hreflang = LAUNCH_LOCALES.find((entry) => entry.code === localeCode)?.hreflang ?? localeCode;
+  const dir = getLocaleDirection(localeCode);
+
+  return { localeCode, hreflang, dir };
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  const localeCode: LocaleCode = isValidLocale(locale) ? locale : "en";
+  const { localeCode } = resolveLayoutLocale(locale);
   const baseUrl = getSiteBaseUrl();
   const localizedPath = localizePath("/", localeCode);
+  const { siteName, tagline, description } = getLocalizedSiteMetadataCopy(localeCode);
+  const defaultTitle = `${siteName} — ${tagline}`;
 
   return {
     metadataBase: new URL(baseUrl),
     title: {
-      default: `${SITE_NAME} — All tools. One workspace.`,
-      template: `%s · ${SITE_NAME}`
+      default: defaultTitle,
+      template: `%s · ${siteName}`
     },
-    description: SITE_DESCRIPTION,
-    applicationName: SITE_NAME,
+    description,
+    applicationName: siteName,
     keywords: [
       "online tools",
       "free calculators",
@@ -43,9 +58,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       "MCP server builder",
       "workflow automation"
     ],
-    authors: [{ name: SITE_NAME }],
-    creator: SITE_NAME,
-    publisher: SITE_NAME,
+    authors: [{ name: siteName }],
+    creator: siteName,
+    publisher: siteName,
     alternates: {
       canonical: localizedPath,
       languages: Object.fromEntries(
@@ -54,16 +69,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     },
     openGraph: {
       type: "website",
-      siteName: SITE_NAME,
+      siteName,
       locale: localeCode,
-      title: `${SITE_NAME} — All tools. One workspace.`,
-      description: SITE_DESCRIPTION,
+      title: defaultTitle,
+      description,
       url: localizedPath
     },
     twitter: {
       card: "summary_large_image",
-      title: `${SITE_NAME} — All tools. One workspace.`,
-      description: SITE_DESCRIPTION
+      title: defaultTitle,
+      description
     },
     robots: {
       index: true,
@@ -77,7 +92,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       }
     },
     icons: {
-      icon: "/favicon.svg"
+      icon: [
+        {
+          url: TOOLARS_FAVICON_URL,
+          type: "image/svg+xml"
+        }
+      ]
     }
   };
 }
@@ -90,8 +110,7 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const localeCode: LocaleCode = isValidLocale(locale) ? locale : "en";
-  const hreflang = LAUNCH_LOCALES.find((entry) => entry.code === localeCode)?.hreflang ?? localeCode;
+  const { localeCode, hreflang, dir } = resolveLayoutLocale(locale);
 
   // Enable static rendering for this locale.
   setRequestLocale(localeCode);
@@ -99,7 +118,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={hreflang}>
+    <html lang={hreflang} dir={dir}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <PostHogProviderWrapper>

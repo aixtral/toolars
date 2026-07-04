@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, CalendarDays, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateOvulation,
   defaultOvulationScenario,
@@ -13,21 +14,32 @@ import {
 const storageKey = "toolars.ovulation-calculator.cycle:v1";
 
 const trustRows = [
-  ["Local", "Cycle dates stay in this browser session", "local"],
-  ["Health", "Cycle estimates vary with irregularity and symptoms", "warn"],
-  ["Private", "Save stores only this cycle sample locally", ""]
+  { key: "local", tone: "local" },
+  { key: "health", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const cycleNotes = [
-  "VitalCalc estimates ovulation about 14 days before the next period.",
-  "The fertile window spans roughly 5 days before ovulation through 1 day after.",
-  "This is not contraception. Irregular cycles and fertility concerns need qualified care."
-];
+  "ovulation",
+  "fertileWindow",
+  "care"
+] as const;
 
 export function OvulationCalculatorWorkspace() {
-  const t = useTranslations("tools.ovulation-calculator");
-  const [cycle, setCycle] = useState<OvulationInput>(() => defaultOvulationScenario);
-  const [result, setResult] = useState<OvulationResult | null>(null);
+  const t = useTranslations("tools.ovulation-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [cycle, setCycle] = useState(defaultOvulationScenario);
+  const [result, setResult] = useState(null as OvulationResult | null);
+  const numberFormatter = new Intl.NumberFormat(localeCode, {
+    maximumFractionDigits: 0
+  });
+  const dateFormatter = new Intl.DateTimeFormat(localeCode, {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC"
+  });
 
   const calculate = () => {
     setResult(calculateOvulation(cycle));
@@ -47,26 +59,34 @@ export function OvulationCalculatorWorkspace() {
     setResult(null);
   };
 
+  const formatDays = (days: number) => t("formats.days", { count: numberFormatter.format(days) });
+  const formatShortDate = (date: string) => dateFormatter.format(parseIsoDate(date));
+  const formatDateRange = (startDate: string, endDate: string) =>
+    t("formats.dateRange", {
+      start: formatShortDate(startDate),
+      end: formatShortDate(endDate)
+    });
+
   return (
     <div className="llm-cost-layout" data-tool-workspace="ovulation-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc cycle workspace</span>
-        <h1>Ovulation Calculator</h1>
-        <p className="subtitle">Estimate ovulation day, fertile window, next period, and cycle milestones locally.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/ovulation-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/ovulation-calculator/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -75,33 +95,33 @@ export function OvulationCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Cycle inputs</h2>
-              <p className="tool-description">Use last period date, cycle length, and period duration for a local estimate.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="ovulation-lmp">
-              First day of last period
+              {t("fields.lastPeriod")}
               <input className="input" id="ovulation-lmp" onChange={(event) => updateCycle("lastPeriodDate", event.target.value)} type="date" value={cycle.lastPeriodDate} />
             </label>
             <label className="field-label" htmlFor="ovulation-cycle">
-              Cycle length
+              {t("fields.cycleLength")}
               <select className="input" id="ovulation-cycle" onChange={(event) => updateCycle("cycleLengthDays", event.target.value)} value={cycle.cycleLengthDays}>
                 {Array.from({ length: 15 }, (_, index) => index + 21).map((days) => (
                   <option key={days} value={days}>
-                    {days} days
+                    {formatDays(days)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="field-label" htmlFor="ovulation-period">
-              Period duration
+              {t("fields.periodDuration")}
               <select className="input" id="ovulation-period" onChange={(event) => updateCycle("periodDurationDays", event.target.value)} value={cycle.periodDurationDays}>
                 {Array.from({ length: 5 }, (_, index) => index + 3).map((days) => (
                   <option key={days} value={days}>
-                    {days} days
+                    {formatDays(days)}
                   </option>
                 ))}
               </select>
@@ -110,10 +130,10 @@ export function OvulationCalculatorWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveCycle} type="button">
-              <Save size={16} aria-hidden="true" /> Save cycle
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate cycle
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -121,60 +141,72 @@ export function OvulationCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Cycle result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate fertile window and next period."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      cycleLength: numberFormatter.format(cycle.cycleLengthDays),
+                      periodDuration: numberFormatter.format(cycle.periodDurationDays)
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Reference</span>
+            <span className="badge warn">{t("badges.reference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedOvulationDate ?? "--"}</strong>
-              <span>Ovulation</span>
+              <strong>{result ? formatShortDate(result.ovulationDate) : "--"}</strong>
+              <span>{t("metrics.ovulation")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedFertileWindow ?? "--"}</strong>
-              <span>Fertile window</span>
+              <strong>{result ? formatDateRange(result.fertileStartDate, result.fertileEndDate) : "--"}</strong>
+              <span>{t("metrics.fertileWindow")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedNextPeriod ?? "--"}</strong>
-              <span>Next period</span>
+              <strong>{result ? formatShortDate(result.nextPeriodDate) : "--"}</strong>
+              <span>{t("metrics.nextPeriod")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedSafePeriod ?? "--"}</strong>
-              <span>Safe-period reference</span>
+              <strong>{result ? formatDateRange(result.safeStartDate, result.safeEndDate) : "--"}</strong>
+              <span>{t("metrics.safePeriod")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <CalendarDays size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.formattedMenstruation ?? "Waiting for calculation"}</strong>
-              <small>{result ? result.recommendation : "Calculate first to create the cycle calendar."}</small>
+              <strong>{result ? formatDateRange(cycle.lastPeriodDate, result.menstruationEndDate) : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Cycle notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {cycleNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Cycle dates stay local. Use this as a planning reference, not a diagnosis or contraception method.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function parseIsoDate(value: string): Date {
+  const [year = 1970, month = 1, day = 1] = value.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day));
 }

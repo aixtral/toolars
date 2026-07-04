@@ -1,0 +1,854 @@
+{
+  "change_id": "complete-source-migration",
+  "plan": "plans/complete-source-migration.md",
+  "mode": "standard",
+  "waves": [
+    {
+      "id": "wave-1",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "audit-source-migration",
+          "agent_id": "019efbfb-2f4f-7ff0-92ed-55865af04c28",
+          "type": "worker",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/scripts/audit-tool-inventory.mjs",
+            "sites/toolars/scripts/*audit*.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm test -- audit-tool-inventory",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "audit_tests": "passed",
+            "vitalcalc_blog_locales": 9,
+            "vitalcalc_blog_slugs": 20,
+            "missing_toolars_locales": 6,
+            "hardcoded_user_facing_strings": 3109
+          }
+        },
+        {
+          "id": "vitalcalc-blog-en",
+          "agent_id": "019efbfc-2bd3-78a2-8b0c-985592c6a18e",
+          "type": "worker",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/blog.ts",
+            "sites/toolars/src/data/blog.test.ts",
+            "sites/toolars/src/data/vitalcalc-blog-source.ts"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm test -- blog",
+            "cd sites/toolars && pnpm typecheck"
+          ],
+          "result": {
+            "article_count_en": 23,
+            "vitalcalc_english_blog_coverage": "20/20",
+            "content_depth": "summary-level migration with title, description, sections, faq, featuredToolSlugs"
+          }
+        },
+        {
+          "id": "aixtral-batch-plan",
+          "agent_id": "019efbfc-684f-7020-b03e-1523b33e94bc",
+          "type": "explorer",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "report contains 72 missing slugs",
+            "report groups slugs by implementation availability and UI template"
+          ],
+          "result": {
+            "missing_registry_slugs": 72,
+            "with_pure_implementation": 52,
+            "requires_page_client_rebuild": 20,
+            "recommended_batches": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-2",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch1-detail",
+          "agent_id": "019efc0b-0101-7c73-a438-66220d62d630",
+          "type": "worker",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 8,
+            "registry_tools": 126,
+            "aixtral_lab_registry_tools": 30,
+            "remaining_aixtral_config_missing_from_registry": 64
+          }
+        },
+        {
+          "id": "blog-ui-i18n-links",
+          "agent_id": "019efc0b-2ca8-7b23-8233-493b8c6419f6",
+          "type": "worker",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/app/[locale]/blog/page.tsx",
+            "sites/toolars/src/app/[locale]/blog/[slug]/page.tsx",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run --dir 'src/app/[locale]/blog'",
+            "cd sites/toolars && pnpm exec vitest run src/lib/i18n/message-coverage.test.ts",
+            "cd sites/toolars && pnpm typecheck"
+          ],
+          "result": {
+            "localized_blog_ui": true,
+            "locale_safe_blog_links": true,
+            "detail_message_guard": "tools.<slug>.name and tools.<slug>.description for all detail slugs"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-3",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch2-detail",
+          "agent_id": "019efc19-9604-7e40-8fe2-a11aa0de9b95",
+          "type": "worker",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts src/lib/i18n/message-coverage.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory",
+            "cd sites/toolars && pnpm typecheck"
+          ],
+          "result": {
+            "migrated_detail_slugs": 8,
+            "registry_tools": 134,
+            "aixtral_lab_registry_tools": 38,
+            "remaining_aixtral_config_missing_from_registry": 56,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        },
+        {
+          "id": "left-category-clickability-diagnosis",
+          "agent_id": "019efc19-97d1-7573-ad5c-ad8dcd093258",
+          "type": "explorer",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "report identifies affected files, root cause, tests, and minimal fix scope"
+          ],
+          "result": {
+            "root_cause": "hard-coded sidebar hashes pointed to missing workflow/collection anchors and PDF workspace finance/health pointed to missing homepage anchors",
+            "fixed_by_main_thread": true,
+            "verify": "pnpm exec vitest run src/components/shell/toolars-shell.test.tsx"
+          }
+        },
+        {
+          "id": "i18n-hardcoded-copy-triage",
+          "agent_id": "019efc19-9973-7ed3-8a58-744ddc3fa864",
+          "type": "explorer",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "report ranks hardcoded-copy hotspots and proposes non-conflicting TDD batches"
+          ],
+          "result": {
+            "hardcoded_user_facing_strings": 3107,
+            "tool_workspace_hotspot_count": "about 2380/3107",
+            "recommended_next_batches": [
+              "pdf-toolkit-workspace-i18n",
+              "settings-main-i18n",
+              "shell-sidebar-taxonomy-i18n"
+            ],
+            "missing_launch_locales": [
+              "ar",
+              "fr",
+              "hi",
+              "ja",
+              "pt",
+              "ru"
+            ]
+          }
+        },
+        {
+          "id": "collections-openWorkflow-message",
+          "agent_id": "main-thread",
+          "type": "integration-fix",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/app/[locale]/collections/collections-index-view.test.tsx",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run 'src/app/[locale]/collections/collections-index-view.test.tsx' src/lib/i18n/message-coverage.test.ts"
+          ],
+          "result": {
+            "browser_discovered_missing_message": "collectionsPage.openWorkflow",
+            "fresh_browser_console_errors_after_fix": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-4",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "pdf-toolkit-workspace-i18n",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/app/[locale]/tools/pdf-toolkit/pdf-toolkit-workspace.tsx",
+            "sites/toolars/src/app/[locale]/tools/pdf-toolkit/pdf-toolkit-workspace.test.tsx",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run 'src/app/[locale]/tools/pdf-toolkit/pdf-toolkit-workspace.test.tsx'",
+            "cd sites/toolars && pnpm exec vitest run src/lib/i18n/message-coverage.test.ts",
+            "cd sites/toolars && pnpm run audit:i18n"
+          ],
+          "result": {
+            "localized_pdf_workspace": true,
+            "spanish_browser_dom_verified": true,
+            "hardcoded_i18n_candidates_after": 3032
+          }
+        },
+        {
+          "id": "aixtral-batch3-discovery",
+          "agent_id": "019efddc-8aae-71a2-b763-4dedc06c822f",
+          "type": "explorer",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "read-only report confirms 7 missing slugs and detail-only write scope"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "url-parser",
+              "number-base-converter",
+              "file-size-converter",
+              "chmod-calculator",
+              "ipv4-subnet-calculator",
+              "timestamp-converter",
+              "user-agent-parser"
+            ],
+            "expected_registry_after": 141,
+            "expected_remaining_aixtral_config_missing": 49
+          }
+        },
+        {
+          "id": "locale-expansion-plan",
+          "agent_id": "019efddc-8c72-7823-b9bb-6ae10b13cf07",
+          "type": "explorer",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "read-only report identifies gated locale model, tests, and Arabic RTL risks"
+          ],
+          "result": {
+            "missing_launch_locales": [
+              "ar",
+              "fr",
+              "hi",
+              "ja",
+              "pt",
+              "ru"
+            ],
+            "recommended_strategy": "register draft locales separately from routed launch locales, then promote in small batches",
+            "arabic_requires_rtl_gate": true
+          }
+        },
+        {
+          "id": "aixtral-batch3-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 7,
+            "registry_tools": 141,
+            "aixtral_lab_registry_tools": 45,
+            "remaining_aixtral_config_missing_from_registry": 49,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-5",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "locale-staging-foundation",
+          "agent_id": "main-thread",
+          "supporting_agent_id": "019efe64-43b3-7933-9255-daf1ef7cecc0",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/locales.ts",
+            "sites/toolars/src/lib/i18n/index.ts",
+            "sites/toolars/src/lib/i18n/index.test.ts",
+            "sites/toolars/src/i18n/request.ts",
+            "sites/toolars/src/i18n/request.test.ts",
+            "sites/toolars/src/proxy.ts",
+            "sites/toolars/src/proxy.test.ts",
+            "sites/toolars/src/components/shell/language-switcher.tsx",
+            "sites/toolars/src/components/shell/language-switcher.test.tsx",
+            "sites/toolars/src/app/[locale]/layout.tsx",
+            "sites/toolars/src/app/[locale]/layout.test.ts",
+            "sites/toolars/src/app/sitemap.test.ts",
+            "sites/toolars/scripts/audit-tool-inventory.mjs",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/lib/i18n/index.test.ts src/i18n/request.test.ts src/proxy.test.ts src/components/shell/language-switcher.test.tsx src/app/sitemap.test.ts 'src/app/[locale]/layout.test.ts'",
+            "cd sites/toolars && pnpm typecheck"
+          ],
+          "result": {
+            "registered_locales": 10,
+            "launch_locales": 4,
+            "draft_locales": 6,
+            "message_locales": 4,
+            "missing_registered_source_locales": 0,
+            "missing_launch_source_locales": 6,
+            "arabic_dir": "rtl",
+            "draft_locale_public_routes": "notFound"
+          }
+        },
+        {
+          "id": "aixtral-batch4-discovery",
+          "agent_id": "019efe64-41eb-71f3-82c7-f05cf9b53ffd",
+          "type": "explorer",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "read-only report confirms 7 Color/CSS missing slugs and detail-only write scope"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "color-converter",
+              "color-contrast-checker",
+              "color-palette-generator",
+              "css-border-radius-generator",
+              "css-flexbox-generator",
+              "css-grid-generator",
+              "css-unit-converter"
+            ],
+            "expected_registry_after": 148,
+            "expected_remaining_aixtral_config_missing": 42
+          }
+        },
+        {
+          "id": "aixtral-batch4-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs src/lib/i18n/message-coverage.test.ts",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 7,
+            "registry_tools": 148,
+            "aixtral_lab_registry_tools": 52,
+            "remaining_aixtral_config_missing_from_registry": 42,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-6",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch5-candidate-scan",
+          "agent_id": "main-thread",
+          "supporting_agent_id": "019efe70-9d56-7bc2-985b-36067e8b0922",
+          "type": "source-check",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "rg --files /Users/stanvl/Documents/dev/ai-repo/aixtral-lab/src | rg '(hash-generator|jwt-decoder|password-generator|regex-tester|sql-formatter|toml-converter|unicode-search)'",
+            "jq source messages in en/es/zh-cn/zh-tw for selected camelCase keys"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "hash-generator",
+              "jwt-decoder",
+              "password-generator",
+              "regex-tester",
+              "sql-formatter",
+              "toml-converter",
+              "unicode-search"
+            ],
+            "source_paths_confirmed": true,
+            "source_messages_confirmed": true,
+            "supporting_agent_result": "closed before final report; main thread completed source check"
+          }
+        },
+        {
+          "id": "aixtral-batch5-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts src/lib/i18n/message-coverage.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 7,
+            "registry_tools": 155,
+            "aixtral_lab_registry_tools": 59,
+            "remaining_aixtral_config_missing_from_registry": 35,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-7",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch6-source-check",
+          "agent_id": "main-thread",
+          "type": "source-check",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "rg --files /Users/stanvl/Documents/dev/ai-repo/aixtral-lab/src | rg '(code-minifier|cron-explainer|css-to-tailwind-converter|docker-compose-converter|env-editor|meta-tag-generator|robots-txt-generator)'",
+            "jq source messages in en/es/zh-cn/zh-tw for selected camelCase keys"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "code-minifier",
+              "cron-explainer",
+              "css-to-tailwind-converter",
+              "docker-compose-converter",
+              "env-editor",
+              "meta-tag-generator",
+              "robots-txt-generator"
+            ],
+            "source_paths_confirmed": true,
+            "source_messages_confirmed": true
+          }
+        },
+        {
+          "id": "aixtral-batch6-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts src/lib/i18n/message-coverage.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 7,
+            "registry_tools": 162,
+            "aixtral_lab_registry_tools": 66,
+            "remaining_aixtral_config_missing_from_registry": 28,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-8",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch7-source-check",
+          "agent_id": "main-thread",
+          "type": "source-check",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "rg --files /Users/stanvl/Documents/dev/ai-repo/aixtral-lab/src | rg '(barcode-generator|base64-image-encoder|certificate-decoder|cron-builder|http-status-reference|mime-lookup|nanoid-generator|qr-code-generator)'",
+            "jq source messages in en/es/zh-cn/zh-tw for selected camelCase keys"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "barcode-generator",
+              "base64-image-encoder",
+              "certificate-decoder",
+              "cron-builder",
+              "http-status-reference",
+              "mime-lookup",
+              "nanoid-generator",
+              "qr-code-generator"
+            ],
+            "source_paths_confirmed": true,
+            "source_messages_confirmed": true,
+            "source_message_notes": "qr-code-generator Spanish and Traditional Chinese source entries still contained English fallback; Toolars localized them."
+          }
+        },
+        {
+          "id": "aixtral-batch7-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts src/lib/i18n/message-coverage.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 8,
+            "registry_tools": 170,
+            "aixtral_lab_registry_tools": 74,
+            "remaining_aixtral_config_missing_from_registry": 20,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-9",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch8-source-check",
+          "agent_id": "main-thread",
+          "type": "source-check",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "rg --files /Users/stanvl/Documents/dev/ai-repo/aixtral-lab/src | rg '(html-markdown-converter|html-preview|markdown-table-generator|json-schema-builder|mock-data-generator|svg-optimizer|image-resizer)'",
+            "jq source messages in en/es/zh-cn/zh-tw for selected camelCase keys"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "html-markdown-converter",
+              "html-preview",
+              "image-resizer",
+              "json-schema-builder",
+              "markdown-table-generator",
+              "mock-data-generator",
+              "svg-optimizer"
+            ],
+            "source_paths_confirmed": true,
+            "source_messages_confirmed": true,
+            "source_message_notes": "image-resizer, svg-optimizer, and html-preview Spanish/Traditional Chinese source entries still contained English fallback; Toolars localized them."
+          }
+        },
+        {
+          "id": "aixtral-batch8-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts src/lib/i18n/message-coverage.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory"
+          ],
+          "result": {
+            "migrated_detail_slugs": 7,
+            "registry_tools": 177,
+            "aixtral_lab_registry_tools": 81,
+            "remaining_aixtral_config_missing_from_registry": 13,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-10",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "aixtral-batch9-source-check",
+          "agent_id": "main-thread",
+          "type": "source-check",
+          "status": "completed",
+          "write_scope": [],
+          "verify": [
+            "rg --files /Users/stanvl/Documents/dev/ai-repo/aixtral-lab/src | rg '(ai-guardrail-config|code-to-image|css-animation-generator|css-box-shadow-generator|embedding-playground|jailbreak-detector|rag-chunk-visualizer|red-team-simulator|synthetic-dataset-gen|system-prompt-compressor|system-prompt-guard|token-counter|toxicity-scanner)'",
+            "node source checks for tool-config.ts and en/es/zh-cn/zh-tw message key presence"
+          ],
+          "result": {
+            "candidate_slugs": [
+              "ai-guardrail-config",
+              "code-to-image",
+              "css-animation-generator",
+              "css-box-shadow-generator",
+              "embedding-playground",
+              "jailbreak-detector",
+              "rag-chunk-visualizer",
+              "red-team-simulator",
+              "synthetic-dataset-gen",
+              "system-prompt-compressor",
+              "system-prompt-guard",
+              "token-counter",
+              "toxicity-scanner"
+            ],
+            "source_paths_confirmed": true,
+            "source_config_confirmed": true,
+            "source_messages_confirmed": true
+          }
+        },
+        {
+          "id": "aixtral-batch9-detail",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && node scripts/audit-tool-inventory.mjs"
+          ],
+          "result": {
+            "migrated_detail_slugs": 13,
+            "registry_tools": 190,
+            "aixtral_lab_registry_tools": 94,
+            "remaining_aixtral_config_missing_from_registry": 0,
+            "public_tools_missing_workspace_lib": "0/0"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-11",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "token-counter-native-workspace",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/lib/tools/token-counter.ts",
+            "sites/toolars/src/lib/tools/token-counter.test.ts",
+            "sites/toolars/src/app/[locale]/tools/token-counter/page.tsx",
+            "sites/toolars/src/app/[locale]/tools/token-counter/token-counter-workspace.tsx",
+            "sites/toolars/src/app/[locale]/tools/token-counter/token-counter-workspace.test.tsx",
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/lib/tools/token-counter.test.ts 'src/app/[locale]/tools/token-counter/token-counter-workspace.test.tsx' src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory",
+            "cd sites/toolars && pnpm exec vitest run src/lib/i18n/message-coverage.test.ts",
+            "cd sites/toolars && pnpm typecheck",
+            "cd sites/toolars && pnpm run audit:i18n",
+            "cd sites/toolars && pnpm build",
+            "cd sites/toolars && pnpm test"
+          ],
+          "result": {
+            "promoted_public_slug": "token-counter",
+            "public_tools": 92,
+            "dedicated_workspaces": 92,
+            "registry_tools_missing_toolars_lib": 98,
+            "public_tools_missing_workspace_lib": "0/0",
+            "dev_server_url": "http://localhost:9320/en/tools/token-counter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-12",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "system-prompt-compressor-native-workspace",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/lib/tools/system-prompt-compressor.ts",
+            "sites/toolars/src/lib/tools/system-prompt-compressor.test.ts",
+            "sites/toolars/src/app/[locale]/tools/system-prompt-compressor/page.tsx",
+            "sites/toolars/src/app/[locale]/tools/system-prompt-compressor/system-prompt-compressor-workspace.tsx",
+            "sites/toolars/src/app/[locale]/tools/system-prompt-compressor/system-prompt-compressor-workspace.test.tsx",
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/lib/tools/system-prompt-compressor.test.ts 'src/app/[locale]/tools/system-prompt-compressor/system-prompt-compressor-workspace.test.tsx' src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory",
+            "cd sites/toolars && pnpm exec vitest run src/lib/i18n/message-coverage.test.ts",
+            "cd sites/toolars && pnpm typecheck",
+            "cd sites/toolars && pnpm run audit:i18n",
+            "cd sites/toolars && pnpm build",
+            "cd sites/toolars && pnpm test"
+          ],
+          "result": {
+            "promoted_public_slug": "system-prompt-compressor",
+            "public_tools": 93,
+            "dedicated_workspaces": 93,
+            "registry_tools_missing_toolars_lib": 97,
+            "public_tools_missing_workspace_lib": "0/0",
+            "dev_server_url": "http://localhost:9320/en/tools/system-prompt-compressor"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wave-13",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "system-prompt-guard-native-workspace",
+          "agent_id": "main-thread",
+          "type": "implementation",
+          "status": "completed",
+          "write_scope": [
+            "sites/toolars/src/lib/tools/system-prompt-guard.ts",
+            "sites/toolars/src/lib/tools/system-prompt-guard.test.ts",
+            "sites/toolars/src/app/[locale]/tools/system-prompt-guard/page.tsx",
+            "sites/toolars/src/app/[locale]/tools/system-prompt-guard/system-prompt-guard-workspace.tsx",
+            "sites/toolars/src/app/[locale]/tools/system-prompt-guard/system-prompt-guard-workspace.test.tsx",
+            "sites/toolars/src/data/registry.ts",
+            "sites/toolars/src/data/registry.test.ts",
+            "sites/toolars/src/data/tool-details.ts",
+            "sites/toolars/src/data/tool-details.test.ts",
+            "sites/toolars/messages/en.json",
+            "sites/toolars/messages/es.json",
+            "sites/toolars/messages/zh-hans.json",
+            "sites/toolars/messages/zh-hant.json",
+            "sites/toolars/scripts/audit-tool-inventory.test.mjs"
+          ],
+          "verify": [
+            "cd sites/toolars && pnpm exec vitest run src/lib/tools/system-prompt-guard.test.ts 'src/app/[locale]/tools/system-prompt-guard/system-prompt-guard-workspace.test.tsx' src/data/registry.test.ts src/data/tool-details.test.ts scripts/audit-tool-inventory.test.mjs",
+            "cd sites/toolars && pnpm run audit:tool-inventory",
+            "cd sites/toolars && pnpm exec vitest run src/lib/i18n/message-coverage.test.ts",
+            "cd sites/toolars && pnpm typecheck",
+            "cd sites/toolars && pnpm run audit:i18n",
+            "cd sites/toolars && pnpm build",
+            "cd sites/toolars && pnpm test"
+          ],
+          "result": {
+            "promoted_public_slug": "system-prompt-guard",
+            "public_tools": 94,
+            "dedicated_workspaces": 94,
+            "registry_tools_missing_toolars_lib": 96,
+            "public_tools_missing_workspace_lib": "0/0",
+            "dev_server_url": "http://localhost:9320/en/tools/system-prompt-guard"
+          }
+        }
+      ]
+    }
+  ]
+}

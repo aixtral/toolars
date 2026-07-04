@@ -25,7 +25,7 @@ export function AiLabWorkbenchShell({
 
   return (
     <div className="ai-lab-workbench" data-ai-lab-tool={toolSlug} data-testid="ai-lab-workbench">
-      <div aria-label="AI Lab execution metadata" className="ai-lab-workbench-meta">
+      <div aria-label={t("metadata.ariaLabel")} className="ai-lab-workbench-meta">
         {metadata.map(([label, value]) => (
           <div className="ai-lab-workbench-meta-item" key={label}>
             <span>{label}</span>

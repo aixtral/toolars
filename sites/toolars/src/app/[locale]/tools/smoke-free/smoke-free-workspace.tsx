@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateSmokeFree,
   defaultSmokeFreeScenario,
@@ -13,21 +14,53 @@ import {
 const storageKey = "toolars.smoke-free.plan:v1";
 
 const trustRows = [
-  ["Local", "Quit date and smoking assumptions stay in this browser session", "local"],
-  ["Health", "Recovery timelines vary by person and care history", "warn"],
-  ["Private", "Save stores only the quit-tracker sample locally", ""]
+  { key: "local", tone: "local" },
+  { key: "health", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const recoveryNotes = [
-  "VitalCalc counts full smoke-free days from the selected quit date.",
-  "Life extension uses the source estimate of 11 minutes per cigarette not smoked.",
-  "Use this tracker for motivation; relapse support and medical care can matter more than any single metric."
-];
+  "days",
+  "lifeExtension",
+  "support"
+] as const;
+
+const milestoneKeysByDay = {
+  0: "d0",
+  1: "d1",
+  3: "d3",
+  14: "d14",
+  90: "d90",
+  365: "d365",
+  1825: "d1825",
+  3650: "d3650",
+  5475: "d5475"
+} as const;
 
 export function SmokeFreeWorkspace() {
-  const t = useTranslations("tools.smoke-free");
-  const [values, setValues] = useState<SmokeFreeInput>(() => defaultSmokeFreeScenario);
-  const [result, setResult] = useState<SmokeFreeResult | null>(null);
+  const t = useTranslations("tools.smoke-free.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [values, setValues] = useState(defaultSmokeFreeScenario as SmokeFreeInput);
+  const [result, setResult] = useState(null as SmokeFreeResult | null);
+  const nextMilestoneKey = result?.nextMilestone ? getMilestoneKey(result.nextMilestone.days) : undefined;
+  const smokeFreeDays = result ? formatInteger(result.daysSmokeFree) : "0";
+  const resultSummary = result
+    ? result.daysSmokeFree > 0
+      ? t("resultSection.summary", { days: smokeFreeDays })
+      : t("resultSection.startingToday")
+    : t("resultSection.emptyDescription");
+  const calloutTitle = result
+    ? nextMilestoneKey
+      ? t("callout.nextTitle", { time: t(`milestones.${nextMilestoneKey}.time`) })
+      : t("callout.completeTitle")
+    : t("callout.waitingTitle");
+  const calloutDescription = result
+    ? nextMilestoneKey
+      ? t(`milestones.${nextMilestoneKey}.message`)
+      : t("callout.completeDescription")
+    : t("callout.waitingDescription");
 
   const calculate = () => {
     setResult(calculateSmokeFree(values));
@@ -52,23 +85,23 @@ export function SmokeFreeWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="smoke-free">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc recovery tracker</span>
-        <h1>Quit Smoking Tracker</h1>
-        <p className="subtitle">Track smoke-free days, money saved, cigarettes avoided, and recovery milestones.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={tone ? `badge ${tone}` : "badge"}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/smoke-free/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/smoke-free/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -77,37 +110,37 @@ export function SmokeFreeWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Quit inputs</h2>
-              <p className="tool-description">Use quit date, daily cigarette count, pack size, and pack price.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="smoke-quit-date">
-              Quit date
+              {t("fields.quitDate")}
               <input className="input" id="smoke-quit-date" onChange={(event) => updateQuitDate(event.target.value)} type="date" value={values.quitDate} />
             </label>
             <label className="field-label" htmlFor="smoke-cigs-per-day">
-              Cigarettes per day
+              {t("fields.cigarettesPerDay")}
               <input className="input" id="smoke-cigs-per-day" min={0} onChange={(event) => updateNumber("cigarettesPerDay", event.target.value)} step="1" type="number" value={values.cigarettesPerDay} />
             </label>
             <label className="field-label" htmlFor="smoke-price-per-pack">
-              Price per pack
+              {t("fields.pricePerPack")}
               <input className="input" id="smoke-price-per-pack" min={0} onChange={(event) => updateNumber("pricePerPack", event.target.value)} step="0.01" type="number" value={values.pricePerPack} />
             </label>
             <label className="field-label" htmlFor="smoke-cigs-per-pack">
-              Cigarettes per pack
+              {t("fields.cigarettesPerPack")}
               <input className="input" id="smoke-cigs-per-pack" min={1} onChange={(event) => updateNumber("cigarettesPerPack", event.target.value)} step="1" type="number" value={values.cigarettesPerPack} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveValues} type="button">
-              <Save size={16} aria-hidden="true" /> Save quit plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Track recovery
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -115,60 +148,72 @@ export function SmokeFreeWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Recovery summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run tracker to show progress and milestones."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{resultSummary}</p>
             </div>
-            <span className="badge local">{result ? "Progress" : "Tracker"}</span>
+            <span className="badge local">{result ? t("badges.progress") : t("badges.tracker")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result ? `${result.daysSmokeFree.toLocaleString("en-US")} days` : "0 days"}</strong>
-              <span>Smoke-free</span>
+              <strong>{result ? t("metrics.daysValue", { days: smokeFreeDays }) : t("metrics.zeroDays")}</strong>
+              <span>{t("metrics.smokeFree")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedMoneySaved ?? "$0"}</strong>
-              <span>Money saved</span>
+              <span>{t("metrics.moneySaved")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedCigarettesAvoided ?? "0 cigarettes"}</strong>
-              <span>Not smoked</span>
+              <strong>{result ? t("metrics.cigarettesValue", { count: formatInteger(result.cigarettesAvoided) }) : t("metrics.zeroCigarettes")}</strong>
+              <span>{t("metrics.notSmoked")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedLifeExtended ?? "0.0 days"}</strong>
-              <span>Life estimate</span>
+              <strong>{result ? t("metrics.lifeDaysValue", { days: formatDecimal(result.lifeExtendedDays) }) : t("metrics.zeroLifeDays")}</strong>
+              <span>{t("metrics.lifeEstimate")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Heart size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.nextMilestone ? `Next: ${result.nextMilestone.time}` : "Waiting for recovery timeline"}</strong>
-              <small>{result?.nextMilestone?.message ?? "Track recovery to review source milestones."}</small>
+              <strong>{calloutTitle}</strong>
+              <small>{calloutDescription}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Recovery notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {recoveryNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Quit-tracker assumptions stay private in this browser unless you export or share them.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function getMilestoneKey(days: number) {
+  return milestoneKeysByDay[days as keyof typeof milestoneKeysByDay];
+}
+
+function formatInteger(value: number): string {
+  return Math.round(value).toLocaleString("en-US");
+}
+
+function formatDecimal(value: number): string {
+  return value.toFixed(1);
 }

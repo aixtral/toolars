@@ -1,12 +1,31 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { screen } from "@testing-library/react";
 import { render } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import es from "../../../messages/es.json";
+import zhHans from "../../../messages/zh-hans.json";
 import HomePage from "./page";
 
 describe("HomePage", () => {
+  it("does not contribute hardcoded UI candidates to the i18n audit", async () => {
+    const auditI18nUrl = pathToFileURL(join(process.cwd(), "scripts/audit-i18n.mjs")).href;
+    const { scanSourceText } = (await import(auditI18nUrl)) as {
+      scanSourceText: (
+        source: string,
+        file: string
+      ) => {
+        hardcodedText: Array<{ file: string; kind: string; text: string }>;
+      };
+    };
+    const source = readFileSync(join(process.cwd(), "src/app/[locale]/page.tsx"), "utf8");
+
+    expect(scanSourceText(source, "src/app/[locale]/page.tsx").hardcodedText).toEqual([]);
+  });
+
   it("exposes the high-fidelity desktop marketplace layout", () => {
     const { container } = renderWithIntl(<HomePage />);
 
@@ -54,12 +73,42 @@ describe("HomePage", () => {
       </NextIntlClientProvider>
     );
 
-    expect(screen.getByRole("link", { name: "Compress image" })).toHaveAttribute("href", "/es/tools/pdf-toolkit");
+    expect(screen.getByRole("link", { name: "Comprimir imagen" })).toHaveAttribute("href", "/es/tools/pdf-toolkit");
     expect(container.querySelector(".hero-input .open-link")).toHaveAttribute("href", "/es/explore/pdf");
     expect(container.querySelector(".home-section-head .text-link")).toHaveAttribute("href", "/es/collections");
-    expect(screen.getAllByRole("link", { name: /Turn PDF into summary/ })[0]).toHaveAttribute(
+    expect(screen.getAllByRole("link", { name: /Convertir PDF en resumen/ })[0]).toHaveAttribute(
       "href",
       "/es/workflows/pdf-summary"
     );
+  });
+
+  it("localizes remaining home page hotspot copy for Spanish", () => {
+    render(
+      <NextIntlClientProvider locale="es" messages={es}>
+        <HomePage />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.queryByText("Compress image")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Comprimir imagen" })).toHaveAttribute(
+      "href",
+      "/es/tools/pdf-toolkit"
+    );
+    expect(screen.getByText("Compresor de imágenes")).toBeInTheDocument();
+    expect(screen.getByText("Herramientas PDF")).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Pestañas de inicio móvil" })).toBeInTheDocument();
+  });
+
+  it("uses simplified Chinese workflow and blog previews instead of English registry fallbacks", () => {
+    render(
+      <NextIntlClientProvider locale="zh-hans" messages={zhHans}>
+        <HomePage />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getAllByText("将 PDF 转成摘要").length).toBeGreaterThan(0);
+    expect(screen.getByText("如何在几秒内修复损坏的 JSON")).toBeInTheDocument();
+    expect(screen.queryByText("Turn PDF into summary")).not.toBeInTheDocument();
+    expect(screen.queryByText("How to Repair Broken JSON in Seconds")).not.toBeInTheDocument();
   });
 });

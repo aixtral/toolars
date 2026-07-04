@@ -44,4 +44,13 @@ describe("buildSitemapEntries", () => {
     expect(bmiWorkspace?.changeFrequency).toBe("weekly");
     expect(bmiWorkspace?.priority).toBeGreaterThan(0.5);
   });
+
+  it("marks blog article entries with every launch locale because fallback content is routable", () => {
+    const entries = buildSitemapEntries("https://toolars.app");
+    const launchArticle = entries.find((entry) => entry.url === "https://toolars.app/blog/json-repair-guide");
+    const vitalCalcArticle = entries.find((entry) => entry.url === "https://toolars.app/blog/what-is-bmi");
+
+    expect(launchArticle?.locales).toEqual(["en", "es", "zh-hans", "zh-hant"]);
+    expect(vitalCalcArticle?.locales).toEqual(["en", "es", "zh-hans", "zh-hant"]);
+  });
 });

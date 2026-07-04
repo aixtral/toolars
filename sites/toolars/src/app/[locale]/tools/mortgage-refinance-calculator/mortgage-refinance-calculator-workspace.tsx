@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, RefreshCw, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateMortgageRefinance,
   defaultMortgageRefinanceScenario,
@@ -11,21 +12,28 @@ import {
 } from "@/lib/tools/mortgage-refinance-calculator";
 
 const trustRows = [
-  ["Local", "Loan balance, rates, terms, and costs stay in this browser session", "local"],
-  ["Scenario", "Break-even math assumes payment savings are realized every month", "warn"],
-  ["Private", "Save only stores the refinance case locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "scenario", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const refinanceNotes = [
-  "VitalCalc compares old and new fixed-rate payments using the same balance.",
-  "Total interest saved is net of the entered refinancing cost.",
-  "Prepayment penalties, points, closing-cost financing, taxes, and holding period can change the decision."
-];
+const refinanceNotes = ["comparison", "interest", "caveats"] as const;
+const termOptions = [
+  { value: 5, key: "years5" },
+  { value: 10, key: "years10" },
+  { value: 15, key: "years15" },
+  { value: 20, key: "years20" },
+  { value: 25, key: "years25" },
+  { value: 30, key: "years30" }
+] as const;
 
 export function MortgageRefinanceCalculatorWorkspace() {
-  const t = useTranslations("tools.mortgage-refinance-calculator");
-  const [plan, setPlan] = useState<MortgageRefinanceInput>(defaultMortgageRefinanceScenario);
-  const [result, setResult] = useState<MortgageRefinanceResult | null>(null);
+  const t = useTranslations("tools.mortgage-refinance-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [plan, setPlan] = useState(defaultMortgageRefinanceScenario);
+  const [result, setResult] = useState(null as MortgageRefinanceResult | null);
 
   const calculate = () => {
     setResult(calculateMortgageRefinance(plan));
@@ -43,23 +51,23 @@ export function MortgageRefinanceCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="mortgage-refinance-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc refinance workspace</span>
-        <h1>Mortgage Refinance Calculator</h1>
-        <p className="subtitle">Compare current and new mortgage terms, monthly savings, and break-even time.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/mortgage-refinance-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/mortgage-refinance-calculator/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -68,59 +76,57 @@ export function MortgageRefinanceCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Refinance inputs</h2>
-              <p className="tool-description">Compare current balance, old terms, new terms, and refinance costs.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="refi-balance">
-              Current loan balance
+              {t("fields.currentBalance")}
               <input className="input" id="refi-balance" min={0} onChange={(event) => updateNumber("currentBalance", event.target.value)} step="1000" type="number" value={plan.currentBalance} />
             </label>
             <label className="field-label" htmlFor="refi-current-rate">
-              Current interest rate
+              {t("fields.currentAnnualInterestRate")}
               <input className="input" id="refi-current-rate" min={0} onChange={(event) => updateNumber("currentAnnualInterestRate", event.target.value)} step="0.05" type="number" value={plan.currentAnnualInterestRate} />
             </label>
             <label className="field-label" htmlFor="refi-current-years">
-              Remaining term
+              {t("fields.currentRemainingYears")}
               <select className="input" id="refi-current-years" onChange={(event) => updateNumber("currentRemainingYears", event.target.value)} value={plan.currentRemainingYears}>
-                <option value={5}>5 years</option>
-                <option value={10}>10 years</option>
-                <option value={15}>15 years</option>
-                <option value={20}>20 years</option>
-                <option value={25}>25 years</option>
-                <option value={30}>30 years</option>
+                {termOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {t(`termOptions.${option.key}`)}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="field-label" htmlFor="refi-new-rate">
-              New interest rate
+              {t("fields.newAnnualInterestRate")}
               <input className="input" id="refi-new-rate" min={0} onChange={(event) => updateNumber("newAnnualInterestRate", event.target.value)} step="0.05" type="number" value={plan.newAnnualInterestRate} />
             </label>
             <label className="field-label" htmlFor="refi-new-years">
-              New loan term
+              {t("fields.newLoanTermYears")}
               <select className="input" id="refi-new-years" onChange={(event) => updateNumber("newLoanTermYears", event.target.value)} value={plan.newLoanTermYears}>
-                <option value={5}>5 years</option>
-                <option value={10}>10 years</option>
-                <option value={15}>15 years</option>
-                <option value={20}>20 years</option>
-                <option value={25}>25 years</option>
-                <option value={30}>30 years</option>
+                {termOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {t(`termOptions.${option.key}`)}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="field-label" htmlFor="refi-cost">
-              Refinancing costs
+              {t("fields.refinancingCost")}
               <input className="input" id="refi-cost" min={0} onChange={(event) => updateNumber("refinancingCost", event.target.value)} step="1000" type="number" value={plan.refinancingCost} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save refinance case
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate refinance savings
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -128,58 +134,62 @@ export function MortgageRefinanceCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Refinance summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate savings and break-even time."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className={`badge ${result?.statusTone === "worthwhile" ? "local" : "warn"}`}>{result?.statusTitle ?? "Refi"}</span>
+            <span className={`badge ${result?.statusTone === "worthwhile" ? "local" : "warn"}`}>{result?.statusTitle ?? t("badges.refi")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedMonthlySavings ?? "$0"}</strong>
-              <span>Monthly savings</span>
+              <strong>{result?.formattedMonthlySavings ?? t("metrics.emptyCurrency")}</strong>
+              <span>{t("metrics.monthlySavings")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedOldMonthly ?? "$0"}</strong>
-              <span>Old payment</span>
+              <strong>{result?.formattedOldMonthly ?? t("metrics.emptyCurrency")}</strong>
+              <span>{t("metrics.oldPayment")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedNewMonthly ?? "$0"}</strong>
-              <span>New payment</span>
+              <strong>{result?.formattedNewMonthly ?? t("metrics.emptyCurrency")}</strong>
+              <span>{t("metrics.newPayment")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.breakEvenLabel ?? "--"}</strong>
-              <span>Break-even</span>
+              <strong>{result?.breakEvenLabel ?? t("metrics.emptyBreakEven")}</strong>
+              <span>{t("metrics.breakEven")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <RefreshCw size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.formattedTotalInterestSaved ?? "Waiting for calculation"}</strong>
-              <small>{result ? `${result.guidance} Current interest ${result.formattedOldInterest}; new interest ${result.formattedNewInterest}.` : "Calculate first to review net interest saved after costs."}</small>
+              <strong>{result?.formattedTotalInterestSaved ?? t("callout.waitingTitle")}</strong>
+              <small>
+                {result
+                  ? `${result.guidance} ${t("callout.calculatedDescription", { oldInterest: result.formattedOldInterest, newInterest: result.formattedNewInterest })}`
+                  : t("callout.waitingDescription")}
+              </small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Refinance notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {refinanceNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Refinance caveat
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Compare loan estimates from multiple lenders and confirm how long you expect to keep the property.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

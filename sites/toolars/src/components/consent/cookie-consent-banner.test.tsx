@@ -1,8 +1,17 @@
+import { readFileSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, screen } from "@testing-library/react";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../scripts/audit-i18n.mjs";
 import { CONSENT_STORAGE_KEY } from "@/lib/consent/cookie-consent";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { CookieConsentBanner } from "./cookie-consent-banner";
+
+const cookieConsentBannerSourceFile = "src/components/consent/cookie-consent-banner.tsx";
+
+function scanCookieConsentBannerSource() {
+  return scanSourceText(readFileSync(cookieConsentBannerSourceFile, "utf8"), cookieConsentBannerSourceFile);
+}
 
 describe("CookieConsentBanner", () => {
   beforeEach(() => {
@@ -18,6 +27,13 @@ describe("CookieConsentBanner", () => {
     renderWithIntl(<CookieConsentBanner />);
     expect(screen.getByRole("region", { name: /cookie consent/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /privacy policy/i })).toHaveAttribute("href", "/privacy");
+  });
+
+  it("keeps the cookie banner source free of hardcoded UI scanner candidates", () => {
+    const scan = scanCookieConsentBannerSource();
+
+    expect(scan.hardcodedText).toEqual([]);
+    expect(scan.absoluteHrefs).toEqual([]);
   });
 
   it("does not render the banner after the user accepts", () => {

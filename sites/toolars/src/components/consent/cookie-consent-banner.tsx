@@ -1,8 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { getCookieConsent, setCookieConsent } from "@/lib/consent/cookie-consent";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 /**
  * Bottom-anchored cookie consent banner. Shown once per visitor until they
@@ -12,7 +13,8 @@ import { getCookieConsent, setCookieConsent } from "@/lib/consent/cookie-consent
  */
 export function CookieConsentBanner() {
   const t = useTranslations("cookie");
-  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -29,12 +31,12 @@ export function CookieConsentBanner() {
   if (!visible) return null;
 
   return (
-    <div className="cookie-consent-banner" role="region" aria-label="Cookie consent">
+    <div className="cookie-consent-banner" role="region" aria-label={t("ariaLabel")}>
       <div className="cookie-consent-content">
         <p>
           {t.rich("message", {
             privacyLink: (chunks) => (
-              <a href="/privacy">{chunks}</a>
+              <a href={localizePath("/privacy", localeCode)}>{chunks}</a>
             )
           })}
         </p>

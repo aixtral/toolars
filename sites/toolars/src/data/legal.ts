@@ -1,3 +1,7 @@
+import esMessages from "../../messages/es.json";
+import zhHansMessages from "../../messages/zh-hans.json";
+import zhHantMessages from "../../messages/zh-hant.json";
+
 export interface LegalSection {
   heading: string;
   paragraphs: string[];
@@ -185,14 +189,46 @@ const termsOfService: LegalDocument = {
 
 const documents: LegalDocument[] = [privacyPolicy, termsOfService];
 
-/**
- * Resolve the legal document set for a locale. Falls back to English when no
- * translation file exists for the locale. Translated legal content should be
- * professionally reviewed before publishing.
- */
+type LocalizedLegalDocument = Omit<LegalDocument, "slug" | "lastUpdated">;
+
+type LocalizedLegalMessages = {
+  documents?: {
+    privacyPolicy?: LocalizedLegalDocument;
+    termsOfService?: LocalizedLegalDocument;
+  };
+};
+
+const localizedLegalMessages: Record<string, LocalizedLegalMessages> = {
+  es: esMessages.legal,
+  "zh-hans": zhHansMessages.legal,
+  "zh-hant": zhHantMessages.legal
+};
+
+function buildLocalizedDocuments(locale: string): LegalDocument[] | undefined {
+  const localizedDocuments = localizedLegalMessages[locale]?.documents;
+  const privacy = localizedDocuments?.privacyPolicy;
+  const terms = localizedDocuments?.termsOfService;
+
+  if (!privacy || !terms) return undefined;
+
+  return [
+    {
+      slug: "privacy-policy",
+      lastUpdated: PRIVACY_POLICY_LAST_UPDATED,
+      ...privacy
+    },
+    {
+      slug: "terms-of-service",
+      lastUpdated: TERMS_OF_SERVICE_LAST_UPDATED,
+      ...terms
+    }
+  ];
+}
+
 async function resolveDocumentsForLocale(locale: string): Promise<LegalDocument[]> {
-  // Translated legal documents (es/zh) will be added here once professionally
-  // reviewed. Until then, all locales render the English source.
+  const localizedDocuments = buildLocalizedDocuments(locale);
+  if (localizedDocuments) return localizedDocuments;
+
   return documents;
 }
 

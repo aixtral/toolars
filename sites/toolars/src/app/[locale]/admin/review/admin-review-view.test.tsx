@@ -1,7 +1,17 @@
-import { screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
+import zhHans from "../../../../../messages/zh-hans.json";
 import { AdminReviewView } from "./admin-review-view";
+
+function renderAdminReviewInLocale(locale: string, messages: Record<string, unknown>) {
+  return render(
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <AdminReviewView />
+    </NextIntlClientProvider>
+  );
+}
 
 describe("AdminReviewView", () => {
   it("renders the admin review modules from the design", () => {
@@ -37,5 +47,20 @@ describe("AdminReviewView", () => {
     expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Request changes" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Reject" })).toBeInTheDocument();
+  });
+
+  it("localizes the admin review queue in simplified Chinese", () => {
+    renderAdminReviewInLocale("zh-hans", zhHans);
+
+    expect(screen.getByRole("heading", { name: "审核队列" })).toBeInTheDocument();
+    expect(screen.getByText("待审核")).toBeInTheDocument();
+    expect(screen.getByLabelText("提交表格")).toBeInTheDocument();
+    expect(screen.getAllByText("AI 研究摘要器").length).toBeGreaterThan(0);
+    expect(screen.getByText("截图-1.png")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "打开提交表单" })).toHaveAttribute("href", "/zh-hans/submit");
+    expect(screen.getByRole("button", { name: "批准" })).toBeInTheDocument();
+    expect(screen.queryByText("Pending reviews")).not.toBeInTheDocument();
+    expect(screen.queryAllByText("AI Research Summarizer")).toHaveLength(0);
+    expect(screen.queryByText("screenshot-1.png")).not.toBeInTheDocument();
   });
 });

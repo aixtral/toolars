@@ -14,6 +14,233 @@ import {
   getToolsByGroup
 } from "./registry";
 
+const aixtralBatch1PromotedSlugs = [
+  "base64-converter",
+  "case-converter",
+  "slug-generator",
+  "text-stats",
+  "uuid-generator",
+  "url-encoder",
+  "html-entity-encoder",
+  "lorem-ipsum"
+] as const;
+
+const aixtralBatch1DetailOnlySlugs = [] as const;
+
+const aixtralBatch1Slugs = [...aixtralBatch1PromotedSlugs, ...aixtralBatch1DetailOnlySlugs] as const;
+
+const aixtralBatch2Slugs = [
+  "csv-to-json",
+  "json-to-csv",
+  "json-diff",
+  "yaml-validator",
+  "xml-formatter",
+  "markdown-to-json",
+  "diff-checker",
+  "text-diff"
+] as const;
+
+const aixtralBatch2PromotedSlugs = [
+  "csv-to-json",
+  "json-to-csv",
+  "json-diff",
+  "yaml-validator",
+  "xml-formatter",
+  "markdown-to-json",
+  "diff-checker",
+  "text-diff"
+] as const;
+
+const aixtralBatch2DetailOnlySlugs = [] as const;
+
+const aixtralBatch3Slugs = [
+  "url-parser",
+  "number-base-converter",
+  "file-size-converter",
+  "chmod-calculator",
+  "ipv4-subnet-calculator",
+  "timestamp-converter",
+  "user-agent-parser"
+] as const;
+
+const aixtralBatch4Slugs = [
+  "color-converter",
+  "color-contrast-checker",
+  "color-palette-generator",
+  "css-border-radius-generator",
+  "css-flexbox-generator",
+  "css-grid-generator",
+  "css-unit-converter"
+] as const;
+
+const aixtralBatch4PromotedSlugs = [
+  "color-converter",
+  "color-contrast-checker",
+  "color-palette-generator",
+  "css-border-radius-generator",
+  "css-flexbox-generator",
+  "css-grid-generator",
+  "css-unit-converter"
+] as const;
+const aixtralBatch4DetailOnlySlugs = [] as const;
+
+const aixtralBatch5Slugs = [
+  "hash-generator",
+  "jwt-decoder",
+  "password-generator",
+  "regex-tester",
+  "sql-formatter",
+  "toml-converter",
+  "unicode-search"
+] as const;
+
+const aixtralBatch5PromotedSlugs = [
+  "hash-generator",
+  "jwt-decoder",
+  "password-generator",
+  "regex-tester",
+  "sql-formatter",
+  "toml-converter",
+  "unicode-search"
+] as const;
+const aixtralBatch5DetailOnlySlugs = [] as const;
+
+const aixtralBatch6Slugs = [
+  "code-minifier",
+  "cron-explainer",
+  "css-to-tailwind-converter",
+  "docker-compose-converter",
+  "env-editor",
+  "meta-tag-generator",
+  "robots-txt-generator"
+] as const;
+const aixtralBatch6PromotedSlugs = [
+  "code-minifier",
+  "cron-explainer",
+  "css-to-tailwind-converter",
+  "docker-compose-converter",
+  "env-editor",
+  "meta-tag-generator",
+  "robots-txt-generator"
+] as const;
+const aixtralBatch6DetailOnlySlugs = [] as const;
+
+const aixtralBatch7Slugs = [
+  "barcode-generator",
+  "base64-image-encoder",
+  "certificate-decoder",
+  "cron-builder",
+  "http-status-reference",
+  "mime-lookup",
+  "nanoid-generator",
+  "qr-code-generator"
+] as const;
+
+const aixtralBatch7PromotedSlugs = [
+  "barcode-generator",
+  "base64-image-encoder",
+  "certificate-decoder",
+  "cron-builder",
+  "http-status-reference",
+  "mime-lookup",
+  "nanoid-generator",
+  "qr-code-generator"
+] as const;
+const aixtralBatch7DetailOnlySlugs = [] as const;
+
+const aixtralBatch8Slugs = [
+  "html-markdown-converter",
+  "html-preview",
+  "image-resizer",
+  "json-schema-builder",
+  "markdown-table-generator",
+  "mock-data-generator",
+  "svg-optimizer"
+] as const;
+const aixtralBatch8PromotedSlugs = [
+  "html-markdown-converter",
+  "html-preview",
+  "image-resizer",
+  "json-schema-builder",
+  "markdown-table-generator",
+  "mock-data-generator",
+  "svg-optimizer"
+] as const;
+const aixtralBatch8DetailOnlySlugs = [] as const;
+
+const aixtralBatch9Slugs = [
+  "ai-guardrail-config",
+  "code-to-image",
+  "css-animation-generator",
+  "css-box-shadow-generator",
+  "embedding-playground",
+  "jailbreak-detector",
+  "rag-chunk-visualizer",
+  "red-team-simulator",
+  "synthetic-dataset-gen",
+  "system-prompt-compressor",
+  "system-prompt-guard",
+  "token-counter",
+  "toxicity-scanner"
+] as const;
+const aixtralBatch9PromotedSlugs = [
+  "ai-guardrail-config",
+  "code-to-image",
+  "css-animation-generator",
+  "css-box-shadow-generator",
+  "embedding-playground",
+  "jailbreak-detector",
+  "rag-chunk-visualizer",
+  "red-team-simulator",
+  "synthetic-dataset-gen",
+  "system-prompt-compressor",
+  "system-prompt-guard",
+  "token-counter",
+  "toxicity-scanner"
+] as const;
+
+const w20BdAiSafetyNativeSlugs = [
+  "ai-guardrail-config",
+  "hallucination-checker",
+  "jailbreak-detector",
+  "pii-scanner",
+  "red-team-simulator",
+  "toxicity-scanner",
+  "certificate-decoder"
+] as const;
+
+const w20BfDeveloperUtilityNativeSlugs = [
+  "code-minifier",
+  "cron-builder",
+  "cron-explainer",
+  "docker-compose-converter",
+  "env-editor",
+  "html-markdown-converter",
+  "html-preview",
+  "http-status-reference",
+  "json-schema-builder",
+  "json-tree-viewer",
+  "mime-lookup",
+  "schema-validator",
+  "sql-formatter",
+  "toml-converter",
+  "unicode-search"
+] as const;
+
+const w20BkPromptDataNativeSlugs = [
+  "function-call-builder",
+  "prompt-templates",
+  "structured-output-formatter",
+  "vision-prompt-builder",
+  "markdown-table-generator",
+  "mock-data-generator",
+  "synthetic-dataset-gen"
+] as const;
+
+const w20BkToolarsNativePromptDataSlugs = [
+  "synthetic-dataset-generator"
+] as const;
+
 describe("Toolars registry", () => {
   it("contains the first representative tools from the design contract", () => {
     const slugs = tools.map((tool) => tool.slug);
@@ -42,15 +269,106 @@ describe("Toolars registry", () => {
   it("keeps only launch-ready or trial-ready tools in the public catalog", () => {
     const publicSlugs = publicTools.map((tool) => tool.slug);
 
-    expect(tools).toHaveLength(118);
-    expect(publicTools).toHaveLength(91);
+    expect(tools).toHaveLength(190);
+    expect(publicTools).toHaveLength(190);
     expect(publicSlugs).toEqual(
-      expect.arrayContaining(["pdf-toolkit", "json-repair", "prompt-injection-scanner", "llm-cost-calculator", "mcp-server-builder"])
+      expect.arrayContaining([
+        "pdf-toolkit",
+        "ai-pdf-summarizer",
+        "json-repair",
+        "prompt-injection-scanner",
+        "llm-cost-calculator",
+        "model-comparator",
+        "context-window",
+        "token-budget-planner",
+        "mcp-server-builder",
+        "mcp-tester",
+        "agent-workflow-builder",
+        "rag-eval-bench",
+        "base64-converter",
+        "case-converter",
+        "slug-generator",
+        "text-stats",
+        "uuid-generator",
+        "url-encoder",
+        "html-entity-encoder",
+        "lorem-ipsum",
+        "csv-to-json",
+        "json-to-csv",
+        "json-diff",
+        "yaml-validator",
+        "xml-formatter",
+        "markdown-to-json",
+        "diff-checker",
+        "text-diff",
+        "url-parser",
+        "number-base-converter",
+        "file-size-converter",
+        "chmod-calculator",
+        "ipv4-subnet-calculator",
+        "timestamp-converter",
+        "user-agent-parser",
+        "hash-generator",
+        "jwt-decoder",
+        "password-generator",
+        "regex-tester",
+        "nanoid-generator",
+        "json-formatter",
+        "json-path-tester",
+        "color-converter",
+        "color-contrast-checker",
+        "color-palette-generator",
+        "css-gradient-generator",
+        "css-box-shadow-generator",
+        "css-border-radius-generator",
+        "css-flexbox-generator",
+        "css-grid-generator",
+        "css-unit-converter",
+        "css-to-tailwind-converter",
+        "meta-tag-generator",
+        "robots-txt-generator",
+        "pdf-merger",
+        "pdf-compressor",
+        "pdf-to-word",
+        "extract-tables",
+        "pdf-password-remover",
+        "pdf-signer",
+        "ocr-scanner",
+        "pdf-translator",
+        "base64-image-encoder",
+        "barcode-generator",
+        "qr-code-generator",
+        "certificate-decoder",
+        "image-resizer",
+        "svg-optimizer",
+        "ai-guardrail-config",
+        "hallucination-checker",
+        "jailbreak-detector",
+        "pii-scanner",
+        "red-team-simulator",
+        "toxicity-scanner",
+        "code-to-image",
+        "css-animation-generator",
+        "embedding-playground",
+        "rag-chunk-visualizer",
+        "system-prompt-compressor",
+        "system-prompt-guard",
+        "token-counter",
+        "function-call-builder",
+        "prompt-templates",
+        "structured-output-formatter",
+        "vision-prompt-builder",
+        "markdown-table-generator",
+        "mock-data-generator",
+        "synthetic-dataset-gen",
+        "synthetic-dataset-generator"
+      ])
     );
-    expect(publicSlugs).not.toEqual(expect.arrayContaining(["ai-pdf-summarizer", "pdf-merger", "pii-scanner"]));
+    expect(publicSlugs).toEqual(expect.arrayContaining(["ai-pdf-summarizer", "pdf-password-remover", "pdf-signer", "pdf-translator"]));
     expect(tools.find((tool) => tool.slug === "ai-pdf-summarizer")).toMatchObject({
-      status: "preview",
-      visibility: "beta"
+      status: "ready",
+      visibility: "public",
+      processing: ["local", "ai-consent"]
     });
   });
 
@@ -65,10 +383,19 @@ describe("Toolars registry", () => {
 
     expect(categories).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ label: "AI", count: 4 }),
-        expect.objectContaining({ label: "PDF", count: 1 }),
+        expect.objectContaining({ label: "AI", count: 94 }),
+        expect.objectContaining({ label: "AI Security", count: 11 }),
+        expect.objectContaining({ label: "Frontend & Design", count: 16 }),
+        expect.objectContaining({ label: "Developer", count: 36 }),
+        expect.objectContaining({ label: "Data", count: 9 }),
+        expect.objectContaining({ label: "PDF", count: 10 }),
+        expect.objectContaining({ label: "RAG / MCP / Agent", count: 6 }),
+        expect.objectContaining({ label: "LLM Cost", count: 6 }),
+        expect.objectContaining({ label: "Prompt Engineering", count: 4 }),
         expect.objectContaining({ label: "Finance", count: 42 }),
-        expect.objectContaining({ label: "Health", count: 42 })
+        expect.objectContaining({ label: "Health", count: 42 }),
+        expect.objectContaining({ label: "Productivity", count: 6 }),
+        expect.objectContaining({ label: "Writing", count: 2 })
       ])
     );
   });
@@ -90,15 +417,448 @@ describe("Toolars registry", () => {
   it("keeps the AI Developer Lab as a first-class merged inventory", () => {
     const labTools = getToolsByGroup("AI Developer Lab");
 
-    expect(labTools).toHaveLength(22);
+    expect(labTools).toHaveLength(94);
     expect(labTools.map((tool) => tool.slug)).toContain("json-repair");
     expect(labTools.map((tool) => tool.slug)).toContain("mcp-server-builder");
-    expect(aiDeveloperLabTools.map((tool) => tool.slug)).toEqual([
+    expect(aiDeveloperLabTools).toHaveLength(94);
+    expect(aiDeveloperLabTools.map((tool) => tool.slug)).toEqual(expect.arrayContaining([
       "json-repair",
       "prompt-injection-scanner",
       "llm-cost-calculator",
-      "mcp-server-builder"
-    ]);
+      "mcp-server-builder",
+      "base64-converter",
+      "case-converter",
+      "slug-generator",
+      "text-stats",
+      "uuid-generator",
+      "url-encoder",
+      "html-entity-encoder",
+      "lorem-ipsum",
+      "csv-to-json",
+      "json-to-csv",
+      "json-diff",
+      "yaml-validator",
+      "xml-formatter",
+      "markdown-to-json",
+      "diff-checker",
+      "text-diff",
+      "url-parser",
+      "number-base-converter",
+      "file-size-converter",
+      "chmod-calculator",
+      "ipv4-subnet-calculator",
+      "timestamp-converter",
+      "user-agent-parser",
+      "hash-generator",
+      "jwt-decoder",
+      "password-generator",
+      "regex-tester",
+      "nanoid-generator",
+      "json-formatter",
+      "json-path-tester",
+      "color-converter",
+      "color-contrast-checker",
+      "color-palette-generator",
+      "css-gradient-generator",
+      "css-box-shadow-generator",
+      "css-border-radius-generator",
+      "css-flexbox-generator",
+      "css-grid-generator",
+      "css-unit-converter",
+      "css-to-tailwind-converter",
+      "meta-tag-generator",
+      "robots-txt-generator",
+      "base64-image-encoder",
+      "barcode-generator",
+      "qr-code-generator",
+      "certificate-decoder",
+      "image-resizer",
+      "svg-optimizer",
+      "ai-guardrail-config",
+      "hallucination-checker",
+      "jailbreak-detector",
+      "pii-scanner",
+      "red-team-simulator",
+      "toxicity-scanner",
+      "code-to-image",
+      "css-animation-generator",
+      "system-prompt-compressor",
+      "system-prompt-guard",
+      "token-counter",
+      "model-comparator",
+      "context-window",
+      "token-budget-planner",
+      "mcp-tester",
+      "agent-workflow-builder",
+      "rag-eval-bench",
+      "embedding-playground",
+      "rag-chunk-visualizer"
+    ]));
+  });
+
+  it("registers Aixtral Batch 1 with promoted native workspaces", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch1Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch1Slugs]);
+    expect(72 - registeredBatchSlugs.length).toBe(64);
+
+    for (const slug of aixtralBatch1PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    expect(aixtralBatch1DetailOnlySlugs).toEqual([]);
+  });
+
+  it("registers Aixtral Batch 2 data formatter and diff tools with promoted native workspaces", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch2Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch2Slugs]);
+    expect(64 - registeredBatchSlugs.length).toBe(56);
+
+    for (const slug of aixtralBatch2PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    expect(aixtralBatch2DetailOnlySlugs).toEqual([]);
+
+    for (const slug of aixtralBatch2DetailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+  });
+
+  it("registers Aixtral Batch 3 developer utilities with promoted native workspaces", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch3Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch3Slugs]);
+    expect(56 - registeredBatchSlugs.length).toBe(49);
+
+    for (const slug of aixtralBatch3Slugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+  });
+
+  it("registers Aixtral Batch 4 color and CSS utilities with Wave 19 native promotions", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch4Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch4Slugs]);
+    expect(49 - registeredBatchSlugs.length).toBe(42);
+
+    for (const slug of aixtralBatch4PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of aixtralBatch4DetailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+
+    expect(tools.find((item) => item.slug === "css-gradient-generator")).toMatchObject({
+      group: "AI Developer Lab",
+      processing: ["local"],
+      source: "aixtral-lab",
+      status: "ready",
+      visibility: "public"
+    });
+    expect(publicSlugs).toContain("css-gradient-generator");
+  });
+
+  it("registers Aixtral Batch 5 developer security and text utilities with Wave 19 native promotions", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch5Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch5Slugs]);
+    expect(42 - registeredBatchSlugs.length).toBe(35);
+
+    for (const slug of aixtralBatch5PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of aixtralBatch5DetailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+  });
+
+  it("registers Aixtral Batch 6 web and config utilities with W20 native promotions", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch6Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch6Slugs]);
+    expect(35 - registeredBatchSlugs.length).toBe(28);
+
+    for (const slug of aixtralBatch6PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of aixtralBatch6DetailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+  });
+
+  it("registers Aixtral Batch 7 reference, encoding, and generator utilities with media generators promoted", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch7Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch7Slugs]);
+    expect(28 - registeredBatchSlugs.length).toBe(20);
+
+    for (const slug of aixtralBatch7PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of aixtralBatch7DetailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+  });
+
+  it("registers Aixtral Batch 8 content, preview, and schema utilities with W20 media promotions", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const registeredBatchSlugs = aixtralBatch8Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch8Slugs]);
+    expect(20 - registeredBatchSlugs.length).toBe(13);
+
+    for (const slug of aixtralBatch8PromotedSlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of aixtralBatch8DetailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+  });
+
+  it("registers Aixtral Batch 9 AI safety and generation utilities with native prompt and visual tools promoted", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+    const promotedSlugs = [...aixtralBatch9PromotedSlugs];
+    const detailOnlySlugs = aixtralBatch9Slugs.filter((slug) => !promotedSlugs.includes(slug));
+    const registeredBatchSlugs = aixtralBatch9Slugs.filter((slug) =>
+      tools.some((tool) => tool.slug === slug && tool.source === "aixtral-lab")
+    );
+
+    expect(registeredBatchSlugs).toEqual([...aixtralBatch9Slugs]);
+    expect(13 - registeredBatchSlugs.length).toBe(0);
+
+    for (const slug of promotedSlugs) {
+      expect(tools.find((item) => item.slug === slug)).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of detailOnlySlugs) {
+      const tool = tools.find((item) => item.slug === slug);
+
+      expect(tool).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "planned",
+        visibility: "hidden"
+      });
+      expect(publicSlugs).not.toContain(slug);
+    }
+  });
+
+  it("promotes W20-BD AI safety native tools across registry visibility", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+
+    for (const slug of w20BdAiSafetyNativeSlugs) {
+      expect(tools.find((item) => item.slug === slug)).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        pricing: "free",
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+  });
+
+  it("promotes W20-BF developer utility native tools across registry visibility", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+
+    for (const slug of w20BfDeveloperUtilityNativeSlugs) {
+      expect(tools.find((item) => item.slug === slug)).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+  });
+
+  it("promotes W20-BK prompt and data native tools across registry visibility", () => {
+    const publicSlugs = publicTools.map((tool) => tool.slug);
+
+    for (const slug of w20BkPromptDataNativeSlugs) {
+      expect(tools.find((item) => item.slug === slug)).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "aixtral-lab",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
+
+    for (const slug of w20BkToolarsNativePromptDataSlugs) {
+      expect(tools.find((item) => item.slug === slug)).toMatchObject({
+        group: "AI Developer Lab",
+        processing: ["local"],
+        source: "toolars",
+        status: "ready",
+        visibility: "public"
+      });
+      expect(publicSlugs).toContain(slug);
+    }
   });
 
   it("keeps representative VitalCalc finance and health tools in the merged inventory", () => {

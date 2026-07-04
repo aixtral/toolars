@@ -160,12 +160,17 @@ export function buildGraph(...schemas: object[]): JsonLdGraph {
   };
 }
 
+export interface ArticleSchemaOptions {
+  path?: string;
+  inLanguage?: string;
+}
+
 /**
  * schema.org Article for a blog post, plus an embedded FAQPage when the article
  * has FAQ entries. GEO engines surface both article answers and FAQ answers.
  */
-export function buildArticleSchema(article: BlogArticle, baseUrl: string) {
-  const url = joinUrl(baseUrl, `/blog/${article.slug}`);
+export function buildArticleSchema(article: BlogArticle, baseUrl: string, options: ArticleSchemaOptions = {}) {
+  const url = joinUrl(baseUrl, options.path ?? `/blog/${article.slug}`);
   return {
     "@type": "Article",
     headline: article.title,
@@ -183,7 +188,8 @@ export function buildArticleSchema(article: BlogArticle, baseUrl: string) {
       name: "Toolars"
     },
     articleSection: article.category,
-    keywords: article.featuredToolSlugs.join(", ")
+    keywords: article.featuredToolSlugs.join(", "),
+    ...(options.inLanguage ? { inLanguage: options.inLanguage } : {})
   };
 }
 

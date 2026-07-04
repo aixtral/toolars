@@ -1,3 +1,9 @@
+import * as vitalCalcEnglishArticlesSourceModule from "./vitalcalc-blog-source.json";
+import { articlesEs } from "./blog-es";
+import { articlesZh } from "./blog-zh";
+import { articlesZhHant } from "./blog-zh-hant";
+import type { LocaleCode } from "./locales";
+
 export interface BlogSection {
   heading: string;
   paragraphs: string[];
@@ -22,7 +28,15 @@ export interface BlogArticle {
   faq: BlogFaqItem[];
 }
 
-const articles: BlogArticle[] = [
+const vitalCalcEnglishArticlesSource = (
+  Array.isArray(vitalCalcEnglishArticlesSourceModule)
+    ? vitalCalcEnglishArticlesSourceModule
+    : (vitalCalcEnglishArticlesSourceModule as { default: unknown }).default
+) as BlogArticle[];
+
+const vitalCalcEnglishArticles = vitalCalcEnglishArticlesSource;
+
+const launchArticles: BlogArticle[] = [
   {
     slug: "json-repair-guide",
     title: "How to Repair Broken JSON in Seconds",
@@ -181,24 +195,43 @@ const articles: BlogArticle[] = [
   }
 ];
 
-const sortedArticles = [...articles].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+const articles: BlogArticle[] = [...launchArticles, ...vitalCalcEnglishArticles];
+
+function sortArticlesByPublishedAt(articlesToSort: BlogArticle[]): BlogArticle[] {
+  return [...articlesToSort].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+}
+
+const sortedArticles = sortArticlesByPublishedAt(articles);
+
+const translatedArticlesByLocale: Partial<Record<LocaleCode, BlogArticle[]>> = {
+  es: articlesEs,
+  "zh-hans": articlesZh,
+  "zh-hant": articlesZhHant
+};
+
+const articleContentLocales: LocaleCode[] = ["en", "es", "zh-hans", "zh-hant"];
 
 export const allArticleSlugs: string[] = sortedArticles.map((article) => article.slug);
 
+function mergeLocalizedArticles(localizedArticles: BlogArticle[] = []): BlogArticle[] {
+  const articlesBySlug = new Map(sortedArticles.map((article) => [article.slug, article]));
+
+  for (const article of localizedArticles) {
+    articlesBySlug.set(article.slug, article);
+  }
+
+  return sortArticlesByPublishedAt([...articlesBySlug.values()]);
+}
+
 /**
- * Resolve the article set for a locale. Falls back to English when the locale
- * has no dedicated translation file, so untranslated locales still render.
+ * Resolve the article set for a locale. Every launch locale receives the full
+ * English article catalog, then locale-specific translations override matching
+ * slugs. This keeps language switching from landing on 404s while translation
+ * coverage catches up.
  */
 async function resolveArticlesForLocale(locale: string): Promise<BlogArticle[]> {
-  if (locale === "es") {
-    const { articlesEs } = await import("./blog-es");
-    return [...articlesEs].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
-  }
-  if (locale === "zh-hans" || locale === "zh-hant") {
-    const { articlesZh } = await import("./blog-zh");
-    return [...articlesZh].sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
-  }
-  return sortedArticles;
+  if (locale === "en") return sortedArticles;
+  return mergeLocalizedArticles(translatedArticlesByLocale[locale as LocaleCode]);
 }
 
 export async function getAllArticles(locale = "en"): Promise<BlogArticle[]> {
@@ -206,15 +239,19 @@ export async function getAllArticles(locale = "en"): Promise<BlogArticle[]> {
 }
 
 /**
- * Synchronous access to the default (English) article set. Use this in
- * non-async contexts like the home page's "From the blog" preview, where
- * locale-specific content is not critical.
+ * Synchronous access to localized article previews for non-async server
+ * components such as the home page rail.
  */
-export function getAllArticlesSync(): BlogArticle[] {
-  return sortedArticles;
+export function getAllArticlesSync(locale = "en"): BlogArticle[] {
+  if (locale === "en") return sortedArticles;
+  return mergeLocalizedArticles(translatedArticlesByLocale[locale as LocaleCode]);
 }
 
 export async function getArticleBySlug(slug: string, locale = "en"): Promise<BlogArticle | undefined> {
   const articles = await resolveArticlesForLocale(locale);
   return articles.find((article) => article.slug === slug);
+}
+
+export function getArticleAvailableLocales(slug: string): LocaleCode[] {
+  return allArticleSlugs.includes(slug) ? articleContentLocales : [];
 }

@@ -15,6 +15,172 @@ export const labDetailSlugs = [
   "mcp-server-builder"
 ] as const;
 
+export const pdfNativeDetailSlugs = [
+  "ai-pdf-summarizer",
+  "pdf-merger",
+  "pdf-compressor",
+  "pdf-to-word",
+  "extract-tables",
+  "pdf-password-remover",
+  "pdf-signer",
+  "ocr-scanner",
+  "pdf-translator"
+] as const;
+
+export const aixtralBatch1DetailSlugs = [
+  "base64-converter",
+  "case-converter",
+  "slug-generator",
+  "text-stats",
+  "uuid-generator",
+  "url-encoder",
+  "html-entity-encoder",
+  "lorem-ipsum"
+] as const;
+
+export const aixtralBatch2DetailSlugs = [
+  "csv-to-json",
+  "json-to-csv",
+  "json-diff",
+  "yaml-validator",
+  "xml-formatter",
+  "markdown-to-json",
+  "diff-checker",
+  "text-diff"
+] as const;
+
+export const aixtralBatch3DetailSlugs = [
+  "url-parser",
+  "number-base-converter",
+  "file-size-converter",
+  "chmod-calculator",
+  "ipv4-subnet-calculator",
+  "timestamp-converter",
+  "user-agent-parser"
+] as const;
+
+export const aixtralBatch4DetailSlugs = [
+  "color-converter",
+  "color-contrast-checker",
+  "color-palette-generator",
+  "css-gradient-generator",
+  "css-border-radius-generator",
+  "css-flexbox-generator",
+  "css-grid-generator",
+  "css-unit-converter"
+] as const;
+
+export const aixtralBatch5DetailSlugs = [
+  "hash-generator",
+  "jwt-decoder",
+  "password-generator",
+  "regex-tester",
+  "sql-formatter",
+  "toml-converter",
+  "unicode-search"
+] as const;
+
+export const aixtralBatch6DetailSlugs = [
+  "code-minifier",
+  "cron-explainer",
+  "css-to-tailwind-converter",
+  "docker-compose-converter",
+  "env-editor",
+  "meta-tag-generator",
+  "robots-txt-generator"
+] as const;
+
+export const aixtralBatch7DetailSlugs = [
+  "barcode-generator",
+  "base64-image-encoder",
+  "certificate-decoder",
+  "cron-builder",
+  "http-status-reference",
+  "mime-lookup",
+  "nanoid-generator",
+  "qr-code-generator"
+] as const;
+
+export const aixtralBatch8DetailSlugs = [
+  "html-markdown-converter",
+  "html-preview",
+  "image-resizer",
+  "json-schema-builder",
+  "markdown-table-generator",
+  "mock-data-generator",
+  "svg-optimizer"
+] as const;
+
+export const aixtralBatch9DetailSlugs = [
+  "ai-guardrail-config",
+  "code-to-image",
+  "css-animation-generator",
+  "css-box-shadow-generator",
+  "embedding-playground",
+  "jailbreak-detector",
+  "rag-chunk-visualizer",
+  "red-team-simulator",
+  "synthetic-dataset-gen",
+  "system-prompt-compressor",
+  "system-prompt-guard",
+  "token-counter",
+  "toxicity-scanner"
+] as const;
+
+export const wave19WebDevNativeDetailSlugs = ["json-formatter", "json-path-tester"] as const;
+
+export const w20BfPreviewNativeDetailSlugs = ["json-tree-viewer", "schema-validator"] as const;
+
+const w20BfDeveloperUtilityNativeDetailSlugs = new Set([
+  "code-minifier",
+  "cron-builder",
+  "cron-explainer",
+  "docker-compose-converter",
+  "env-editor",
+  "html-markdown-converter",
+  "html-preview",
+  "http-status-reference",
+  "json-schema-builder",
+  "json-tree-viewer",
+  "mime-lookup",
+  "schema-validator",
+  "sql-formatter",
+  "toml-converter",
+  "unicode-search"
+]);
+
+export const w20BeNativeDetailSlugs = [
+  "model-comparator",
+  "context-window",
+  "token-budget-planner",
+  "mcp-tester",
+  "agent-workflow-builder",
+  "rag-eval-bench"
+] as const;
+
+export const w20BdNativeDetailSlugs = ["hallucination-checker", "pii-scanner"] as const;
+
+export const w20BkNativeDetailSlugs = [
+  "function-call-builder",
+  "prompt-templates",
+  "structured-output-formatter",
+  "vision-prompt-builder",
+  "markdown-table-generator",
+  "mock-data-generator",
+  "synthetic-dataset-gen",
+  "synthetic-dataset-generator"
+] as const;
+
+const w20BkAdditionalDetailSlugs = [
+  "function-call-builder",
+  "prompt-templates",
+  "structured-output-formatter",
+  "vision-prompt-builder",
+  "synthetic-dataset-generator"
+] as const;
+
+const w20BkNativeDetailSlugSet = new Set<string>(w20BkNativeDetailSlugs);
+
 export const vitalCalcDetailSlugs = [
   "mortgage-calculator",
   "bmi-calculator",
@@ -104,9 +270,42 @@ export const vitalCalcDetailSlugs = [
   "testosterone-calculator"
 ] as const;
 
-export const allDetailSlugs = [...labDetailSlugs, ...vitalCalcDetailSlugs] as const;
+export const allDetailSlugs = [
+  ...labDetailSlugs,
+  ...pdfNativeDetailSlugs,
+  ...aixtralBatch1DetailSlugs,
+  ...aixtralBatch2DetailSlugs,
+  ...aixtralBatch3DetailSlugs,
+  ...aixtralBatch4DetailSlugs,
+  ...aixtralBatch5DetailSlugs,
+  ...aixtralBatch6DetailSlugs,
+  ...aixtralBatch7DetailSlugs,
+  ...aixtralBatch8DetailSlugs,
+  ...aixtralBatch9DetailSlugs,
+  ...wave19WebDevNativeDetailSlugs,
+  ...w20BfPreviewNativeDetailSlugs,
+  ...w20BeNativeDetailSlugs,
+  ...w20BdNativeDetailSlugs,
+  ...w20BkAdditionalDetailSlugs,
+  ...vitalCalcDetailSlugs
+] as const;
 
 export type LabDetailSlug = (typeof labDetailSlugs)[number];
+export type PdfNativeDetailSlug = (typeof pdfNativeDetailSlugs)[number];
+export type AixtralBatch1DetailSlug = (typeof aixtralBatch1DetailSlugs)[number];
+export type AixtralBatch2DetailSlug = (typeof aixtralBatch2DetailSlugs)[number];
+export type AixtralBatch3DetailSlug = (typeof aixtralBatch3DetailSlugs)[number];
+export type AixtralBatch4DetailSlug = (typeof aixtralBatch4DetailSlugs)[number];
+export type AixtralBatch5DetailSlug = (typeof aixtralBatch5DetailSlugs)[number];
+export type AixtralBatch6DetailSlug = (typeof aixtralBatch6DetailSlugs)[number];
+export type AixtralBatch7DetailSlug = (typeof aixtralBatch7DetailSlugs)[number];
+export type AixtralBatch8DetailSlug = (typeof aixtralBatch8DetailSlugs)[number];
+export type AixtralBatch9DetailSlug = (typeof aixtralBatch9DetailSlugs)[number];
+export type Wave19WebDevNativeDetailSlug = (typeof wave19WebDevNativeDetailSlugs)[number];
+export type W20BfPreviewNativeDetailSlug = (typeof w20BfPreviewNativeDetailSlugs)[number];
+export type W20BeNativeDetailSlug = (typeof w20BeNativeDetailSlugs)[number];
+export type W20BdNativeDetailSlug = (typeof w20BdNativeDetailSlugs)[number];
+export type W20BkNativeDetailSlug = (typeof w20BkNativeDetailSlugs)[number];
 export type VitalCalcDetailSlug = (typeof vitalCalcDetailSlugs)[number];
 export type ToolDetailSlug = (typeof allDetailSlugs)[number];
 export type DetailBadgeTone = "local" | "ai" | "warn" | "workflow" | "cloud";
@@ -288,7 +487,345 @@ function vitalCalcDetail({
   };
 }
 
-const detailContent: Record<ToolDetailSlug, ToolDetailContent> = {
+function aixtralDetail({
+  badge,
+  summary,
+  overview,
+  metric,
+  inputTitle,
+  inputDescription,
+  resultTitle,
+  resultDescription,
+  reviewTitle,
+  reviewDescription,
+  handoffTitle,
+  handoffDescription,
+  sourceDescription,
+  contractDescription,
+  relatedSlugs,
+  outcome,
+  accent
+}: {
+  badge: string;
+  summary: string;
+  overview: string;
+  metric: ToolDetailMetric;
+  inputTitle: string;
+  inputDescription: string;
+  resultTitle: string;
+  resultDescription: string;
+  reviewTitle: string;
+  reviewDescription: string;
+  handoffTitle: string;
+  handoffDescription: string;
+  sourceDescription: string;
+  contractDescription: string;
+  relatedSlugs: string[];
+  outcome: string;
+  accent: string;
+}): ToolDetailContent {
+  return {
+    listingBadge: { badge, description: badge, tone: "local" },
+    summary,
+    overview,
+    metrics: [
+      { value: "Detail", label: "Migration status" },
+      metric,
+      { value: "Local", label: "Source processing" },
+      { value: "Hidden", label: "Public workspace" }
+    ],
+    howItWorks: [
+      {
+        title: inputTitle,
+        description: inputDescription,
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: resultTitle,
+        description: resultDescription,
+        badge: "Output"
+      },
+      {
+        title: reviewTitle,
+        description: reviewDescription,
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: handoffTitle,
+        description: handoffDescription,
+        badge: "Handoff"
+      }
+    ],
+    trustSection: {
+      title: "Detail-only migration model",
+      rows: [
+        {
+          badge: "Hidden",
+          description: "This Aixtral Lab tool is registered for inventory, SEO, and migration planning, but it is not exposed in publicTools yet.",
+          tone: "warn"
+        },
+        {
+          badge: "Local source",
+          description: "The source implementation is local-first; Toolars still needs a matching workspace before public launch.",
+          tone: "local"
+        },
+        {
+          badge: "No dead link",
+          description: "Catalog surfaces must not promote this tool as launch-ready until the Toolars workspace route is implemented and tested."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: sourceDescription,
+        badge: "Source",
+        accent
+      },
+      {
+        initials: "UI",
+        title: "Workspace contract",
+        description: contractDescription,
+        badge: "Next",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs,
+    outcome
+  };
+}
+
+function aixtralNativeDetail({
+  summary,
+  overview,
+  metric,
+  inputTitle,
+  inputDescription,
+  resultTitle,
+  resultDescription,
+  reviewTitle,
+  reviewDescription,
+  sourceDescription,
+  workspaceDescription,
+  trustTitle,
+  trustReviewDescription,
+  relatedSlugs,
+  outcome,
+  accent
+}: {
+  summary: string;
+  overview: string;
+  metric: ToolDetailMetric;
+  inputTitle: string;
+  inputDescription: string;
+  resultTitle: string;
+  resultDescription: string;
+  reviewTitle: string;
+  reviewDescription: string;
+  sourceDescription: string;
+  workspaceDescription: string;
+  trustTitle: string;
+  trustReviewDescription: string;
+  relatedSlugs: string[];
+  outcome: string;
+  accent: string;
+}): ToolDetailContent {
+  return {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary,
+    overview,
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      metric,
+      { value: "Public", label: "Workspace status" },
+      { value: "Aixtral", label: "Source migration" }
+    ],
+    howItWorks: [
+      {
+        title: inputTitle,
+        description: inputDescription,
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: resultTitle,
+        description: resultDescription,
+        badge: "Output"
+      },
+      {
+        title: reviewTitle,
+        description: reviewDescription,
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy local output",
+        description: workspaceDescription,
+        badge: "Handoff"
+      }
+    ],
+    trustSection: {
+      title: trustTitle,
+      rows: [
+        {
+          badge: "Local",
+          description: "Inputs are processed in the browser by the native Toolars workspace and are not uploaded for conversion.",
+          tone: "local"
+        },
+        {
+          badge: "Review",
+          description: trustReviewDescription,
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: sourceDescription,
+        badge: "Source",
+        accent
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: workspaceDescription,
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs,
+    outcome
+  };
+}
+
+function nativeMediaDetail({
+  summary,
+  overview,
+  metric,
+  sourceLabel,
+  inputTitle,
+  inputDescription,
+  resultTitle,
+  resultDescription,
+  reviewTitle,
+  reviewDescription,
+  sourceTitle,
+  sourceDescription,
+  workspaceDescription,
+  trustTitle,
+  trustLocalDescription,
+  trustReviewDescription,
+  relatedSlugs,
+  workflowSlug,
+  outcome,
+  accent
+}: {
+  summary: string;
+  overview: string;
+  metric: ToolDetailMetric;
+  sourceLabel: string;
+  inputTitle: string;
+  inputDescription: string;
+  resultTitle: string;
+  resultDescription: string;
+  reviewTitle: string;
+  reviewDescription: string;
+  sourceTitle: string;
+  sourceDescription: string;
+  workspaceDescription: string;
+  trustTitle: string;
+  trustLocalDescription: string;
+  trustReviewDescription: string;
+  relatedSlugs: string[];
+  workflowSlug?: string;
+  outcome: string;
+  accent: string;
+}): ToolDetailContent {
+  return {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary,
+    overview,
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      metric,
+      { value: "Public", label: "Workspace status" },
+      { value: sourceLabel, label: "Source model" }
+    ],
+    howItWorks: [
+      {
+        title: inputTitle,
+        description: inputDescription,
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: resultTitle,
+        description: resultDescription,
+        badge: "Output"
+      },
+      {
+        title: reviewTitle,
+        description: reviewDescription,
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Use the native workspace",
+        description: workspaceDescription,
+        badge: "Workspace"
+      }
+    ],
+    trustSection: {
+      title: trustTitle,
+      rows: [
+        {
+          badge: "Local-first",
+          description: trustLocalDescription,
+          tone: "local"
+        },
+        {
+          badge: "Boundary",
+          description: trustReviewDescription,
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool now has a dedicated Toolars route, native workspace, local library, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: sourceLabel === "Aixtral" ? "AX" : "TL",
+        title: sourceTitle,
+        description: sourceDescription,
+        badge: "Source",
+        accent
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: workspaceDescription,
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs,
+    workflowSlug,
+    outcome
+  };
+}
+
+const detailContent: Partial<Record<ToolDetailSlug, ToolDetailContent>> = {
   "pdf-toolkit": {
     listingBadge: { badge: "PDF workspace", description: "PDF workspace", tone: "local" },
     summary: "This listing closes the designed PDF Toolkit public page with a local operations promise and an AI-summary handoff.",
@@ -364,6 +901,213 @@ const detailContent: Record<ToolDetailSlug, ToolDetailContent> = {
     workflowSlug: "pdf-summary",
     outcome: "PDF operations and AI-summary handoff"
   },
+  "pdf-merger": nativeMediaDetail({
+    summary: "PDF Merger is now a native Toolars workspace for planning local PDF merge queues before binary processing.",
+    overview:
+      "PDF Merger gives users a focused local-first merge workspace for ordered file queues, page totals, output naming, and size estimates. The trust boundary is explicit: Toolars can validate metadata and queue intent in-browser, while binary PDF stitching still requires a browser PDF engine or worker before a downloadable merged file is produced.",
+    metric: { value: "Merge", label: "PDF operation" },
+    sourceLabel: "Toolars",
+    inputTitle: "Add ordered PDFs",
+    inputDescription: "Enter PDF file names, page counts, and byte sizes in the order they should be merged.",
+    resultTitle: "Build merge plan",
+    resultDescription: "Return output file name, total pages, estimated size, validation issues, and queue order.",
+    reviewTitle: "Review order and limits",
+    reviewDescription: "Check that every item is a PDF and that at least two files are present before handoff.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit queue semantics as the source reference for local PDF operation planning.",
+    workspaceDescription: "Dedicated workspace exposes the merge queue, local validation, and JSON handoff for a future PDF engine.",
+    trustTitle: "Local PDF merge planning model",
+    trustLocalDescription: "Names, page counts, and size estimates are processed locally without uploading PDF contents.",
+    trustReviewDescription: "The workspace does not claim to rewrite binary PDFs; final merge output requires a PDF engine after validation.",
+    relatedSlugs: ["pdf-toolkit", "pdf-compressor", "pdf-to-word"],
+    workflowSlug: "pdf-summary",
+    outcome: "Local PDF merge queue and output plan",
+    accent: "purple"
+  }),
+  "pdf-compressor": nativeMediaDetail({
+    summary: "PDF Compressor is now a native Toolars workspace for estimating compression profiles before PDF rewriting.",
+    overview:
+      "PDF Compressor provides local-first compression planning for profile selection, metadata removal, estimated output size, and savings percentage. The trust boundary is clear: Toolars estimates compression from file metadata in the browser, while actual image downsampling and PDF object rewriting require a PDF engine before download.",
+    metric: { value: "Estimate", label: "Compression mode" },
+    sourceLabel: "Toolars",
+    inputTitle: "Enter PDF metadata",
+    inputDescription: "Capture file name, page count, byte size, compression profile, and metadata removal preference.",
+    resultTitle: "Estimate output size",
+    resultDescription: "Return estimated size, savings percentage, output file name, and blocked states for non-PDF input.",
+    reviewTitle: "Review visual quality",
+    reviewDescription: "Make screen, balanced, and print profile tradeoffs visible before a real compressor rewrites the file.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit compression policy as the local planning reference.",
+    workspaceDescription: "Dedicated workspace exposes profile controls, compression estimates, and local-only validation output.",
+    trustTitle: "Local PDF compression estimate model",
+    trustLocalDescription: "Compression estimates use local metadata and do not upload file contents.",
+    trustReviewDescription: "Estimated savings are not a completed compressed PDF; a PDF engine must perform actual rewriting.",
+    relatedSlugs: ["pdf-toolkit", "pdf-merger", "extract-tables"],
+    workflowSlug: "pdf-summary",
+    outcome: "Compression estimate and PDF engine handoff",
+    accent: "orange"
+  }),
+  "ai-pdf-summarizer": nativeMediaDetail({
+    summary: "AI PDF Summarizer is now a native Toolars workspace for local extraction planning and consent-gated summary handoff.",
+    overview:
+      "AI PDF Summarizer gives users a local-first planning workspace for PDF metadata, extracted text scope, summary style, action items, and output naming. The trust boundary is explicit: Toolars can validate local extraction metadata in-browser, while summary generation starts only after AI consent and a disclosed model route.",
+    metric: { value: "AI consent", label: "Summary route" },
+    sourceLabel: "Toolars",
+    inputTitle: "Validate extracted text",
+    inputDescription: "Enter PDF name, page count, byte size, extracted text characters, summary style, and action-item preference.",
+    resultTitle: "Prepare summary handoff",
+    resultDescription: "Return estimated tokens, section plan, output file name, and blocked states before any model receives content.",
+    reviewTitle: "Review model boundary",
+    reviewDescription: "Make the extracted text scope and model route visible before sending document content for summarization.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit summary consent semantics as the source reference for AI PDF planning.",
+    workspaceDescription: "Dedicated workspace exposes local extraction metadata, summary style controls, and AI-consent handoff output.",
+    trustTitle: "Local PDF summary consent model",
+    trustLocalDescription: "PDF metadata and extracted text counts are validated locally before any summary request is prepared.",
+    trustReviewDescription: "Actual summary generation requires AI consent and a disclosed model route; the planner does not upload raw PDFs.",
+    relatedSlugs: ["pdf-toolkit", "pdf-translator", "extract-tables"],
+    workflowSlug: "pdf-summary",
+    outcome: "Local extraction plan and AI summary consent handoff",
+    accent: "emerald"
+  }),
+  "pdf-to-word": nativeMediaDetail({
+    summary: "PDF to Word is now a native Toolars workspace for validating DOCX conversion handoffs without silent uploads.",
+    overview:
+      "PDF to Word captures file metadata, layout preference, output naming, estimated document size, and conversion steps in a local-first workspace. The trust boundary is explicit: Toolars validates the handoff in-browser, but actual DOCX generation requires a conversion service or document engine after the user accepts that boundary.",
+    metric: { value: "DOCX", label: "Target format" },
+    sourceLabel: "Toolars",
+    inputTitle: "Validate PDF metadata",
+    inputDescription: "Enter the PDF name, page count, size, and whether layout preservation matters.",
+    resultTitle: "Prepare DOCX handoff",
+    resultDescription: "Return output name, estimated DOCX size, page count, and service-required step state.",
+    reviewTitle: "Review conversion boundary",
+    reviewDescription: "Make editable text versus layout preservation tradeoffs visible before any service processes content.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF conversion policy from the broader PDF Toolkit as the source behavior reference.",
+    workspaceDescription: "Dedicated workspace exposes local validation, preserve-layout toggle, and conversion handoff metadata.",
+    trustTitle: "Local PDF to Word validation model",
+    trustLocalDescription: "Metadata validation and output naming happen locally before any document content leaves the browser.",
+    trustReviewDescription: "Actual DOCX generation is outside this browser-only layer and requires a conversion service.",
+    relatedSlugs: ["pdf-toolkit", "ocr-scanner", "extract-tables"],
+    workflowSlug: "pdf-summary",
+    outcome: "DOCX conversion handoff plan",
+    accent: "blue"
+  }),
+  "extract-tables": nativeMediaDetail({
+    summary: "Extract Tables is now a native Toolars workspace for local page-range validation and extraction handoff planning.",
+    overview:
+      "Extract Tables lets users define PDF metadata, page ranges, and CSV or XLSX output targets before a structured extractor runs. The local workspace keeps the trust boundary visible: it validates page ranges and output settings in-browser, but actual table detection from PDF content needs a dedicated extraction engine or consent-gated service.",
+    metric: { value: "CSV/XLSX", label: "Output target" },
+    sourceLabel: "Toolars",
+    inputTitle: "Set PDF pages",
+    inputDescription: "Enter PDF name, page count, file size, selected page range, and table output format.",
+    resultTitle: "Plan extraction output",
+    resultDescription: "Return selected page count, estimated table count, output file name, and validation issues.",
+    reviewTitle: "Review extraction assumptions",
+    reviewDescription: "Catch out-of-range pages and clarify that table detection accuracy depends on the downstream extractor.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit table-export handoff as the source planning model.",
+    workspaceDescription: "Dedicated workspace exposes page range controls, output format selection, and extractor handoff metadata.",
+    trustTitle: "Local table extraction planning model",
+    trustLocalDescription: "Page ranges and output settings are validated locally before any PDF content is processed.",
+    trustReviewDescription: "The workspace does not inspect PDF tables directly; extraction requires a structured PDF table engine.",
+    relatedSlugs: ["pdf-toolkit", "csv-to-json", "json-to-csv"],
+    workflowSlug: "pdf-summary",
+    outcome: "Table extraction queue and CSV/XLSX handoff",
+    accent: "green"
+  }),
+  "pdf-password-remover": nativeMediaDetail({
+    summary: "PDF Password Remover is now a native Toolars workspace for owned-document unlock validation before engine handoff.",
+    overview:
+      "PDF Password Remover captures local PDF metadata, ownership confirmation, and existing-password readiness before any unlock action. The trust boundary is explicit: Toolars validates that the user is working with an owned PDF or authorized file, but it does not crack passwords and still needs a PDF engine to decrypt and rewrite the document.",
+    metric: { value: "Owned PDF", label: "Unlock policy" },
+    sourceLabel: "Toolars",
+    inputTitle: "Confirm owned PDF access",
+    inputDescription: "Enter locked PDF metadata and confirm both permission and existing-password readiness.",
+    resultTitle: "Validate unlock handoff",
+    resultDescription: "Return output naming, page count, and blocked states before any PDF engine attempts decryption.",
+    reviewTitle: "Review unlock limits",
+    reviewDescription: "Make it clear that Toolars validates authorized unlock intent and does not bypass or crack unknown passwords.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit security handoff semantics as the source reference for password-removal planning.",
+    workspaceDescription: "Dedicated workspace exposes local ownership checks, password-readiness validation, and PDF engine handoff output.",
+    trustTitle: "Local owned-PDF unlock validation model",
+    trustLocalDescription: "File metadata and ownership assertions are handled locally before any PDF processing engine is selected.",
+    trustReviewDescription: "The workspace does not crack passwords; decrypting and rewriting an owned PDF requires the existing password and a PDF engine.",
+    relatedSlugs: ["pdf-toolkit", "pdf-signer", "pdf-compressor"],
+    workflowSlug: "pdf-summary",
+    outcome: "Owned PDF unlock validation and engine handoff",
+    accent: "violet"
+  }),
+  "pdf-signer": nativeMediaDetail({
+    summary: "PDF Signer is now a native Toolars workspace for planning signature placement before PDF signing engine handoff.",
+    overview:
+      "PDF Signer gives users a local-first workspace for PDF metadata, signer name, page placement, and signature intent. The trust boundary is explicit: Toolars can plan signature placement locally, while an actual signing engine must embed the mark or certificate before a signed PDF exists.",
+    metric: { value: "Signing", label: "Engine handoff" },
+    sourceLabel: "Toolars",
+    inputTitle: "Set signature placement",
+    inputDescription: "Enter PDF metadata, signer name, target page, and signature type before creating a signing plan.",
+    resultTitle: "Prepare signing plan",
+    resultDescription: "Return output naming, signer, signature type, page placement, and validation issues.",
+    reviewTitle: "Review legal boundary",
+    reviewDescription: "Clarify that planning a signature is not the same as embedding a legally meaningful PDF signature.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit signing handoff semantics as the source reference for signature planning.",
+    workspaceDescription: "Dedicated workspace exposes local placement controls and signing-engine handoff metadata.",
+    trustTitle: "Local PDF signature placement model",
+    trustLocalDescription: "Signer name, signature type, and page placement are validated locally in the browser.",
+    trustReviewDescription: "A signature is not embedded by this planning layer; a PDF signing engine must apply the final mark or certificate.",
+    relatedSlugs: ["pdf-toolkit", "pdf-password-remover", "pdf-to-word"],
+    workflowSlug: "pdf-summary",
+    outcome: "Signature placement plan and signing engine handoff",
+    accent: "sky"
+  }),
+  "ocr-scanner": nativeMediaDetail({
+    summary: "OCR Scanner is now a native Toolars workspace for validating image and PDF OCR jobs before engine handoff.",
+    overview:
+      "OCR Scanner captures file type, size, estimated pages, language, and output format in a local-first planning workspace. The trust boundary is explicit: Toolars can validate supported inputs and queue metadata locally, while actual OCR text recognition requires an OCR engine or consent-gated processing route.",
+    metric: { value: "OCR", label: "Recognition step" },
+    sourceLabel: "Toolars",
+    inputTitle: "Add scan metadata",
+    inputDescription: "Enter PDF or image name, MIME type, file size, optional page count, language, and output format.",
+    resultTitle: "Prepare OCR handoff",
+    resultDescription: "Return input kind, estimated pages, output file name, language, and blocked states for unsupported files.",
+    reviewTitle: "Review OCR limits",
+    reviewDescription: "Make language assumptions, file type support, and engine-required status visible before recognition.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit scan and upload lifecycle concepts as the source planning reference.",
+    workspaceDescription: "Dedicated workspace exposes local file-type validation, language controls, and OCR handoff metadata.",
+    trustTitle: "Local OCR planning model",
+    trustLocalDescription: "File metadata and language choices stay local until a real OCR engine is selected.",
+    trustReviewDescription: "Recognized text is not produced by this planning layer; OCR output requires an OCR engine.",
+    relatedSlugs: ["pdf-toolkit", "pdf-to-word", "extract-tables"],
+    workflowSlug: "pdf-summary",
+    outcome: "OCR validation and engine handoff plan",
+    accent: "cyan"
+  }),
+  "pdf-translator": nativeMediaDetail({
+    summary: "PDF Translator is now a native Toolars workspace for local extraction planning and consent-gated translation handoff.",
+    overview:
+      "PDF Translator captures PDF metadata, extracted text scope, source and target languages, and layout preference in a local-first workspace. The trust boundary is explicit: Toolars validates translation scope locally, while translated text requires AI consent and a disclosed model route, and layout-aware PDF output still requires a PDF engine.",
+    metric: { value: "Translate", label: "AI consent route" },
+    sourceLabel: "Toolars",
+    inputTitle: "Validate translation scope",
+    inputDescription: "Enter PDF metadata, extracted text characters, source and target languages, and layout preference.",
+    resultTitle: "Prepare translation handoff",
+    resultDescription: "Return estimated tokens, target-language output name, layout mode, and blocked states.",
+    reviewTitle: "Review content boundary",
+    reviewDescription: "Make target language, extracted text scope, AI consent, and PDF engine requirements visible before processing.",
+    sourceTitle: "Toolars source",
+    sourceDescription: "Uses Toolars PDF Toolkit AI-consent handoff semantics as the source reference for translation planning.",
+    workspaceDescription: "Dedicated workspace exposes local extraction metadata, language controls, and consent-gated translation output.",
+    trustTitle: "Local PDF translation consent model",
+    trustLocalDescription: "PDF metadata and extracted text counts are validated locally before translation is prepared.",
+    trustReviewDescription: "Translation requires AI consent and a model route; layout-aware PDF rewriting requires a PDF engine.",
+    relatedSlugs: ["pdf-toolkit", "ai-pdf-summarizer", "ocr-scanner"],
+    workflowSlug: "pdf-summary",
+    outcome: "Local translation scope and AI consent handoff",
+    accent: "orange"
+  }),
   "json-repair": {
     listingBadge: { badge: "Local repair", description: "Local repair", tone: "local" },
     summary: "This listing adds the designed JSON Repair public page for fixing malformed AI and developer payloads before handoff.",
@@ -516,6 +1260,44 @@ const detailContent: Record<ToolDetailSlug, ToolDetailContent> = {
     workflowSlug: "ai-prompt-hardening",
     outcome: "Risk report and red-team variants"
   },
+  "hallucination-checker": aixtralNativeDetail({
+    summary: "Hallucination Checker is now a native Toolars workspace for local claim-to-source evidence review.",
+    overview:
+      "Hallucination Checker compares answer claims against supplied source notes before AI output is copied into docs, support replies, or release materials. The native Toolars workspace keeps text local, extracts sentence-level claims, scores source overlap, highlights unsupported claims, and surfaces privacy caveats so reviewers can decide what needs citation or rewrite.",
+    metric: { value: "Evidence", label: "Review model" },
+    inputTitle: "Add answer and sources",
+    inputDescription: "Accept generated answer text plus source excerpts, citations, or reference notes for local comparison.",
+    resultTitle: "Score support",
+    resultDescription: "Return groundedness score, unsupported claim count, matched source evidence, and privacy notes.",
+    reviewTitle: "Check evidence gaps",
+    reviewDescription: "Make missing citations, weak lexical matches, source conflicts, and sensitive source text visible before handoff.",
+    sourceDescription: "Uses the Toolars AI safety review model and prior Hallucination Checker listing as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, claim cards, source-overlap evidence, unsupported-claim flags, and public catalog readiness.",
+    trustTitle: "Local evidence heuristic model",
+    trustReviewDescription: "Claim support uses transparent lexical heuristics, so reviewers should still verify citations and source meaning.",
+    relatedSlugs: ["prompt-injection-scanner", "pii-scanner", "json-repair"],
+    outcome: "Native Hallucination Checker workspace for local groundedness review",
+    accent: "green"
+  }),
+  "pii-scanner": aixtralNativeDetail({
+    summary: "PII Scanner is now a native Toolars workspace for local sensitive-data detection and redaction review.",
+    overview:
+      "PII Scanner detects emails, phone numbers, payment-like numbers, addresses, dates of birth, API keys, and other sensitive tokens before text is sent into AI or publishing workflows. The native Toolars workspace keeps input text in the browser, returns entity cards with severity, generates redacted output, and makes false-positive review explicit.",
+    metric: { value: "PII", label: "Entity scan" },
+    inputTitle: "Paste sensitive text",
+    inputDescription: "Accept notes, prompts, logs, support replies, or draft content for local PII scanning.",
+    resultTitle: "Detect and redact",
+    resultDescription: "Return entity counts, severity, matched evidence, suggested redactions, and copy-ready sanitized text.",
+    reviewTitle: "Check false positives",
+    reviewDescription: "Make ambiguous numbers, public contact details, partial identifiers, and missed domain-specific PII visible.",
+    sourceDescription: "Uses the Toolars local PII scanner rules and prior PII Scanner listing as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, local entity cards, redacted output, severity metrics, and public catalog readiness.",
+    trustTitle: "Local PII redaction model",
+    trustReviewDescription: "Pattern rules are transparent and local, but teams should review context-specific sensitive data before sharing.",
+    relatedSlugs: ["prompt-injection-scanner", "hallucination-checker", "json-repair"],
+    outcome: "Native PII Scanner workspace for local sensitive-data review and redaction",
+    accent: "purple"
+  }),
   "llm-cost-calculator": {
     listingBadge: { badge: "Local first", description: "Local first", tone: "local" },
     summary: "This listing defines the commercial catalog page, local estimation model, and implementation handoff for launch cost reviews.",
@@ -591,6 +1373,63 @@ const detailContent: Record<ToolDetailSlug, ToolDetailContent> = {
     workflowSlug: "llm-cost-review",
     outcome: "Cost plan for launch review"
   },
+  "model-comparator": aixtralNativeDetail({
+    summary: "Model Comparator is now a native Toolars workspace for local workload fit, cost, latency, and context review.",
+    overview:
+      "Model Comparator helps AI teams compare candidate model profiles before routing real traffic. The native workspace estimates workload token fit, latency target alignment, context-window capacity, and cost exposure locally so product and engineering reviewers can pick a launch candidate without sending scenario notes to a model provider.",
+    metric: { value: "Models", label: "Comparison target" },
+    inputTitle: "Enter workload assumptions",
+    inputDescription: "Accept total tokens, latency target, and quality preference for a local model fit pass.",
+    resultTitle: "Compare model profiles",
+    resultDescription: "Return fit scores, context-fit flags, estimated cost, and a recommended model row.",
+    reviewTitle: "Review routing assumptions",
+    reviewDescription: "Make context misses, latency tradeoffs, stale pricing, and quality targets visible before rollout.",
+    sourceDescription: "Uses the Toolars LLM cost and model planning registry entries as the source reference.",
+    workspaceDescription: "Adds a native model comparison workbench, fit scoring, context-fit rows, and local recommendation output.",
+    trustTitle: "Local model comparison model",
+    trustReviewDescription: "Model rates and latency are planning profiles, so final provider routing should verify current production metadata.",
+    relatedSlugs: ["llm-cost-calculator", "context-window", "token-budget-planner"],
+    outcome: "Native model comparison workspace for local model routing review",
+    accent: "indigo"
+  }),
+  "context-window": aixtralNativeDetail({
+    summary: "Context Window Visualizer is now a native Toolars workspace for local context allocation review.",
+    overview:
+      "Context Window Visualizer shows how system prompts, user input, retrieval chunks, tool traces, and output reserve fit inside a selected model context window. The native workspace turns token allocation notes into segment percentages, remaining-token headroom, overflow warnings, and retrieval pressure checks before prompt assembly.",
+    metric: { value: "Context", label: "Allocation target" },
+    inputTitle: "Enter context segments",
+    inputDescription: "Accept model window size plus labeled token segments for prompt, retrieval, tools, and output reserve.",
+    resultTitle: "Visualize allocation",
+    resultDescription: "Return used tokens, remaining tokens, utilization percentage, overflow, and segment breakdown rows.",
+    reviewTitle: "Check context pressure",
+    reviewDescription: "Make tight windows, retrieval-heavy plans, missing output reserve, and overflow visible before sending.",
+    sourceDescription: "Uses the Toolars LLM cost planning registry entries as the source reference.",
+    workspaceDescription: "Adds a native context allocation workbench, segment rows, utilization metrics, and local warnings.",
+    trustTitle: "Local context allocation model",
+    trustReviewDescription: "Token counts are planning estimates and should be checked with provider tokenizers before final launch.",
+    relatedSlugs: ["token-counter", "token-budget-planner", "model-comparator"],
+    outcome: "Native context window workspace for local token allocation review",
+    accent: "teal"
+  }),
+  "token-budget-planner": aixtralNativeDetail({
+    summary: "Token Budget Planner is now a native Toolars workspace for local prompt allocation planning.",
+    overview:
+      "Token Budget Planner helps teams divide a context budget across system instructions, user input, retrieval, tools, and output reserve. The native workspace calculates total allocation, remaining headroom, over-budget warnings, and percentage rows so prompt owners can revise plans before combining retrieval and tool output.",
+    metric: { value: "Budget", label: "Planning target" },
+    inputTitle: "Enter token allocations",
+    inputDescription: "Accept total context budget plus labeled allocation rows for prompt, retrieval, tools, and output.",
+    resultTitle: "Plan budget headroom",
+    resultDescription: "Return total allocated tokens, remaining budget, over-budget amount, and allocation percentages.",
+    reviewTitle: "Check budget risk",
+    reviewDescription: "Make over-budget plans, low headroom, and retrieval-heavy allocations visible before assembly.",
+    sourceDescription: "Uses the Toolars LLM cost planning registry entries as the source reference.",
+    workspaceDescription: "Adds a native token budget workbench, allocation rows, headroom metrics, and local budget warnings.",
+    trustTitle: "Local token budget model",
+    trustReviewDescription: "Budget math stays local, but provider tokenization and runtime tool output can change final usage.",
+    relatedSlugs: ["context-window", "token-counter", "llm-cost-calculator"],
+    outcome: "Native token budget planner workspace for local context allocation",
+    accent: "cyan"
+  }),
   "mcp-server-builder": {
     listingBadge: { badge: "Workflow", description: "Workflow", tone: "workflow" },
     summary: "This listing captures the catalog promise, launch review model, and developer handoff for agent-facing tool servers.",
@@ -666,6 +1505,2306 @@ const detailContent: Record<ToolDetailSlug, ToolDetailContent> = {
     workflowSlug: "mcp-tool-launch",
     outcome: "Manifest, test payloads, and docs"
   },
+  "mcp-tester": aixtralNativeDetail({
+    summary: "MCP Tester is now a native Toolars workspace for local manifest and payload contract checks.",
+    overview:
+      "MCP Tester validates an MCP manifest, representative sample payload, and required input fields before agent tools are connected to production systems. The native workspace keeps manifest JSON and payloads local while surfacing parse errors, missing required fields, tool names, and launch-review checks.",
+    metric: { value: "MCP", label: "Contract target" },
+    inputTitle: "Paste manifest and payload",
+    inputDescription: "Accept MCP manifest JSON plus a sample tool payload for local validation.",
+    resultTitle: "Validate contract",
+    resultDescription: "Return manifest status, required field coverage, sample payload status, and review checks.",
+    reviewTitle: "Check launch contract",
+    reviewDescription: "Make invalid JSON, missing fields, weak schemas, and auth-review gaps visible before agent wiring.",
+    sourceDescription: "Uses the Toolars MCP Server Builder launch model as the source reference.",
+    workspaceDescription: "Adds a native MCP tester workbench, manifest parser, payload checker, and local contract status.",
+    trustTitle: "Local MCP contract model",
+    trustReviewDescription: "Local validation checks shape and required fields but does not execute remote MCP tools.",
+    relatedSlugs: ["mcp-server-builder", "agent-workflow-builder", "rag-eval-bench"],
+    outcome: "Native MCP Tester workspace for local manifest and payload validation",
+    accent: "blue"
+  }),
+  "agent-workflow-builder": aixtralNativeDetail({
+    summary: "Agent Workflow Builder is now a native Toolars workspace for local multi-agent planning and review gates.",
+    overview:
+      "Agent Workflow Builder maps agent stages, tool calls, handoffs, and review gates before automation is connected to real systems. The native workspace turns stage notes into workflow metrics, handoff counts, tool coverage, and review warnings so teams can inspect the plan before agent execution.",
+    metric: { value: "Workflow", label: "Planning target" },
+    inputTitle: "Map workflow stages",
+    inputDescription: "Accept one stage per line with agent, stage, tool list, and review-gate state.",
+    resultTitle: "Build workflow plan",
+    resultDescription: "Return stage count, mapped tools, handoffs, review gates, and readiness checks.",
+    reviewTitle: "Check agent gates",
+    reviewDescription: "Make missing review gates, tool gaps, and handoff points visible before automation launch.",
+    sourceDescription: "Uses the Toolars MCP and agent launch workflow entries as the source reference.",
+    workspaceDescription: "Adds a native agent workflow workbench, stage parser, review-gate checks, and local planning metrics.",
+    trustTitle: "Local agent workflow model",
+    trustReviewDescription: "Planning is local and does not execute tools; production agents still require auth, logging, and rollback review.",
+    relatedSlugs: ["mcp-tester", "mcp-server-builder", "rag-eval-bench"],
+    outcome: "Native Agent Workflow Builder workspace for local agent launch planning",
+    accent: "green"
+  }),
+  "rag-eval-bench": aixtralNativeDetail({
+    summary: "RAG Eval Bench is now a native Toolars workspace for local groundedness and source-coverage checks.",
+    overview:
+      "RAG Eval Bench scores answer coverage against expected terms and cited source IDs so teams can inspect retrieval quality before running heavier evaluation systems. The native workspace keeps questions, answers, and source IDs local while showing groundedness percentages, missing source IDs, and pass or review status.",
+    metric: { value: "Eval", label: "Grounding target" },
+    inputTitle: "Enter eval cases",
+    inputDescription: "Accept one eval case per line with question, answer, expected terms, and source IDs.",
+    resultTitle: "Score groundedness",
+    resultDescription: "Return average groundedness, case count, missing terms, missing source IDs, and case status.",
+    reviewTitle: "Check retrieval evidence",
+    reviewDescription: "Make missing citations, weak answer coverage, and brittle expected terms visible before launch.",
+    sourceDescription: "Uses the Toolars RAG and MCP launch registry entries as the source reference.",
+    workspaceDescription: "Adds a native RAG eval workbench, local groundedness scoring, case rows, and source-coverage review.",
+    trustTitle: "Local RAG eval model",
+    trustReviewDescription: "Local heuristics are a fast screen and should be paired with source-backed evaluation before release.",
+    relatedSlugs: ["rag-chunk-visualizer", "embedding-playground", "mcp-tester"],
+    outcome: "Native RAG Eval Bench workspace for local groundedness review",
+    accent: "orange"
+  }),
+  "json-formatter": aixtralNativeDetail({
+    summary: "JSON Formatter is now a native Toolars workspace for local format, minify, and validation review.",
+    overview:
+      "JSON Formatter parses pasted JSON, validates syntax, formats readable output, and minifies payloads for API debugging, configuration review, fixtures, and AI payload cleanup. The workspace uses a Toolars-native input, action, result, and validation flow so developers can inspect payloads locally before copying them into code or downstream tools.",
+    metric: { value: "JSON", label: "Format target" },
+    inputTitle: "Paste JSON",
+    inputDescription: "Accept raw JSON payloads, config snippets, or API responses for local validation and formatting.",
+    resultTitle: "Format or minify",
+    resultDescription: "Return readable or compact JSON output with syntax status, key counts, depth hints, and copy-ready text.",
+    reviewTitle: "Review syntax assumptions",
+    reviewDescription: "Keep parse errors, payload size, and formatting mode visible before formatted JSON is trusted.",
+    sourceDescription: "Uses the Toolars-native JSON formatting contract as the source reference.",
+    workspaceDescription: "Adds a native workbench, format and minify actions, validation state, output panel, and public catalog readiness.",
+    trustTitle: "Local JSON formatting model",
+    trustReviewDescription: "JSON is parsed in the browser and formatting never repairs or silently changes invalid payloads.",
+    relatedSlugs: ["json-repair", "json-path-tester", "json-diff"],
+    outcome: "Native JSON Formatter workspace for local validation, formatting, and minified output",
+    accent: "slate"
+  }),
+  "json-path-tester": aixtralNativeDetail({
+    summary: "JSON Path Tester is now a native Toolars workspace for local JSONPath query checks.",
+    overview:
+      "JSON Path Tester runs common JSONPath expressions against pasted payloads, returning matching values for nested objects, arrays, recursive property searches, and simple predicates. The workspace adapts the Aixtral source page behavior into Toolars-native JSON input, expression, result, and validation panels for API debugging, fixture review, and extraction rule handoff.",
+    metric: { value: "JSONPath", label: "Query syntax" },
+    inputTitle: "Paste JSON and path",
+    inputDescription: "Accept a JSON document plus a JSONPath expression for local query testing.",
+    resultTitle: "Run query",
+    resultDescription: "Return matching values, match counts, parse status, and copy-ready JSON result arrays.",
+    reviewTitle: "Check query support",
+    reviewDescription: "Make invalid JSON, unsupported path syntax, empty matches, and predicate assumptions visible before use.",
+    sourceDescription: "Uses the Aixtral JSON Path Tester page behavior and examples as the source reference.",
+    workspaceDescription: "Adds a native workbench, expression input, lightweight JSONPath evaluator, match output, and public catalog readiness.",
+    trustTitle: "Local JSONPath query model",
+    trustReviewDescription: "Queries run locally with a focused supported JSONPath subset; complex production expressions should still be verified in the target runtime.",
+    relatedSlugs: ["json-formatter", "json-repair", "json-diff"],
+    outcome: "Native JSON Path Tester workspace for local payload query checks and extraction handoff",
+    accent: "indigo"
+  }),
+  "json-tree-viewer": aixtralDetail({
+    badge: "JSON utility",
+    summary: "This Aixtral Lab listing captures JSON Tree Viewer detail coverage for nested payload inspection workflows.",
+    overview:
+      "JSON Tree Viewer parses nested JSON into an expandable inspection model for API debugging, config review, fixture triage, and LLM payload analysis. Toolars tracks the original registry intent with local parsing, tree shape notes, copied-path handoff, and error visibility while the W20-BF native detail adapter exposes the promoted public workspace metadata.",
+    metric: { value: "Tree", label: "JSON view" },
+    inputTitle: "Paste JSON",
+    inputDescription: "Accept nested objects, arrays, config files, or API responses for local tree inspection.",
+    resultTitle: "Build tree view",
+    resultDescription: "Return node counts, depth hints, expandable path labels, and copy-ready JSON snippets.",
+    reviewTitle: "Check parse errors",
+    reviewDescription: "Keep invalid JSON, very deep payloads, and large arrays visible before teams rely on the tree view.",
+    handoffTitle: "Plan inspector controls",
+    handoffDescription: "Use this detail record to scope expand/collapse controls, path copying, search, and empty states.",
+    sourceDescription: "Use the Aixtral JSON Tree Viewer listing and Toolars JSON utilities as the behavior reference.",
+    contractDescription: "Return parsed node metadata, tree paths, search matches, validation errors, and copy targets.",
+    relatedSlugs: ["json-formatter", "json-path-tester", "json-repair"],
+    outcome: "JSON tree viewer detail page and nested payload inspection handoff",
+    accent: "blue"
+  }),
+  "schema-validator": aixtralDetail({
+    badge: "Schema utility",
+    summary: "This Aixtral Lab listing captures Schema Validator detail coverage for local JSON schema review.",
+    overview:
+      "Schema Validator checks JSON payloads and schema-like contracts before teams use them in APIs, function-calling payloads, structured output, or form validation. Toolars records the local-first validation intent, schema diagnostics, sample payload review, and handoff metadata while the W20-BF native detail adapter exposes the promoted public workspace metadata.",
+    metric: { value: "Schema", label: "Validation target" },
+    inputTitle: "Paste schema and JSON",
+    inputDescription: "Accept a JSON schema draft plus sample JSON payloads for local compatibility checks.",
+    resultTitle: "Validate payload",
+    resultDescription: "Return pass/fail status, schema errors, missing fields, type mismatches, and copy-ready diagnostics.",
+    reviewTitle: "Check schema limits",
+    reviewDescription: "Make unsupported draft features, ambiguous requirements, and nested error paths visible before production use.",
+    handoffTitle: "Plan validation workspace",
+    handoffDescription: "Use this detail record to scope schema and payload editors, error lists, path filters, and export behavior.",
+    sourceDescription: "Use the Aixtral Schema Validator listing and Toolars JSON validation tools as the behavior reference.",
+    contractDescription: "Return validation status, error paths, schema metadata, sample payload stats, and copyable diagnostics.",
+    relatedSlugs: ["json-schema-builder", "json-repair", "json-formatter"],
+    outcome: "Schema validator detail page and local JSON contract review handoff",
+    accent: "blue"
+  }),
+  "base64-converter": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "Base64 Converter is now a native Toolars workspace for local UTF-8 encoding, decoding, and URL-safe payload cleanup.",
+    overview:
+      "Base64 Converter encodes UTF-8 text into standard or URL-safe Base64 and decodes pasted Base64 back into readable text. The workspace migrates the Aixtral source behavior into Toolars-native controls, adds normalization for common copy-paste issues such as missing padding, URL-safe alphabets, whitespace, and data URL prefixes, and keeps payloads local for API debugging, tokens, and configuration review.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "2-way", label: "Encode and decode" },
+      { value: "Public", label: "Workspace status" },
+      { value: "URL-safe", label: "Alphabet support" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste payload text",
+        description: "Add plain UTF-8 text, a standard Base64 string, a URL-safe token, or a copied data URL directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Choose conversion mode",
+        description: "Switch between encode and decode, then pick standard Base64 or URL-safe output for API, JWT, and query-string payloads.",
+        badge: "Mode"
+      },
+      {
+        title: "Normalize safely",
+        description: "Decode flow strips whitespace, converts URL-safe characters, restores missing padding, and reports each cleanup step.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy reviewed output",
+        description: "Review byte counts, output length, warnings, and normalized input before copying the converted payload.",
+        badge: "Output"
+      }
+    ],
+    trustSection: {
+      title: "Local Base64 conversion model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Text and Base64 payloads are converted in the browser and are not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Validation",
+          description: "Malformed Base64 and invalid UTF-8 are surfaced as explicit errors before the output can be reused.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral Base64 converter library and page behavior as the source reference.",
+        badge: "Source",
+        accent: "cyan"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, mode and alphabet controls, normalization warnings, stats, and copy-ready output.",
+        badge: "Ready",
+        accent: "emerald"
+      }
+    ],
+    relatedSlugs: ["url-encoder", "html-entity-encoder", "json-repair"],
+    outcome: "Native Base64 Converter workspace for local standard and URL-safe payload conversion"
+  },
+  "case-converter": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "Case Converter is now a native Toolars workspace for local naming conversion across developer and writing case formats.",
+    overview:
+      "Case Converter transforms pasted identifiers, labels, headings, and mixed-delimiter text into copy-ready naming styles including camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE, Title Case, Sentence case, dot.case, lower case, and UPPER CASE. The workspace migrates the Aixtral source behavior into a Toolars-native interface with detected word review, local-only processing, and copy actions for code, docs, and slug handoff.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "10", label: "Case formats" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Words", label: "Delimiter review" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste naming text",
+        description: "Add a variable name, API field, heading, filename, or mixed separator string directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Detect words",
+        description: "Split camelCase, PascalCase, snake_case, kebab-case, dot.case, spaces, acronyms, and punctuation into reviewable tokens.",
+        badge: "Parse",
+        tone: "local"
+      },
+      {
+        title: "Generate variants",
+        description: "Create copy-ready developer and writing formats side by side for identifiers, documentation, and content workflows.",
+        badge: "Output"
+      },
+      {
+        title: "Review edge cases",
+        description: "Check acronym capitalization and mixed delimiter results before copying into code, docs, or downstream slug workflows.",
+        badge: "Review",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local case conversion model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Input text is parsed and converted in the browser without upload.",
+          tone: "local"
+        },
+        {
+          badge: "Deterministic",
+          description: "Conversion uses transparent string rules, so generated outputs are stable and easy to review."
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral Case Converter utility functions and client behavior as the source reference.",
+        badge: "Source",
+        accent: "blue"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, detected word review, 10 generated formats, and public catalog readiness.",
+        badge: "Ready",
+        accent: "emerald"
+      }
+    ],
+    relatedSlugs: ["slug-generator", "text-stats", "lorem-ipsum"],
+    outcome: "Native Case Converter workspace for local naming normalization and copy-ready case variants"
+  },
+  "slug-generator": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "Slug Generator is now a native Toolars workspace for local URL slug creation, batch cleanup, and duplicate-safe publishing handoff.",
+    overview:
+      "Slug Generator turns titles, labels, filenames, and content drafts into clean URL-friendly slugs with configurable separators, lowercase handling, transliteration, max length, and duplicate suffixing. The workspace migrates the Aixtral source behavior into Toolars-native input, option, result, and history panels so editors and developers can prepare stable URLs locally before publishing.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "3", label: "Separator styles" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Batch", label: "Input mode" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste titles",
+        description: "Add one title or multiple lines of headings, labels, filenames, or content ideas directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Choose slug rules",
+        description: "Select hyphen, underscore, or dot separators, then control lowercase output, ASCII transliteration, max length, and duplicate suffixes.",
+        badge: "Options"
+      },
+      {
+        title: "Generate clean slugs",
+        description: "Normalize punctuation, whitespace, accents, repeated separators, and duplicate rows into copy-ready URL segments.",
+        badge: "Output"
+      },
+      {
+        title: "Review before publish",
+        description: "Check duplicates, truncated terms, routing constraints, and recent history before copying slugs into a CMS, docs site, or route map.",
+        badge: "Review",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local slug generation model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Source titles are processed in the browser and are not uploaded for slug generation.",
+          tone: "local"
+        },
+        {
+          badge: "Deterministic",
+          description: "Slug output comes from transparent string rules, so separator, case, transliteration, and duplicate handling remain reviewable."
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral Slug Generator utility functions and client behavior as the source reference.",
+        badge: "Source",
+        accent: "emerald"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, batch duplicate handling, option review, history cleanup, and public catalog readiness.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["case-converter", "url-encoder", "text-stats"],
+    outcome: "Native Slug Generator workspace for local URL slug creation and publishing handoff"
+  },
+  "text-stats": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "Text Stats is now a native Toolars workspace for local copy analysis, structure review, and reading-time handoff.",
+    overview:
+      "Text Stats analyzes pasted copy for characters, non-space characters, words, sentences, paragraphs, lines, estimated reading time, estimated speaking time, and repeated top words. The workspace migrates the Aixtral source behavior into Toolars-native input, metric, top-word, and review panels so writers, editors, and developers can inspect copy locally before publishing.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "8", label: "Core metrics" },
+      { value: "Public", label: "Workspace status" },
+      { value: "10", label: "Top-word limit" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste copy",
+        description: "Add drafts, docs, snippets, release notes, or article sections directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Calculate structure",
+        description: "Count words, characters, sentences, paragraphs, and lines with deterministic browser-side rules.",
+        badge: "Stats"
+      },
+      {
+        title: "Estimate timing",
+        description: "Use 200 words per minute for reading time and 130 words per minute for speaking time estimates.",
+        badge: "Timing"
+      },
+      {
+        title: "Review repetition",
+        description: "Inspect the top repeated words before handing copy to case conversion, slug generation, or publishing.",
+        badge: "Review",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local text analysis model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Source text is analyzed in the browser and is not uploaded for metric calculation.",
+          tone: "local"
+        },
+        {
+          badge: "Deterministic",
+          description: "Counts and timing estimates come from transparent local rules, so results remain reviewable."
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral Text Statistics utility function and client behavior as the source reference.",
+        badge: "Source",
+        accent: "indigo"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, structure metrics, reading and speaking estimates, top-word review, and public catalog readiness.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["case-converter", "slug-generator", "lorem-ipsum"],
+    outcome: "Native Text Stats workspace for local copy analysis and publishing review"
+  },
+  "uuid-generator": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "UUID Generator is now a native Toolars workspace for local UUID v4 generation, validation, and fixture handoff.",
+    overview:
+      "UUID Generator creates random UUID v4 identifiers in single or bulk batches for database keys, sessions, request traces, fixtures, and distributed-system workflows. The workspace migrates the Aixtral source behavior into Toolars-native quantity controls, result review, single-item copy, copy-all output, and range validation so developers can create identifiers locally before pasting them into tests, configs, or APIs.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "1-1000", label: "Batch range" },
+      { value: "Public", label: "Workspace status" },
+      { value: "v4", label: "UUID version" }
+    ],
+    howItWorks: [
+      {
+        title: "Choose quantity",
+        description: "Set a count from 1 to 1000 depending on whether you need one identifier or a bulk fixture list.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Generate UUID v4",
+        description: "Create RFC 4122-style random UUID v4 values locally in the browser.",
+        badge: "Generate"
+      },
+      {
+        title: "Review identifiers",
+        description: "Inspect generated values, version metadata, and supported range before copying into downstream systems.",
+        badge: "Review"
+      },
+      {
+        title: "Copy single or batch",
+        description: "Copy individual identifiers or the full newline-separated batch for seed data, tests, logs, and API clients.",
+        badge: "Output",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local UUID generation model",
+      rows: [
+        {
+          badge: "Local",
+          description: "UUIDs are generated in the browser and are not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Deterministic contract",
+          description: "The tool keeps the Aixtral 1 to 1000 count boundary and validates UUID format with transparent local rules."
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral UUID Generator utility functions and client behavior as the source reference.",
+        badge: "Source",
+        accent: "violet"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, quantity validation, batch output, copy actions, metadata review, and public catalog readiness.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["base64-converter", "url-encoder", "mcp-server-builder"],
+    outcome: "Native UUID Generator workspace for local identifier generation and fixture handoff"
+  },
+  "url-encoder": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "URL Encoder is now a native Toolars workspace for local percent encoding, decoding, and invalid sequence review.",
+    overview:
+      "URL Encoder converts raw URL component text into percent-encoded output and decodes percent-encoded strings back to readable text. The workspace migrates the Aixtral source behavior into Toolars-native controls, keeps query values and route fragments local, reports invalid percent sequences before copy, and gives developers a focused handoff for links, query parameters, redirects, and API debugging.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "2-way", label: "Encode and decode" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Percent", label: "Encoding model" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste URL text",
+        description: "Add raw URL components, query values, route fragments, or already percent-encoded text directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Choose conversion mode",
+        description: "Switch between encode and decode so links, redirects, and API parameters can be prepared or inspected.",
+        badge: "Mode"
+      },
+      {
+        title: "Validate percent sequences",
+        description: "Decode mode catches malformed percent-encoded input and blocks copy-ready output until the value is fixed.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy URL-safe output",
+        description: "Review character counts, ratio, validation state, and converted text before copying into code, docs, or dashboards.",
+        badge: "Output"
+      }
+    ],
+    trustSection: {
+      title: "Local URL conversion model",
+      rows: [
+        {
+          badge: "Local",
+          description: "URL text is encoded or decoded in the browser and is not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Validation",
+          description: "Invalid percent-encoded sequences are surfaced as explicit errors before output can be reused.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral URL Encoder utility functions and client behavior as the source reference.",
+        badge: "Source",
+        accent: "sky"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, mode controls, invalid-percent review, conversion stats, and copy-ready output.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["base64-converter", "slug-generator", "html-entity-encoder"],
+    outcome: "Native URL Encoder workspace for local percent encoding, decoding, and query-value review"
+  },
+  "html-entity-encoder": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "HTML Entity Encoder is now a native Toolars workspace for local safe rendering conversion and entity review.",
+    overview:
+      "HTML Entity Encoder converts special characters into named, decimal, or hexadecimal HTML entities and decodes mixed entity strings back to readable text for safe rendering review. The workspace migrates the Aixtral source behavior into Toolars-native controls, keeps snippets local, counts converted entities, and helps developers review template copy before it is pasted into pages, docs, CMS fields, or debugging notes.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "Named", label: "Entity support" },
+      { value: "Public", label: "Workspace status" },
+      { value: "3", label: "Encoding styles" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste HTML text",
+        description: "Add raw snippets, text containing special characters, or existing named and numeric entities directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Choose entity mode",
+        description: "Encode with named, decimal, or hexadecimal entities, or decode mixed entity strings back to readable text.",
+        badge: "Mode"
+      },
+      {
+        title: "Review rendering safety",
+        description: "Compare converted entity counts and decoded text before rendering output as HTML or placing it into templates.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy safe output",
+        description: "Copy the reviewed entity output for docs, frontend fixtures, CMS fields, and source-code comments.",
+        badge: "Output"
+      }
+    ],
+    trustSection: {
+      title: "Local HTML entity conversion model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Snippets are converted in the browser and are not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Review",
+          description: "Decoded HTML-looking text is shown as text so users can review it before rendering or publishing.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral HTML Entity Encoder table and conversion behavior as the source reference.",
+        badge: "Source",
+        accent: "amber"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, entity style controls, safe rendering review, stats, and copy-ready output.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["base64-converter", "url-encoder", "json-repair"],
+    outcome: "Native HTML Entity Encoder workspace for local safe rendering conversion and entity review"
+  },
+  "lorem-ipsum": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "Lorem Ipsum Generator is now a native Toolars workspace for local placeholder copy generation and layout review.",
+    overview:
+      "Lorem Ipsum Generator creates configurable placeholder copy for mockups, wireframes, print layouts, CMS drafts, and content QA. The workspace migrates the Aixtral paragraph and word range constraints into Toolars-native controls, keeps generation local, supports classic Lorem ipsum starts, reports paragraph, word, and character counts, and includes copy-all output for layout testing handoff.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "1-100", label: "Paragraph range" },
+      { value: "Public", label: "Workspace status" },
+      { value: "5-500", label: "Words per paragraph" }
+    ],
+    howItWorks: [
+      {
+        title: "Set copy shape",
+        description: "Choose paragraph count, words per paragraph, and whether the first paragraph starts with classic Lorem ipsum text.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Generate placeholder text",
+        description: "Create deterministic local copy blocks that preserve the Aixtral 1 to 100 paragraph and 5 to 500 word constraints.",
+        badge: "Generate"
+      },
+      {
+        title: "Review layout fit",
+        description: "Check paragraph, word, and character counts before using the copy in prototypes, CMS previews, or print layouts.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy all output",
+        description: "Copy the full generated block for mockups, wireframes, content planning, or downstream text statistics review.",
+        badge: "Output"
+      }
+    ],
+    trustSection: {
+      title: "Local placeholder copy model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Placeholder text is generated in the browser and is not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Range",
+          description: "The workspace preserves the source paragraph and word limits so generated copy stays intentional.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral Lorem Ipsum Generator constraints and copy flow as the source reference.",
+        badge: "Source",
+        accent: "rose"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, paragraph and word controls, range validation, copy-all output, and public catalog readiness.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["text-stats", "case-converter", "slug-generator"],
+    outcome: "Native Lorem Ipsum workspace for local placeholder copy generation and layout review"
+  },
+  "csv-to-json": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "CSV to JSON Converter is now a native Toolars workspace for local table parsing, header review, and JSON output.",
+    overview:
+      "CSV to JSON Converter turns pasted CSV rows into structured JSON records with header handling, delimiter options, skipped-empty-row behavior, quoted fields, escaped quotes, and embedded newlines. The workspace migrates the Aixtral parser into Toolars-native controls, keeps table data local, reports inconsistent row shapes, and gives data teams copy-ready JSON for fixtures, imports, QA notes, and API debugging.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "CSV", label: "Source format" },
+      { value: "Public", label: "Workspace status" },
+      { value: "3", label: "Delimiter options" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste CSV rows",
+        description: "Add comma, semicolon, or tab-delimited data with optional headers directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Choose table options",
+        description: "Set delimiter, header mode, and skipped-empty-row behavior before parsing the source text.",
+        badge: "Options"
+      },
+      {
+        title: "Review row shape",
+        description: "Surface inconsistent column counts and empty-header issues before the JSON output is copied.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy JSON records",
+        description: "Review row count, column count, skipped rows, and formatted JSON before handing data to code or docs.",
+        badge: "Output"
+      }
+    ],
+    trustSection: {
+      title: "Local CSV parsing model",
+      rows: [
+        {
+          badge: "Local",
+          description: "CSV text is parsed in the browser and is not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Validation",
+          description: "Quoted fields, escaped quotes, embedded newlines, and inconsistent column counts are handled before output reuse.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral CSV parser behavior and tests as the source reference.",
+        badge: "Source",
+        accent: "emerald"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, delimiter controls, header and empty-row options, validation stats, and copy-ready JSON.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["json-to-csv", "json-diff", "json-repair"],
+    outcome: "Native CSV to JSON workspace for local table parsing and structured JSON handoff"
+  },
+  "json-to-csv": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "JSON to CSV Converter is now a native Toolars workspace for local object-array export and escaped CSV output.",
+    overview:
+      "JSON to CSV Converter turns arrays of objects into escaped CSV rows with header discovery, nested-value handling, null handling, and row statistics. The workspace migrates the Aixtral JSON export behavior into Toolars-native controls, keeps records local, rejects non-array and non-object inputs, and gives teams copy-ready CSV for spreadsheets, fixture exports, issue reports, and data QA handoff.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "Rows", label: "Export target" },
+      { value: "Public", label: "Workspace status" },
+      { value: "CSV", label: "Output format" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste JSON array",
+        description: "Add object arrays intended for CSV export directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Discover headers",
+        description: "Collect unique object keys in source order and preserve blank cells for missing values.",
+        badge: "Headers"
+      },
+      {
+        title: "Validate record shape",
+        description: "Reject invalid JSON, non-array input, and arrays with primitive items before CSV output appears.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy CSV rows",
+        description: "Review row count, column count, discovered headers, and escaped output before export handoff.",
+        badge: "Output"
+      }
+    ],
+    trustSection: {
+      title: "Local JSON export model",
+      rows: [
+        {
+          badge: "Local",
+          description: "JSON records are parsed and converted in the browser and are not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Validation",
+          description: "The workspace blocks invalid JSON and non-object arrays before copy-ready CSV is shown.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral JSON to CSV conversion behavior and tests as the source reference.",
+        badge: "Source",
+        accent: "cyan"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, delimiter controls, row and column stats, validation errors, and copy-ready CSV.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["csv-to-json", "markdown-to-json", "json-repair"],
+    outcome: "Native JSON to CSV workspace for local record export and spreadsheet handoff"
+  },
+  "json-diff": aixtralNativeDetail({
+    summary: "JSON Diff Checker is now a native Toolars workspace for local payload comparison and JSONPath-style review.",
+    overview:
+      "JSON Diff Checker compares two JSON-compatible values and reports changed, added, and removed paths for debugging API payloads, fixtures, config snapshots, and release test data. The native Toolars workspace parses both payloads locally, returns JSONPath-style differences, summarizes changed path counts, and gives developers copy-ready diff output before data is pasted into tickets, tests, or API docs.",
+    metric: { value: "Paths", label: "Diff output" },
+    inputTitle: "Paste two payloads",
+    inputDescription: "Accept original and modified JSON values in split local editors before comparison.",
+    resultTitle: "List path changes",
+    resultDescription: "Report JSONPath-style locations with added, removed, and changed values for quick review.",
+    reviewTitle: "Check parse safety",
+    reviewDescription: "Keep invalid JSON, changed top-level types, and unexpected null values visible in the result state.",
+    sourceDescription: "Uses the Aixtral JSON Diff recursive comparison behavior and tests as the source reference.",
+    workspaceDescription: "Adds split input panes, path counts, parse errors, JSONPath-style output, and copy-ready diff summaries.",
+    trustTitle: "Local JSON diff model",
+    trustReviewDescription: "Invalid JSON is blocked before comparison, and every reported change keeps its JSONPath-style location visible.",
+    relatedSlugs: ["json-repair", "yaml-validator", "xml-formatter"],
+    outcome: "Native JSON Diff workspace for local payload comparison and path-level review",
+    accent: "amber"
+  }),
+  "yaml-validator": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "YAML Validator is now a native Toolars workspace for local configuration checks and line-level issue review.",
+    overview:
+      "YAML Validator checks pasted configuration snippets, workflow files, docs front matter, and deployment settings for tabs, indentation warnings, trailing whitespace, long lines, empty list items, key counts, and depth. The workspace migrates the Aixtral validation behavior into Toolars-native controls, keeps configuration text local, separates errors from warnings, and helps teams review risky YAML before changes ship.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "YAML", label: "Validated format" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Line", label: "Issue review" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste YAML",
+        description: "Add configuration snippets, CI files, docs front matter, or deployment settings directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Run validation",
+        description: "Check tabs, indentation, trailing whitespace, long lines, empty list items, key counts, and maximum depth.",
+        badge: "Validate"
+      },
+      {
+        title: "Review findings",
+        description: "Separate blocking errors from style warnings with line numbers before a config handoff.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Ship safer config",
+        description: "Use the stats and issue list to clean YAML before opening a pull request or updating deployment settings.",
+        badge: "Handoff"
+      }
+    ],
+    trustSection: {
+      title: "Local YAML validation model",
+      rows: [
+        {
+          badge: "Local",
+          description: "YAML text is inspected in the browser and is not uploaded for processing.",
+          tone: "local"
+        },
+        {
+          badge: "Review",
+          description: "The validator separates syntax blockers from style warnings so config changes can be triaged quickly.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral YAML Validator issue rules and tests as the source reference.",
+        badge: "Source",
+        accent: "blue"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, stats, error and warning lists, and public catalog readiness.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["json-repair", "json-diff", "xml-formatter"],
+    outcome: "Native YAML Validator workspace for local configuration issue review"
+  },
+  "xml-formatter": aixtralNativeDetail({
+    summary: "XML Formatter is now a native Toolars workspace for local format and minify workflows.",
+    overview:
+      "XML Formatter can format and minify compact XML into readable indentation or compact tag whitespace for feeds, SOAP payloads, manifests, and configuration review. The native Toolars workspace migrates the Aixtral formatting behavior into local controls, keeps markup in the browser, reports line, tag, and character counts, and supports copy-ready XML output for developers reviewing structured payloads.",
+    metric: { value: "2-way", label: "Format and minify" },
+    inputTitle: "Paste XML",
+    inputDescription: "Accept XML snippets, feed fragments, or config payloads as local source text.",
+    resultTitle: "Format or minify",
+    resultDescription: "Return readable indentation or compact XML while preserving declarations, tags, and text nodes.",
+    reviewTitle: "Catch empty input",
+    reviewDescription: "Keep empty input, malformed structures, and formatting assumptions visible before copy or handoff.",
+    sourceDescription: "Uses the Aixtral XML Formatter implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds format and minify modes, indentation control, markup stats, empty-input errors, and copy-ready output.",
+    trustTitle: "Local XML formatting model",
+    trustReviewDescription: "The workspace keeps formatting assumptions visible, including empty input and whitespace-sensitive minify behavior.",
+    relatedSlugs: ["yaml-validator", "json-diff", "html-entity-encoder"],
+    outcome: "Native XML Formatter workspace for local format, minify, and markup handoff",
+    accent: "violet"
+  }),
+  "markdown-to-json": aixtralNativeDetail({
+    summary: "Markdown to JSON Converter is now a native Toolars workspace for local content structure extraction.",
+    overview:
+      "Markdown to JSON Converter extracts headings, paragraphs, lists, code blocks, links, images, metadata, word count, and reading-time hints from Markdown into structured JSON. The native Toolars workspace migrates the Aixtral parser behavior into a local content tool, reports block counts, keeps drafts in the browser, and gives editors and developers copy-ready structured JSON for docs, changelogs, CMS handoff, and fixture generation.",
+    metric: { value: "Blocks", label: "Parsed structure" },
+    inputTitle: "Paste Markdown",
+    inputDescription: "Accept notes, docs, changelog drafts, or article bodies for local structural parsing.",
+    resultTitle: "Create structured JSON",
+    resultDescription: "Return metadata, content blocks, headings, lists, code blocks, links, images, and text stats.",
+    reviewTitle: "Review parser limits",
+    reviewDescription: "Keep unsupported markdown shapes, malformed links, and empty documents visible before export.",
+    sourceDescription: "Uses the Aixtral Markdown to JSON parser implementation and tests as the migration source.",
+    workspaceDescription: "Adds a native Markdown editor, block metrics, structured JSON output, copy controls, and content QA notes.",
+    trustTitle: "Local Markdown parser model",
+    trustReviewDescription: "Parsed headings, links, images, and code blocks remain inspectable before structured JSON is reused.",
+    relatedSlugs: ["text-stats", "json-to-csv", "json-repair"],
+    outcome: "Native Markdown to JSON workspace for local structured JSON content handoff",
+    accent: "slate"
+  }),
+  "diff-checker": aixtralNativeDetail({
+    summary: "Diff Checker is now a native Toolars workspace for local line-level text comparison.",
+    overview:
+      "Diff Checker compares two versions of text and reports line-level additions, removals, unchanged lines, and total change counts for copy review, release notes, and lightweight document QA. The native Toolars workspace migrates the Aixtral LCS-based comparison behavior into split text panes, keeps drafts local, summarizes changed lines, and gives copy-ready diff output for review handoff.",
+    metric: { value: "Lines", label: "Comparison unit" },
+    inputTitle: "Paste two versions",
+    inputDescription: "Accept original and revised text blocks for local comparison without upload.",
+    resultTitle: "Show changed lines",
+    resultDescription: "Return added, removed, and unchanged lines with counts that can drive a future diff view.",
+    reviewTitle: "Check review context",
+    reviewDescription: "Make empty inputs, large pasted documents, and line-number assumptions visible before users rely on it.",
+    sourceDescription: "Uses the Aixtral Diff Checker LCS implementation and local tests as the source reference.",
+    workspaceDescription: "Adds split text input, changed-line metrics, plain-text diff output, and copyable summaries.",
+    trustTitle: "Local text diff model",
+    trustReviewDescription: "Line-level additions and removals stay visible so reviewers do not mistake this for semantic merge review.",
+    relatedSlugs: ["text-diff", "text-stats", "json-diff"],
+    outcome: "Native Diff Checker workspace for local line-level text review",
+    accent: "orange"
+  }),
+  "text-diff": aixtralNativeDetail({
+    summary: "Text Diff is now a native Toolars workspace for option-aware local text comparison.",
+    overview:
+      "Text Diff compares two text blocks with options to ignore whitespace, ignore case, or trim lines before calculating additions, removals, unchanged lines, and total changes. The native Toolars workspace migrates the Aixtral option-aware comparison model into local controls, preserves left and right line numbers, makes normalization choices visible, and gives reviewers copy-ready diff output.",
+    metric: { value: "Options", label: "Comparison modes" },
+    inputTitle: "Paste text versions",
+    inputDescription: "Accept left and right text inputs plus whitespace, case, and trimming preferences for local review.",
+    resultTitle: "Compute diff lines",
+    resultDescription: "Return normalized line comparison with left and right line numbers for review-oriented display.",
+    reviewTitle: "Verify comparison mode",
+    reviewDescription: "Keep normalization choices visible so ignored whitespace or case changes are not misread as exact matches.",
+    sourceDescription: "Uses the Aixtral Text Diff options, line numbering, and tests as the behavior source.",
+    workspaceDescription: "Adds ignore whitespace, ignore case, trim line toggles, metrics, and copyable option-aware diff output.",
+    trustTitle: "Local option-aware diff model",
+    trustReviewDescription: "Normalization choices stay visible so ignored whitespace, casing, or trim changes are not mistaken for exact matches.",
+    relatedSlugs: ["diff-checker", "case-converter", "text-stats"],
+    outcome: "Native Text Diff workspace for local option-aware comparison and review handoff",
+    accent: "pink"
+  }),
+  "url-parser": aixtralNativeDetail({
+    summary: "URL Parser is now a native Toolars workspace for local URL inspection, query review, and component handoff.",
+    overview:
+      "URL Parser breaks absolute URLs into protocol, origin, hostname, port, pathname, hash, and query pairs while preserving duplicate query keys for review. The native Toolars workspace migrates the Aixtral parsing behavior into local controls, keeps pasted URLs in the browser, surfaces invalid URL errors, and gives developers copy-ready component summaries before they debug redirects, links, and API clients.",
+    metric: { value: "URL", label: "Parsed input" },
+    inputTitle: "Paste a URL",
+    inputDescription: "Accept absolute URLs that need local inspection before debugging, ticket handoff, or sharing.",
+    resultTitle: "Break down components",
+    resultDescription: "Return protocol, origin, hostname, pathname, hash, query count, and decoded query pairs.",
+    reviewTitle: "Review malformed input",
+    reviewDescription: "Make invalid URLs, missing protocols, duplicate query keys, and sensitive query values visible before copy.",
+    sourceDescription: "Uses the Aixtral URL Parser implementation and tests as the behavior reference.",
+    workspaceDescription: "Adds a native parser workbench, query-pair review, component metrics, invalid URL handling, and copy-ready summaries.",
+    trustTitle: "Local URL parsing model",
+    trustReviewDescription: "Parsed query values stay visible so users can review duplicate keys, fragments, and sensitive parameters before reuse.",
+    relatedSlugs: ["url-encoder", "slug-generator", "html-entity-encoder"],
+    outcome: "Native URL Parser workspace for local URL inspection and query handoff",
+    accent: "teal"
+  }),
+  "number-base-converter": aixtralNativeDetail({
+    summary: "Number Base Converter is now a native Toolars workspace for exact local binary, octal, decimal, and hexadecimal conversion.",
+    overview:
+      "Number Base Converter converts values between binary, octal, decimal, and hexadecimal with source-base validation, BigInt-backed precision, and optional Unicode character preview for printable code points. The native Toolars workspace migrates the Aixtral conversion behavior into local base selectors, keeps values in the browser, flags invalid digits, and gives developers copy-ready outputs for debugging IDs, flags, encodings, and low-level number formats.",
+    metric: { value: "4", label: "Number bases" },
+    inputTitle: "Enter a number",
+    inputDescription: "Accept a value and source base while keeping parsing local and explicit.",
+    resultTitle: "Convert bases",
+    resultDescription: "Return binary, octal, decimal, hexadecimal, normalized source value, and Unicode preview when printable.",
+    reviewTitle: "Check precision and validity",
+    reviewDescription: "Flag invalid digits, empty values, source-base mismatch, and Unicode assumptions before users trust conversion output.",
+    sourceDescription: "Uses the Aixtral Number Base Converter implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, source base selector, BigInt conversion, validation errors, Unicode preview, and copy-ready outputs.",
+    trustTitle: "Local number conversion model",
+    trustReviewDescription: "Source-base validation remains visible so invalid digits or unsupported values are not silently converted.",
+    relatedSlugs: ["unit-converter", "percentage-calculator", "uuid-generator"],
+    outcome: "Native Number Base Converter workspace for exact local base conversion and Unicode preview",
+    accent: "indigo"
+  }),
+  "file-size-converter": aixtralNativeDetail({
+    summary: "File Size Converter is now a native Toolars workspace for local SI and IEC storage unit conversion.",
+    overview:
+      "File Size Converter converts file sizes across bytes, KB, MB, GB, TB, PB, and IEC units such as KiB, MiB, GiB, TiB, and PiB. The native Toolars workspace migrates the Aixtral conversion behavior into decimal and binary mode controls, keeps values in the browser, rejects negative or non-finite input, formats copy-ready result tables, and makes SI versus IEC assumptions explicit before storage and transfer estimates are reused.",
+    metric: { value: "SI/IEC", label: "Unit modes" },
+    inputTitle: "Enter file size",
+    inputDescription: "Accept a numeric amount, source unit, and decimal or binary conversion mode.",
+    resultTitle: "Convert units",
+    resultDescription: "Return all units in the selected family with formatted values and byte-level output.",
+    reviewTitle: "Check unit assumptions",
+    reviewDescription: "Keep decimal versus binary mode, zero values, invalid numeric input, and rounding assumptions visible before copy.",
+    sourceDescription: "Uses the Aixtral File Size Converter implementation and tests as the conversion source.",
+    workspaceDescription: "Adds SI and IEC unit pickers, mode-aware result tables, invalid input handling, formatting, and copy-ready output.",
+    trustTitle: "Local file size conversion model",
+    trustReviewDescription: "Decimal and binary mode labels stay visible so users do not mix SI and IEC estimates.",
+    relatedSlugs: ["unit-converter", "pdf-compressor", "csv-to-json"],
+    outcome: "Native File Size Converter workspace for local SI and IEC conversion",
+    accent: "emerald"
+  }),
+  "chmod-calculator": aixtralNativeDetail({
+    summary: "Chmod Calculator is now a native Toolars workspace for local Unix permission review and command handoff.",
+    overview:
+      "Chmod Calculator translates Unix file permissions between octal notation, symbolic notation, owner-group-other permission bits, readable descriptions, and copy-ready chmod commands. The native Toolars workspace migrates the Aixtral permission helpers into a local review flow, keeps modes in the browser, flags invalid permission input, highlights broad write and execute access, and helps developers inspect risky modes before they paste shell commands.",
+    metric: { value: "rwx", label: "Permission model" },
+    inputTitle: "Set permissions",
+    inputDescription: "Accept 3-digit octal values or 9-character symbolic notation for local permission review.",
+    resultTitle: "Calculate chmod output",
+    resultDescription: "Return octal mode, symbolic mode, readable permission summary, warnings, and copy-ready chmod command.",
+    reviewTitle: "Check unsafe modes",
+    reviewDescription: "Make invalid octal values, missing permission groups, broad execute access, and world-writable modes visible before copy.",
+    sourceDescription: "Uses the Aixtral Chmod Calculator helpers and tests as the permission behavior reference.",
+    workspaceDescription: "Adds a native permission input, warning review, command output, local validation, and copy-ready chmod handoff.",
+    trustTitle: "Local permission calculation model",
+    trustReviewDescription: "Unsafe modes and invalid permission strings stay visible before users copy a chmod command.",
+    relatedSlugs: ["yaml-validator", "mcp-server-builder", "json-diff"],
+    outcome: "Native Chmod Calculator workspace for local permission review and command handoff",
+    accent: "slate"
+  }),
+  "ipv4-subnet-calculator": aixtralNativeDetail({
+    summary: "IPv4 Subnet Calculator is now a native Toolars workspace for local CIDR planning and address-range review.",
+    overview:
+      "IPv4 Subnet Calculator computes network address, broadcast address, subnet mask, wildcard mask, usable host range, host count, IP class, and binary network views from an IPv4 address and CIDR prefix. The native Toolars workspace migrates the Aixtral subnet behavior into local inputs, handles /31, /32, and /0 boundary cases without signed overflow, keeps addresses in the browser, and gives network reviewers copy-ready subnet summaries.",
+    metric: { value: "CIDR", label: "Network output" },
+    inputTitle: "Enter IPv4 and prefix",
+    inputDescription: "Accept an IPv4 address and CIDR prefix for local subnet calculation.",
+    resultTitle: "Calculate subnet details",
+    resultDescription: "Return mask, network address, broadcast address, usable range, host count, class, and binary view.",
+    reviewTitle: "Check boundary cases",
+    reviewDescription: "Keep invalid IPs, invalid prefixes, /31, /32, /0, and host-count assumptions visible before use.",
+    sourceDescription: "Uses the Aixtral IPv4 Subnet Calculator implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds CIDR inputs, boundary-safe arithmetic, subnet detail rows, binary display, validation errors, and copy actions.",
+    trustTitle: "Local subnet calculation model",
+    trustReviewDescription: "CIDR boundary assumptions and usable-host counts stay visible before users apply subnet output.",
+    relatedSlugs: ["url-parser", "json-repair", "mcp-server-builder"],
+    outcome: "Native IPv4 Subnet Calculator workspace for local CIDR planning and network handoff",
+    accent: "blue"
+  }),
+  "timestamp-converter": aixtralNativeDetail({
+    summary: "Timestamp Converter is now a native Toolars workspace for local Unix time conversion and timezone review.",
+    overview:
+      "Timestamp Converter converts Unix timestamps in seconds or milliseconds and ISO-like date strings into ISO, UTC, local, relative, and normalized Unix-second outputs. The native Toolars workspace migrates the Aixtral time conversion behavior into local controls, keeps values in the browser, detects timestamp precision, exposes current-time helpers, rejects invalid input, and makes timezone assumptions visible before developers copy date values.",
+    metric: { value: "Unix", label: "Time format" },
+    inputTitle: "Enter timestamp",
+    inputDescription: "Accept Unix timestamps in seconds or milliseconds plus date strings that need local conversion.",
+    resultTitle: "Convert to readable dates",
+    resultDescription: "Return Unix seconds, precision, local date, UTC date, ISO output, and relative labels.",
+    reviewTitle: "Review timezone assumptions",
+    reviewDescription: "Make timezone, seconds-versus-milliseconds, relative labels, and invalid timestamp handling visible before copy.",
+    sourceDescription: "Uses the Aixtral Timestamp Converter implementation and client behavior as the source reference.",
+    workspaceDescription: "Adds a native timestamp input, current-time helper, precision detection, validation errors, and copy-ready date outputs.",
+    trustTitle: "Local timestamp conversion model",
+    trustReviewDescription: "Precision and timezone labels stay visible so seconds, milliseconds, UTC, and local values are not mixed up.",
+    relatedSlugs: ["text-stats", "uuid-generator", "url-parser"],
+    outcome: "Native Timestamp Converter workspace for local Unix time conversion and date handoff",
+    accent: "orange"
+  }),
+  "user-agent-parser": aixtralNativeDetail({
+    summary: "User Agent Parser is now a native Toolars workspace for local browser, OS, device, and engine inspection.",
+    overview:
+      "User Agent Parser analyzes browser and crawler User-Agent strings to detect browser name and version, operating system, device type, rendering engine, and raw string context with dependency-free rules. The native Toolars workspace migrates the Aixtral parser into local controls, keeps User-Agent strings in the browser, identifies bots and common mobile/tablet cases, and gives QA and support teams copy-ready environment summaries.",
+    metric: { value: "UA", label: "Parsed signal" },
+    inputTitle: "Paste User-Agent",
+    inputDescription: "Accept browser, mobile, tablet, or crawler User-Agent strings for local parsing and inspection.",
+    resultTitle: "Detect browser context",
+    resultDescription: "Return browser, OS, device type, rendering engine, version hints, and normalized summary labels.",
+    reviewTitle: "Check parser confidence",
+    reviewDescription: "Make unknown browsers, spoofed strings, bots, and rule limitations visible before using parsed output.",
+    sourceDescription: "Uses the Aixtral User Agent Parser implementation and tests as the behavior reference.",
+    workspaceDescription: "Adds a native parser workbench, browser and OS metrics, device review, engine output, and copy-ready summaries.",
+    trustTitle: "Local User-Agent parsing model",
+    trustReviewDescription: "Parser limitations stay visible because User-Agent strings can be spoofed or omit reliable browser signals.",
+    relatedSlugs: ["url-parser", "json-repair", "mcp-server-builder"],
+    outcome: "Native User Agent Parser workspace for local browser and device inspection",
+    accent: "rose"
+  }),
+  "color-converter": aixtralNativeDetail({
+    summary: "Color Converter is now a native Toolars workspace for local design-token color conversion and swatch review.",
+    overview:
+      "Color Converter translates HEX, RGB, HSL, HSV, CMYK, and common named colors into normalized copy-ready values for design systems, CSS reviews, product UI handoff, and accessibility checks. The native Toolars workspace keeps parsing and conversion local, shows a live swatch, reports invalid values, and gives designers and developers consistent output strings before values move into tokens, stylesheets, or tickets.",
+    metric: { value: "5", label: "Output formats" },
+    inputTitle: "Enter a color",
+    inputDescription: "Accept HEX, RGB, HSL, HSV, CMYK, or named color input for local parsing and conversion.",
+    resultTitle: "Convert formats",
+    resultDescription: "Return normalized HEX, RGB, HSL, HSV, and CMYK strings with preview swatch metadata.",
+    reviewTitle: "Check invalid values",
+    reviewDescription: "Make unsupported names, out-of-range channels, and malformed values visible before output is copied.",
+    sourceDescription: "Uses the Aixtral Color Converter implementation and tests as the base conversion reference.",
+    workspaceDescription: "Adds a native color input, validation state, swatch preview, multi-format output rows, and public catalog readiness.",
+    trustTitle: "Local color conversion model",
+    trustReviewDescription: "Validation errors and format assumptions stay visible so malformed colors are not silently copied into design tokens.",
+    relatedSlugs: ["color-contrast-checker", "color-palette-generator", "css-gradient-generator"],
+    outcome: "Native Color Converter workspace for local design-token conversion",
+    accent: "fuchsia"
+  }),
+  "color-contrast-checker": aixtralNativeDetail({
+    summary: "Color Contrast Checker is now a native Toolars workspace for local WCAG ratio review and preview handoff.",
+    overview:
+      "Color Contrast Checker compares foreground and background colors, calculates contrast ratios, and reports WCAG AA and AAA readability status for normal and large text. The native Toolars workspace migrates the local-first Aixtral contrast math into Toolars controls, keeps color values in the browser, includes color swapping and preview states, and makes accessibility pass-fail labels clear before UI colors ship.",
+    metric: { value: "WCAG", label: "Review target" },
+    inputTitle: "Choose colors",
+    inputDescription: "Accept foreground and background colors with local parsing and preview-friendly values.",
+    resultTitle: "Calculate contrast",
+    resultDescription: "Return contrast ratio, AA and AAA status, text-size guidance, and preview-ready result labels.",
+    reviewTitle: "Confirm accessibility level",
+    reviewDescription: "Keep failures, borderline ratios, and color parsing errors visible before design decisions ship.",
+    sourceDescription: "Uses the Aixtral Color Contrast Checker luminance and WCAG helpers as the behavior source.",
+    workspaceDescription: "Adds foreground/background inputs, color swapping, live preview, ratio metrics, pass-fail rows, and public readiness.",
+    trustTitle: "Local WCAG contrast model",
+    trustReviewDescription: "AA and AAA thresholds remain visible so teams can distinguish normal text, large text, and failed combinations.",
+    relatedSlugs: ["color-converter", "color-palette-generator", "css-gradient-generator"],
+    outcome: "Native Color Contrast Checker workspace for local accessibility review",
+    accent: "yellow"
+  }),
+  "color-palette-generator": aixtralNativeDetail({
+    summary: "Color Palette Generator is now a native Toolars workspace for local harmony palettes and CSS variable export.",
+    overview:
+      "Color Palette Generator creates harmonious palettes from a base color using complementary, analogous, triadic, split-complementary, tetradic, and monochromatic relationships, then adds tint and shade metadata for implementation handoff. The Toolars-native workspace keeps generation local, renders swatches, exports CSS variables, and makes palette assumptions inspectable before colors are reused in product UI.",
+    metric: { value: "Harmony", label: "Palette model" },
+    inputTitle: "Set a base color",
+    inputDescription: "Accept a base color and palette style so generation can stay local and reproducible.",
+    resultTitle: "Generate palette",
+    resultDescription: "Return coordinated swatches, HSL values, harmony labels, and export-ready CSS token strings.",
+    reviewTitle: "Check usability",
+    reviewDescription: "Keep contrast, saturation, and naming assumptions visible before the palette moves into production UI.",
+    sourceDescription: "Uses the Aixtral Color Palette Generator harmony, tint, shade, and export helpers as the migration reference.",
+    workspaceDescription: "Adds base color and harmony controls, generated swatches, CSS variable export, and design QA notes.",
+    trustTitle: "Local palette generation model",
+    trustReviewDescription: "Generated palettes remain deterministic and reviewable before colors are promoted to design tokens.",
+    relatedSlugs: ["color-converter", "color-contrast-checker", "css-gradient-generator"],
+    outcome: "Native Color Palette Generator workspace for local palette and token handoff",
+    accent: "rose"
+  }),
+  "css-gradient-generator": aixtralNativeDetail({
+    summary: "CSS Gradient Generator is now a native Toolars workspace for local gradient preview and copy-ready CSS.",
+    overview:
+      "CSS Gradient Generator creates implementation-ready linear gradients from color stops and angle settings while preserving the Aixtral source model for linear, radial, and conic gradient strings in the local library. The Toolars workspace focuses the public flow on stable two-stop linear gradients with a live preview, generated CSS declaration, and design review prompts so frontend teams can move gradients into components or tokens without leaving the browser.",
+    metric: { value: "CSS", label: "Gradient output" },
+    inputTitle: "Set color stops",
+    inputDescription: "Accept start color, end color, and angle settings for local gradient generation.",
+    resultTitle: "Generate gradient CSS",
+    resultDescription: "Return a preview gradient and copy-ready background declaration for implementation handoff.",
+    reviewTitle: "Check visual fit",
+    reviewDescription: "Make stop order, angle, token naming, and readability assumptions visible before CSS is copied.",
+    sourceDescription: "Uses the Aixtral CSS Gradient Generator linear, radial, conic, and preset helpers as the behavior reference.",
+    workspaceDescription: "Adds native color stop controls, angle input, preview surface, generated CSS output, and public catalog readiness.",
+    trustTitle: "Local CSS gradient model",
+    trustReviewDescription: "Gradient values stay inspectable so teams can verify stops, angles, and token handoff before reuse.",
+    relatedSlugs: ["color-converter", "color-palette-generator", "css-border-radius-generator"],
+    outcome: "Native CSS Gradient Generator workspace for local gradient CSS handoff",
+    accent: "orange"
+  }),
+  "css-border-radius-generator": aixtralNativeDetail({
+    summary: "CSS Border Radius Generator is now a native Toolars workspace for local corner controls and preview CSS.",
+    overview:
+      "CSS Border Radius Generator designs per-corner radius values, preview shapes, and implementation-ready CSS for cards, controls, avatars, and custom UI surfaces. The native Toolars workspace migrates the Aixtral shorthand behavior into stable numeric controls, keeps values local, shows whether output is simplified or expanded, and gives designers copy-ready border-radius declarations before styling changes ship.",
+    metric: { value: "4", label: "Corner controls" },
+    inputTitle: "Set corner radii",
+    inputDescription: "Accept radius values for each corner plus px or percent unit selection.",
+    resultTitle: "Preview CSS shape",
+    resultDescription: "Return CSS border-radius output and preview metadata for rounded rectangle or custom corner shapes.",
+    reviewTitle: "Check layout fit",
+    reviewDescription: "Make extreme values, asymmetric shapes, and unit assumptions visible before the CSS is copied.",
+    sourceDescription: "Uses the Aixtral CSS Border Radius Generator source behavior as the preview and code reference.",
+    workspaceDescription: "Adds per-corner controls, unit selection, preview surface, simplified/expanded status, and copy-ready CSS.",
+    trustTitle: "Local border-radius model",
+    trustReviewDescription: "Unit and corner assumptions stay visible so asymmetric shapes are reviewed before implementation.",
+    relatedSlugs: ["css-gradient-generator", "css-flexbox-generator", "css-grid-generator"],
+    outcome: "Native CSS Border Radius Generator workspace for local shape and CSS handoff",
+    accent: "orange"
+  }),
+  "css-flexbox-generator": aixtralNativeDetail({
+    summary: "CSS Flexbox Generator is now a native Toolars workspace for local flex layout controls and CSS handoff.",
+    overview:
+      "CSS Flexbox Generator builds responsive flex layouts with direction, wrapping, alignment, justification, gap, and item basis controls. The native Toolars workspace migrates the Aixtral source behavior into local controls, renders a stable preview strip, and returns copy-ready container and item CSS so frontend teams can test layout assumptions before code is pasted into components.",
+    metric: { value: "Flex", label: "Layout model" },
+    inputTitle: "Configure flex layout",
+    inputDescription: "Accept direction, wrap, align, justify, gap, and item settings for local layout generation.",
+    resultTitle: "Generate flex CSS",
+    resultDescription: "Return container and item CSS plus preview metadata that can drive a responsive layout canvas.",
+    reviewTitle: "Inspect responsive behavior",
+    reviewDescription: "Keep overflow, gap, wrapping, and alignment assumptions visible before code is copied into an app.",
+    sourceDescription: "Use the Aixtral CSS Flexbox Generator implementation and messages as the behavior reference.",
+    workspaceDescription: "Adds segmented layout controls, a stable preview, generated container/item CSS, warning notes, and public catalog readiness.",
+    trustTitle: "Local CSS flexbox model",
+    trustReviewDescription: "Generated values stay local, but teams should still test wrapping and overflow inside the target component width.",
+    relatedSlugs: ["css-grid-generator", "css-border-radius-generator", "css-gradient-generator"],
+    outcome: "Native CSS Flexbox Generator workspace for local layout and CSS export",
+    accent: "blue"
+  }),
+  "css-grid-generator": aixtralNativeDetail({
+    summary: "CSS Grid Generator is now a native Toolars workspace for local grid templates, gaps, and preview cells.",
+    overview:
+      "CSS Grid Generator creates grid layouts with column count, row count, gap values, min column widths, preview cells, and implementation-ready template output. The native Toolars workspace turns the Aixtral layout brief into a local editor with deterministic grid CSS, stable preview sizing, and review notes for mobile breakpoints before grid rules move into production styles.",
+    metric: { value: "Grid", label: "Layout model" },
+    inputTitle: "Configure grid",
+    inputDescription: "Accept column, row, gap, area, and placement settings for local CSS Grid generation.",
+    resultTitle: "Generate grid CSS",
+    resultDescription: "Return grid-template rows, columns, areas, gap values, placement rules, and preview metadata.",
+    reviewTitle: "Check template clarity",
+    reviewDescription: "Make overlapping areas, empty cells, invalid names, and responsive assumptions visible before copying CSS.",
+    sourceDescription: "Use the Aixtral CSS Grid Generator source implementation, tests, and messages as the migration reference.",
+    workspaceDescription: "Adds column and row controls, gap settings, preview cells, generated grid CSS, warning notes, and public catalog readiness.",
+    trustTitle: "Local CSS grid model",
+    trustReviewDescription: "Grid output is generated in-browser; dense templates still need breakpoint review in the final app shell.",
+    relatedSlugs: ["css-flexbox-generator", "css-border-radius-generator", "css-gradient-generator"],
+    outcome: "Native CSS Grid Generator workspace for local template and CSS handoff",
+    accent: "violet"
+  }),
+  "css-unit-converter": aixtralNativeDetail({
+    summary: "CSS Unit Converter is now a native Toolars workspace for local sizing conversion with visible context assumptions.",
+    overview:
+      "CSS Unit Converter translates between px, rem, em, percent, viewport, and absolute CSS units while preserving assumptions such as root font size, current font size, parent dimensions, and viewport size. The native Toolars workspace provides local conversion output, formula notes, and copy-ready CSS values so designers and frontend engineers can review sizing decisions without sending layout values anywhere.",
+    metric: { value: "11", label: "CSS units" },
+    inputTitle: "Enter CSS value",
+    inputDescription: "Accept a numeric value, source unit, target unit, and context assumptions for local conversion.",
+    resultTitle: "Convert units",
+    resultDescription: "Return equivalent CSS values with precision controls, formula notes, and copy-ready strings.",
+    reviewTitle: "Review context assumptions",
+    reviewDescription: "Keep root font size, parent size, viewport basis, and invalid unit choices visible before use.",
+    sourceDescription: "Use the Aixtral CSS Unit Converter implementation and source messages as the behavior reference.",
+    workspaceDescription: "Adds unit menus, numeric input, formula output, copy-ready CSS values, and public catalog readiness.",
+    trustTitle: "Local CSS unit conversion model",
+    trustReviewDescription: "Context-sensitive units such as em, percent, vw, and vh must be checked against the actual target container.",
+    relatedSlugs: ["unit-converter", "css-flexbox-generator", "css-grid-generator"],
+    outcome: "Native CSS Unit Converter workspace for local sizing and context review",
+    accent: "teal"
+  }),
+  "hash-generator": aixtralNativeDetail({
+    summary: "Hash Generator is now a native Toolars workspace for local checksum and digest review.",
+    overview:
+      "Hash Generator creates MD5, SHA1, SHA256, and SHA512 digests from pasted text, IDs, and payload snippets for debugging, integrity checks, and lightweight security review. The workspace migrates the Aixtral source behavior into Toolars-native input and digest rows, keeps source content local, and makes algorithm limits visible before users copy output.",
+    metric: { value: "4", label: "Hash algorithms" },
+    inputTitle: "Paste source text",
+    inputDescription: "Accept text, IDs, or payload snippets for local digest generation without uploading content.",
+    resultTitle: "Generate digest rows",
+    resultDescription: "Return MD5, SHA1, SHA256, and SHA512 outputs with stable labels and copy-ready values.",
+    reviewTitle: "Review algorithm limits",
+    reviewDescription: "Keep collision caveats, non-password storage warnings, and empty input states visible before using hashes.",
+    sourceDescription: "Uses the Aixtral Hash Generator implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, local input processing, algorithm rows, stats, and public catalog readiness.",
+    trustTitle: "Local digest generation model",
+    trustReviewDescription: "Hash output is deterministic, but MD5 and SHA1 are shown for compatibility checks rather than modern security guarantees.",
+    relatedSlugs: ["jwt-decoder", "password-generator", "base64-converter"],
+    outcome: "Native Hash Generator workspace for local digest generation and checksum review",
+    accent: "emerald"
+  }),
+  "jwt-decoder": aixtralNativeDetail({
+    summary: "JWT Decoder is now a native Toolars workspace for local decode-only token inspection.",
+    overview:
+      "JWT Decoder splits JSON Web Tokens into header, payload, and signature sections, decodes JSON fields, and surfaces token metadata without sending secrets to a server. The workspace migrates the Aixtral source behavior into Toolars-native token input, decoded payload review, algorithm metadata, and explicit decode-only warnings so users do not confuse inspection with signature verification.",
+    metric: { value: "JWT", label: "Token format" },
+    inputTitle: "Paste token",
+    inputDescription: "Accept a JWT string for local parsing while warning users not to paste production secrets casually.",
+    resultTitle: "Decode token parts",
+    resultDescription: "Return decoded header, payload, signature presence, algorithm, expiry hints, and structured JSON.",
+    reviewTitle: "Separate decode from verify",
+    reviewDescription: "Make unsupported tokens, invalid segments, missing signatures, and unverifiable status clear before use.",
+    sourceDescription: "Uses the Aixtral JWT Decoder implementation, examples, and tests as the migration reference.",
+    workspaceDescription: "Adds a native decode-only workbench, token warnings, decoded JSON panels, metadata badges, and public catalog readiness.",
+    trustTitle: "Decode-only JWT inspection model",
+    trustReviewDescription: "The workspace decodes token contents locally and never claims signature verification or trust decisions.",
+    relatedSlugs: ["hash-generator", "json-repair", "base64-converter"],
+    outcome: "Native JWT Decoder workspace for local token inspection and decode-only review",
+    accent: "amber"
+  }),
+  "password-generator": aixtralNativeDetail({
+    summary: "Password Generator is now a native Toolars workspace for local credential creation and strength review.",
+    overview:
+      "Password Generator creates random passwords from length, uppercase, lowercase, number, symbol, and ambiguity-exclusion settings while reporting strength-oriented metadata. The workspace migrates the Aixtral source behavior into Toolars-native controls, keeps generated values local, and gives users a no-storage utility for fixtures, temporary credentials, and security handoff.",
+    metric: { value: "Rules", label: "Generation controls" },
+    inputTitle: "Choose password rules",
+    inputDescription: "Accept length, character sets, symbol rules, and exclusions for local random password generation.",
+    resultTitle: "Generate secure values",
+    resultDescription: "Return a generated password plus strength hints, character coverage, and copy-ready output.",
+    reviewTitle: "Check rule quality",
+    reviewDescription: "Keep weak lengths, missing character classes, ambiguous exclusions, and clipboard assumptions visible.",
+    sourceDescription: "Uses the Aixtral Password Generator implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, rule toggles, strength metadata, no-storage copy flow, and public catalog readiness.",
+    trustTitle: "Local password generation model",
+    trustReviewDescription: "Generated values stay in the browser, but users should still use a password manager for storage and rotation.",
+    relatedSlugs: ["hash-generator", "uuid-generator", "jwt-decoder"],
+    outcome: "Native Password Generator workspace for local credential generation and strength review",
+    accent: "rose"
+  }),
+  "regex-tester": aixtralNativeDetail({
+    summary: "Regex Tester is now a native Toolars workspace for local pattern debugging and match review.",
+    overview:
+      "Regex Tester evaluates regular expressions against sample text, showing matches, capture groups, flags, and syntax errors without uploading source strings. The workspace migrates the Aixtral source behavior into Toolars-native pattern, flag, sample, and result panels so developers and editors can debug expressions locally before pasting them into code or data workflows.",
+    metric: { value: "Regex", label: "Pattern engine" },
+    inputTitle: "Enter pattern and text",
+    inputDescription: "Accept a regular expression, flags, and sample text for local matching and debugging.",
+    resultTitle: "Show matches",
+    resultDescription: "Return match ranges, capture groups, counts, flag behavior, and preview-friendly annotations.",
+    reviewTitle: "Catch invalid patterns",
+    reviewDescription: "Make syntax errors, runaway assumptions, empty matches, and flag interactions visible before copying.",
+    sourceDescription: "Uses the Aixtral Regex Tester implementation, examples, and tests as the behavior source.",
+    workspaceDescription: "Adds a native workbench, pattern and flag controls, sample text testing, match rows, and public catalog readiness.",
+    trustTitle: "Local regex testing model",
+    trustReviewDescription: "The JavaScript regular expression engine is used locally, so results should be checked against other runtimes when syntax differs.",
+    relatedSlugs: ["text-diff", "text-stats", "unicode-search"],
+    outcome: "Native Regex Tester workspace for local pattern debugging and match handoff",
+    accent: "indigo"
+  }),
+  "sql-formatter": aixtralDetail({
+    badge: "Data utility",
+    summary: "This Aixtral Lab listing captures SQL Formatter detail content for query cleanup and review workflows.",
+    overview:
+      "SQL Formatter beautifies SQL queries with configurable dialect and style options for database reviews, migration scripts, debugging, and documentation. Toolars records this as hidden detail inventory until the workspace can expose dialect controls, formatting options, and validation feedback inside the current UI system.",
+    metric: { value: "SQL", label: "Formatted input" },
+    inputTitle: "Paste SQL",
+    inputDescription: "Accept queries, scripts, or fragments with dialect and formatting preferences for local cleanup.",
+    resultTitle: "Format query",
+    resultDescription: "Return readable SQL with indentation, keyword casing, line breaks, and copy-ready output.",
+    reviewTitle: "Check parser limits",
+    reviewDescription: "Make unsupported syntax, huge scripts, and dialect assumptions visible before formatted code is trusted.",
+    handoffTitle: "Plan formatter controls",
+    handoffDescription: "Use this detail record to scope dialect menus, style toggles, editor states, and copy/download actions.",
+    sourceDescription: "Use the Aixtral SQL Formatter implementation and tests as the source behavior reference.",
+    contractDescription: "Return dialect, formatting options, formatted SQL, validation errors, input stats, and copy targets.",
+    relatedSlugs: ["json-repair", "yaml-validator", "toml-converter"],
+    outcome: "SQL formatter detail page and database review handoff",
+    accent: "blue"
+  }),
+  "toml-converter": aixtralDetail({
+    badge: "Config utility",
+    summary: "This Aixtral Lab listing prepares TOML Converter detail coverage for configuration format workflows.",
+    overview:
+      "TOML Converter converts between TOML and JSON with validation and error reporting for package metadata, build config, and infrastructure settings. Toolars keeps the listing detail-only while the future workspace aligns local parsing, structured preview, error states, and export behavior with existing data tools.",
+    metric: { value: "2-way", label: "TOML and JSON" },
+    inputTitle: "Paste TOML or JSON",
+    inputDescription: "Accept TOML or JSON source content and a conversion direction for local parsing.",
+    resultTitle: "Convert format",
+    resultDescription: "Return converted output, parsed structure hints, validation status, and copy-ready text.",
+    reviewTitle: "Inspect config errors",
+    reviewDescription: "Keep syntax errors, unsupported value shapes, comments, and ordering caveats visible before export.",
+    handoffTitle: "Prepare converter route",
+    handoffDescription: "Use this detail page to scope editor panes, direction controls, error lists, and export actions.",
+    sourceDescription: "Use the Aixtral TOML Converter implementation and tests as the source behavior reference.",
+    contractDescription: "Return direction, parsed status, converted output, validation errors, warning rows, and copy metadata.",
+    relatedSlugs: ["yaml-validator", "json-repair", "sql-formatter"],
+    outcome: "TOML converter detail page and configuration migration brief",
+    accent: "teal"
+  }),
+  "unicode-search": aixtralDetail({
+    badge: "Character utility",
+    summary: "This Aixtral Lab listing adds Unicode Character Search detail coverage for character lookup workflows.",
+    overview:
+      "Unicode Character Search helps users find and inspect characters with names, glyphs, code points, decimal values, and HTML entity details for copy, localization, documentation, and frontend debugging. Toolars keeps it hidden until a native workspace can provide search, category filters, and copy-safe result rows.",
+    metric: { value: "Unicode", label: "Character index" },
+    inputTitle: "Search characters",
+    inputDescription: "Accept a keyword, glyph, or code point query for local lookup across Unicode character metadata.",
+    resultTitle: "Browse results",
+    resultDescription: "Return matching glyphs, Unicode names, code points, decimal values, and HTML entity details.",
+    reviewTitle: "Check copy context",
+    reviewDescription: "Keep invisible characters, similar glyphs, and encoding caveats visible before users paste output.",
+    handoffTitle: "Plan search interface",
+    handoffDescription: "Use this detail record to scope filters, character rows, copy controls, and category navigation.",
+    sourceDescription: "Use the Aixtral Unicode Character Search implementation and tests as the source behavior reference.",
+    contractDescription: "Return query, result rows, code point labels, decimal values, HTML entities, category metadata, and copy targets.",
+    relatedSlugs: ["regex-tester", "html-entity-encoder", "text-stats"],
+    outcome: "Unicode search detail page and character lookup handoff",
+    accent: "violet"
+  }),
+  "code-minifier": aixtralDetail({
+    badge: "Code utility",
+    summary: "This Aixtral Lab listing prepares Code Minifier detail coverage for local frontend optimization workflows.",
+    overview:
+      "Code Minifier compresses JavaScript, CSS, and HTML snippets to reduce file size for prototypes, embeds, documentation samples, and quick shipping checks. Toolars keeps this as detail-only inventory until a native workspace can expose language selection, minify options, warnings, and copy behavior inside the current design system.",
+    metric: { value: "3", label: "Code formats" },
+    inputTitle: "Paste code",
+    inputDescription: "Accept JavaScript, CSS, or HTML source and keep minification local to the browser workflow.",
+    resultTitle: "Minify output",
+    resultDescription: "Return compact code, byte savings, selected language, and copy-ready output for review.",
+    reviewTitle: "Check parsing assumptions",
+    reviewDescription: "Make unsupported syntax, malformed markup, and irreversible formatting caveats visible before copy.",
+    handoffTitle: "Plan minifier controls",
+    handoffDescription: "Use this detail record to scope language tabs, compression stats, warnings, and copy/download states.",
+    sourceDescription: "Use the Aixtral Code Minifier implementation and tests as the source behavior reference.",
+    contractDescription: "Return language, original size, minified size, output, warnings, validation errors, and copy metadata.",
+    relatedSlugs: ["json-formatter", "css-to-tailwind-converter", "xml-formatter"],
+    outcome: "Code minifier detail page and local optimization handoff",
+    accent: "slate"
+  }),
+  "cron-explainer": aixtralDetail({
+    badge: "Schedule utility",
+    summary: "This Aixtral Lab listing captures Cron Explainer detail content for schedule review workflows.",
+    overview:
+      "Cron Explainer decodes cron expressions into readable descriptions, field breakdowns, and next execution hints for scheduled jobs, automation rules, and deployment maintenance windows. Toolars keeps it hidden until a native workspace can handle validation, timezone notes, examples, and copyable explanations.",
+    metric: { value: "Cron", label: "Schedule syntax" },
+    inputTitle: "Enter cron expression",
+    inputDescription: "Accept standard cron fields and optional schedule examples for local parsing.",
+    resultTitle: "Explain schedule",
+    resultDescription: "Return human-readable timing, field meanings, next-run hints, and validation feedback.",
+    reviewTitle: "Check timezone caveats",
+    reviewDescription: "Make invalid fields, unsupported syntax, and timezone assumptions visible before schedules are deployed.",
+    handoffTitle: "Prepare schedule UX",
+    handoffDescription: "Use this detail page to scope expression presets, readable summaries, and next-run preview states.",
+    sourceDescription: "Use the Aixtral Cron Explainer implementation and tests as the source behavior reference.",
+    contractDescription: "Return expression, parsed fields, readable description, next execution hints, warnings, and validation errors.",
+    relatedSlugs: ["timestamp-converter", "regex-tester", "text-stats"],
+    outcome: "Cron explainer detail page and schedule review handoff",
+    accent: "orange"
+  }),
+  "css-to-tailwind-converter": aixtralNativeDetail({
+    summary: "CSS to Tailwind Converter is now a native Toolars workspace for local utility-class suggestions.",
+    overview:
+      "CSS to Tailwind Converter maps raw CSS declarations to Tailwind utility class suggestions for design-system cleanup, component migration, and prototype handoff. The native Toolars workspace parses declarations locally, separates matched and unsupported rules, and returns copy-ready class strings for common flex, alignment, spacing, and radius properties without implying custom project config coverage.",
+    metric: { value: "CSS", label: "Source input" },
+    inputTitle: "Paste CSS declarations",
+    inputDescription: "Accept raw CSS properties, inline styles, or rule fragments for local Tailwind conversion.",
+    resultTitle: "Suggest utilities",
+    resultDescription: "Return Tailwind class suggestions, unsupported properties, and normalized CSS for review.",
+    reviewTitle: "Check framework assumptions",
+    reviewDescription: "Keep custom theme values, arbitrary units, and unsupported CSS visible before classes are copied.",
+    sourceDescription: "Use the Aixtral CSS to Tailwind Converter implementation and tests as the migration reference.",
+    workspaceDescription: "Adds a local CSS textarea, generated Tailwind class output, unsupported-rule review, and public catalog readiness.",
+    trustTitle: "Local CSS utility mapping model",
+    trustReviewDescription: "The converter suggests common Tailwind utilities locally; custom theme tokens still require project review.",
+    relatedSlugs: ["css-unit-converter", "css-flexbox-generator", "css-grid-generator"],
+    outcome: "Native CSS to Tailwind workspace for local utility-class migration",
+    accent: "sky"
+  }),
+  "docker-compose-converter": aixtralDetail({
+    badge: "DevOps utility",
+    summary: "This Aixtral Lab listing prepares Docker Compose Converter detail data for container config workflows.",
+    overview:
+      "Docker Compose Converter translates between docker run commands and docker-compose.yml service definitions for local deployment notes, onboarding docs, and infrastructure handoff. Toolars keeps this detail-only until a workspace can handle YAML preview, command parsing caveats, and safe environment variable treatment.",
+    metric: { value: "2-way", label: "Docker formats" },
+    inputTitle: "Paste Docker config",
+    inputDescription: "Accept docker run commands or Compose YAML for local conversion and inspection.",
+    resultTitle: "Convert container setup",
+    resultDescription: "Return converted Compose YAML or docker run command with service, port, volume, and env metadata.",
+    reviewTitle: "Check secret handling",
+    reviewDescription: "Make environment variables, volume paths, unsupported flags, and parser warnings visible before sharing.",
+    handoffTitle: "Prepare DevOps workspace",
+    handoffDescription: "Use this detail page to scope split input panes, YAML preview, warning rows, and copy controls.",
+    sourceDescription: "Use the Aixtral Docker Compose Converter implementation and tests as the source behavior reference.",
+    contractDescription: "Return direction, parsed services, converted output, env warnings, unsupported flags, and validation errors.",
+    relatedSlugs: ["yaml-validator", "env-editor", "mcp-server-builder"],
+    outcome: "Docker Compose converter detail page and DevOps handoff",
+    accent: "blue"
+  }),
+  "env-editor": aixtralDetail({
+    badge: "Config utility",
+    summary: "This Aixtral Lab listing captures Env Variable Editor detail content for local configuration review.",
+    overview:
+      "Env Variable Editor parses .env files into editable rows, detects malformed lines, and helps review names, values, comments, duplicates, and secret-like entries. Toolars keeps it hidden from public launch until the native workspace can offer table editing, privacy warnings, diff-safe export, and clear no-upload behavior.",
+    metric: { value: ".env", label: "Config format" },
+    inputTitle: "Paste .env content",
+    inputDescription: "Accept environment variable files locally and preserve comments, blank lines, and key-value rows.",
+    resultTitle: "Parse variables",
+    resultDescription: "Return editable variable rows, comments, duplicate keys, parse warnings, and export-ready text.",
+    reviewTitle: "Protect sensitive values",
+    reviewDescription: "Keep secret-like values, duplicate keys, and malformed lines visible before anyone exports or shares.",
+    handoffTitle: "Plan table editor",
+    handoffDescription: "Use this detail record to scope row editing, validation badges, masked values, and copy/download states.",
+    sourceDescription: "Use the Aixtral Env Variable Editor implementation and tests as the behavior reference.",
+    contractDescription: "Return parsed rows, comments, duplicates, secret warnings, validation errors, and serialized .env output.",
+    relatedSlugs: ["yaml-validator", "toml-converter", "docker-compose-converter"],
+    outcome: "Env editor detail page and local config handoff",
+    accent: "emerald"
+  }),
+  "meta-tag-generator": aixtralNativeDetail({
+    summary: "Meta Tag Generator is now a native Toolars workspace for local SEO, Open Graph, and Twitter tag output.",
+    overview:
+      "Meta Tag Generator creates SEO-oriented HTML meta tags including title, description, canonical, Open Graph, and Twitter Card markup for pages, launches, and content previews. The native Toolars workspace uses local structured inputs, escapes generated output, surfaces title and description length warnings, and returns copy-ready snippets that can be reviewed before a page ships.",
+    metric: { value: "SEO", label: "Markup target" },
+    inputTitle: "Enter page metadata",
+    inputDescription: "Accept title, description, URL, image, and social fields for local meta tag generation.",
+    resultTitle: "Generate HTML tags",
+    resultDescription: "Return canonical tags, Open Graph tags, Twitter Card tags, and copy-ready HTML snippets.",
+    reviewTitle: "Check preview quality",
+    reviewDescription: "Make missing descriptions, long titles, invalid URLs, and image assumptions visible before publishing.",
+    sourceDescription: "Use the Aixtral Meta Tag Generator implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds page-title input, generated metadata tags, validation warnings, and public catalog readiness.",
+    trustTitle: "Local metadata generation model",
+    trustReviewDescription: "Generated tags are escaped locally, but teams should validate final previews in search and social debuggers.",
+    relatedSlugs: ["robots-txt-generator", "html-entity-encoder", "css-gradient-generator"],
+    outcome: "Native Meta Tag Generator workspace for local SEO snippet generation",
+    accent: "violet"
+  }),
+  "robots-txt-generator": aixtralNativeDetail({
+    summary: "robots.txt Generator is now a native Toolars workspace for local crawl-rule authoring and review.",
+    overview:
+      "robots.txt Generator creates crawl rules for user agents, disallowed paths, allowed paths, sitemap references, and basic search-engine behavior notes. The native Toolars workspace generates text locally from structured path inputs, keeps production warnings visible, and helps teams review crawler-blocking rules before publishing robots.txt to a site root.",
+    metric: { value: "robots", label: "Crawler policy" },
+    inputTitle: "Configure crawl rules",
+    inputDescription: "Accept user agents, allow and disallow paths, crawl settings, and sitemap URLs for local generation.",
+    resultTitle: "Generate robots.txt",
+    resultDescription: "Return robots.txt content, sitemap lines, rule summaries, and copy-ready output.",
+    reviewTitle: "Check crawl impact",
+    reviewDescription: "Make broad disallows, invalid paths, missing sitemap URLs, and crawler caveats visible before deployment.",
+    sourceDescription: "Use the Aixtral robots.txt Generator implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds disallow path input, generated robots.txt output, crawler warnings, and public catalog readiness.",
+    trustTitle: "Local robots.txt generation model",
+    trustReviewDescription: "Generated directives stay local, but publishing robots.txt can affect indexing and must be reviewed in production.",
+    relatedSlugs: ["meta-tag-generator", "url-parser", "text-stats"],
+    outcome: "Native robots.txt Generator workspace for local crawl-rule handoff",
+    accent: "amber"
+  }),
+  "barcode-generator": nativeMediaDetail({
+    summary: "Barcode Generator is now a native Toolars workspace for local barcode validation and SVG preview output.",
+    overview:
+      "Barcode Generator creates local SVG output for CODE39 and validates common retail-code inputs before export. The trust boundary is explicit: Toolars can generate dependency-free SVG previews and validate formats locally, while production labels still need scanner verification, especially for CODE128, EAN, and UPC workflows that normally rely on a specialist barcode engine.",
+    metric: { value: "Barcode", label: "Output format" },
+    sourceLabel: "Aixtral",
+    inputTitle: "Enter barcode value",
+    inputDescription: "Accept product codes, inventory IDs, or label strings with a selected barcode format.",
+    resultTitle: "Generate barcode SVG",
+    resultDescription: "Return local SVG markup, quiet-zone metadata, formatted value, and validation errors.",
+    reviewTitle: "Validate format limits",
+    reviewDescription: "Make unsupported characters, checksum rules, and scanner-verification caveats visible before export.",
+    sourceTitle: "Aixtral source",
+    sourceDescription: "Uses the Aixtral Barcode Generator page contract as the source behavior reference, adapted to Toolars local SVG output.",
+    workspaceDescription: "Dedicated workspace exposes format controls, local validation, SVG preview text, and scanner-readiness caveats.",
+    trustTitle: "Local barcode SVG model",
+    trustLocalDescription: "Barcode values and generated SVG markup stay in the browser.",
+    trustReviewDescription: "CODE39 is generated locally; other barcode formats should be scanner-tested before production labels.",
+    relatedSlugs: ["qr-code-generator", "base64-image-encoder", "nanoid-generator"],
+    outcome: "Native barcode SVG workspace with local format validation",
+    accent: "indigo"
+  }),
+  "base64-image-encoder": aixtralNativeDetail({
+    summary: "Base64 Image Encoder is now a native Toolars workspace for local image data URL inspection and handoff.",
+    overview:
+      "Base64 Image Encoder converts image content into Base64 data URLs and inspects pasted Base64 strings for embeds, tests, and quick asset review. The native Toolars workspace keeps image payloads local, normalizes data URL output, reports MIME type and byte estimates, and surfaces size warnings so developers can decide whether inline image data is appropriate before copying it.",
+    metric: { value: "2-way", label: "Image conversion" },
+    inputTitle: "Add image or Base64",
+    inputDescription: "Accept uploaded images or pasted Base64 content for local conversion and preview.",
+    resultTitle: "Encode or decode",
+    resultDescription: "Return data URLs, decoded image previews, file metadata, and copy or download targets.",
+    reviewTitle: "Check payload size",
+    reviewDescription: "Make large data URLs, invalid Base64, unsupported MIME types, and browser memory limits visible.",
+    sourceDescription: "Use the Aixtral Base64 Image Encoder implementation and tests as the source behavior reference.",
+    workspaceDescription: "Adds Base64 input, normalized image data URL output, MIME and byte metadata, warnings, and public catalog readiness.",
+    trustTitle: "Local image data URL model",
+    trustReviewDescription: "Image data stays in the browser, but large data URLs can still harm page weight and should be reviewed.",
+    relatedSlugs: ["base64-converter", "barcode-generator", "qr-code-generator"],
+    outcome: "Native Base64 Image Encoder workspace for local image data URL review",
+    accent: "cyan"
+  }),
+  "certificate-decoder": aixtralNativeDetail({
+    summary: "Certificate Decoder is now a native Toolars workspace for local PEM certificate inspection.",
+    overview:
+      "Certificate Decoder parses PEM-formatted X.509 certificates locally and surfaces issuer, subject, validity dates, serial number, fingerprints, and decoded field metadata for TLS review. The native Toolars workspace keeps certificate material in the browser, shows expiry state, and makes parser and trust-chain limits visible before teams copy certificate notes into incident or deployment work.",
+    metric: { value: "X.509", label: "Certificate format" },
+    inputTitle: "Paste PEM certificate",
+    inputDescription: "Accept PEM-formatted certificates for local decoding and inspection without upload.",
+    resultTitle: "Inspect certificate fields",
+    resultDescription: "Return subject, issuer, validity range, serial number, SHA fingerprints, and decoded field summaries.",
+    reviewTitle: "Check validity context",
+    reviewDescription: "Make expired dates, unsupported encodings, parse failures, and trust-chain limits visible before use.",
+    sourceDescription: "Use the Aixtral Certificate Decoder implementation and Toolars certificate parser tests as the source behavior reference.",
+    workspaceDescription: "Adds PEM input, local ASN.1 field extraction, validity badges, fingerprint copy data, warnings, and public catalog readiness.",
+    trustTitle: "Local certificate decoding model",
+    trustReviewDescription: "Certificate fields are decoded locally, but chain trust, revocation, and hostname validation must be checked with production TLS tooling.",
+    relatedSlugs: ["jwt-decoder", "hash-generator", "env-editor"],
+    outcome: "Native Certificate Decoder workspace for local TLS certificate inspection",
+    accent: "emerald"
+  }),
+  "cron-builder": aixtralDetail({
+    badge: "Schedule builder",
+    summary: "This Aixtral Lab listing adds Cron Expression Builder detail coverage for schedule construction workflows.",
+    overview:
+      "Cron Expression Builder helps users construct cron expressions visually with field controls, presets, readable descriptions, and preview-oriented schedule output. Toolars keeps the route hidden until the native workspace can pair builder controls with validation, examples, and timezone caveats.",
+    metric: { value: "Cron", label: "Expression output" },
+    inputTitle: "Configure schedule fields",
+    inputDescription: "Accept minute, hour, day, month, and weekday settings through builder-friendly controls.",
+    resultTitle: "Build expression",
+    resultDescription: "Return the cron expression, readable summary, preview hints, and copy-ready schedule text.",
+    reviewTitle: "Validate schedule intent",
+    reviewDescription: "Make impossible values, confusing wildcards, timezone assumptions, and unsupported syntax visible.",
+    handoffTitle: "Prepare builder controls",
+    handoffDescription: "Use this detail record to scope presets, segmented fields, readable preview, and copy states.",
+    sourceDescription: "Use the Aixtral Cron Expression Builder page and client behavior as the source reference.",
+    contractDescription: "Return field values, generated expression, readable description, validation errors, and preview metadata.",
+    relatedSlugs: ["cron-explainer", "timestamp-converter", "regex-tester"],
+    outcome: "Cron builder detail page and schedule construction handoff",
+    accent: "orange"
+  }),
+  "http-status-reference": aixtralDetail({
+    badge: "Reference utility",
+    summary: "This Aixtral Lab listing captures HTTP Status Reference detail data for API debugging workflows.",
+    overview:
+      "HTTP Status Reference provides searchable HTTP status codes, category filters, descriptions, and quick-copy reference rows for API debugging, documentation, and incident review. Toolars keeps it as hidden detail inventory until the native workspace can offer dense lookup, filters, and copy affordances.",
+    metric: { value: "HTTP", label: "Reference set" },
+    inputTitle: "Search status codes",
+    inputDescription: "Accept code numbers, phrases, or categories for local lookup across HTTP status metadata.",
+    resultTitle: "Show matching codes",
+    resultDescription: "Return status code, reason phrase, category, description, and quick-copy reference text.",
+    reviewTitle: "Clarify usage",
+    reviewDescription: "Keep similar codes, deprecated meanings, and implementation-specific caveats visible before docs are copied.",
+    handoffTitle: "Plan lookup interface",
+    handoffDescription: "Use this detail page to scope search, category filters, keyboard navigation, and copy actions.",
+    sourceDescription: "Use the Aixtral HTTP Status Reference page and client behavior as the source reference.",
+    contractDescription: "Return query, filtered status rows, selected category, copy target, and no-result state.",
+    relatedSlugs: ["mime-lookup", "url-parser", "json-repair"],
+    outcome: "HTTP status reference detail page and API lookup handoff",
+    accent: "blue"
+  }),
+  "mime-lookup": aixtralDetail({
+    badge: "Reference utility",
+    summary: "This Aixtral Lab listing prepares MIME Type Lookup detail coverage for web development reference flows.",
+    overview:
+      "MIME Type Lookup searches file extensions and media types for upload handling, response headers, content negotiation, and frontend asset debugging. Toolars keeps the listing detail-only until a native workspace can expose fast search, category filters, copy actions, and related extension hints.",
+    metric: { value: "MIME", label: "Reference type" },
+    inputTitle: "Search extension or MIME type",
+    inputDescription: "Accept file extensions, media type strings, or keywords for local reference lookup.",
+    resultTitle: "Return MIME matches",
+    resultDescription: "Return extension, MIME type, category, description, and copy-friendly header examples.",
+    reviewTitle: "Check upload assumptions",
+    reviewDescription: "Make unknown extensions, ambiguous types, and browser/server caveats visible before implementation.",
+    handoffTitle: "Prepare reference UI",
+    handoffDescription: "Use this detail record to scope search rows, copy chips, category filters, and no-result states.",
+    sourceDescription: "Use the Aixtral MIME Type Lookup page and client behavior as the source reference.",
+    contractDescription: "Return query, matching MIME rows, extension hints, category filters, copy text, and empty-state metadata.",
+    relatedSlugs: ["http-status-reference", "base64-image-encoder", "html-entity-encoder"],
+    outcome: "MIME lookup detail page and web reference handoff",
+    accent: "slate"
+  }),
+  "nanoid-generator": aixtralNativeDetail({
+    summary: "NanoID Generator is now a native Toolars workspace for compact local identifier generation.",
+    overview:
+      "NanoID Generator creates compact URL-safe unique IDs with custom alphabets, lengths, and batch quantities for frontend keys, share links, fixtures, and local test data. The workspace adapts the Aixtral page behavior into a dependency-free Toolars-native implementation with entropy metadata, validation, and copy-ready rows.",
+    metric: { value: "NanoID", label: "ID format" },
+    inputTitle: "Set ID rules",
+    inputDescription: "Accept length, alphabet, quantity, and URL-safe preferences for local ID generation.",
+    resultTitle: "Generate IDs",
+    resultDescription: "Return generated NanoIDs, entropy hints, alphabet metadata, and copy-ready output.",
+    reviewTitle: "Check collision risk",
+    reviewDescription: "Make short lengths, custom alphabets, bulk counts, and randomness assumptions visible before use.",
+    sourceDescription: "Uses the Aixtral NanoID Generator page behavior and tests as the source reference.",
+    workspaceDescription: "Adds a native workbench, custom alphabet controls, batch generation, entropy metadata, and public catalog readiness.",
+    trustTitle: "Local NanoID generation model",
+    trustReviewDescription: "Generated IDs are random local utility values; teams should still size length and alphabet against collision risk.",
+    relatedSlugs: ["uuid-generator", "password-generator", "hash-generator"],
+    outcome: "Native NanoID Generator workspace for compact local ID generation",
+    accent: "violet"
+  }),
+  "qr-code-generator": nativeMediaDetail({
+    summary: "QR Code Generator is now a native Toolars workspace for local QR-style SVG preview and export planning.",
+    overview:
+      "QR Code Generator accepts text or URLs, error-correction intent, and preview settings in a local-first Toolars workspace. The trust boundary is visible: because this repo cannot add the source QR dependency in this wave, Toolars renders deterministic SVG previews and metadata locally, while production QR codes should be scan-tested with a full QR encoder before print or launch.",
+    metric: { value: "QR", label: "Output format" },
+    sourceLabel: "Aixtral",
+    inputTitle: "Enter QR content",
+    inputDescription: "Accept text, URLs, or data strings plus error-correction settings for local preview generation.",
+    resultTitle: "Render SVG preview",
+    resultDescription: "Return deterministic SVG markup, module count, content length, and validation warnings.",
+    reviewTitle: "Check scan reliability",
+    reviewDescription: "Make long content, color choices, dependency limits, and production scan-testing caveats visible before export.",
+    sourceTitle: "Aixtral source",
+    sourceDescription: "Uses the Aixtral QR Code Generator page contract as the source behavior reference, adapted without adding new dependencies.",
+    workspaceDescription: "Dedicated workspace exposes content input, error-correction intent, local SVG preview output, and scan-testing caveats.",
+    trustTitle: "Local QR SVG preview model",
+    trustLocalDescription: "QR content and preview SVG are generated locally without uploading data.",
+    trustReviewDescription: "The preview is dependency-free and should be verified with a production QR encoder before public use.",
+    relatedSlugs: ["barcode-generator", "url-encoder", "base64-image-encoder"],
+    outcome: "Native QR preview workspace with local validation and scan-test boundary",
+    accent: "lime"
+  }),
+  "html-markdown-converter": aixtralDetail({
+    badge: "Content utility",
+    summary: "This Aixtral Lab listing prepares HTML to Markdown Converter detail coverage for content migration workflows.",
+    overview:
+      "HTML to Markdown Converter turns HTML snippets into Markdown and converts Markdown back into HTML for documentation, CMS imports, changelogs, and publishing QA. Toolars keeps this detail-only until a native workspace can expose bidirectional conversion, preview panes, copy states, and parser caveats.",
+    metric: { value: "2-way", label: "HTML and Markdown" },
+    inputTitle: "Paste content",
+    inputDescription: "Accept HTML or Markdown source text and a conversion direction for local transformation.",
+    resultTitle: "Convert markup",
+    resultDescription: "Return converted content, parser warnings, structural notes, and copy-ready output.",
+    reviewTitle: "Check conversion loss",
+    reviewDescription: "Make unsupported tags, malformed links, escaped entities, and formatting changes visible before export.",
+    handoffTitle: "Plan content editor",
+    handoffDescription: "Use this detail page to scope split panes, preview mode, conversion direction, and copy controls.",
+    sourceDescription: "Use the Aixtral HTML Markdown Converter page, converter helper, and tests as the source behavior reference.",
+    contractDescription: "Return direction, converted output, warnings, input stats, preview metadata, and copy target state.",
+    relatedSlugs: ["markdown-to-json", "html-preview", "markdown-table-generator"],
+    outcome: "HTML and Markdown conversion detail page and content migration handoff",
+    accent: "amber"
+  }),
+  "html-preview": aixtralDetail({
+    badge: "Markup utility",
+    summary: "This Aixtral Lab listing captures HTML Preview detail content for local markup review workflows.",
+    overview:
+      "HTML Preview renders pasted HTML in real time so developers and content teams can inspect snippets, examples, documentation embeds, and simple layouts before publishing. Toolars keeps this as hidden detail inventory until a native workspace can sandbox output, manage preview sizing, and expose safety warnings.",
+    metric: { value: "Live", label: "Preview mode" },
+    inputTitle: "Write HTML",
+    inputDescription: "Accept HTML snippets for local rendering in a controlled preview workflow.",
+    resultTitle: "Render preview",
+    resultDescription: "Return rendered output metadata, source stats, and preview-oriented state for the page.",
+    reviewTitle: "Check unsafe markup",
+    reviewDescription: "Make script handling, external assets, invalid tags, and preview limitations visible before use.",
+    handoffTitle: "Prepare sandbox UI",
+    handoffDescription: "Use this detail record to scope editor panes, sandbox preview, warnings, and reset states.",
+    sourceDescription: "Use the Aixtral HTML Preview implementation and tests as the source behavior reference.",
+    contractDescription: "Return source HTML, rendered preview state, warnings, source metrics, and sanitization notes.",
+    relatedSlugs: ["html-entity-encoder", "code-minifier", "html-markdown-converter"],
+    outcome: "HTML preview detail page and local markup review handoff",
+    accent: "orange"
+  }),
+  "image-resizer": aixtralNativeDetail({
+    summary: "Image Resizer is now a native Toolars workspace for local resize planning, aspect ratio review, and export estimates.",
+    overview:
+      "Image Resizer changes image dimensions with format and quality controls for product screenshots, social assets, documentation, and upload preparation. The native Toolars workspace provides local dimension planning, aspect-ratio locking, format quality estimates, and warning states so asset teams can review output intent before handing work to a browser canvas or image pipeline.",
+    metric: { value: "Image", label: "Asset type" },
+    inputTitle: "Add image",
+    inputDescription: "Accept a local image file plus target dimensions, format, and quality settings.",
+    resultTitle: "Resize asset",
+    resultDescription: "Return resized image metadata, preview state, file-size estimate, and download target.",
+    reviewTitle: "Check quality tradeoffs",
+    reviewDescription: "Make aspect ratio changes, upscaling, compression, and unsupported formats visible before export.",
+    sourceDescription: "Use the Aixtral Image Resizer page and client behavior as the source reference.",
+    workspaceDescription: "Adds source and target dimension controls, aspect-ratio estimates, size warnings, and public catalog readiness.",
+    trustTitle: "Local image resize planning model",
+    trustReviewDescription: "Resize planning stays local; final pixel rewriting still needs browser canvas verification for production downloads.",
+    relatedSlugs: ["base64-image-encoder", "svg-optimizer", "pdf-compressor"],
+    outcome: "Native Image Resizer workspace for local dimension and export planning",
+    accent: "rose"
+  }),
+  "json-schema-builder": aixtralDetail({
+    badge: "Schema utility",
+    summary: "This Aixtral Lab listing prepares JSON Schema Builder detail coverage for validation design workflows.",
+    overview:
+      "JSON Schema Builder helps users define object fields, types, required rules, descriptions, and nested validation structures visually before using schemas in APIs, form validation, or LLM structured output. Toolars records this as detail-only inventory until a native workspace can manage editing, preview, and export safely.",
+    metric: { value: "Schema", label: "Output type" },
+    inputTitle: "Design fields",
+    inputDescription: "Accept field names, types, required flags, nested properties, and validation settings.",
+    resultTitle: "Build JSON Schema",
+    resultDescription: "Return structured JSON Schema, preview metadata, validation warnings, and copy-ready output.",
+    reviewTitle: "Check schema constraints",
+    reviewDescription: "Make missing required fields, invalid names, nested complexity, and draft assumptions visible before export.",
+    handoffTitle: "Prepare schema editor",
+    handoffDescription: "Use this detail record to scope field rows, nesting controls, preview panels, and JSON export.",
+    sourceDescription: "Use the Aixtral JSON Schema Builder page and client behavior as the source reference.",
+    contractDescription: "Return schema draft, fields, required list, validation options, generated JSON, warnings, and copy metadata.",
+    relatedSlugs: ["schema-validator", "json-repair", "mock-data-generator"],
+    outcome: "JSON schema builder detail page and validation design handoff",
+    accent: "blue"
+  }),
+  "markdown-table-generator": aixtralDetail({
+    badge: "Content utility",
+    summary: "This Aixtral Lab listing captures Markdown Table Generator detail data for documentation table workflows.",
+    overview:
+      "Markdown Table Generator creates editable tables with headers, cells, CSV import, and formatted Markdown export for docs, READMEs, changelogs, and lightweight reports. Toolars keeps the listing hidden until a native workspace can provide stable table controls, import validation, and copy-friendly output.",
+    metric: { value: "Table", label: "Markdown output" },
+    inputTitle: "Build table",
+    inputDescription: "Accept editable headers, rows, cells, and optional CSV input for local table construction.",
+    resultTitle: "Export Markdown",
+    resultDescription: "Return formatted Markdown table text, row and column metadata, and copy-ready output.",
+    reviewTitle: "Check table shape",
+    reviewDescription: "Make uneven rows, escaped pipes, empty headers, and CSV parsing warnings visible before export.",
+    handoffTitle: "Plan table editor",
+    handoffDescription: "Use this detail page to scope grid controls, import flow, alignment choices, and copy states.",
+    sourceDescription: "Use the Aixtral Markdown Table Generator page and client behavior as the source reference.",
+    contractDescription: "Return headers, rows, alignment settings, imported CSV status, generated Markdown, warnings, and copy metadata.",
+    relatedSlugs: ["csv-to-json", "html-markdown-converter", "text-stats"],
+    outcome: "Markdown table detail page and documentation workflow handoff",
+    accent: "slate"
+  }),
+  "mock-data-generator": aixtralDetail({
+    badge: "Data utility",
+    summary: "This Aixtral Lab listing adds Mock Data Generator detail coverage for testing and prototype data workflows.",
+    overview:
+      "Mock Data Generator creates realistic sample data in JSON or CSV for UI testing, API fixtures, demos, and development workflows. Toolars keeps this as detail-only inventory until a native workspace can expose schema controls, row counts, field presets, export choices, and privacy-safe local generation.",
+    metric: { value: "JSON/CSV", label: "Export formats" },
+    inputTitle: "Choose data shape",
+    inputDescription: "Accept field presets, row count, export format, and optional schema-like structure for local generation.",
+    resultTitle: "Generate sample rows",
+    resultDescription: "Return generated records, field metadata, output format, and copy or download targets.",
+    reviewTitle: "Check realism limits",
+    reviewDescription: "Make fake-data assumptions, duplicate risks, unsupported field types, and large output warnings visible.",
+    handoffTitle: "Plan generator workspace",
+    handoffDescription: "Use this detail record to scope field controls, format tabs, preview table, and export states.",
+    sourceDescription: "Use the Aixtral Mock Data Generator page and client behavior as the source reference.",
+    contractDescription: "Return field definitions, row count, generated JSON or CSV, validation warnings, and export metadata.",
+    relatedSlugs: ["synthetic-dataset-generator", "json-to-csv", "json-schema-builder"],
+    outcome: "Mock data detail page and local fixture generation handoff",
+    accent: "green"
+  }),
+  "svg-optimizer": aixtralNativeDetail({
+    summary: "SVG Optimizer is now a native Toolars workspace for local vector cleanup, byte savings, and markup review.",
+    overview:
+      "SVG Optimizer removes unnecessary SVG metadata, whitespace, comments, and redundant markup to reduce file size for icons, illustrations, and inline assets. The native Toolars workspace optimizes pasted SVG locally, reports byte savings, preserves renderable markup, and highlights viewBox or malformed-output warnings before code is copied into UI bundles.",
+    metric: { value: "SVG", label: "Vector format" },
+    inputTitle: "Paste or add SVG",
+    inputDescription: "Accept SVG markup or files for local optimization and review.",
+    resultTitle: "Optimize markup",
+    resultDescription: "Return optimized SVG, size savings, validation warnings, and copy or download targets.",
+    reviewTitle: "Check rendering safety",
+    reviewDescription: "Make malformed SVG, removed metadata, viewBox changes, and rendering differences visible before export.",
+    sourceDescription: "Use the Aixtral SVG Optimizer page and client behavior as the source reference.",
+    workspaceDescription: "Adds SVG markup input, comment and metadata cleanup, byte-savings output, warnings, and public catalog readiness.",
+    trustTitle: "Local SVG optimization model",
+    trustReviewDescription: "Optimization runs in-browser, but teams should visually compare important icons after cleanup.",
+    relatedSlugs: ["base64-image-encoder", "image-resizer", "code-minifier"],
+    outcome: "Native SVG Optimizer workspace for local vector markup cleanup",
+    accent: "teal"
+  }),
+  "ai-guardrail-config": aixtralNativeDetail({
+    summary: "AI Guardrail Config is now a native Toolars workspace for local safety policy drafting.",
+    overview:
+      "AI Guardrail Config helps teams draft refusal rules, policy checks, escalation paths, and review notes before shipping AI features. The native Toolars workspace turns product context and selected risk categories into structured guardrail rules, severity notes, review checklists, and export-ready configuration without sending policy drafts away from the browser.",
+    metric: { value: "Rules", label: "Guardrail output" },
+    inputTitle: "Define policy scope",
+    inputDescription: "Accept product context, prohibited content classes, refusal behavior, and review requirements.",
+    resultTitle: "Draft guardrails",
+    resultDescription: "Return structured guardrail rules, category coverage, reviewer notes, and export-ready policy sections.",
+    reviewTitle: "Check policy coverage",
+    reviewDescription: "Make unsupported claims, missing escalation steps, vague refusals, and risky automation gaps visible.",
+    sourceDescription: "Use the Aixtral AI Guardrail Config listing and Toolars safety-policy templates as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, risk-category toggles, generated rule cards, JSON export, review warnings, and public catalog readiness.",
+    trustTitle: "Local guardrail configuration model",
+    trustReviewDescription: "Generated guardrails are heuristic policy drafts and should be reviewed against the product's legal, safety, and abuse requirements.",
+    relatedSlugs: ["system-prompt-guard", "jailbreak-detector", "prompt-injection-scanner"],
+    outcome: "Native AI Guardrail Config workspace for local safety-rule drafting",
+    accent: "rose"
+  }),
+  "code-to-image": aixtralNativeDetail({
+    summary: "Code to Image is now a native Toolars workspace for local SVG snippet cards and shareable code previews.",
+    overview:
+      "Code to Image converts snippets into polished visuals for documentation, social posts, release notes, and design reviews. The native Toolars workspace renders escaped code into deterministic local SVG cards with theme, title, dimensions, and data URL output so teams can review readability and export boundaries before producing final social assets.",
+    metric: { value: "Image", label: "Export target" },
+    inputTitle: "Paste code",
+    inputDescription: "Accept code text, language hints, theme choice, padding, and image size preferences.",
+    resultTitle: "Render snippet image",
+    resultDescription: "Return preview metadata, styled image output, size information, and export target state.",
+    reviewTitle: "Check readability",
+    reviewDescription: "Make wrapping, overflow, syntax highlight gaps, and low-contrast theme combinations visible.",
+    sourceDescription: "Use the Aixtral Code to Image page and client behavior as the source reference.",
+    workspaceDescription: "Adds code input, local SVG card generation, dimensions, copy-ready markup, and public catalog readiness.",
+    trustTitle: "Local code image SVG model",
+    trustReviewDescription: "SVG output is generated locally; final PNG export or syntax highlighting should be verified when used for publication.",
+    relatedSlugs: ["code-minifier", "css-box-shadow-generator", "css-animation-generator"],
+    outcome: "Native Code to Image workspace for local shareable snippet cards",
+    accent: "violet"
+  }),
+  "css-animation-generator": aixtralNativeDetail({
+    summary: "CSS Animation Generator is now a native Toolars workspace for local keyframes, declarations, and reduced-motion review.",
+    overview:
+      "CSS Animation Generator creates keyframe animations with duration, easing, delay, iteration, direction, and preview-ready CSS output. The native Toolars workspace generates local keyframes, animation declarations, preview metadata, and a reduced-motion fallback so frontend teams can review motion safety before adding animation CSS to product surfaces.",
+    metric: { value: "Keyframes", label: "Output type" },
+    inputTitle: "Set motion controls",
+    inputDescription: "Accept animation name, timing, easing, iteration, direction, and keyframe values.",
+    resultTitle: "Generate CSS",
+    resultDescription: "Return keyframes, animation declarations, preview metadata, and copy-ready CSS snippets.",
+    reviewTitle: "Check motion safety",
+    reviewDescription: "Make excessive motion, missing reduced-motion fallbacks, invalid timing, and naming collisions visible.",
+    sourceDescription: "Use the Aixtral CSS Animation Generator page and source behavior as the reference.",
+    workspaceDescription: "Adds animation name input, generated keyframes, declaration output, reduced-motion CSS, warnings, and public catalog readiness.",
+    trustTitle: "Local CSS animation model",
+    trustReviewDescription: "Motion CSS stays local, but long or infinite animations should be checked against accessibility expectations.",
+    relatedSlugs: ["css-box-shadow-generator", "css-gradient-generator", "css-to-tailwind-converter"],
+    outcome: "Native CSS Animation Generator workspace for local keyframe and motion review",
+    accent: "pink"
+  }),
+  "css-box-shadow-generator": aixtralNativeDetail({
+    summary: "CSS Box Shadow Generator is now a native Toolars workspace for local shadow presets, layers, and preview CSS.",
+    overview:
+      "CSS Box Shadow Generator designs shadow values with offsets, blur, spread, color, opacity, inset mode, and preset multi-layer output for UI surfaces. The native Toolars workspace extracts the Aixtral client behavior into a local library, keeps style values in the browser, renders a stable preview, supports source presets such as Subtle and Elevated, and produces copy-ready box-shadow declarations for component handoff.",
+    metric: { value: "Shadow", label: "CSS output" },
+    inputTitle: "Tune shadow values",
+    inputDescription: "Accept x and y offsets, blur, spread, color, opacity, and source presets for local shadow generation.",
+    resultTitle: "Create CSS shadow",
+    resultDescription: "Return box-shadow CSS, preview metadata, token-friendly values, and copy-ready output.",
+    reviewTitle: "Check design fit",
+    reviewDescription: "Make harsh shadows, inaccessible contrast, invalid values, and layout preview limitations visible.",
+    sourceDescription: "Uses the Aixtral CSS Box Shadow Generator client presets and layer formatting as the source reference.",
+    workspaceDescription: "Adds native shadow controls, source presets, live preview, layer count, generated CSS, and public catalog readiness.",
+    trustTitle: "Local CSS shadow model",
+    trustReviewDescription: "Shadow layers and opacity choices stay visible so teams can inspect elevation strength before copying CSS.",
+    relatedSlugs: ["css-animation-generator", "css-border-radius-generator", "css-gradient-generator"],
+    outcome: "Native CSS Box Shadow Generator workspace for local visual style handoff",
+    accent: "slate"
+  }),
+  "embedding-playground": aixtralNativeDetail({
+    summary: "Embedding Playground is now a native Toolars workspace for local retrieval similarity experiments.",
+    overview:
+      "Embedding Playground compares a query against candidate chunks with local lexical similarity so teams can inspect retrieval shape before sending text to provider embedding models. The native workspace shows query tokens, ranked chunk rows, shared token evidence, and privacy notes for lightweight RAG planning.",
+    metric: { value: "Similarity", label: "Experiment focus" },
+    inputTitle: "Add retrieval samples",
+    inputDescription: "Accept query text and candidate chunks for a local similarity comparison.",
+    resultTitle: "Rank candidate chunks",
+    resultDescription: "Return top match, similarity scores, shared token evidence, and chunk metadata.",
+    reviewTitle: "Check embedding assumptions",
+    reviewDescription: "Make tokenizer differences, lexical-only scoring, semantic gaps, and privacy constraints visible.",
+    sourceDescription: "Uses the Aixtral Embedding Playground listing and Toolars RAG planning model as the source reference.",
+    workspaceDescription: "Adds a native embedding playground workbench, local similarity rows, shared-token evidence, and retrieval review notes.",
+    trustTitle: "Local embedding comparison model",
+    trustReviewDescription: "Local lexical overlap is a planning proxy and should be verified with provider embeddings before production retrieval.",
+    relatedSlugs: ["rag-chunk-visualizer", "token-counter", "mcp-server-builder"],
+    outcome: "Native Embedding Playground workspace for local retrieval similarity planning",
+    accent: "indigo"
+  }),
+  "jailbreak-detector": aixtralNativeDetail({
+    summary: "Jailbreak Detector is now a native Toolars workspace for local prompt risk review.",
+    overview:
+      "Jailbreak Detector reviews prompts for instruction overrides, unsafe roleplay, policy bypass attempts, and suspicious framing before AI requests are sent downstream. The native Toolars workspace runs local heuristics, groups explainable findings by category, scores severity, and gives reviewer-friendly mitigation notes for prompt owners.",
+    metric: { value: "Prompt", label: "Review input" },
+    inputTitle: "Paste prompt",
+    inputDescription: "Accept user prompts, system context notes, and optional policy labels for local review.",
+    resultTitle: "Flag jailbreak risk",
+    resultDescription: "Return risk categories, highlighted phrases, severity notes, and remediation suggestions.",
+    reviewTitle: "Check false positives",
+    reviewDescription: "Make uncertainty, benign roleplay, missing context, and ambiguous policy matches visible.",
+    sourceDescription: "Use the Aixtral Jailbreak Detector listing and Toolars prompt-safety heuristics as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, severity meter, local finding cards, mitigation list, reviewer notes, and public catalog readiness.",
+    trustTitle: "Local jailbreak heuristic model",
+    trustReviewDescription: "Pattern matches are explainable but imperfect, so reviewers should validate benign prompts and product-specific policies.",
+    relatedSlugs: ["prompt-injection-scanner", "ai-guardrail-config", "red-team-simulator"],
+    outcome: "Native Jailbreak Detector workspace for local prompt risk review",
+    accent: "red"
+  }),
+  "rag-chunk-visualizer": aixtralNativeDetail({
+    summary: "RAG Chunk Visualizer is now a native Toolars workspace for local document chunk planning.",
+    overview:
+      "RAG Chunk Visualizer splits pasted document text into chunk previews with target size, overlap, estimated token counts, and boundary notes. The native workspace keeps source text local while making overlap tradeoffs, retrieval continuity, and tokenizer caveats visible before ingestion.",
+    metric: { value: "Chunks", label: "Output shape" },
+    inputTitle: "Paste document text",
+    inputDescription: "Accept source text, target chunk size, and overlap amount for local RAG preview.",
+    resultTitle: "Visualize chunks",
+    resultDescription: "Return chunk boundaries, overlap metadata, token estimates, and retrieval-prep notes.",
+    reviewTitle: "Check chunk quality",
+    reviewDescription: "Make broken sections, excessive overlap, token mismatch, and missing headings visible.",
+    sourceDescription: "Uses the Aixtral RAG Chunk Visualizer listing and Toolars RAG planning model as the source reference.",
+    workspaceDescription: "Adds a native RAG chunk workbench, local chunk cards, overlap metadata, and retrieval review notes.",
+    trustTitle: "Local RAG chunking model",
+    trustReviewDescription: "Local word-token approximations are planning aids and should be checked against production tokenizers.",
+    relatedSlugs: ["embedding-playground", "token-counter", "mcp-server-builder"],
+    outcome: "Native RAG Chunk Visualizer workspace for local retrieval prep",
+    accent: "teal"
+  }),
+  "red-team-simulator": aixtralNativeDetail({
+    summary: "Red Team Simulator is now a native Toolars workspace for safe AI attack-scenario planning.",
+    overview:
+      "Red Team Simulator helps teams plan adversarial prompt scenarios, unsafe behavior probes, and mitigation review workflows for AI features. The native Toolars workspace generates bounded scenario prompts, severity labels, expected risk signals, and mitigation notes from selected vectors while keeping the exercise package local and reviewer-oriented.",
+    metric: { value: "Scenarios", label: "Planning unit" },
+    inputTitle: "Choose attack focus",
+    inputDescription: "Accept model context, target behavior, scenario family, and mitigation notes.",
+    resultTitle: "Draft red-team cases",
+    resultDescription: "Return scenario prompts, expected risk signals, severity labels, and reviewer notes.",
+    reviewTitle: "Check safe boundaries",
+    reviewDescription: "Make harmful content risks, missing mitigations, weak evidence, and unsafe automation visible.",
+    sourceDescription: "Use the Aixtral Red Team Simulator listing and Toolars safety-exercise templates as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, vector toggles, generated scenario cards, mitigation checklist, warnings, and public catalog readiness.",
+    trustTitle: "Local red-team simulation model",
+    trustReviewDescription: "Generated scenarios are bounded planning artifacts and should not be used to automate harmful behavior or bypass policies.",
+    relatedSlugs: ["jailbreak-detector", "toxicity-scanner", "system-prompt-guard"],
+    outcome: "Native Red Team Simulator workspace for local AI safety exercise planning",
+    accent: "orange"
+  }),
+  "synthetic-dataset-gen": aixtralDetail({
+    badge: "Data utility",
+    summary: "This Aixtral Lab listing adds Synthetic Dataset Generator detail coverage for fixture planning.",
+    overview:
+      "Synthetic Dataset Generator creates structured fake datasets for tests, demos, AI workflow fixtures, and data product prototypes. Toolars keeps this detail-only until a native workspace can expose schema controls, row counts, seed behavior, format exports, and privacy-safe fake data warnings.",
+    metric: { value: "Dataset", label: "Generated asset" },
+    inputTitle: "Define schema",
+    inputDescription: "Accept field names, data types, row counts, fake-data style, and export format preferences.",
+    resultTitle: "Generate records",
+    resultDescription: "Return synthetic rows, schema metadata, format output, and copy or download targets.",
+    reviewTitle: "Check data limits",
+    reviewDescription: "Make duplicate rows, unrealistic values, privacy confusion, and large output warnings visible.",
+    handoffTitle: "Plan dataset workspace",
+    handoffDescription: "Use this detail page to scope schema builder controls, previews, seeding, and export states.",
+    sourceDescription: "Use the Aixtral Synthetic Dataset Generator config and source behavior as the reference.",
+    contractDescription: "Return schema, row count, generated dataset, export format, warnings, and download metadata.",
+    relatedSlugs: ["mock-data-generator", "json-schema-builder", "json-to-csv"],
+    outcome: "Synthetic dataset detail page and fake-data generation handoff",
+    accent: "fuchsia"
+  }),
+  "system-prompt-compressor": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "System Prompt Compressor is now a native Toolars workspace for local prompt compression, token savings, and reviewer checks.",
+    overview:
+      "System Prompt Compressor shortens system prompts by removing redundant phrasing, verbose wording, and filler text while keeping a reviewer checklist for role, policy, and output-format instructions. The workspace follows the Aixtral source client behavior, keeps prompt text local, and adds Toolars-native before-and-after review surfaces for AI teams reducing prompt cost without weakening critical instructions.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "Rules", label: "Compression model" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Tokens", label: "Savings output" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste system prompt",
+        description: "Add the system instructions, role definition, safety constraints, and output-format notes directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Apply local rewrites",
+        description: "Use Aixtral-style phrase rules to remove repetition, filler language, and verbose expressions without calling a model.",
+        badge: "Local",
+        tone: "local"
+      },
+      {
+        title: "Review savings",
+        description: "Compare original tokens, compressed tokens, token savings, and compression ratio before copying the shorter prompt.",
+        badge: "Tokens"
+      },
+      {
+        title: "Check preservation",
+        description: "Review role, policy, and output-format checks so cost reduction does not erase critical instructions.",
+        badge: "Review",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local prompt compression model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Prompt text is processed in the browser and is not uploaded for compression.",
+          tone: "local"
+        },
+        {
+          badge: "Heuristic",
+          description: "Compression uses transparent phrase rules and token estimates, so final prompts still need reviewer approval.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral System Prompt Compressor page and client behavior as the source reference.",
+        badge: "Source",
+        accent: "cyan"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, token savings metrics, rewrite suggestions, and preservation review checks.",
+        badge: "Ready",
+        accent: "emerald"
+      }
+    ],
+    relatedSlugs: ["token-counter", "system-prompt-guard", "prompt-templates"],
+    outcome: "Native System Prompt Compressor workspace for local prompt compression and reviewer-safe token reduction"
+  },
+  "system-prompt-guard": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "System Prompt Guard is now a native Toolars workspace for local system prompt risk scanning and remediation review.",
+    overview:
+      "System Prompt Guard reviews system prompts for injection patterns, leakage language, safety bypass attempts, role confusion, and credential-like data before the prompt reaches an AI workflow. The workspace migrates the Aixtral source rules into a Toolars-native review surface with security score, severity cards, local-only processing, and mitigation notes for prompt owners.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "5", label: "Risk categories" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Score", label: "Review output" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste system prompt",
+        description: "Add the system role, policy wording, tool instructions, and sensitive prompt context directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Run local rules",
+        description: "Scan for injection, leakage, bypass, role confusion, and data exposure patterns using the Aixtral source rules.",
+        badge: "Local",
+        tone: "local"
+      },
+      {
+        title: "Review score",
+        description: "Read the security score, risk level, finding count, and category-level finding cards.",
+        badge: "Report"
+      },
+      {
+        title: "Apply mitigations",
+        description: "Use mitigation notes to tighten trusted instructions, remove secrets, and clarify role boundaries before release.",
+        badge: "Review",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local system prompt guard model",
+      rows: [
+        {
+          badge: "Local",
+          description: "System prompt text is scanned in the browser and is not uploaded for review.",
+          tone: "local"
+        },
+        {
+          badge: "Heuristic",
+          description: "The guard uses transparent pattern rules, so reviewers should still validate false positives and policy context.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, source-backed library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral System Prompt Guard library, page, and client behavior as the source reference.",
+        badge: "Source",
+        accent: "emerald"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, risk score, finding cards, mitigation list, and public catalog readiness.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["ai-guardrail-config", "prompt-injection-scanner", "system-prompt-compressor"],
+    outcome: "Native System Prompt Guard workspace for local prompt safety review and remediation handoff"
+  },
+  "token-counter": {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: "Token Counter is now a native Toolars workspace for local prompt sizing, character counts, and model cost estimates.",
+    overview:
+      "Token Counter estimates prompt tokens, characters, words, lines, and selected-model cost before an LLM request is sent. The workspace follows the Aixtral source behavior with a local-first approximation, adds a model comparison table, and keeps prompt text in the browser so teams can size context and budget without uploading sensitive drafts.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "6", label: "Model profiles" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Cost", label: "Estimate output" }
+    ],
+    howItWorks: [
+      {
+        title: "Paste prompt text",
+        description: "Add system, user, retrieval, or draft prompt text directly in the local workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Choose model profile",
+        description: "Pick a representative model profile to estimate a one-off request cost from token volume.",
+        badge: "Model"
+      },
+      {
+        title: "Estimate locally",
+        description: "Calculate character count, word count, line count, estimated tokens, and model cost without sending prompt text away.",
+        badge: "Local",
+        tone: "local"
+      },
+      {
+        title: "Compare costs",
+        description: "Review all available model rows to see whether the prompt size fits the intended LLM route.",
+        badge: "Review",
+        tone: "warn"
+      }
+    ],
+    trustSection: {
+      title: "Local token estimation model",
+      rows: [
+        {
+          badge: "Local",
+          description: "Prompt text is processed in the browser and is not uploaded for counting.",
+          tone: "local"
+        },
+        {
+          badge: "Estimate",
+          description: "Token counts use the Aixtral-style four-characters-per-token approximation, so provider tokenizers may differ.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars workspace, library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Uses the Aixtral token-counter page and client behavior as the source reference.",
+        badge: "Source",
+        accent: "blue"
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Adds a native workbench, selected-model estimate, model comparison rows, and public catalog readiness.",
+        badge: "Ready",
+        accent: "emerald"
+      }
+    ],
+    relatedSlugs: ["llm-cost-calculator", "system-prompt-compressor", "rag-chunk-visualizer"],
+    outcome: "Native Token Counter workspace for local LLM prompt sizing and cost estimation"
+  },
+  "toxicity-scanner": aixtralNativeDetail({
+    summary: "Toxicity Scanner is now a native Toolars workspace for local moderation-signal review.",
+    overview:
+      "Toxicity Scanner reviews text for abusive, hateful, harassing, threatening, or unsafe language signals before AI, moderation, or publishing workflows. The native Toolars workspace keeps text local, groups explainable category findings, scores severity, and keeps context-review caveats visible before content is escalated or copied.",
+    metric: { value: "Safety", label: "Scan focus" },
+    inputTitle: "Paste text",
+    inputDescription: "Accept text content, optional audience context, and moderation policy notes.",
+    resultTitle: "Scan toxicity signals",
+    resultDescription: "Return highlighted concerns, severity labels, category notes, and review recommendations.",
+    reviewTitle: "Check moderation context",
+    reviewDescription: "Make reclaimed language, quote context, policy uncertainty, and false-positive risk visible.",
+    sourceDescription: "Use the Aixtral Toxicity Scanner listing and Toolars local moderation rules as the source behavior reference.",
+    workspaceDescription: "Adds a native workbench, category cards, severity summary, mitigation notes, review warnings, and public catalog readiness.",
+    trustTitle: "Local toxicity moderation model",
+    trustReviewDescription: "Local moderation rules are transparent but context-sensitive, so final decisions still need human policy review.",
+    relatedSlugs: ["red-team-simulator", "jailbreak-detector", "prompt-injection-scanner"],
+    outcome: "Native Toxicity Scanner workspace for local moderation-signal review",
+    accent: "amber"
+  }),
   "mortgage-calculator": {
     listingBadge: { badge: "Local calculator", description: "Local calculator", tone: "local" },
     summary: "This VitalCalc listing keeps mortgage planning local-first while giving Toolars a public detail surface for finance users.",
@@ -2889,9 +6028,14 @@ function relatedToolsFor(slugs: string[]): ToolDefinition[] {
 export function getToolDetailBySlug(slug: string): ToolDetailDefinition | undefined {
   if (!allDetailSlugs.includes(slug as ToolDetailSlug)) return undefined;
 
-  const content = detailContent[slug as ToolDetailSlug];
   const tool = getToolBySlug(slug);
   if (!tool) return undefined;
+  const rawContent = detailContent[slug as ToolDetailSlug];
+  const content =
+    w20BfDeveloperUtilityNativeDetailSlugs.has(slug) || w20BkNativeDetailSlugSet.has(slug)
+      ? toW20BfNativeDetail(tool, rawContent)
+      : rawContent;
+  if (!content) return undefined;
 
   return {
     tool,
@@ -2907,6 +6051,142 @@ export function getToolDetailBySlug(slug: string): ToolDetailDefinition | undefi
     relatedTools: relatedToolsFor(content.relatedSlugs),
     recommendedWorkflow: workflows.find((workflow) => workflow.slug === content.workflowSlug),
     outcome: content.outcome
+  };
+}
+
+function createW20BfNativeBaseDetail(tool: ToolDefinition): ToolDetailContent {
+  return {
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: `${tool.name} is now a native Toolars workspace with local processing, focused tests, and a public tool route.`,
+    overview:
+      `${tool.name} has been promoted from registry inventory into a Toolars-native developer utility workspace. ` +
+      "The implementation keeps inputs in the browser, exposes a focused local library contract, and uses the current Toolars workbench layout for input, result, review, and handoff states.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      { value: "Utility", label: "Developer workflow" },
+      { value: "Public", label: "Workspace status" },
+      { value: "Toolars", label: "Native implementation" }
+    ],
+    howItWorks: [
+      {
+        title: "Add developer input",
+        description: "Paste source data, code, config, or lookup text into the local Toolars workspace.",
+        badge: "Input",
+        tone: "local"
+      },
+      {
+        title: "Run the local utility",
+        description: "Use the focused Toolars library implementation to transform, inspect, validate, or explain the input.",
+        badge: "Process"
+      },
+      {
+        title: "Review output",
+        description: "Check warnings, assumptions, metadata, and generated output before using it in project files or documentation.",
+        badge: "Review",
+        tone: "warn"
+      },
+      {
+        title: "Copy the result",
+        description: "Move the reviewed result into the next developer workflow with the local processing boundary intact.",
+        badge: "Handoff"
+      }
+    ],
+    trustSection: {
+      title: `Local ${tool.name.toLowerCase()} model`,
+      rows: [
+        {
+          badge: "Local",
+          description: "Inputs are processed in the browser by the native Toolars workspace and are not uploaded.",
+          tone: "local"
+        },
+        {
+          badge: "Review",
+          description: "Generated output is designed for developer review before use in production code, config, documentation, or deployment workflows.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars route, native workspace, local library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Keeps the original Aixtral registry intent as the migration and behavior reference where source coverage exists.",
+        badge: "Source",
+        accent: tool.accent
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Uses the current Toolars workbench pattern with local input controls, result review, and copy-ready output states.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    relatedSlugs: ["json-repair", "json-formatter", "schema-validator"].filter((slug) => slug !== tool.slug),
+    outcome: `Native ${tool.name} workspace for local developer utility workflows`
+  };
+}
+
+function toW20BfNativeDetail(tool: ToolDefinition, content?: ToolDetailContent): ToolDetailContent {
+  const baseContent = content ?? createW20BfNativeBaseDetail(tool);
+  const primaryMetric = baseContent.metrics.find((metric) => !["Detail", "Local", "Hidden"].includes(metric.value)) ?? {
+    value: "Local",
+    label: "Utility mode"
+  };
+
+  return {
+    ...baseContent,
+    listingBadge: { badge: "Native workspace", description: "Native workspace", tone: "local" },
+    summary: `${tool.name} is now a native Toolars workspace with local processing, focused tests, and a public tool route.`,
+    overview:
+      `${tool.name} has been promoted from registry inventory into a Toolars-native developer utility workspace. ` +
+      "The implementation keeps inputs in the browser, exposes a focused local library contract, and uses the current Toolars workbench layout for input, result, review, and handoff states.",
+    metrics: [
+      { value: "Local", label: "Processing mode" },
+      primaryMetric,
+      { value: "Public", label: "Workspace status" },
+      { value: "Toolars", label: "Native implementation" }
+    ],
+    trustSection: {
+      title: `Local ${tool.name.toLowerCase()} model`,
+      rows: [
+        {
+          badge: "Local",
+          description: "Inputs are processed in the browser by the native Toolars workspace and are not uploaded.",
+          tone: "local"
+        },
+        {
+          badge: "Review",
+          description: "Generated output is designed for developer review before use in production code, config, documentation, or deployment workflows.",
+          tone: "warn"
+        },
+        {
+          badge: "Public",
+          description: "This tool has a dedicated Toolars route, native workspace, local library implementation, and focused tests."
+        }
+      ]
+    },
+    handoff: [
+      {
+        initials: "AX",
+        title: "Aixtral source",
+        description: "Keeps the original Aixtral registry intent as the migration and behavior reference where source coverage exists.",
+        badge: "Source",
+        accent: tool.accent
+      },
+      {
+        initials: "UI",
+        title: "Toolars workspace",
+        description: "Uses the current Toolars workbench pattern with local input controls, result review, and copy-ready output states.",
+        badge: "Ready",
+        accent: "blue"
+      }
+    ],
+    outcome: `Native ${tool.name} workspace for local developer utility workflows`
   };
 }
 

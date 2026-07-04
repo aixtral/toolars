@@ -1,33 +1,32 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Percent, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculatePercentage,
   defaultPercentageScenarios,
-  percentageModeLabels,
   type PercentageInput,
   type PercentageMode,
   type PercentageResult
 } from "@/lib/tools/percentage-calculator";
 
 const trustRows = [
-  ["Local", "Percentage inputs stay in this browser session", "local"],
-  ["Context", "Label denominators before reusing percentage outputs", "warn"],
-  ["Private", "Save only stores the percentage scenario locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "context", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const denominatorNotes = [
-  "VitalCalc percent-of uses percent divided by 100 times the base value.",
-  "Ratio mode uses the second value as the denominator.",
-  "Change mode uses the starting value as the denominator and labels increase or decrease."
-];
+const denominatorNotes = ["percentOf", "ratio", "change"] as const;
 
 export function PercentageCalculatorWorkspace() {
-  const t = useTranslations("tools.percentage-calculator");
-  const [plan, setPlan] = useState<PercentageInput>(defaultPercentageScenarios.percentOf);
-  const [result, setResult] = useState<PercentageResult | null>(null);
+  const t = useTranslations("tools.percentage-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/percentage-calculator/about", localeCode);
+  const [plan, setPlan] = useState(defaultPercentageScenarios.percentOf as PercentageInput);
+  const [result, setResult] = useState(null as PercentageResult | null);
 
   const calculate = () => {
     setResult(calculatePercentage(plan));
@@ -50,23 +49,23 @@ export function PercentageCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="percentage-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc percent math workspace</span>
-        <h1>Percentage Calculator</h1>
-        <p className="subtitle">Calculate percent-of, ratio percentage, and percentage change with denominator context.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/percentage-calculator/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -75,30 +74,30 @@ export function PercentageCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Percentage inputs</h2>
-              <p className="tool-description">Choose percent-of, ratio, or change mode and enter the matching values.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="percentage-mode">
-              Calculation mode
+              {t("fields.mode")}
               <select className="input" id="percentage-mode" onChange={(event) => updateMode(event.target.value)} value={plan.mode}>
-                <option value="percentOf">Percent of</option>
-                <option value="ratio">Ratio percentage</option>
-                <option value="change">Percentage change</option>
+                <option value="percentOf">{t("options.percentOf")}</option>
+                <option value="ratio">{t("options.ratio")}</option>
+                <option value="change">{t("options.change")}</option>
               </select>
             </label>
 
             {plan.mode === "percentOf" ? (
               <>
                 <label className="field-label" htmlFor="percentage-percent">
-                  Percent
+                  {t("fields.percent")}
                   <input className="input" id="percentage-percent" onChange={(event) => updateNumber("percent", event.target.value)} step="0.1" type="number" value={plan.percent} />
                 </label>
                 <label className="field-label" htmlFor="percentage-base">
-                  Base value
+                  {t("fields.baseValue")}
                   <input className="input" id="percentage-base" onChange={(event) => updateNumber("baseValue", event.target.value)} step="0.01" type="number" value={plan.baseValue} />
                 </label>
               </>
@@ -107,11 +106,11 @@ export function PercentageCalculatorWorkspace() {
             {plan.mode === "ratio" ? (
               <>
                 <label className="field-label" htmlFor="percentage-part">
-                  Part value
+                  {t("fields.partValue")}
                   <input className="input" id="percentage-part" onChange={(event) => updateNumber("partValue", event.target.value)} step="0.01" type="number" value={plan.partValue} />
                 </label>
                 <label className="field-label" htmlFor="percentage-whole">
-                  Whole value
+                  {t("fields.wholeValue")}
                   <input className="input" id="percentage-whole" onChange={(event) => updateNumber("wholeValue", event.target.value)} step="0.01" type="number" value={plan.wholeValue} />
                 </label>
               </>
@@ -120,11 +119,11 @@ export function PercentageCalculatorWorkspace() {
             {plan.mode === "change" ? (
               <>
                 <label className="field-label" htmlFor="percentage-from">
-                  Starting value
+                  {t("fields.fromValue")}
                   <input className="input" id="percentage-from" onChange={(event) => updateNumber("fromValue", event.target.value)} step="0.01" type="number" value={plan.fromValue} />
                 </label>
                 <label className="field-label" htmlFor="percentage-to">
-                  Ending value
+                  {t("fields.toValue")}
                   <input className="input" id="percentage-to" onChange={(event) => updateNumber("toValue", event.target.value)} step="0.01" type="number" value={plan.toValue} />
                 </label>
               </>
@@ -133,10 +132,10 @@ export function PercentageCalculatorWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save percentage
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate percentage
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -144,58 +143,58 @@ export function PercentageCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Percentage summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to see result and formula context."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge local">{result?.direction ?? "Percent"}</span>
+            <span className="badge local">{result?.direction ?? t("badges.percent")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedResult ?? "0"}</strong>
-              <span>Result</span>
+              <span>{t("metrics.result")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.modeLabel ?? percentageModeLabels[plan.mode]}</strong>
-              <span>Mode</span>
+              <strong>{result?.modeLabel ?? t(`options.${plan.mode}`)}</strong>
+              <span>{t("metrics.mode")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.directionLabel ?? "-"}</strong>
-              <span>Direction</span>
+              <span>{t("metrics.direction")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result ? "Checked" : "-"}</strong>
-              <span>Denominator</span>
+              <strong>{result ? t("metrics.checked") : "-"}</strong>
+              <span>{t("metrics.denominator")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Percent size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.formulaNote ?? "Waiting for calculation"}</strong>
-              <small>{result?.denominatorNote ?? "Calculate first to review denominator context."}</small>
+              <strong>{result?.formulaNote ?? t("callout.waitingTitle")}</strong>
+              <small>{result?.denominatorNote ?? t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Denominator notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {denominatorNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Percentage math runs locally and should be labeled with its denominator before reuse.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

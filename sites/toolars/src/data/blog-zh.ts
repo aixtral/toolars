@@ -1,10 +1,11 @@
 import type { BlogArticle } from "./blog";
+import { vitalCalcArticlesZh } from "./blog-zh-vitalcalc";
 
 /**
  * Chinese translations of blog articles. Same structure as the English source;
  * the locale resolver in blog.ts picks the right set based on request locale.
  */
-export const articlesZh: BlogArticle[] = [
+const launchArticlesZh: BlogArticle[] = [
   {
     slug: "json-repair-guide",
     title: "如何在几秒内修复损坏的 JSON",
@@ -13,7 +14,7 @@ export const articlesZh: BlogArticle[] = [
     category: "Guides",
     publishedAt: "2026-06-10",
     readTimeMinutes: 5,
-    author: "Toolars Team",
+    author: "Toolars 团队",
     featuredToolSlugs: ["json-repair"],
     sections: [
       {
@@ -36,7 +37,7 @@ export const articlesZh: BlogArticle[] = [
         heading: "安全的修复流程",
         paragraphs: [
           "将损坏的文本通过一个修复阶段——规范化引号、移除尾随逗号、清除注释——然后用严格的解析器重新验证输出，然后才信任它。先修复后验证比宽松解析更安全，因为它能显示实际改变了什么。",
-          "Toolars JSON Repair 完全在你的浏览器中运行。没有任何内容上传，因此在包含敏感值的负载上使用是安全的。"
+          "Toolars JSON 修复完全在你的浏览器中运行。没有任何内容上传，因此在包含敏感值的负载上使用是安全的。"
         ]
       }
     ],
@@ -44,7 +45,7 @@ export const articlesZh: BlogArticle[] = [
       {
         question: "JSON 修复对敏感数据安全吗？",
         answer:
-          "安全。Toolars JSON Repair 工具在你的浏览器中本地运行，因此你的文本永远不会离开你的设备。无上传、无账户、无日志。"
+          "安全。Toolars JSON 修复工具在你的浏览器中本地运行，因此你的文本永远不会离开你的设备。无上传、无账户、无日志。"
       },
       {
         question: "修复能处理 LLM 生成的 JSON 吗？",
@@ -66,7 +67,7 @@ export const articlesZh: BlogArticle[] = [
     category: "Product",
     publishedAt: "2026-06-08",
     readTimeMinutes: 6,
-    author: "Toolars Team",
+    author: "Toolars 团队",
     featuredToolSlugs: ["mortgage-calculator", "llm-cost-calculator"],
     sections: [
       {
@@ -86,7 +87,7 @@ export const articlesZh: BlogArticle[] = [
       {
         heading: "估算 AI 步骤的成本",
         paragraphs: [
-          "在将多个 AI 调用串联在一起之前，先估算 token 成本。LLM 成本计算器根据 token 量和模型定价预测月度支出，让你在规模化运行前就能判断工作流是否可负担。"
+          "在将多个 AI 调用串联在一起之前，先估算令牌成本。LLM 成本计算器根据令牌量和模型定价预测月度支出，让你在规模化运行前就能判断工作流是否可负担。"
         ]
       }
     ],
@@ -104,7 +105,7 @@ export const articlesZh: BlogArticle[] = [
       {
         question: "如何防止个人数据进入 AI 工具？",
         answer:
-          "在本地运行计算，只将汇总或脱敏的结果发送给 AI 步骤。Toolars 将每个工具标记为 Local、Cloud 或 AI-consent，让你始终知道数据去了哪里。"
+          "在本地运行计算，只将汇总或脱敏的结果发送给 AI 步骤。Toolars 将每个工具标记为本地、云端或需 AI 同意，让你始终知道数据去了哪里。"
       }
     ]
   },
@@ -116,7 +117,7 @@ export const articlesZh: BlogArticle[] = [
     category: "Engineering",
     publishedAt: "2026-06-05",
     readTimeMinutes: 7,
-    author: "Toolars Team",
+    author: "Toolars 团队",
     featuredToolSlugs: ["prompt-injection-scanner", "mcp-server-builder"],
     sections: [
       {
@@ -157,8 +158,10 @@ export const articlesZh: BlogArticle[] = [
       {
         question: "我应该多久运行一次注入测试？",
         answer:
-          "在每次提示词更改和每次发布前运行它们。把扫描器当作 linter：运行成本低，能及早发现回归。"
+          "在每次提示词更改和每次发布前运行它们。把扫描器当作静态检查器：运行成本低，能及早发现回归。"
       }
     ]
   }
 ];
+
+export const articlesZh: BlogArticle[] = [...launchArticlesZh, ...vitalCalcArticlesZh];

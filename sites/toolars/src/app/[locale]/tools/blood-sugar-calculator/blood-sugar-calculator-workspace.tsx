@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Droplet, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateBloodSugar,
   defaultBloodSugarScenario,
@@ -13,21 +14,20 @@ import {
 } from "@/lib/tools/blood-sugar-calculator";
 
 const trustRows = [
-  ["Local", "Glucose and A1C values stay in this browser session", "local"],
-  ["Reference", "Risk bands are informational and not a diagnosis", "warn"],
-  ["Private", "Save only stores the local lab-value sample when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const sugarNotes = [
-  "VitalCalc converts A1C and estimated average glucose with eAG mg/dL = A1C x 28.7 - 46.7.",
-  "WHO/ADA reference bands depend on repeat testing, symptoms, and clinician interpretation.",
-  "Do not use this workspace to adjust medication or delay professional care."
-];
+const sugarNotes = ["formula", "interpretation", "care"] as const;
 
 export function BloodSugarCalculatorWorkspace() {
-  const t = useTranslations("tools.blood-sugar-calculator");
-  const [values, setValues] = useState<BloodSugarInput>(() => defaultBloodSugarScenario);
-  const [result, setResult] = useState<BloodSugarResult | null>(null);
+  const t = useTranslations("tools.blood-sugar-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [values, setValues] = useState(defaultBloodSugarScenario as BloodSugarInput);
+  const [result, setResult] = useState(null as BloodSugarResult | null);
 
   const calculate = () => {
     setResult(calculateBloodSugar(values));
@@ -57,23 +57,23 @@ export function BloodSugarCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="blood-sugar-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc lab reference workspace</span>
-        <h1>Blood Sugar / A1C Calculator</h1>
-        <p className="subtitle">Convert fasting glucose, A1C, and estimated average glucose with reference-only risk bands.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/blood-sugar-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/blood-sugar-calculator/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -82,55 +82,55 @@ export function BloodSugarCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Lab inputs</h2>
-              <p className="tool-description">Choose which value should drive the conversion.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="blood-sugar-mode">
-              Input mode
+              {t("fields.inputMode")}
               <select className="input" id="blood-sugar-mode" onChange={(event) => updateMode(event.target.value as BloodSugarInputMode)} value={values.inputMode}>
-                <option value="fpg">Fasting glucose</option>
-                <option value="a1c">A1C</option>
-                <option value="eag">Average glucose</option>
+                <option value="fpg">{t("options.inputMode.fpg")}</option>
+                <option value="a1c">{t("options.inputMode.a1c")}</option>
+                <option value="eag">{t("options.inputMode.eag")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="blood-sugar-fpg">
-              Fasting glucose
+              {t("fields.fastingGlucose")}
               <input className="input" id="blood-sugar-fpg" min={0} onChange={(event) => updateNumber("fastingGlucose", event.target.value)} step="0.1" type="number" value={values.fastingGlucose} />
             </label>
             <label className="field-label" htmlFor="blood-sugar-fpg-unit">
-              FPG unit
+              {t("fields.fpgUnit")}
               <select className="input" id="blood-sugar-fpg-unit" onChange={(event) => updateUnit("fastingGlucoseUnit", event.target.value as GlucoseUnit)} value={values.fastingGlucoseUnit}>
-                <option value="mmoll">mmol/L</option>
-                <option value="mgdl">mg/dL</option>
+                <option value="mmoll">{t("options.units.mmoll")}</option>
+                <option value="mgdl">{t("options.units.mgdl")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="blood-sugar-a1c">
-              A1C
+              {t("fields.a1c")}
               <input className="input" id="blood-sugar-a1c" min={0} onChange={(event) => updateNumber("a1c", event.target.value)} step="0.1" type="number" value={values.a1c} />
             </label>
             <label className="field-label" htmlFor="blood-sugar-eag">
-              Average glucose
+              {t("fields.averageGlucose")}
               <input className="input" id="blood-sugar-eag" min={0} onChange={(event) => updateNumber("averageGlucose", event.target.value)} step="1" type="number" value={values.averageGlucose} />
             </label>
             <label className="field-label" htmlFor="blood-sugar-eag-unit">
-              eAG unit
+              {t("fields.eagUnit")}
               <select className="input" id="blood-sugar-eag-unit" onChange={(event) => updateUnit("averageGlucoseUnit", event.target.value as GlucoseUnit)} value={values.averageGlucoseUnit}>
-                <option value="mgdl">mg/dL</option>
-                <option value="mmoll">mmol/L</option>
+                <option value="mgdl">{t("options.units.mgdl")}</option>
+                <option value="mmoll">{t("options.units.mmoll")}</option>
               </select>
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveValues} type="button">
-              <Save size={16} aria-hidden="true" /> Save lab values
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Convert blood sugar
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -138,58 +138,58 @@ export function BloodSugarCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Blood sugar summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run conversion to show equivalent lab values and risk band."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">WHO / ADA reference</span>
+            <span className="badge warn">{t("badges.referenceOnly")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedFastingGlucose ?? "0.0 mmol/L"}</strong>
-              <span>Fasting glucose</span>
+              <strong>{result?.formattedFastingGlucose ?? t("metrics.emptyFastingGlucose")}</strong>
+              <span>{t("metrics.fastingGlucose")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedA1c ?? "0.0%"}</strong>
-              <span>A1C</span>
+              <strong>{result?.formattedA1c ?? t("metrics.emptyA1c")}</strong>
+              <span>{t("metrics.a1c")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedAverageGlucose ?? "0 mg/dL"}</strong>
-              <span>Average glucose</span>
+              <strong>{result?.formattedAverageGlucose ?? t("metrics.emptyAverageGlucose")}</strong>
+              <span>{t("metrics.averageGlucose")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.riskBand ?? "Pending"}</strong>
-              <span>Risk band</span>
+              <strong>{result?.riskBand ?? t("metrics.emptyRiskBand")}</strong>
+              <span>{t("metrics.riskBand")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Droplet size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.advice ?? "Waiting for conversion"}</strong>
-              <small>{result ? "Use results as lab-reference context only." : "Convert first to review blood sugar context."}</small>
+              <strong>{result?.advice ?? t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Blood sugar notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {sugarNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Lab values stay in the browser and cannot replace professional diagnosis or treatment guidance.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

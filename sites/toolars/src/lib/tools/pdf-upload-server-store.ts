@@ -590,7 +590,9 @@ function decryptPdfUploadObjectContent(objectKey: string, storedContent: Buffer)
 }
 
 function getObjectStorageEncryptionKey() {
-  return createHash("sha256").update(process.env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY ?? "toolars-local-object-storage-encryption-secret").digest();
+  return createHash("sha256")
+    .update(getSecretEnvValue(process.env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY, "toolars-local-object-storage-encryption-secret"))
+    .digest();
 }
 
 function sanitizeObjectKeySegment(segment: string) {
@@ -662,7 +664,12 @@ function signPdfUploadObjectAccess(record: Pick<PdfUploadServerRecord, "expiresA
 }
 
 function getHandoffSigningSecret() {
-  return process.env.TOOLARS_UPLOAD_HANDOFF_SECRET ?? "toolars-local-upload-handoff-secret";
+  return getSecretEnvValue(process.env.TOOLARS_UPLOAD_HANDOFF_SECRET, "toolars-local-upload-handoff-secret");
+}
+
+function getSecretEnvValue(value: string | undefined, fallback: string) {
+  const normalized = value?.trim();
+  return normalized || fallback;
 }
 
 function isMatchingSignature(candidate: string, expected: string) {

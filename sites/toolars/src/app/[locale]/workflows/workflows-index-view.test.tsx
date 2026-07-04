@@ -1,10 +1,78 @@
-import { screen } from "@testing-library/react";
+import fs from "node:fs";
+import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../../scripts/audit-i18n.mjs";
 import { workflows } from "@/data/registry";
+import en from "../../../../messages/en.json";
+import zhHans from "../../../../messages/zh-hans.json";
 import { WorkflowsIndexView } from "./workflows-index-view";
 
+const workflowSentinelMessages = {
+  ...en,
+  workflowsPage: {
+    ...en.workflowsPage,
+    searchSubmitMobile: "前往-哨兵",
+    examplesAriaLabel: "工作流示例-哨兵",
+    exampleItems: ["摘要 PDF 报告-哨兵", "清理 CSV 并可视化-哨兵", "生成博客文章-哨兵", "调整社交图片-哨兵"],
+    filtersAriaLabel: "工作流筛选-哨兵",
+    filters: ["全部工作流-哨兵", "包含 AI-哨兵", "本地优先-哨兵", "团队就绪-哨兵"],
+    card: {
+      stepsAriaLabel: "{title} 步骤-哨兵",
+      stepsCount: "{count} 个步骤-哨兵",
+      aiStep: "AI 步骤-哨兵",
+      noAi: "无 AI-哨兵",
+      minutes: "{minutes} 分钟-哨兵",
+      runs: "{runs} 次运行-哨兵",
+      start: "开始-哨兵"
+    },
+    workflowCards: {
+      "pdf-summary": {
+        title: "PDF 摘要工作流构建器-哨兵",
+        description: "合并 PDF 并导出引用-哨兵",
+        steps: ["提取内容-哨兵", "AI 摘要-哨兵", "导出分享-哨兵"],
+        mobileTileValue: "5",
+        mobileMinutes: "6 分钟-哨兵",
+        mobileRuns: "+1.2K 次运行-哨兵"
+      },
+      "ai-prompt-hardening": {
+        title: "提示词加固-哨兵",
+        description: "扫描注入风险-哨兵",
+        steps: ["扫描注入-哨兵", "检测 PII-哨兵", "复盘风险-哨兵", "导出报告-哨兵"],
+        mobileDescription: "扫描提示词并生成红队清单-哨兵",
+        mobileRuns: "+764 次运行-哨兵"
+      },
+      "llm-cost-review": {
+        title: "LLM 成本复盘-哨兵",
+        description: "估算模型花费-哨兵",
+        steps: ["估算 token-哨兵", "比较模型-哨兵", "复盘预算-哨兵", "导出计划-哨兵"],
+        mobileRuns: "+689 次运行-哨兵"
+      },
+      "mcp-tool-launch": {
+        title: "MCP 工具发布-哨兵",
+        description: "构建 manifest-哨兵",
+        steps: ["定义工具-哨兵", "构建 manifest-哨兵", "运行 MCP 测试-哨兵", "导出文档-哨兵"],
+        mobileRuns: "+534 次运行-哨兵"
+      }
+    },
+    fastStartResource: {
+      title: "PDF 摘要-哨兵",
+      description: "合并、提取、摘要并导出引用-哨兵"
+    }
+  }
+};
+
 describe("WorkflowsIndexView", () => {
+  it("does not leave hardcoded UI audit candidates in the workflow index source", () => {
+    const file = "src/app/[locale]/workflows/workflows-index-view.tsx";
+    const source = fs.readFileSync(file, "utf8");
+    const scan = scanSourceText(source, file);
+
+    expect(scan.hardcodedText).toEqual([]);
+  });
+
   it("renders the workflows landing modules from the design", () => {
     const { container } = renderWithIntl(<WorkflowsIndexView />);
 
@@ -58,5 +126,64 @@ describe("WorkflowsIndexView", () => {
     expect(screen.getAllByText("AI step").length).toBeGreaterThan(0);
     expect(screen.getByText("Local-first steps")).toBeInTheDocument();
     expect(screen.getByText("Files removed after session")).toBeInTheDocument();
+  });
+
+  it("uses semantic workflow icons instead of numeric or abbreviated icon placeholders", () => {
+    const { container } = renderWithIntl(<WorkflowsIndexView />);
+
+    for (const workflow of workflows) {
+      const cardIcon = container.querySelector(`[data-workflow-card-icon="${workflow.slug}"]`);
+      const rankedIcon = container.querySelector(`[data-workflow-ranked-icon="${workflow.slug}"]`);
+
+      expect(cardIcon?.querySelector("svg")).toBeInTheDocument();
+      expect(cardIcon).not.toHaveTextContent(/^\d+$/);
+      expect(rankedIcon?.querySelector("svg")).toBeInTheDocument();
+      expect(rankedIcon).not.toHaveTextContent(/^[A-Z]{2}$/);
+    }
+  });
+
+  it("prefixes workflow links for routed non-default locales", () => {
+    const { container } = render(
+      <NextIntlClientProvider locale="zh-hans" messages={en}>
+        <WorkflowsIndexView />
+      </NextIntlClientProvider>
+    );
+
+    expect(container.querySelector('a[href="/zh-hans/workflows/pdf-summary"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="/zh-hans/collections"]')).toBeInTheDocument();
+  });
+
+  it("renders workflow index hotspots from non-English messages", () => {
+    const { container } = render(
+      <NextIntlClientProvider locale="zh-hans" messages={workflowSentinelMessages}>
+        <WorkflowsIndexView />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByRole("link", { name: "前往-哨兵" })).toHaveAttribute("href", "/zh-hans/workflows/pdf-summary");
+    expect(screen.getByLabelText("工作流示例-哨兵")).toBeInTheDocument();
+    expect(screen.getByText("摘要 PDF 报告-哨兵")).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "工作流筛选-哨兵" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "全部工作流-哨兵" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getAllByText("PDF 摘要工作流构建器-哨兵").length).toBeGreaterThan(0);
+    expect(screen.getAllByLabelText("PDF 摘要工作流构建器-哨兵 步骤-哨兵").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("AI 步骤-哨兵").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("无 AI-哨兵").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("开始-哨兵").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("+1.2K 次运行-哨兵").length).toBeGreaterThan(0);
+    expect(screen.getByText("PDF 摘要-哨兵")).toBeInTheDocument();
+    expect(screen.getByText("合并、提取、摘要并导出引用-哨兵")).toBeInTheDocument();
+    expect(container.querySelector('a[href="/zh-hans/collections"]')).toBeInTheDocument();
+  });
+
+  it("renders real simplified Chinese workflow labels with translated ICU placeholders", () => {
+    render(
+      <NextIntlClientProvider locale="zh-hans" messages={zhHans}>
+        <WorkflowsIndexView />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getAllByLabelText("将 PDF 转成摘要 步骤").length).toBeGreaterThan(0);
+    expect(screen.queryByLabelText("{标题} 步骤")).not.toBeInTheDocument();
   });
 });

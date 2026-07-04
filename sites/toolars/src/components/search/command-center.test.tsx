@@ -1,9 +1,58 @@
-import { fireEvent, screen, within } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
+import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
+import es from "../../../messages/es.json";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { CommandCenter } from "./command-center";
 
+function renderWithSpanishIntl(ui: ReactNode) {
+  return render(<NextIntlClientProvider locale="es" messages={es}>{ui}</NextIntlClientProvider>);
+}
+
+function scanCommandCenterI18nCandidates() {
+  const source = readFileSync("src/components/search/command-center.tsx", "utf8");
+  const candidates: string[] = [];
+  const attributePattern = /\b(aria-label|placeholder|title|alt)=["']([^"']+)["']/g;
+  const textNodePattern = />\s*([^<>{}][^<>{}]*?)\s*</g;
+  const hrefPattern = /\bhref=["'](\/(?!\/|#)[^"']*)["']/g;
+
+  for (const match of source.matchAll(attributePattern)) {
+    const text = normalizeAuditText(match[2]);
+    if (isLikelyHardcodedEnglish(text)) candidates.push(`${match[1]}:${text}`);
+  }
+
+  for (const match of source.matchAll(textNodePattern)) {
+    const text = normalizeAuditText(match[1]);
+    if (isLikelyHardcodedEnglish(text)) candidates.push(`text-node:${text}`);
+  }
+
+  for (const match of source.matchAll(hrefPattern)) {
+    candidates.push(`href:${match[1]}`);
+  }
+
+  return candidates;
+}
+
+function normalizeAuditText(value: string) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function isLikelyHardcodedEnglish(text: string) {
+  if (!text || text.length < 3) return false;
+  if (!/[A-Za-z]/.test(text)) return false;
+  if (/^[A-Z0-9 /&+-]{2,8}$/.test(text)) return false;
+  if (/^[{}()[\].,:;'"`]+$/.test(text)) return false;
+
+  return true;
+}
+
 describe("CommandCenter", () => {
+  it("keeps command-center source clean for i18n audit candidates", () => {
+    expect(scanCommandCenterI18nCandidates()).toEqual([]);
+  });
+
   it("opens from the shell trigger and focuses search", () => {
     renderWithIntl(<CommandCenter />);
 
@@ -71,6 +120,36 @@ describe("CommandCenter", () => {
     expect(screen.getByText("Tools")).toBeInTheDocument();
   });
 
+  it("localizes command chrome and result hrefs for non-default locales", () => {
+    renderWithSpanishIntl(<CommandCenter />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Abrir búsqueda de comandos" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Centro de comandos" });
+    expect(screen.getByRole("searchbox", { name: "Buscar herramientas y flujos" })).toHaveFocus();
+    expect(screen.getByText("Comando K")).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Cerrar centro de comandos" })).toHaveTextContent("Escape");
+    expect(within(dialog).getByText("Sugeridos")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar herramientas y flujos" }), {
+      target: { value: "json" }
+    });
+
+    const result = screen.getByRole("link", { name: /JSON Repair/ });
+    expect(result).toHaveAttribute("href", "/es/tools/json-repair");
+    expect(screen.getByText("Herramientas")).toBeInTheDocument();
+    expect(within(dialog).getByText("Navegar")).toBeInTheDocument();
+    expect(within(dialog).getByText("Seleccionar")).toBeInTheDocument();
+    expect(within(dialog).getByText("Escape Cerrar")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar herramientas y flujos" }), {
+      target: { value: "zzzz no matching task" }
+    });
+
+    expect(screen.getByText("No se encontraron herramientas ni flujos")).toBeInTheDocument();
+    expect(screen.getByText("Prueba con el nombre de una herramienta, un tipo de archivo o una tarea como resumir PDF.")).toBeInTheDocument();
+  });
+
   it("shows an empty state for unmatched tasks", () => {
     renderWithIntl(<CommandCenter />);
 
@@ -96,7 +175,7 @@ describe("CommandCenter", () => {
     const resultLinks = within(resultsRegion).getAllByRole("link");
 
     expect(resultLinks.length).toBeGreaterThan(8);
-    expect(within(dialog).getByText("Esc Close")).toBeInTheDocument();
+    expect(within(dialog).getByText("Escape Close")).toBeInTheDocument();
 
     resultLinks.at(-1)?.focus();
     expect(resultLinks.at(-1)).toHaveFocus();

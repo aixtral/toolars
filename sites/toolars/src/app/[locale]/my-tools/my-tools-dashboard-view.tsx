@@ -1,166 +1,245 @@
 import {
   ArrowRight,
+  BadgeDollarSign,
   Bookmark,
+  Calculator,
   Clock,
+  FileJson,
   FileText,
-  Folder,
+  Image as ImageIcon,
   Link,
+  Mail,
   Puzzle,
   Sparkles,
   Star,
   Workflow
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
-
-const kpis = [
-  { label: "Recent outputs", value: "24", note: "+6 from yesterday", tone: "green" },
-  { label: "Favorite tools", value: "18", note: "View your favorites", tone: "amber" },
-  { label: "Saved workflows", value: "9", note: "+2 this week", tone: "teal" },
-  { label: "AI credits remaining", value: "1,250", note: "Resets in 14 days", tone: "purple" }
-] as const;
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 const recentOutputs = [
-  { title: "Q2 PDF summary", tool: "PDF Toolkit + AI Summarizer", href: "/tools/pdf-toolkit", time: "2h ago", status: "Completed" },
-  { title: "Image compression batch", tool: "Image Compressor", href: "/tools/pdf-toolkit", time: "5h ago", status: "Processing" },
-  { title: "Mortgage scenario", tool: "Mortgage Calculator", href: "/", time: "Yesterday", status: "Completed" },
-  { title: "CSV cleanup", tool: "Data Cleaner", href: "/tools/json-repair", time: "2 days ago", status: "Completed" }
+  { key: "q2PdfSummary", href: "/tools/pdf-toolkit" },
+  { key: "imageCompressionBatch", href: "/tools/pdf-toolkit" },
+  { key: "mortgageScenario", href: "/" },
+  { key: "csvCleanup", href: "/tools/json-repair" }
 ] as const;
 
 const favoriteTools = [
-  { title: "PDF Toolkit", description: "All-in-one PDF utility", href: "/tools/pdf-toolkit", badge: "Traditional" },
-  { title: "JSON Repair", description: "Format and validate JSON", href: "/tools/json-repair", badge: "Local" },
-  { title: "AI Email Writer", description: "Write emails in seconds", href: "/explore/ai-developer", badge: "AI" },
-  { title: "LLM Cost Calculator", description: "Estimate AI launch spend", href: "/tools/llm-cost-calculator", badge: "Local" }
+  { key: "pdfToolkit", href: "/tools/pdf-toolkit" },
+  { key: "jsonRepair", href: "/tools/json-repair" },
+  { key: "aiEmailWriter", href: "/explore/ai-developer" },
+  { key: "llmCostCalculator", href: "/tools/llm-cost-calculator" }
 ] as const;
 
 const savedCollections = [
-  { title: "PDF Ops Kit", meta: "4 tools · 1 workflow", href: "/collections/pdf-ops-kit" },
-  { title: "AI Developer Lab", meta: "4 tools · 3 workflows", href: "/collections/ai-developer-lab" },
-  { title: "Marketing Sprint", meta: "12 tools · 3 workflows", href: "/collections" }
+  { key: "pdfOpsKit", href: "/collections/pdf-ops-kit" },
+  { key: "aiDeveloperLab", href: "/collections/ai-developer-lab" }
 ] as const;
 
 const nextWorkflows = [
-  { title: "Turn PDF into summary", meta: "PDF Toolkit · AI Summarizer", href: "/workflows/pdf-summary" },
-  { title: "LLM Cost Review", meta: "Calculator · Budget memo", href: "/workflows/llm-cost-review" },
-  { title: "MCP Tool Launch", meta: "MCP Builder · Docs export", href: "/workflows/mcp-tool-launch" }
+  { key: "pdfSummary", href: "/workflows/pdf-summary" },
+  { key: "llmCostReview", href: "/workflows/llm-cost-review" },
+  { key: "mcpToolLaunch", href: "/workflows/mcp-tool-launch" }
 ] as const;
 
-const sharedLinks = [
-  "Q2_Marketing_Report.pdf",
-  "Cleaned_Data_May.csv",
-  "Social_Post_1080x1080.png"
+const sharedLinks = ["marketingReport", "cleanedData", "socialPost"] as const;
+const commandChips = ["all", "tools", "workflows", "outputs"] as const;
+
+const kpis = [
+  { key: "recentOutputs", value: String(recentOutputs.length), tone: "green", icon: Clock },
+  { key: "favoriteTools", value: String(favoriteTools.length), tone: "amber", icon: Star },
+  { key: "savedWorkflows", value: String(nextWorkflows.length), tone: "teal", icon: Workflow },
+  { key: "aiCredits", value: "0", tone: "purple", icon: BadgeDollarSign }
 ] as const;
+
+const recentOutputIcons = {
+  q2PdfSummary: FileText,
+  imageCompressionBatch: ImageIcon,
+  mortgageScenario: Calculator,
+  csvCleanup: FileJson
+} as const;
+
+const recentOutputTones = {
+  q2PdfSummary: "rose",
+  imageCompressionBatch: "green",
+  mortgageScenario: "amber",
+  csvCleanup: "teal"
+} as const;
+
+const favoriteToolIcons = {
+  pdfToolkit: FileText,
+  jsonRepair: FileJson,
+  aiEmailWriter: Mail,
+  llmCostCalculator: Calculator
+} as const;
+
+const favoriteToolTones = {
+  pdfToolkit: "rose",
+  jsonRepair: "teal",
+  aiEmailWriter: "purple",
+  llmCostCalculator: "amber"
+} as const;
+
+const collectionIcons = {
+  pdfOpsKit: FileText,
+  aiDeveloperLab: Sparkles
+} as const;
+
+const collectionTones = {
+  pdfOpsKit: "rose",
+  aiDeveloperLab: "purple"
+} as const;
+
+const workflowIcons = {
+  pdfSummary: FileText,
+  llmCostReview: Calculator,
+  mcpToolLaunch: Workflow
+} as const;
+
+const workflowTones = {
+  pdfSummary: "rose",
+  llmCostReview: "green",
+  mcpToolLaunch: "purple"
+} as const;
 
 export function MyToolsDashboardView() {
+  const t = useTranslations("myToolsDashboard");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+
+  function localizedHref(href: string) {
+    return href.startsWith("#") ? href : localizePath(href, localeCode);
+  }
+
   return (
     <div className="my-tools-page" data-my-tools-page="true">
       <section className="section landing-hero">
-        <span className="eyebrow">Personal workspace</span>
-        <h1 className="title">Welcome back, Alex</h1>
-        <p className="subtitle">Continue recent outputs, reopen favorites, manage saved collections, and track AI credits.</p>
+        <span className="eyebrow">{t("hero.eyebrow")}</span>
+        <h1 className="title">{t("hero.title")}</h1>
+        <p className="subtitle">{t("hero.subtitle")}</p>
         <div className="search-panel landing-search-panel my-tools-command">
           <div className="hero-input">
             <Sparkles size={18} aria-hidden="true" />
-            <span>What do you want to do next?</span>
-            <a className="open-link" href="/workflows/pdf-summary" aria-label="Run next workflow">
+            <span>{t("command.prompt")}</span>
+            <a className="open-link" href={localizedHref("/workflows/pdf-summary")} aria-label={t("command.runNextWorkflowLabel")}>
               <ArrowRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="chip-row">
-            <span className="chip active">All</span>
-            <span className="chip">Tools</span>
-            <span className="chip">Workflows</span>
-            <span className="chip">Outputs</span>
+            {commandChips.map((chip) => (
+              <span className={chip === "all" ? "chip active" : "chip"} key={chip}>
+                {t(`command.chips.${chip}`)}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
       <div className="workspace-kpi-grid">
-        {kpis.map((kpi) => (
-          <article className="workspace-kpi-card" key={kpi.label}>
-            <span className={`icon-tile ${kpi.tone}`}>{kpi.value.slice(0, 2)}</span>
-            <span>
-              <small>{kpi.label}</small>
-              <strong>{kpi.value}</strong>
-              <em>{kpi.note}</em>
-            </span>
-          </article>
-        ))}
+        {kpis.map((kpi) => {
+          const Icon = kpi.icon;
+
+          return (
+            <article className="workspace-kpi-card" key={kpi.key}>
+              <span className={`icon-tile ${kpi.tone}`} data-kpi-icon={kpi.key}>
+                <Icon size={18} aria-hidden="true" />
+              </span>
+              <span>
+                <small>{t(`kpis.${kpi.key}.label`)}</small>
+                <strong>{kpi.value}</strong>
+                <em>{t(`kpis.${kpi.key}.note`)}</em>
+              </span>
+            </article>
+          );
+        })}
       </div>
 
       <div className="my-tools-grid">
         <section className="panel" id="recent">
           <div className="landing-section-head">
-            <h2>Continue where you left off</h2>
+            <h2>{t("recentOutputs.title")}</h2>
             <a className="text-link" href="#recent">
-              View all history <ArrowRight size={14} aria-hidden="true" />
+              {t("recentOutputs.viewAll")} <ArrowRight size={14} aria-hidden="true" />
             </a>
           </div>
           <div className="workspace-timeline">
-            {recentOutputs.map((item) => (
-              <a className="workspace-timeline-row" href={item.href} key={item.title}>
+            {recentOutputs.map((item) => {
+              const Icon = recentOutputIcons[item.key];
+
+              return (
+              <a className="workspace-timeline-row" href={localizedHref(item.href)} key={item.key}>
                 <span className="timeline-dot" />
-                <span className="icon-tile rose">
-                  <FileText size={16} aria-hidden="true" />
+                <span className={`icon-tile ${recentOutputTones[item.key]}`} data-recent-output-icon={item.key}>
+                  <Icon size={16} aria-hidden="true" />
                 </span>
                 <span>
-                  <strong>{item.title}</strong>
-                  <small>{item.tool}</small>
+                  <strong>{t(`recentOutputs.items.${item.key}.title`)}</strong>
+                  <small>{t(`recentOutputs.items.${item.key}.tool`)}</small>
                 </span>
                 <span>
-                  <small>{item.time}</small>
-                  <em>{item.status}</em>
+                  <small>{t(`recentOutputs.items.${item.key}.time`)}</small>
+                  <em>{t(`recentOutputs.items.${item.key}.status`)}</em>
                 </span>
-                <span className="button button-outline-neutral">Open</span>
+                <span className="button button-outline-neutral">{t("recentOutputs.open")}</span>
               </a>
-            ))}
+              );
+            })}
           </div>
         </section>
 
         <aside className="workspace-side-stack">
           <section className="panel" id="collections">
             <div className="landing-section-head">
-              <h2>Saved collections</h2>
-              <a className="text-link" href="/collections">
-                View all <ArrowRight size={14} aria-hidden="true" />
+              <h2>{t("savedCollections.title")}</h2>
+              <a className="text-link" href={localizedHref("/collections")}>
+                {t("savedCollections.viewAll")} <ArrowRight size={14} aria-hidden="true" />
               </a>
             </div>
             <div className="detail-resource-list">
-              {savedCollections.map((collection) => (
-                <a className="detail-resource-row" href={collection.href} key={collection.title}>
-                  <span className="icon-tile amber">
-                    <Folder size={16} aria-hidden="true" />
+              {savedCollections.map((collection) => {
+                const Icon = collectionIcons[collection.key];
+
+                return (
+                <a className="detail-resource-row" href={localizedHref(collection.href)} key={collection.key}>
+                  <span className={`icon-tile ${collectionTones[collection.key]}`}>
+                    <Icon size={16} aria-hidden="true" />
                   </span>
                   <span>
-                    <strong>{collection.title}</strong>
-                    <small>{collection.meta}</small>
+                    <strong>{t(`savedCollections.items.${collection.key}.title`)}</strong>
+                    <small>{t(`savedCollections.items.${collection.key}.meta`)}</small>
                   </span>
                   <Bookmark size={16} aria-hidden="true" />
                 </a>
-              ))}
+                );
+              })}
             </div>
           </section>
 
           <section className="panel" id="workflows">
             <div className="landing-section-head">
-              <h2>Recommended next workflows</h2>
-              <a className="text-link" href="/workflows">
-                View all <ArrowRight size={14} aria-hidden="true" />
+              <h2>{t("nextWorkflows.title")}</h2>
+              <a className="text-link" href={localizedHref("/workflows")}>
+                {t("nextWorkflows.viewAll")} <ArrowRight size={14} aria-hidden="true" />
               </a>
             </div>
             <div className="detail-resource-list">
-              {nextWorkflows.map((workflow) => (
-                <a className="detail-resource-row" href={workflow.href} key={workflow.title}>
-                  <span className="icon-tile purple">
-                    <Workflow size={16} aria-hidden="true" />
+              {nextWorkflows.map((workflow) => {
+                const Icon = workflowIcons[workflow.key];
+
+                return (
+                <a className="detail-resource-row" href={localizedHref(workflow.href)} key={workflow.key}>
+                  <span className={`icon-tile ${workflowTones[workflow.key]}`}>
+                    <Icon size={16} aria-hidden="true" />
                   </span>
                   <span>
-                    <strong>{workflow.title}</strong>
-                    <small>{workflow.meta}</small>
+                    <strong>{t(`nextWorkflows.items.${workflow.key}.title`)}</strong>
+                    <small>{t(`nextWorkflows.items.${workflow.key}.meta`)}</small>
                   </span>
-                  <span className="badge local">Use</span>
+                  <span className="badge local">{t("nextWorkflows.use")}</span>
                 </a>
-              ))}
+                );
+              })}
             </div>
           </section>
         </aside>
@@ -169,58 +248,62 @@ export function MyToolsDashboardView() {
       <div className="my-tools-grid">
         <section className="panel" id="favorites">
           <div className="landing-section-head">
-            <h2>Your favorite tools</h2>
+            <h2>{t("favoriteTools.title")}</h2>
             <a className="text-link" href="#favorites">
-              Manage <ArrowRight size={14} aria-hidden="true" />
+              {t("favoriteTools.manage")} <ArrowRight size={14} aria-hidden="true" />
             </a>
           </div>
           <div className="favorite-tool-grid">
-            {favoriteTools.map((tool) => (
-              <a className="favorite-tool-card" href={tool.href} key={tool.title}>
-                <span className="icon-tile green">
-                  <Star size={16} aria-hidden="true" />
+            {favoriteTools.map((tool) => {
+              const Icon = favoriteToolIcons[tool.key];
+
+              return (
+              <a className="favorite-tool-card" href={localizedHref(tool.href)} key={tool.key}>
+                <span className={`icon-tile ${favoriteToolTones[tool.key]}`} data-favorite-tool-icon={tool.key}>
+                  <Icon size={16} aria-hidden="true" />
                 </span>
                 <span>
-                  <strong>{tool.title}</strong>
-                  <small>{tool.description}</small>
+                  <strong>{t(`favoriteTools.items.${tool.key}.title`)}</strong>
+                  <small>{t(`favoriteTools.items.${tool.key}.description`)}</small>
                 </span>
-                <span className="badge">{tool.badge}</span>
-                <span className="open-link">Open</span>
+                <span className="badge">{t(`favoriteTools.items.${tool.key}.badge`)}</span>
+                <span className="open-link">{t("favoriteTools.open")}</span>
               </a>
-            ))}
+              );
+            })}
           </div>
         </section>
 
         <aside className="workspace-side-stack">
           <section className="panel" id="shared">
             <div className="landing-section-head">
-              <h2>Recent shared links</h2>
+              <h2>{t("sharedLinks.title")}</h2>
               <a className="text-link" href="#shared">
-                View all <ArrowRight size={14} aria-hidden="true" />
+                {t("sharedLinks.viewAll")} <ArrowRight size={14} aria-hidden="true" />
               </a>
             </div>
             <div className="detail-row-list">
               {sharedLinks.map((name) => (
                 <div className="detail-row" key={name}>
                   <span className="badge">
-                    <Link size={13} aria-hidden="true" /> Link
+                    <Link size={13} aria-hidden="true" /> {t("sharedLinks.linkLabel")}
                   </span>
-                  <span>{name}</span>
+                  <span>{t(`sharedLinks.items.${name}`)}</span>
                 </div>
               ))}
             </div>
           </section>
 
           <section className="panel workspace-usage-card">
-            <h2>Storage</h2>
+            <h2>{t("storage.title")}</h2>
             <div className="workspace-meter large">
               <span style={{ width: "24%" }} />
             </div>
-            <p className="tool-description">2.4 GB / 10 GB used</p>
-            <h2 style={{ marginTop: 18 }}>Install Toolars Extension</h2>
-            <p className="tool-description">Access tools, save outputs, and use your favorites from anywhere.</p>
+            <p className="tool-description">{t("storage.usage")}</p>
+            <h2 style={{ marginTop: 18 }}>{t("extension.title")}</h2>
+            <p className="tool-description">{t("extension.description")}</p>
             <button className="button button-outline-neutral" type="button">
-              <Puzzle size={16} aria-hidden="true" /> Install extension
+              <Puzzle size={16} aria-hidden="true" /> {t("extension.action")}
             </button>
           </section>
         </aside>
@@ -232,11 +315,11 @@ export function MyToolsDashboardView() {
             <Clock size={18} aria-hidden="true" />
           </span>
           <span>
-            <strong>Team workspace not enabled</strong>
-            <small>Collaborate with your team, share collections, and manage permissions in a shared workspace.</small>
+            <strong>{t("teamUpsell.title")}</strong>
+            <small>{t("teamUpsell.description")}</small>
           </span>
           <button className="button button-outline-neutral" type="button">
-            Upgrade to Team
+            {t("teamUpsell.action")}
           </button>
         </div>
       )}

@@ -1,9 +1,97 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AI_CONSENT_AUDIT_STORAGE_KEY } from "@/lib/ai/consent-audit-storage";
 import { WORKSPACE_IDENTITY_STORAGE_KEY, bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
+import en from "../../../../../messages/en.json";
 import { PrivacyAiSettingsView } from "./privacy-ai-settings-view";
+
+const localizedPrivacyCopy = {
+  hero: {
+    ...en.settings["privacy-ai"].hero,
+    consentOn: "Consentimiento IA centinela activo"
+  },
+  sections: en.settings["privacy-ai"].sections,
+  labels: {
+    beforeAiProcessing: "Antes de procesamiento IA centinela"
+  },
+  copy: {
+    consentDefaultsDescription: "Valores centinela para cada flujo IA.",
+    providerRoutingDescription: "Ruta centinela antes de enviar trabajo IA.",
+    localFirstDescription: "Herramientas locales centinela primero.",
+    trainingControlsDescription: "Contenido centinela fuera de entrenamiento.",
+    consentPreviewDescription: "Flujo centinela quiere resumir un PDF.",
+    privacyLogDescription: "Exporta auditoría centinela de consentimiento.",
+    identityDescription: "Metadatos centinela unidos a identidad.",
+    latestRunEmpty: "Sin ejecución centinela registrada",
+    latestRunDescription: "Ejecuciones centinela aparecen luego.",
+    deletionEmpty: "Sin eliminación centinela",
+    deletionDescription: "Eliminaciones centinela quedan en el libro.",
+    guardrailsDescription: "Contenido sensible centinela requiere consentimiento."
+  },
+  trustDefaults: {
+    askBeforeAi: {
+      label: "Pedir antes de IA centinela",
+      description: "Muestra consentimiento centinela."
+    },
+    autoDeleteUploads: {
+      label: "Eliminar cargas centinela",
+      description: "Quita cargas centinela."
+    },
+    preferLocalTools: {
+      label: "Preferir local centinela",
+      description: "Ruta local centinela."
+    },
+    saveOutputHistory: {
+      label: "Guardar historial centinela",
+      description: "Conserva salidas centinela."
+    }
+  },
+  retentionRows: {
+    uploads: {
+      label: "Cargas centinela",
+      value: "Eliminadas centinela"
+    },
+    aiPrompts: {
+      label: "Prompts IA centinela",
+      value: "Guardados centinela"
+    },
+    generatedOutputs: {
+      label: "Salidas centinela",
+      value: "Guardadas centinela"
+    },
+    auditEvents: {
+      label: "Eventos centinela",
+      value: "Retenidos centinela"
+    }
+  },
+  actions: {
+    allowOnce: "Permitir una vez centinela",
+    useLocalTool: "Usar local centinela",
+    deleteAiHistory: "Eliminar historial IA centinela",
+    downloadPrivacyLog: "Descargar privacidad centinela"
+  }
+};
+
+const localizedMessages = {
+  ...en,
+  settings: {
+    ...en.settings,
+    "privacy-ai": {
+      ...en.settings["privacy-ai"],
+      ...localizedPrivacyCopy
+    }
+  }
+};
+
+function renderWithLocalizedMessages() {
+  return render(
+    <NextIntlClientProvider locale="es" messages={localizedMessages}>
+      <PrivacyAiSettingsView />
+    </NextIntlClientProvider>
+  );
+}
 
 describe("PrivacyAiSettingsView", () => {
   beforeEach(() => {
@@ -13,6 +101,18 @@ describe("PrivacyAiSettingsView", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+  });
+
+  it("renders visible settings copy from localized non-English messages", () => {
+    renderWithLocalizedMessages();
+
+    expect(screen.getByText(localizedPrivacyCopy.hero.consentOn)).toBeInTheDocument();
+    expect(screen.getByText(localizedPrivacyCopy.copy.consentDefaultsDescription)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: localizedPrivacyCopy.trustDefaults.askBeforeAi.label })).toBeInTheDocument();
+    expect(screen.getByText(localizedPrivacyCopy.labels.beforeAiProcessing)).toBeInTheDocument();
+    expect(screen.getByText(localizedPrivacyCopy.copy.consentPreviewDescription)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: localizedPrivacyCopy.actions.deleteAiHistory })).toBeInTheDocument();
+    expect(screen.getByText(localizedPrivacyCopy.copy.guardrailsDescription)).toBeInTheDocument();
   });
 
   it("renders privacy and AI settings modules from the design", () => {

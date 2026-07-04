@@ -1,11 +1,114 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
+import en from "../../../../../messages/en.json";
 import { BillSplitCalculatorWorkspace } from "./bill-split-calculator-workspace";
+
+const localizedWorkspaceCopy = {
+  eyebrow: "Espacio cuenta centinela",
+  title: "Calculadora de cuenta centinela",
+  subtitle: "División centinela de gastos.",
+  modelTitle: "Modelo local centinela",
+  detailsLink: "Detalles centinela",
+  badges: {
+    local: "Local centinela",
+    split: "División centinela"
+  },
+  trustRows: {
+    local: {
+      label: "Confianza local",
+      text: "Cuenta centinela local."
+    },
+    agreement: {
+      label: "Acuerdo centinela",
+      text: "Confirmación centinela."
+    },
+    private: {
+      label: "Privado centinela",
+      text: "Plan centinela local."
+    }
+  },
+  inputSection: {
+    title: "Entradas de cuenta centinela",
+    description: "Subtotal y propina centinela."
+  },
+  fields: {
+    subtotal: "Subtotal centinela",
+    people: "Personas centinela",
+    tipPercent: "Propina centinela",
+    taxPercent: "Impuesto centinela",
+    splitMode: "Modo centinela",
+    equal: "Igual centinela",
+    itemized: "Itemizado centinela"
+  },
+  actions: {
+    save: "Guardar cuenta centinela",
+    calculate: "Calcular división centinela"
+  },
+  resultSection: {
+    title: "Resumen grupo centinela",
+    emptyDescription: "Ejecuta cálculo centinela."
+  },
+  metrics: {
+    grandTotal: "Total centinela",
+    equalShare: "Parte centinela",
+    fees: "Cargos centinela",
+    subtotal: "Subtotal resultado centinela"
+  },
+  callout: {
+    waitingTitle: "Esperando cálculo centinela",
+    waitingDescription: "Calcula primero centinela."
+  },
+  review: {
+    eyebrow: "Lista centinela",
+    title: "Notas división centinela",
+    notes: {
+      total: "Nota centinela total.",
+      equal: "Nota centinela igual.",
+      itemized: "Nota centinela itemizada."
+    }
+  },
+  caveat: {
+    title: "Local primero centinela",
+    body: "Sin recibo centinela."
+  }
+};
+
+const localizedMessages = {
+  ...en,
+  tools: {
+    ...en.tools,
+    "bill-split-calculator": {
+      ...en.tools["bill-split-calculator"],
+      workspace: localizedWorkspaceCopy
+    }
+  }
+};
+
+function renderWithLocalizedMessages() {
+  return render(
+    <NextIntlClientProvider locale="es" messages={localizedMessages}>
+      <BillSplitCalculatorWorkspace />
+    </NextIntlClientProvider>
+  );
+}
 
 describe("BillSplitCalculatorWorkspace", () => {
   beforeEach(() => {
     window.localStorage.clear();
+  });
+
+  it("renders visible workspace copy from localized non-English messages", () => {
+    renderWithLocalizedMessages();
+
+    expect(screen.getByRole("heading", { name: localizedWorkspaceCopy.title })).toBeInTheDocument();
+    expect(screen.getByText(localizedWorkspaceCopy.inputSection.title)).toBeInTheDocument();
+    expect(screen.getByText(localizedWorkspaceCopy.resultSection.title)).toBeInTheDocument();
+    expect(screen.getByText(localizedWorkspaceCopy.review.title)).toBeInTheDocument();
+    expect(screen.getByLabelText(localizedWorkspaceCopy.fields.subtotal)).toHaveValue(120);
+    expect(screen.getByRole("button", { name: localizedWorkspaceCopy.actions.calculate })).toBeInTheDocument();
+    expect(screen.getByText(localizedWorkspaceCopy.caveat.body)).toBeInTheDocument();
   });
 
   it("renders the local VitalCalc bill split workspace sections", () => {

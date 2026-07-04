@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateVo2Max,
   defaultVo2MaxScenario,
@@ -16,21 +17,20 @@ import {
 const storageKey = "toolars.vo2-max.test:v1";
 
 const trustRows = [
-  ["Local", "Fitness test inputs stay in this browser session", "local"],
-  ["Training", "VO2 Max estimates depend on test quality and recovery state", "warn"],
-  ["Private", "Save stores only this local fitness test", ""]
+  { key: "local", tone: "local" },
+  { key: "training", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const trainingNotes = [
-  "VitalCalc source formula: Cooper VO2 = (distance(m) - 504.9) / 44.73.",
-  "Female Cooper estimates use the source multiplier of 0.85.",
-  "Resting HR method uses 15.3 x (208 - 0.7 x age) / resting HR."
-];
+const trainingNotes = ["cooperFormula", "femaleMultiplier", "restingHrFormula"] as const;
 
 export function Vo2MaxWorkspace() {
-  const t = useTranslations("tools.vo2-max");
-  const [test, setTest] = useState<Vo2MaxInput>(() => defaultVo2MaxScenario);
-  const [result, setResult] = useState<Vo2MaxResult | null>(null);
+  const t = useTranslations("tools.vo2-max.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/vo2-max/about", localeCode);
+  const [test, setTest] = useState((): Vo2MaxInput => ({ ...defaultVo2MaxScenario }));
+  const [result, setResult] = useState(null as Vo2MaxResult | null);
 
   const calculate = () => {
     setResult(calculateVo2Max(test));
@@ -50,23 +50,23 @@ export function Vo2MaxWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="vo2-max">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc cardio workspace</span>
-        <h1>VO2 Max Calculator</h1>
-        <p className="subtitle">Estimate maximum oxygen uptake from a Cooper 12-minute run or resting heart rate sample.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/vo2-max/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -75,50 +75,50 @@ export function Vo2MaxWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Fitness inputs</h2>
-              <p className="tool-description">Choose the source method and enter test data from a controlled effort.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="vo2-method">
-              Method
+              {t("fields.method")}
               <select className="input" id="vo2-method" onChange={(event) => updateTest("method", event.target.value as Vo2Method)} value={test.method}>
                 {vo2MethodOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label}
+                    {t(`options.method.${option.value}`)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="field-label" htmlFor="vo2-distance">
-              Distance (meters)
+              {t("fields.distanceMeters")}
               <input className="input" id="vo2-distance" min={0} onChange={(event) => updateTest("distanceMeters", Number(event.target.value))} type="number" value={test.distanceMeters} />
             </label>
             <label className="field-label" htmlFor="vo2-sex">
-              Sex
+              {t("fields.sex")}
               <select className="input" id="vo2-sex" onChange={(event) => updateTest("sex", event.target.value as Vo2Sex)} value={test.sex}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">{t("options.sex.male")}</option>
+                <option value="female">{t("options.sex.female")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="vo2-age">
-              Age
+              {t("fields.age")}
               <input className="input" id="vo2-age" min={0} onChange={(event) => updateTest("age", Number(event.target.value))} type="number" value={test.age} />
             </label>
             <label className="field-label" htmlFor="vo2-resting-hr">
-              Resting heart rate
+              {t("fields.restingHeartRate")}
               <input className="input" id="vo2-resting-hr" min={1} onChange={(event) => updateTest("restingHeartRate", Number(event.target.value))} type="number" value={test.restingHeartRate} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveTest} type="button">
-              <Save size={16} aria-hidden="true" /> Save fitness test
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate VO2 Max
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -126,28 +126,32 @@ export function Vo2MaxWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>VO2 result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show VO2 Max, fitness level, and source reference bands."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">{result?.methodLabel ?? "Source formula"}</span>
+            <span className="badge warn">{result?.methodLabel ?? t("badges.reference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedVo2Max ?? "0.0"}</strong>
-              <span>ml/kg/min</span>
+              <strong>{result?.formattedVo2Max ?? t("metrics.emptyVo2Max")}</strong>
+              <span>{t("metrics.vo2Unit")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.fitnessLevel ?? "--"}</strong>
-              <span>Fitness level</span>
+              <strong>{result?.fitnessLevel ?? t("metrics.pending")}</strong>
+              <span>{t("metrics.fitnessLevel")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result ? (test.method === "cooper" ? "Cooper" : "Resting HR") : "--"}</strong>
-              <span>Method</span>
+              <strong>{result ? (test.method === "cooper" ? t("metrics.methodCooper") : t("metrics.methodRestingHeartRate")) : t("metrics.pending")}</strong>
+              <span>{t("metrics.method")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{test.method === "cooper" ? `${test.distanceMeters} m` : `${test.restingHeartRate} bpm`}</strong>
-              <span>Source input</span>
+              <strong>
+                {test.method === "cooper"
+                  ? t("metrics.sourceDistance", { distanceMeters: test.distanceMeters })
+                  : t("metrics.sourceRestingHeartRate", { restingHeartRate: test.restingHeartRate })}
+              </strong>
+              <span>{t("metrics.sourceInput")}</span>
             </article>
           </div>
 
@@ -163,30 +167,30 @@ export function Vo2MaxWorkspace() {
           <div className="llm-plan-callout">
             <Activity size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Retest under similar conditions for trend comparisons." : "Calculate first to build the reference table."}</small>
+              <strong>{result?.recommendation ?? t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Training notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {trainingNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Fitness estimates stay local and should not replace medical clearance for hard exercise.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

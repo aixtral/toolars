@@ -75,24 +75,12 @@ export const sourceInventory = {
 
 const previewToolSlugs = new Set([
   "agent-workflow-builder",
-  "ai-pdf-summarizer",
   "context-window",
-  "css-gradient-generator",
-  "extract-tables",
   "function-call-builder",
   "hallucination-checker",
-  "json-formatter",
-  "json-path-tester",
   "json-tree-viewer",
   "mcp-tester",
   "model-comparator",
-  "ocr-scanner",
-  "pdf-compressor",
-  "pdf-merger",
-  "pdf-password-remover",
-  "pdf-signer",
-  "pdf-to-word",
-  "pdf-translator",
   "pii-scanner",
   "prompt-templates",
   "rag-eval-bench",
@@ -102,6 +90,56 @@ const previewToolSlugs = new Set([
   "token-budget-planner",
   "vision-prompt-builder"
 ]);
+
+const w20BeNativeRegistrySlugs = new Set([
+  "agent-workflow-builder",
+  "context-window",
+  "mcp-tester",
+  "model-comparator",
+  "rag-eval-bench",
+  "token-budget-planner"
+]);
+
+const w20BdNativeRegistrySlugs = new Set([
+  "ai-guardrail-config",
+  "certificate-decoder",
+  "hallucination-checker",
+  "jailbreak-detector",
+  "pii-scanner",
+  "red-team-simulator",
+  "toxicity-scanner"
+]);
+
+const w20BfNativeRegistrySlugs = new Set([
+  "code-minifier",
+  "cron-builder",
+  "cron-explainer",
+  "docker-compose-converter",
+  "env-editor",
+  "html-markdown-converter",
+  "html-preview",
+  "http-status-reference",
+  "json-schema-builder",
+  "json-tree-viewer",
+  "mime-lookup",
+  "schema-validator",
+  "sql-formatter",
+  "toml-converter",
+  "unicode-search"
+]);
+
+const w20BkNativeRegistrySlugs = new Set([
+  "function-call-builder",
+  "prompt-templates",
+  "structured-output-formatter",
+  "vision-prompt-builder",
+  "markdown-table-generator",
+  "mock-data-generator",
+  "synthetic-dataset-gen",
+  "synthetic-dataset-generator"
+]);
+
+const toolarsNativeAiDeveloperRegistrySlugs = new Set(["json-formatter", "synthetic-dataset-generator"]);
 
 const makeHref = (slug: string) => `/tools/${slug}`;
 
@@ -123,6 +161,14 @@ const tool = (
 };
 
 function getDefaultToolStatus(definition: Pick<ToolDefinitionInput, "slug" | "pricing">): ToolLaunchStatus {
+  if (
+    w20BdNativeRegistrySlugs.has(definition.slug) ||
+    w20BfNativeRegistrySlugs.has(definition.slug) ||
+    w20BkNativeRegistrySlugs.has(definition.slug)
+  ) {
+    return "ready";
+  }
+
   if (previewToolSlugs.has(definition.slug)) {
     return "preview";
   }
@@ -162,12 +208,14 @@ export const tools: ToolDefinition[] = [
     category: "PDF",
     group: "General",
     type: "ai",
-    processing: ["cloud", "ai-consent"],
+    processing: ["local", "ai-consent"],
     pricing: "freemium",
     tags: ["PDF", "Summary", "AI"],
     source: "toolars",
     accent: "emerald",
-    featured: true
+    featured: true,
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "pdf-merger",
@@ -202,11 +250,13 @@ export const tools: ToolDefinition[] = [
     category: "PDF",
     group: "General",
     type: "traditional",
-    processing: ["cloud"],
+    processing: ["local"],
     pricing: "freemium",
     tags: ["PDF", "Convert", "Word"],
     source: "toolars",
-    accent: "blue"
+    accent: "blue",
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "extract-tables",
@@ -215,29 +265,33 @@ export const tools: ToolDefinition[] = [
     category: "PDF",
     group: "General",
     type: "ai",
-    processing: ["cloud", "ai-consent"],
+    processing: ["local", "ai-consent"],
     pricing: "freemium",
     tags: ["PDF", "Tables", "AI"],
     source: "toolars",
-    accent: "green"
+    accent: "green",
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "pdf-signer",
     name: "PDF Signer",
-    description: "Add signatures to PDF files online.",
+    description: "Plan PDF signature placement before a signing engine embeds it.",
     category: "PDF",
     group: "General",
     type: "traditional",
-    processing: ["cloud"],
+    processing: ["local"],
     pricing: "freemium",
     tags: ["PDF", "Sign", "Legal"],
     source: "toolars",
-    accent: "sky"
+    accent: "sky",
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "pdf-password-remover",
     name: "PDF Password Remover",
-    description: "Remove password protection from PDF files you own.",
+    description: "Validate owned PDF unlock handoff without cracking passwords.",
     category: "PDF",
     group: "General",
     type: "traditional",
@@ -245,7 +299,9 @@ export const tools: ToolDefinition[] = [
     pricing: "free",
     tags: ["PDF", "Unlock", "Security"],
     source: "toolars",
-    accent: "violet"
+    accent: "violet",
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "ocr-scanner",
@@ -254,11 +310,13 @@ export const tools: ToolDefinition[] = [
     category: "PDF",
     group: "General",
     type: "ai",
-    processing: ["cloud", "ai-consent"],
+    processing: ["local", "ai-consent"],
     pricing: "freemium",
     tags: ["PDF", "OCR", "Text"],
     source: "toolars",
-    accent: "cyan"
+    accent: "cyan",
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "pdf-translator",
@@ -267,11 +325,13 @@ export const tools: ToolDefinition[] = [
     category: "PDF",
     group: "General",
     type: "ai",
-    processing: ["cloud", "ai-consent"],
+    processing: ["local", "ai-consent"],
     pricing: "freemium",
     tags: ["PDF", "Translate", "AI"],
     source: "toolars",
-    accent: "orange"
+    accent: "orange",
+    status: "ready",
+    visibility: "public"
   }),
   tool({
     slug: "mortgage-calculator",
@@ -1396,7 +1456,7 @@ export const tools: ToolDefinition[] = [
     ["json-repair", "JSON Repair", "Fix malformed LLM JSON output, trailing commas, quotes, and arrays.", "AI Security", "traditional", ["local"], "free", ["JSON", "AI Security", "Local"], "yellow", true],
     ["prompt-injection-scanner", "Prompt Injection Scanner", "Scan prompts for jailbreaks, instruction overrides, and hidden payloads.", "AI Security", "ai", ["local", "ai-consent"], "freemium", ["Prompt", "Security", "AI"], "rose", true],
     ["pii-scanner", "PII Scanner", "Detect emails, phone numbers, IDs, and sensitive entities before AI upload.", "AI Security", "traditional", ["local"], "free", ["PII", "Privacy", "Local"], "purple", false],
-    ["hallucination-checker", "Hallucination Checker", "Compare claims against sources and flag unsupported output.", "AI Security", "ai", ["cloud", "ai-consent"], "freemium", ["Evidence", "Safety", "AI"], "green", false],
+    ["hallucination-checker", "Hallucination Checker", "Compare claims against sources and flag unsupported output.", "AI Security", "traditional", ["local"], "free", ["Evidence", "Safety", "AI"], "green", false],
     ["schema-validator", "Schema Validator", "Validate JSON schema and function-calling payloads before production.", "Developer", "traditional", ["local"], "free", ["Schema", "JSON", "Validation"], "blue", false],
     ["llm-cost-calculator", "LLM Cost Calculator", "Estimate token cost across providers, models, context windows, and traffic.", "LLM Cost", "traditional", ["local"], "free", ["Cost", "Tokens", "Models"], "emerald", true],
     ["model-comparator", "Model Comparator", "Compare model price, latency, context, and fit for a workload.", "LLM Cost", "traditional", ["local"], "freemium", ["Models", "Cost", "Latency"], "indigo", false],
@@ -1409,8 +1469,8 @@ export const tools: ToolDefinition[] = [
     ["prompt-templates", "Prompt Templates", "Browse production prompt structures for common AI tasks.", "Prompt Engineering", "traditional", ["local"], "free", ["Prompt", "Templates", "AI"], "amber", false],
     ["function-call-builder", "Function Call Builder", "Turn API payloads into tool schemas and function-calling specs.", "Prompt Engineering", "traditional", ["local"], "free", ["Function", "Schema", "API"], "pink", false],
     ["structured-output-formatter", "Structured Output Formatter", "Normalize model output into typed JSON response formats.", "Prompt Engineering", "traditional", ["local"], "free", ["Output", "JSON", "Schema"], "lime", false],
-    ["vision-prompt-builder", "Vision Prompt Builder", "Draft multimodal prompts with camera, crop, and object instructions.", "Prompt Engineering", "ai", ["cloud", "ai-consent"], "freemium", ["Vision", "Prompt", "AI"], "sky", false],
-    ["synthetic-dataset-generator", "Synthetic Dataset Generator", "Generate structured sample rows for testing apps and prompts.", "Developer", "ai", ["cloud", "ai-consent"], "freemium", ["Dataset", "Testing", "AI"], "fuchsia", false],
+    ["vision-prompt-builder", "Vision Prompt Builder", "Draft multimodal prompts with camera, crop, and object instructions.", "Prompt Engineering", "traditional", ["local"], "free", ["Vision", "Prompt", "AI"], "sky", false],
+    ["synthetic-dataset-generator", "AI Fixture Dataset Generator", "Generate local JSONL fixture rows for AI workflow tests and eval prompts.", "Developer", "traditional", ["local"], "free", ["Synthetic data", "Testing", "AI"], "fuchsia", false],
     ["json-formatter", "JSON Formatter", "Format, validate, and beautify JSON data.", "Developer", "traditional", ["local"], "free", ["JSON", "Format", "Validate"], "slate", false],
     ["json-tree-viewer", "JSON Tree Viewer", "Inspect nested JSON with collapsible tree views.", "Developer", "traditional", ["local"], "free", ["JSON", "Tree", "Inspect"], "blue", false],
     ["json-path-tester", "JSON Path Tester", "Test JSONPath expressions against sample payloads.", "Developer", "traditional", ["local"], "free", ["JSONPath", "Query", "JSON"], "indigo", false],
@@ -1426,9 +1486,731 @@ export const tools: ToolDefinition[] = [
       processing: processing as ProcessingMode[],
       pricing: pricing as PricingMode,
       tags: tags as string[],
+      source: toolarsNativeAiDeveloperRegistrySlugs.has(slug as string) ? "toolars" : "aixtral-lab",
+      accent: accent as string,
+      featured: Boolean(featured),
+      status:
+        w20BeNativeRegistrySlugs.has(slug as string) ||
+        w20BdNativeRegistrySlugs.has(slug as string) ||
+        w20BfNativeRegistrySlugs.has(slug as string)
+          ? "ready"
+          : undefined
+    })
+  ),
+  ...[
+    [
+      "base64-converter",
+      "Base64 Encoder/Decoder",
+      "Encode and decode Base64 strings with UTF-8 support for developer payloads.",
+      "Developer",
+      ["Base64", "Encoding", "Developer"],
+      "cyan"
+    ],
+    [
+      "case-converter",
+      "Case Converter",
+      "Convert text between camelCase, PascalCase, snake_case, kebab-case, and more.",
+      "Productivity",
+      ["Text", "Case", "Naming"],
+      "blue"
+    ],
+    [
+      "slug-generator",
+      "Slug Generator",
+      "Generate URL-friendly slugs from titles with separators, case options, and transliteration.",
+      "Productivity",
+      ["Slug", "SEO", "URL"],
+      "emerald"
+    ],
+    [
+      "text-stats",
+      "Text Statistics",
+      "Analyze text for word count, character count, sentence count, and reading time.",
+      "Productivity",
+      ["Text", "Stats", "Reading time"],
+      "indigo"
+    ],
+    [
+      "uuid-generator",
+      "UUID Generator",
+      "Generate random UUID v4 identifiers in bulk for databases, sessions, and API traces.",
+      "Developer",
+      ["UUID", "IDs", "Developer"],
+      "violet"
+    ],
+    [
+      "url-encoder",
+      "URL Encoder/Decoder",
+      "Encode URL components or decode percent-encoded strings for query parameters and links.",
+      "Developer",
+      ["URL", "Encoding", "Decode"],
+      "sky"
+    ],
+    [
+      "html-entity-encoder",
+      "HTML Entity Encoder",
+      "Encode and decode HTML entities for safe text rendering in pages and templates.",
+      "Developer",
+      ["HTML", "Entities", "Encoding"],
+      "amber"
+    ],
+    [
+      "lorem-ipsum",
+      "Lorem Ipsum Generator",
+      "Generate configurable placeholder copy for mockups, wireframes, and layout testing.",
+      "Writing",
+      ["Lorem ipsum", "Placeholder", "Writing"],
+      "rose"
+    ],
+    [
+      "csv-to-json",
+      "CSV to JSON Converter",
+      "Convert CSV rows into structured JSON with header handling and validation notes.",
+      "Data",
+      ["CSV", "JSON", "Data"],
+      "emerald"
+    ],
+    [
+      "json-to-csv",
+      "JSON to CSV Converter",
+      "Turn JSON arrays into CSV tables with escaped fields and row statistics.",
+      "Data",
+      ["JSON", "CSV", "Export"],
+      "cyan"
+    ],
+    [
+      "json-diff",
+      "JSON Diff Checker",
+      "Compare JSON payloads and summarize added, removed, and changed paths.",
+      "Developer",
+      ["JSON", "Diff", "Debugging"],
+      "amber"
+    ],
+    [
+      "yaml-validator",
+      "YAML Validator",
+      "Validate YAML syntax, indentation, keys, and structure before config changes ship.",
+      "Developer",
+      ["YAML", "Validation", "Config"],
+      "blue"
+    ],
+    [
+      "xml-formatter",
+      "XML Formatter",
+      "Format or minify XML snippets for readable configuration, feeds, and payload review.",
+      "Developer",
+      ["XML", "Format", "Minify"],
+      "violet"
+    ],
+    [
+      "markdown-to-json",
+      "Markdown to JSON Converter",
+      "Extract headings, lists, code blocks, links, and metadata from Markdown as JSON.",
+      "Data",
+      ["Markdown", "JSON", "Content"],
+      "slate"
+    ],
+    [
+      "diff-checker",
+      "Diff Checker",
+      "Compare two text versions and review line-level additions and removals.",
+      "Productivity",
+      ["Diff", "Text", "Review"],
+      "orange"
+    ],
+    [
+      "text-diff",
+      "Text Diff",
+      "Compare text with whitespace, case, and trim options for local review workflows.",
+      "Productivity",
+      ["Text", "Diff", "Review"],
+      "pink"
+    ],
+    [
+      "url-parser",
+      "URL Parser",
+      "Parse, decode, and inspect URL components with query, path, host, and protocol breakdowns.",
+      "Developer",
+      ["URL", "Parser", "Query"],
+      "teal"
+    ],
+    [
+      "number-base-converter",
+      "Number Base Converter",
+      "Convert numbers between binary, octal, decimal, and hexadecimal with validation notes.",
+      "Developer",
+      ["Binary", "Hex", "Numbers"],
+      "indigo"
+    ],
+    [
+      "file-size-converter",
+      "File Size Converter",
+      "Convert file sizes across bytes, KB, MB, GB, TB, and PB with decimal and binary modes.",
+      "Developer",
+      ["File size", "Units", "Binary"],
+      "emerald"
+    ],
+    [
+      "chmod-calculator",
+      "Chmod Calculator",
+      "Calculate Linux file permissions with octal, symbolic, and owner-group-other views.",
+      "Developer",
+      ["Linux", "Permissions", "Chmod"],
+      "slate"
+    ],
+    [
+      "ipv4-subnet-calculator",
+      "IPv4 Subnet Calculator",
+      "Calculate IPv4 network address, broadcast, usable hosts, CIDR notation, and binary views.",
+      "Developer",
+      ["IPv4", "CIDR", "Network"],
+      "blue"
+    ],
+    [
+      "timestamp-converter",
+      "Timestamp Converter",
+      "Convert Unix timestamps into readable dates and compare second or millisecond precision.",
+      "Productivity",
+      ["Timestamp", "Date", "Unix"],
+      "orange"
+    ],
+    [
+      "user-agent-parser",
+      "User Agent Parser",
+      "Parse browser User-Agent strings into browser, OS, device type, and rendering engine.",
+      "Developer",
+      ["User-Agent", "Browser", "Parser"],
+      "rose"
+    ],
+    [
+      "color-converter",
+      "Color Converter",
+      "Convert colors between HEX, RGB, HSL, HSV, CMYK, and named formats.",
+      "Frontend & Design",
+      ["Color", "HEX", "RGB"],
+      "fuchsia"
+    ],
+    [
+      "color-contrast-checker",
+      "Color Contrast Checker",
+      "Check foreground and background contrast ratios against WCAG readability targets.",
+      "Frontend & Design",
+      ["Color", "Contrast", "WCAG"],
+      "yellow"
+    ],
+    [
+      "color-palette-generator",
+      "Color Palette Generator",
+      "Generate cohesive color palettes with harmonies, shades, tints, and export-ready values.",
+      "Frontend & Design",
+      ["Color", "Palette", "Design"],
+      "rose"
+    ],
+    [
+      "css-border-radius-generator",
+      "CSS Border Radius Generator",
+      "Create CSS border-radius values for all corners with preview-ready output.",
+      "Frontend & Design",
+      ["CSS", "Border radius", "Design"],
+      "orange"
+    ],
+    [
+      "css-flexbox-generator",
+      "CSS Flexbox Generator",
+      "Build CSS flexbox layouts with direction, wrapping, alignment, gap, and item controls.",
+      "Frontend & Design",
+      ["CSS", "Flexbox", "Layout"],
+      "blue"
+    ],
+    [
+      "css-grid-generator",
+      "CSS Grid Generator",
+      "Build CSS grid layouts with columns, rows, gaps, placement, and template output.",
+      "Frontend & Design",
+      ["CSS", "Grid", "Layout"],
+      "violet"
+    ],
+    [
+      "css-unit-converter",
+      "CSS Unit Converter",
+      "Convert CSS units such as px, rem, em, %, vw, vh, cm, mm, in, pt, and pc.",
+      "Frontend & Design",
+      ["CSS", "Units", "Conversion"],
+      "teal"
+    ],
+    [
+      "hash-generator",
+      "Hash Generator",
+      "Generate MD5, SHA1, SHA256, and SHA512 hashes for local text and payload checks.",
+      "Developer",
+      ["Hash", "SHA", "Checksum"],
+      "emerald"
+    ],
+    [
+      "jwt-decoder",
+      "JWT Decoder",
+      "Decode and inspect JSON Web Tokens locally without verifying or sending secrets.",
+      "AI Security",
+      ["JWT", "Token", "Security"],
+      "amber"
+    ],
+    [
+      "password-generator",
+      "Password Generator",
+      "Generate secure passwords with length, symbol, number, and custom rule controls.",
+      "Developer",
+      ["Password", "Security", "Random"],
+      "rose"
+    ],
+    [
+      "regex-tester",
+      "Regex Tester",
+      "Test regular expressions with real-time matches, groups, flags, and sample text.",
+      "Developer",
+      ["Regex", "Testing", "Text"],
+      "indigo"
+    ],
+    [
+      "sql-formatter",
+      "SQL Formatter",
+      "Format and beautify SQL queries with dialect and style options for review.",
+      "Developer",
+      ["SQL", "Format", "Database"],
+      "blue"
+    ],
+    [
+      "toml-converter",
+      "TOML Converter",
+      "Convert between TOML and JSON with validation and error reporting.",
+      "Data",
+      ["TOML", "JSON", "Config"],
+      "teal"
+    ],
+    [
+      "unicode-search",
+      "Unicode Character Search",
+      "Search Unicode characters with code point, decimal, and HTML entity details.",
+      "Developer",
+      ["Unicode", "Characters", "HTML"],
+      "violet"
+    ],
+    [
+      "code-minifier",
+      "Code Minifier",
+      "Minify JavaScript, CSS, and HTML code to reduce file size before shipping.",
+      "Developer",
+      ["Code", "Minify", "JavaScript"],
+      "slate"
+    ],
+    [
+      "cron-explainer",
+      "Cron Explainer",
+      "Decode cron expressions into readable schedules with next execution hints.",
+      "Developer",
+      ["Cron", "Schedule", "Time"],
+      "orange"
+    ],
+    [
+      "css-to-tailwind-converter",
+      "CSS to Tailwind Converter",
+      "Convert raw CSS declarations into Tailwind CSS utility class suggestions.",
+      "Frontend & Design",
+      ["CSS", "Tailwind", "Utility"],
+      "sky"
+    ],
+    [
+      "docker-compose-converter",
+      "Docker Compose Converter",
+      "Convert between docker run commands and docker-compose.yml service definitions.",
+      "Developer",
+      ["Docker", "Compose", "DevOps"],
+      "blue"
+    ],
+    [
+      "env-editor",
+      "Env Variable Editor",
+      "Parse, edit, and manage .env files with table-style local validation.",
+      "Developer",
+      ["Env", "Config", "Secrets"],
+      "emerald"
+    ],
+    [
+      "meta-tag-generator",
+      "Meta Tag Generator",
+      "Generate SEO-ready HTML meta tags including Open Graph and Twitter Cards.",
+      "Frontend & Design",
+      ["SEO", "Meta", "HTML"],
+      "violet"
+    ],
+    [
+      "robots-txt-generator",
+      "robots.txt Generator",
+      "Generate robots.txt rules to control search engine crawling behavior.",
+      "Frontend & Design",
+      ["SEO", "Robots", "Crawling"],
+      "amber"
+    ],
+    [
+      "barcode-generator",
+      "Barcode Generator",
+      "Generate barcodes in CODE128, EAN-13, UPC, CODE39, and export-ready formats.",
+      "Developer",
+      ["Barcode", "SVG", "PNG"],
+      "indigo"
+    ],
+    [
+      "base64-image-encoder",
+      "Base64 Image Encoder",
+      "Encode images to Base64 data URLs or decode Base64 content back to previewable images.",
+      "Developer",
+      ["Base64", "Image", "Encoding"],
+      "cyan"
+    ],
+    [
+      "certificate-decoder",
+      "Certificate Decoder",
+      "Decode and inspect X.509 SSL/TLS certificates in PEM format with local parsing.",
+      "AI Security",
+      ["Certificate", "TLS", "Security"],
+      "emerald"
+    ],
+    [
+      "cron-builder",
+      "Cron Expression Builder",
+      "Build and visualize cron expressions with presets and readable schedule output.",
+      "Developer",
+      ["Cron", "Schedule", "Builder"],
+      "orange"
+    ],
+    [
+      "http-status-reference",
+      "HTTP Status Reference",
+      "Search HTTP status codes by category with quick reference descriptions.",
+      "Developer",
+      ["HTTP", "Status", "Reference"],
+      "blue"
+    ],
+    [
+      "mime-lookup",
+      "MIME Type Lookup",
+      "Search MIME types by file extension for web development and upload handling.",
+      "Developer",
+      ["MIME", "Extension", "Reference"],
+      "slate"
+    ],
+    [
+      "nanoid-generator",
+      "NanoID Generator",
+      "Generate compact URL-safe unique IDs with custom alphabets and lengths.",
+      "Developer",
+      ["NanoID", "IDs", "Random"],
+      "violet"
+    ],
+    [
+      "qr-code-generator",
+      "QR Code Generator",
+      "Generate QR codes from text, URLs, or data with customizable color and size settings.",
+      "Developer",
+      ["QR", "Code", "SVG"],
+      "lime"
+    ],
+    [
+      "html-markdown-converter",
+      "HTML to Markdown Converter",
+      "Convert between HTML and Markdown formats bidirectionally for content workflows.",
+      "Data",
+      ["HTML", "Markdown", "Content"],
+      "amber"
+    ],
+    [
+      "html-preview",
+      "HTML Preview",
+      "Write HTML and preview rendered output in real time for local markup checks.",
+      "Developer",
+      ["HTML", "Preview", "Markup"],
+      "orange"
+    ],
+    [
+      "image-resizer",
+      "Image Resizer",
+      "Resize images to custom dimensions with format and quality controls.",
+      "Frontend & Design",
+      ["Image", "Resize", "Export"],
+      "rose"
+    ],
+    [
+      "json-schema-builder",
+      "JSON Schema Builder",
+      "Build JSON Schema definitions visually with fields, types, and validation rules.",
+      "Developer",
+      ["JSON Schema", "Validation", "Builder"],
+      "blue"
+    ],
+    [
+      "markdown-table-generator",
+      "Markdown Table Generator",
+      "Create Markdown tables visually with editable headers, cells, CSV import, and export.",
+      "Writing",
+      ["Markdown", "Table", "CSV"],
+      "slate"
+    ],
+    [
+      "mock-data-generator",
+      "Mock Data Generator",
+      "Generate realistic mock data in JSON or CSV format for testing and development.",
+      "Data",
+      ["Mock data", "JSON", "CSV"],
+      "green"
+    ],
+    [
+      "svg-optimizer",
+      "SVG Optimizer",
+      "Optimize SVG files by removing unnecessary data and reducing file size.",
+      "Frontend & Design",
+      ["SVG", "Optimize", "Image"],
+      "teal"
+    ],
+    [
+      "ai-guardrail-config",
+      "AI Guardrail Config",
+      "Draft AI guardrail rules for refusal behavior, policy checks, and review workflows.",
+      "AI Security",
+      ["AI", "Guardrails", "Policy"],
+      "rose"
+    ],
+    [
+      "code-to-image",
+      "Code to Image",
+      "Convert code snippets into styled shareable images for docs, social posts, and reviews.",
+      "Frontend & Design",
+      ["Code", "Image", "Share"],
+      "violet"
+    ],
+    [
+      "css-animation-generator",
+      "CSS Animation Generator",
+      "Create CSS keyframe animations with timing, easing, iteration, and preview-ready output.",
+      "Frontend & Design",
+      ["CSS", "Animation", "Keyframes"],
+      "pink"
+    ],
+    [
+      "css-box-shadow-generator",
+      "CSS Box Shadow Generator",
+      "Design CSS box-shadow values with blur, spread, offsets, color, and preview-ready output.",
+      "Frontend & Design",
+      ["CSS", "Shadow", "Design"],
+      "slate"
+    ],
+    [
+      "embedding-playground",
+      "Embedding Playground",
+      "Explore embedding text chunks, similarity, and retrieval-oriented comparison workflows.",
+      "RAG / MCP / Agent",
+      ["Embedding", "RAG", "Similarity"],
+      "indigo"
+    ],
+    [
+      "jailbreak-detector",
+      "Jailbreak Detector",
+      "Review prompts for jailbreak patterns, unsafe roleplay, and instruction-override risk.",
+      "AI Security",
+      ["Jailbreak", "Prompt", "Safety"],
+      "red"
+    ],
+    [
+      "rag-chunk-visualizer",
+      "RAG Chunk Visualizer",
+      "Visualize document chunks, overlap, token boundaries, and retrieval-prep tradeoffs.",
+      "RAG / MCP / Agent",
+      ["RAG", "Chunks", "Tokens"],
+      "teal"
+    ],
+    [
+      "red-team-simulator",
+      "Red Team Simulator",
+      "Plan AI red-team scenarios, attack prompts, and mitigation review workflows.",
+      "AI Security",
+      ["Red team", "AI Safety", "Prompts"],
+      "orange"
+    ],
+    [
+      "synthetic-dataset-gen",
+      "Synthetic Dataset Generator",
+      "Generate structured synthetic datasets for testing, demos, and AI workflow fixtures.",
+      "Data",
+      ["Synthetic data", "Dataset", "Testing"],
+      "fuchsia"
+    ],
+    [
+      "system-prompt-compressor",
+      "System Prompt Compressor",
+      "Compress system prompts while preserving constraints, roles, policies, and critical instructions.",
+      "LLM Cost",
+      ["System prompt", "Compression", "LLM"],
+      "cyan"
+    ],
+    [
+      "system-prompt-guard",
+      "System Prompt Guard",
+      "Review system prompts for exposed secrets, policy drift, injection risk, and unsafe instructions.",
+      "AI Security",
+      ["System prompt", "Guard", "Security"],
+      "emerald"
+    ],
+    [
+      "token-counter",
+      "Token Counter",
+      "Estimate tokens, characters, and cost-oriented prompt size for LLM workflows.",
+      "LLM Cost",
+      ["Tokens", "LLM", "Cost"],
+      "blue"
+    ],
+    [
+      "toxicity-scanner",
+      "Toxicity Scanner",
+      "Scan text for toxic, abusive, or unsafe language signals before AI or moderation workflows.",
+      "AI Security",
+      ["Toxicity", "Moderation", "Safety"],
+      "amber"
+    ]
+  ].map(([slug, name, description, category, tags, accent]) =>
+    tool({
+      slug: slug as string,
+      name: name as string,
+      description: description as string,
+      category: category as string,
+      group: "AI Developer Lab",
+      type: "traditional",
+      processing: ["local"],
+      pricing: "free",
+      tags: tags as string[],
       source: "aixtral-lab",
       accent: accent as string,
-      featured: Boolean(featured)
+      status:
+        slug === "base64-converter" ||
+        slug === "case-converter" ||
+        slug === "slug-generator" ||
+        slug === "text-stats" ||
+        slug === "uuid-generator" ||
+        slug === "url-encoder" ||
+        slug === "html-entity-encoder" ||
+        slug === "lorem-ipsum" ||
+        slug === "csv-to-json" ||
+        slug === "json-to-csv" ||
+        slug === "yaml-validator" ||
+        slug === "json-diff" ||
+        slug === "xml-formatter" ||
+        slug === "markdown-to-json" ||
+        slug === "diff-checker" ||
+        slug === "text-diff" ||
+        slug === "url-parser" ||
+        slug === "number-base-converter" ||
+        slug === "file-size-converter" ||
+        slug === "chmod-calculator" ||
+        slug === "ipv4-subnet-calculator" ||
+        slug === "timestamp-converter" ||
+        slug === "user-agent-parser" ||
+        slug === "hash-generator" ||
+        slug === "jwt-decoder" ||
+        slug === "password-generator" ||
+        slug === "regex-tester" ||
+        slug === "nanoid-generator" ||
+        slug === "color-converter" ||
+        slug === "color-contrast-checker" ||
+        slug === "color-palette-generator" ||
+        slug === "css-border-radius-generator" ||
+        slug === "css-flexbox-generator" ||
+        slug === "css-grid-generator" ||
+        slug === "css-unit-converter" ||
+        slug === "css-to-tailwind-converter" ||
+        slug === "meta-tag-generator" ||
+        slug === "robots-txt-generator" ||
+        slug === "base64-image-encoder" ||
+        slug === "certificate-decoder" ||
+        slug === "image-resizer" ||
+        slug === "svg-optimizer" ||
+        w20BdNativeRegistrySlugs.has(slug as string) ||
+        w20BfNativeRegistrySlugs.has(slug as string) ||
+        w20BkNativeRegistrySlugs.has(slug as string) ||
+        slug === "ai-guardrail-config" ||
+        slug === "jailbreak-detector" ||
+        slug === "red-team-simulator" ||
+        slug === "toxicity-scanner" ||
+        slug === "embedding-playground" ||
+        slug === "rag-chunk-visualizer" ||
+        slug === "code-to-image" ||
+        slug === "css-animation-generator" ||
+        slug === "css-box-shadow-generator" ||
+        slug === "token-counter" ||
+        slug === "system-prompt-compressor" ||
+        slug === "system-prompt-guard" ||
+        slug === "barcode-generator" ||
+        slug === "qr-code-generator"
+          ? "ready"
+          : "planned",
+      visibility:
+        slug === "base64-converter" ||
+        slug === "case-converter" ||
+        slug === "slug-generator" ||
+        slug === "text-stats" ||
+        slug === "uuid-generator" ||
+        slug === "url-encoder" ||
+        slug === "html-entity-encoder" ||
+        slug === "lorem-ipsum" ||
+        slug === "csv-to-json" ||
+        slug === "json-to-csv" ||
+        slug === "yaml-validator" ||
+        slug === "json-diff" ||
+        slug === "xml-formatter" ||
+        slug === "markdown-to-json" ||
+        slug === "diff-checker" ||
+        slug === "text-diff" ||
+        slug === "url-parser" ||
+        slug === "number-base-converter" ||
+        slug === "file-size-converter" ||
+        slug === "chmod-calculator" ||
+        slug === "ipv4-subnet-calculator" ||
+        slug === "timestamp-converter" ||
+        slug === "user-agent-parser" ||
+        slug === "hash-generator" ||
+        slug === "jwt-decoder" ||
+        slug === "password-generator" ||
+        slug === "regex-tester" ||
+        slug === "nanoid-generator" ||
+        slug === "color-converter" ||
+        slug === "color-contrast-checker" ||
+        slug === "color-palette-generator" ||
+        slug === "css-border-radius-generator" ||
+        slug === "css-flexbox-generator" ||
+        slug === "css-grid-generator" ||
+        slug === "css-unit-converter" ||
+        slug === "css-to-tailwind-converter" ||
+        slug === "meta-tag-generator" ||
+        slug === "robots-txt-generator" ||
+        slug === "base64-image-encoder" ||
+        slug === "certificate-decoder" ||
+        slug === "image-resizer" ||
+        slug === "svg-optimizer" ||
+        w20BdNativeRegistrySlugs.has(slug as string) ||
+        w20BfNativeRegistrySlugs.has(slug as string) ||
+        w20BkNativeRegistrySlugs.has(slug as string) ||
+        slug === "ai-guardrail-config" ||
+        slug === "jailbreak-detector" ||
+        slug === "red-team-simulator" ||
+        slug === "toxicity-scanner" ||
+        slug === "embedding-playground" ||
+        slug === "rag-chunk-visualizer" ||
+        slug === "code-to-image" ||
+        slug === "css-animation-generator" ||
+        slug === "css-box-shadow-generator" ||
+        slug === "token-counter" ||
+        slug === "system-prompt-compressor" ||
+        slug === "system-prompt-guard" ||
+        slug === "barcode-generator" ||
+        slug === "qr-code-generator"
+          ? "public"
+          : "hidden"
     })
   )
 ];

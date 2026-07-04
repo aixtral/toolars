@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Dumbbell, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateOneRepMax,
   defaultOneRepMaxScenario,
@@ -13,21 +14,27 @@ import {
 const storageKey = "toolars.one-rep-max.lift:v1";
 
 const trustRows = [
-  ["Local", "Lift weight and reps stay in this browser session", "local"],
-  ["Training", "1RM estimates are planning references, not max-test instructions", "warn"],
-  ["Private", "Save stores only this lift sample locally", ""]
+  { key: "local", tone: "local" },
+  { key: "training", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const strengthNotes = [
-  "VitalCalc uses the Epley formula: 1RM = weight x (1 + reps / 30).",
-  "The estimate is most useful for 1-10 completed reps; accuracy drops at higher rep counts.",
-  "Use spotters, warmups, and coaching when testing heavy singles."
-];
+const strengthNotes = ["formula", "repRange", "safety"] as const;
 
 export function OneRepMaxWorkspace() {
-  const t = useTranslations("tools.one-rep-max");
-  const [lift, setLift] = useState<OneRepMaxInput>(() => defaultOneRepMaxScenario);
-  const [result, setResult] = useState<OneRepMaxResult | null>(null);
+  const t = useTranslations("tools.one-rep-max.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [lift, setLift] = useState((): OneRepMaxInput => defaultOneRepMaxScenario);
+  const [result, setResult] = useState(null as OneRepMaxResult | null);
+  const accuracyKey = getAccuracyKey(lift.reps);
+  const resultSummary = result
+    ? t("resultSection.summary", {
+        weightKg: formatCompact(cleanPositive(lift.weightKg)),
+        reps: formatCompact(cleanReps(lift.reps))
+      })
+    : t("resultSection.emptyDescription");
 
   const calculate = () => {
     setResult(calculateOneRepMax(lift));
@@ -47,23 +54,23 @@ export function OneRepMaxWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="one-rep-max">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc strength workspace</span>
-        <h1>1RM Calculator</h1>
-        <p className="subtitle">Estimate one-repetition maximum and percentage-based working sets from weight and reps.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/one-rep-max/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/one-rep-max/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -72,29 +79,29 @@ export function OneRepMaxWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Lift inputs</h2>
-              <p className="tool-description">Enter a working set you completed with stable form.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="one-rep-weight">
-              Working weight (kg)
+              {t("fields.weightKg")}
               <input className="input" id="one-rep-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} type="number" value={lift.weightKg} />
             </label>
             <label className="field-label" htmlFor="one-rep-reps">
-              Completed reps
+              {t("fields.reps")}
               <input className="input" id="one-rep-reps" min={1} onChange={(event) => updateNumber("reps", event.target.value)} type="number" value={lift.reps} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveLift} type="button">
-              <Save size={16} aria-hidden="true" /> Save lift
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate 1RM
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -102,28 +109,28 @@ export function OneRepMaxWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Strength result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate max strength and training weights."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{resultSummary}</p>
             </div>
-            <span className="badge warn">{result?.accuracyLabel ?? "Epley"}</span>
+            <span className="badge warn">{result ? t(`accuracy.${accuracyKey}`) : t("badges.epley")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedOneRepMax ?? "0.0 kg"}</strong>
-              <span>Estimated 1RM</span>
+              <strong>{result?.formattedOneRepMax ?? t("metrics.emptyOneRepMax")}</strong>
+              <span>{t("metrics.estimatedOneRepMax")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.accuracyLabel ?? "--"}</strong>
-              <span>Accuracy band</span>
+              <strong>{result ? t(`accuracy.${accuracyKey}`) : t("metrics.pending")}</strong>
+              <span>{t("metrics.accuracyBand")}</span>
             </article>
             <article className="llm-metric">
               <strong>{lift.reps}</strong>
-              <span>Input reps</span>
+              <span>{t("metrics.inputReps")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.percentageRows.length ?? 0}</strong>
-              <span>Working sets</span>
+              <span>{t("metrics.workingSets")}</span>
             </article>
           </div>
 
@@ -133,7 +140,7 @@ export function OneRepMaxWorkspace() {
                 <span className="badge">{row.percentage}%</span>
                 <span>
                   <strong>{row.formattedWeight}</strong>
-                  <small style={{ display: "block", marginTop: 2 }}>{row.label}</small>
+                  <small style={{ display: "block", marginTop: 2 }}>{t("percentageRows.label", { percentage: row.percentage, reps: row.reps })}</small>
                 </span>
               </div>
             ))}
@@ -142,32 +149,50 @@ export function OneRepMaxWorkspace() {
           <div className="llm-plan-callout">
             <Dumbbell size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Use percentages as training targets, not a mandate to max out." : "Calculate first to build the percentage table."}</small>
+              <strong>{result ? t(`recommendations.${accuracyKey}`) : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Strength notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {strengthNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Lift data stays local and should be interpreted with safe training practice.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function getAccuracyKey(reps: number) {
+  return cleanReps(reps) <= 10 ? "epleyReference" : "lowerAccuracy";
+}
+
+function cleanPositive(value: number): number {
+  if (!Number.isFinite(value) || value < 0) return 0;
+  return value;
+}
+
+function cleanReps(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) return 1;
+  return Math.round(value);
+}
+
+function formatCompact(value: number): string {
+  return Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1);
 }

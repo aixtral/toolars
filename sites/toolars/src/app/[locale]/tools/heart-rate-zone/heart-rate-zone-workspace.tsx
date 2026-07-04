@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateHeartRateZones,
   defaultHeartRateZoneScenario,
@@ -11,23 +12,42 @@ import {
 } from "@/lib/tools/heart-rate-zone";
 
 const storageKey = "toolars.heart-rate-zone.profile:v1";
+const initialResult: HeartRateZoneResult | null = null;
 
 const trustRows = [
-  ["Local", "Age and resting heart rate stay in this browser session", "local"],
-  ["Training", "Karvonen zones are planning references, not medical limits", "warn"],
-  ["Private", "Save stores only this zone profile locally", ""]
+  { key: "local", tone: "local" },
+  { key: "training", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const measurementNotes = [
-  "VitalCalc uses max HR = 220 - age.",
-  "Heart rate reserve is max HR minus resting HR.",
-  "Target HR = resting HR + heart rate reserve x intensity."
-];
+  "maxHeartRate",
+  "reserve",
+  "target"
+] as const;
+
+const zoneKeys = [
+  "recovery",
+  "fatBurn",
+  "cardioEndurance",
+  "anaerobicThreshold",
+  "maximumEffort"
+] as const;
+
+function localizedWorkspaceHref(href: string, localeCode: LocaleCode) {
+  return localizePath(href, localeCode);
+}
+
+function formatCompactNumber(value: number) {
+  return Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1);
+}
 
 export function HeartRateZoneWorkspace() {
-  const t = useTranslations("tools.heart-rate-zone");
-  const [profile, setProfile] = useState<HeartRateZoneInput>(() => defaultHeartRateZoneScenario);
-  const [result, setResult] = useState<HeartRateZoneResult | null>(null);
+  const t = useTranslations("tools.heart-rate-zone.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const [profile, setProfile] = useState(defaultHeartRateZoneScenario);
+  const [result, setResult] = useState(initialResult);
 
   const calculate = () => {
     setResult(calculateHeartRateZones(profile));
@@ -44,26 +64,34 @@ export function HeartRateZoneWorkspace() {
     setResult(null);
   };
 
+  function formatBpm(value: number) {
+    return t("formats.bpm", { value });
+  }
+
+  function formatBpmRange(min: number, max: number) {
+    return t("formats.bpmRange", { min, max });
+  }
+
   return (
     <div className="llm-cost-layout" data-tool-workspace="heart-rate-zone">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc training workspace</span>
-        <h1>Heart Rate Zone Calculator</h1>
-        <p className="subtitle">Calculate target heart-rate zones using age, resting heart rate, and the Karvonen model.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/heart-rate-zone/about">
-            Tool details
+          <a className="button button-outline" href={localizedWorkspaceHref("/tools/heart-rate-zone/about", localeCode)}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -72,29 +100,29 @@ export function HeartRateZoneWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Training inputs</h2>
-              <p className="tool-description">Use morning resting heart rate for the most stable zone estimate.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="heart-zone-age">
-              Age
+              {t("fields.age")}
               <input className="input" id="heart-zone-age" min={0} onChange={(event) => updateNumber("age", event.target.value)} type="number" value={profile.age} />
             </label>
             <label className="field-label" htmlFor="heart-zone-resting">
-              Resting heart rate
+              {t("fields.restingHeartRate")}
               <input className="input" id="heart-zone-resting" min={0} onChange={(event) => updateNumber("restingHeartRate", event.target.value)} type="number" value={profile.restingHeartRate} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveProfile} type="button">
-              <Save size={16} aria-hidden="true" /> Save zone profile
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate zones
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -102,70 +130,82 @@ export function HeartRateZoneWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Zone result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show heart-rate reserve and five target zones."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      age: formatCompactNumber(Math.max(0, profile.age)),
+                      restingHeartRate: formatCompactNumber(Math.max(0, profile.restingHeartRate))
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Karvonen</span>
+            <span className="badge warn">{t("badges.karvonen")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedMaxHeartRate ?? "0 bpm"}</strong>
-              <span>Max heart rate</span>
+              <strong>{result ? formatBpm(result.maxHeartRate) : formatBpm(0)}</strong>
+              <span>{t("metrics.maxHeartRate")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedHeartRateReserve ?? "0 bpm"}</strong>
-              <span>Heart rate reserve</span>
+              <strong>{result ? formatBpm(result.heartRateReserve) : formatBpm(0)}</strong>
+              <span>{t("metrics.heartRateReserve")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.zones[1]?.formattedRange ?? "--"}</strong>
-              <span>Fat burn</span>
+              <strong>{result?.zones[1] ? formatBpmRange(result.zones[1].minBpm, result.zones[1].maxBpm) : "--"}</strong>
+              <span>{t("metrics.fatBurn")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.zones[4]?.formattedRange ?? "--"}</strong>
-              <span>Maximum effort</span>
+              <strong>{result?.zones[4] ? formatBpmRange(result.zones[4].minBpm, result.zones[4].maxBpm) : "--"}</strong>
+              <span>{t("metrics.maximumEffort")}</span>
             </article>
           </div>
 
           <div className="profile-list" style={{ marginTop: 18 }}>
-            {(result?.zones ?? []).map((zone) => (
-              <div className="profile-row" key={zone.label}>
-                <span className="badge">{zone.intensityLabel}</span>
-                <span>
-                  <strong>{zone.label}</strong> - {zone.formattedRange}
-                  <small style={{ display: "block", marginTop: 2 }}>{zone.description}</small>
-                </span>
-              </div>
-            ))}
+            {(result?.zones ?? []).map((zone, index) => {
+              const zoneKey = zoneKeys[index];
+              if (!zoneKey) return null;
+
+              return (
+                <div className="profile-row" key={zone.intensityLabel}>
+                  <span className="badge">{zone.intensityLabel}</span>
+                  <span>
+                    <strong>{t(`zones.${zoneKey}.label`)}</strong> - {formatBpmRange(zone.minBpm, zone.maxBpm)}
+                    <small style={{ display: "block", marginTop: 2 }}>{t(`zones.${zoneKey}.description`)}</small>
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <div className="llm-plan-callout">
             <Heart size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Pair zones with perceived exertion and training context." : "Calculate first to build the zone table."}</small>
+              <strong>{result ? t("recommendation.result") : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.resultDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Measurement notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {measurementNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Zone data stays local and should be adjusted for medication, illness, and clinician advice.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

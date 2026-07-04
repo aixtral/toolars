@@ -1,10 +1,11 @@
 import type { BlogArticle } from "./blog";
+import { vitalCalcArticlesEs } from "./blog-es-vitalcalc";
 
 /**
  * Spanish translations of blog articles. Same structure as the English source;
  * the locale resolver in blog.ts picks the right set based on request locale.
  */
-export const articlesEs: BlogArticle[] = [
+const launchArticlesEs: BlogArticle[] = [
   {
     slug: "json-repair-guide",
     title: "Cómo reparar JSON roto en segundos",
@@ -162,3 +163,5 @@ export const articlesEs: BlogArticle[] = [
     ]
   }
 ];
+
+export const articlesEs: BlogArticle[] = [...launchArticlesEs, ...vitalCalcArticlesEs];

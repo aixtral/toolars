@@ -1,11 +1,36 @@
 "use client";
 
 import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ArrowDown, ArrowUp, CornerDownLeft, Search, X } from "lucide-react";
 import { searchCommandResults, type CommandResult } from "@/lib/command-search";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 const maxVisibleResults = 16;
+
+type CommandCenterKeyboardEvent = KeyboardEvent | ReactKeyboardEvent<HTMLElement>;
+type CommandGroupMessageKey = "tools" | "workflows" | "collections";
+
+const commandShortcutKey = "k" satisfies KeyboardEvent["key"];
+const keyboardKeys = {
+  tab: "Tab",
+  escape: "Escape",
+  arrowDown: "ArrowDown",
+  arrowUp: "ArrowUp",
+  enter: "Enter"
+} as const satisfies Record<string, KeyboardEvent["key"]>;
+type CommandCenterKeyboardKey = (typeof keyboardKeys)[keyof typeof keyboardKeys];
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])"
+] as const;
+const commandGroupMessageKeys = {
+  Tools: "tools",
+  Workflows: "workflows",
+  Collections: "collections"
+} as const satisfies Record<CommandResult["group"], CommandGroupMessageKey>;
 
 interface CommandCenterProps {
   resultLimit?: number;
@@ -15,9 +40,11 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef(null as HTMLButtonElement | null);
+  const dialogRef = useRef(null as HTMLElement | null);
+  const inputRef = useRef(null as HTMLInputElement | null);
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const t = useTranslations("commandCenter");
 
   const results = useMemo(() => searchCommandResults(query, { limit: resultLimit }), [query, resultLimit]);
@@ -31,7 +58,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
   };
 
   const handleDialogKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
-    if (event.key !== "Tab") return;
+    if (!hasKeyboardKey(event, keyboardKeys.tab)) return;
 
     const focusableItems = getFocusableElements(dialogRef.current);
     if (focusableItems.length === 0) return;
@@ -53,7 +80,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const isCommandShortcut = event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey);
+      const isCommandShortcut = event.key.toLowerCase() === commandShortcutKey && (event.metaKey || event.ctrlKey);
 
       if (isCommandShortcut) {
         event.preventDefault();
@@ -63,30 +90,30 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
 
       if (!open) return;
 
-      if (event.key === "Escape") {
+      if (hasKeyboardKey(event, keyboardKeys.escape)) {
         event.preventDefault();
         closeCommandCenter();
       }
 
-      if (event.key === "ArrowDown") {
+      if (hasKeyboardKey(event, keyboardKeys.arrowDown)) {
         event.preventDefault();
         setActiveIndex((index) => Math.min(index + 1, Math.max(results.length - 1, 0)));
       }
 
-      if (event.key === "ArrowUp") {
+      if (hasKeyboardKey(event, keyboardKeys.arrowUp)) {
         event.preventDefault();
         setActiveIndex((index) => Math.max(index - 1, 0));
       }
 
-      if (event.key === "Enter" && results[activeIndex]) {
+      if (hasKeyboardKey(event, keyboardKeys.enter) && results[activeIndex]) {
         event.preventDefault();
-        window.location.href = results[activeIndex].href;
+        window.location.href = localizeCommandHref(results[activeIndex].href, localeCode);
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, open, results]);
+  }, [activeIndex, localeCode, open, results]);
 
   useEffect(() => {
     if (!open) return;
@@ -111,13 +138,13 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
         className="command-trigger"
         type="button"
         data-command-center
-        aria-label="Open command search"
+        aria-label={t("aria.open")}
         aria-expanded={open}
         onClick={openCommandCenter}
       >
         <Search size={18} aria-hidden="true" />
         <span>{t("placeholder")}</span>
-        <kbd className="kbd">CMD K</kbd>
+        <kbd className="kbd">{t("kbd.command")}</kbd>
       </button>
 
       {open ? (
@@ -129,14 +156,14 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
             className="command-dialog"
             role="dialog"
             aria-modal="true"
-            aria-label="Command Center"
+            aria-label={t("aria.dialog")}
             onKeyDown={handleDialogKeyDown}
           >
             <div className="command-search-row">
               <Search size={18} aria-hidden="true" />
               <input
                 ref={inputRef}
-                aria-label="Search tools and workflows"
+                aria-label={t("aria.search")}
                 className="command-input"
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t("placeholder")}
@@ -144,16 +171,16 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
                 value={query}
               />
               {query ? (
-                <button className="command-icon-button" type="button" aria-label="Clear search" onClick={() => setQuery("")}>
+                <button className="command-icon-button" type="button" aria-label={t("aria.clear")} onClick={() => setQuery("")}>
                   <X size={16} aria-hidden="true" />
                 </button>
               ) : null}
-              <button className="command-close-button" type="button" onClick={closeCommandCenter}>
-                Esc
+              <button className="command-close-button" type="button" aria-label={t("aria.close")} onClick={closeCommandCenter}>
+                {t("kbd.escape")}
               </button>
             </div>
 
-            <div className="command-results" role="listbox" aria-label="Command results">
+            <div className="command-results" role="listbox" aria-label={t("aria.results")}>
               {results.length > 0 ? (
                 query.trim() ? (
                   groupedResults.map(([group, items]) => (
@@ -162,16 +189,18 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
                       group={group}
                       items={items}
                       key={group}
+                      localeCode={localeCode}
                       results={results}
                       setActiveIndex={setActiveIndex}
                     />
                   ))
                 ) : (
                   <section className="command-group">
-                    <h2>Suggested</h2>
+                    <h2>{t("suggested")}</h2>
                     {results.map((result, index) => (
                       <CommandResultItem
                         active={index === activeIndex}
+                        href={localizeCommandHref(result.href, localeCode)}
                         index={index}
                         key={`${result.group}-${result.slug}`}
                         result={result}
@@ -183,15 +212,15 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
               ) : (
                 <div className="command-empty">
                   <strong>{t("empty")}</strong>
-                  <p>Try a tool name, file type, or task like summarize pdf.</p>
+                  <p>{t("emptyDescription")}</p>
                 </div>
               )}
             </div>
 
             <footer className="command-footer">
-              <span><ArrowUp size={13} aria-hidden="true" /> <ArrowDown size={13} aria-hidden="true" /> Navigate</span>
-              <span><CornerDownLeft size={13} aria-hidden="true" /> Select</span>
-              <span>Esc Close</span>
+              <span><ArrowUp size={13} aria-hidden="true" /> <ArrowDown size={13} aria-hidden="true" /> {t("footer.navigate")}</span>
+              <span><CornerDownLeft size={13} aria-hidden="true" /> {t("footer.select")}</span>
+              <span>{t("kbd.escape")} {t("footer.close")}</span>
             </footer>
           </section>
         </div>
@@ -204,25 +233,30 @@ function CommandGroup({
   activeIndex,
   group,
   items,
+  localeCode,
   results,
   setActiveIndex
 }: {
   activeIndex: number;
   group: CommandResult["group"];
   items: CommandResult[];
+  localeCode: LocaleCode;
   results: CommandResult[];
   setActiveIndex: (index: number) => void;
 }) {
   const t = useTranslations("commandCenter");
-  const groupKey = `${group.charAt(0).toLowerCase()}${group.slice(1)}` as "tools" | "workflows" | "collections";
+  const groupKey = getCommandGroupMessageKey(group);
   return (
     <section className="command-group">
       <h2>{t(`groups.${groupKey}`)}</h2>
       {items.map((result) => {
-        const index = results.findIndex((item) => item.group === result.group && item.slug === result.slug);
+        const index = results.findIndex((item) => {
+          return item.group === result.group && item.slug === result.slug;
+        });
         return (
           <CommandResultItem
             active={index === activeIndex}
+            href={localizeCommandHref(result.href, localeCode)}
             index={index}
             key={`${result.group}-${result.slug}`}
             result={result}
@@ -236,38 +270,55 @@ function CommandGroup({
 
 function CommandResultItem({
   active,
+  href,
   index,
   result,
   setActiveIndex
 }: {
   active: boolean;
+  href: string;
   index: number;
   result: CommandResult;
   setActiveIndex: (index: number) => void;
 }) {
+  const t = useTranslations("commandCenter");
+  const groupLabel = t(`groups.${getCommandGroupMessageKey(result.group)}`);
+
   return (
     <a
       className={`command-result ${active ? "is-active" : ""}`}
-      href={result.href}
+      href={href}
       onMouseEnter={() => setActiveIndex(index)}
     >
-      <span className="command-result-icon">{result.group.charAt(0)}</span>
+      <span className="command-result-icon">{groupLabel.charAt(0)}</span>
       <span className="command-result-copy">
         <strong>{result.title}</strong>
         <small>{result.meta}</small>
       </span>
       <span className="command-result-enter">
-        <CornerDownLeft size={13} aria-hidden="true" /> Enter
+        <CornerDownLeft size={13} aria-hidden="true" /> {t("footer.enter")}
       </span>
     </a>
   );
 }
 
+function localizeCommandHref(href: string, locale: LocaleCode) {
+  return href.startsWith("/") ? localizePath(href, locale) : href;
+}
+
+function hasKeyboardKey(event: CommandCenterKeyboardEvent, key: CommandCenterKeyboardKey) {
+  return event.key === key;
+}
+
+function getCommandGroupMessageKey(group: CommandResult["group"]) {
+  return commandGroupMessageKeys[group];
+}
+
 function getFocusableElements(dialog: HTMLElement | null) {
   if (!dialog) return [];
 
-  return Array.from(
-    dialog.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex='-1'])")
+  return Array.from(dialog.querySelectorAll(focusableSelector.join(","))).filter(
+    (element): element is HTMLElement => element instanceof HTMLElement
   );
 }
 

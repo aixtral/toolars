@@ -5,87 +5,68 @@ import { useState } from "react";
 import { Activity, CheckCircle2, Clipboard, Code2, KeyRound, LockKeyhole, Plus, ShieldCheck, Trash2 } from "lucide-react";
 
 type ApiKey = {
+  id: string;
   label: string;
   token: string;
   environment: string;
   scopes: string[];
   lastUsed: string;
-  status: "Active" | "Revoked";
+  status: "active" | "revoked";
 };
 
-const initialKeys: ApiKey[] = [
-  {
-    label: "Production key",
-    token: "tk_live_••••••••••••9f3a",
-    environment: "Production",
-    scopes: ["tools:read", "workflows:run", "collections:write"],
-    lastUsed: "2 hours ago",
-    status: "Active"
-  },
-  {
-    label: "Development key",
-    token: "tk_test_••••••••••••4a21",
-    environment: "Sandbox",
-    scopes: ["tools:read", "workflows:run"],
-    lastUsed: "Yesterday",
-    status: "Active"
-  }
-];
+type ScopeRow = {
+  scope: string;
+  description: string;
+};
 
-const scopeRows = [
-  ["tools:read", "Read public tool metadata and saved workspace tools."],
-  ["workflows:run", "Run approved local-first and AI workflow templates."],
-  ["collections:write", "Create and update shared tool collections."],
-  ["billing:read", "Read usage totals without changing payment settings."]
-] as const;
+type ActivityRow = {
+  time: string;
+  detail: string;
+};
 
-const activityRows = [
-  ["2 hours ago", "Production key ran PDF Summary Workflow"],
-  ["Yesterday", "Development key listed AI Developer Lab tools"],
-  ["Jun 12, 2026", "Webhook signing secret rotated"]
-] as const;
+type SelectOption = {
+  value: string;
+  label: string;
+};
 
 export function ApiKeysSettingsView() {
   const t = useTranslations("settings.api-keys");
-  const [keys, setKeys] = useState<ApiKey[]>(initialKeys);
-  const [feedback, setFeedback] = useState("API keys are masked by default. Copy the key after creation and store it securely.");
+  const [keys, setKeys] = useState<ApiKey[]>(() => t.raw("inventory.keys") as ApiKey[]);
+  const [feedback, setFeedback] = useState(() => t("feedback.initial"));
+  const newKey = t.raw("inventory.newKey") as ApiKey;
+  const scopeRows = t.raw("scopes.rows") as ScopeRow[];
+  const activityRows = t.raw("activity.rows") as ActivityRow[];
+  const checklistItems = t.raw("securityChecklist.items") as string[];
+  const environmentOptions = t.raw("createForm.environments") as SelectOption[];
+  const expirationOptions = t.raw("createForm.expirations") as SelectOption[];
+  const activeKeyCount = keys.filter((key) => key.status === "active").length;
 
   function createKey() {
     setKeys((current) => {
-      if (current.some((key) => key.label === "New local key")) {
+      if (current.some((key) => key.id === newKey.id)) {
         return current;
       }
-      return [
-        ...current,
-        {
-          label: "New local key",
-          token: "tk_live_new_••••7f4",
-          environment: "Production",
-          scopes: ["tools:read", "workflows:run"],
-          lastUsed: "Just now",
-          status: "Active"
-        }
-      ];
+      return [...current, newKey];
     });
-    setFeedback("New local key created.");
+    setFeedback(t("feedback.created"));
   }
 
-  function revokeKey(label: string) {
-    setKeys((current) => current.map((key) => (key.label === label ? { ...key, status: "Revoked" } : key)));
-    setFeedback(`${label} revoked.`);
+  function revokeKey(id: string, label: string) {
+    setKeys((current) => current.map((key) => (key.id === id ? { ...key, status: "revoked" } : key)));
+    setFeedback(t("feedback.revoked", { label }));
   }
 
   return (
     <div className="settings-subpage api-keys-settings-page" data-api-keys-settings-page="true">
       <section className="section landing-hero settings-subpage-hero">
-        <span className="eyebrow">Settings</span>
+        <span className="eyebrow">{t("sections.eyebrow")}</span>
         <div className="landing-section-head">
           <span>
             <h1 className="title">{t("hero.title")}</h1>
-            <p className="subtitle">Create scoped keys for Toolars automations, inspect usage, and revoke access without leaving account settings.</p>
+            <p className="subtitle">{t("hero.subtitle")}</p>
           </span>
           <button className="button button-solid" onClick={createKey} type="button">
-            <Plus size={15} aria-hidden="true" /> Create key
+            <Plus size={15} aria-hidden="true" /> {t("actions.create")}
           </button>
         </div>
       </section>
@@ -96,35 +77,35 @@ export function ApiKeysSettingsView() {
             <div className="landing-section-head">
               <span>
                 <h2>{t("sections.inventory")}</h2>
-                <p className="tool-description">Keys stay masked after creation. Use scoped permissions and revoke unused credentials quickly.</p>
+                <p className="tool-description">{t("inventory.description")}</p>
               </span>
-              <span className="badge local">2 active</span>
+              <span className="badge local">{t("inventory.activeCount", { count: activeKeyCount })}</span>
             </div>
             <div className="api-key-list">
               {keys.map((key) => (
-                <article className={`api-key-row ${key.status === "Revoked" ? "is-revoked" : ""}`} key={key.label}>
+                <article className={`api-key-row ${key.status === "revoked" ? "is-revoked" : ""}`} key={key.id}>
                   <span className="icon-tile green">
                     <KeyRound size={18} aria-hidden="true" />
                   </span>
                   <div className="api-key-content">
                     <div className="api-key-head">
                       <strong>{key.label}</strong>
-                      <span className={key.status === "Active" ? "badge local" : "badge warn"}>{key.status}</span>
+                      <span className={key.status === "active" ? "badge local" : "badge warn"}>{t(`statuses.${key.status}`)}</span>
                     </div>
                     <code>{key.token}</code>
                     <div className="api-key-meta">
                       <span>{key.environment}</span>
-                      <span>Last used {key.lastUsed}</span>
+                      <span>{t("inventory.lastUsed", { value: key.lastUsed })}</span>
                       <span>{key.scopes.join(", ")}</span>
                     </div>
                   </div>
                   <div className="api-key-actions">
                     <button className="button button-outline-neutral" type="button">
-                      <Clipboard size={15} aria-hidden="true" /> Copy
+                      <Clipboard size={15} aria-hidden="true" /> {t("actions.copy")}
                     </button>
-                    {key.status === "Active" ? (
-                      <button className="button button-outline-neutral" onClick={() => revokeKey(key.label)} type="button">
-                        <Trash2 size={15} aria-hidden="true" /> Revoke {key.label}
+                    {key.status === "active" ? (
+                      <button className="button button-outline-neutral" onClick={() => revokeKey(key.id, key.label)} type="button">
+                        <Trash2 size={15} aria-hidden="true" /> {t("actions.revoke", { label: key.label })}
                       </button>
                     ) : null}
                   </div>
@@ -140,34 +121,39 @@ export function ApiKeysSettingsView() {
             <h2>{t("sections.createKey")}</h2>
             <div className="api-create-grid">
               <label>
-                Key name
-                <input defaultValue="Production automation" />
+                {t("createForm.keyNameLabel")}
+                <input defaultValue={t("createForm.keyNameDefault")} />
               </label>
               <label>
-                Environment
-                <select defaultValue="Production">
-                  <option>Production</option>
-                  <option>Sandbox</option>
+                {t("createForm.environmentLabel")}
+                <select defaultValue={environmentOptions[0]?.value}>
+                  {environmentOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label>
-                Expiration
-                <select defaultValue="90 days">
-                  <option>30 days</option>
-                  <option>90 days</option>
-                  <option>1 year</option>
+                {t("createForm.expirationLabel")}
+                <select defaultValue={expirationOptions[1]?.value ?? expirationOptions[0]?.value}>
+                  {expirationOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </label>
             </div>
             <button className="button button-outline-neutral" onClick={createKey} type="button">
-              Create scoped key
+              {t("actions.createScoped")}
             </button>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.scopes")}</h2>
             <div className="scope-grid">
-              {scopeRows.map(([scope, description]) => (
+              {scopeRows.map(({ scope, description }) => (
                 <article key={scope}>
                   <Code2 size={16} aria-hidden="true" />
                   <strong>{scope}</strong>
@@ -184,19 +170,19 @@ export function ApiKeysSettingsView() {
             <div className="settings-api-row">
               <LockKeyhole size={22} aria-hidden="true" />
               <span>
-                <strong>whsec_••••••••98f</strong>
-                <small>Rotated Jun 12, 2026</small>
+                <strong>{t("webhook.secret")}</strong>
+                <small>{t("webhook.rotated")}</small>
               </span>
             </div>
             <button className="button button-outline-neutral" type="button">
-              Rotate secret
+              {t("actions.rotateSecret")}
             </button>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.activity")}</h2>
             <div className="key-activity-list">
-              {activityRows.map(([time, detail]) => (
+              {activityRows.map(({ time, detail }) => (
                 <article key={`${time}-${detail}`}>
                   <Activity size={15} aria-hidden="true" />
                   <span>
@@ -211,11 +197,11 @@ export function ApiKeysSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.secChecklist")}</h2>
             <div className="settings-row-list compact">
-              {["Use one key per environment", "Rotate production keys every 90 days", "Never expose keys in client bundles", "Revoke keys that have not run this month"].map((item) => (
+              {checklistItems.map((item) => (
                 <div className="settings-detail-row compact-row" key={item}>
                   <ShieldCheck size={15} aria-hidden="true" />
                   <span>{item}</span>
-                  <span className="badge local">On</span>
+                  <span className="badge local">{t("securityChecklist.badge")}</span>
                 </div>
               ))}
             </div>

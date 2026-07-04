@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+import { getSiteBaseUrl } from "@/lib/seo/site-config";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(getSiteBaseUrl())
+};
+
 /**
  * Root layout. The <html>/<body> and all site chrome (footer, cookie consent
  * banner) live in app/[locale]/layout.tsx so the <html lang> attribute can be

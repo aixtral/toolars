@@ -1,142 +1,129 @@
 import { ArrowRight, Bookmark, CheckCircle2, Cloud, Eye, Image, Lock, Send, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 
-const submissionSteps = [
-  { title: "Tool basics", description: "Name, URL, description", state: "Active" },
-  { title: "Classification", description: "Category, type, tags", state: "Next" },
-  { title: "Pricing & processing", description: "Local, cloud, AI consent", state: "Next" },
-  { title: "Review preview", description: "Checks and submit", state: "Next" }
-] as const;
-
-const checklist = [
-  "Tool name",
-  "Website URL",
-  "Short description",
-  "Long description",
-  "Category",
-  "Tags",
-  "Tool type",
-  "Processing",
-  "Screenshot or logo"
-] as const;
-
-const timeline = [
-  ["Submitted", "We received your submission."],
-  ["Quality review", "Our team reviews your tool in 1-2 business days."],
-  ["Security check", "We check for safety, policy, and data handling."],
-  ["Published", "Your tool goes live for Toolars users."]
-] as const;
+const submissionStepKeys = ["basics", "classification", "pricingProcessing", "reviewPreview"] as const;
+const checklistKeys = ["toolName", "websiteUrl", "shortDescription", "longDescription", "category", "tags", "toolType", "processing", "screenshotOrLogo"] as const;
+const timelineKeys = ["submitted", "qualityReview", "securityCheck", "published"] as const;
+const pendingReviewState = "pending_review";
+const sampleTool = {
+  contactEmail: "hello@imageenhancer.ai",
+  name: "Image Enhancer AI",
+  websiteUrl: "https://imageenhancer.ai"
+} as const;
 
 export function SubmitToolView() {
+  const t = useTranslations("submitTool");
+
   return (
     <div className="submit-tool-page" data-submit-tool-page="true">
       <section className="section landing-hero">
-        <span className="eyebrow">Maker submission</span>
-        <h1 className="title">Submit a tool to Toolars</h1>
-        <p className="subtitle">Share your useful tool with thousands of users and get discovered.</p>
+        <span className="eyebrow">{t("hero.eyebrow")}</span>
+        <h1 className="title">{t("hero.title")}</h1>
+        <p className="subtitle">{t("hero.subtitle")}</p>
       </section>
 
       <div className="submit-layout">
         <form className="submit-form panel">
-          <section className="submit-step-list" aria-label="Submission steps">
-            {submissionSteps.map((step, index) => (
-              <article className="submit-step-row" key={step.title}>
+          <section className="submit-step-list" aria-label={t("steps.ariaLabel")}>
+            {submissionStepKeys.map((stepKey, index) => (
+              <article className="submit-step-row" key={stepKey}>
                 <span className="mcp-stage-number">{index + 1}</span>
                 <span>
-                  <strong>{step.title}</strong>
-                  <small>{step.description}</small>
+                  <strong>{t(`steps.items.${stepKey}.title`)}</strong>
+                  <small>{t(`steps.items.${stepKey}.description`)}</small>
                 </span>
-                <span className={index === 0 ? "badge local" : "badge"}>{step.state}</span>
+                <span className={index === 0 ? "badge local" : "badge"}>{index === 0 ? t("steps.states.active") : t("steps.states.next")}</span>
               </article>
             ))}
           </section>
 
           <section className="submit-form-section">
-            <h2>Tool basics</h2>
+            <h2>{t("sections.basics")}</h2>
             <div className="submit-field-grid">
               <label className="field-label" htmlFor="tool-name">
-                Tool name
-                <input id="tool-name" name="toolName" defaultValue="Image Enhancer AI" />
+                {t("fields.toolName")}
+                <input id="tool-name" name="toolName" defaultValue={sampleTool.name} />
               </label>
               <label className="field-label" htmlFor="website-url">
-                Website URL
-                <input id="website-url" name="websiteUrl" defaultValue="https://imageenhancer.ai" />
+                {t("fields.websiteUrl")}
+                <input id="website-url" name="websiteUrl" defaultValue={sampleTool.websiteUrl} />
               </label>
               <label className="field-label submit-field-wide" htmlFor="short-description">
-                Short description
-                <input id="short-description" name="shortDescription" defaultValue="Enhance image quality, remove noise, and upscale images using AI." />
+                {t("fields.shortDescription")}
+                <input id="short-description" name="shortDescription" defaultValue={t("sample.shortDescription")} />
               </label>
               <label className="field-label submit-field-wide" htmlFor="long-description">
-                Long description
+                {t("fields.longDescription")}
                 <textarea
                   id="long-description"
                   name="longDescription"
-                  defaultValue="Image Enhancer AI helps you improve image quality in seconds. Remove noise, fix blur, enhance colors, and upscale images up to 4x using advanced AI models. Perfect for product photos, portraits, and artwork."
+                  defaultValue={t("sample.longDescription")}
                 />
               </label>
               <label className="field-label submit-field-wide" htmlFor="contact-email">
-                Contact email
-                <input id="contact-email" name="contactEmail" defaultValue="hello@imageenhancer.ai" />
+                {t("fields.contactEmail")}
+                <input id="contact-email" name="contactEmail" defaultValue={sampleTool.contactEmail} />
               </label>
             </div>
           </section>
 
           <section className="submit-form-section">
-            <h2>Classification</h2>
+            <h2>{t("sections.classification")}</h2>
             <div className="submit-field-grid">
               <label className="field-label" htmlFor="category">
-                Category
-                <select id="category" name="category" defaultValue="Image">
-                  <option>Image</option>
-                  <option>PDF</option>
-                  <option>Developer</option>
+                {t("fields.category")}
+                <select id="category" name="category" defaultValue="image">
+                  <option value="image">{t("categoryOptions.image")}</option>
+                  <option value="pdf">{t("categoryOptions.pdf")}</option>
+                  <option value="developer">{t("categoryOptions.developer")}</option>
                 </select>
               </label>
               <label className="field-label" htmlFor="tags">
-                Tags
-                <input id="tags" name="tags" defaultValue="AI, Image Enhancement, Upscale" />
+                {t("fields.tags")}
+                <input id="tags" name="tags" defaultValue={t("sample.tags")} />
               </label>
             </div>
-            <p className="field-label">Tool type</p>
-            <div className="submit-segment-row" role="group" aria-label="Tool type">
+            <p className="field-label">{t("fields.toolType")}</p>
+            <div className="submit-segment-row" role="group" aria-label={t("fields.toolType")}>
               <button className="button button-outline-neutral" type="button">
-                Traditional
+                {t("toolTypes.traditional")}
               </button>
               <button aria-pressed="true" className="button button-soft" type="button">
-                AI-powered
+                {t("toolTypes.aiPowered")}
               </button>
               <button className="button button-outline-neutral" type="button">
-                Workflow
+                {t("toolTypes.workflow")}
               </button>
             </div>
           </section>
 
           <section className="submit-form-section">
-            <h2>Pricing & processing</h2>
+            <h2>{t("sections.pricingProcessing")}</h2>
             <div className="submit-field-grid">
               <fieldset className="submit-fieldset">
-                <legend>Processing</legend>
+                <legend>{t("fields.processing")}</legend>
                 <label>
-                  <input type="checkbox" name="processing" value="local" /> Local / On device
+                  <input type="checkbox" name="processing" value="local" /> {t("processing.local")}
                 </label>
                 <label>
-                  <input defaultChecked type="checkbox" name="processing" value="cloud" /> Cloud
+                  <input defaultChecked type="checkbox" name="processing" value="cloud" /> {t("processing.cloud")}
                 </label>
                 <label>
-                  <input defaultChecked type="checkbox" name="processing" value="ai-consent" /> AI consent required
+                  <input defaultChecked type="checkbox" name="processing" value="ai-consent" /> {t("processing.aiConsent")}
                 </label>
               </fieldset>
               <fieldset className="submit-fieldset">
-                <legend>Pricing model</legend>
+                <legend>{t("fields.pricingModel")}</legend>
                 <div className="submit-segment-row">
                   <button className="button button-outline-neutral" type="button">
-                    Free
+                    {t("pricing.free")}
                   </button>
                   <button aria-pressed="true" className="button button-soft" type="button">
-                    Freemium
+                    {t("pricing.freemium")}
                   </button>
                   <button className="button button-outline-neutral" type="button">
-                    Paid
+                    {t("pricing.paid")}
                   </button>
                 </div>
               </fieldset>
@@ -144,103 +131,108 @@ export function SubmitToolView() {
           </section>
 
           <section className="submit-form-section">
-            <h2>Review preview</h2>
-            <p className="tool-description">Preview how your tool will appear on Toolars before the submission enters <code>pending_review</code>.</p>
+            <h2>{t("sections.reviewPreview")}</h2>
+            <p className="tool-description">
+              {t("reviewPreview.before")} <code>{pendingReviewState}</code>
+              {t("reviewPreview.after")}
+            </p>
           </section>
 
           <div className="submit-action-row">
             <button className="button button-outline-neutral" type="button">
-              Save draft
+              {t("actions.saveDraft")}
             </button>
             <button className="button button-outline-neutral" type="button">
-              <Eye size={16} aria-hidden="true" /> Preview listing
+              <Eye size={16} aria-hidden="true" /> {t("actions.previewListing")}
             </button>
             <button className="button button-solid" type="button">
-              <Send size={16} aria-hidden="true" /> Submit for review
+              <Send size={16} aria-hidden="true" /> {t("actions.submitForReview")}
             </button>
           </div>
         </form>
 
         <aside className="submit-preview panel">
-          <h2>Preview</h2>
+          <h2>{t("sections.preview")}</h2>
           <article className="submit-preview-card">
             <span className="icon-tile green">
               <Sparkles size={24} aria-hidden="true" />
             </span>
             <span>
-              <strong>Image Enhancer AI</strong>
-              <small>Enhance image quality, remove noise, and upscale images using AI.</small>
+              <strong>{sampleTool.name}</strong>
+              <small>{t("sample.shortDescription")}</small>
             </span>
             <BookmarkPreview />
-            <p>Improve image quality in seconds. Remove noise, fix blur, enhance colors, and upscale images up to 4x using advanced AI models.</p>
+            <p>{t("sample.previewDescription")}</p>
             <div className="tag-list">
-              <span className="badge ai">AI-powered</span>
-              <span className="badge">Freemium</span>
-              <span className="badge">Image</span>
+              <span className="badge ai">{t("toolTypes.aiPowered")}</span>
+              <span className="badge">{t("pricing.freemium")}</span>
+              <span className="badge">{t("categoryOptions.image")}</span>
             </div>
             <div className="submit-preview-footer">
               <span>
-                <Image size={16} aria-hidden="true" /> Image
+                <Image size={16} aria-hidden="true" /> {t("categoryOptions.image")}
               </span>
               <span>
-                <Cloud size={16} aria-hidden="true" /> Cloud
+                <Cloud size={16} aria-hidden="true" /> {t("processing.cloud")}
               </span>
               <button className="button button-outline-neutral" type="button">
-                Open <ArrowRight size={14} aria-hidden="true" />
+                {t("actions.open")} <ArrowRight size={14} aria-hidden="true" />
               </button>
             </div>
           </article>
-          <p className="submit-preview-note">Preview updates automatically as you fill the form.</p>
+          <p className="submit-preview-note">{t("preview.note")}</p>
         </aside>
 
         <aside className="submit-review-rail">
           <section className="panel">
             <div className="landing-section-head">
-              <h2>Review checklist</h2>
-              <span className="badge local">8/9 complete</span>
+              <h2>{t("sections.reviewChecklist")}</h2>
+              <span className="badge local">{t("checklist.complete")}</span>
             </div>
             <div className="submit-check-list">
-              {checklist.map((item, index) => (
-                <div className="submit-check-row" key={item}>
+              {checklistKeys.map((itemKey, index) => (
+                <div className="submit-check-row" key={itemKey}>
                   <CheckCircle2 size={16} color={index < 8 ? "#059669" : "#9ca3af"} aria-hidden="true" />
-                  <span>{item}</span>
+                  <span>{t(`checklist.items.${itemKey}`)}</span>
                 </div>
               ))}
             </div>
           </section>
 
           <section className="panel">
-            <h2>Submission guidelines</h2>
+            <h2>{t("sections.guidelines")}</h2>
             <div className="detail-row-list">
               <div className="detail-row">
-                <span className="badge local">Functional</span>
-                <span>Your tool must be functional and accessible.</span>
+                <span className="badge local">{t("guidelines.functional")}</span>
+                <span>{t("guidelines.functionalDescription")}</span>
               </div>
               <div className="detail-row">
-                <span className="badge warn">Safety</span>
-                <span>No malware, phishing, or harmful content.</span>
+                <span className="badge warn">{t("guidelines.safety")}</span>
+                <span>{t("guidelines.safetyDescription")}</span>
               </div>
               <div className="detail-row">
-                <span className="badge ai">Disclosure</span>
-                <span>Follow privacy best practices and disclose data usage.</span>
+                <span className="badge ai">{t("guidelines.disclosure")}</span>
+                <span>{t("guidelines.disclosureDescription")}</span>
               </div>
             </div>
           </section>
 
           <section className="panel">
-            <h2>What happens next?</h2>
+            <h2>{t("sections.whatNext")}</h2>
             <div className="submit-timeline">
-              {timeline.map(([title, description], index) => (
-                <article className="submit-timeline-row" key={title}>
+              {timelineKeys.map((itemKey, index) => (
+                <article className="submit-timeline-row" key={itemKey}>
                   <span className={index === 0 ? "badge local" : "badge"}>{index + 1}</span>
                   <span>
-                    <strong>{title}</strong>
-                    <small>{description}</small>
+                    <strong>{t(`timeline.items.${itemKey}.title`)}</strong>
+                    <small>{t(`timeline.items.${itemKey}.description`)}</small>
                   </span>
                 </article>
               ))}
             </div>
-            <p className="submit-preview-note">System state: <code>pending_review</code></p>
+            <p className="submit-preview-note">
+              {t("timeline.systemState")} <code>{pendingReviewState}</code>
+            </p>
           </section>
 
           {isFreeTrialMode() ? null : (
@@ -248,10 +240,10 @@ export function SubmitToolView() {
               <span className="icon-tile green">
                 <Lock size={18} aria-hidden="true" />
               </span>
-              <h2>Get featured faster</h2>
-              <p className="tool-description">Upgrade to Pro to get priority review, featured placement, and more exposure.</p>
+              <h2>{t("upsell.title")}</h2>
+              <p className="tool-description">{t("upsell.description")}</p>
               <button className="button button-solid" type="button">
-                Upgrade to Pro <ArrowRight size={14} aria-hidden="true" />
+                {t("actions.upgradeToPro")} <ArrowRight size={14} aria-hidden="true" />
               </button>
             </section>
           )}

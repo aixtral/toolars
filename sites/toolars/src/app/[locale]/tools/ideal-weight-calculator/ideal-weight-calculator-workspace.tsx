@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, Target } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateIdealWeight,
   defaultIdealWeightScenario,
@@ -14,21 +15,28 @@ import {
 const storageKey = "toolars.ideal-weight-calculator.profile:v1";
 
 const trustRows = [
-  ["Local", "Height and sex stay in this browser session", "local"],
-  ["Reference", "Devine range does not measure body composition", "warn"],
-  ["Private", "Save stores only this body profile locally", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const bodyNotes = [
-  "VitalCalc uses Devine: men 50 + 0.91 x (height cm - 152.4).",
-  "Women use a 45.5 kg base with the same height adjustment.",
-  "The displayed healthy range is +/-10% around the ideal value."
-];
+  "menFormula",
+  "womenFormula",
+  "range"
+] as const;
 
 export function IdealWeightCalculatorWorkspace() {
-  const t = useTranslations("tools.ideal-weight-calculator");
-  const [profile, setProfile] = useState<IdealWeightInput>(() => defaultIdealWeightScenario);
-  const [result, setResult] = useState<IdealWeightResult | null>(null);
+  const t = useTranslations("tools.ideal-weight-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+
+  function localizedHref(href: string) {
+    return localizePath(href, localeCode);
+  }
+
+  const [profile, setProfile] = useState(defaultIdealWeightScenario);
+  const [result, setResult] = useState(null as IdealWeightResult | null);
 
   const calculate = () => {
     setResult(calculateIdealWeight(profile));
@@ -48,23 +56,23 @@ export function IdealWeightCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="ideal-weight-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc body reference</span>
-        <h1>Ideal Weight Calculator</h1>
-        <p className="subtitle">Estimate ideal weight and a +/-10% reference range from height and sex using the Devine formula.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/ideal-weight-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/ideal-weight-calculator/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -73,32 +81,32 @@ export function IdealWeightCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Body inputs</h2>
-              <p className="tool-description">Enter height and sex for the Devine reference calculation.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="ideal-weight-sex">
-              Sex
+              {t("fields.sex")}
               <select className="input" id="ideal-weight-sex" onChange={(event) => updateProfile("sex", event.target.value as IdealWeightSex)} value={profile.sex}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">{t("sexOptions.male")}</option>
+                <option value="female">{t("sexOptions.female")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="ideal-weight-height">
-              Height (cm)
+              {t("fields.height")}
               <input className="input" id="ideal-weight-height" min={0} onChange={(event) => updateProfile("heightCm", Number(event.target.value))} type="number" value={profile.heightCm} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveProfile} type="button">
-              <Save size={16} aria-hidden="true" /> Save body profile
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate ideal weight
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -106,58 +114,65 @@ export function IdealWeightCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Ideal weight result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show ideal weight and source healthy range."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      height: Math.round(Math.max(0, profile.heightCm)),
+                      sex: t(`sexOptions.${profile.sex}`)
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Devine</span>
+            <span className="badge warn">{t("badges.devine")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedIdealWeight ?? "0.0 kg"}</strong>
-              <span>Ideal weight</span>
+              <span>{t("metrics.idealWeight")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedMinimumWeight ?? "0.0 kg"}</strong>
-              <span>Range low</span>
+              <span>{t("metrics.rangeLow")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedMaximumWeight ?? "0.0 kg"}</strong>
-              <span>Range high</span>
+              <span>{t("metrics.rangeHigh")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formulaLabel ?? "--"}</strong>
-              <span>Formula</span>
+              <strong>{result ? t("resultSection.formulaLabel") : "--"}</strong>
+              <span>{t("metrics.formula")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Target size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Compare with body composition and clinical context." : "Calculate first to build the reference range."}</small>
+              <strong>{result ? t("recommendation.result") : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Body reference notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {bodyNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Body reference inputs stay local and should not replace medical nutrition or body-composition review.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

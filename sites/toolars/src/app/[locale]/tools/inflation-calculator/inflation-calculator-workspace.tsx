@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingDown } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateInflation,
   defaultInflationScenario,
@@ -11,20 +12,23 @@ import {
 } from "@/lib/tools/inflation-calculator";
 
 const trustRows = [
-  ["Local", "Amount, rate, and timeline assumptions stay in this browser session", "local"],
-  ["Scenario", "Inflation results are estimates, not forecasts", "warn"],
-  ["Private", "Save only stores the inflation scenario locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "scenario", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const assumptionNotes = [
-  "VitalCalc future purchasing power equals current amount divided by (1 + inflation rate)^years.",
-  "Inflation rates vary by country, category, time period, and personal spending basket.",
-  "Break-even return is the nominal return needed before fees and taxes to preserve purchasing power."
-];
+  "purchasingPower",
+  "inflationVariation",
+  "breakEven"
+] as const;
 
 export function InflationCalculatorWorkspace() {
-  const t = useTranslations("tools.inflation-calculator");
-  const [plan, setPlan] = useState<InflationInput>(defaultInflationScenario);
+  const t = useTranslations("tools.inflation-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/inflation-calculator/about", localeCode);
+  const [plan, setPlan] = useState(defaultInflationScenario);
   const [result, setResult] = useState<InflationResult | null>(null);
 
   const calculate = () => {
@@ -43,23 +47,23 @@ export function InflationCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="inflation-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc purchasing power workspace</span>
-        <h1>Inflation Calculator</h1>
-        <p className="subtitle">Estimate how inflation erodes purchasing power over a planning timeline.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/inflation-calculator/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -68,33 +72,33 @@ export function InflationCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Inflation inputs</h2>
-              <p className="tool-description">Use current amount, annual inflation rate, and years.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="inflation-amount">
-              Current amount
+              {t("fields.amount")}
               <input className="input" id="inflation-amount" min={0} onChange={(event) => updateNumber("amount", event.target.value)} step="1" type="number" value={plan.amount} />
             </label>
             <label className="field-label" htmlFor="inflation-rate">
-              Annual inflation rate
+              {t("fields.annualInflationRate")}
               <input className="input" id="inflation-rate" min={0} onChange={(event) => updateNumber("annualInflationRate", event.target.value)} step="0.1" type="number" value={plan.annualInflationRate} />
             </label>
             <label className="field-label" htmlFor="inflation-years">
-              Years
+              {t("fields.years")}
               <input className="input" id="inflation-years" min={0} onChange={(event) => updateNumber("years", event.target.value)} step="1" type="number" value={plan.years} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save scenario
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate inflation
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -102,58 +106,66 @@ export function InflationCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Purchasing power summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to see future purchasing power and inflation loss."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      originalAmount: result.formattedOriginalAmount,
+                      futurePurchasingPower: result.formattedFuturePurchasingPower,
+                      years: result.years
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge local">{result ? "Purchasing power" : "Scenario"}</span>
+            <span className="badge local">{result ? t("badges.purchasingPower") : t("badges.scenario")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedFuturePurchasingPower ?? "$0"}</strong>
-              <span>Future purchasing power</span>
+              <span>{t("metrics.futurePurchasingPower")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedOriginalAmount ?? "$0"}</strong>
-              <span>Original amount</span>
+              <span>{t("metrics.originalAmount")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedCumulativeInflation ?? "0.0%"}</strong>
-              <span>Cumulative inflation</span>
+              <span>{t("metrics.cumulativeInflation")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedPurchasingPowerLoss ?? "$0"}</strong>
-              <span>Purchasing-power loss</span>
+              <span>{t("metrics.purchasingPowerLoss")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <TrendingDown size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.formattedBreakEvenReturn ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Nominal break-even return before fees and taxes." : "Calculate first to review purchasing-power assumptions."}</small>
+              <strong>{result?.formattedBreakEvenReturn ?? t("resultSection.waitingTitle")}</strong>
+              <small>{result ? t("resultSection.breakEvenDetail") : t("resultSection.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Assumption notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {assumptionNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Inflation scenarios are calculated locally and saved only when you choose Save.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

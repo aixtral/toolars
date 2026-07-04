@@ -162,6 +162,48 @@ describe("PDF upload server temp store", () => {
     ).toBeNull();
   });
 
+  it("treats blank PDF crypto env values as local fallbacks", () => {
+    const originalObjectEncryptionKey = process.env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY;
+    const originalUploadHandoffSecret = process.env.TOOLARS_UPLOAD_HANDOFF_SECRET;
+
+    try {
+      delete process.env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY;
+      delete process.env.TOOLARS_UPLOAD_HANDOFF_SECRET;
+
+      const content = "%PDF-1.7\nblank-env-fallback";
+      const [record] = registerPdfUploadTempObjects({
+        files: [
+          {
+            contentBase64: Buffer.from(content).toString("base64"),
+            contentHash: "sha256-blank-env-fallback",
+            name: "Blank Env Fallback.pdf",
+            size: Buffer.byteLength(content),
+            type: "application/pdf"
+          }
+        ],
+        uploadedAt: "2026-06-29T14:50:00Z",
+        workspaceId: "toolars_ws_blank_env_fallback_test"
+      });
+      const signedObjectUrl = new URL(record.signedObjectUrl, "http://toolars.test");
+
+      process.env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY = "   ";
+      process.env.TOOLARS_UPLOAD_HANDOFF_SECRET = "   ";
+
+      const resolved = resolvePdfUploadSignedObject({
+        expiresAt: signedObjectUrl.searchParams.get("expiresAt") ?? "",
+        now: "2026-06-29T15:00:00Z",
+        objectKey: record.objectKey,
+        signature: signedObjectUrl.searchParams.get("signature") ?? "",
+        workspaceId: "toolars_ws_blank_env_fallback_test"
+      });
+
+      expect(resolved?.content.toString("utf8")).toBe(content);
+    } finally {
+      restoreEnvValue("TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY", originalObjectEncryptionKey);
+      restoreEnvValue("TOOLARS_UPLOAD_HANDOFF_SECRET", originalUploadHandoffSecret);
+    }
+  });
+
   it("removes temporary PDF content after user-requested deletion", () => {
     const content = "%PDF-1.7\ncleanup-after-delete";
     const originalFile = {
@@ -513,3 +555,12 @@ describe("PDF upload server temp store", () => {
     expect(resolved?.content.toString("utf8")).toBe(content);
   });
 });
+
+function restoreEnvValue(key: string, value: string | undefined) {
+  if (value === undefined) {
+    delete process.env[key];
+    return;
+  }
+
+  process.env[key] = value;
+}

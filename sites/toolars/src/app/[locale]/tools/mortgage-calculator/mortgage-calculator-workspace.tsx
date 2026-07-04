@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Download, Home, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateMortgagePayment,
   defaultMortgageScenario,
@@ -11,21 +12,20 @@ import {
 } from "@/lib/tools/mortgage-calculator";
 
 const trustRows = [
-  ["Local", "Inputs stay in this browser session", "local"],
-  ["Free", "Core mortgage math is available without sign-in", ""],
-  ["Export", "Save assumptions with date and caveats", ""]
+  { key: "local", tone: "local" },
+  { key: "free", tone: "" },
+  { key: "export", tone: "" }
 ] as const;
 
-const affordabilityNotes = [
-  "Keep taxes, insurance, and HOA assumptions separate from principal and interest.",
-  "Compare at least two rates before using the payment in a budget.",
-  "Saved outputs should include rate, term, down payment, and calculation date."
-];
+const affordabilityNotes = ["escrow", "rates", "saved"] as const;
 
 export function MortgageCalculatorWorkspace() {
-  const t = useTranslations("tools.mortgage-calculator");
-  const [scenario, setScenario] = useState<MortgageInput>(defaultMortgageScenario);
-  const [result, setResult] = useState<MortgageResult | null>(null);
+  const t = useTranslations("tools.mortgage-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/mortgage-calculator/about", localeCode);
+  const [scenario, setScenario] = useState(defaultMortgageScenario as MortgageInput);
+  const [result, setResult] = useState(null as MortgageResult | null);
 
   const calculate = () => {
     setResult(calculateMortgagePayment(scenario));
@@ -46,24 +46,22 @@ export function MortgageCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="mortgage-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc finance workspace</span>
-        <h1>Mortgage Calculator</h1>
-        <p className="subtitle">
-          Calculate monthly mortgage payments, escrow assumptions, and long-term interest locally.
-        </p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={`badge ${row.tone}`}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/mortgage-calculator/about">Tool details</a>
+          <a className="button button-outline" href={detailsHref}>{t("detailsLink")}</a>
         </div>
       </section>
 
@@ -71,15 +69,15 @@ export function MortgageCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Loan inputs</h2>
-              <p className="tool-description">Start with the VitalCalc sample, then adjust purchase assumptions.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="mortgage-home-price">
-              Home price
+              {t("fields.homePrice")}
               <input
                 className="input"
                 id="mortgage-home-price"
@@ -90,7 +88,7 @@ export function MortgageCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="mortgage-down-payment">
-              Down payment
+              {t("fields.downPayment")}
               <input
                 className="input"
                 id="mortgage-down-payment"
@@ -101,7 +99,7 @@ export function MortgageCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="mortgage-interest-rate">
-              Interest rate
+              {t("fields.interestRate")}
               <input
                 className="input"
                 id="mortgage-interest-rate"
@@ -113,7 +111,7 @@ export function MortgageCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="mortgage-loan-term">
-              Loan term
+              {t("fields.loanTerm")}
               <input
                 className="input"
                 id="mortgage-loan-term"
@@ -124,7 +122,7 @@ export function MortgageCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="mortgage-property-tax">
-              Annual property tax
+              {t("fields.propertyTax")}
               <input
                 className="input"
                 id="mortgage-property-tax"
@@ -135,7 +133,7 @@ export function MortgageCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="mortgage-insurance">
-              Monthly insurance
+              {t("fields.insurance")}
               <input
                 className="input"
                 id="mortgage-insurance"
@@ -149,10 +147,10 @@ export function MortgageCalculatorWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" type="button" onClick={saveScenario}>
-              <Save size={16} aria-hidden="true" /> Save scenario
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" type="button" onClick={calculate}>
-              <Calculator size={16} aria-hidden="true" /> Calculate payment
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -160,58 +158,62 @@ export function MortgageCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Monthly payment</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate mortgage payment."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
             <button className="button button-outline" type="button">
-              <Download size={16} aria-hidden="true" /> Export plan
+              <Download size={16} aria-hidden="true" /> {t("actions.exportPlan")}
             </button>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedMonthlyPayment ?? "$0"}</strong>
-              <span>Total monthly payment</span>
+              <span>{t("metrics.totalMonthlyPayment")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedTotalInterest ?? "$0"}</strong>
-              <span>Total interest</span>
+              <span>{t("metrics.totalInterest")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? `${result.downPaymentPercent}%` : "0%"}</strong>
-              <span>Down payment</span>
+              <span>{t("metrics.downPayment")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? `${result.loanToValuePercent}%` : "0%"}</strong>
-              <span>Loan-to-value</span>
+              <span>{t("metrics.loanToValue")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Home size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? `${result.formattedPrincipalAndInterest} principal and interest with ${result.formattedMonthlyEscrow} escrow.` : "Calculate first to classify the payment plan."}</small>
+              <strong>{result?.recommendation ?? t("callout.waitingTitle")}</strong>
+              <small>
+                {result
+                  ? t("callout.escrowDetail", { principalAndInterest: result.formattedPrincipalAndInterest, escrow: result.formattedMonthlyEscrow })
+                  : t("callout.waitingDescription")}
+              </small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Affordability notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {affordabilityNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
-          <strong><ShieldCheck size={16} aria-hidden="true" /> Local-first</strong>
-          <p>No account data is required for this prototype. Financial assumptions should be reviewed before decisions.</p>
+          <strong><ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}</strong>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

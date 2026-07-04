@@ -1,26 +1,30 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Receipt, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { calculateTip, defaultTipScenario, type TipInput, type TipResult } from "@/lib/tools/tip-calculator";
 
 const trustRows = [
-  ["Local", "Bill, tip, and group size stay in this browser session", "local"],
-  ["Reference", "Tipping norms vary by country, service type, and group agreement", "warn"],
-  ["Private", "Save only stores the split locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const tipNotes = [
-  "VitalCalc calculates tip amount as bill multiplied by tip percentage.",
-  "Per-person share divides the full bill plus tip by the group size.",
-  "Confirm whether tax should be tipped on before collecting from the group."
-];
+const tipNotes = ["formula", "split", "tax"] as const;
+
+function formatTipPercent(value: number): string {
+  return Number.isInteger(value) ? `${value}%` : `${value.toFixed(2)}%`;
+}
 
 export function TipCalculatorWorkspace() {
-  const t = useTranslations("tools.tip-calculator");
-  const [plan, setPlan] = useState<TipInput>(defaultTipScenario);
-  const [result, setResult] = useState<TipResult | null>(null);
+  const t = useTranslations("tools.tip-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [plan, setPlan] = useState(defaultTipScenario as TipInput);
+  const [result, setResult] = useState(null as TipResult | null);
 
   const calculate = () => {
     setResult(calculateTip(plan));
@@ -35,26 +39,33 @@ export function TipCalculatorWorkspace() {
     setResult(null);
   };
 
+  const resultSummary = result
+    ? t("resultSection.summary", {
+        percent: formatTipPercent(result.tipPercent),
+        people: result.people
+      })
+    : t("resultSection.emptyDescription");
+
   return (
     <div className="llm-cost-layout" data-tool-workspace="tip-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc everyday finance workspace</span>
-        <h1>Tip Calculator</h1>
-        <p className="subtitle">Calculate tip amount, total bill, and per-person share for restaurants and group outings.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/tip-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/tip-calculator/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -63,33 +74,33 @@ export function TipCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Tip inputs</h2>
-              <p className="tool-description">Use the VitalCalc sample bill or enter a live check before collecting.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="tip-bill">
-              Bill amount
+              {t("fields.billAmount")}
               <input className="input" id="tip-bill" min={0} onChange={(event) => updateNumber("billAmount", event.target.value)} step="0.01" type="number" value={plan.billAmount} />
             </label>
             <label className="field-label" htmlFor="tip-percent">
-              Tip percent
+              {t("fields.tipPercent")}
               <input className="input" id="tip-percent" min={0} onChange={(event) => updateNumber("tipPercent", event.target.value)} step="0.1" type="number" value={plan.tipPercent} />
             </label>
             <label className="field-label" htmlFor="tip-people">
-              People
+              {t("fields.people")}
               <input className="input" id="tip-people" min={1} onChange={(event) => updateNumber("people", event.target.value)} type="number" value={plan.people} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save split
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate tip
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -97,58 +108,58 @@ export function TipCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Tip and split summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to see the total and each person's share."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{resultSummary}</p>
             </div>
-            <span className="badge local">{result ? `${result.people} people` : "Tip"}</span>
+            <span className="badge local">{result ? t("badges.people", { people: result.people }) : t("badges.tip")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedTotalBill ?? "$0.00"}</strong>
-              <span>Total bill</span>
+              <span>{t("metrics.totalBill")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedTipAmount ?? "$0.00"}</strong>
-              <span>Tip amount</span>
+              <span>{t("metrics.tipAmount")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedBillAmount ?? "$0.00"}</strong>
-              <span>Original bill</span>
+              <span>{t("metrics.originalBill")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedPerPersonShare ?? "$0.00"}</strong>
-              <span>Per person</span>
+              <span>{t("metrics.perPerson")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Receipt size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.summary ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Share this number before payment so the group agrees on the total." : "Calculate first to review bill and tip assumptions."}</small>
+              <strong>{result ? resultSummary : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Tipping notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {tipNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>No receipt upload or account is required. The bill math runs locally.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

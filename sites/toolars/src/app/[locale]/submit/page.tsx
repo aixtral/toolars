@@ -16,7 +16,7 @@ export default function SubmitPage() {
   const { ToolarsShell } = require("@/components/shell/toolars-shell");
 
   return (
-    <ToolarsShell active="explore" sidebarVariant="none">
+    <ToolarsShell active="none" sidebarVariant="none">
       <SubmitToolView />
     </ToolarsShell>
   );

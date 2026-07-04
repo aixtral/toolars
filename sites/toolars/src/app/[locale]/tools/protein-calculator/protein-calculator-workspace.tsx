@@ -1,26 +1,51 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Dumbbell, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { calculateProteinNeeds, defaultProteinScenario, proteinFactors, type ProteinInput, type ProteinResult } from "@/lib/tools/protein-calculator";
 
 const trustRows = [
-  ["Local", "Weight and goal factor stay in this browser session", "local"],
-  ["Reference", "Protein targets are planning ranges, not medical nutrition therapy", "warn"],
-  ["Private", "Save only stores the plan locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const nutritionNotes = [
-  "General adults often use 0.8-1.2 g/kg; training goals can use higher ranges.",
-  "Spread intake across meals and choose sources that fit digestion and preference.",
-  "Kidney disease, pregnancy, medication, or eating-disorder history need qualified care."
-];
+  "ranges",
+  "meals",
+  "care"
+] as const;
+
+const proteinFactorKeys = [
+  "sedentary",
+  "lightlyActive",
+  "moderateExercise",
+  "strengthTraining",
+  "muscleBuilding"
+] as const;
 
 export function ProteinCalculatorWorkspace() {
-  const t = useTranslations("tools.protein-calculator");
-  const [plan, setPlan] = useState<ProteinInput>(defaultProteinScenario);
-  const [result, setResult] = useState<ProteinResult | null>(null);
+  const t = useTranslations("tools.protein-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/protein-calculator/about", localeCode);
+  const [plan, setPlan] = useState(defaultProteinScenario);
+  const [result, setResult] = useState(null as ProteinResult | null);
+  const numberFormatter = new Intl.NumberFormat(localeCode, {
+    maximumFractionDigits: 0
+  });
+  const factorFormatter = new Intl.NumberFormat(localeCode, {
+    maximumFractionDigits: 1
+  });
+  const selectedFactorIndex = proteinFactors.findIndex((factor) => {
+    return Math.abs(factor.value - plan.factor) < 0.001;
+  });
+  const selectedFactorKey = selectedFactorIndex !== -1 ? proteinFactorKeys[selectedFactorIndex] : null;
+  const selectedFactorLabel = selectedFactorKey
+    ? t(`proteinFactors.${selectedFactorKey}`)
+    : t("formats.customFactor", { value: factorFormatter.format(plan.factor) });
 
   const calculate = () => {
     setResult(calculateProteinNeeds(plan));
@@ -38,26 +63,42 @@ export function ProteinCalculatorWorkspace() {
     setResult(null);
   };
 
+  function formatNumber(value: number) {
+    return numberFormatter.format(Math.round(value));
+  }
+
+  function formatGrams(value: number) {
+    return t("formats.grams", { value: formatNumber(value) });
+  }
+
+  function formatEggs(value: number) {
+    return t("formats.eggs", { value: formatNumber(value) });
+  }
+
+  function formatFactor(value: number) {
+    return factorFormatter.format(value);
+  }
+
   return (
     <div className="llm-cost-layout" data-tool-workspace="protein-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc nutrition workspace</span>
-        <h1>Protein Calculator</h1>
-        <p className="subtitle">Calculate daily protein needs from weight and activity or training goal.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={`badge ${row.tone}`}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/protein-calculator/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -66,23 +107,26 @@ export function ProteinCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Nutrition inputs</h2>
-              <p className="tool-description">Use the VitalCalc sample body weight, then choose a protein factor.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="protein-weight">
-              Weight (kg)
+              {t("fields.weight")}
               <input className="input" id="protein-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} type="number" value={plan.weightKg} />
             </label>
             <label className="field-label" htmlFor="protein-factor">
-              Activity or goal
+              {t("fields.goal")}
               <select className="input" id="protein-factor" onChange={(event) => updateNumber("factor", event.target.value)} value={plan.factor}>
-                {proteinFactors.map((factor) => (
+                {proteinFactors.map((factor, index) => (
                   <option key={factor.value} value={factor.value}>
-                    {factor.label} ({factor.value} g/kg)
+                    {t("formats.factorOption", {
+                      label: t(`proteinFactors.${proteinFactorKeys[index]}`),
+                      value: formatFactor(factor.value)
+                    })}
                   </option>
                 ))}
               </select>
@@ -91,10 +135,10 @@ export function ProteinCalculatorWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save protein plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate protein
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -102,58 +146,65 @@ export function ProteinCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Protein result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate protein grams and food equivalents."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      weight: formatNumber(plan.weightKg),
+                      factor: formatFactor(plan.factor)
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">{result?.factorLabel ?? "Reference"}</span>
+            <span className="badge warn">{result ? selectedFactorLabel : t("badges.reference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedProtein ?? "0 g"}</strong>
-              <span>Daily target</span>
+              <strong>{result ? formatGrams(result.proteinGrams) : formatGrams(0)}</strong>
+              <span>{t("metrics.dailyTarget")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedPerMeal ?? "0 g"}</strong>
-              <span>Per meal</span>
+              <strong>{result ? formatGrams(result.perMealGrams) : formatGrams(0)}</strong>
+              <span>{t("metrics.perMeal")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedEggs ?? "0 eggs"}</strong>
-              <span>Egg equivalent</span>
+              <strong>{result ? formatEggs(result.eggsEquivalent) : formatEggs(0)}</strong>
+              <span>{t("metrics.eggEquivalent")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedChicken ?? "0 g"}</strong>
-              <span>Chicken breast</span>
+              <strong>{result ? formatGrams(result.chickenBreastGrams) : formatGrams(0)}</strong>
+              <span>{t("metrics.chickenBreast")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Dumbbell size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Use this as a daily target, then adapt by appetite and training response." : "Calculate first to get food equivalents."}</small>
+              <strong>{result ? t("callout.recommendation") : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.resultDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Nutrition notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {nutritionNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>No account data is required. Protein results are planning estimates, not a clinical meal plan.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

@@ -28,6 +28,31 @@ describe("legal documents", () => {
     expect(await getLegalDocument("unknown")).toBeUndefined();
   });
 
+  it("returns localized simplified Chinese legal documents", async () => {
+    const privacy = await getLegalDocument("privacy-policy", "zh-hans");
+    const terms = await getLegalDocument("terms-of-service", "zh-hans");
+
+    expect(privacy?.title).toBe("隐私政策");
+    expect(terms?.title).toBe("服务条款");
+    expect(privacy?.intro).toContain("本地优先");
+    expect(terms?.sections.map((section) => section.heading)).toContain("可接受使用");
+    expect(privacy?.intro).not.toMatch(/\bPrivacy Policy\b|\blocal-first\b/i);
+    expect(terms?.intro).not.toMatch(/\bTerms of Service\b|\bgovern your use\b/i);
+  });
+
+  it("returns localized traditional Chinese legal documents", async () => {
+    const privacy = await getLegalDocument("privacy-policy", "zh-hant");
+    const terms = await getLegalDocument("terms-of-service", "zh-hant");
+
+    expect(privacy?.title).toBe("隱私政策");
+    expect(terms?.title).toBe("服務條款");
+    expect(privacy?.intro).toContain("本地優先");
+    expect(terms?.sections.map((section) => section.heading)).toContain("可接受使用");
+    expect(JSON.stringify([privacy, terms])).not.toMatch(/失败|这里|标签|声明|紧凑/);
+    expect(privacy?.intro).not.toMatch(/\bPrivacy Policy\b|\blocal-first\b/i);
+    expect(terms?.intro).not.toMatch(/\bTerms of Service\b|\bgovern your use\b/i);
+  });
+
   it("every section has a heading and non-empty paragraphs", async () => {
     const docs: LegalDocument[] = [
       (await getLegalDocument("privacy-policy"))!,

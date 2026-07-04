@@ -1,35 +1,42 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Coffee, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   caffeineDrinks,
   calculateCaffeineLimit,
   defaultCaffeineScenario,
   type CaffeineDrinkId,
-  type CaffeineInput,
   type CaffeineResult
 } from "@/lib/tools/caffeine-calculator";
 
 const storageKey = "toolars.caffeine-calculator.plan:v1";
+const initialResult: CaffeineResult | null = null;
 
 const trustRows = [
-  ["Local", "Weight and drink choices stay in this browser session", "local"],
-  ["Timing", "Sleep impact varies by metabolism and timing", "warn"],
-  ["Private", "Save stores only this caffeine sample locally", ""]
+  { key: "local", tone: "local" },
+  { key: "timing", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const caffeineNotes = [
-  "VitalCalc uses 5.7 mg per kg with a 400 mg daily adult cap.",
-  "Pregnancy mode applies the source 50% weight adjustment and 200 mg cap.",
-  "Medication, sleep timing, anxiety, pregnancy, and individual tolerance can change safe intake."
-];
+  "adultCap",
+  "pregnancy",
+  "tolerance"
+] as const;
+
+function localizedWorkspaceHref(href: string, localeCode: LocaleCode) {
+  return localizePath(href, localeCode);
+}
 
 export function CaffeineCalculatorWorkspace() {
-  const t = useTranslations("tools.caffeine-calculator");
-  const [values, setValues] = useState<CaffeineInput>(() => defaultCaffeineScenario);
-  const [result, setResult] = useState<CaffeineResult | null>(null);
+  const t = useTranslations("tools.caffeine-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const [values, setValues] = useState(defaultCaffeineScenario);
+  const [result, setResult] = useState(initialResult);
 
   const calculate = () => {
     setResult(calculateCaffeineLimit(values));
@@ -62,23 +69,23 @@ export function CaffeineCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="caffeine-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc caffeine workspace</span>
-        <h1>Caffeine Safe Limit Calculator</h1>
-        <p className="subtitle">Calculate a daily caffeine allowance from weight, pregnancy status, and selected drink sources.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/caffeine-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedWorkspaceHref("/tools/caffeine-calculator/about", localeCode)}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -87,37 +94,37 @@ export function CaffeineCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Caffeine inputs</h2>
-              <p className="tool-description">Use source allowance caps and common drink caffeine references.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="caffeine-weight">
-              Weight (kg)
+              {t("fields.weight")}
               <input className="input" id="caffeine-weight" min={0} onChange={(event) => updateWeight(event.target.value)} step="0.1" type="number" value={values.weightKg} />
             </label>
             <label className="field-label" htmlFor="caffeine-pregnant">
-              Pregnant
+              {t("fields.pregnant")}
               <select className="input" id="caffeine-pregnant" onChange={(event) => updatePregnancy(event.target.value)} value={values.pregnant ? "yes" : "no"}>
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
+                <option value="no">{t("pregnancyOptions.no")}</option>
+                <option value="yes">{t("pregnancyOptions.yes")}</option>
               </select>
             </label>
           </div>
 
           <div className="workspace-section-title">
             <div>
-              <h2>Today's drinks</h2>
-              <p className="tool-description">Select any sources already consumed today.</p>
+              <h2>{t("drinksSection.title")}</h2>
+              <p className="tool-description">{t("drinksSection.description")}</p>
             </div>
           </div>
           <div className="profile-list">
             {caffeineDrinks.map((drink) => (
               <label className="profile-row" htmlFor={`caffeine-drink-${drink.id}`} key={drink.id}>
                 <input checked={values.selectedDrinkIds.includes(drink.id)} id={`caffeine-drink-${drink.id}`} onChange={() => toggleDrink(drink.id)} type="checkbox" />
-                <span>{drink.label}</span>
+                <span>{t(`drinkLabels.${drink.id}`)}</span>
                 <strong>{drink.mg} mg</strong>
               </label>
             ))}
@@ -125,10 +132,10 @@ export function CaffeineCalculatorWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveValues} type="button">
-              <Save size={16} aria-hidden="true" /> Save caffeine plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate safe limit
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -136,60 +143,71 @@ export function CaffeineCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Allowance summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show safe limit and remaining allowance."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      consumed: result.formattedConsumed,
+                      count: result.selectedDrinks.length
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">{result?.status ?? "Reference"}</span>
+            <span className="badge warn">{result ? t(`statuses.${getStatusKey(result)}`) : t("badges.reference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedDailyLimit ?? "0 mg"}</strong>
-              <span>Daily safe limit</span>
+              <span>{t("metrics.dailyLimit")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedConsumed ?? "0 mg"}</strong>
-              <span>Consumed</span>
+              <span>{t("metrics.consumed")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedRemaining ?? "0 mg"}</strong>
-              <span>Remaining</span>
+              <span>{t("metrics.remaining")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.limitText ?? "Pending"}</strong>
-              <span>Limit mode</span>
+              <strong>{result ? t(`limitModes.${values.pregnant ? "pregnancy" : "adult"}`) : t("resultSection.pending")}</strong>
+              <span>{t("metrics.limitMode")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Coffee size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.status ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Caffeine half-life is commonly around five hours." : "Calculate first to review intake and remaining allowance."}</small>
+              <strong>{result ? t(`statuses.${getStatusKey(result)}`) : t("resultSection.waitingTitle")}</strong>
+              <small>{result ? t("resultSection.halfLifeDescription") : t("resultSection.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Caffeine notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {caffeineNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Caffeine intake assumptions stay in this browser and are not sent to a provider.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function getStatusKey(result: CaffeineResult) {
+  return result.consumedMg > result.dailyLimitMg ? "aboveSafeLimit" : "withinSafeRange";
 }

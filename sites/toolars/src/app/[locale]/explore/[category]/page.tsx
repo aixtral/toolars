@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { FolderSearch, Workflow } from "lucide-react";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
 import { ResourceCard } from "@/components/tools/resource-card";
@@ -12,6 +12,7 @@ import {
   getPublicToolsByCategory,
   workflows
 } from "@/data/registry";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 export function generateStaticParams() {
   return exploreCategorySlugs.map((category) => ({ category }));
@@ -53,6 +54,9 @@ function ExploreCategoryView({ category, label }: Readonly<{ category: string; l
   const categoryTools = getPublicToolsByCategory(label);
   const categoryWorkflows = workflows.filter((workflow) => workflow.category === label);
   const t = useTranslations();
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
   const categoryName = t(`categories.${category}`);
 
   return (
@@ -82,7 +86,7 @@ function ExploreCategoryView({ category, label }: Readonly<{ category: string; l
                 categoryWorkflows.map((workflow) => (
                   <ResourceCard
                     description={`${workflow.steps.length} steps · ${workflow.estimatedMinutes} min`}
-                    href={workflow.href}
+                    href={localizedHref(workflow.href)}
                     icon={<Workflow size={20} aria-hidden="true" />}
                     key={workflow.slug}
                     meta={workflow.aiRequired ? "AI consent" : "Local"}
@@ -92,7 +96,7 @@ function ExploreCategoryView({ category, label }: Readonly<{ category: string; l
               ) : (
                 <ResourceCard
                   description={t("directories.category.relatedWorkflowDescription")}
-                  href="/"
+                  href={localizedHref("/")}
                   icon={<FolderSearch size={20} aria-hidden="true" />}
                   meta={t("directories.category.relatedWorkflowMeta")}
                   title={t("directories.category.relatedWorkflowTitle")}

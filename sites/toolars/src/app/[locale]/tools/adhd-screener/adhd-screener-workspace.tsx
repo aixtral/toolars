@@ -1,8 +1,9 @@
 "use client";
 
 import { Brain, Calculator, Save, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   adhdAnswerOptions,
   calculateAdhdScreener,
@@ -14,21 +15,24 @@ import {
 const storageKey = "toolars.adhd-screener.snapshot:v1";
 
 const trustRows = [
-  ["Local", "ASRS answers stay in this browser session", "local"],
-  ["Screening", "This is not an ADHD diagnosis", "warn"],
-  ["Private", "Save stores only this local screener snapshot", ""]
+  { key: "local", tone: "local" },
+  { key: "screening", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const supportNotes = [
-  "VitalCalc uses the ASRS-v1.1 6-question screener and counts answers scored 2 or higher.",
-  "Four or more positive answers maps to the source screening-positive outcome.",
-  "Only a qualified clinician can diagnose ADHD after interview, history, impairment review, and differential assessment."
-];
+  "asrs",
+  "threshold",
+  "clinician"
+] as const;
 
 export function AdhdScreenerWorkspace() {
-  const t = useTranslations("tools.adhd-screener");
-  const [answers, setAnswers] = useState<AdhdAnswer[]>(() => defaultAdhdScreenerAnswers);
-  const [result, setResult] = useState<AdhdScreenerResult | null>(null);
+  const t = useTranslations("tools.adhd-screener.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [answers, setAnswers] = useState(() => [...defaultAdhdScreenerAnswers]);
+  const [result, setResult] = useState(null as AdhdScreenerResult | null);
 
   const calculate = () => {
     setResult(calculateAdhdScreener(answers));
@@ -48,23 +52,23 @@ export function AdhdScreenerWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="adhd-screener">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc adult ADHD screening workspace</span>
-        <h1>ADHD Adult Screener</h1>
-        <p className="subtitle">Score the ASRS-v1.1 six-question adult ADHD screener with local dimensional breakdowns.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local screening model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/adhd-screener/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/adhd-screener/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -73,10 +77,10 @@ export function AdhdScreenerWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>ASRS answers</h2>
-              <p className="tool-description">Answer based on the last 6 months. Scores of 2 or higher count toward the source positive-answer threshold.</p>
+              <h2>{t("answerSection.title")}</h2>
+              <p className="tool-description">{t("answerSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="profile-list">
@@ -99,10 +103,10 @@ export function AdhdScreenerWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveSnapshot} type="button">
-              <Save size={16} aria-hidden="true" /> Save screener snapshot
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Score ASRS
+              <Calculator size={16} aria-hidden="true" /> {t("actions.score")}
             </button>
           </div>
         </section>
@@ -110,69 +114,69 @@ export function AdhdScreenerWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Screening result</h2>
-              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show ASRS positive-answer count and dimensional scores."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.formattedScore : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">Screening only</span>
+            <span className="badge warn">{t("badges.screeningOnly")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedScore ?? "0 / 24"}</strong>
-              <span>Total score</span>
+              <span>{t("metrics.totalScore")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? t(`outcome.${result.outcome}.label`) : "--"}</strong>
-              <span>Source outcome</span>
+              <span>{t("metrics.sourceOutcome")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? `${result.positiveCount} / 6` : "0 / 6"}</strong>
-              <span>Positive answers</span>
+              <span>{t("metrics.positiveAnswers")}</span>
             </article>
             <article className="llm-metric">
-              <strong>Screening only</strong>
-              <span>Diagnostic status</span>
+              <strong>{t("badges.screeningOnly")}</strong>
+              <span>{t("metrics.diagnosticStatus")}</span>
             </article>
           </div>
 
           <div className="llm-metric-grid" style={{ marginTop: 14 }}>
             <article className="llm-metric">
               <strong>{result ? `${result.partAScore} / 12` : "0 / 12"}</strong>
-              <span>Inattention score</span>
+              <span>{t("metrics.inattentionScore")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? `${result.partBScore} / 12` : "0 / 12"}</strong>
-              <span>Hyperactivity score</span>
+              <span>{t("metrics.hyperactivityScore")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Brain size={18} aria-hidden="true" />
             <span>
-              <strong>{result ? t(`outcome.${result.outcome}.guidance`) : "Waiting for score"}</strong>
-              <small>{result ? "Use this as a screening reference and seek professional evaluation when symptoms impair life." : "Score answers first to review ASRS guidance."}</small>
+              <strong>{result ? t(`outcome.${result.outcome}.guidance`) : t("resultSection.waitingTitle")}</strong>
+              <small>{result ? t("resultSection.guidanceDescription") : t("resultSection.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Support notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {supportNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>ASRS output is a screening reference, not a diagnosis, crisis service, or substitute for professional evaluation.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

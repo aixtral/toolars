@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Clock3, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateIntermittentFasting,
   defaultIntermittentFastingScenario,
@@ -15,21 +16,36 @@ import {
 const storageKey = "toolars.intermittent-fasting.plan:v1";
 
 const trustRows = [
-  ["Local", "Protocol and meal time stay in this browser session", "local"],
-  ["Health", "Fasting is not appropriate for every medical or nutrition context", "warn"],
-  ["Private", "Save stores only this local fasting plan", ""]
+  { key: "local", tone: "local" },
+  { key: "health", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const fastingNotes = [
-  "VitalCalc maps 16:8, 18:6, 20:4, and 14:10 directly to fasting and eating windows.",
-  "OMAD uses 23 fasting hours and 1 eating hour.",
-  "5:2 is treated as 5 normal days plus 2 non-consecutive lower-calorie days."
-];
+  "windows",
+  "omad",
+  "fiveTwo"
+] as const;
+
+const protocolOptionKeys: Record<IntermittentFastingProtocol, "sixteenEight" | "eighteenSix" | "twentyFour" | "fourteenTen" | "omad" | "fiveTwo"> = {
+  "16:8": "sixteenEight",
+  "18:6": "eighteenSix",
+  "20:4": "twentyFour",
+  "14:10": "fourteenTen",
+  OMAD: "omad",
+  "5:2": "fiveTwo"
+};
 
 export function IntermittentFastingWorkspace() {
-  const t = useTranslations("tools.intermittent-fasting");
-  const [plan, setPlan] = useState<IntermittentFastingInput>(() => defaultIntermittentFastingScenario);
-  const [result, setResult] = useState<IntermittentFastingResult | null>(null);
+  const t = useTranslations("tools.intermittent-fasting.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/intermittent-fasting/about", localeCode);
+  const [plan, setPlan] = useState(defaultIntermittentFastingScenario as IntermittentFastingInput);
+  const [result, setResult] = useState(null as IntermittentFastingResult | null);
+  const numberFormatter = new Intl.NumberFormat(localeCode, {
+    maximumFractionDigits: 0
+  });
 
   const calculate = () => {
     setResult(calculateIntermittentFasting(plan));
@@ -46,26 +62,47 @@ export function IntermittentFastingWorkspace() {
     setResult(null);
   };
 
+  const formatHours = (hours: number) => t("formats.hours", { count: numberFormatter.format(hours) });
+  const formatNextDayRange = (start: string, end: string) => t("formats.timeRangeNextDay", { start, end });
+  const formatProtocol = (protocol: IntermittentFastingProtocol) => t(`protocolOptions.${protocolOptionKeys[protocol]}`);
+  const eatingEndTime = result ? addHours(normalizeTime(plan.lastMealTime), result.fastingHours + result.eatingHours) : "--";
+  const timelineRows = result
+    ? plan.protocol === "5:2"
+      ? [
+          {
+            label: t("timeline.protocol52Label"),
+            value: t("timeline.protocol52Value"),
+            tone: "neutral" as const
+          }
+        ]
+      : [
+          { label: t("timeline.lastMealEnds"), value: normalizeTime(plan.lastMealTime), tone: "neutral" as const },
+          { label: t("timeline.fastingBegins"), value: normalizeTime(plan.lastMealTime), tone: "neutral" as const },
+          { label: t("timeline.youMayEat"), value: result.nextMealTime, tone: "active" as const },
+          { label: t("timeline.eatingWindowCloses"), value: eatingEndTime, tone: "neutral" as const }
+        ]
+    : [];
+
   return (
     <div className="llm-cost-layout" data-tool-workspace="intermittent-fasting">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc fasting workspace</span>
-        <h1>Intermittent Fasting Calculator</h1>
-        <p className="subtitle">Plan eating and fasting windows from the source protocol table and last-meal time.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local schedule model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/intermittent-fasting/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -74,35 +111,35 @@ export function IntermittentFastingWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Schedule inputs</h2>
-              <p className="tool-description">Choose a protocol and the time your last meal ended.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="fasting-protocol">
-              Fasting protocol
+              {t("fields.protocol")}
               <select className="input" id="fasting-protocol" onChange={(event) => updatePlan("protocol", event.target.value as IntermittentFastingProtocol)} value={plan.protocol}>
                 {intermittentFastingProtocolOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label}
+                    {formatProtocol(option.value)}
                   </option>
                 ))}
               </select>
             </label>
             <label className="field-label" htmlFor="fasting-last-meal">
-              Last meal time
+              {t("fields.lastMealTime")}
               <input className="input" id="fasting-last-meal" onChange={(event) => updatePlan("lastMealTime", event.target.value)} type="time" value={plan.lastMealTime} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save fasting plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate windows
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -110,33 +147,40 @@ export function IntermittentFastingWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Fasting result</h2>
-              <p className="tool-description">{result ? `${result.protocolLabel} plan from ${plan.lastMealTime}` : "Run calculation to show next meal, eating window, and fasting window."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      protocol: formatProtocol(plan.protocol),
+                      time: normalizeTime(plan.lastMealTime)
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Schedule</span>
+            <span className="badge warn">{t("badges.schedule")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.nextMealTime ?? "--"}</strong>
-              <span>Next meal</span>
+              <span>{t("metrics.nextMeal")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedFastingHours ?? "0 hours"}</strong>
-              <span>Fasting duration</span>
+              <strong>{result ? formatHours(result.displayFastingHours) : formatHours(0)}</strong>
+              <span>{t("metrics.fastingDuration")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.eatingWindow ?? "--"}</strong>
-              <span>Eating window</span>
+              <span>{t("metrics.eatingWindow")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.fastingWindow ?? "--"}</strong>
-              <span>Fasting window</span>
+              <strong>{result ? formatNextDayRange(eatingEndTime, result.nextMealTime) : "--"}</strong>
+              <span>{t("metrics.fastingWindow")}</span>
             </article>
           </div>
 
           <div className="profile-list" style={{ marginTop: 18 }}>
-            {(result?.timeline ?? []).map((row) => (
+            {timelineRows.map((row) => (
               <div className="profile-row" key={row.label}>
                 <span className={`badge ${row.tone === "active" ? "local" : ""}`}>{row.label}</span>
                 <span>{row.value}</span>
@@ -147,32 +191,52 @@ export function IntermittentFastingWorkspace() {
           <div className="llm-plan-callout">
             <Clock3 size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Treat fasting windows as a planning aid, not a medical directive." : "Calculate first to build the fasting timeline."}</small>
+              <strong>{result ? t(plan.protocol === "5:2" ? "recommendations.protocol52" : "recommendations.standard") : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Fasting notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {fastingNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Avoid fasting during pregnancy, adolescent growth, eating-disorder risk, or diabetes medication changes without care guidance.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function normalizeTime(value: string): string {
+  const [hourValue, minuteValue] = value.split(":").map(Number);
+  const hours = Number.isFinite(hourValue) ? hourValue : 20;
+  const minutes = Number.isFinite(minuteValue) ? minuteValue : 0;
+  return `${mod(hours, 24).toString().padStart(2, "0")}:${mod(minutes, 60).toString().padStart(2, "0")}`;
+}
+
+function addHours(value: string, hours: number): string {
+  const [hourValue, minuteValue] = value.split(":").map(Number);
+  const totalMinutes = hourValue * 60 + minuteValue + hours * 60;
+  const normalized = mod(totalMinutes, 24 * 60);
+  const nextHours = Math.floor(normalized / 60);
+  const nextMinutes = normalized % 60;
+  return `${nextHours.toString().padStart(2, "0")}:${nextMinutes.toString().padStart(2, "0")}`;
+}
+
+function mod(value: number, divisor: number): number {
+  return ((value % divisor) + divisor) % divisor;
 }

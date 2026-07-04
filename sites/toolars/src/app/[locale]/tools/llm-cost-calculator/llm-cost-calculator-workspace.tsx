@@ -1,9 +1,10 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { useState } from "react";
 import { Calculator, Download, Save, TrendingUp } from "lucide-react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateLlmCost,
   llmCostProfiles,
@@ -20,21 +21,30 @@ const defaultScenario: LlmCostInput = {
 };
 
 const costRows = [
-  ["Local", "Static estimate, no account required", "local"],
-  ["BYOK", "Provider-specific pricing later", ""],
-  ["Pro", "Save historical budgets", "local"]
+  { key: "local", tone: "local" },
+  { key: "byok", tone: "" },
+  { key: "pro", tone: "local" }
 ] as const;
 
-const checklistRows = [
-  "Cap maximum context and output length.",
-  "Route simple tasks to a smaller model profile.",
-  "Track rejected, retried, and cached requests."
-];
+const checklistRows = ["context", "routing", "tracking"] as const;
+
+function getRecommendationKey(totalCost: number) {
+  if (totalCost >= 1000) return "approval";
+  if (totalCost >= 250) return "review";
+  return "safe";
+}
+
+function formatUsd(value: number) {
+  return `$${Math.round(value).toLocaleString("en-US")}`;
+}
 
 export function LlmCostCalculatorWorkspace() {
-  const t = useTranslations("tools.llm-cost-calculator");
-  const [scenario, setScenario] = useState<LlmCostInput>(defaultScenario);
-  const [result, setResult] = useState<LlmCostResult | null>(null);
+  const t = useTranslations("tools.llm-cost-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [scenario, setScenario] = useState((): LlmCostInput => ({ ...defaultScenario }));
+  const [result, setResult] = useState(null as LlmCostResult | null);
 
   const calculate = () => {
     setResult(calculateLlmCost(scenario));
@@ -62,31 +72,39 @@ export function LlmCostCalculatorWorkspace() {
 
   const inputBar = result?.inputSharePercent ?? 77;
   const outputBar = result?.outputSharePercent ?? 23;
+  const resultSummary = result
+    ? t("resultSection.summary", {
+        model: t(`modelProfiles.${scenario.modelProfile}`),
+        input: formatUsd(result.inputCost),
+        output: formatUsd(result.outputCost)
+      })
+    : t("resultSection.emptyDescription");
+  const recommendation = result ? t(`recommendations.${getRecommendationKey(result.totalCost)}`) : t("callout.waitingTitle");
 
   return (
     <AiLabWorkbenchShell
-      artifactState={result ? "Budget estimate" : "Waiting"}
-      providerRoute="Pricing table"
-      runMode="Static estimator"
+      artifactState={result ? t("shell.artifactBudgetEstimate") : t("shell.artifactWaiting")}
+      providerRoute={t("shell.providerRoute")}
+      runMode={t("shell.runMode")}
       toolSlug="llm-cost-calculator"
     >
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">LLM cost planning</span>
-        <h1>LLM Cost Calculator</h1>
-        <p className="subtitle">Estimate monthly spend, token mix, and launch risk before an AI workflow reaches production.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Cost model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {costRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {costRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={`badge ${row.tone}`}>{t(`costRows.${row.key}.label`)}</span>
+              <span>{t(`costRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/llm-cost-calculator/about">Tool details</a>
+          <a className="button button-outline" href={localizedHref("/tools/llm-cost-calculator/about")}>{t("detailsLink")}</a>
         </div>
       </section>
 
@@ -94,15 +112,15 @@ export function LlmCostCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Usage inputs</h2>
-              <p className="tool-description">Use conservative launch assumptions, then compare model fit.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Estimator</span>
+            <span className="badge local">{t("badges.estimator")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="llm-input-tokens">
-              Input tokens / request
+              {t("fields.inputTokens")}
               <input
                 className="input"
                 id="llm-input-tokens"
@@ -113,7 +131,7 @@ export function LlmCostCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="llm-output-tokens">
-              Output tokens / request
+              {t("fields.outputTokens")}
               <input
                 className="input"
                 id="llm-output-tokens"
@@ -124,7 +142,7 @@ export function LlmCostCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="llm-requests">
-              Requests / month
+              {t("fields.requests")}
               <input
                 className="input"
                 id="llm-requests"
@@ -135,10 +153,10 @@ export function LlmCostCalculatorWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="llm-model-profile">
-              Model profile
+              {t("fields.modelProfile")}
               <select className="input" id="llm-model-profile" onChange={(event) => updateModel(event.target.value)} value={scenario.modelProfile}>
                 {Object.values(llmCostProfiles).map((profile) => (
-                  <option key={profile.key} value={profile.key}>{profile.label}</option>
+                  <option key={profile.key} value={profile.key}>{t(`modelProfiles.${profile.key}`)}</option>
                 ))}
               </select>
             </label>
@@ -146,10 +164,10 @@ export function LlmCostCalculatorWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" type="button" onClick={saveScenario}>
-              <Save size={16} aria-hidden="true" /> Save scenario
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" type="button" onClick={calculate}>
-              <Calculator size={16} aria-hidden="true" /> Calculate cost
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -157,55 +175,55 @@ export function LlmCostCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Monthly estimate</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate monthly spend."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{resultSummary}</p>
             </div>
             <button className="button button-outline" type="button">
-              <Download size={16} aria-hidden="true" /> Export budget
+              <Download size={16} aria-hidden="true" /> {t("actions.export")}
             </button>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedTotalCost ?? "$0"}</strong>
-              <span>Estimated monthly cost</span>
+              <span>{t("metrics.monthlyCost")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedMonthlyTokens ?? "0M"}</strong>
-              <span>Monthly tokens</span>
+              <span>{t("metrics.monthlyTokens")}</span>
             </article>
           </div>
 
-          <div className="llm-bar-stack" aria-label="Cost mix">
-            <span className="llm-bar input" style={{ width: `${inputBar}%` }}>Input tokens</span>
-            <span className="llm-bar output" style={{ width: `${outputBar}%` }}>Output tokens</span>
+          <div className="llm-bar-stack" aria-label={t("bars.costMixLabel")}>
+            <span className="llm-bar input" style={{ width: `${inputBar}%` }}>{t("bars.inputTokens")}</span>
+            <span className="llm-bar output" style={{ width: `${outputBar}%` }}>{t("bars.outputTokens")}</span>
           </div>
 
           <div className="llm-plan-callout">
             <TrendingUp size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for estimate"}</strong>
-              <small>{result ? "Review token mix before launch and set an owner for monthly budget drift." : "Calculate first to classify launch budget risk."}</small>
+              <strong>{recommendation}</strong>
+              <small>{result ? t("callout.reviewBudget") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Before production</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {checklistRows.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
-          <strong>Recommended plan</strong>
-          <p>Use Team once budgets need approval flows and shared model policies.</p>
+          <strong>{t("recommendation.title")}</strong>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </AiLabWorkbenchShell>

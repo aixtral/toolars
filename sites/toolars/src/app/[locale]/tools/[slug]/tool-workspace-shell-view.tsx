@@ -1,7 +1,8 @@
 import { ArrowRight, CheckCircle2, CircleHelp, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { ProcessingMode, ToolDefinition } from "@/data/registry";
 import type { DetailBadgeTone, ToolDetailDefinition, ToolDetailRow } from "@/data/tool-details";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 
 function badgeClass(tone?: DetailBadgeTone): string {
@@ -32,16 +33,32 @@ function DetailRows({ rows }: { rows: ToolDetailRow[] }) {
 
 export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinition }) {
   const t = useTranslations("toolWorkspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => {
+    if (href.startsWith("/")) {
+      return localizePath(href, localeCode);
+    }
+
+    return href;
+  };
   const primaryProcessing = detail.tool.processing[0];
   const freeTrial = isFreeTrialMode();
-  const pricing = freeTrial && detail.tool.pricing !== "free"
-    ? t("pricing.freeTrial")
-    : detail.tool.pricing === "freemium"
-      ? t("pricing.freemium")
-      : detail.tool.pricing === "paid"
-        ? t("pricing.paid")
-        : t("pricing.free");
-  const procLabel = primaryProcessing === "local" ? t("processing.local") : primaryProcessing === "cloud" ? t("processing.cloud") : t("processing.aiConsent");
+  let pricing = t("pricing.free");
+  if (freeTrial && detail.tool.pricing !== "free") {
+    pricing = t("pricing.freeTrial");
+  } else if (detail.tool.pricing === "freemium") {
+    pricing = t("pricing.freemium");
+  } else if (detail.tool.pricing === "paid") {
+    pricing = t("pricing.paid");
+  }
+
+  let procLabel = t("processing.aiConsent");
+  if (primaryProcessing === "local") {
+    procLabel = t("processing.local");
+  } else if (primaryProcessing === "cloud") {
+    procLabel = t("processing.cloud");
+  }
 
   return (
     <div className="tool-workspace-shell" data-tool-workspace-shell={detail.tool.slug}>
@@ -58,12 +75,12 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
             </span>
           </div>
           <div className="button-row tool-workspace-action-row">
-            <a className="button button-solid" href={detail.tool.aboutHref}>
+            <a className="button button-solid" href={localizedHref(detail.tool.aboutHref)}>
               {t("toolDetails")} <ArrowRight size={16} aria-hidden="true" />
             </a>
             {detail.recommendedWorkflow ? (
-              <a className="button button-outline-neutral" href={detail.recommendedWorkflow.href}>
-                Open recommended workflow
+              <a className="button button-outline-neutral" href={localizedHref(detail.recommendedWorkflow.href)}>
+                {t("openWorkflow")}
               </a>
             ) : null}
           </div>
@@ -73,7 +90,7 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
           <section className="workspace-panel">
             <div className="workspace-section-title">
               <h2>{detail.trustSection.title}</h2>
-              <span className="badge local">Source-backed</span>
+              <span className="badge local">{t("badges.sourceBacked")}</span>
             </div>
             <div className="detail-metric-grid tool-workspace-metric-grid">
               {detail.metrics.map((metric) => (
@@ -88,8 +105,8 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
 
           <section className="workspace-panel">
             <div className="workspace-section-title">
-              <h2>Workspace path</h2>
-              <span className="badge">Plan</span>
+              <h2>{t("sections.workspacePath")}</h2>
+              <span className="badge">{t("badges.plan")}</span>
             </div>
             <div className="detail-step-list">
               {detail.howItWorks.map((step, index) => (
@@ -107,8 +124,8 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
 
           <section className="workspace-panel">
             <div className="workspace-section-title">
-              <h2>Source handoff</h2>
-              <span className="badge">Build-ready</span>
+              <h2>{t("sections.sourceHandoff")}</h2>
+              <span className="badge">{t("badges.buildReady")}</span>
             </div>
             <div className="detail-resource-list">
               {detail.handoff.map((item) => (
@@ -128,33 +145,33 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
         <aside className="workspace-stack">
           <section className="workspace-panel">
             <div className="workspace-section-title">
-              <h2>Full calculator path</h2>
+              <h2>{t("sections.fullPath")}</h2>
               <CheckCircle2 size={18} aria-hidden="true" />
             </div>
             <div className="detail-row-list">
               <div className="detail-row">
-                <span className="badge local">Now</span>
+                <span className="badge local">{t("badges.now")}</span>
                 <span>{detail.outcome}</span>
               </div>
               <div className="detail-row">
-                <span className="badge">Next</span>
-                <span>Promote source formulas, inputs, validation, saved scenarios, and export state into a dedicated interactive workspace.</span>
+                <span className="badge">{t("badges.next")}</span>
+                <span>{t("fullPath.next")}</span>
               </div>
               <div className="detail-row">
-                <span className="badge warn">Review</span>
-                <span>Keep caveats visible before users rely on financial, health, tax, or planning outputs.</span>
+                <span className="badge warn">{t("badges.review")}</span>
+                <span>{t("fullPath.review")}</span>
               </div>
             </div>
           </section>
 
           <section className="workspace-panel">
             <div className="workspace-section-title">
-              <h2>Related tools</h2>
+              <h2>{t("sections.relatedTools")}</h2>
               <CircleHelp size={18} aria-hidden="true" />
             </div>
             <div className="detail-resource-list">
               {detail.relatedTools.map((tool) => (
-                <a className="detail-resource-row" href={tool.aboutHref} key={tool.slug}>
+                <a className="detail-resource-row" href={localizedHref(tool.aboutHref)} key={tool.slug}>
                   <span className={`icon-tile ${tool.accent}`}>{initials(tool.name)}</span>
                   <span>
                     <strong>{tool.name}</strong>
@@ -167,12 +184,11 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
 
           <section className="workspace-panel">
             <div className="workspace-section-title">
-              <h2>Trust boundary</h2>
+              <h2>{t("sections.trustBoundary")}</h2>
               <ShieldCheck size={18} aria-hidden="true" />
             </div>
             <p className="detail-aside-note">
-              This workspace keeps the public listing CTA reachable while preserving the local-first and AI-consent labels from the source
-              detail.
+              {t("trustBoundaryNote")}
             </p>
           </section>
         </aside>

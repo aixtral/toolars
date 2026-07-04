@@ -2,25 +2,46 @@ import type { Metadata } from "next";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
 import { LegalDocumentView } from "@/components/legal/legal-document-view";
 import { getLegalDocument } from "@/data/legal";
+import { DEFAULT_LOCALE, getAlternateLanguageLinks, isLaunchLocale, localizePath } from "@/lib/i18n";
+import { getSiteBaseUrl } from "@/lib/seo/site-config";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description:
-    "How Toolars collects, uses, and protects your information. Local-first processing, explicit AI consent, and your GDPR and CCPA data rights.",
-  alternates: { canonical: "/privacy" },
-  openGraph: {
-    type: "article",
-    title: "Privacy Policy — Toolars",
-    description: "Local-first processing, explicit AI consent, and your GDPR and CCPA data rights.",
-    url: "/privacy"
-  }
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale?: string }> }): Promise<Metadata> {
+  const { locale: routeLocale } = await params;
+  const locale = routeLocale && isLaunchLocale(routeLocale) ? routeLocale : DEFAULT_LOCALE;
+  const document = await getLegalDocument("privacy-policy", locale);
+  const baseUrl = getSiteBaseUrl();
+  const privacyPath = "/privacy";
+  const localizedPrivacyPath = localizePath(privacyPath, locale);
+  const description =
+    document?.intro ??
+    "How Toolars collects, uses, and protects your information. Local-first processing, explicit AI consent, and your GDPR and CCPA data rights.";
 
-export default async function PrivacyPage() {
-  const document = await getLegalDocument("privacy-policy");
+  return {
+    metadataBase: new URL(baseUrl),
+    title: document?.title ?? "Privacy Policy",
+    description,
+    alternates: {
+      canonical: localizedPrivacyPath,
+      languages: Object.fromEntries(
+        getAlternateLanguageLinks(privacyPath, baseUrl).map((link) => [link.hreflang, link.href])
+      )
+    },
+    openGraph: {
+      type: "article",
+      title: `${document?.title ?? "Privacy Policy"} — Toolars`,
+      description,
+      url: localizedPrivacyPath
+    }
+  };
+}
+
+export default async function PrivacyPage({ params }: { params: Promise<{ locale?: string }> }) {
+  const { locale: routeLocale } = await params;
+  const locale = routeLocale && isLaunchLocale(routeLocale) ? routeLocale : DEFAULT_LOCALE;
+  const document = await getLegalDocument("privacy-policy", locale);
   if (!document) return null;
   return (
-    <ToolarsShell active="explore" sidebarVariant="none">
+    <ToolarsShell active="none" sidebarVariant="none">
       <div className="page-grid legal-page">
         <LegalDocumentView document={document} />
       </div>

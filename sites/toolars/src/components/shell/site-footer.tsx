@@ -1,4 +1,6 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { ToolarsLogoMark } from "@/components/shell/toolars-logo";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { isFeatureEnabled } from "@/lib/product/feature-flags";
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
@@ -50,21 +52,28 @@ const FOOTER_COLUMNS: FooterColumn[] = [
  */
 export async function SiteFooter() {
   const t = await getTranslations();
+  const locale = await getLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const year = new Date().getFullYear();
   const baseUrl = getSiteBaseUrl();
   const freeTrialMode = isFreeTrialMode();
+  const footerNavLabel = [t("footer.columns.tools"), t("footer.columns.resources"), t("footer.columns.legal")].join(" / ");
+
+  function localizedHref(href: string) {
+    return href.startsWith("/") ? localizePath(href, localeCode) : href;
+  }
 
   return (
     <footer className="site-footer" aria-label={t("common.brandName")}>
       <div className="site-footer-inner">
         <div className="site-footer-brand">
-          <a className="site-footer-logo" href="/" aria-label={`${t("common.brandName")} home`}>
-            {t("common.brandName")}
+          <a className="site-footer-logo" href={localizedHref("/")} aria-label={`${t("common.brandName")} home`}>
+            <ToolarsLogoMark label={t("common.brandName")} size="sm" />
           </a>
           <p>{t("common.tagline")}</p>
         </div>
 
-        <nav className="site-footer-nav" aria-label="Footer">
+        <nav className="site-footer-nav" aria-label={footerNavLabel}>
           {FOOTER_COLUMNS.map((column) => (
             <div key={column.headingKey} className="site-footer-column">
               <h2>{t(column.headingKey)}</h2>
@@ -74,7 +83,7 @@ export async function SiteFooter() {
                   .filter((link) => !(!isFeatureEnabled("submit") && link.href === "/submit"))
                   .map((link) => (
                     <li key={link.href}>
-                      <a href={link.href}>{t(link.labelKey)}</a>
+                      <a href={localizedHref(link.href)}>{t(link.labelKey)}</a>
                     </li>
                   ))}
               </ul>

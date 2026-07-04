@@ -1,26 +1,26 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Ruler, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { calculateBodyFat, defaultBodyFatScenario, type BodyFatInput, type BodyFatResult, type BodyFatSex } from "@/lib/tools/body-fat-calculator";
 
 const trustRows = [
-  ["Local", "Circumference measurements stay in this browser session", "local"],
-  ["Reference", "US Navy estimates are not DEXA or clinical body composition tests", "warn"],
-  ["Private", "Saved measurements stay in local browser storage", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const measurementNotes = [
-  "Measure neck and waist consistently, ideally at the same time of day.",
-  "Female calculations use hip measurement; male calculations use waist minus neck.",
-  "Hydration, posture, tape tension, and training state can move the estimate."
-];
+const measurementNotes = ["consistency", "sexFormula", "variables"] as const;
 
 export function BodyFatCalculatorWorkspace() {
-  const t = useTranslations("tools.body-fat-calculator");
-  const [measurements, setMeasurements] = useState<BodyFatInput>(defaultBodyFatScenario);
-  const [result, setResult] = useState<BodyFatResult | null>(null);
+  const t = useTranslations("tools.body-fat-calculator.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [measurements, setMeasurements] = useState((): BodyFatInput => ({ ...defaultBodyFatScenario }));
+  const [result, setResult] = useState(null as BodyFatResult | null);
 
   const calculate = () => {
     setResult(calculateBodyFat(measurements));
@@ -49,23 +49,23 @@ export function BodyFatCalculatorWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="body-fat-calculator">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc health workspace</span>
-        <h1>Body Fat Calculator</h1>
-        <p className="subtitle">Estimate body fat percentage using the US Navy circumference method.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/body-fat-calculator/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/body-fat-calculator/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -74,48 +74,48 @@ export function BodyFatCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Measurement inputs</h2>
-              <p className="tool-description">Use circumference measurements in centimeters; weight enables fat and lean mass estimates.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="body-fat-sex">
-              Sex
+              {t("fields.sex")}
               <select className="input" id="body-fat-sex" onChange={(event) => updateSex(event.target.value as BodyFatSex)} value={measurements.sex}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">{t("fields.male")}</option>
+                <option value="female">{t("fields.female")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="body-fat-weight">
-              Weight (kg)
+              {t("fields.weightKg")}
               <input className="input" id="body-fat-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} type="number" value={measurements.weightKg} />
             </label>
             <label className="field-label" htmlFor="body-fat-height">
-              Height (cm)
+              {t("fields.heightCm")}
               <input className="input" id="body-fat-height" min={0} onChange={(event) => updateNumber("heightCm", event.target.value)} type="number" value={measurements.heightCm} />
             </label>
             <label className="field-label" htmlFor="body-fat-neck">
-              Neck (cm)
+              {t("fields.neckCm")}
               <input className="input" id="body-fat-neck" min={0} onChange={(event) => updateNumber("neckCm", event.target.value)} type="number" value={measurements.neckCm} />
             </label>
             <label className="field-label" htmlFor="body-fat-waist">
-              Waist (cm)
+              {t("fields.waistCm")}
               <input className="input" id="body-fat-waist" min={0} onChange={(event) => updateNumber("waistCm", event.target.value)} type="number" value={measurements.waistCm} />
             </label>
             <label className="field-label" htmlFor="body-fat-hip">
-              Hip (cm)
+              {t("fields.hipCm")}
               <input className="input" id="body-fat-hip" min={0} onChange={(event) => updateNumber("hipCm", event.target.value)} type="number" value={measurements.hipCm} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveMeasurements} type="button">
-              <Save size={16} aria-hidden="true" /> Save measurements
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate body fat
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -123,58 +123,58 @@ export function BodyFatCalculatorWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Body composition result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate body fat and mass split."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">{result?.formulaLabel ?? "Reference"}</span>
+            <span className="badge warn">{result?.formulaLabel ?? t("badges.reference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedBodyFat ?? "0.0%"}</strong>
-              <span>Body fat</span>
+              <span>{t("metrics.bodyFat")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.category ?? "Pending"}</strong>
-              <span>Reference category</span>
+              <strong>{result?.category ?? t("metrics.pending")}</strong>
+              <span>{t("metrics.referenceCategory")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedFatMass ?? "0.0 kg"}</strong>
-              <span>Fat mass</span>
+              <span>{t("metrics.fatMass")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedLeanMass ?? "0.0 kg"}</strong>
-              <span>Lean mass</span>
+              <span>{t("metrics.leanMass")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Ruler size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.tip ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Compare trends using the same method instead of mixing measurement systems." : "Calculate first to get a reference category."}</small>
+              <strong>{result?.tip ?? t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.trendDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Measurement notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {measurementNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>No account data is required. Use results as fitness planning estimates, not clinical diagnosis.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

@@ -4,45 +4,66 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Bell, CheckCircle2, Clock, Mail, MessageSquare, Moon, Smartphone } from "lucide-react";
 
-const alertDefaults = [
-  ["Workflow completion alerts", "Email me when long workflow runs finish."],
-  ["Review alerts", "Notify me when submitted tools need changes."],
-  ["Trial usage alerts", "Send beta credit, storage, and usage threshold updates."],
-  ["Product updates", "Occasional updates about new collections and workflows."]
-] as const;
+const alertDefaults = ["workflowCompletion", "reviewAlerts", "trialUsage", "productUpdates"] as const;
+type AlertId = (typeof alertDefaults)[number];
 
 const channels = [
-  ["Email", "Primary delivery channel", Mail],
-  ["In-app", "Command center and toast updates", Bell],
-  ["Mobile push", "Critical workflow and trial usage alerts", Smartphone]
+  { Icon: Mail, id: "email" },
+  { Icon: Bell, id: "inApp" },
+  { Icon: Smartphone, id: "mobilePush" }
 ] as const;
+
+type AlertStatus =
+  | { kind: "allActive" }
+  | { kind: "workflowCompletionPaused" }
+  | { alertId: AlertId; enabled: boolean; kind: "changed" };
+
+function buildInitialAlertState(): Record<AlertId, boolean> {
+  const state = {} as Record<AlertId, boolean>;
+  for (const alertId of alertDefaults) {
+    state[alertId] = true;
+  }
+  return state;
+}
 
 export function NotificationsSettingsView() {
   const t = useTranslations("settings.notifications");
-  const [enabled, setEnabled] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(alertDefaults.map(([label]) => [label, true]))
-  );
-  const [status, setStatus] = useState("All notification defaults are active.");
+  const [enabled, setEnabled] = useState(buildInitialAlertState);
+  const [status, setStatus] = useState({ kind: "allActive" } as AlertStatus);
 
-  function toggleAlert(label: string) {
+  function toggleAlert(alertId: AlertId) {
     setEnabled((current) => {
-      const nextValue = !current[label];
-      setStatus(label === "Workflow completion alerts" && !nextValue ? "Workflow completion alerts paused." : `${label} ${nextValue ? "enabled" : "paused"}.`);
-      return { ...current, [label]: nextValue };
+      const nextValue = !current[alertId];
+      setStatus(alertId === "workflowCompletion" && !nextValue ? { kind: "workflowCompletionPaused" } : { alertId, enabled: nextValue, kind: "changed" });
+      return { ...current, [alertId]: nextValue };
     });
+  }
+
+  function statusMessage() {
+    switch (status.kind) {
+      case "allActive":
+        return t("status.allActive");
+      case "workflowCompletionPaused":
+        return t("status.workflowCompletionPaused");
+      case "changed":
+        return t("status.changed", {
+          label: t(`alerts.${status.alertId}.label`),
+          state: t(status.enabled ? "status.enabled" : "status.paused")
+        });
+    }
   }
 
   return (
     <div className="settings-subpage notifications-settings-page" data-notifications-settings-page="true">
       <section className="section landing-hero settings-subpage-hero">
-        <span className="eyebrow">Settings</span>
+        <span className="eyebrow">{t("sections.eyebrow")}</span>
         <div className="landing-section-head">
           <span>
             <h1 className="title">{t("hero.title")}</h1>
-            <p className="subtitle">Tune workflow, review, trial usage, digest, quiet-hour, and delivery channel preferences.</p>
+            <p className="subtitle">{t("hero.subtitle")}</p>
           </span>
           <span className="settings-trust-note">
-            <Bell size={15} aria-hidden="true" /> Alerts enabled
+            <Bell size={15} aria-hidden="true" /> {t("hero.trustNote")}
           </span>
         </div>
       </section>
@@ -52,11 +73,11 @@ export function NotificationsSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.deliveryChannels")}</h2>
             <div className="settings-stat-grid">
-              {channels.map(([label, detail, Icon]) => (
-                <article className="settings-stat-card" key={label}>
+              {channels.map(({ Icon, id }) => (
+                <article className="settings-stat-card" key={id}>
                   <Icon size={18} aria-hidden="true" />
-                  <span>{label}</span>
-                  <small>{detail}</small>
+                  <span>{t(`channels.${id}.label`)}</span>
+                  <small>{t(`channels.${id}.detail`)}</small>
                 </article>
               ))}
             </div>
@@ -65,22 +86,23 @@ export function NotificationsSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.workflowAlerts")}</h2>
             <div className="settings-toggle-list">
-              {alertDefaults.map(([label, description]) => {
-                const isEnabled = enabled[label];
+              {alertDefaults.map((alertId) => {
+                const isEnabled = enabled[alertId];
+                const label = t(`alerts.${alertId}.label`);
                 return (
-                  <article className="privacy-toggle-row" key={label}>
+                  <article className="privacy-toggle-row" key={alertId}>
                     <span className="icon-tile green">
                       <Bell size={18} aria-hidden="true" />
                     </span>
                     <span>
                       <strong>{label}</strong>
-                      <small>{description}</small>
+                      <small>{t(`alerts.${alertId}.description`)}</small>
                     </span>
                     <button
                       aria-label={label}
                       aria-pressed={isEnabled}
                       className={`privacy-switch-button ${isEnabled ? "is-on" : ""}`}
-                      onClick={() => toggleAlert(label)}
+                      onClick={() => toggleAlert(alertId)}
                       type="button"
                     />
                   </article>
@@ -88,7 +110,7 @@ export function NotificationsSettingsView() {
               })}
             </div>
             <p className="settings-status-note" aria-live="polite">
-              <CheckCircle2 size={15} aria-hidden="true" /> {status}
+              <CheckCircle2 size={15} aria-hidden="true" /> {statusMessage()}
             </p>
           </section>
 
@@ -98,8 +120,8 @@ export function NotificationsSettingsView() {
                 <Clock size={18} aria-hidden="true" />
               </span>
               <h2>{t("sections.digest")}</h2>
-              <p className="tool-description">Send a daily digest at 8:30 AM with completed workflows, submitted tool decisions, and shared collection changes.</p>
-              <span className="badge local">Daily</span>
+              <p className="tool-description">{t("digest.description")}</p>
+              <span className="badge local">{t("digest.badge")}</span>
             </section>
 
             <section className="panel settings-subpage-card">
@@ -107,8 +129,8 @@ export function NotificationsSettingsView() {
                 <Moon size={18} aria-hidden="true" />
               </span>
               <h2>{t("sections.quietHours")}</h2>
-              <p className="tool-description">Pause non-critical notifications from 10:00 PM to 7:00 AM in your workspace timezone.</p>
-              <span className="badge">Scheduled</span>
+              <p className="tool-description">{t("quietHours.description")}</p>
+              <span className="badge">{t("quietHours.badge")}</span>
             </section>
           </div>
         </div>
@@ -116,29 +138,29 @@ export function NotificationsSettingsView() {
         <aside className="settings-subpage-side">
           <section className="panel settings-subpage-card">
             <h2>{t("sections.reviewRouting")}</h2>
-            <p className="tool-description">Submitted tool review decisions and required-change requests are sent immediately.</p>
-            <span className="badge local">Enabled</span>
+            <p className="tool-description">{t("reviewRouting.description")}</p>
+            <span className="badge local">{t("reviewRouting.badge")}</span>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.trialRouting")}</h2>
-            <p className="tool-description">Beta credit, storage, and usage threshold warnings go to workspace owners.</p>
-            <span className="badge local">Enabled</span>
+            <p className="tool-description">{t("trialRouting.description")}</p>
+            <span className="badge local">{t("trialRouting.badge")}</span>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.releaseNotes")}</h2>
-            <p className="tool-description">New workflows, collections, and Toolars release notes are grouped into the product digest.</p>
-            <span className="badge">Digest only</span>
+            <p className="tool-description">{t("releaseNotes.description")}</p>
+            <span className="badge">{t("releaseNotes.badge")}</span>
           </section>
 
           <section className="panel settings-subpage-card">
             <h2>{t("sections.preview")}</h2>
             <div className="consent-preview-box">
-              <strong>{t("labels.PDF Summary Workflow finished")}</strong>
-              <p>Your summary is ready. It used 18 AI credits and saved the output to PDF Ops Kit.</p>
+              <strong>{t("preview.title")}</strong>
+              <p>{t("preview.description")}</p>
               <button className="button button-outline-neutral" type="button">
-                <MessageSquare size={15} aria-hidden="true" /> Preview message
+                <MessageSquare size={15} aria-hidden="true" /> {t("preview.action")}
               </button>
             </div>
           </section>

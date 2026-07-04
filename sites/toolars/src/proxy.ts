@@ -1,11 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { DEFAULT_LOCALE, LAUNCH_LOCALES, isValidLocale } from "@/lib/i18n";
+import { DEFAULT_LOCALE, ROUTED_LOCALES, isLaunchLocale } from "@/lib/i18n";
 
 /**
  * Detect the preferred locale from the Accept-Language header, falling back to
  * the default locale (en).
  */
-function detectLocale(acceptLanguage: string | null): string {
+export function detectLocale(acceptLanguage: string | null): string {
   if (!acceptLanguage) return DEFAULT_LOCALE;
   const headerLocales = acceptLanguage
     .split(",")
@@ -24,9 +24,21 @@ function detectLocale(acceptLanguage: string | null): string {
     .sort((a, b) => b.quality - a.quality);
 
   for (const { tag } of headerLocales) {
-    if (isValidLocale(tag)) return tag;
+    if (isLaunchLocale(tag)) return tag;
   }
   return DEFAULT_LOCALE;
+}
+
+export function isStaticAssetPath(pathname: string): boolean {
+  return (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/brand/") ||
+    pathname === "/manifest.webmanifest" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
+    pathname === "/favicon.svg"
+  );
 }
 
 /**
@@ -39,19 +51,12 @@ export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   // Skip Next internals, API routes, and the manifest/robots/sitemap special files.
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname === "/manifest.webmanifest" ||
-    pathname === "/robots.txt" ||
-    pathname === "/sitemap.xml" ||
-    pathname === "/favicon.svg"
-  ) {
+  if (isStaticAssetPath(pathname)) {
     return NextResponse.next();
   }
 
   // Already has a locale prefix (e.g. /en/tools, /es/tools).
-  for (const locale of LAUNCH_LOCALES) {
+  for (const locale of ROUTED_LOCALES) {
     if (pathname === `/${locale.code}` || pathname.startsWith(`/${locale.code}/`)) {
       // Stamp the locale for next-intl's request config (setRequestLocale is
       // unreliable in some Next 16 Turbopack builds; this header is the source
@@ -75,7 +80,8 @@ export const config = {
      * Match all paths except:
      * - Next internals (_next/static, _next/image)
      * - favicon
+     * - public brand assets
      */
-    "/((?!_next/static|_next/image|favicon).*)"
+    "/((?!_next/static|_next/image|favicon|brand).*)"
   ]
 };

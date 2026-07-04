@@ -1,19 +1,25 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { Save, ShieldCheck } from "lucide-react";
+import { FileJson, Save, ScanSearch, ShieldCheck } from "lucide-react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
-  buildAiPromptHardeningSteps,
   runAiPromptHardeningWorkflow,
   type AiPromptHardeningResult
 } from "@/lib/workflows/ai-prompt-hardening";
 
-const inputSurfaces = ["System prompt", "Tool instruction", "Retrieved text"] as const;
-const steps = buildAiPromptHardeningSteps();
+const inputSurfaces = ["systemPrompt", "toolInstruction", "retrievedText"] as const;
+const workflowSteps = ["pastePrompt", "scanInjectionRisk", "addGuardrails", "redTeamVariants"] as const;
+type InputSurface = (typeof inputSurfaces)[number];
 
 export function AiPromptHardeningWorkflow() {
-  const [surface, setSurface] = useState<(typeof inputSurfaces)[number]>("System prompt");
-  const [result, setResult] = useState<AiPromptHardeningResult | null>(null);
+  const t = useTranslations("workflows.ai-prompt-hardening");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [surface, setSurface] = useState("systemPrompt" as InputSurface);
+  const [result, setResult] = useState(null as AiPromptHardeningResult | null);
   const progress = result?.progressPercent ?? 0;
 
   const runHardening = () => {
@@ -23,18 +29,18 @@ export function AiPromptHardeningWorkflow() {
   return (
     <div className="workflow-builder-layout" data-ai-lab-workflow="mobile-edge-v3">
       <section className="workspace-panel workflow-overview-panel">
-        <span className="eyebrow">AI security workflow</span>
-        <h1>AI Prompt Hardening Workflow Builder</h1>
-        <p className="subtitle">Scan a prompt, detect injection risk, add guardrails, and generate a red-team checklist.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
         <div className="badge-row workflow-badge-row">
-          <span className="badge local">AI review optional</span>
-          <span className="badge warn">Injection risk</span>
-          <span className="badge">4 min</span>
+          <span className="badge local">{t("badges.aiReviewOptional")}</span>
+          <span className="badge warn">{t("badges.injectionRisk")}</span>
+          <span className="badge">{t("badges.duration")}</span>
         </div>
 
-        <h2 style={{ marginTop: 26 }}>Input surfaces</h2>
-        <div className="workflow-mode-row" role="group" aria-label="Input surfaces">
+        <h2 style={{ marginTop: 26 }}>{t("inputSurfacesTitle")}</h2>
+        <div className="workflow-mode-row" role="group" aria-label={t("inputSurfacesLabel")}>
           {inputSurfaces.map((item) => (
             <button
               aria-pressed={surface === item}
@@ -43,7 +49,7 @@ export function AiPromptHardeningWorkflow() {
               onClick={() => setSurface(item)}
               type="button"
             >
-              {item}
+              {t(`inputSurfaces.${item}`)}
             </button>
           ))}
         </div>
@@ -53,23 +59,23 @@ export function AiPromptHardeningWorkflow() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Hardening canvas</h2>
-              <p className="tool-description">Move from raw prompt to risk report, guardrails, and red-team variants.</p>
+              <h2>{t("canvas.title")}</h2>
+              <p className="tool-description">{t("canvas.description")}</p>
             </div>
             <button className="button button-outline-neutral" type="button">
-              <Save size={16} aria-hidden="true" /> Save template
+              <Save size={16} aria-hidden="true" /> {t("canvas.save")}
             </button>
           </div>
 
           <div className="workflow-step-list">
-            {steps.map((step, index) => (
-              <article className="workflow-step-row" key={step.title}>
+            {workflowSteps.map((step, index) => (
+              <article className="workflow-step-row" key={step}>
                 <span className="mcp-stage-number">{index + 1}</span>
                 <span>
-                  <strong>{step.title}</strong>
-                  <small>{step.description}</small>
+                  <strong>{t(`steps.${step}.title`)}</strong>
+                  <small>{t(`steps.${step}.description`)}</small>
                 </span>
-                <span className={`badge ${step.badge === "Scan" ? "warn" : "local"}`}>{step.badge}</span>
+                <span className={`badge ${step === "scanInjectionRisk" ? "warn" : "local"}`}>{t(`steps.${step}.badge`)}</span>
               </article>
             ))}
           </div>
@@ -78,16 +84,16 @@ export function AiPromptHardeningWorkflow() {
         <section className="workspace-panel">
           <div className="workflow-run-head">
             <div>
-              <h2>Run preview</h2>
-              <p className="tool-description">Simulate guardrail generation before wiring real scanners.</p>
+              <h2>{t("run.title")}</h2>
+              <p className="tool-description">{t("run.description")}</p>
             </div>
             <button className="button button-solid workflow-run-button" onClick={runHardening} type="button">
-              <ShieldCheck size={16} aria-hidden="true" /> Run hardening
+              <ShieldCheck size={16} aria-hidden="true" /> {t("run.action")}
             </button>
           </div>
 
           <div
-            aria-label="Prompt hardening progress"
+            aria-label={t("run.progressLabel")}
             aria-valuemax={100}
             aria-valuemin={0}
             aria-valuenow={progress}
@@ -98,39 +104,43 @@ export function AiPromptHardeningWorkflow() {
           </div>
 
           <div className="workflow-output-box">
-            <strong>{result?.statusTitle ?? "Ready to harden"}</strong>
-            <p>{result?.summary ?? "Paste a prompt and run the scanner to generate guardrails."}</p>
+            <strong>{result?.statusTitle ?? t("run.readyTitle")}</strong>
+            <p>{result?.summary ?? t("run.readyDescription")}</p>
             {result ? <small>{result.consentNote}</small> : null}
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel workflow-tool-chain">
-        <h2>Tool chain</h2>
+        <h2>{t("toolChain.title")}</h2>
         <div className="workflow-resource-list">
-          <a className="workflow-resource-row" href="/tools/prompt-injection-scanner">
-            <span className="icon-tile rose">PR</span>
-            <span>
-              <strong>Prompt Injection Scanner</strong>
-              <small>Detect override and exfiltration patterns</small>
+          <a className="workflow-resource-row" href={localizedHref("/tools/prompt-injection-scanner")}>
+            <span className="icon-tile rose" data-workflow-resource-icon="prompt-injection-scanner">
+              <ScanSearch size={18} aria-hidden="true" />
             </span>
-            <span className="badge warn">Scan</span>
+            <span>
+              <strong>{t("toolChain.promptScanner.title")}</strong>
+              <small>{t("toolChain.promptScanner.description")}</small>
+            </span>
+            <span className="badge warn">{t("toolChain.badges.scan")}</span>
           </a>
-          <a className="workflow-resource-row" href="/tools/json-repair">
-            <span className="icon-tile amber">JS</span>
-            <span>
-              <strong>JSON Repair</strong>
-              <small>Clean scanner report payloads</small>
+          <a className="workflow-resource-row" href={localizedHref("/tools/json-repair")}>
+            <span className="icon-tile amber" data-workflow-resource-icon="json-repair">
+              <FileJson size={18} aria-hidden="true" />
             </span>
-            <span className="badge local">Local</span>
+            <span>
+              <strong>{t("toolChain.jsonRepair.title")}</strong>
+              <small>{t("toolChain.jsonRepair.description")}</small>
+            </span>
+            <span className="badge local">{t("toolChain.badges.local")}</span>
           </a>
         </div>
 
         <div className="workflow-review-gate">
-          <strong>AI deep review</strong>
-          <p>Optional model-assisted review should require explicit consent.</p>
+          <strong>{t("reviewGate.title")}</strong>
+          <p>{t("reviewGate.description")}</p>
           <button className="button button-outline-neutral" type="button">
-            Review consent
+            {t("reviewGate.action")}
           </button>
         </div>
       </aside>

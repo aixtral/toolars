@@ -1,9 +1,36 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { renderWithIntl } from "@/test/i18n-test-utils";
+import { NextIntlClientProvider } from "next-intl";
+import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../../../scripts/audit-i18n.mjs";
+import es from "../../../../../messages/es.json";
 import { TeamSettingsView } from "./team-settings-view";
 
+function renderWithSpanishMessages(ui: ReactNode) {
+  return render(
+    <NextIntlClientProvider locale="es" messages={es}>
+      {ui}
+    </NextIntlClientProvider>
+  );
+}
+
+const teamSettingsSourceFile = "src/app/[locale]/settings/team/team-settings-view.tsx";
+
+function scanTeamSettingsSource() {
+  return scanSourceText(readFileSync(teamSettingsSourceFile, "utf8"), teamSettingsSourceFile);
+}
+
 describe("TeamSettingsView", () => {
+  it("does not contribute team settings hardcoded UI candidates to the i18n audit", () => {
+    const sourceScan = scanTeamSettingsSource();
+
+    expect(sourceScan.hardcodedText).toEqual([]);
+    expect(sourceScan.absoluteHrefs).toEqual([]);
+  });
+
   it("renders team settings modules from the design", () => {
     const { container } = renderWithIntl(<TeamSettingsView />);
 
@@ -17,6 +44,12 @@ describe("TeamSettingsView", () => {
     expect(screen.getByText("Shared collections")).toBeInTheDocument();
     expect(screen.getByText("Activity log")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Transfer ownership" })).toBeInTheDocument();
+  });
+
+  it("renders non-English team copy from messages", () => {
+    renderWithSpanishMessages(<TeamSettingsView />);
+
+    expect(screen.getByText("Administra miembros, roles, puestos, colecciones compartidas, invitaciones pendientes y controles de propiedad.")).toBeInTheDocument();
   });
 
   it("adds a pending invite when an email is submitted", () => {

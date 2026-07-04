@@ -1,9 +1,94 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AI_CONSENT_AUDIT_STORAGE_KEY } from "@/lib/ai/consent-audit-storage";
 import { WORKSPACE_IDENTITY_STORAGE_KEY } from "@/lib/workspace/workspace-identity";
+import en from "../../../../../messages/en.json";
 import { PdfSummaryWorkflow } from "./pdf-summary-workflow";
+
+const localizedWorkflowCopy = {
+  eyebrow: "Constructor centinela",
+  title: "Flujo PDF centinela",
+  subtitle: "Fusiona, extrae y resume con consentimiento centinela.",
+  badges: {
+    aiConsent: "Consentimiento IA centinela",
+    localSteps: "3 pasos locales centinela",
+    duration: "6 min centinela",
+    local: "Local centinela",
+    ai: "IA centinela",
+    style: "Estilo centinela",
+    handoffReady: "Traspaso servidor centinela"
+  },
+  variations: {
+    title: "Variaciones recomendadas centinela",
+    ariaLabel: "Variaciones recomendadas centinela",
+    boardPack: "Paquete directivo centinela",
+    clientSummary: "Resumen cliente centinela",
+    tableExtract: "Extracción tabla centinela"
+  },
+  stepCanvas: {
+    title: "Lienzo de pasos centinela",
+    description: "Cada paso centinela puede editarse."
+  },
+  actions: {
+    saveTemplate: "Guardar plantilla centinela",
+    runWorkflow: "Ejecutar flujo centinela",
+    reviewConsent: "Revisar consentimiento centinela"
+  },
+  runPreview: {
+    title: "Vista previa centinela",
+    description: "Simula extracción y consentimiento centinela.",
+    progressLabel: "Progreso PDF centinela",
+    readyTitle: "Listo centinela",
+    readyDescription: "Sube un PDF centinela antes de exportar."
+  },
+  settings: {
+    title: "Ajustes de paso centinela",
+    pdfToolkitTitle: "Kit PDF centinela",
+    pdfToolkitDescription: "Fuente centinela · cola PDF",
+    executiveTitle: "Informe ejecutivo centinela",
+    executiveDescription: "Estilo centinela · citas y acciones",
+    reviewTitle: "Consentimiento IA por paso centinela",
+    reviewDescription: "Solo el texto extraído centinela se envía.",
+    reviewed: "Consentimiento centinela revisado."
+  },
+  consent: {
+    contentSummary: "Solo se envía el texto extraído centinela.",
+    providerSummary: "{providerLabel} · {modelFamily} · {retentionDays} días centinela",
+    retentionSummary: "Puedes cancelar antes de aprobar el flujo centinela.",
+    scopeSummary: "La IA centinela empieza tras aprobar el resumen.",
+    workflowTitle: "Flujo PDF centinela"
+  }
+};
+
+const localizedMessages = {
+  ...en,
+  workflowsPage: {
+    ...en.workflowsPage,
+    pdfSummary: {
+      workspace: localizedWorkflowCopy
+    }
+  }
+};
+
+function renderWithLocalizedMessages() {
+  return render(
+    <NextIntlClientProvider locale="es" messages={localizedMessages}>
+      <PdfSummaryWorkflow />
+    </NextIntlClientProvider>
+  );
+}
+
+function expectToolChainIconsToUseArtwork(container: HTMLElement) {
+  const iconTiles = Array.from(container.querySelectorAll(".workflow-tool-chain .icon-tile"));
+
+  expect(iconTiles).toHaveLength(2);
+  iconTiles.forEach((tile) => {
+    expect(tile.querySelector("svg")).toBeInTheDocument();
+    expect(tile.textContent?.trim()).not.toMatch(/^(?:EX)$/);
+  });
+}
 
 describe("PdfSummaryWorkflow", () => {
   beforeEach(() => {
@@ -15,8 +100,23 @@ describe("PdfSummaryWorkflow", () => {
     vi.unstubAllGlobals();
   });
 
+  it("renders visible workflow copy from localized non-English messages", () => {
+    renderWithLocalizedMessages();
+
+    expect(screen.getByRole("heading", { name: localizedWorkflowCopy.title })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: localizedWorkflowCopy.variations.ariaLabel })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: localizedWorkflowCopy.variations.boardPack })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    expect(screen.getByText(localizedWorkflowCopy.stepCanvas.title)).toBeInTheDocument();
+    expect(screen.getByText(localizedWorkflowCopy.runPreview.title)).toBeInTheDocument();
+    expect(screen.getByText(localizedWorkflowCopy.settings.title)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: localizedWorkflowCopy.actions.reviewConsent })).toBeInTheDocument();
+  });
+
   it("renders the PDF summary workflow builder sections from the design", () => {
-    renderWithIntl(<PdfSummaryWorkflow />);
+    const { container } = renderWithIntl(<PdfSummaryWorkflow />);
 
     expect(screen.getByRole("heading", { name: "PDF Summary Workflow Builder" })).toBeInTheDocument();
     expect(screen.getByText("Recommended variations")).toBeInTheDocument();
@@ -27,6 +127,7 @@ describe("PdfSummaryWorkflow", () => {
     expect(screen.getByText("AI consent is step-scoped")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /PDF Toolkit/ })).toHaveAttribute("href", "/tools/pdf-toolkit");
     expect(screen.getByText("AI")).toBeInTheDocument();
+    expectToolChainIconsToUseArtwork(container);
   });
 
   it("simulates the PDF summary run when the user runs the workflow", () => {

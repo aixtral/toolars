@@ -1,9 +1,20 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
+import type { ReactNode } from "react";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { getToolDetailBySlug } from "@/data/tool-details";
+import zhHans from "../../../../../../messages/zh-hans.json";
 import { generateStaticParams, getDetailShellActive } from "./page";
 import { ToolDetailView } from "./tool-detail-view";
+
+function renderWithZhHans(ui: ReactNode) {
+  return render(
+    <NextIntlClientProvider locale="zh-hans" messages={zhHans}>
+      {ui}
+    </NextIntlClientProvider>
+  );
+}
 
 describe("ToolDetailView", () => {
   it("renders the Prompt Injection Scanner public listing template", () => {
@@ -47,6 +58,41 @@ describe("ToolDetailView", () => {
       "href",
       "/workflows/llm-cost-review"
     );
+  });
+
+  it("localizes generic detail labels and internal hrefs in zh-hans", () => {
+    const detail = getToolDetailBySlug("pdf-toolkit");
+    if (!detail) throw new Error("missing PDF detail");
+
+    renderWithZhHans(<ToolDetailView detail={detail} />);
+
+    expect(screen.getByText("公开工具列表")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "PDF 工具箱 详情" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "分享" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "打开工具" })).toHaveAttribute("href", "/zh-hans/tools/pdf-toolkit");
+    expect(screen.getByText("概览")).toBeInTheDocument();
+    expect(screen.getByText("工作方式")).toBeInTheDocument();
+    expect(screen.getByText("实现交接")).toBeInTheDocument();
+    expect(screen.getByText("收录于集合")).toBeInTheDocument();
+    expect(screen.getByText("相关工具")).toBeInTheDocument();
+    expect(screen.getByText("推荐工作流")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /PDF Ops Kit/ })).toHaveAttribute(
+      "href",
+      "/zh-hans/collections/pdf-ops-kit"
+    );
+    expect(screen.getByRole("link", { name: /PDF Merger/ })).toHaveAttribute(
+      "href",
+      "/zh-hans/tools/pdf-merger/about"
+    );
+    expect(screen.getByRole("link", { name: /Turn PDF into summary/ })).toHaveAttribute(
+      "href",
+      "/zh-hans/workflows/pdf-summary"
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "分享" }));
+
+    expect(screen.getByRole("dialog", { name: "分享此工具" })).toBeInTheDocument();
+    expect(screen.getByDisplayValue("/zh-hans/tools/pdf-toolkit/about")).toBeInTheDocument();
   });
 
   it("renders the designed PDF Toolkit and JSON Repair public listings", () => {

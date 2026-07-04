@@ -1,41 +1,46 @@
 import {
   ArrowRight,
+  Calculator,
   FileText,
   Flame,
   FolderOpen,
+  Network,
   ShieldCheck,
   Sparkles,
   Workflow
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { workflows, type WorkflowDefinition } from "@/data/registry";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 const featuredWorkflowSlugs = ["pdf-summary", "llm-cost-review", "mcp-tool-launch"];
-const examples = ["Summarize PDF report", "Clean CSV and visualize", "Generate blog post", "Resize images for social"];
-const workflowFilters = ["All workflows", "Includes AI", "Local first", "Team ready"];
+const workflowIcons = {
+  "pdf-summary": FileText,
+  "ai-prompt-hardening": ShieldCheck,
+  "llm-cost-review": Calculator,
+  "mcp-tool-launch": Network
+} as const;
 
-const workflowMobileTitles: Record<string, string> = {
-  "pdf-summary": "PDF Summary Workflow Builder"
+type WorkflowCardMessage = {
+  title: string;
+  description: string;
+  steps: string[];
+  categoryShort: string;
+  mobileTitle?: string;
+  mobileDescription?: string;
+  mobileTileValue?: string;
+  mobileMinutes?: string;
+  mobileRuns?: string;
 };
 
-const workflowMobileDescriptions: Record<string, string> = {
-  "pdf-summary": "Merge PDFs, extract text locally, run AI summary with consent, and export citations.",
-  "ai-prompt-hardening": "Scan a prompt, detect injection risk, add guardrails, and generate a red-team checklist."
-};
-
-const workflowMobileTileValues: Record<string, string> = {
-  "pdf-summary": "5"
-};
-
-const workflowMobileMinuteLabels: Record<string, string> = {
-  "pdf-summary": "6 min"
-};
-
-const workflowMobileRunLabels: Record<string, string> = {
-  "pdf-summary": "+1.2K runs",
-  "ai-prompt-hardening": "+764 runs",
-  "llm-cost-review": "+689 runs",
-  "mcp-tool-launch": "+534 runs"
+type WorkflowCardLabels = {
+  stepsAriaLabel: (title: string) => string;
+  stepsCount: (count: number) => string;
+  minutes: (minutes: number) => string;
+  runs: (runs: string) => string;
+  aiStep: string;
+  noAi: string;
+  start: string;
 };
 
 function workflowTone(workflow: WorkflowDefinition): string {
@@ -45,51 +50,80 @@ function workflowTone(workflow: WorkflowDefinition): string {
   return "amber";
 }
 
-function WorkflowCard({ workflow, featured = false }: { workflow: WorkflowDefinition; featured?: boolean }) {
+function workflowCopy(workflow: WorkflowDefinition, messages: Record<string, WorkflowCardMessage>): WorkflowCardMessage {
+  return messages[workflow.slug] ?? {
+    title: workflow.title,
+    description: workflow.description,
+    steps: workflow.steps,
+    categoryShort: workflow.category.slice(0, 2).toUpperCase()
+  };
+}
+
+function getWorkflowIcon(workflow: WorkflowDefinition) {
+  return workflowIcons[workflow.slug as keyof typeof workflowIcons] ?? Workflow;
+}
+
+function isWorkflowDefinition(workflow: WorkflowDefinition | undefined): workflow is WorkflowDefinition {
+  return Boolean(workflow);
+}
+
+function WorkflowCard({
+  workflow,
+  copy,
+  labels,
+  featured = false,
+  localizedHref
+}: {
+  workflow: WorkflowDefinition;
+  copy: WorkflowCardMessage;
+  labels: WorkflowCardLabels;
+  featured?: boolean;
+  localizedHref: (href: string) => string;
+}) {
   const tone = workflowTone(workflow);
-  const mobileTitle = workflowMobileTitles[workflow.slug] ?? workflow.title;
-  const mobileDescription = workflowMobileDescriptions[workflow.slug] ?? workflow.description;
-  const mobileTileValue = workflowMobileTileValues[workflow.slug] ?? String(workflow.steps.length);
-  const mobileMinuteLabel = workflowMobileMinuteLabels[workflow.slug] ?? `${workflow.estimatedMinutes} min`;
-  const mobileRunLabel = workflowMobileRunLabels[workflow.slug] ?? `${workflow.runCount} runs`;
+  const Icon = getWorkflowIcon(workflow);
+  const steps = copy.steps.length ? copy.steps : workflow.steps;
+  const mobileTitle = copy.mobileTitle ?? copy.title;
+  const mobileDescription = copy.mobileDescription ?? copy.description;
+  const mobileMinuteLabel = copy.mobileMinutes ?? labels.minutes(workflow.estimatedMinutes);
+  const mobileRunLabel = copy.mobileRuns ?? labels.runs(workflow.runCount);
 
   return (
-    <a className={`workflow-index-card ${featured ? "is-featured" : ""}`} href={workflow.href}>
-      <span className={`icon-tile ${tone}`}>
-        <span className="workflow-card-tile-desktop">{workflow.steps.length}</span>
-        <span className="workflow-card-tile-mobile">{mobileTileValue}</span>
+    <a className={`workflow-index-card ${featured ? "is-featured" : ""}`} href={localizedHref(workflow.href)}>
+      <span className={`icon-tile ${tone}`} data-workflow-card-icon={workflow.slug}>
+        <Icon size={18} aria-hidden="true" />
       </span>
       <span>
         <strong>
-          <span className="workflow-title-desktop">{workflow.title}</span>
+          <span className="workflow-title-desktop">{copy.title}</span>
           <span className="workflow-title-mobile">{mobileTitle}</span>
         </strong>
         <small>
-          <span className="workflow-description-desktop">{workflow.description}</span>
+          <span className="workflow-description-desktop">{copy.description}</span>
           <span className="workflow-description-mobile">{mobileDescription}</span>
         </small>
       </span>
-      <span className="workflow-mini-steps" aria-label={`${workflow.title} steps`}>
-        {workflow.steps.slice(0, 3).map((step) => (
+      <span className="workflow-mini-steps" aria-label={labels.stepsAriaLabel(copy.title)}>
+        {steps.slice(0, 3).map((step) => (
           <span className="workflow-mini-step" key={step}>
             {step}
           </span>
         ))}
       </span>
       <span className="tag-list">
-        <span className="badge workflow-steps-count">{workflow.steps.length} steps</span>
-        <span className={workflow.aiRequired ? "badge ai workflow-ai-state" : "badge local workflow-ai-state"}>{workflow.aiRequired ? "AI step" : "No AI"}</span>
+        <span className="badge workflow-steps-count">{labels.stepsCount(steps.length)}</span>
+        <span className={workflow.aiRequired ? "badge ai workflow-ai-state" : "badge local workflow-ai-state"}>{workflow.aiRequired ? labels.aiStep : labels.noAi}</span>
         <span className="badge workflow-minutes">
-          <span className="workflow-badge-desktop">{workflow.estimatedMinutes} min</span>
+          <span className="workflow-badge-desktop">{labels.minutes(workflow.estimatedMinutes)}</span>
           <span className="workflow-badge-mobile">{mobileMinuteLabel}</span>
         </span>
         <span className="badge warn workflow-runs">
-          <span className="workflow-badge-desktop">{workflow.runCount} runs</span>
+          <span className="workflow-badge-desktop">{labels.runs(workflow.runCount)}</span>
           <span className="workflow-badge-mobile">{mobileRunLabel}</span>
         </span>
       </span>
       <span className="open-link">
-        Start <ArrowRight size={14} aria-hidden="true" />
+        {labels.start} <ArrowRight size={14} aria-hidden="true" />
       </span>
     </a>
   );
@@ -97,9 +131,27 @@ function WorkflowCard({ workflow, featured = false }: { workflow: WorkflowDefini
 
 export function WorkflowsIndexView() {
   const t = useTranslations("workflowsPage");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const examples = t.raw("exampleItems") as string[];
+  const workflowFilters = t.raw("filters") as string[];
+  const workflowMessages = t.raw("workflowCards") as Record<string, WorkflowCardMessage>;
+  const cardLabels: WorkflowCardLabels = {
+    stepsAriaLabel: (title) => t("card.stepsAriaLabel", { title }),
+    stepsCount: (count) => t("card.stepsCount", { count }),
+    minutes: (minutes) => t("card.minutes", { minutes }),
+    runs: (runs) => t("card.runs", { runs }),
+    aiStep: t("card.aiStep"),
+    noAi: t("card.noAi"),
+    start: t("card.start")
+  };
   const featuredWorkflows = featuredWorkflowSlugs
     .map((slug) => workflows.find((workflow) => workflow.slug === slug))
-    .filter((workflow): workflow is WorkflowDefinition => Boolean(workflow));
+    .filter(isWorkflowDefinition);
+
+  function localizedHref(href: string) {
+    return href.startsWith("#") ? href : localizePath(href, localeCode);
+  }
 
   return (
     <div
@@ -127,16 +179,16 @@ export function WorkflowsIndexView() {
           </button>
           <div className="search-panel landing-search-panel">
             <div className="hero-input">
-              <span className="workflow-mobile-search-icon">WF</span>
+              <span className="workflow-mobile-search-icon">{t("searchIconLabel")}</span>
               <Sparkles size={18} aria-hidden="true" />
               <span>{t("searchPrompt")}</span>
-              <a className="open-link workflow-search-submit" href="/workflows/pdf-summary">
-                <span className="workflow-search-submit-mobile-label">Go</span>
+              <a className="open-link workflow-search-submit" href={localizedHref("/workflows/pdf-summary")}>
+                <span className="workflow-search-submit-mobile-label">{t("searchSubmitMobile")}</span>
                 <ArrowRight size={16} aria-hidden="true" />
               </a>
             </div>
           </div>
-          <div className="workflow-example-row" aria-label="Workflow examples">
+          <div className="workflow-example-row" aria-label={t("examplesAriaLabel")}>
             <span>{t("examples")}</span>
             {examples.map((example) => (
               <span className="chip" key={example}>
@@ -144,7 +196,7 @@ export function WorkflowsIndexView() {
               </span>
             ))}
           </div>
-          <div className="workflow-mobile-filter-row" role="group" aria-label="Workflow filters">
+          <div className="workflow-mobile-filter-row" role="group" aria-label={t("filtersAriaLabel")}>
             {workflowFilters.map((filter, index) => (
               <button className={index === 0 ? "chip active" : "chip"} aria-pressed={index === 0 ? "true" : "false"} key={filter} type="button">
                 {filter}
@@ -165,7 +217,7 @@ export function WorkflowsIndexView() {
           </div>
           <div className="workflow-feature-grid">
             {featuredWorkflows.map((workflow) => (
-              <WorkflowCard featured key={workflow.slug} workflow={workflow} />
+              <WorkflowCard copy={workflowCopy(workflow, workflowMessages)} featured key={workflow.slug} labels={cardLabels} localizedHref={localizedHref} workflow={workflow} />
             ))}
           </div>
         </section>
@@ -173,13 +225,13 @@ export function WorkflowsIndexView() {
         <section className="section" id="templates">
           <div className="landing-section-head">
             <h2>{t("popularTemplates")}</h2>
-            <a className="text-link" href="/collections">
+            <a className="text-link" href={localizedHref("/collections")}>
               {t("browseCollections")}
             </a>
           </div>
           <div className="workflow-template-grid">
             {workflows.map((workflow) => (
-              <WorkflowCard key={workflow.slug} workflow={workflow} />
+              <WorkflowCard copy={workflowCopy(workflow, workflowMessages)} key={workflow.slug} labels={cardLabels} localizedHref={localizedHref} workflow={workflow} />
             ))}
           </div>
         </section>
@@ -194,16 +246,23 @@ export function WorkflowsIndexView() {
             </a>
           </div>
           <div className="landing-ranked-list">
-            {workflows.map((workflow, index) => (
-              <a className="landing-ranked-row" href={workflow.href} key={workflow.slug}>
-                <span>{index + 1}</span>
-                <span className={`icon-tile ${workflowTone(workflow)}`}>{workflow.category.slice(0, 2).toUpperCase()}</span>
-                <strong>{workflow.title}</strong>
-                <small>
-                  <Flame size={12} aria-hidden="true" /> {workflow.runCount}
-                </small>
-              </a>
-            ))}
+            {workflows.map((workflow, index) => {
+              const copy = workflowCopy(workflow, workflowMessages);
+              const Icon = getWorkflowIcon(workflow);
+
+              return (
+                <a className="landing-ranked-row" href={localizedHref(workflow.href)} key={workflow.slug}>
+                  <span>{index + 1}</span>
+                  <span className={`icon-tile ${workflowTone(workflow)}`} data-workflow-ranked-icon={workflow.slug}>
+                    <Icon size={16} aria-hidden="true" />
+                  </span>
+                  <strong>{copy.title}</strong>
+                  <small>
+                    <Flame size={12} aria-hidden="true" /> {workflow.runCount}
+                  </small>
+                </a>
+              );
+            })}
           </div>
         </section>
 
@@ -237,13 +296,13 @@ export function WorkflowsIndexView() {
 
         <section className="panel">
           <h2>{t("startFast")}</h2>
-          <a className="resource-card" href="/workflows/pdf-summary">
+          <a className="resource-card" href={localizedHref("/workflows/pdf-summary")}>
             <span className="icon-tile rose">
               <FileText size={18} aria-hidden="true" />
             </span>
             <span>
-              <h3>PDF summary</h3>
-              <p>Merge, extract, summarize, and export with citations.</p>
+              <h3>{t("fastStartResource.title")}</h3>
+              <p>{t("fastStartResource.description")}</p>
             </span>
             <ArrowRight size={18} aria-hidden="true" />
           </a>

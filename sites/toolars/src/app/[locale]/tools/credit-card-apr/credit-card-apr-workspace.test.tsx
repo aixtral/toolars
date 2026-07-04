@@ -1,11 +1,29 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
+import es from "../../../../../messages/es.json";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../../../scripts/audit-i18n.mjs";
 import { CreditCardAprWorkspace } from "./credit-card-apr-workspace";
+
+const creditCardAprSourceFile = "src/app/[locale]/tools/credit-card-apr/credit-card-apr-workspace.tsx";
+
+function scanCreditCardAprWorkspaceSource() {
+  return scanSourceText(readFileSync(creditCardAprSourceFile, "utf8"), creditCardAprSourceFile);
+}
 
 describe("CreditCardAprWorkspace", () => {
   beforeEach(() => {
     window.localStorage.clear();
+  });
+
+  it("keeps the workspace source clear of i18n audit candidates", () => {
+    const sourceScan = scanCreditCardAprWorkspaceSource();
+
+    expect(sourceScan.hardcodedText).toEqual([]);
+    expect(sourceScan.absoluteHrefs).toEqual([]);
   });
 
   it("renders the local VitalCalc credit card APR workspace sections", () => {
@@ -37,5 +55,20 @@ describe("CreditCardAprWorkspace", () => {
     fireEvent.click(screen.getByRole("button", { name: "Save APR plan" }));
 
     expect(window.localStorage.getItem("toolars.credit-card-apr.plan")).toContain("10000");
+  });
+
+  it("renders Spanish workspace copy and localized details link", () => {
+    render(
+      <NextIntlClientProvider locale="es" messages={es}>
+        <CreditCardAprWorkspace />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByRole("heading", { name: "Calculadora de TAE de tarjeta de crédito" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Revelar TAE real" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Detalles de la herramienta" })).toHaveAttribute(
+      "href",
+      "/es/tools/credit-card-apr/about"
+    );
   });
 });

@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, CreditCard, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateDebtPayoff,
   defaultDebtPayoffScenario,
@@ -12,21 +13,20 @@ import {
 } from "@/lib/tools/debt-payoff";
 
 const trustRows = [
-  ["Local", "Debt, rate, and payment assumptions stay in this browser session", "local"],
-  ["Reference", "Single-debt plans make avalanche and snowball equivalent", "warn"],
-  ["Private", "Save only stores the plan locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const debtNotes = [
-  "VitalCalc uses a monthly interest loop and stops at 600 months.",
-  "Payments must exceed monthly interest or principal will not fall.",
-  "For multiple debts, avalanche reduces interest while snowball may improve motivation."
-];
+const debtNotes = ["loop", "principal", "strategy"] as const;
 
 export function DebtPayoffWorkspace() {
-  const t = useTranslations("tools.debt-payoff");
-  const [plan, setPlan] = useState<DebtPayoffInput>(defaultDebtPayoffScenario);
-  const [result, setResult] = useState<DebtPayoffResult | null>(null);
+  const t = useTranslations("tools.debt-payoff.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/debt-payoff/about", localeCode);
+  const [plan, setPlan] = useState((): DebtPayoffInput => ({ ...defaultDebtPayoffScenario }));
+  const [result, setResult] = useState(null as DebtPayoffResult | null);
 
   const calculate = () => {
     setResult(calculateDebtPayoff(plan));
@@ -49,23 +49,23 @@ export function DebtPayoffWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="debt-payoff">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc finance workspace</span>
-        <h1>Debt Payoff Calculator</h1>
-        <p className="subtitle">Estimate payoff time, interest, and the first-month principal split.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={`badge ${row.tone}`}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/debt-payoff/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -74,40 +74,40 @@ export function DebtPayoffWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Debt inputs</h2>
-              <p className="tool-description">Use the VitalCalc sample, then adjust balance, APR, payment, and payoff strategy.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="debt-payoff-balance">
-              Total debt
+              {t("fields.totalDebt")}
               <input className="input" id="debt-payoff-balance" min={0} onChange={(event) => updateNumber("debtBalance", event.target.value)} type="number" value={plan.debtBalance} />
             </label>
             <label className="field-label" htmlFor="debt-payoff-rate">
-              Annual interest rate
+              {t("fields.annualInterestRate")}
               <input className="input" id="debt-payoff-rate" min={0} onChange={(event) => updateNumber("annualInterestRate", event.target.value)} step="0.1" type="number" value={plan.annualInterestRate} />
             </label>
             <label className="field-label" htmlFor="debt-payoff-payment">
-              Monthly payment
+              {t("fields.monthlyPayment")}
               <input className="input" id="debt-payoff-payment" min={0} onChange={(event) => updateNumber("monthlyPayment", event.target.value)} type="number" value={plan.monthlyPayment} />
             </label>
             <label className="field-label" htmlFor="debt-payoff-strategy">
-              Strategy
+              {t("fields.strategy")}
               <select className="input" id="debt-payoff-strategy" onChange={(event) => updateStrategy(event.target.value)} value={plan.strategy}>
-                <option value="avalanche">Avalanche</option>
-                <option value="snowball">Snowball</option>
+                <option value="avalanche">{t("fields.avalanche")}</option>
+                <option value="snowball">{t("fields.snowball")}</option>
               </select>
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save payoff plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate payoff
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -115,28 +115,28 @@ export function DebtPayoffWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Payoff summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate payoff months and total interest."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">Debt plan</span>
+            <span className="badge warn">{t("badges.debtPlan")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result && !result.isPaymentTooLow ? `${result.monthsToPayoff} months` : "0 months"}</strong>
-              <span>Months to payoff</span>
+              <strong>{result && !result.isPaymentTooLow ? t("metrics.monthsValue", { count: result.monthsToPayoff }) : t("metrics.zeroMonths")}</strong>
+              <span>{t("metrics.monthsToPayoff")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedTotalInterest ?? "$0"}</strong>
-              <span>Total interest</span>
+              <span>{t("metrics.totalInterest")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedTotalPaid ?? "$0"}</strong>
-              <span>Total paid</span>
+              <span>{t("metrics.totalPaid")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{plan.strategy === "snowball" ? "Snowball" : "Avalanche"}</strong>
-              <span>Strategy</span>
+              <strong>{plan.strategy === "snowball" ? t("metrics.snowball") : t("metrics.avalanche")}</strong>
+              <span>{t("metrics.strategy")}</span>
             </article>
           </div>
 
@@ -147,32 +147,32 @@ export function DebtPayoffWorkspace() {
                 {result
                   ? result.isPaymentTooLow
                     ? result.warning
-                    : `Month 1 principal ${result.firstMonth.formattedPrincipal} + interest ${result.firstMonth.formattedInterest}`
-                  : "Waiting for calculation"}
+                    : t("callout.firstMonthPrincipal", { principal: result.firstMonth.formattedPrincipal, interest: result.firstMonth.formattedInterest })
+                  : t("callout.waitingTitle")}
               </strong>
-              <small>{result ? result.strategyMessage : "Calculate first to see the first-month split."}</small>
+              <small>{result ? result.strategyMessage : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Debt payoff notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {debtNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>No lender or account data is required. Use this as a payoff estimate.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

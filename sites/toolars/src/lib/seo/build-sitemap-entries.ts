@@ -1,4 +1,5 @@
-import { allArticleSlugs } from "@/data/blog";
+import { allArticleSlugs, getArticleAvailableLocales } from "@/data/blog";
+import type { LocaleCode } from "@/data/locales";
 import { collections, tools, workflows } from "@/data/registry";
 
 export interface SitemapEntry {
@@ -6,6 +7,7 @@ export interface SitemapEntry {
   lastModified?: string;
   changeFrequency?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority?: number;
+  locales?: LocaleCode[];
 }
 
 const STATIC_DIRECTORIES: Array<{ path: string; changeFrequency: SitemapEntry["changeFrequency"]; priority: number }> = [
@@ -71,7 +73,8 @@ export function buildSitemapEntries(baseUrl: string): SitemapEntry[] {
     entries.push({
       url: `${normalizedBase}/blog/${slug}`,
       changeFrequency: "monthly",
-      priority: 0.6
+      priority: 0.6,
+      locales: getArticleAvailableLocales(slug)
     });
   }
 

@@ -1,42 +1,49 @@
 import { AlertTriangle, LoaderCircle, Search, Trash2, WifiOff } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
-const toastRows = [
-  ["saved", "Saved to PDF power user kit", "Undo"],
-  ["consent", "AI consent required before summarizing", "Review"],
-  ["failed", "Upload failed. File exceeds 50 MB.", "Retry"],
-  ["shared", "Share link copied", "Dismiss"]
-] as const;
+const toastRowKeys = ["saved", "consent", "failed", "shared"] as const;
+const drawerItemKeys = ["explore", "workflows", "collections", "myTools", "submitTool", "settings"] as const;
+const commandSuggestionKeys = ["aiPdfSummarizer", "pdfToolkit", "turnPdfIntoSummary", "q2ReportSummary"] as const;
 
 export function StatesBoardView() {
+  const t = useTranslations("statesBoard");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+
+  function localizedHref(href: string) {
+    return localizePath(href, localeCode);
+  }
+
   return (
     <div className="states-board-page" data-states-board-page="true" data-states-density="mobile-v2" data-states-mobile-layout="state-gallery">
       <section className="section states-board-hero">
-        <span className="eyebrow">System states</span>
-        <h1 className="title">States and overlays</h1>
-        <p className="subtitle">Prototype-ready states for empty screens, loading skeletons, upload failures, offline mode, toast feedback, validation, mobile navigation, delete confirmation, and mobile command search.</p>
+        <span className="eyebrow">{t("hero.eyebrow")}</span>
+        <h1 className="title">{t("hero.title")}</h1>
+        <p className="subtitle">{t("hero.subtitle")}</p>
         <button className="button button-outline-neutral" type="button">
-          Show toast
+          {t("hero.showToast")}
         </button>
       </section>
 
-      <section className="states-grid" aria-label="States and overlays board">
+      <section className="states-grid" aria-label={t("boardAriaLabel")}>
         <article className="panel states-card">
-          <span className="states-label">Empty</span>
+          <span className="states-label">{t("labels.empty")}</span>
           <span className="icon-tile green">+</span>
-          <h2>No saved outputs yet</h2>
-          <p className="tool-description">Start with a tool or workflow, then saved results will appear here.</p>
+          <h2>{t("empty.title")}</h2>
+          <p className="tool-description">{t("empty.description")}</p>
           <div className="settings-button-row">
-            <a className="button button-solid" href="/tools/pdf-toolkit">
-              Open PDF Toolkit
+            <a className="button button-solid" href={localizedHref("/tools/pdf-toolkit")}>
+              {t("empty.openPdfToolkit")}
             </a>
             <button className="button button-outline-neutral" type="button">
-              Import bookmarks
+              {t("empty.importBookmarks")}
             </button>
           </div>
         </article>
 
         <article className="panel states-card">
-          <span className="states-label">Loading</span>
+          <span className="states-label">{t("labels.loading")}</span>
           <LoaderCircle size={22} aria-hidden="true" />
           <div className="states-skeleton wide" />
           <div className="states-skeleton" />
@@ -45,114 +52,113 @@ export function StatesBoardView() {
         </article>
 
         <article className="panel states-card">
-          <span className="states-label">Upload error</span>
+          <span className="states-label">{t("labels.uploadError")}</span>
           <div className="states-alert red">
             <AlertTriangle size={18} aria-hidden="true" />
             <span>
-              <strong>File too large</strong>
-              <small>Toolars can process files up to 50 MB for this workflow.</small>
+              <strong>{t("uploadError.title")}</strong>
+              <small>{t("uploadError.description")}</small>
             </span>
           </div>
           <div className="settings-button-row">
             <button className="button button-solid" type="button">
-              Retry upload
+              {t("uploadError.retryUpload")}
             </button>
             <button className="button button-outline-neutral" type="button">
-              View requirements
+              {t("uploadError.viewRequirements")}
             </button>
           </div>
         </article>
 
         <article className="panel states-card">
-          <span className="states-label">Offline mode</span>
+          <span className="states-label">{t("labels.offlineMode")}</span>
           <div className="states-alert blue">
             <WifiOff size={18} aria-hidden="true" />
             <span>
-              <strong>Local tools are still available</strong>
-              <small>AI and cloud tools are paused until your connection returns.</small>
+              <strong>{t("offline.title")}</strong>
+              <small>{t("offline.description")}</small>
             </span>
           </div>
-          <a className="button button-outline-neutral" href="/">
-            Open local tools
+          <a className="button button-outline-neutral" href={localizedHref("/")}>
+            {t("offline.openLocalTools")}
           </a>
         </article>
 
         <article className="panel states-card states-card-wide">
-          <span className="states-label">Toast stack</span>
+          <span className="states-label">{t("labels.toastStack")}</span>
           <div className="states-toast-stack">
-            {toastRows.map(([tone, text, action]) => (
-              <div className={`states-toast ${tone}`} key={text}>
+            {toastRowKeys.map((toastKey) => (
+              <div className={`states-toast ${toastKey}`} key={toastKey}>
                 <span className="states-dot" />
-                <strong>{text}</strong>
-                <button type="button">{action}</button>
+                <strong>{t(`toasts.${toastKey}.text`)}</strong>
+                <button type="button">{t(`toasts.${toastKey}.action`)}</button>
               </div>
             ))}
           </div>
         </article>
 
         <article className="panel states-card states-card-wide">
-          <span className="states-label">Form validation</span>
+          <span className="states-label">{t("labels.formValidation")}</span>
           <label className="states-field">
-            <span>Website URL <strong>Verified</strong></span>
+            <span>{t("validation.websiteUrl.label")} <strong>{t("validation.websiteUrl.state")}</strong></span>
             <input readOnly value="https://exampletool.com" />
           </label>
           <label className="states-field warn">
-            <span>Screenshot <strong>Required for review</strong></span>
-            <input readOnly value="No screenshot uploaded" />
+            <span>{t("validation.screenshot.label")} <strong>{t("validation.screenshot.state")}</strong></span>
+            <input readOnly value={t("validation.screenshot.value")} />
           </label>
           <label className="states-field error">
-            <span>Description <strong>12 characters over limit</strong></span>
-            <input readOnly value="An AI tool that summarizes documents, PDFs, and reports..." />
+            <span>{t("validation.description.label")} <strong>{t("validation.description.state")}</strong></span>
+            <input readOnly value={t("validation.description.value")} />
           </label>
         </article>
 
         <article className="panel states-card">
-          <span className="states-label">Mobile drawer</span>
+          <span className="states-label">{t("labels.mobileDrawer")}</span>
           <div className="states-mobile-drawer">
             <div>
               <strong>Toolars</strong>
-              <span>Close</span>
+              <span>{t("drawer.close")}</span>
             </div>
-            {["Explore", "Workflows", "Collections", "My tools", "Submit tool", "Settings"].map((item, index) => (
-              <span className={index === 0 ? "is-active" : ""} key={item}>{item}</span>
+            {drawerItemKeys.map((itemKey, index) => (
+              <span className={index === 0 ? "is-active" : ""} key={itemKey}>{t(`drawer.items.${itemKey}`)}</span>
             ))}
           </div>
         </article>
 
         <article className="panel states-card">
-          <span className="states-label">Delete confirmation</span>
+          <span className="states-label">{t("labels.deleteConfirmation")}</span>
           <div className="states-modal">
             <Trash2 size={20} aria-hidden="true" />
-            <h2>Delete saved output?</h2>
-            <p>This will remove the PDF summary from your history. Shared links to this output will stop working.</p>
+            <h2>{t("delete.title")}</h2>
+            <p>{t("delete.description")}</p>
             <div className="states-alert amber">
               <AlertTriangle size={16} aria-hidden="true" />
-              <span>This action cannot be undone</span>
+              <span>{t("delete.warning")}</span>
             </div>
             <div className="settings-button-row">
               <button className="button button-outline-neutral" type="button">
-                Cancel
+                {t("delete.cancel")}
               </button>
               <button className="button button-danger" type="button">
-                Delete output
+                {t("delete.deleteOutput")}
               </button>
             </div>
           </div>
         </article>
 
         <article className="panel states-card states-card-wide">
-          <span className="states-label">Mobile command overlay</span>
+          <span className="states-label">{t("labels.mobileCommandOverlay")}</span>
           <div className="states-command-overlay">
             <div className="states-command-input">
               <Search size={16} aria-hidden="true" />
-              <span>summarize pdf</span>
-              <button type="button">Close command</button>
+              <span>{t("command.query")}</span>
+              <button type="button">{t("command.close")}</button>
             </div>
-            <strong>Suggested</strong>
-            <span className="is-active">AI PDF Summarizer</span>
-            <span>PDF Toolkit</span>
-            <span>Turn PDF into summary</span>
-            <span>Recent: Q2 report summary</span>
+            <strong>{t("command.suggested")}</strong>
+            {commandSuggestionKeys.map((suggestionKey, index) => (
+              <span className={index === 0 ? "is-active" : ""} key={suggestionKey}>{t(`command.suggestions.${suggestionKey}`)}</span>
+            ))}
           </div>
         </article>
       </section>

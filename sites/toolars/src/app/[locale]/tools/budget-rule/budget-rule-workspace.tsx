@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, PieChart, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateBudgetRule,
   defaultBudgetRuleScenario,
@@ -11,21 +12,24 @@ import {
 } from "@/lib/tools/budget-rule";
 
 const trustRows = [
-  ["Local", "Income and allocation ratios stay in this browser session", "local"],
-  ["Reference", "50/30/20 is a budgeting heuristic, not a mandate", "warn"],
-  ["Private", "Save only stores the plan locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const budgetNotes = [
-  "VitalCalc splits income into needs, wants, and savings by percentage.",
-  "Adjust ratios when rent, debt payoff, or savings priorities require it.",
-  "A ratio total outside 100% needs review before using the allocation."
-];
+  "split",
+  "adjust",
+  "review"
+] as const;
 
 export function BudgetRuleWorkspace() {
-  const t = useTranslations("tools.budget-rule");
-  const [plan, setPlan] = useState<BudgetRuleInput>(defaultBudgetRuleScenario);
-  const [result, setResult] = useState<BudgetRuleResult | null>(null);
+  const t = useTranslations("tools.budget-rule.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/budget-rule/about", localeCode);
+  const [plan, setPlan] = useState(defaultBudgetRuleScenario);
+  const [result, setResult] = useState(null as BudgetRuleResult | null);
 
   const calculate = () => {
     setResult(calculateBudgetRule(plan));
@@ -43,23 +47,23 @@ export function BudgetRuleWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="budget-rule">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc finance workspace</span>
-        <h1>50/30/20 Budget Rule</h1>
-        <p className="subtitle">Split monthly income into needs, wants, and savings using adjustable ratios.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/budget-rule/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -68,37 +72,37 @@ export function BudgetRuleWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Budget inputs</h2>
-              <p className="tool-description">Use the VitalCalc 50/30/20 sample or tune percentages for the household.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="budget-income">
-              Monthly income
+              {t("fields.monthlyIncome")}
               <input className="input" id="budget-income" min={0} onChange={(event) => updateNumber("monthlyIncome", event.target.value)} type="number" value={plan.monthlyIncome} />
             </label>
             <label className="field-label" htmlFor="budget-needs">
-              Needs percent
+              {t("fields.needsPercent")}
               <input className="input" id="budget-needs" min={0} onChange={(event) => updateNumber("needsPercent", event.target.value)} type="number" value={plan.needsPercent} />
             </label>
             <label className="field-label" htmlFor="budget-wants">
-              Wants percent
+              {t("fields.wantsPercent")}
               <input className="input" id="budget-wants" min={0} onChange={(event) => updateNumber("wantsPercent", event.target.value)} type="number" value={plan.wantsPercent} />
             </label>
             <label className="field-label" htmlFor="budget-savings">
-              Savings percent
+              {t("fields.savingsPercent")}
               <input className="input" id="budget-savings" min={0} onChange={(event) => updateNumber("savingsPercent", event.target.value)} type="number" value={plan.savingsPercent} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save budget
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Generate budget
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -106,58 +110,68 @@ export function BudgetRuleWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Budget allocation</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to split income into three buckets."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      needs: Math.max(0, plan.needsPercent),
+                      wants: Math.max(0, plan.wantsPercent),
+                      savings: Math.max(0, plan.savingsPercent)
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className={`badge ${result?.healthTone === "warning" ? "warn" : "local"}`}>{result ? `${result.totalPercent}% total` : "Budget"}</span>
+            <span className={`badge ${result?.healthTone === "warning" ? "warn" : "local"}`}>
+              {result ? t("badges.total", { percent: result.totalPercent }) : t("badges.budget")}
+            </span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedIncome ?? "$0"}</strong>
-              <span>Monthly income</span>
+              <span>{t("metrics.monthlyIncome")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedNeedsAmount ?? "$0"}</strong>
-              <span>Needs</span>
+              <span>{t("metrics.needs")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedWantsAmount ?? "$0"}</strong>
-              <span>Wants</span>
+              <span>{t("metrics.wants")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedSavingsAmount ?? "$0"}</strong>
-              <span>Savings</span>
+              <span>{t("metrics.savings")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <PieChart size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.message ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Use this as a monthly envelope before transaction-level tracking." : "Calculate first to review the allocation health."}</small>
+              <strong>{result ? t(`resultSection.healthMessages.${result.healthTone}`, { total: result.totalPercent }) : t("resultSection.waitingTitle")}</strong>
+              <small>{result ? t("resultSection.envelopeDescription") : t("resultSection.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Budget notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {budgetNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>No payroll or transaction data is required. This is a local allocation planner.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

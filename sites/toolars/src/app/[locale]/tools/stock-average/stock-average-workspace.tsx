@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateStockAverage,
   defaultStockAverageScenario,
@@ -11,21 +12,30 @@ import {
 } from "@/lib/tools/stock-average";
 
 const trustRows = [
-  ["Local", "Purchase lots stay in this browser session", "local"],
-  ["No advice", "Cost-basis math is not a buy or sell recommendation", "warn"],
-  ["Private", "Save only stores the stock plan locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "noAdvice", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const costBasisNotes = [
-  "VitalCalc average cost equals total cost divided by total shares.",
-  "Fees, taxes, currency conversion, corporate actions, and unfilled orders can change real cost basis.",
-  "Use brokerage statements for tax reporting and official records."
-];
+  "average",
+  "exclusions",
+  "records"
+] as const;
 
 export function StockAverageWorkspace() {
-  const t = useTranslations("tools.stock-average");
-  const [plan, setPlan] = useState<StockAverageInput>(defaultStockAverageScenario);
-  const [result, setResult] = useState<StockAverageResult | null>(null);
+  const t = useTranslations("tools.stock-average.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [plan, setPlan] = useState(defaultStockAverageScenario as StockAverageInput);
+  const [result, setResult] = useState(null as StockAverageResult | null);
+  const resultSummary = result
+    ? t("resultSection.summary", {
+        shares: result.formattedTotalShares,
+        averagePrice: result.formattedAveragePrice
+      })
+    : t("resultSection.emptyDescription");
 
   const calculate = () => {
     setResult(calculateStockAverage(plan));
@@ -50,23 +60,23 @@ export function StockAverageWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="stock-average">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc cost basis workspace</span>
-        <h1>Stock Average Calculator</h1>
-        <p className="subtitle">Calculate average cost per share, total cost basis, and breakeven after multiple purchases.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/stock-average/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/stock-average/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -75,21 +85,21 @@ export function StockAverageWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Purchase lots</h2>
-              <p className="tool-description">Enter shares and price per share for each purchase lot.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="workspace-stack" style={{ gap: 14 }}>
             {plan.purchases.map((lot, index) => (
               <div className="llm-input-grid" key={index}>
                 <label className="field-label" htmlFor={`stock-shares-${index}`}>
-                  Lot {index + 1} shares
+                  {t("fields.lotShares", { lot: index + 1 })}
                   <input className="input" id={`stock-shares-${index}`} min={0} onChange={(event) => updateLot(index, "shares", event.target.value)} step="0.01" type="number" value={lot.shares} />
                 </label>
                 <label className="field-label" htmlFor={`stock-price-${index}`}>
-                  Lot {index + 1} price per share
+                  {t("fields.lotPricePerShare", { lot: index + 1 })}
                   <input className="input" id={`stock-price-${index}`} min={0} onChange={(event) => updateLot(index, "pricePerShare", event.target.value)} step="0.01" type="number" value={lot.pricePerShare} />
                 </label>
               </div>
@@ -98,13 +108,13 @@ export function StockAverageWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={addLot} type="button">
-              Add purchase
+              {t("actions.addPurchase")}
             </button>
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save stock plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate average
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -112,58 +122,58 @@ export function StockAverageWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Cost basis summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to see average cost and breakeven price."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{resultSummary}</p>
             </div>
-            <span className="badge local">{result ? "Cost basis" : "Portfolio"}</span>
+            <span className="badge local">{result ? t("badges.costBasis") : t("badges.portfolio")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedAveragePrice ?? "$0.00"}</strong>
-              <span>Average cost</span>
+              <span>{t("metrics.averageCost")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedTotalShares ?? "0"}</strong>
-              <span>Total shares</span>
+              <span>{t("metrics.totalShares")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedTotalCost ?? "$0.00"}</strong>
-              <span>Total cost</span>
+              <span>{t("metrics.totalCost")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedBreakevenPrice ?? "$0.00"}</strong>
-              <span>Breakeven</span>
+              <span>{t("metrics.breakeven")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <TrendingUp size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.summary ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Cost basis excludes fees, taxes, and corporate actions unless included in lot prices." : "Calculate first to review the purchase lots."}</small>
+              <strong>{result ? resultSummary : t("resultSection.waitingTitle")}</strong>
+              <small>{result ? t("resultSection.costBasisDetail") : t("resultSection.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Cost-basis notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {costBasisNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> No advice
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>This workspace is arithmetic only and does not recommend buying, selling, or holding any security.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

@@ -53,7 +53,7 @@ export function AiConsentDialog({
           <p>{t("intro")}</p>
         </div>
 
-        <div className="ai-consent-checklist" aria-label="AI consent details">
+        <div className="ai-consent-checklist" aria-label={t("checklistLabel")}>
           <article>
             <ShieldCheck size={16} aria-hidden="true" />
             <span>

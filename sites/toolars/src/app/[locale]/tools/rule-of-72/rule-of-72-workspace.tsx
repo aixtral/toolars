@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Clock, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateRuleOf72,
   defaultRuleOf72Scenario,
@@ -11,21 +12,24 @@ import {
 } from "@/lib/tools/rule-of-72";
 
 const trustRows = [
-  ["Local", "Rate and principal stay in this browser session", "local"],
-  ["Shortcut", "The Rule of 72 is approximate, especially outside 6-10%", "warn"],
-  ["Private", "Save only stores the scenario locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "shortcut", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const shortcutNotes = [
-  "VitalCalc divides 72 by the annual return rate to estimate doubling time.",
-  "Exact doubling time uses logarithms: ln(2) divided by ln(1 + rate).",
-  "The shortcut is intuitive, but extreme rates need the exact figure and broader context."
-];
+  "formula",
+  "exact",
+  "context"
+] as const;
 
 export function RuleOf72Workspace() {
-  const t = useTranslations("tools.rule-of-72");
-  const [plan, setPlan] = useState<RuleOf72Input>(defaultRuleOf72Scenario);
-  const [result, setResult] = useState<RuleOf72Result | null>(null);
+  const t = useTranslations("tools.rule-of-72.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [plan, setPlan] = useState(defaultRuleOf72Scenario as RuleOf72Input);
+  const [result, setResult] = useState(null as RuleOf72Result | null);
 
   const calculate = () => {
     setResult(calculateRuleOf72(plan));
@@ -43,23 +47,23 @@ export function RuleOf72Workspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="rule-of-72">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc doubling-time workspace</span>
-        <h1>Rule of 72 Calculator</h1>
-        <p className="subtitle">Estimate how long an investment takes to double, then compare against exact compounding.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/rule-of-72/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/rule-of-72/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -68,29 +72,29 @@ export function RuleOf72Workspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Doubling inputs</h2>
-              <p className="tool-description">Use annual return and initial investment to estimate doubling time.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="rule-return">
-              Annual return rate
+              {t("fields.annualReturn")}
               <input className="input" id="rule-return" min={0} onChange={(event) => updateNumber("annualReturn", event.target.value)} step="0.1" type="number" value={plan.annualReturn} />
             </label>
             <label className="field-label" htmlFor="rule-principal">
-              Initial investment
+              {t("fields.principal")}
               <input className="input" id="rule-principal" min={0} onChange={(event) => updateNumber("principal", event.target.value)} step="1" type="number" value={plan.principal} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save Rule of 72 case
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate doubling time
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -98,58 +102,71 @@ export function RuleOf72Workspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Doubling time summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to compare shortcut and exact doubling time."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      rate: plan.annualReturn.toFixed(2),
+                      years: t("values.yearsOneDecimal", { value: result.ruleYears.toFixed(1) })
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className={`badge ${result?.accuracyTone === "rough" ? "warn" : "local"}`}>{result?.accuracyTone ?? "Rule"}</span>
+            <span className={`badge ${result?.accuracyTone === "rough" ? "warn" : "local"}`}>
+              {result ? t(`badges.${result.accuracyTone}`) : t("badges.rule")}
+            </span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedRuleYears ?? "0.0 years"}</strong>
-              <span>Rule of 72 estimate</span>
+              <strong>{t("values.yearsOneDecimal", { value: result ? result.ruleYears.toFixed(1) : "0.0" })}</strong>
+              <span>{t("metrics.ruleYears")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedExactYears ?? "0.00 years"}</strong>
-              <span>Exact doubling time</span>
+              <strong>{t("values.yearsTwoDecimal", { value: result ? result.exactYears.toFixed(2) : "0.00" })}</strong>
+              <span>{t("metrics.exactYears")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedDoubledValue ?? "$0"}</strong>
-              <span>Doubled value</span>
+              <span>{t("metrics.doubledValue")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedReverseTenYearRate ?? "0.0%"}</strong>
-              <span>Rate for 10-year double</span>
+              <span>{t("metrics.reverseTenYearRate")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Clock size={18} aria-hidden="true" />
             <span>
-              <strong>{result ? "Exact comparison ready" : "Waiting for calculation"}</strong>
-              <small>{result ? `${result.schedule[0]?.formattedValue ?? "$0"} after year 1 in the simple annual schedule.` : "Calculate first to review the growth shortcut."}</small>
+              <strong>{result ? t("callout.readyTitle") : t("callout.waitingTitle")}</strong>
+              <small>
+                {result
+                  ? t("callout.readyDescription", { value: result.schedule[0]?.formattedValue ?? "$0" })
+                  : t("callout.waitingDescription")}
+              </small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Shortcut notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {shortcutNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Shortcut only
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Use exact compounding and investment context when the estimate drives a real decision.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

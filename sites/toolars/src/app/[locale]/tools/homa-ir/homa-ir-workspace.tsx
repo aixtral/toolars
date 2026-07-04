@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
 
 import { Activity, Calculator, Save, ShieldCheck } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateHomaIr,
   defaultHomaIrScenario,
@@ -13,23 +14,47 @@ import {
 } from "@/lib/tools/homa-ir";
 
 const storageKey = "toolars.homa-ir.labs:v1";
+const initialResult: HomaIrResult | null = null;
 
 const trustRows = [
-  ["Local", "Glucose and insulin values stay in this browser session", "local"],
-  ["Lab caveat", "Reference bands vary by lab, ethnicity, and clinician context", "warn"],
-  ["Private", "Save stores only this lab sample locally", ""]
+  { key: "local", tone: "local" },
+  { key: "lab", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const homaNotes = [
-  "VitalCalc uses HOMA-IR = fasting glucose mmol/L x fasting insulin uU/mL / 22.5.",
-  "General reference bands: < 2.0 normal, 2.0-2.5 borderline, > 2.5 insulin resistance.",
-  "HOMA-IR is a screening reference and cannot replace diagnosis or treatment guidance."
+const homaNotes = ["formula", "bands", "screening"] as const;
+const glucoseUnitOptions: ReadonlyArray<{ value: FastingGlucoseUnit; label: string }> = [
+  { value: "mmoll", label: "mmol/L" },
+  { value: "mgdl", label: "mg/dL" }
 ];
+const insulinUnitOptions: ReadonlyArray<{ value: FastingInsulinUnit; label: string }> = [
+  { value: "uUml", label: "uU/mL" },
+  { value: "pmoll", label: "pmol/L" }
+];
+const emptyMetricValues = {
+  homaIr: "0.00",
+  glucose: "0.0 mmol/L",
+  insulin: "0.0 uU/mL"
+} as const;
+
+function localizedWorkspaceHref(href: string, localeCode: LocaleCode) {
+  return localizePath(href, localeCode);
+}
+
+function homaLevelKey(homaIr: number) {
+  if (homaIr < 2) return "normal";
+  if (homaIr <= 2.5) return "borderline";
+  return "resistance";
+}
 
 export function HomaIrWorkspace() {
-  const t = useTranslations("tools.homa-ir");
-  const [values, setValues] = useState<HomaIrInput>(() => defaultHomaIrScenario);
-  const [result, setResult] = useState<HomaIrResult | null>(null);
+  const t = useTranslations("tools.homa-ir.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const [values, setValues] = useState(defaultHomaIrScenario);
+  const [result, setResult] = useState(initialResult);
+  const resultLevelKey = result ? homaLevelKey(result.homaIr) : null;
+  const resultLevelLabel = resultLevelKey ? t(`levels.${resultLevelKey}.label`) : t("badges.reference");
 
   const calculate = () => {
     setResult(calculateHomaIr(values));
@@ -49,23 +74,23 @@ export function HomaIrWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="homa-ir">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc lab reference workspace</span>
-        <h1>HOMA-IR Calculator</h1>
-        <p className="subtitle">Estimate insulin resistance from fasting glucose and fasting insulin lab values.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={`badge ${row.tone}`}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/homa-ir/about">
-            Tool details
+          <a className="button button-outline" href={localizedWorkspaceHref("/tools/homa-ir/about", localeCode)}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -74,43 +99,49 @@ export function HomaIrWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Lab inputs</h2>
-              <p className="tool-description">Enter fasting glucose and insulin with source-supported unit conversions.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="homa-glucose">
-              Fasting glucose
+              {t("fields.fastingGlucose")}
               <input className="input" id="homa-glucose" min={0} onChange={(event) => updateNumber("fastingGlucose", event.target.value)} step="0.1" type="number" value={values.fastingGlucose} />
             </label>
             <label className="field-label" htmlFor="homa-glucose-unit">
-              Glucose unit
+              {t("fields.glucoseUnit")}
               <select className="input" id="homa-glucose-unit" onChange={(event) => setValues((current) => ({ ...current, fastingGlucoseUnit: event.target.value as FastingGlucoseUnit }))} value={values.fastingGlucoseUnit}>
-                <option value="mmoll">mmol/L</option>
-                <option value="mgdl">mg/dL</option>
+                {glucoseUnitOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="field-label" htmlFor="homa-insulin">
-              Fasting insulin
+              {t("fields.fastingInsulin")}
               <input className="input" id="homa-insulin" min={0} onChange={(event) => updateNumber("fastingInsulin", event.target.value)} step="0.1" type="number" value={values.fastingInsulin} />
             </label>
             <label className="field-label" htmlFor="homa-insulin-unit">
-              Insulin unit
+              {t("fields.insulinUnit")}
               <select className="input" id="homa-insulin-unit" onChange={(event) => setValues((current) => ({ ...current, fastingInsulinUnit: event.target.value as FastingInsulinUnit }))} value={values.fastingInsulinUnit}>
-                <option value="uUml">uU/mL</option>
-                <option value="pmoll">pmol/L</option>
+                {insulinUnitOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveValues} type="button">
-              <Save size={16} aria-hidden="true" /> Save lab values
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate HOMA-IR
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -118,58 +149,58 @@ export function HomaIrWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Insulin resistance summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show HOMA-IR value and range."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? t("resultSection.summary", { homaIr: result.formattedHomaIr, level: resultLevelLabel }) : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">{result?.level ?? "Reference"}</span>
+            <span className="badge warn">{resultLevelLabel}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedHomaIr ?? "0.00"}</strong>
-              <span>HOMA-IR</span>
+              <strong>{result?.formattedHomaIr ?? emptyMetricValues.homaIr}</strong>
+              <span>{t("metrics.homaIr")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.level ?? "Pending"}</strong>
-              <span>Range</span>
+              <strong>{result ? resultLevelLabel : t("metrics.pending")}</strong>
+              <span>{t("metrics.range")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedGlucose ?? "0.0 mmol/L"}</strong>
-              <span>Glucose</span>
+              <strong>{result?.formattedGlucose ?? emptyMetricValues.glucose}</strong>
+              <span>{t("metrics.glucose")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedInsulin ?? "0.0 uU/mL"}</strong>
-              <span>Insulin</span>
+              <strong>{result?.formattedInsulin ?? emptyMetricValues.insulin}</strong>
+              <span>{t("metrics.insulin")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Activity size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.level ?? "Waiting for calculation"}</strong>
-              <small>{result?.interpretation ?? "Calculate first to review the lab reference range."}</small>
+              <strong>{result ? resultLevelLabel : t("callout.waitingTitle")}</strong>
+              <small>{resultLevelKey ? t(`levels.${resultLevelKey}.interpretation`) : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>HOMA-IR notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {homaNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Lab values stay local and should be interpreted with a qualified clinician when needed.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

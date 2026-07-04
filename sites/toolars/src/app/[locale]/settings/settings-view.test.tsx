@@ -1,7 +1,17 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import zhHans from "../../../../messages/zh-hans.json";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { SettingsView } from "./settings-view";
+
+function renderSettingsViewInLocale(locale: string, messages: Record<string, unknown>) {
+  return render(
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <SettingsView />
+    </NextIntlClientProvider>
+  );
+}
 
 describe("SettingsView", () => {
   beforeEach(() => {
@@ -42,6 +52,21 @@ describe("SettingsView", () => {
     expect(screen.getByText("API keys preview")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
     expect(screen.getByText("Team invite")).toBeInTheDocument();
+  });
+
+  it("localizes the account controls surface in simplified Chinese", () => {
+    const { container } = renderSettingsViewInLocale("zh-hans", zhHans);
+
+    expect(screen.getByRole("heading", { name: "设置" })).toBeInTheDocument();
+    expect(screen.getByText("信任默认已开启")).toBeInTheDocument();
+    expect(screen.getByText("API 密钥预览")).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: /邀请成员/ }).length).toBeGreaterThanOrEqual(1);
+    expect(container.querySelector('a[href="/zh-hans/settings/billing"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="/zh-hans/settings/api-keys"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="/zh-hans/settings/security"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="/zh-hans/settings/privacy-ai"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="/settings/privacy-ai"]')).not.toBeInTheDocument();
+    expect(screen.queryByText("Trust defaults on")).not.toBeInTheDocument();
   });
 
   it("shows trust defaults, trial usage, and beta handoffs", () => {

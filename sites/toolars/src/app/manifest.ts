@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { TOOLARS_FAVICON_URL } from "@/lib/seo/brand-icons";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -12,7 +13,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#059669",
     icons: [
       {
-        src: "/favicon.svg",
+        src: TOOLARS_FAVICON_URL,
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any"

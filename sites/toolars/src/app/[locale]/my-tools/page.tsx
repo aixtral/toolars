@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
+import { buildLocalizedPageMetadata } from "@/lib/seo/localized-page-metadata";
 import { MyToolsDashboardView } from "./my-tools-dashboard-view";
 
-export const metadata: Metadata = {
-  title: "My Tools",
-  description: "Your Toolars workspace: pinned tools, recent outputs, favorites, collections, and workflows.",
-  robots: { index: false, follow: false }
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+
+  return buildLocalizedPageMetadata({ locale, page: "myTools" });
+}
 
 export default function MyToolsPage() {
   return (

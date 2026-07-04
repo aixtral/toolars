@@ -1,10 +1,36 @@
-import { screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
+import zhHans from "../../../../messages/zh-hans.json";
 import { renderWithIntl } from "@/test/i18n-test-utils";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../../scripts/audit-i18n.mjs";
 import StatesPage from "./page";
 import { StatesBoardView } from "./states-board-view";
 
+function renderStatesBoardInLocale(locale: string, messages: Record<string, unknown>) {
+  return render(
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <StatesBoardView />
+    </NextIntlClientProvider>
+  );
+}
+
+const statesBoardSourceFile = "src/app/[locale]/states/states-board-view.tsx";
+
+function scanStatesBoardSource() {
+  return scanSourceText(readFileSync(statesBoardSourceFile, "utf8"), statesBoardSourceFile);
+}
+
 describe("StatesBoardView", () => {
+  it("does not contribute states board hardcoded UI candidates to the i18n audit", () => {
+    const sourceScan = scanStatesBoardSource();
+
+    expect(sourceScan.hardcodedText).toEqual([]);
+    expect(sourceScan.absoluteHrefs).toEqual([]);
+  });
+
   it("renders the states and overlays modules from the design", () => {
     const { container } = renderWithIntl(<StatesBoardView />);
 
@@ -34,6 +60,17 @@ describe("StatesBoardView", () => {
     expect(screen.getByRole("button", { name: "Show toast" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Delete output" })).toBeInTheDocument();
+  });
+
+  it("localizes the states board in simplified Chinese", () => {
+    renderStatesBoardInLocale("zh-hans", zhHans);
+
+    expect(screen.getByRole("heading", { name: "状态与覆盖层" })).toBeInTheDocument();
+    expect(screen.getByLabelText("状态与覆盖层面板")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "显示通知" })).toBeInTheDocument();
+    expect(screen.getByText("空状态")).toBeInTheDocument();
+    expect(screen.getByText("删除已保存结果？")).toBeInTheDocument();
+    expect(screen.queryByText("States and overlays")).not.toBeInTheDocument();
   });
 
   it("uses the no-sidebar shell variant for the states route", () => {

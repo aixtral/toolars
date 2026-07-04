@@ -1,15 +1,82 @@
 import { ImageResponse } from "next/og";
+import en from "../../../messages/en.json";
+import es from "../../../messages/es.json";
+import zhHans from "../../../messages/zh-hans.json";
+import zhHant from "../../../messages/zh-hant.json";
 
 export const runtime = "edge";
-export const alt = "Toolars — All tools. One workspace.";
 export const contentType = "image/png";
 export const size = { width: 1200, height: 630 };
 
-/**
- * Dynamic OpenGraph image for social sharing. Branded with the Toolars
- * emerald accent and tagline.
- */
-export default function OGImage() {
+type OpenGraphHeadlineText = {
+  readonly primary: string;
+  readonly secondary: string;
+};
+
+export type OpenGraphImageText = {
+  readonly alt: string;
+  readonly tagline: string;
+  readonly headline: OpenGraphHeadlineText;
+  readonly subtitle: string;
+};
+
+type OpenGraphImageMessageBundle = {
+  readonly openGraph: {
+    readonly image: OpenGraphImageText;
+  };
+};
+
+type OpenGraphImageMessageBundleMap = {
+  readonly [locale: string]: OpenGraphImageMessageBundle;
+};
+
+type OpenGraphImageParams = {
+  readonly locale?: string;
+};
+
+interface OpenGraphImageParamsThenable {
+  then(resolve: (value: OpenGraphImageParams) => unknown): unknown;
+}
+
+type OpenGraphImageProps = {
+  readonly params?: OpenGraphImageParams | OpenGraphImageParamsThenable;
+};
+
+const openGraphMessageBundles = {
+  en,
+  es,
+  "zh-hans": zhHans,
+  "zh-hant": zhHant
+} satisfies OpenGraphImageMessageBundleMap;
+
+type OpenGraphImageLocale = keyof typeof openGraphMessageBundles;
+
+const fallbackOpenGraphImageLocale: OpenGraphImageLocale = "en";
+
+function hasOpenGraphImageBundle(locale: string): locale is OpenGraphImageLocale {
+  return locale in openGraphMessageBundles;
+}
+
+function isOpenGraphImageParamsThenable(value: unknown): value is OpenGraphImageParamsThenable {
+  return Boolean(value && typeof value === "object" && "then" in value);
+}
+
+async function resolveOpenGraphImageParams(params: OpenGraphImageProps["params"]) {
+  if (isOpenGraphImageParamsThenable(params)) return await params;
+  return params;
+}
+
+export function resolveOpenGraphImageText(locale: string | null | undefined): OpenGraphImageText {
+  const resolvedLocale = locale && hasOpenGraphImageBundle(locale) ? locale : fallbackOpenGraphImageLocale;
+  return openGraphMessageBundles[resolvedLocale].openGraph.image;
+}
+
+export const alt = resolveOpenGraphImageText(fallbackOpenGraphImageLocale).alt;
+
+export default async function OGImage({ params }: OpenGraphImageProps = {}) {
+  const resolvedParams = await resolveOpenGraphImageParams(params);
+  const imageText = resolveOpenGraphImageText(resolvedParams?.locale);
+
   return new ImageResponse(
     (
       <div
@@ -42,15 +109,18 @@ export default function OGImage() {
           >
             T
           </div>
-          <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em" }}>Toolars</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em" }}>Toolars</span>
+            <span style={{ fontSize: 18, color: "#bbf7d0", fontWeight: 700 }}>{imageText.tagline}</span>
+          </div>
         </div>
         <div style={{ fontSize: 64, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.03em", maxWidth: 900 }}>
-          All tools.
+          {imageText.headline.primary}
           <br />
-          One workspace.
+          {imageText.headline.secondary}
         </div>
         <div style={{ fontSize: 28, color: "#94a3b8", marginTop: 24, maxWidth: 800, lineHeight: 1.4 }}>
-          Calculators, AI tools, PDF utilities, and workflows — local-first, free to start.
+          {imageText.subtitle}
         </div>
       </div>
     ),

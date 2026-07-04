@@ -1,26 +1,26 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Baby, Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { calculateChildGrowth, defaultChildGrowthProfile, type ChildGrowthInput, type ChildGrowthResult, type ChildGrowthSex } from "@/lib/tools/child-growth";
 
 const trustRows = [
-  ["Local", "Child age, height, and weight stay in this browser session", "local"],
-  ["Reference", "Percentiles are approximate and require pediatric context", "warn"],
-  ["Private", "Save only stores the local growth profile when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const growthNotes = [
-  "VitalCalc estimates BMI, then maps it to a simplified age and sex percentile approximation.",
-  "Single measurements are less useful than trend over time on a pediatric growth chart.",
-  "Growth interpretation depends on development stage, family history, and pediatric clinician review."
-];
+const growthNotes = ["bmi", "trend", "context"] as const;
 
 export function ChildGrowthWorkspace() {
-  const t = useTranslations("tools.child-growth");
-  const [profile, setProfile] = useState<ChildGrowthInput>(() => defaultChildGrowthProfile);
-  const [result, setResult] = useState<ChildGrowthResult | null>(null);
+  const t = useTranslations("tools.child-growth.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/child-growth/about", localeCode);
+  const [profile, setProfile] = useState(defaultChildGrowthProfile as ChildGrowthInput);
+  const [result, setResult] = useState(null as ChildGrowthResult | null);
 
   const calculate = () => {
     setResult(calculateChildGrowth(profile));
@@ -45,23 +45,23 @@ export function ChildGrowthWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="child-growth">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc pediatric reference workspace</span>
-        <h1>Child BMI Growth Chart</h1>
-        <p className="subtitle">Estimate child BMI percentile context from age, sex, height, and weight.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/child-growth/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -70,49 +70,49 @@ export function ChildGrowthWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Growth inputs</h2>
-              <p className="tool-description">Use ages 2-20 with metric height and weight.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="growth-sex">
-              Sex
+              {t("fields.sex")}
               <select className="input" id="growth-sex" onChange={(event) => updateSex(event.target.value as ChildGrowthSex)} value={profile.sex}>
-                <option value="boy">Boy</option>
-                <option value="girl">Girl</option>
+                <option value="boy">{t("options.sex.boy")}</option>
+                <option value="girl">{t("options.sex.girl")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="growth-age-years">
-              Age years
+              {t("fields.ageYears")}
               <input className="input" id="growth-age-years" min={2} onChange={(event) => updateNumber("ageYears", event.target.value)} type="number" value={profile.ageYears} />
             </label>
             <label className="field-label" htmlFor="growth-age-months">
-              Age months
+              {t("fields.ageMonths")}
               <select className="input" id="growth-age-months" onChange={(event) => updateNumber("ageMonths", event.target.value)} value={profile.ageMonths}>
-                <option value={0}>0 months</option>
-                <option value={3}>3 months</option>
-                <option value={6}>6 months</option>
-                <option value={9}>9 months</option>
+                <option value={0}>{t("options.ageMonths.zero")}</option>
+                <option value={3}>{t("options.ageMonths.three")}</option>
+                <option value={6}>{t("options.ageMonths.six")}</option>
+                <option value={9}>{t("options.ageMonths.nine")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="growth-height">
-              Height (cm)
+              {t("fields.heightCm")}
               <input className="input" id="growth-height" min={0} onChange={(event) => updateNumber("heightCm", event.target.value)} type="number" value={profile.heightCm} />
             </label>
             <label className="field-label" htmlFor="growth-weight">
-              Weight (kg)
+              {t("fields.weightKg")}
               <input className="input" id="growth-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} type="number" value={profile.weightKg} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveProfile} type="button">
-              <Save size={16} aria-hidden="true" /> Save growth profile
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Assess growth curve
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -120,58 +120,58 @@ export function ChildGrowthWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Growth summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate BMI percentile context."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">CDC-style reference</span>
+            <span className="badge warn">{t("badges.referenceOnly")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedPercentile ?? "0.0th"}</strong>
-              <span>BMI percentile</span>
+              <strong>{result?.formattedPercentile ?? t("metrics.emptyPercentile")}</strong>
+              <span>{t("metrics.bmiPercentile")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedBmi ?? "0.0"}</strong>
-              <span>BMI</span>
+              <strong>{result?.formattedBmi ?? t("metrics.emptyBmi")}</strong>
+              <span>{t("metrics.bmi")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.category ?? "Pending"}</strong>
-              <span>Category</span>
+              <strong>{result?.category ?? t("metrics.emptyCategory")}</strong>
+              <span>{t("metrics.category")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.idealWeightRange ?? "0.0-0.0 kg"}</strong>
-              <span>Reference weight range</span>
+              <strong>{result?.idealWeightRange ?? t("metrics.emptyWeightRange")}</strong>
+              <span>{t("metrics.referenceWeightRange")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Baby size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.rankLabel ?? "Waiting for calculation"}</strong>
-              <small>{result ? `${result.ageLabel} percentile context from VitalCalc approximation.` : "Calculate first to review growth context."}</small>
+              <strong>{result?.rankLabel ?? t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription", { ageLabel: result.ageLabel }) : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Growth notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {growthNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Child growth data stays local and should be reviewed as a trend with pediatric guidance.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

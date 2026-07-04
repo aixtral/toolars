@@ -1,41 +1,54 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { Save, Workflow } from "lucide-react";
-import {
-  buildLlmCostReviewSteps,
-  runLlmCostReviewWorkflow,
-  type LlmCostReviewResult
-} from "@/lib/workflows/llm-cost-review";
+import { BadgeDollarSign, Gauge, Save, Workflow } from "lucide-react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
+import { runLlmCostReviewWorkflow, type LlmCostReviewResult } from "@/lib/workflows/llm-cost-review";
 
-const reviewModes = ["MVP launch", "Team budget", "API pricing"] as const;
-const steps = buildLlmCostReviewSteps();
+const reviewModes = ["mvpLaunch", "teamBudget", "apiPricing"] as const;
+const workflowSteps = ["countTokens", "compareModels", "planContext", "exportBudget"] as const;
+type ReviewMode = (typeof reviewModes)[number];
+
+function stripMonthlyCostPeriod(monthlyCost: string) {
+  return monthlyCost.endsWith("/month") ? monthlyCost.slice(0, -"/month".length) : monthlyCost;
+}
+
+function stripTokenUnit(monthlyTokens: string) {
+  return monthlyTokens.endsWith(" tokens") ? monthlyTokens.slice(0, -" tokens".length) : monthlyTokens;
+}
 
 export function LlmCostReviewWorkflow() {
-  const [mode, setMode] = useState<(typeof reviewModes)[number]>("MVP launch");
-  const [result, setResult] = useState<LlmCostReviewResult | null>(null);
+  const t = useTranslations("workflows.llm-cost-review");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [mode, setMode] = useState("mvpLaunch" as ReviewMode);
+  const [result, setResult] = useState(null as LlmCostReviewResult | null);
 
   const runReview = () => {
     setResult(runLlmCostReviewWorkflow());
   };
 
   const progress = result?.progressPercent ?? 0;
+  const monthlyCost = result ? stripMonthlyCostPeriod(result.monthlyCost) : "";
+  const monthlyTokens = result ? stripTokenUnit(result.monthlyTokens) : "";
 
   return (
     <div className="workflow-builder-layout" data-ai-lab-workflow="mobile-edge-v3">
       <section className="workspace-panel workflow-overview-panel">
-        <span className="eyebrow">Cost workflow</span>
-        <h1>LLM Cost Review Workflow Builder</h1>
-        <p className="subtitle">Estimate token cost, compare models, and plan a context budget before shipping.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
         <div className="badge-row workflow-badge-row">
-          <span className="badge local">4 local steps</span>
-          <span className="badge">5 min</span>
-          <span className="badge workflow">Launch review</span>
+          <span className="badge local">{t("badges.localSteps")}</span>
+          <span className="badge">{t("badges.duration")}</span>
+          <span className="badge workflow">{t("badges.launchReview")}</span>
         </div>
 
-        <h2 style={{ marginTop: 26 }}>Review mode</h2>
-        <div className="workflow-mode-row" role="group" aria-label="Review mode">
+        <h2 style={{ marginTop: 26 }}>{t("reviewModeTitle")}</h2>
+        <div className="workflow-mode-row" role="group" aria-label={t("reviewModeLabel")}>
           {reviewModes.map((item) => (
             <button
               aria-pressed={mode === item}
@@ -44,7 +57,7 @@ export function LlmCostReviewWorkflow() {
               onClick={() => setMode(item)}
               type="button"
             >
-              {item}
+              {t(`reviewModes.${item}`)}
             </button>
           ))}
         </div>
@@ -54,23 +67,23 @@ export function LlmCostReviewWorkflow() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Cost review canvas</h2>
-              <p className="tool-description">Estimate usage, compare models, plan context, and export budget notes.</p>
+              <h2>{t("canvas.title")}</h2>
+              <p className="tool-description">{t("canvas.description")}</p>
             </div>
             <button className="button button-outline-neutral" type="button">
-              <Save size={16} aria-hidden="true" /> Save template
+              <Save size={16} aria-hidden="true" /> {t("canvas.save")}
             </button>
           </div>
 
           <div className="workflow-step-list">
-            {steps.map((step, index) => (
-              <article className="workflow-step-row" key={step.title}>
+            {workflowSteps.map((step, index) => (
+              <article className="workflow-step-row" key={step}>
                 <span className="mcp-stage-number">{index + 1}</span>
                 <span>
-                  <strong>{step.title}</strong>
-                  <small>{step.description}</small>
+                  <strong>{t(`steps.${step}.title`)}</strong>
+                  <small>{t(`steps.${step}.description`)}</small>
                 </span>
-                <span className="badge local">{step.badge}</span>
+                <span className="badge local">{t(`steps.${step}.badge`)}</span>
               </article>
             ))}
           </div>
@@ -79,16 +92,16 @@ export function LlmCostReviewWorkflow() {
         <section className="workspace-panel">
           <div className="workflow-run-head">
             <div>
-              <h2>Run preview</h2>
-              <p className="tool-description">Simulate a launch cost review from the current usage assumptions.</p>
+              <h2>{t("run.title")}</h2>
+              <p className="tool-description">{t("run.description")}</p>
             </div>
             <button className="button button-solid workflow-run-button" onClick={runReview} type="button">
-              <Workflow size={16} aria-hidden="true" /> Run review
+              <Workflow size={16} aria-hidden="true" /> {t("run.action")}
             </button>
           </div>
 
           <div
-            aria-label="Cost review progress"
+            aria-label={t("run.progressLabel")}
             aria-valuemax={100}
             aria-valuemin={0}
             aria-valuenow={progress}
@@ -99,37 +112,41 @@ export function LlmCostReviewWorkflow() {
           </div>
 
           <div className="workflow-output-box">
-            <strong>{result?.statusTitle ?? "Ready to review"}</strong>
-            <p>{result?.memo ?? "Open the calculator, estimate monthly tokens, and export a budget memo."}</p>
-            {result ? <small>{result.monthlyTokens}</small> : null}
+            <strong>{result ? t("run.resultTitle") : t("run.readyTitle")}</strong>
+            <p>{result ? t("run.resultMemo", { monthlyCost }) : t("run.readyDescription")}</p>
+            {result ? <small>{t("run.monthlyTokens", { monthlyTokens })}</small> : null}
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel workflow-tool-chain">
-        <h2>Tool chain</h2>
+        <h2>{t("toolChain.title")}</h2>
         <div className="workflow-resource-list">
-          <a className="workflow-resource-row" href="/tools/llm-cost-calculator">
-            <span className="icon-tile">LL</span>
-            <span>
-              <strong>LLM Cost Calculator</strong>
-              <small>Estimate token spend by usage profile</small>
+          <a className="workflow-resource-row" href={localizedHref("/tools/llm-cost-calculator")}>
+            <span className="icon-tile green" data-workflow-resource-icon="llm-cost-calculator">
+              <BadgeDollarSign size={18} aria-hidden="true" />
             </span>
-            <span className="badge local">Estimate</span>
+            <span>
+              <strong>{t("toolChain.llmCostCalculator.title")}</strong>
+              <small>{t("toolChain.llmCostCalculator.description")}</small>
+            </span>
+            <span className="badge local">{t("toolChain.badges.estimate")}</span>
           </a>
           <div className="workflow-resource-row">
-            <span className="icon-tile blue">MO</span>
-            <span>
-              <strong>Model Comparator</strong>
-              <small>Compare model price and fit</small>
+            <span className="icon-tile blue" data-workflow-resource-icon="model-comparator">
+              <Gauge size={18} aria-hidden="true" />
             </span>
-            <span className="badge">Next</span>
+            <span>
+              <strong>{t("toolChain.modelComparator.title")}</strong>
+              <small>{t("toolChain.modelComparator.description")}</small>
+            </span>
+            <span className="badge">{t("toolChain.badges.next")}</span>
           </div>
         </div>
 
         <div className="llm-recommended-plan">
-          <strong>Budget policy</strong>
-          <p>Use Team plan when approval thresholds and shared model defaults become part of the workflow.</p>
+          <strong>{t("budgetPolicy.title")}</strong>
+          <p>{t("budgetPolicy.description")}</p>
         </div>
       </aside>
     </div>

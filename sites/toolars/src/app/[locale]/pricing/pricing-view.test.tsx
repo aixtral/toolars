@@ -1,9 +1,39 @@
-import { screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
+import type { ReactNode } from "react";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../../scripts/audit-i18n.mjs";
+import es from "../../../../messages/es.json";
+import zhHans from "../../../../messages/zh-hans.json";
+import zhHant from "../../../../messages/zh-hant.json";
 import { PricingView } from "./pricing-view";
 
+function renderWithSpanishIntl(ui: ReactNode) {
+  return render(<NextIntlClientProvider locale="es" messages={es}>{ui}</NextIntlClientProvider>);
+}
+
+const pricingSourceFile = "src/app/[locale]/pricing/pricing-view.tsx";
+
+function scanPricingSource() {
+  return scanSourceText(readFileSync(pricingSourceFile, "utf8"), pricingSourceFile);
+}
+
 describe("PricingView", () => {
+  it("does not ship W31 pricing placeholders in Chinese launch locale copy", () => {
+    expect(JSON.stringify(zhHans.pricing)).not.toContain("W31-E");
+    expect(JSON.stringify(zhHant.pricing)).not.toContain("W31-E");
+  });
+
+  it("does not leave hardcoded UI audit candidates in the pricing source", () => {
+    const scan = scanPricingSource();
+
+    expect(scan.hardcodedText).toHaveLength(0);
+    expect(scan.absoluteHrefs).toHaveLength(0);
+  });
+
   it("renders the pricing modules from the design", () => {
     const { container } = renderWithIntl(<PricingView />);
 
@@ -45,5 +75,35 @@ describe("PricingView", () => {
     expect(screen.getByLabelText("File storage")).toHaveValue("5");
     expect(screen.getByText("Recommended plan")).toBeInTheDocument();
     expect(screen.getByText("Are traditional tools really free?")).toBeInTheDocument();
+  });
+
+  it("localizes paid pricing copy and internal sales links for non-default locales", () => {
+    const originalFreeTrialMode = process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE;
+    process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE = "disabled";
+
+    try {
+      renderWithSpanishIntl(<PricingView />);
+
+      expect(screen.getByText("Planes y créditos")).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "Empieza gratis. Mejora cuando Toolars se convierta en tu espacio de trabajo." })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Anual/ })).toBeInTheDocument();
+      expect(screen.getByText("Ahorra 20%")).toBeInTheDocument();
+      expect(screen.getByText("Los precios se muestran en USD.")).toBeInTheDocument();
+      expect(screen.getByText("Gratis")).toBeInTheDocument();
+      expect(screen.getAllByText("Empezar gratis").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText("Comparar planes")).toBeInTheDocument();
+      expect(screen.getByText("Herramientas tradicionales")).toBeInTheDocument();
+      expect(screen.getByText("Estima tu uso mensual")).toBeInTheDocument();
+      expect(screen.getByText("$6.99 / mes · Facturado anualmente")).toBeInTheDocument();
+
+      const salesLink = screen.getByRole("link", { name: "¿Necesitas más? Contacta con ventas" });
+      expect(salesLink).toHaveAttribute("href", "/es/pricing#team");
+    } finally {
+      if (originalFreeTrialMode === undefined) {
+        delete process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE;
+      } else {
+        process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE = originalFreeTrialMode;
+      }
+    }
   });
 });

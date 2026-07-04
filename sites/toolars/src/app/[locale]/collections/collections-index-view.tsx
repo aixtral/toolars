@@ -1,47 +1,25 @@
-import { ArrowRight, Bookmark, FolderPlus, Globe2, Import, Sparkles } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { collections, getToolBySlug, workflows, type CollectionDefinition } from "@/data/registry";
+import { ArrowRight, Bookmark, FileText, FolderPlus, Globe2, Import, Sparkles } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { ToolIcon } from "@/components/tools/tool-icon";
+import { collections, getToolBySlug, type CollectionDefinition, type ToolDefinition } from "@/data/registry";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 const featuredCollectionSlugs = ["pdf-ops-kit", "ai-developer-lab"];
+const mobileCollectionSlugs = featuredCollectionSlugs;
+const collectionCopyKeys = {
+  "pdf-ops-kit": "pdfOpsKit",
+  "ai-developer-lab": "aiDeveloperLab"
+} as const;
 
-const mobileCollectionCards = [
-  {
-    title: "PDF Ops Kit",
-    description: "A focused stack for merging, compressing, summarizing, and sharing business PDFs.",
-    count: "4",
-    tone: "rose",
-    visibility: "Official",
-    workflows: "1 workflow",
-    updated: "Updated today"
-  },
-  {
-    title: "AI Developer Lab",
-    description: "Security, cost, prompt, RAG, MCP, and agent tools from the Aixtral Lab inventory.",
-    count: "4",
-    tone: "purple",
-    visibility: "Official",
-    workflows: "3 workflows",
-    updated: "Updated 2 hours ago"
-  },
-  {
-    title: "Finance Review",
-    description: "Mortgage, ROI, budget, loan, and report workflows for practical financial decisions.",
-    count: "1",
-    tone: "blue",
-    visibility: "Public",
-    workflows: "1 workflow",
-    updated: "Updated yesterday"
-  },
-  {
-    title: "Health Basics",
-    description: "BMI, sleep, hydration, and heart-rate tools for quick personal snapshots.",
-    count: "1",
-    tone: "amber",
-    visibility: "Public",
-    workflows: "1 workflow",
-    updated: "Updated yesterday"
-  }
-] as const;
+const mobileCollectionUpdatedKeys = {
+  "pdf-ops-kit": "today",
+  "ai-developer-lab": "twoHoursAgo"
+} as const;
+
+type CollectionCopyKey = (typeof collectionCopyKeys)[keyof typeof collectionCopyKeys];
+type CollectionsTranslator = ReturnType<typeof useTranslations>;
+type ToolPreview = ToolDefinition;
+type UpdatedKey = "today" | "twoHoursAgo" | "threeHoursAgo" | "yesterday";
 
 function collectionTone(collection: CollectionDefinition): string {
   if (collection.slug.includes("pdf")) return "rose";
@@ -49,38 +27,75 @@ function collectionTone(collection: CollectionDefinition): string {
   return "blue";
 }
 
-function collectionSummary(collection: CollectionDefinition): string {
+function getCollectionCopyKey(collection: CollectionDefinition): CollectionCopyKey {
+  return collectionCopyKeys[collection.slug as keyof typeof collectionCopyKeys] ?? "pdfOpsKit";
+}
+
+function collectionSummary(collection: CollectionDefinition, t: CollectionsTranslator): string {
   const toolCount = collection.toolSlugs.length;
   const workflowCount = collection.workflowSlugs.length;
   const aiCount = collection.toolSlugs
     .map((slug) => getToolBySlug(slug))
     .filter((tool) => tool?.processing.includes("ai-consent")).length;
 
-  return `${toolCount} tools · ${workflowCount} workflows · ${aiCount} AI`;
+  return t("collectionSummary", { toolCount, workflowCount, aiCount });
 }
 
-function CollectionCard({ collection, featured = false }: { collection: CollectionDefinition; featured?: boolean }) {
+function getCollectionIcon(collection: CollectionDefinition) {
+  if (collection.slug.includes("pdf")) return FileText;
+  if (collection.slug.includes("ai")) return Sparkles;
+  return FolderPlus;
+}
+
+function updatedLabel(t: CollectionsTranslator, updatedKey: UpdatedKey): string {
+  if (updatedKey === "today") return t("updatedToday");
+  if (updatedKey === "twoHoursAgo") return t("updatedHoursAgo", { hours: 2 });
+  if (updatedKey === "threeHoursAgo") return t("updatedHoursAgo", { hours: 3 });
+  return t("updatedYesterday");
+}
+
+function getFeaturedCollection(slug: string) {
+  return collections.find(function isMatchingCollection(collection) {
+    return collection.slug === slug;
+  });
+}
+
+function isCollectionDefinition(collection: CollectionDefinition | undefined): collection is CollectionDefinition {
+  return Boolean(collection);
+}
+
+function isToolPreview(tool: ReturnType<typeof getToolBySlug>): tool is ToolPreview {
+  return Boolean(tool);
+}
+
+function CollectionCard({ collection, featured = false, localizedHref }: { collection: CollectionDefinition; featured?: boolean; localizedHref: (href: string) => string }) {
   const t = useTranslations("collectionsPage");
   const tone = collectionTone(collection);
-  const previewTools = collection.toolSlugs.map((slug) => getToolBySlug(slug)).filter(Boolean).slice(0, 4);
+  const Icon = getCollectionIcon(collection);
+  const copyKey = getCollectionCopyKey(collection);
+  const title = t(`registryCollections.${copyKey}.title`);
+  const description = t(`registryCollections.${copyKey}.description`);
+  const previewTools = collection.toolSlugs.map(getToolBySlug).filter(isToolPreview).slice(0, 4);
 
   return (
-    <a className={`collection-index-card ${featured ? "is-featured" : ""}`} href={collection.href}>
-      <span className={`icon-tile ${tone}`}>{collection.toolSlugs.length}</span>
-      <span>
-        <strong>{collection.title}</strong>
-        <small>{collection.description}</small>
+    <a className={`collection-index-card ${featured ? "is-featured" : ""}`} href={localizedHref(collection.href)}>
+      <span className={`icon-tile ${tone}`} data-collection-card-icon={collection.slug}>
+        <Icon size={18} aria-hidden="true" />
       </span>
-      <span className="collection-preview-icons" aria-label={`${collection.title} preview tools`}>
+      <span>
+        <strong>{title}</strong>
+        <small>{description}</small>
+      </span>
+      <span className="collection-preview-icons" aria-label={t("previewToolsAriaLabel", { title })}>
         {previewTools.map((tool) => (
-          <span className="collection-preview-icon" key={tool?.slug}>
-            {tool?.name.slice(0, 2).toUpperCase()}
+          <span className="collection-preview-icon" key={tool.slug}>
+            <ToolIcon tool={tool} />
           </span>
         ))}
       </span>
       <span className="tag-list">
-        <span className="badge workflow">{collection.visibility === "official" ? "Official" : collection.visibility}</span>
-        <span className="badge">{collectionSummary(collection)}</span>
+        <span className="badge workflow">{t(`visibility.${collection.visibility}`)}</span>
+        <span className="badge">{collectionSummary(collection, t)}</span>
       </span>
       <span className="collection-card-footer">
         <span className="badge local">{t("curatedBy", { curator: collection.curator })}</span>
@@ -94,9 +109,15 @@ function CollectionCard({ collection, featured = false }: { collection: Collecti
 
 export function CollectionsIndexView() {
   const t = useTranslations("collectionsPage");
-  const featuredCollections = featuredCollectionSlugs
-    .map((slug) => collections.find((collection) => collection.slug === slug))
-    .filter((collection): collection is CollectionDefinition => Boolean(collection));
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const featuredCollections = featuredCollectionSlugs.map(getFeaturedCollection).filter(isCollectionDefinition);
+  const mobileCollections = mobileCollectionSlugs.map(getFeaturedCollection).filter(isCollectionDefinition);
+  const aiDeveloperCollection = getFeaturedCollection("ai-developer-lab");
+
+  function localizedHref(href: string) {
+    return href.startsWith("#") ? href : localizePath(href, localeCode);
+  }
 
   return (
     <div
@@ -128,21 +149,30 @@ export function CollectionsIndexView() {
           </div>
         </section>
 
-        <section className="collections-mobile-stack" aria-label="Collections directory">
-          {mobileCollectionCards.map((collection) => (
-            <article className="collection-mobile-card" data-tone={collection.tone} key={collection.title}>
-              <span className={`icon-tile ${collection.tone}`}>{collection.count}</span>
+        <section className="collections-mobile-stack" aria-label={t("mobileDirectoryAriaLabel")}>
+          {mobileCollections.map((collection) => {
+            const tone = collectionTone(collection);
+            const Icon = getCollectionIcon(collection);
+            const copyKey = getCollectionCopyKey(collection);
+            const updatedKey = mobileCollectionUpdatedKeys[collection.slug as keyof typeof mobileCollectionUpdatedKeys] ?? "yesterday";
+
+            return (
+            <article className="collection-mobile-card" data-tone={tone} key={collection.slug}>
+              <span className={`icon-tile ${tone}`} data-collection-mobile-icon={collection.slug}>
+                <Icon size={18} aria-hidden="true" />
+              </span>
               <span>
-                <strong>{collection.title}</strong>
-                <small>{collection.description}</small>
+                <strong>{t(`registryCollections.${copyKey}.title`)}</strong>
+                <small>{t(`registryCollections.${copyKey}.description`)}</small>
               </span>
               <span className="tag-list">
-                <span className="badge workflow">{collection.visibility}</span>
-                <span className="badge">{collection.workflows}</span>
-                <span className="badge local">{collection.updated}</span>
+                <span className="badge workflow">{t(`visibility.${collection.visibility}`)}</span>
+                <span className="badge">{t("workflowCount", { count: collection.workflowSlugs.length })}</span>
+                <span className="badge local">{updatedLabel(t, updatedKey)}</span>
               </span>
             </article>
-          ))}
+            );
+          })}
         </section>
 
         <section className="section">
@@ -154,7 +184,7 @@ export function CollectionsIndexView() {
           </div>
           <div className="collection-feature-grid">
             {featuredCollections.map((collection) => (
-              <CollectionCard collection={collection} featured key={collection.slug} />
+              <CollectionCard collection={collection} featured key={collection.slug} localizedHref={localizedHref} />
             ))}
           </div>
         </section>
@@ -166,7 +196,7 @@ export function CollectionsIndexView() {
           </div>
           <div className="collection-grid">
             {collections.map((collection) => (
-              <CollectionCard collection={collection} key={collection.slug} />
+              <CollectionCard collection={collection} key={collection.slug} localizedHref={localizedHref} />
             ))}
           </div>
         </section>
@@ -181,16 +211,22 @@ export function CollectionsIndexView() {
             </a>
           </div>
           <div className="collection-update-list">
-            {collections.map((collection, index) => (
-              <a className="collection-update-row" href={collection.href} key={collection.slug}>
-                <span className={`icon-tile ${collectionTone(collection)}`}>{index + 1}</span>
+            {collections.map((collection, index) => {
+              const Icon = getCollectionIcon(collection);
+
+              return (
+              <a className="collection-update-row" href={localizedHref(collection.href)} key={collection.slug}>
+                <span className={`icon-tile ${collectionTone(collection)}`} data-collection-update-icon={collection.slug}>
+                  <Icon size={16} aria-hidden="true" />
+                </span>
                 <span>
-                  <strong>{collection.title}</strong>
-                  <small>{index === 0 ? "Updated 3 hours ago" : "Updated yesterday"}</small>
+                  <strong>{t(`registryCollections.${getCollectionCopyKey(collection)}.title`)}</strong>
+                  <small>{updatedLabel(t, index === 0 ? "threeHoursAgo" : "yesterday")}</small>
                 </span>
                 <Bookmark size={16} aria-hidden="true" />
               </a>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -198,13 +234,13 @@ export function CollectionsIndexView() {
           <h2>{t("suggested")}</h2>
           <p className="tool-description">{t("suggestedDescription")}</p>
           <div className="detail-row-list">
-            <a className="detail-row" href="/collections/ai-developer-lab">
-              <span className="badge workflow">AI</span>
-              <span>AI Developer Lab · {workflows.length - 1} workflows</span>
+            <a className="detail-row" href={localizedHref("/collections/ai-developer-lab")}>
+              <span className="badge workflow">{t("suggestedLinks.aiDeveloperLab.badge")}</span>
+              <span>{t("suggestedLinks.aiDeveloperLab.label", { workflowCount: t("workflowCount", { count: aiDeveloperCollection?.workflowSlugs.length ?? 0 }) })}</span>
             </a>
-            <a className="detail-row" href="/collections/pdf-ops-kit">
-              <span className="badge local">PDF</span>
-              <span>PDF Ops Kit · local-first tools</span>
+            <a className="detail-row" href={localizedHref("/collections/pdf-ops-kit")}>
+              <span className="badge local">{t("suggestedLinks.pdfOpsKit.badge")}</span>
+              <span>{t("suggestedLinks.pdfOpsKit.label")}</span>
             </a>
           </div>
         </section>

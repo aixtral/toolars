@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Receipt, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateSideIncomeTax,
   defaultSideIncomeTaxScenario,
@@ -12,21 +13,20 @@ import {
 } from "@/lib/tools/side-income-tax";
 
 const trustRows = [
-  ["Local", "Salary and side-income assumptions stay in this browser session", "local"],
-  ["Tax estimate", "Outputs are planning math, not filing advice", "warn"],
-  ["Private", "Save only stores the tax estimate locally when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "taxEstimate", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const taxNotes = [
-  "VitalCalc applies 15.3% self-employment tax to 92.35% of net side income.",
-  "Half of self-employment tax and retirement contributions reduce taxable income in the estimate.",
-  "Federal brackets, state tax, deductions, credits, and local rules can change the real filing outcome."
-];
+const taxNotes = ["selfEmployment", "deductions", "filing"] as const;
 
 export function SideIncomeTaxWorkspace() {
-  const t = useTranslations("tools.side-income-tax");
-  const [plan, setPlan] = useState<SideIncomeTaxInput>(defaultSideIncomeTaxScenario);
-  const [result, setResult] = useState<SideIncomeTaxResult | null>(null);
+  const t = useTranslations("tools.side-income-tax.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/side-income-tax/about", localeCode);
+  const [plan, setPlan] = useState(defaultSideIncomeTaxScenario as SideIncomeTaxInput);
+  const [result, setResult] = useState(null as SideIncomeTaxResult | null);
 
   const calculate = () => {
     setResult(calculateSideIncomeTax(plan));
@@ -49,23 +49,23 @@ export function SideIncomeTaxWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="side-income-tax">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc side-income workspace</span>
-        <h1>Side Income Tax Calculator</h1>
-        <p className="subtitle">Estimate self-employment tax, federal plus state tax, and quarterly payments for side work.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/side-income-tax/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -74,50 +74,50 @@ export function SideIncomeTaxWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Side income inputs</h2>
-              <p className="tool-description">Use W-2 salary, gig income, expenses, retirement, filing status, and state rate.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="side-salary">
-              W-2 salary
+              {t("fields.salary")}
               <input className="input" id="side-salary" min={0} onChange={(event) => updateNumber("salary", event.target.value)} step="1000" type="number" value={plan.salary} />
             </label>
             <label className="field-label" htmlFor="side-income">
-              Side income
+              {t("fields.sideIncome")}
               <input className="input" id="side-income" min={0} onChange={(event) => updateNumber("sideIncome", event.target.value)} step="1000" type="number" value={plan.sideIncome} />
             </label>
             <label className="field-label" htmlFor="side-expenses">
-              Business expenses
+              {t("fields.businessExpenses")}
               <input className="input" id="side-expenses" min={0} onChange={(event) => updateNumber("businessExpenses", event.target.value)} step="500" type="number" value={plan.businessExpenses} />
             </label>
             <label className="field-label" htmlFor="side-retirement">
-              Retirement contribution
+              {t("fields.retirementContribution")}
               <input className="input" id="side-retirement" min={0} onChange={(event) => updateNumber("retirementContribution", event.target.value)} step="500" type="number" value={plan.retirementContribution} />
             </label>
             <label className="field-label" htmlFor="side-status">
-              Filing status
+              {t("fields.filingStatus")}
               <select className="input" id="side-status" onChange={(event) => updateStatus(event.target.value as SideIncomeFilingStatus)} value={plan.filingStatus}>
-                <option value="single">Single</option>
-                <option value="mfj">Married filing jointly</option>
-                <option value="mfs">Married filing separately</option>
-                <option value="hoh">Head of household</option>
+                <option value="single">{t("filingStatuses.single")}</option>
+                <option value="mfj">{t("filingStatuses.mfj")}</option>
+                <option value="mfs">{t("filingStatuses.mfs")}</option>
+                <option value="hoh">{t("filingStatuses.hoh")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="side-state-rate">
-              State tax rate
+              {t("fields.stateTaxRate")}
               <input className="input" id="side-state-rate" min={0} onChange={(event) => updateNumber("stateTaxRate", event.target.value)} step="0.5" type="number" value={plan.stateTaxRate} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save tax estimate
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate side tax
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -125,58 +125,62 @@ export function SideIncomeTaxWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Tax estimate summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate side-income tax and quarterly payments."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className={`badge ${result?.taxTone === "high" ? "warn" : "local"}`}>{result?.taxTone ?? "Tax"}</span>
+            <span className={`badge ${result?.taxTone === "high" ? "warn" : "local"}`}>{result?.taxTone ?? t("badges.tax")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedSelfEmploymentTax ?? "$0"}</strong>
-              <span>Self-employment tax</span>
+              <span>{t("metrics.selfEmploymentTax")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedFederalAndStateTax ?? "$0"}</strong>
-              <span>Federal plus state tax</span>
+              <span>{t("metrics.federalAndStateTax")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedEffectiveRate ?? "0.0%"}</strong>
-              <span>Effective tax rate</span>
+              <span>{t("metrics.effectiveTaxRate")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedQuarterlyPayment ?? "$0"}</strong>
-              <span>Quarterly payment</span>
+              <span>{t("metrics.quarterlyPayment")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Receipt size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.formattedTaxableIncome ?? "Waiting for calculation"}</strong>
-              <small>{result ? `${result.formattedNetSelfEmploymentIncome} net self-employment income after expenses.` : "Calculate first to review taxable income."}</small>
+              <strong>{result?.formattedTaxableIncome ?? t("callout.waitingTitle")}</strong>
+              <small>
+                {result
+                  ? t("callout.calculatedDescription", { amount: result.formattedNetSelfEmploymentIncome })
+                  : t("callout.waitingDescription")}
+              </small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Tax planning notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {taxNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Tax caveat
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Use official forms or a tax professional before filing or making estimated payments.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

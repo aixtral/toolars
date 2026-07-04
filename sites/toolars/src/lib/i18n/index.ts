@@ -5,14 +5,24 @@ export { LOCALES } from "@/data/locales";
 
 export const DEFAULT_LOCALE: LocaleCode = LOCALES.find((locale) => locale.default)?.code ?? "en";
 export const LAUNCH_LOCALES: LocaleDefinition[] = LOCALES.filter((locale) => locale.phase === "launch");
+export const ROUTED_LOCALES: LocaleDefinition[] = LAUNCH_LOCALES;
+export const DRAFT_LOCALES: LocaleDefinition[] = LOCALES.filter((locale) => locale.phase !== "launch");
 export const NON_DEFAULT_LOCALES: LocaleDefinition[] = LAUNCH_LOCALES.filter((locale) => !locale.default);
 
 export function isValidLocale(code: string): code is LocaleCode {
   return LOCALES.some((locale) => locale.code === code);
 }
 
+export function isLaunchLocale(code: string): code is LocaleCode {
+  return ROUTED_LOCALES.some((locale) => locale.code === code);
+}
+
 export function isDefaultLocale(code: LocaleCode): boolean {
   return code === DEFAULT_LOCALE;
+}
+
+export function getLocaleDirection(code: LocaleCode): LocaleDefinition["dir"] {
+  return LOCALES.find((locale) => locale.code === code)?.dir ?? "ltr";
 }
 
 /**

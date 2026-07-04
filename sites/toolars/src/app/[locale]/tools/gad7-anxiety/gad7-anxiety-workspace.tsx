@@ -1,8 +1,9 @@
 "use client";
 
 import { Calculator, Heart, Save, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateGad7Anxiety,
   defaultGad7Answers,
@@ -14,21 +15,24 @@ import {
 const storageKey = "toolars.gad7-anxiety.snapshot:v1";
 
 const trustRows = [
-  ["Local", "GAD-7 answers stay in this browser session", "local"],
-  ["Screening", "This is not a diagnosis or crisis service", "warn"],
-  ["Private", "Save stores only this local screening snapshot", ""]
+  { key: "local", tone: "local" },
+  { key: "screening", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const supportNotes = [
-  "VitalCalc maps GAD-7 totals to minimal, mild, moderate, and severe anxiety bands.",
-  "Persistent symptoms, impairment, panic, substance use, or physical symptoms should be reviewed with a clinician.",
-  "If you feel at immediate risk or unsafe, contact local emergency or crisis support now."
-];
+  "scoring",
+  "clinician",
+  "crisis"
+] as const;
 
 export function Gad7AnxietyWorkspace() {
-  const t = useTranslations("tools.gad7-anxiety");
-  const [answers, setAnswers] = useState<Gad7Answer[]>(() => defaultGad7Answers);
-  const [result, setResult] = useState<Gad7Result | null>(null);
+  const t = useTranslations("tools.gad7-anxiety.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [answers, setAnswers] = useState((): Gad7Answer[] => defaultGad7Answers);
+  const [result, setResult] = useState(null as Gad7Result | null);
 
   const calculate = () => {
     setResult(calculateGad7Anxiety(answers));
@@ -48,23 +52,23 @@ export function Gad7AnxietyWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="gad7-anxiety">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc anxiety screening workspace</span>
-        <h1>GAD-7 Anxiety Screening</h1>
-        <p className="subtitle">Score seven anxiety-frequency questions locally and review screening-only support guidance.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local screening model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/gad7-anxiety/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/gad7-anxiety/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -73,10 +77,10 @@ export function Gad7AnxietyWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Screening answers</h2>
-              <p className="tool-description">Answer based on the last 2 weeks. Values mirror the source GAD-7 0-3 frequency scale.</p>
+              <h2>{t("answerSection.title")}</h2>
+              <p className="tool-description">{t("answerSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="profile-list">
@@ -99,10 +103,10 @@ export function Gad7AnxietyWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveSnapshot} type="button">
-              <Save size={16} aria-hidden="true" /> Save screening snapshot
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Score GAD-7
+              <Calculator size={16} aria-hidden="true" /> {t("actions.score")}
             </button>
           </div>
         </section>
@@ -110,58 +114,58 @@ export function Gad7AnxietyWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Screening result</h2>
-              <p className="tool-description">{result ? result.formattedScore : "Run scoring to show GAD-7 total and severity band."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.formattedScore : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">Screening only</span>
+            <span className="badge warn">{t("badges.screeningOnly")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedScore ?? "0 / 21"}</strong>
-              <span>GAD-7 score</span>
+              <strong>{result?.formattedScore ?? t("resultSection.emptyScore")}</strong>
+              <span>{t("metrics.totalScore")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
-              <span>Severity band</span>
+              <span>{t("metrics.severityBand")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? t(`severity.${result.severity}.label`) : "--"}</strong>
-              <span>Support level</span>
+              <span>{t("metrics.supportLevel")}</span>
             </article>
             <article className="llm-metric">
-              <strong>Screening only</strong>
-              <span>Diagnostic status</span>
+              <strong>{t("badges.screeningOnly")}</strong>
+              <span>{t("metrics.diagnosticStatus")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Heart size={18} aria-hidden="true" />
             <span>
-              <strong>{result ? t(`severity.${result.severity}.guidance`) : "Waiting for score"}</strong>
-              <small>{result ? "Discuss persistent symptoms with a doctor, therapist, or qualified clinician." : "Score answers first to review support guidance."}</small>
+              <strong>{result ? t(`severity.${result.severity}.guidance`) : t("resultSection.waitingTitle")}</strong>
+              <small>{result ? t("resultSection.guidanceDescription") : t("resultSection.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Support notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {supportNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Screening answers stay local. GAD-7 output is a reference screen, not a diagnosis or emergency service.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

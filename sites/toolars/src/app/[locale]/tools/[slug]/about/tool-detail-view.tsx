@@ -1,17 +1,94 @@
 import { ArrowRight, Share2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
 import type { ProcessingMode, ToolDefinition } from "@/data/registry";
 import { labDetailSlugs, type DetailBadgeTone, type ToolDetailDefinition, type ToolDetailRow } from "@/data/tool-details";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 
-const processingLabel: Record<ProcessingMode, string> = {
-  local: "Local",
-  cloud: "Cloud",
-  "ai-consent": "AI consent"
+type TranslationValues = {
+  readonly [key: string]: string | number;
 };
 
-const designedDetailBadges: Record<string, Array<{ label: string; tone?: DetailBadgeTone }>> = {
+type ToolDetailTranslator = (key: string, values?: TranslationValues) => string;
+
+type ProcessingLabelKeyMap = {
+  readonly [mode in ProcessingMode]: string;
+};
+
+type MessageKeyMap = {
+  readonly [label: string]: string;
+};
+
+type DetailBadge = {
+  readonly label: string;
+  readonly tone?: DetailBadgeTone;
+};
+
+type DesignedDetailBadgeMap = {
+  readonly [slug: string]: readonly DetailBadge[];
+};
+
+interface StringSet {
+  has(value: string): boolean;
+}
+
+function createSlugSet(slugs: readonly string[]): StringSet {
+  return new Set(slugs);
+}
+
+const processingLabelKey: ProcessingLabelKeyMap = {
+  local: "processing.local",
+  cloud: "processing.cloud",
+  "ai-consent": "processing.aiConsent"
+};
+
+const badgeMessageKeys: MessageKeyMap = {
+  Verified: "badges.verified",
+  Free: "pricing.free",
+  Freemium: "pricing.freemium",
+  Paid: "pricing.paid",
+  Local: "processing.local",
+  Cloud: "processing.cloud",
+  "AI consent": "processing.aiConsent",
+  "Free trial": "pricing.freeTrial",
+  "Local first": "badges.localFirst",
+  JSON: "badges.json",
+  LLM: "badges.llm",
+  API: "badges.api",
+  "AI security": "badges.aiSecurity",
+  Security: "badges.security",
+  Prompt: "badges.prompt",
+  OWASP: "badges.owasp",
+  Cost: "badges.cost",
+  Models: "badges.models",
+  Tokens: "badges.tokens",
+  Workflow: "badges.workflow",
+  MCP: "badges.mcp",
+  Agent: "badges.agent",
+  Tools: "badges.tools",
+  Process: "badges.process",
+  Consent: "badges.consent",
+  Handoff: "badges.handoff",
+  Stable: "badges.stable",
+  Next: "badges.next",
+  Review: "badges.review",
+  "Source-backed": "badges.sourceBacked",
+  Plan: "badges.plan",
+  "Build-ready": "badges.buildReady",
+  Now: "badges.now",
+  "Native workspace": "badges.nativeWorkspace",
+  "PDF workspace": "badges.pdfWorkspace",
+  "Local repair": "badges.localRepair",
+  "Local calculator": "badges.localCalculator",
+  "Health reference": "badges.healthReference",
+  "Local finance": "badges.localFinance",
+  "VitalCalc source": "badges.vitalCalcSource",
+  "Local files": "badges.localFiles",
+  Retention: "badges.retention"
+};
+
+const designedDetailBadges: DesignedDetailBadgeMap = {
   "pdf-toolkit": [
     { label: "Verified", tone: "local" },
     { label: "Free" },
@@ -47,10 +124,14 @@ const designedDetailBadges: Record<string, Array<{ label: string; tone?: DetailB
   ]
 };
 
-const designedPublicDetailSlugs = new Set<string>(labDetailSlugs);
-const aiLabDetailSlugs = new Set<string>(labDetailSlugs.filter((slug) => slug !== "pdf-toolkit"));
+const designedPublicDetailSlugs = createSlugSet(labDetailSlugs);
+const aiLabDetailSlugs = createSlugSet(labDetailSlugs.filter((slug) => slug !== "pdf-toolkit"));
 
-const designedHeroSummaries: Record<string, string> = {
+type HeroSummaryMap = {
+  readonly [slug: string]: string;
+};
+
+const designedHeroSummaries: HeroSummaryMap = {
   "pdf-toolkit": "Merge, split, compress, convert, summarize, and export PDFs in one place.",
   "json-repair":
     "Fix malformed LLM JSON output, trailing commas, quotes, and broken arrays. This listing explains the production contract, privacy posture, and handoff notes for the Toolars developer catalog.",
@@ -66,14 +147,23 @@ function badgeClass(tone?: DetailBadgeTone): string {
   return tone ? `badge ${tone}` : "badge";
 }
 
-function pricingLabel(tool: ToolDefinition): string {
-  if (isFreeTrialMode() && tool.pricing !== "free") return "Free trial";
-  return tool.pricing === "freemium" ? "Freemium" : tool.pricing === "paid" ? "Paid" : "Free";
+function localizedBadgeLabel(label: string, t: ToolDetailTranslator): string {
+  const messageKey = badgeMessageKeys[label];
+  return messageKey ? t(messageKey) : label;
 }
 
-function trialBadgeLabel(label: string): string {
-  if (!isFreeTrialMode()) return label;
-  return label === "Freemium" || label === "Paid" ? "Free trial" : label;
+function pricingLabel(tool: ToolDefinition, t: ToolDetailTranslator): string {
+  if (isFreeTrialMode() && tool.pricing !== "free") return t("pricing.freeTrial");
+  return t(`pricing.${tool.pricing}`);
+}
+
+function processingLabel(mode: ProcessingMode, t: ToolDetailTranslator): string {
+  return t(processingLabelKey[mode]);
+}
+
+function trialBadgeLabel(label: string, t: ToolDetailTranslator): string {
+  const normalizedLabel = isFreeTrialMode() && (label === "Freemium" || label === "Paid") ? "Free trial" : label;
+  return localizedBadgeLabel(normalizedLabel, t);
 }
 
 function initials(label: string): string {
@@ -85,18 +175,21 @@ function initials(label: string): string {
     .toUpperCase();
 }
 
-function workspaceActionLabel(detail: ToolDetailDefinition): string {
-  return detail.tool.slug === "pdf-toolkit" ? "Open tool" : "Open workspace";
+function workspaceActionLabel(detail: ToolDetailDefinition, t: ToolDetailTranslator): string {
+  return detail.tool.slug === "pdf-toolkit" ? t("actions.openTool") : t("actions.openWorkspace");
 }
 
-function detailBadges(detail: ToolDetailDefinition): Array<{ label: string; tone?: DetailBadgeTone }> {
+function detailBadges(
+  detail: ToolDetailDefinition,
+  t: ToolDetailTranslator
+): DetailBadge[] {
   const designedBadges = designedDetailBadges[detail.tool.slug];
-  if (designedBadges) return designedBadges.map((badge) => ({ ...badge, label: trialBadgeLabel(badge.label) }));
+  if (designedBadges) return designedBadges.map((badge) => ({ ...badge, label: trialBadgeLabel(badge.label, t) }));
 
   return [
-    { label: detail.listingBadge.badge, tone: detail.listingBadge.tone },
-    { label: pricingLabel(detail.tool) },
-    ...detail.tool.tags.map((tag) => ({ label: tag }))
+    { label: localizedBadgeLabel(detail.listingBadge.badge, t), tone: detail.listingBadge.tone },
+    { label: pricingLabel(detail.tool, t) },
+    ...detail.tool.tags.map((tag) => ({ label: localizedBadgeLabel(tag, t) }))
   ];
 }
 
@@ -112,12 +205,17 @@ function heroSummary(detail: ToolDetailDefinition): string {
   return designedHeroSummaries[detail.tool.slug] ?? `${detail.tool.description} ${detail.summary}`;
 }
 
-function DetailRows({ rows }: { rows: ToolDetailRow[] }) {
+function localizeInternalHref(href: string, localeCode: LocaleCode): string {
+  if (!href.startsWith("/")) return href;
+  return localizePath(href, localeCode);
+}
+
+function DetailRows({ rows, t }: { rows: ToolDetailRow[]; t: ToolDetailTranslator }) {
   return (
     <div className="detail-row-list">
       {rows.map((row) => (
         <div className="detail-row" key={row.badge}>
-          <span className={badgeClass(row.tone)}>{row.badge}</span>
+          <span className={badgeClass(row.tone)}>{localizedBadgeLabel(row.badge, t)}</span>
           <span>{row.description}</span>
         </div>
       ))}
@@ -127,6 +225,10 @@ function DetailRows({ rows }: { rows: ToolDetailRow[] }) {
 
 export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
   const tTools = useTranslations(`tools.${detail.tool.slug}`);
+  const t = useTranslations("toolDetail") as ToolDetailTranslator;
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+
   return (
     <div
       className="tool-detail-page"
@@ -137,13 +239,13 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
     >
       <header className="tool-detail-head">
         <div>
-          <span className="eyebrow">Public tool listing</span>
-          <h1 className="title">{tTools("name")} details</h1>
+          <span className="eyebrow">{t("eyebrow")}</span>
+          <h1 className="title">{t("title", { name: tTools("name") })}</h1>
           <p className="subtitle tool-detail-hero-summary">
             {heroSummary(detail)}
           </p>
           <div className="badge-row detail-badge-row">
-            {detailBadges(detail).map((badge) => (
+            {detailBadges(detail, t).map((badge) => (
               <span className={badgeClass(badge.tone)} key={badge.label}>
                 {badge.label}
               </span>
@@ -155,13 +257,13 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
             className="button button-outline-neutral"
             itemName={tTools("name")}
             kind="share"
-            sharePath={detail.tool.aboutHref}
-            shareTitle="Share this tool"
+            sharePath={localizeInternalHref(detail.tool.aboutHref, localeCode)}
+            shareTitle={t("share.title")}
           >
-            <Share2 size={16} aria-hidden="true" /> Share
+            <Share2 size={16} aria-hidden="true" /> {t("share.action")}
           </CoreActionModalButton>
-          <a className="button button-solid tool-detail-primary-action" href={detail.workspaceHref}>
-            {workspaceActionLabel(detail)} <ArrowRight size={16} aria-hidden="true" />
+          <a className="button button-solid tool-detail-primary-action" href={localizeInternalHref(detail.workspaceHref, localeCode)}>
+            {workspaceActionLabel(detail, t)} <ArrowRight size={16} aria-hidden="true" />
           </a>
         </div>
       </header>
@@ -169,7 +271,7 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
       <div className="tool-detail-grid">
         <section className="tool-detail-main">
           <section className="panel tool-detail-overview-panel">
-            <h2>Overview</h2>
+            <h2>{t("sections.overview")}</h2>
             <p className="subtitle">{detail.overview}</p>
             <div className="detail-metric-grid">
               {detail.metrics.map((metric) => (
@@ -182,7 +284,7 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
           </section>
 
           <section className="panel section tool-detail-how-it-works-panel">
-            <h2>How it works</h2>
+            <h2>{t("sections.howItWorks")}</h2>
             <div className="detail-step-list">
               {detail.howItWorks.map((step, index) => (
                 <article className="detail-step-row" key={step.title}>
@@ -191,7 +293,7 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
                     <strong>{step.title}</strong>
                     <small>{step.description}</small>
                   </span>
-                  <span className={badgeClass(step.tone)}>{step.badge}</span>
+                  <span className={badgeClass(step.tone)}>{localizedBadgeLabel(step.badge, t)}</span>
                 </article>
               ))}
             </div>
@@ -199,11 +301,11 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
 
           <section className="panel section">
             <h2>{detail.trustSection.title}</h2>
-            <DetailRows rows={detail.trustSection.rows} />
+            <DetailRows rows={detail.trustSection.rows} t={t} />
           </section>
 
           <section className="panel section">
-            <h2>Implementation handoff</h2>
+            <h2>{t("sections.implementationHandoff")}</h2>
             <div className="detail-resource-list">
               {detail.handoff.map((item) => (
                 <article className="detail-resource-row" key={item.title}>
@@ -212,7 +314,7 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
                     <strong>{item.title}</strong>
                     <small>{item.description}</small>
                   </span>
-                  <span className="badge">{item.badge}</span>
+                  <span className="badge">{localizedBadgeLabel(item.badge, t)}</span>
                 </article>
               ))}
             </div>
@@ -221,10 +323,10 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
 
         <aside className="right-rail">
           <section className="panel">
-            <h2>Included in collections</h2>
+            <h2>{t("sections.includedCollections")}</h2>
             <div className="detail-resource-list">
               {detail.includedCollections.map((collection) => (
-                <a className="detail-resource-row" href={collection.href} key={collection.slug}>
+                <a className="detail-resource-row" href={localizeInternalHref(collection.href, localeCode)} key={collection.slug}>
                   <span className="icon-tile purple">{collection.toolSlugs.length}</span>
                   <span>
                     <strong>{collection.title}</strong>
@@ -236,17 +338,17 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
           </section>
 
           <section className="panel">
-            <h2>Related tools</h2>
+            <h2>{t("sections.relatedTools")}</h2>
             <div className="detail-resource-list">
               {detail.relatedTools.map((tool) => (
-                <a className="detail-resource-row" href={tool.aboutHref} key={tool.slug}>
+                <a className="detail-resource-row" href={localizeInternalHref(tool.aboutHref, localeCode)} key={tool.slug}>
                   <span className={`icon-tile ${tool.accent}`}>{initials(tool.name)}</span>
                   <span>
                     <strong>{tool.name}</strong>
                     <small>{tool.category}</small>
                   </span>
                   <span className={badgeClass(tool.processing[0] === "ai-consent" ? "ai" : tool.processing[0] === "local" ? "local" : "cloud")}>
-                    {processingLabel[tool.processing[0]]}
+                    {processingLabel(tool.processing[0], t)}
                   </span>
                 </a>
               ))}
@@ -255,17 +357,20 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
 
           {detail.recommendedWorkflow ? (
             <section className="panel">
-              <h2>Recommended workflow</h2>
-              <a className="detail-resource-row" href={detail.recommendedWorkflow.href}>
+              <h2>{t("sections.recommendedWorkflow")}</h2>
+              <a className="detail-resource-row" href={localizeInternalHref(detail.recommendedWorkflow.href, localeCode)}>
                 <span className="icon-tile rose">{detail.recommendedWorkflow.steps.length}</span>
                 <span>
                   <strong>{detail.recommendedWorkflow.title}</strong>
                   <small>
-                    {detail.recommendedWorkflow.estimatedMinutes} min · {detail.recommendedWorkflow.runCount} runs
+                    {t("workflow.meta", {
+                      minutes: detail.recommendedWorkflow.estimatedMinutes,
+                      runs: detail.recommendedWorkflow.runCount
+                    })}
                   </small>
                 </span>
               </a>
-              <p className="detail-aside-note">{detail.outcome} is the primary catalog outcome for this detail page.</p>
+              <p className="detail-aside-note">{t("workflow.outcome", { outcome: detail.outcome })}</p>
             </section>
           ) : null}
         </aside>

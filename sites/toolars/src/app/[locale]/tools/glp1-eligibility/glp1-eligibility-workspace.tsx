@@ -1,12 +1,12 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, Scale, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateGlp1Eligibility,
   defaultGlp1EligibilityScenario,
-  glp1ComorbidityLabels,
   type Glp1Comorbidity,
   type Glp1EligibilityInput,
   type Glp1EligibilityResult
@@ -15,21 +15,54 @@ import {
 const storageKey = "toolars.glp1-eligibility.snapshot:v1";
 
 const trustRows = [
-  ["Local", "Height, weight, and checkbox inputs stay in this browser session", "local"],
-  ["Medical", "This is education for clinician discussion, not a prescription decision", "warn"],
-  ["Private", "Save stores only this local eligibility snapshot", ""]
+  { key: "local", tone: "local" },
+  { key: "medical", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const prescriptionNotes = [
-  "VitalCalc checks common criteria: BMI >= 30 or BMI >= 27 with a weight-related comorbidity.",
-  "Contraindications, medications, pregnancy status, labs, and side effects require clinician review.",
-  "Medication names and coverage vary by country, indication, and current label."
+  "criteria",
+  "clinician",
+  "coverage"
+] as const;
+
+const comorbidityKeys: Glp1Comorbidity[] = [
+  "diabetes",
+  "hypertension",
+  "cholesterol",
+  "sleepApnea",
+  "pcos",
+  "heart"
 ];
 
+function getBmiCategoryKey(bmi: number) {
+  if (bmi < 18.5) return "underweight";
+  if (bmi < 25) return "normal";
+  if (bmi < 30) return "overweight";
+  return "obesity";
+}
+
+function getCriteriaStatusKey(result: Glp1EligibilityResult) {
+  if (result.isCriteriaMatch) return "match";
+  if (result.bmi >= 27) return "needsComorbidity";
+  return "notMet";
+}
+
+function getMedicationNoteKey(result: Glp1EligibilityResult) {
+  if (result.isCriteriaMatch) return "match";
+  if (result.bmi >= 27) return "review";
+  return "notMet";
+}
+
 export function Glp1EligibilityWorkspace() {
-  const t = useTranslations("tools.glp1-eligibility");
-  const [values, setValues] = useState<Glp1EligibilityInput>(() => defaultGlp1EligibilityScenario);
-  const [result, setResult] = useState<Glp1EligibilityResult | null>(null);
+  const t = useTranslations("tools.glp1-eligibility.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [values, setValues] = useState(defaultGlp1EligibilityScenario);
+  const [result, setResult] = useState(null as Glp1EligibilityResult | null);
+  const resultCriteriaKey = result ? getCriteriaStatusKey(result) : null;
+  const resultCriteriaStatus = resultCriteriaKey ? t(`criteriaStatuses.${resultCriteriaKey}`) : null;
 
   const calculate = () => {
     setResult(calculateGlp1Eligibility(values));
@@ -57,23 +90,23 @@ export function Glp1EligibilityWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="glp1-eligibility">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc medical discussion workspace</span>
-        <h1>GLP-1 Eligibility Check</h1>
-        <p className="subtitle">Check common BMI and comorbidity criteria for a clinician conversation about GLP-1 medications.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local criteria model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={`badge ${row.tone}`}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/glp1-eligibility/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/glp1-eligibility/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -82,38 +115,38 @@ export function Glp1EligibilityWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Eligibility inputs</h2>
-              <p className="tool-description">Enter body measurements and select any relevant weight-related comorbidities.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="glp1-eligibility-height">
-              Height (cm)
+              {t("fields.height")}
               <input className="input" id="glp1-eligibility-height" min={0} onChange={(event) => updateNumber("heightCm", event.target.value)} type="number" value={values.heightCm} />
             </label>
             <label className="field-label" htmlFor="glp1-eligibility-weight">
-              Weight (kg)
+              {t("fields.weight")}
               <input className="input" id="glp1-eligibility-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} step="0.1" type="number" value={values.weightKg} />
             </label>
           </div>
 
           <div className="profile-list" style={{ marginTop: 18 }}>
-            {(Object.keys(glp1ComorbidityLabels) as Glp1Comorbidity[]).map((key) => (
+            {comorbidityKeys.map((key) => (
               <label className="profile-row" key={key} htmlFor={`glp1-${key}`}>
                 <input checked={values.comorbidities.includes(key)} id={`glp1-${key}`} onChange={() => toggleComorbidity(key)} type="checkbox" />
-                <span>{glp1ComorbidityLabels[key]}</span>
+                <span>{t(`comorbidities.${key}`)}</span>
               </label>
             ))}
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveSnapshot} type="button">
-              <Save size={16} aria-hidden="true" /> Save eligibility snapshot
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Check common criteria
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -121,58 +154,62 @@ export function Glp1EligibilityWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Criteria result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show BMI category and criteria status."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result && resultCriteriaStatus
+                  ? t("resultSection.summary", { bmi: result.formattedBmi, criteria: resultCriteriaStatus })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Medical review</span>
+            <span className="badge warn">{t("badges.medicalReview")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedBmi ?? "0.0"}</strong>
-              <span>BMI</span>
+              <span>{t("metrics.bmi")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.bmiCategory ?? "--"}</strong>
-              <span>BMI category</span>
+              <strong>{result ? t(`bmiCategories.${getBmiCategoryKey(result.bmi)}`) : "--"}</strong>
+              <span>{t("metrics.bmiCategory")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.criteriaStatus ?? "--"}</strong>
-              <span>Criteria</span>
+              <strong>{resultCriteriaStatus ?? "--"}</strong>
+              <span>{t("metrics.criteria")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.comorbidityLabel ?? "None selected"}</strong>
-              <span>Comorbidity context</span>
+              <strong>{result?.hasComorbidity ? t("formats.comorbiditySelected", { count: values.comorbidities.length }) : t("metrics.noneSelected")}</strong>
+              <span>{t("metrics.comorbidityContext")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Scale size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.medicationNote ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Bring the snapshot to a qualified clinician; Toolars does not prescribe or recommend medication." : "Calculate first to review common criteria."}</small>
+              <strong>{result ? t(`medicationNotes.${getMedicationNoteKey(result)}`) : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.reviewDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Prescription notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {prescriptionNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Eligibility inputs stay local. This workspace is educational and does not replace clinician review.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

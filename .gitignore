@@ -3,6 +3,7 @@ node_modules/
 .pnpm-store/
 .next/
 out/
+output/
 dist/
 coverage/
 playwright-report/

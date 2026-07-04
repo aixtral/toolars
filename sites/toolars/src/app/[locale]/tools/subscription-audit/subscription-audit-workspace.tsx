@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, ReceiptText, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateSubscriptionAudit,
   categoryLabels,
@@ -14,30 +15,28 @@ import {
 } from "@/lib/tools/subscription-audit";
 
 const trustRows = [
-  ["Local", "Subscription names, costs, and categories stay in this browser session", "local"],
-  ["Review", "Monthly normalization follows the VitalCalc source frequency model", "warn"],
-  ["Private", "Save stores only this local subscription list when you choose it", ""]
+  { key: "local", tone: "local" },
+  { key: "review", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const subscriptionNotes = [
-  "VitalCalc monthly cost normalizes yearly, weekly, quarterly, and monthly subscriptions.",
-  "Weekly subscriptions use the source 4.33 weeks-per-month conversion.",
-  "Review annual renewals and high-share categories before cancelling useful services."
-];
+  "normalized",
+  "weekly",
+  "renewals"
+] as const;
 
-const frequencies: Array<{ value: SubscriptionFrequency; label: string }> = [
-  { value: "month", label: "Monthly" },
-  { value: "year", label: "Yearly" },
-  { value: "week", label: "Weekly" },
-  { value: "quarter", label: "Quarterly" }
-];
+const frequencies: SubscriptionFrequency[] = ["month", "year", "week", "quarter"];
 
-const categories = Object.entries(categoryLabels) as Array<[SubscriptionCategory, string]>;
+const categories = Object.keys(categoryLabels) as SubscriptionCategory[];
 
 export function SubscriptionAuditWorkspace() {
-  const t = useTranslations("tools.subscription-audit");
-  const [entries, setEntries] = useState<SubscriptionEntry[]>(() => defaultSubscriptionAuditEntries);
-  const [result, setResult] = useState<SubscriptionAuditResult | null>(null);
+  const t = useTranslations("tools.subscription-audit.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [entries, setEntries] = useState((): SubscriptionEntry[] => defaultSubscriptionAuditEntries);
+  const [result, setResult] = useState((): SubscriptionAuditResult | null => null);
 
   const calculate = () => {
     setResult(calculateSubscriptionAudit(entries));
@@ -57,23 +56,23 @@ export function SubscriptionAuditWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="subscription-audit">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc subscription workspace</span>
-        <h1>Subscription Audit Calculator</h1>
-        <p className="subtitle">Normalize recurring subscriptions into monthly spend, yearly spend, and category concentration.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/subscription-audit/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/subscription-audit/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -82,10 +81,10 @@ export function SubscriptionAuditWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Subscription inputs</h2>
-              <p className="tool-description">Edit the sample list or use it as a normalized subscription audit.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="profile-list">
@@ -94,29 +93,29 @@ export function SubscriptionAuditWorkspace() {
                 <span className="badge">{index + 1}</span>
                 <div className="llm-input-grid" style={{ flex: 1 }}>
                   <label className="field-label" htmlFor={`subscription-name-${index}`}>
-                    Name
+                    {t("fields.name")}
                     <input className="input" id={`subscription-name-${index}`} onChange={(event) => updateEntry(index, { name: event.target.value })} type="text" value={entry.name} />
                   </label>
                   <label className="field-label" htmlFor={`subscription-cost-${index}`}>
-                    Cost
+                    {t("fields.cost")}
                     <input className="input" id={`subscription-cost-${index}`} min={0} onChange={(event) => updateEntry(index, { cost: Number(event.target.value) })} step="0.01" type="number" value={entry.cost} />
                   </label>
                   <label className="field-label" htmlFor={`subscription-frequency-${index}`}>
-                    Frequency
+                    {t("fields.frequency")}
                     <select className="input" id={`subscription-frequency-${index}`} onChange={(event) => updateEntry(index, { frequency: event.target.value as SubscriptionFrequency })} value={entry.frequency}>
                       {frequencies.map((frequency) => (
-                        <option key={frequency.value} value={frequency.value}>
-                          {frequency.label}
+                        <option key={frequency} value={frequency}>
+                          {t(`frequencyOptions.${frequency}`)}
                         </option>
                       ))}
                     </select>
                   </label>
                   <label className="field-label" htmlFor={`subscription-category-${index}`}>
-                    Category
+                    {t("fields.category")}
                     <select className="input" id={`subscription-category-${index}`} onChange={(event) => updateEntry(index, { category: event.target.value as SubscriptionCategory })} value={entry.category}>
-                      {categories.map(([value, label]) => (
+                      {categories.map((value) => (
                         <option key={value} value={value}>
-                          {label}
+                          {t(`categoryOptions.${value}`)}
                         </option>
                       ))}
                     </select>
@@ -128,10 +127,10 @@ export function SubscriptionAuditWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveEntries} type="button">
-              <Save size={16} aria-hidden="true" /> Save audit list
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate audit
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -139,58 +138,65 @@ export function SubscriptionAuditWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Audit summary</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to see normalized subscription spend and concentration."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      count: result.subscriptionCount,
+                      monthly: result.formattedMonthlySpend
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge local">{result ? "Audit ready" : "Sample"}</span>
+            <span className="badge local">{result ? t("badges.auditReady") : t("badges.sample")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedMonthlySpend ?? "$0.00"}</strong>
-              <span>Monthly spend</span>
+              <span>{t("metrics.monthlySpend")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedYearlySpend ?? "$0.00"}</strong>
-              <span>Yearly spend</span>
+              <span>{t("metrics.yearlySpend")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedAverageMonthly ?? "$0.00"}</strong>
-              <span>Average monthly</span>
+              <span>{t("metrics.averageMonthly")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? String(result.subscriptionCount) : String(entries.length)}</strong>
-              <span>Subscriptions</span>
+              <span>{t("metrics.subscriptions")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <ReceiptText size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.categoryBreakdown[0]?.label ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Largest normalized category by monthly spend." : "Calculate first to see category concentration."}</small>
+              <strong>{result?.categoryBreakdown[0] ? t(`categoryOptions.${result.categoryBreakdown[0].category}`) : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Subscription review notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {subscriptionNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>Subscription audits are browser-only calculations unless you choose Save.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>

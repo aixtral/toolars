@@ -1,25 +1,32 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, Scale, ShieldCheck } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { calculateLeanBodyMass, defaultLeanBodyMassScenario, type LeanBodyMassInput, type LeanBodyMassResult } from "@/lib/tools/lean-body-mass";
 
 const trustRows = [
-  ["Local", "Weight and body-fat assumptions stay in this browser session", "local"],
-  ["Reference", "Lean body mass depends on the body-fat method used", "warn"],
-  ["Private", "Save only stores composition assumptions locally", ""]
+  { key: "local", tone: "local" },
+  { key: "reference", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
 const compositionNotes = [
-  "Lean body mass equals total weight minus estimated fat mass.",
-  "Use the same body-fat method over time for better trend comparison.",
-  "Hydration and measurement error can move short-term body-composition readings."
-];
+  "formula",
+  "method",
+  "measurement"
+] as const;
 
 export function LeanBodyMassWorkspace() {
-  const t = useTranslations("tools.lean-body-mass");
-  const [composition, setComposition] = useState<LeanBodyMassInput>(defaultLeanBodyMassScenario);
+  const t = useTranslations("tools.lean-body-mass.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  function localizedHref(href: string) {
+    return localizePath(href, localeCode);
+  }
+
+  const [composition, setComposition] = useState(defaultLeanBodyMassScenario);
   const [result, setResult] = useState<LeanBodyMassResult | null>(null);
 
   const calculate = () => {
@@ -38,23 +45,23 @@ export function LeanBodyMassWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="lean-body-mass">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc body composition workspace</span>
-        <h1>Lean Body Mass Calculator</h1>
-        <p className="subtitle">Calculate lean mass from weight and body fat percentage.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local calculation model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map(({ key, tone }) => (
+            <div className="profile-row" key={key}>
+              <span className={`badge ${tone}`}>{t(`trustRows.${key}.label`)}</span>
+              <span>{t(`trustRows.${key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/lean-body-mass/about">
-            Tool details
+          <a className="button button-outline" href={localizedHref("/tools/lean-body-mass/about")}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -63,29 +70,29 @@ export function LeanBodyMassWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Composition inputs</h2>
-              <p className="tool-description">Use body weight and body fat percentage from the same measurement method.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="lean-weight">
-              Weight (kg)
+              {t("fields.weight")}
               <input className="input" id="lean-weight" min={0} onChange={(event) => updateNumber("weightKg", event.target.value)} type="number" value={composition.weightKg} />
             </label>
             <label className="field-label" htmlFor="lean-body-fat">
-              Body fat (%)
+              {t("fields.bodyFat")}
               <input className="input" id="lean-body-fat" min={0} onChange={(event) => updateNumber("bodyFatPercent", event.target.value)} step="0.1" type="number" value={composition.bodyFatPercent} />
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" onClick={saveComposition} type="button">
-              <Save size={16} aria-hidden="true" /> Save composition
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate lean mass
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -93,56 +100,74 @@ export function LeanBodyMassWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Lean mass result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to estimate lean and fat mass."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">
+                {result
+                  ? t("resultSection.summary", {
+                      bodyFat: formatOneDecimal(Math.max(0, Math.min(100, composition.bodyFatPercent)), localeCode),
+                      weight: formatInteger(Math.max(0, composition.weightKg), localeCode)
+                    })
+                  : t("resultSection.emptyDescription")}
+              </p>
             </div>
-            <span className="badge warn">Reference</span>
+            <span className="badge warn">{t("badges.reference")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedLeanBodyMass ?? "0.0 kg"}</strong>
-              <span>Lean body mass</span>
+              <span>{t("metrics.leanBodyMass")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedFatMass ?? "0.0 kg"}</strong>
-              <span>Fat mass</span>
+              <span>{t("metrics.fatMass")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedLeanMassRatio ?? "0.0%"}</strong>
-              <span>Lean mass ratio</span>
+              <span>{t("metrics.leanMassRatio")}</span>
             </article>
           </div>
 
           <div className="llm-plan-callout">
             <Scale size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.recommendation ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Use trend data, not a single snapshot, for body composition decisions." : "Calculate first to get the composition split."}</small>
+              <strong>{result ? t("recommendation.result") : t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.trendDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Composition notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {compositionNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("recommendation.title")}
           </strong>
-          <p>No account data is required. Lean mass results are body-composition estimates, not clinical measurements.</p>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </div>
   );
+}
+
+function formatInteger(value: number, locale: LocaleCode): string {
+  return Math.round(value).toLocaleString(locale);
+}
+
+function formatOneDecimal(value: number, locale: LocaleCode): string {
+  return value.toLocaleString(locale, {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1
+  });
 }

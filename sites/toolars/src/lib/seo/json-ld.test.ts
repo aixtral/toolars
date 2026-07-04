@@ -140,4 +140,28 @@ describe("json-ld schema builders", () => {
     expect(schema.datePublished).toBe("2026-06-10");
     expect(schema.mainEntityOfPage).toBe("https://toolars.app/blog/json-repair-guide");
   });
+
+  it("builds localized Article schema URLs with inLanguage", () => {
+    const article = {
+      slug: "json-repair-guide",
+      title: "Cómo reparar JSON roto en segundos",
+      description: "Corrige JSON mal formado.",
+      category: "Guides",
+      publishedAt: "2026-06-10",
+      readTimeMinutes: 5,
+      author: "Toolars Team",
+      featuredToolSlugs: ["json-repair"],
+      sections: [{ heading: "Por qué", paragraphs: ["texto"] }],
+      faq: []
+    } as unknown as BlogArticle;
+
+    const schema = buildArticleSchema(article, "https://toolars.app", {
+      path: "/es/blog/json-repair-guide",
+      inLanguage: "es"
+    });
+
+    expect(schema.url).toBe("https://toolars.app/es/blog/json-repair-guide");
+    expect(schema.mainEntityOfPage).toBe("https://toolars.app/es/blog/json-repair-guide");
+    expect(schema.inLanguage).toBe("es");
+  });
 });

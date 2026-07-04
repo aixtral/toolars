@@ -35,74 +35,114 @@ import { buildGraph, buildOrganizationSchema, buildWebSiteSchema } from "@/lib/s
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
 
 const homeQuickTasks = [
-  { label: "Compress image", href: "/tools/pdf-toolkit", icon: ImageIcon, tone: "green" },
-  { label: "Summarize PDF", href: "/workflows/pdf-summary", icon: FileText, tone: "red" },
-  { label: "Write email", href: "/tools/json-repair", icon: Mail, tone: "blue" },
-  { label: "Calculate loan", href: "/tools/loan-calculator", icon: Calculator, tone: "orange" }
+  { key: "compressImage", href: "/tools/pdf-toolkit", icon: ImageIcon, tone: "green" },
+  { key: "summarizePdf", href: "/workflows/pdf-summary", icon: FileText, tone: "red" },
+  { key: "writeEmail", href: "/tools/json-repair", icon: Mail, tone: "blue" },
+  { key: "calculateLoan", href: "/tools/loan-calculator", icon: Calculator, tone: "orange" }
 ] as const;
 
 const homeContinueItems = [
-  { title: "Image Compressor", detail: "Compressed 3 images", meta: "2h ago", icon: ImageIcon, tone: "green" },
-  { title: "PDF summary", detail: "AI summary · 6 pages", meta: "Yesterday", icon: FileText, tone: "red" }
+  { key: "imageCompressor", icon: ImageIcon, tone: "green" },
+  { key: "pdfSummary", icon: FileText, tone: "red" }
 ] as const;
 
 const homePicks = [
   {
-    title: "AI Research Summarizer",
-    description: "Summarize long articles and papers instantly with AI.",
+    key: "aiResearchSummarizer",
     href: "/tools/prompt-injection-scanner",
     icon: FileText,
     tone: "green",
-    badges: ["AI", "Free"]
+    badges: ["ai", "free"]
   },
   {
-    title: "PDF Toolkit",
-    description: "Merge, split, compress, convert and protect PDFs.",
+    key: "pdfToolkit",
     href: "/tools/pdf-toolkit",
     icon: FileText,
     tone: "red",
-    badges: ["Traditional", "Free"]
+    badges: ["traditional", "free"]
   },
   {
-    title: "Image Cleaner",
-    description: "Remove background, erase objects, enhance image quality.",
+    key: "imageCleaner",
     href: "/tools/json-repair",
     icon: ImageIcon,
     tone: "blue",
-    badges: ["AI", "Freemium"]
+    badges: ["ai", "freemium"]
   }
 ] as const;
 
 const homeCategories = [
-  { label: "AI", href: "/explore/ai-developer", icon: Sparkles },
-  { label: "PDF", href: "/explore/pdf", icon: FileText },
-  { label: "Image", href: "/tools/pdf-toolkit", icon: ImageIcon },
-  { label: "Writing", href: "/tools/json-repair", icon: PenLine },
-  { label: "Code", href: "/explore/ai-developer", icon: Code2 },
-  { label: "Finance", href: "/tools/loan-calculator", icon: Calculator },
-  { label: "Health", href: "/tools/bmi-calculator", icon: Heart },
-  { label: "Data", href: "/tools/json-repair", icon: BarChart3 }
+  { key: "ai", href: "/explore/ai-developer", icon: Sparkles },
+  { key: "pdf", href: "/explore/pdf", icon: FileText },
+  { key: "image", href: "/tools/pdf-toolkit", icon: ImageIcon },
+  { key: "writing", href: "/tools/json-repair", icon: PenLine },
+  { key: "code", href: "/explore/ai-developer", icon: Code2 },
+  { key: "finance", href: "/tools/loan-calculator", icon: Calculator },
+  { key: "health", href: "/tools/bmi-calculator", icon: Heart },
+  { key: "data", href: "/tools/json-repair", icon: BarChart3 }
 ] as const;
 
 const homeWorkflowRows = [
-  { title: "Turn PDF into summary", detail: "PDF Toolkit + AI Summarizer", href: "/workflows/pdf-summary", icon: FileText, tone: "green", heat: "24.6K" },
-  { title: "Clean CSV then chart", detail: "Data Cleaner + Chart Builder", href: "/workflows/llm-cost-review", icon: BarChart3, tone: "purple", heat: "18.1K" },
-  { title: "Resize image for social", detail: "Image Resizer + Format Converter", href: "/workflows/mcp-tool-launch", icon: ImageIcon, tone: "blue", heat: "15.3K" }
+  { key: "pdfSummary", href: "/workflows/pdf-summary", icon: FileText, tone: "green" },
+  { key: "csvChart", href: "/workflows/llm-cost-review", icon: BarChart3, tone: "purple" },
+  { key: "socialImage", href: "/workflows/mcp-tool-launch", icon: ImageIcon, tone: "blue" }
 ] as const;
 
+const homeWorkflowIcons = {
+  "pdf-summary": FileText,
+  "ai-prompt-hardening": ShieldCheck,
+  "llm-cost-review": Calculator,
+  "mcp-tool-launch": Network
+} as const;
+
 const homeTabs = [
-  { label: "Explore", href: "/", icon: Compass, active: true },
-  { label: "Workflows", href: "/workflows", icon: Network, active: false },
-  { label: "Collections", href: "/collections", icon: Heart, active: false },
-  { label: "My tools", href: "/my-tools", icon: BriefcaseBusiness, active: false }
+  { key: "explore", href: "/", icon: Compass, active: true },
+  { key: "workflows", href: "/workflows", icon: Network, active: false },
+  { key: "collections", href: "/collections", icon: Heart, active: false },
+  { key: "myTools", href: "/my-tools", icon: BriefcaseBusiness, active: false }
 ] as const;
+
+const homeBadgeClassNames = {
+  ai: "badge local",
+  traditional: "badge cloud",
+  free: "badge local",
+  freemium: "badge warn"
+} as const;
+
+type HomeWorkflowCopy = {
+  title: string;
+  description: string;
+};
+
+type HomeWorkflowCopyMap = {
+  [slug: string]: HomeWorkflowCopy;
+};
+
+function getHomeWorkflowCopy(
+  workflow: (typeof workflows)[number],
+  messages: HomeWorkflowCopyMap
+): HomeWorkflowCopy {
+  return messages[workflow.slug] ?? {
+    title: workflow.title,
+    description: workflow.description
+  };
+}
+
+function getHomeWorkflowIcon(slug: string) {
+  return homeWorkflowIcons[slug as keyof typeof homeWorkflowIcons] ?? Workflow;
+}
 
 export default function HomePage() {
   const t = useTranslations();
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
-  const localizedHref = (href: string) => localizeHomeHref(href, localeCode);
-  const popularTools = tools.filter((tool) => ["json-repair", "mortgage-calculator", "llm-cost-calculator", "pdf-toolkit", "prompt-injection-scanner", "mcp-server-builder"].includes(tool.slug));
+  const localizedHref = (href: string) => {
+    return localizeHomeHref(href, localeCode);
+  };
+  const popularTools = tools.filter((tool) => {
+    return ["json-repair", "mortgage-calculator", "llm-cost-calculator", "pdf-toolkit", "prompt-injection-scanner", "mcp-server-builder"].includes(tool.slug);
+  });
+  const workflowMessages = t.raw("workflowsPage.workflowCards") as HomeWorkflowCopyMap;
+  const articles = getAllArticles(localeCode);
 
   const baseUrl = getSiteBaseUrl();
   const siteSchema = buildGraph(buildOrganizationSchema(baseUrl), buildWebSiteSchema(baseUrl));
@@ -121,7 +161,7 @@ export default function HomePage() {
               <div className="hero-input">
                 <Sparkles size={18} aria-hidden="true" />
                 <span>{t("home.heroDesktop.inputLabel")}</span>
-                <a className="open-link" href={localizedHref("/explore/pdf")} aria-label="Search">
+                <a className="open-link" href={localizedHref("/explore/pdf")} aria-label={t("home.aria.search")}>
                   <ArrowRight size={16} aria-hidden="true" />
                 </a>
               </div>
@@ -142,25 +182,30 @@ export default function HomePage() {
               </a>
             </div>
             <div className="home-desktop-pick-grid">
-              {homePicks.map(({ title, description, href, icon: Icon, tone, badges }) => (
-                <a className="home-desktop-pick-card" data-tone={tone} href={localizedHref(href)} key={title}>
-                  <span>
-                    <strong>{title}</strong>
-                    <small>{description}</small>
-                    <em>{badges[0]}</em>
-                  </span>
-                  <span className="home-desktop-pick-art">
-                    <Icon size={48} aria-hidden="true" />
-                  </span>
-                  <span className="home-desktop-pick-footer">
-                    {badges.map((badge) => (
-                      <span className="chip" key={badge}>{badge}</span>
-                    ))}
-                    <span className="badge local">{badges.some((badge) => badge === "Freemium") ? t("home.badges.freemium") : t("home.badges.free")}</span>
-                    <span className="button button-solid">{t("home.actions.open")}</span>
-                  </span>
-                </a>
-              ))}
+              {homePicks.map(({ key, href, icon: Icon, tone, badges }) => {
+                const title = t(`home.picks.${key}.title`);
+                const description = t(`home.picks.${key}.description`);
+
+                return (
+                  <a className="home-desktop-pick-card" data-tone={tone} href={localizedHref(href)} key={key}>
+                    <span>
+                      <strong>{title}</strong>
+                      <small>{description}</small>
+                      <em>{t(`home.badges.${badges[0]}`)}</em>
+                    </span>
+                    <span className="home-desktop-pick-art">
+                      <Icon size={48} aria-hidden="true" />
+                    </span>
+                    <span className="home-desktop-pick-footer">
+                      {badges.map((badge) => (
+                        <span className="chip" key={badge}>{t(`home.badges.${badge}`)}</span>
+                      ))}
+                      <span className="badge local">{badges.some((badge) => badge === "freemium") ? t("home.badges.freemium") : t("home.badges.free")}</span>
+                      <span className="button button-solid">{t("home.actions.open")}</span>
+                    </span>
+                  </a>
+                );
+              })}
             </div>
           </section>
 
@@ -175,7 +220,7 @@ export default function HomePage() {
 
           <section className="section">
             <h2>{t("home.sections.aiDeveloperLab")}</h2>
-            <p className="subtitle">Aixtral Lab inventory merged into Toolars for security, cost, prompt engineering, RAG, MCP, and agent work.</p>
+            <p className="subtitle">{t("home.aiDeveloperLab.subtitle")}</p>
             <div className="tool-grid" style={{ marginTop: 14 }}>
               {aiDeveloperLabTools.slice(0, 6).map((tool) => (
                 <ToolCard tool={tool} key={tool.slug} />
@@ -188,16 +233,21 @@ export default function HomePage() {
           <section className="panel">
             <h2>{t("home.sections.popularWorkflows")}</h2>
             <div className="resource-list">
-              {workflows.map((workflow) => (
-                <ResourceCard
-                  description={workflow.description}
-                  href={localizedHref(workflow.href)}
-                  icon={<Workflow size={20} aria-hidden="true" />}
-                  key={workflow.slug}
-                  meta={`${workflow.estimatedMinutes} min`}
-                  title={workflow.title}
-                />
-              ))}
+              {workflows.map((workflow) => {
+                const copy = getHomeWorkflowCopy(workflow, workflowMessages);
+                const Icon = getHomeWorkflowIcon(workflow.slug);
+
+                return (
+                  <ResourceCard
+                    description={copy.description}
+                    href={localizedHref(workflow.href)}
+                    icon={<Icon size={20} aria-hidden="true" />}
+                    key={workflow.slug}
+                    meta={t("home.units.minutesShort", { minutes: workflow.estimatedMinutes })}
+                    title={copy.title}
+                  />
+                );
+              })}
             </div>
           </section>
           <section className="panel">
@@ -212,20 +262,20 @@ export default function HomePage() {
           <section className="panel">
             <h2>{t("home.sections.startFast")}</h2>
             <div className="resource-list">
-              <ResourceCard description="Merge, compress, summarize, and export PDFs." href={localizedHref("/explore/pdf")} icon={<FileText size={20} aria-hidden="true" />} title="PDF tools" />
-              <ResourceCard description="Repair LLM JSON locally before validation." href={localizedHref("/tools/json-repair")} icon={<FileJson size={20} aria-hidden="true" />} title="JSON Repair" />
+              <ResourceCard description={t("home.startFast.pdfToolsDescription")} href={localizedHref("/explore/pdf")} icon={<FileText size={20} aria-hidden="true" />} title={t("home.startFast.pdfToolsTitle")} />
+              <ResourceCard description={t("home.startFast.jsonRepairDescription")} href={localizedHref("/tools/json-repair")} icon={<FileJson size={20} aria-hidden="true" />} title={t("home.startFast.jsonRepairTitle")} />
             </div>
           </section>
           <section className="panel">
             <h2>{t("home.sections.fromTheBlog")}</h2>
             <div className="resource-list">
-              {getAllArticles().slice(0, 3).map((article) => (
+              {articles.slice(0, 3).map((article) => (
                 <ResourceCard
                   description={article.description}
                   href={localizedHref(`/blog/${article.slug}`)}
                   icon={<FileText size={20} aria-hidden="true" />}
                   key={article.slug}
-                  meta={`${article.readTimeMinutes} min`}
+                  meta={t("home.units.minutesShort", { minutes: article.readTimeMinutes })}
                   title={article.title}
                 />
               ))}
@@ -242,7 +292,9 @@ function MobileHomeApp() {
   const t = useTranslations();
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
-  const localizedHref = (href: string) => localizeHomeHref(href, localeCode);
+  const localizedHref = (href: string) => {
+    return localizeHomeHref(href, localeCode);
+  };
   return (
     <div className="home-mobile-app" data-home-asset-parity="icon-font-v5" data-home-mobile-layout="explore-app">
       <main className="home-mobile-main">
@@ -257,23 +309,27 @@ function MobileHomeApp() {
               <ArrowRight size={22} aria-hidden="true" />
             </span>
           </a>
-          <div className="home-mobile-quick-row" aria-label="Suggested tasks">
-            {homeQuickTasks.map(({ label, href, icon: Icon, tone }) => (
-              <a className="home-mobile-quick-chip" data-tone={tone} href={localizedHref(href)} key={label}>
-                <Icon size={18} aria-hidden="true" />
-                <span>{label}</span>
-              </a>
-            ))}
+          <div className="home-mobile-quick-row" aria-label={t("home.aria.suggestedTasks")}>
+            {homeQuickTasks.map(({ key, href, icon: Icon, tone }) => {
+              const label = t(`home.quickTasks.${key}`);
+
+              return (
+                <a className="home-mobile-quick-chip" data-tone={tone} href={localizedHref(href)} key={key}>
+                  <Icon size={18} aria-hidden="true" />
+                  <span>{label}</span>
+                </a>
+              );
+            })}
           </div>
-          <div className="home-mobile-segmented" role="group" aria-label="Tool type">
+          <div className="home-mobile-segmented" role="group" aria-label={t("home.aria.toolType")}>
             <button aria-pressed="true" type="button">
-              <Monitor size={18} aria-hidden="true" /> Traditional
+              <Monitor size={18} aria-hidden="true" /> {t("home.toolTypes.traditional")}
             </button>
             <button aria-pressed="false" type="button">
-              <Sparkles size={18} aria-hidden="true" /> AI
+              <Sparkles size={18} aria-hidden="true" /> {t("home.toolTypes.ai")}
             </button>
             <button aria-pressed="false" type="button">
-              <Workflow size={18} aria-hidden="true" /> Workflow
+              <Workflow size={18} aria-hidden="true" /> {t("home.toolTypes.workflow")}
             </button>
           </div>
         </section>
@@ -282,20 +338,20 @@ function MobileHomeApp() {
           <div className="home-mobile-section-head">
             <h2>{t("home.sections.continue")}</h2>
             <a href={localizedHref("/my-tools")}>
-              View all <ChevronRight size={16} aria-hidden="true" />
+              {t("home.actions.viewAll")} <ChevronRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="home-mobile-list-card">
-            {homeContinueItems.map(({ title, detail, meta, icon: Icon, tone }) => (
-              <a className="home-mobile-continue-row" href={localizedHref("/my-tools")} key={title}>
+            {homeContinueItems.map(({ key, icon: Icon, tone }) => (
+              <a className="home-mobile-continue-row" href={localizedHref("/my-tools")} key={key}>
                 <span className="home-mobile-soft-icon" data-tone={tone}>
                   <Icon size={24} aria-hidden="true" />
                 </span>
                 <span>
-                  <strong>{title}</strong>
-                  <small>{detail}</small>
+                  <strong>{t(`home.continueItems.${key}.title`)}</strong>
+                  <small>{t(`home.continueItems.${key}.detail`)}</small>
                 </span>
-                <em>{meta}</em>
+                <em>{t(`home.continueItems.${key}.meta`)}</em>
                 <ChevronRight size={18} aria-hidden="true" />
               </a>
             ))}
@@ -306,39 +362,44 @@ function MobileHomeApp() {
           <div className="home-mobile-section-head">
             <h2>{t("home.sections.toolarsPicks")}</h2>
             <a href={localizedHref("/explore/pdf")}>
-              See all <ChevronRight size={16} aria-hidden="true" />
+              {t("home.actions.seeAll")} <ChevronRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="home-mobile-pick-list">
-            {homePicks.map(({ title, description, href, icon: Icon, tone, badges }) => (
-              <a className="home-mobile-pick-row" href={localizedHref(href)} key={title}>
-                <span className="home-mobile-pick-icon" data-tone={tone}>
-                  <Icon size={36} aria-hidden="true" />
-                </span>
-                <span>
-                  <strong>{title}</strong>
-                  <small>{description}</small>
-                </span>
-                <span className="home-mobile-pick-badges">
-                  {badges.map((badge) => (
-                    <span className={badge === "AI" ? "badge local" : badge === "Traditional" ? "badge cloud" : badge === "Freemium" ? "badge warn" : "badge local"} key={badge}>
-                      {badge}
-                    </span>
-                  ))}
-                </span>
-                <span className="home-mobile-open">{t("home.actions.open")}</span>
-              </a>
-            ))}
+            {homePicks.map(({ key, href, icon: Icon, tone, badges }) => {
+              const title = t(`home.picks.${key}.title`);
+              const description = t(`home.picks.${key}.description`);
+
+              return (
+                <a className="home-mobile-pick-row" href={localizedHref(href)} key={key}>
+                  <span className="home-mobile-pick-icon" data-tone={tone}>
+                    <Icon size={36} aria-hidden="true" />
+                  </span>
+                  <span>
+                    <strong>{title}</strong>
+                    <small>{description}</small>
+                  </span>
+                  <span className="home-mobile-pick-badges">
+                    {badges.map((badge) => (
+                      <span className={homeBadgeClassNames[badge]} key={badge}>
+                        {t(`home.badges.${badge}`)}
+                      </span>
+                    ))}
+                  </span>
+                  <span className="home-mobile-open">{t("home.actions.open")}</span>
+                </a>
+              );
+            })}
           </div>
         </section>
 
-        <nav className="home-mobile-category-rail" aria-label="Home categories">
-          {homeCategories.map(({ label, href, icon: Icon }) => (
-            <a href={localizedHref(href)} key={label}>
+        <nav className="home-mobile-category-rail" aria-label={t("home.aria.homeCategories")}>
+          {homeCategories.map(({ key, href, icon: Icon }) => (
+            <a href={localizedHref(href)} key={key}>
               <span>
                 <Icon size={26} aria-hidden="true" />
               </span>
-              {label}
+              {t(`home.categories.${key}`)}
             </a>
           ))}
         </nav>
@@ -347,21 +408,21 @@ function MobileHomeApp() {
           <div className="home-mobile-section-head">
             <h2>{t("home.sections.popularWorkflows")}</h2>
             <a href={localizedHref("/workflows")}>
-              See all <ChevronRight size={16} aria-hidden="true" />
+              {t("home.actions.seeAll")} <ChevronRight size={16} aria-hidden="true" />
             </a>
           </div>
           <div className="home-mobile-list-card">
-            {homeWorkflowRows.map(({ title, detail, href, icon: Icon, tone, heat }) => (
-              <a className="home-mobile-workflow-row" href={localizedHref(href)} key={title}>
+            {homeWorkflowRows.map(({ key, href, icon: Icon, tone }) => (
+              <a className="home-mobile-workflow-row" href={localizedHref(href)} key={key}>
                 <span className="home-mobile-soft-icon" data-tone={tone}>
                   <Icon size={22} aria-hidden="true" />
                 </span>
                 <span>
-                  <strong>{title}</strong>
-                  <small>{detail}</small>
+                  <strong>{t(`home.workflowRows.${key}.title`)}</strong>
+                  <small>{t(`home.workflowRows.${key}.detail`)}</small>
                 </span>
                 <em>
-                  <Flame size={11} aria-hidden="true" /> {heat}
+                  <Flame size={11} aria-hidden="true" /> {t(`home.workflowRows.${key}.heat`)}
                 </em>
                 <ChevronRight size={18} aria-hidden="true" />
               </a>
@@ -369,24 +430,24 @@ function MobileHomeApp() {
           </div>
         </section>
 
-        <div className="home-mobile-trust-strip" aria-label="Toolars trust notes">
+        <div className="home-mobile-trust-strip" aria-label={t("home.aria.trustNotes")}>
           <span>
-            <ShieldCheck size={18} aria-hidden="true" /> Local when possible
+            <ShieldCheck size={18} aria-hidden="true" /> {t("home.trust.localWhenPossible")}
           </span>
           <span>
-            <Lock size={18} aria-hidden="true" /> No sign-in for basics
+            <Lock size={18} aria-hidden="true" /> {t("home.trust.noSignInForBasics")}
           </span>
           <span>
-            <Tag size={18} aria-hidden="true" /> AI clearly labeled
+            <Tag size={18} aria-hidden="true" /> {t("home.trust.aiClearlyLabeled")}
           </span>
         </div>
       </main>
 
-      <nav className="home-mobile-bottom-tabs" aria-label="Mobile home tabs">
-        {homeTabs.map(({ label, href, icon: Icon, active }) => (
-          <a aria-current={active ? "page" : undefined} href={localizedHref(href)} key={label}>
+      <nav className="home-mobile-bottom-tabs" aria-label={t("home.aria.mobileHomeTabs")}>
+        {homeTabs.map(({ key, href, icon: Icon, active }) => (
+          <a aria-current={active ? "page" : undefined} href={localizedHref(href)} key={key}>
             <Icon size={25} aria-hidden="true" />
-            <span>{label}</span>
+            <span>{t(`home.tabs.${key}`)}</span>
           </a>
         ))}
       </nav>

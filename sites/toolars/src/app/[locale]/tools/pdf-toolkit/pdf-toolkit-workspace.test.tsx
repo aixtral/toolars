@@ -1,8 +1,36 @@
+import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { WORKSPACE_IDENTITY_STORAGE_KEY } from "@/lib/workspace/workspace-identity";
+import es from "../../../../../messages/es.json";
 import { PdfToolkitWorkspace } from "./pdf-toolkit-workspace";
+
+function scanPdfToolkitWorkspaceSource() {
+  const script = `
+    import fs from "node:fs/promises";
+    import { scanSourceText } from "./scripts/audit-i18n.mjs";
+
+    const file = "src/app/[locale]/tools/pdf-toolkit/pdf-toolkit-workspace.tsx";
+    const source = await fs.readFile(file, "utf8");
+    console.log(JSON.stringify(scanSourceText(source, file)));
+  `;
+
+  return JSON.parse(execFileSync(process.execPath, ["--input-type=module", "-e", script], { encoding: "utf8" })) as {
+    absoluteHrefs: Array<{ file: string; href: string }>;
+    hardcodedText: Array<{ file: string; kind: string; text: string }>;
+  };
+}
+
+function renderPdfToolkitWithSpanishMessages() {
+  return render(
+    <NextIntlClientProvider locale="es" messages={es}>
+      <PdfToolkitWorkspace />
+    </NextIntlClientProvider>
+  );
+}
 
 describe("PdfToolkitWorkspace", () => {
   beforeEach(() => {
@@ -31,6 +59,23 @@ describe("PdfToolkitWorkspace", () => {
     expect(screen.getByText("Turn PDF into slides")).toBeInTheDocument();
     expect(screen.getByText("Create email draft")).toBeInTheDocument();
     expect(document.querySelectorAll(".next-step-strip article")).toHaveLength(5);
+  });
+
+  it("keeps the desktop PDF workspace grid fluid within the shell content width", () => {
+    const css = readFileSync("src/app/globals.css", "utf8");
+    const desktopGridRule = css.match(
+      /\.pdf-workspace-shell\[data-pdf-desktop-layout="workspace-v2"\] \.pdf-workspace\s*{[^}]*grid-template-columns:\s*([^;]+);/
+    );
+
+    expect(desktopGridRule?.[1]).toContain("minmax(0,");
+    expect(desktopGridRule?.[1]).not.toMatch(/\\d+px/);
+  });
+
+  it("keeps the PDF workspace source clear of i18n audit candidates", () => {
+    const scan = scanPdfToolkitWorkspaceSource();
+
+    expect(scan.hardcodedText).toEqual([]);
+    expect(scan.absoluteHrefs).toEqual([]);
   });
 
   it("requires explicit consent before generating an AI summary", () => {
@@ -264,5 +309,33 @@ describe("PdfToolkitWorkspace", () => {
 
     expect(screen.queryByText("Contract.pdf")).not.toBeInTheDocument();
     expect(screen.getByText("Deleted Contract.pdf from the local queue.")).toBeInTheDocument();
+  });
+
+  it("renders critical PDF workspace controls and statuses from the active locale bundle", () => {
+    const { container } = renderPdfToolkitWithSpanishMessages();
+
+    expect(screen.getByRole("button", { name: "Añadir archivos" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Add files" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Resultado" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Mejora con IA" })).toBeInTheDocument();
+    expect(screen.getByText("hace 2 h")).toBeInTheDocument();
+    expect(screen.queryByText("2h")).not.toBeInTheDocument();
+    expect(container.querySelector(".pdf-mobile-rail-back")).toHaveAttribute("href", "/es/explore/pdf");
+    expect(container.querySelector('.workspace-tab[href="/es/workflows/pdf-summary"]')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Resumir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Generar resumen" }));
+
+    expect(screen.getByText("Se requiere consentimiento antes del procesamiento con IA.")).toBeInTheDocument();
+    expect(screen.queryByText("Consent required before AI processing.")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Añadir archivos" }));
+    fireEvent.change(screen.getByLabelText("Elegir archivos PDF"), {
+      target: { files: [new File(["pdf"], "Client_Brief.pdf", { type: "application/pdf" })] }
+    });
+
+    expect(screen.getByText("Escaneo aprobado")).toBeInTheDocument();
+    expect(screen.queryByText("Scan passed")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Añadir 1 archivo a la cola" })).toBeInTheDocument();
   });
 });

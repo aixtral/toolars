@@ -1,14 +1,14 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { useMemo, useState } from "react";
 import { Clipboard, Save, ServerCog } from "lucide-react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   buildMcpManifest,
   buildMcpServerDraft,
   defaultMcpServerDraft,
-  getMcpManifestStatus,
   stringifyMcpManifest,
   validateMcpServerDraft,
   type McpServerDraft
@@ -20,18 +20,45 @@ const initialPreview = `{
 }`;
 
 const builderStages = [
-  ["1", "Define tools", "Name, input schema, output contract", "Active", "local"],
-  ["2", "Add resources", "Docs, prompts, datasets", "Next", ""],
-  ["3", "Test payloads", "Validate agent-facing metadata", "Next", ""]
+  { number: "1", key: "defineTools", tone: "local" },
+  { number: "2", key: "addResources", tone: "" },
+  { number: "3", key: "testPayloads", tone: "" }
 ] as const;
 
-export function McpServerBuilderWorkspace() {
-  const t = useTranslations("tools.mcp-server-builder");
-  const [draft, setDraft] = useState<McpServerDraft>(() => buildMcpServerDraft());
-  const [manifestText, setManifestText] = useState(initialPreview);
-  const [status, setStatus] = useState("Waiting for generation.");
+const reviewCheckKeys = [
+  "actionName",
+  "schema",
+  "auth"
+] as const;
 
-  const reviewChecks = useMemo(() => validateMcpServerDraft(draft), [draft]);
+interface ManifestStats {
+  [key: string]: string | number | Date;
+  toolCount: number;
+  resourceCount: number;
+  payloadCount: number;
+}
+
+export function McpServerBuilderWorkspace() {
+  const t = useTranslations("tools.mcp-server-builder.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+  const [draft, setDraft] = useState(() => buildMcpServerDraft());
+  const [manifestText, setManifestText] = useState(initialPreview);
+  const [manifestStats, setManifestStats] = useState(null as ManifestStats | null);
+  const status = manifestStats ? t("status.generated", manifestStats) : t("status.waiting");
+
+  const reviewChecks = useMemo(
+    () =>
+      validateMcpServerDraft(draft).map((check, index) => {
+        const checkKey = reviewCheckKeys[index];
+        return {
+          ...check,
+          label: checkKey ? t(`review.checks.${checkKey}.${check.tone}`) : check.label
+        };
+      }),
+    [draft, t]
+  );
 
   const updateDraft = <Key extends keyof McpServerDraft>(key: Key, value: McpServerDraft[Key]) => {
     setDraft((current) => ({
@@ -43,7 +70,11 @@ export function McpServerBuilderWorkspace() {
   const generateManifest = () => {
     const nextDraft = buildMcpServerDraft(draft);
     setManifestText(stringifyMcpManifest(buildMcpManifest(nextDraft)));
-    setStatus(getMcpManifestStatus(nextDraft));
+    setManifestStats({
+      toolCount: 1,
+      resourceCount: nextDraft.includeResourceIndex ? 1 : 0,
+      payloadCount: nextDraft.includeTestPayload ? 1 : 0
+    });
   };
 
   const saveDraft = () => {
@@ -52,32 +83,34 @@ export function McpServerBuilderWorkspace() {
 
   return (
     <AiLabWorkbenchShell
-      artifactState={status.startsWith("Manifest generated") ? "Manifest ready" : "Drafting"}
-      providerRoute="Local manifest"
-      runMode="Manifest draft"
+      artifactState={manifestStats ? t("shell.artifactReady") : t("shell.artifactDrafting")}
+      providerRoute={t("shell.providerRoute")}
+      runMode={t("shell.runMode")}
       toolSlug="mcp-server-builder"
     >
       <section className="workspace-panel mcp-overview-panel">
-        <span className="eyebrow">RAG / MCP / Agent</span>
-        <h1>MCP Server Builder</h1>
-        <p className="subtitle">Draft tool definitions, resources, and manifest notes for an agent-ready MCP server.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Builder stages</h2>
+        <h2 style={{ marginTop: 28 }}>{t("stageTitle")}</h2>
         <div className="mcp-stage-list">
-          {builderStages.map(([number, title, description, statusLabel, tone]) => (
-            <article className="mcp-stage-row" key={title}>
-              <span className="mcp-stage-number">{number}</span>
+          {builderStages.map((stage) => (
+            <article className="mcp-stage-row" key={stage.key}>
+              <span className="mcp-stage-number">{stage.number}</span>
               <span>
-                <strong>{title}</strong>
-                <small>{description}</small>
+                <strong>{t(`stages.${stage.key}.title`)}</strong>
+                <small>{t(`stages.${stage.key}.description`)}</small>
               </span>
-              <span className={`badge ${tone}`}>{statusLabel}</span>
+              <span className={`badge ${stage.tone}`}>{t(`stages.${stage.key}.status`)}</span>
             </article>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/mcp-server-builder/about">Tool details</a>
+          <a className="button button-outline" href={localizedHref("/tools/mcp-server-builder/about")}>
+            {t("detailsLink")}
+          </a>
         </div>
       </section>
 
@@ -85,15 +118,15 @@ export function McpServerBuilderWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Server draft</h2>
-              <p className="tool-description">Describe the server and primary tool. The prototype updates a manifest preview.</p>
+              <h2>{t("draftSection.title")}</h2>
+              <p className="tool-description">{t("draftSection.description")}</p>
             </div>
-            <span className="badge workflow">Workflow</span>
+            <span className="badge workflow">{t("draftSection.badge")}</span>
           </div>
 
           <div className="mcp-input-grid">
             <label className="field-label" htmlFor="mcp-server-name">
-              Server name
+              {t("fields.serverName")}
               <input
                 className="input"
                 id="mcp-server-name"
@@ -102,7 +135,7 @@ export function McpServerBuilderWorkspace() {
               />
             </label>
             <label className="field-label" htmlFor="mcp-primary-tool">
-              Primary tool
+              {t("fields.primaryTool")}
               <input
                 className="input"
                 id="mcp-primary-tool"
@@ -111,7 +144,7 @@ export function McpServerBuilderWorkspace() {
               />
             </label>
             <label className="field-label mcp-wide-field" htmlFor="mcp-tool-description">
-              Tool description
+              {t("fields.toolDescription")}
               <textarea
                 className="textarea mcp-description"
                 id="mcp-tool-description"
@@ -128,7 +161,7 @@ export function McpServerBuilderWorkspace() {
                 onChange={(event) => updateDraft("includeJsonSchema", event.target.checked)}
                 type="checkbox"
               />
-              JSON schema
+              {t("toggles.jsonSchema")}
             </label>
             <label>
               <input
@@ -136,7 +169,7 @@ export function McpServerBuilderWorkspace() {
                 onChange={(event) => updateDraft("includeResourceIndex", event.target.checked)}
                 type="checkbox"
               />
-              Resource index
+              {t("toggles.resourceIndex")}
             </label>
             <label>
               <input
@@ -144,7 +177,7 @@ export function McpServerBuilderWorkspace() {
                 onChange={(event) => updateDraft("includeOAuthNotes", event.target.checked)}
                 type="checkbox"
               />
-              OAuth notes
+              {t("toggles.oauthNotes")}
             </label>
             <label>
               <input
@@ -152,16 +185,16 @@ export function McpServerBuilderWorkspace() {
                 onChange={(event) => updateDraft("includeTestPayload", event.target.checked)}
                 type="checkbox"
               />
-              Test payload
+              {t("toggles.testPayload")}
             </label>
           </div>
 
           <div className="button-row">
             <button className="button button-outline" type="button" onClick={saveDraft}>
-              <Save size={16} aria-hidden="true" /> Save draft
+              <Save size={16} aria-hidden="true" /> {t("actions.saveDraft")}
             </button>
             <button className="button button-solid" type="button" onClick={generateManifest}>
-              <ServerCog size={16} aria-hidden="true" /> Generate manifest
+              <ServerCog size={16} aria-hidden="true" /> {t("actions.generateManifest")}
             </button>
           </div>
         </section>
@@ -169,11 +202,11 @@ export function McpServerBuilderWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Manifest preview</h2>
+              <h2>{t("preview.title")}</h2>
               <p className="tool-description">{status}</p>
             </div>
             <button className="button button-outline" type="button">
-              <Clipboard size={16} aria-hidden="true" /> Copy manifest
+              <Clipboard size={16} aria-hidden="true" /> {t("actions.copyManifest")}
             </button>
           </div>
           <pre className="code-output mcp-code-output">{manifestText}</pre>
@@ -181,20 +214,22 @@ export function McpServerBuilderWorkspace() {
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Launch review</span>
-        <h2 style={{ marginTop: 12 }}>What Toolars checks</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="mcp-review-list">
           {reviewChecks.map((check) => (
             <div className="profile-row" key={check.label}>
-              <span className={`badge ${check.tone === "ok" ? "local" : "warn"}`}>{check.tone === "ok" ? "OK" : "Warn"}</span>
+              <span className={`badge ${check.tone === "ok" ? "local" : "warn"}`}>
+                {check.tone === "ok" ? t("review.badges.ok") : t("review.badges.warn")}
+              </span>
               <span>{check.label}</span>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
-          <strong>Suggested next tool</strong>
-          <p>Open MCP Tester after export to validate responses and metadata.</p>
+          <strong>{t("recommendation.title")}</strong>
+          <p>{t("recommendation.body")}</p>
         </div>
       </aside>
     </AiLabWorkbenchShell>

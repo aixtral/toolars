@@ -50,6 +50,12 @@ try {
         colorScheme: "light"
       });
       const page = await context.newPage();
+      await page.addInitScript(() => {
+        window.localStorage.setItem(
+          "toolars:cookie-consent",
+          JSON.stringify({ status: "rejected", timestamp: Date.now() })
+        );
+      });
       await page.goto(url, { timeout: 25000, waitUntil: "networkidle" });
       await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" });
       await page.waitForTimeout(900);

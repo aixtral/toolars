@@ -10,7 +10,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
+    "audit:i18n": "node scripts/audit-i18n.mjs",
+    "audit:i18n-quality": "node scripts/audit-i18n-quality.mjs --fail-on-needs-work",
     "audit:tool-inventory": "node scripts/audit-tool-inventory.mjs",
+    "launch:route-crawl": "node scripts/launch-route-crawl.mjs",
+    "launch:readiness": "node scripts/launch-readiness-report.mjs",
     "visual:design-pack": "node scripts/visual-verify-design-pack.mjs",
     "visual:diff-design-pack": "node scripts/visual-diff-design-pack.mjs",
     "visual:release-gate": "node scripts/visual-release-gate.mjs"
@@ -37,13 +41,5 @@
     "pngjs": "^7.0.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.7"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "@swc/core",
-      "keytar",
-      "node-pty"
-    ]
   }
 }

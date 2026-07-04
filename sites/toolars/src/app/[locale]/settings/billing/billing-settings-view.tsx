@@ -1,10 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { CreditCard, ExternalLink, FileText, Info, ReceiptText, ShieldCheck } from "lucide-react";
 import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
 import type { ToolarsBillingAccount, ToolarsInvoiceStatus } from "@/lib/billing/billing-account";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { buildWorkspaceAuditHeaders, subscribeWorkspaceIdentityChanges } from "@/lib/workspace/workspace-identity";
 
@@ -13,64 +14,41 @@ type BillingDetailRow = [label: string, value: string, action: string];
 type BillingInvoiceRow = [date: string, plan: string, amount: string, status: string];
 type BillingUsageRow = [label: string, value: string, percent: string, category: string];
 type BillingInvoiceDetailRow = [label: string, detail: string, amount: string];
+type BillingT = (key: string, values?: Record<string, number | string>) => string;
 
 interface BillingApiPayload {
   auth?: ToolarsAuthContext;
   billing?: ToolarsBillingAccount;
 }
 
-const fallbackSummaryCards: BillingSummaryCard[] = [
-  ["Plan", "Pro", "$12 monthly"],
-  ["AI credits", "68%", "1,360 / 2,000"],
-  ["Storage", "41%", "8.2 GB used"],
-  ["Next invoice", "Jun 28", "$12.00"]
-];
-
-const trialSummaryCards: BillingSummaryCard[] = [
-  ["Trial", "Free trial", "No card required"],
-  ["AI credits", "68%", "1,360 / 2,000 trial credits"],
-  ["Storage", "41%", "8.2 GB trial storage"],
-  ["Trial window", "14 days", "Google account sync"]
-];
-
-const fallbackDetailRows: BillingDetailRow[] = [
-  ["Payment method", "Visa ending 4242", "Update"],
-  ["Billing email", "billing@example.com", "Edit"],
-  ["Tax details", "Not configured", "Add"]
-];
-
-const fallbackInvoiceRows: BillingInvoiceRow[] = [
-  ["May 28, 2026", "Pro monthly", "$12.00", "Paid"],
-  ["Apr 28, 2026", "Pro monthly", "$12.00", "Paid"],
-  ["Mar 28, 2026", "Pro trial", "$0.00", "Trial"]
-];
-
-const fallbackUsageRows: BillingUsageRow[] = [
-  ["PDF Summary Workflow", "1,360 credits used", "68%", "AI usage"],
-  ["PDF Toolkit uploads", "8.2 GB stored", "41%", "Storage usage"],
-  ["Command Center launches", "284 actions", "57%", "Workspace activity"]
-];
-
-const fallbackInvoiceDetailRows: BillingInvoiceDetailRow[] = [
-  ["Subscription", "Pro monthly workspace subscription", "$12.00"],
-  ["Tax", "No tax profile configured", "$0.00"],
-  ["Total", "Paid with Visa ending 4242", "$12.00"]
-];
-
 export function BillingSettingsView() {
   const t = useTranslations("settings.billing");
+  const tx: BillingT = (key, values) => t(key, values);
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const freeTrialMode = isFreeTrialMode();
-  const [authContext, setAuthContext] = useState<ToolarsAuthContext | null>(null);
-  const [billingAccount, setBillingAccount] = useState<ToolarsBillingAccount | null>(null);
-  const summaryCards = freeTrialMode ? trialSummaryCards : buildSummaryCards(billingAccount);
-  const detailRows = buildDetailRows(billingAccount, authContext);
-  const invoiceRows = buildInvoiceRows(billingAccount);
-  const usageRows = buildUsageRows(billingAccount);
-  const invoiceDetailRows = buildInvoiceDetailRows(billingAccount);
+  const [authContext, setAuthContext] = useState(null as ToolarsAuthContext | null);
+  const [billingAccount, setBillingAccount] = useState(null as ToolarsBillingAccount | null);
+  const summaryCards = freeTrialMode ? buildTrialSummaryCards(tx) : buildSummaryCards(billingAccount, tx);
+  const detailRows = buildDetailRows(billingAccount, authContext, tx);
+  const invoiceRows = buildInvoiceRows(billingAccount, tx);
+  const usageRows = buildUsageRows(billingAccount, tx);
+  const invoiceDetailRows = buildInvoiceDetailRows(billingAccount, tx);
   const latestInvoice = billingAccount?.invoices[0];
-  const billingCycleClose = billingAccount ? `Cycle closes ${formatMonthDay(billingAccount.usage.periodEnd)}` : "Cycle closes Jun 28";
+  const billingCycleClose = tx("badges.cycleCloses", {
+    date: billingAccount ? formatMonthDay(billingAccount.usage.periodEnd) : tx("summary.fallbackNextInvoiceDate")
+  });
   const selectedInvoiceId = latestInvoice?.invoiceId ?? "inv_2026_05_pro";
-  const receiptStatus = latestInvoice ? `${formatInvoiceStatus(latestInvoice.status)} ${formatDate(latestInvoice.issuedAt)}` : "Paid May 28, 2026";
+  const receiptStatus = latestInvoice
+    ? tx("receipt.status", {
+        date: formatDate(latestInvoice.issuedAt),
+        status: formatInvoiceStatus(latestInvoice.status, tx)
+      })
+    : tx("receipt.paidMay28");
+
+  function localizedHref(href: string) {
+    return localizePath(href, localeCode);
+  }
 
   useEffect(() => {
     let isActive = true;
@@ -112,25 +90,21 @@ export function BillingSettingsView() {
   return (
     <div className="billing-settings-page" data-billing-settings-page="true">
       <section className="section landing-hero billing-settings-hero">
-        <span className="eyebrow">{freeTrialMode ? "Free trial mode" : "Billing settings"}</span>
+        <span className="eyebrow">{freeTrialMode ? tx("hero.freeTrialEyebrow") : tx("hero.paidEyebrow")}</span>
         <div className="landing-section-head">
           <span>
             <h1 className="title">{t("hero.title")}</h1>
-            <p className="subtitle">
-              {freeTrialMode
-                ? "Review beta trial credits, storage, workflow usage, and account sync. Invoices and paid plans are parked for Phase 2."
-                : "Review current plan, usage, payment method, invoices, and customer portal handoff points."}
-            </p>
+            <p className="subtitle">{freeTrialMode ? tx("hero.freeTrialSubtitle") : tx("hero.paidSubtitle")}</p>
           </span>
-          {freeTrialMode ? <span className="badge local">Free beta trial</span> : <a className="button button-outline-neutral" href="/pricing">
-            Compare plans
+          {freeTrialMode ? <span className="badge local">{tx("hero.freeTrialBadge")}</span> : <a className="button button-outline-neutral" href={localizedHref("/pricing")}>
+            {tx("hero.comparePlans")}
           </a>}
         </div>
       </section>
 
       <div className="billing-settings-layout">
         <div className="billing-settings-main">
-          <section className="billing-summary-grid" aria-label="Billing summary">
+          <section className="billing-summary-grid" aria-label={tx("aria.billingSummary")}>
             {summaryCards.map(([label, value, detail]) => (
               <article className="panel billing-summary-card" key={label}>
                 <h2>{label}</h2>
@@ -144,9 +118,9 @@ export function BillingSettingsView() {
             <div className="landing-section-head">
               <span>
                 <h2>{t("sections.usageAnalytics")}</h2>
-                <p className="tool-description">Track AI credits, storage, and workspace activity before the next billing cycle closes.</p>
+                <p className="tool-description">{tx("copy.usageAnalyticsDescription")}</p>
               </span>
-              <span className="badge local">{freeTrialMode ? "Trial resets Jun 28" : billingCycleClose}</span>
+              <span className="badge local">{freeTrialMode ? tx("badges.trialResets") : billingCycleClose}</span>
             </div>
             <div className="billing-usage-list">
               {usageRows.map(([label, value, percent, category]) => (
@@ -155,7 +129,7 @@ export function BillingSettingsView() {
                     <strong>{label}</strong>
                     <small>{category}</small>
                   </span>
-                  <span className="billing-usage-meter" aria-label={`${label} usage`}>
+                  <span className="billing-usage-meter" aria-label={tx("aria.usageMeter", { label })}>
                     <span style={{ width: percent }} />
                   </span>
                   <strong>{value}</strong>
@@ -170,18 +144,18 @@ export function BillingSettingsView() {
             <div className="settings-row-list">
               <div className="settings-detail-row">
                 <strong>{t("labels.Google sign-in")}</strong>
-                <span>Required for synced trial history and account settings.</span>
-                <span className="badge local">Enabled</span>
+                <span>{tx("copy.trialGoogleSignIn")}</span>
+                <span className="badge local">{tx("badges.enabled")}</span>
               </div>
               <div className="settings-detail-row">
                 <strong>{t("labels.Paid plan access")}</strong>
-                <span>Paid plans are parked during the beta trial.</span>
-                <span className="badge">Phase 2</span>
+                <span>{tx("copy.trialPaidPlanAccess")}</span>
+                <span className="badge">{tx("badges.phase2")}</span>
               </div>
               <div className="settings-detail-row">
                 <strong>{t("labels.Paid plans")}</strong>
-                <span>Pro, Team, invoices, and customer portal are hidden for launch.</span>
-                <span className="badge">Parked</span>
+                <span>{tx("copy.trialPaidPlans")}</span>
+                <span className="badge">{tx("badges.parked")}</span>
               </div>
             </div>
           </section>
@@ -217,7 +191,7 @@ export function BillingSettingsView() {
                   <span>{date}</span>
                   <span>{plan}</span>
                   <span>{amount}</span>
-                  <span className={status === "Paid" ? "badge local" : "badge"}>{status}</span>
+                  <span className={status === tx("statuses.paid") ? "badge local" : "badge"}>{status}</span>
                 </div>
               ))}
             </div>
@@ -229,7 +203,7 @@ export function BillingSettingsView() {
             <div className="landing-section-head">
               <span>
                 <h2>{t("sections.invoiceDetail")}</h2>
-                <p className="tool-description">Selected invoice handoff with line items, receipt metadata, and tax-ready export fields.</p>
+                <p className="tool-description">{tx("copy.invoiceDetailDescription")}</p>
               </span>
               <span className="badge local">{selectedInvoiceId}</span>
             </div>
@@ -248,7 +222,7 @@ export function BillingSettingsView() {
                 <small>{receiptStatus}</small>
               </span>
               <button className="button button-outline-neutral" type="button">
-                <ReceiptText size={15} aria-hidden="true" /> Download May invoice
+                <ReceiptText size={15} aria-hidden="true" /> {tx("actions.downloadMayInvoice")}
               </button>
             </div>
           </section>
@@ -259,21 +233,21 @@ export function BillingSettingsView() {
           {freeTrialMode ? (
           <section className="panel billing-portal-card">
             <h2>{t("sections.trialStatus")}</h2>
-            <p className="tool-description">Toolars is currently in free trial mode. Usage is tracked for product quality and future plan design.</p>
-            <span className="badge local">Free trial mode</span>
+            <p className="tool-description">{tx("copy.trialStatusDescription")}</p>
+            <span className="badge local">{tx("badges.freeTrialMode")}</span>
           </section>
           ) : (
           <section className="panel billing-portal-card">
-            <h2>Customer portal</h2>
-            <p className="tool-description">Production can create a temporary portal session for subscription, payment method, invoice, and cancellation flows.</p>
-            {billingAccount ? <span className="badge local">Billing account synced</span> : null}
+            <h2>{t("sections.customerPortal")}</h2>
+            <p className="tool-description">{tx("copy.customerPortalDescription")}</p>
+            {billingAccount ? <span className="badge local">{tx("badges.billingAccountSynced")}</span> : null}
             {billingAccount?.customerPortalUrl ? (
               <a className="button button-solid" href={billingAccount.customerPortalUrl}>
-                Open portal <ExternalLink size={15} aria-hidden="true" />
+                {tx("actions.openPortal")} <ExternalLink size={15} aria-hidden="true" />
               </a>
             ) : (
               <button className="button button-solid" type="button">
-                Open portal <ExternalLink size={15} aria-hidden="true" />
+                {tx("actions.openPortal")} <ExternalLink size={15} aria-hidden="true" />
               </button>
             )}
           </section>
@@ -283,13 +257,13 @@ export function BillingSettingsView() {
             <h2>{t("sections.usagePolicy")}</h2>
             <div className="settings-row-list compact">
               <div className="settings-detail-row">
-                <span className="badge local">AI</span>
-                <span>{freeTrialMode ? "Trial credits reset during beta" : "Credits reset monthly"}</span>
+                <span className="badge local">{tx("badges.ai")}</span>
+                <span>{freeTrialMode ? tx("copy.usagePolicyTrialCredits") : tx("copy.usagePolicyMonthlyCredits")}</span>
                 <Info size={15} aria-hidden="true" />
               </div>
               <div className="settings-detail-row">
-                <span className="badge local">Local</span>
-                <span>Traditional tools stay free</span>
+                <span className="badge local">{tx("badges.local")}</span>
+                <span>{tx("copy.usagePolicyLocalTools")}</span>
                 <ShieldCheck size={15} aria-hidden="true" />
               </div>
             </div>
@@ -302,7 +276,7 @@ export function BillingSettingsView() {
               <CreditCard size={22} aria-hidden="true" />
               <span>
                 <strong>{t("labels.Primary card")}</strong>
-                <small>Primary payment method</small>
+                <small>{tx("copy.primaryPaymentMethod")}</small>
               </span>
             </div>
           </section>
@@ -315,11 +289,11 @@ export function BillingSettingsView() {
               <ReceiptText size={22} aria-hidden="true" />
               <span>
                 <strong>{t("labels.Download tax-ready invoices")}</strong>
-                <small>Includes plan, payment, and receipt metadata.</small>
+                <small>{tx("copy.invoiceExportDescription")}</small>
               </span>
             </div>
             <button className="button button-outline-neutral" type="button">
-              <FileText size={15} aria-hidden="true" /> Export invoices
+              <FileText size={15} aria-hidden="true" /> {tx("actions.exportInvoices")}
             </button>
           </section>
           )}
@@ -329,81 +303,135 @@ export function BillingSettingsView() {
   );
 }
 
-function buildSummaryCards(account: ToolarsBillingAccount | null): BillingSummaryCard[] {
-  if (!account) return fallbackSummaryCards;
+function buildFallbackSummaryCards(t: BillingT): BillingSummaryCard[] {
+  return [
+    [t("summary.fallbackPlanLabel"), t("summary.fallbackPlanValue"), t("summary.fallbackPlanDetail")],
+    [t("summary.aiCreditsLabel"), "68%", t("summary.fallbackAiCreditsDetail")],
+    [t("summary.storageLabel"), "41%", t("summary.fallbackStorageDetail")],
+    [t("summary.nextInvoiceLabel"), t("summary.fallbackNextInvoiceDate"), t("summary.fallbackNextInvoiceAmount")]
+  ];
+}
+
+function buildTrialSummaryCards(t: BillingT): BillingSummaryCard[] {
+  return [
+    [t("summary.trialLabel"), t("summary.trialValue"), t("summary.trialDetail")],
+    [t("summary.aiCreditsLabel"), "68%", t("summary.trialAiCreditsDetail")],
+    [t("summary.storageLabel"), "41%", t("summary.trialStorageDetail")],
+    [t("summary.trialWindowLabel"), t("summary.trialWindowValue"), t("summary.trialWindowDetail")]
+  ];
+}
+
+function buildFallbackDetailRows(t: BillingT): BillingDetailRow[] {
+  return [
+    [t("detailRows.paymentMethod"), t("detailRows.fallbackCard"), t("actions.update")],
+    [t("detailRows.billingEmail"), t("detailRows.fallbackEmail"), t("actions.edit")],
+    [t("detailRows.taxDetails"), t("detailRows.notConfigured"), t("actions.add")]
+  ];
+}
+
+function buildFallbackInvoiceRows(t: BillingT): BillingInvoiceRow[] {
+  return [
+    [t("invoiceRows.may28"), t("invoiceRows.proMonthly"), "$12.00", t("statuses.paid")],
+    [t("invoiceRows.apr28"), t("invoiceRows.proMonthly"), "$12.00", t("statuses.paid")],
+    [t("invoiceRows.mar28"), t("invoiceRows.proTrial"), "$0.00", t("statuses.trial")]
+  ];
+}
+
+function buildFallbackUsageRows(t: BillingT): BillingUsageRow[] {
+  return [
+    [t("usageRows.pdfSummaryWorkflow"), t("usageRows.pdfSummaryValue"), "68%", t("usageRows.aiUsage")],
+    [t("usageRows.pdfToolkitUploads"), t("usageRows.pdfToolkitValue"), "41%", t("usageRows.storageUsage")],
+    [t("usageRows.commandCenterLaunches"), t("usageRows.commandCenterValue"), "57%", t("usageRows.workspaceActivity")]
+  ];
+}
+
+function buildFallbackInvoiceDetailRows(t: BillingT): BillingInvoiceDetailRow[] {
+  return [
+    [t("invoiceDetailRows.subscription"), t("invoiceDetailRows.fallbackSubscriptionDetail"), "$12.00"],
+    [t("invoiceDetailRows.tax"), t("invoiceDetailRows.noTaxProfile"), "$0.00"],
+    [t("invoiceDetailRows.total"), t("invoiceDetailRows.fallbackTotalDetail"), "$12.00"]
+  ];
+}
+
+function buildSummaryCards(account: ToolarsBillingAccount | null, t: BillingT): BillingSummaryCard[] {
+  if (!account) return buildFallbackSummaryCards(t);
 
   const latestInvoice = account.invoices[0];
   return [
-    ["Plan", account.planName, `${formatBillingStatus(account.status)} · ${account.planId}`],
+    [t("summary.fallbackPlanLabel"), account.planName, `${formatBillingStatus(account.status, t)} · ${account.planId}`],
     [
-      "AI credits",
+      t("summary.aiCreditsLabel"),
       formatPercent(account.usage.aiCreditsUsed, account.usage.aiCreditsLimit),
       `${formatNumber(account.usage.aiCreditsUsed)} / ${formatNumber(account.usage.aiCreditsLimit)}`
     ],
     [
-      "Storage",
+      t("summary.storageLabel"),
       formatPercent(account.usage.storageBytesUsed, account.usage.storageBytesLimit),
-      `${formatStorage(account.usage.storageBytesUsed)} used`
+      t("summary.usedStorage", { value: formatStorage(account.usage.storageBytesUsed) })
     ],
     [
-      "Next invoice",
+      t("summary.nextInvoiceLabel"),
       latestInvoice ? formatMonthDay(latestInvoice.issuedAt) : formatMonthDay(account.usage.periodEnd),
-      latestInvoice ? formatCurrency(latestInvoice.amountCents, latestInvoice.currency) : "Pending"
+      latestInvoice ? formatCurrency(latestInvoice.amountCents, latestInvoice.currency) : t("summary.pending")
     ]
   ];
 }
 
-function buildDetailRows(account: ToolarsBillingAccount | null, auth: ToolarsAuthContext | null): BillingDetailRow[] {
-  if (!account) return fallbackDetailRows;
+function buildDetailRows(account: ToolarsBillingAccount | null, auth: ToolarsAuthContext | null, t: BillingT): BillingDetailRow[] {
+  if (!account) return buildFallbackDetailRows(t);
 
   return [
-    ["Payment method", account.customerPortalUrl ? "Customer portal managed" : "Portal session required", "Update"],
-    ["Billing email", account.billingEmail ?? auth?.accountEmail ?? "Not configured", "Edit"],
-    ["Account ID", account.accountId, "View"],
-    ["Tax details", "Not configured", "Add"]
+    [
+      t("detailRows.paymentMethod"),
+      account.customerPortalUrl ? t("detailRows.customerPortalManaged") : t("detailRows.portalSessionRequired"),
+      t("actions.update")
+    ],
+    [t("detailRows.billingEmail"), account.billingEmail ?? auth?.accountEmail ?? t("detailRows.notConfigured"), t("actions.edit")],
+    [t("detailRows.accountId"), account.accountId, t("actions.view")],
+    [t("detailRows.taxDetails"), t("detailRows.notConfigured"), t("actions.add")]
   ];
 }
 
-function buildInvoiceRows(account: ToolarsBillingAccount | null): BillingInvoiceRow[] {
-  if (!account?.invoices.length) return fallbackInvoiceRows;
+function buildInvoiceRows(account: ToolarsBillingAccount | null, t: BillingT): BillingInvoiceRow[] {
+  if (!account?.invoices.length) return buildFallbackInvoiceRows(t);
 
   return account.invoices.map((invoice) => [
     formatDate(invoice.issuedAt),
     invoice.invoiceId,
     formatCurrency(invoice.amountCents, invoice.currency),
-    formatInvoiceStatus(invoice.status)
+    formatInvoiceStatus(invoice.status, t)
   ]);
 }
 
-function buildUsageRows(account: ToolarsBillingAccount | null): BillingUsageRow[] {
-  if (!account) return fallbackUsageRows;
+function buildUsageRows(account: ToolarsBillingAccount | null, t: BillingT): BillingUsageRow[] {
+  if (!account) return buildFallbackUsageRows(t);
 
   return [
     [
-      "AI credit consumption",
-      `${formatNumber(account.usage.aiCreditsUsed)} credits used`,
+      t("usageRows.aiCreditConsumption"),
+      t("usageRows.creditsUsed", { value: formatNumber(account.usage.aiCreditsUsed) }),
       formatPercent(account.usage.aiCreditsUsed, account.usage.aiCreditsLimit),
-      "AI usage"
+      t("usageRows.aiUsage")
     ],
     [
-      "Workspace storage",
-      `${formatStorage(account.usage.storageBytesUsed)} stored`,
+      t("usageRows.workspaceStorage"),
+      t("usageRows.storageStored", { value: formatStorage(account.usage.storageBytesUsed) }),
       formatPercent(account.usage.storageBytesUsed, account.usage.storageBytesLimit),
-      "Storage usage"
+      t("usageRows.storageUsage")
     ],
-    ["Billing account", account.source, "100%", account.planId]
+    [t("usageRows.billingAccount"), account.source, "100%", account.planId]
   ];
 }
 
-function buildInvoiceDetailRows(account: ToolarsBillingAccount | null): BillingInvoiceDetailRow[] {
-  if (!account?.invoices.length) return fallbackInvoiceDetailRows;
+function buildInvoiceDetailRows(account: ToolarsBillingAccount | null, t: BillingT): BillingInvoiceDetailRow[] {
+  if (!account?.invoices.length) return buildFallbackInvoiceDetailRows(t);
 
   const invoice = account.invoices[0];
   const invoiceAmount = formatCurrency(invoice.amountCents, invoice.currency);
   return [
-    ["Subscription", `${account.planName} workspace subscription`, invoiceAmount],
-    ["Billing email", account.billingEmail ?? "Not configured", account.accountId],
-    ["Total", `${formatInvoiceStatus(invoice.status)} invoice`, invoiceAmount]
+    [t("invoiceDetailRows.subscription"), t("invoiceDetailRows.workspaceSubscription", { plan: account.planName }), invoiceAmount],
+    [t("invoiceDetailRows.billingEmail"), account.billingEmail ?? t("detailRows.notConfigured"), account.accountId],
+    [t("invoiceDetailRows.total"), t("invoiceDetailRows.statusInvoice", { status: formatInvoiceStatus(invoice.status, t) }), invoiceAmount]
   ];
 }
 
@@ -452,18 +480,14 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-function formatBillingStatus(status: ToolarsBillingAccount["status"]) {
-  if (status === "past_due") return "Past due";
-  return capitalizeStatus(status);
+function formatBillingStatus(status: ToolarsBillingAccount["status"], t: BillingT) {
+  if (status === "past_due") return t("statuses.pastDue");
+  if (status === "trialing") return t("statuses.trialing");
+  return t("statuses.active");
 }
 
-function formatInvoiceStatus(status: ToolarsInvoiceStatus) {
-  return capitalizeStatus(status);
-}
-
-function capitalizeStatus(status: string) {
-  return status
-    .split("_")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
+function formatInvoiceStatus(status: ToolarsInvoiceStatus, t: BillingT) {
+  if (status === "open") return t("statuses.open");
+  if (status === "void") return t("statuses.void");
+  return t("statuses.paid");
 }

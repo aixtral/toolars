@@ -1,8 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Calculator, Save, ShieldCheck, SunMedium } from "lucide-react";
 import { useState } from "react";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   calculateThirtyThirtyThirty,
   defaultThirtyThirtyThirtyScenario,
@@ -16,21 +17,20 @@ import {
 const storageKey = "toolars.30-30-30-method.plan:v1";
 
 const trustRows = [
-  ["Local", "Morning routine inputs stay in this browser session", "local"],
-  ["Nutrition", "Protein and calorie burn are planning references", "warn"],
-  ["Private", "Save stores only this morning plan locally", ""]
+  { key: "local", tone: "local" },
+  { key: "nutrition", tone: "warn" },
+  { key: "private", tone: "" }
 ] as const;
 
-const routineNotes = [
-  "VitalCalc uses a fixed 30g protein target and 30-minute low-intensity activity block.",
-  "Exercise burn uses MET x body weight x 0.5 hours.",
-  "This routine is a habit reference and should not replace personalized medical nutrition advice."
-];
+const routineNotes = ["target", "met", "medical"] as const;
 
 export function ThirtyThirtyThirtyMethodWorkspace() {
-  const t = useTranslations("tools.30-30-30-method");
-  const [plan, setPlan] = useState<ThirtyThirtyThirtyInput>(() => defaultThirtyThirtyThirtyScenario);
-  const [result, setResult] = useState<ThirtyThirtyThirtyResult | null>(null);
+  const t = useTranslations("tools.30-30-30-method.workspace");
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const detailsHref = localizePath("/tools/30-30-30-method/about", localeCode);
+  const [plan, setPlan] = useState(() => defaultThirtyThirtyThirtyScenario as ThirtyThirtyThirtyInput);
+  const [result, setResult] = useState(null as ThirtyThirtyThirtyResult | null);
 
   const calculate = () => {
     setResult(calculateThirtyThirtyThirty(plan));
@@ -50,23 +50,23 @@ export function ThirtyThirtyThirtyMethodWorkspace() {
   return (
     <div className="llm-cost-layout" data-tool-workspace="30-30-30-method">
       <section className="workspace-panel llm-cost-overview">
-        <span className="eyebrow">VitalCalc morning routine workspace</span>
-        <h1>30-30-30 Morning Method</h1>
-        <p className="subtitle">Estimate a 30g protein target and 30-minute low-intensity exercise burn for a morning routine.</p>
+        <span className="eyebrow">{t("eyebrow")}</span>
+        <h1>{t("title")}</h1>
+        <p className="subtitle">{t("subtitle")}</p>
 
-        <h2 style={{ marginTop: 28 }}>Local routine model</h2>
+        <h2 style={{ marginTop: 28 }}>{t("modelTitle")}</h2>
         <div className="profile-list">
-          {trustRows.map(([label, text, tone]) => (
-            <div className="profile-row" key={label}>
-              <span className={`badge ${tone}`}>{label}</span>
-              <span>{text}</span>
+          {trustRows.map((row) => (
+            <div className="profile-row" key={row.key}>
+              <span className={row.tone ? `badge ${row.tone}` : "badge"}>{t(`trustRows.${row.key}.label`)}</span>
+              <span>{t(`trustRows.${row.key}.text`)}</span>
             </div>
           ))}
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <a className="button button-outline" href="/tools/30-30-30-method/about">
-            Tool details
+          <a className="button button-outline" href={detailsHref}>
+            {t("detailsLink")}
           </a>
         </div>
       </section>
@@ -75,34 +75,34 @@ export function ThirtyThirtyThirtyMethodWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Morning inputs</h2>
-              <p className="tool-description">Enter body context and choose the low-intensity activity used by the source MET table.</p>
+              <h2>{t("inputSection.title")}</h2>
+              <p className="tool-description">{t("inputSection.description")}</p>
             </div>
-            <span className="badge local">Local</span>
+            <span className="badge local">{t("badges.local")}</span>
           </div>
 
           <div className="llm-input-grid">
             <label className="field-label" htmlFor="thirty-weight">
-              Weight (kg)
+              {t("fields.weightKg")}
               <input className="input" id="thirty-weight" min={30} onChange={(event) => updateNumber("weightKg", event.target.value)} step="0.1" type="number" value={plan.weightKg} />
             </label>
             <label className="field-label" htmlFor="thirty-age">
-              Age
+              {t("fields.age")}
               <input className="input" id="thirty-age" min={18} onChange={(event) => updateNumber("age", event.target.value)} type="number" value={plan.age} />
             </label>
             <label className="field-label" htmlFor="thirty-sex">
-              Sex context
+              {t("fields.sex")}
               <select className="input" id="thirty-sex" onChange={(event) => setPlan((current) => ({ ...current, sex: event.target.value as ThirtySex }))} value={plan.sex}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">{t("options.sex.male")}</option>
+                <option value="female">{t("options.sex.female")}</option>
               </select>
             </label>
             <label className="field-label" htmlFor="thirty-activity">
-              Activity
+              {t("fields.activity")}
               <select className="input" id="thirty-activity" onChange={(event) => setPlan((current) => ({ ...current, activity: event.target.value as ThirtyActivity }))} value={plan.activity}>
-                {Object.entries(thirtyActivityReferences).map(([key, reference]) => (
+                {Object.entries(thirtyActivityReferences).map(([key]) => (
                   <option key={key} value={key}>
-                    {reference.label}
+                    {t(`options.activity.${key}`)}
                   </option>
                 ))}
               </select>
@@ -111,10 +111,10 @@ export function ThirtyThirtyThirtyMethodWorkspace() {
 
           <div className="button-row">
             <button className="button button-outline" onClick={savePlan} type="button">
-              <Save size={16} aria-hidden="true" /> Save morning plan
+              <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
             <button className="button button-solid" onClick={calculate} type="button">
-              <Calculator size={16} aria-hidden="true" /> Calculate routine
+              <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
           </div>
         </section>
@@ -122,35 +122,35 @@ export function ThirtyThirtyThirtyMethodWorkspace() {
         <section className="workspace-panel">
           <div className="workspace-section-title" style={{ marginTop: 0 }}>
             <div>
-              <h2>Routine result</h2>
-              <p className="tool-description">{result ? result.summary : "Run calculation to show protein target and activity burn."}</p>
+              <h2>{t("resultSection.title")}</h2>
+              <p className="tool-description">{result ? result.summary : t("resultSection.emptyDescription")}</p>
             </div>
-            <span className="badge warn">Reference only</span>
+            <span className="badge warn">{t("badges.referenceOnly")}</span>
           </div>
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
               <strong>{result?.formattedProteinTarget ?? "30 g"}</strong>
-              <span>Protein target</span>
+              <span>{t("metrics.proteinTarget")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.formattedCalories ?? "0 kcal"}</strong>
-              <span>30-minute burn</span>
+              <span>{t("metrics.burn")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result?.activityLabel ?? "--"}</strong>
-              <span>Activity</span>
+              <span>{t("metrics.activity")}</span>
             </article>
             <article className="llm-metric">
               <strong>{result ? `MET ${result.met}` : "MET --"}</strong>
-              <span>Source MET</span>
+              <span>{t("metrics.sourceMet")}</span>
             </article>
           </div>
 
           <div className="profile-list" style={{ marginTop: 18 }}>
             {(result?.proteinOptions ?? []).slice(0, 3).map((option) => (
               <div className="profile-row" key={option}>
-                <span className="badge">Protein</span>
+                <span className="badge">{t("badges.protein")}</span>
                 <span>{option}</span>
               </div>
             ))}
@@ -159,30 +159,30 @@ export function ThirtyThirtyThirtyMethodWorkspace() {
           <div className="llm-plan-callout">
             <SunMedium size={18} aria-hidden="true" />
             <span>
-              <strong>{result?.activityTip ?? "Waiting for calculation"}</strong>
-              <small>{result ? "Keep the session gentle and adjust for medical, recovery, and nutrition context." : "Calculate first to build the routine."}</small>
+              <strong>{result?.activityTip ?? t("callout.waitingTitle")}</strong>
+              <small>{result ? t("callout.calculatedDescription") : t("callout.waitingDescription")}</small>
             </span>
           </div>
         </section>
       </div>
 
       <aside className="workspace-panel">
-        <span className="eyebrow">Review checklist</span>
-        <h2 style={{ marginTop: 12 }}>Routine notes</h2>
+        <span className="eyebrow">{t("review.eyebrow")}</span>
+        <h2 style={{ marginTop: 12 }}>{t("review.title")}</h2>
         <div className="remediation-list">
           {routineNotes.map((item, index) => (
             <div className="remediation-row" key={item}>
               <span>{index + 1}</span>
-              <p>{item}</p>
+              <p>{t(`review.notes.${item}`)}</p>
             </div>
           ))}
         </div>
 
         <div className="llm-recommended-plan">
           <strong>
-            <ShieldCheck size={16} aria-hidden="true" /> Local-first
+            <ShieldCheck size={16} aria-hidden="true" /> {t("caveat.title")}
           </strong>
-          <p>Routine data stays local. Adjust the method for eating disorder history, pregnancy, diabetes, or clinician guidance.</p>
+          <p>{t("caveat.body")}</p>
         </div>
       </aside>
     </div>

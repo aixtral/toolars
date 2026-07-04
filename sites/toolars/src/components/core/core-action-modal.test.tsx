@@ -1,6 +1,10 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { fireEvent, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithIntl } from "@/test/i18n-test-utils";
+// @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
+import { scanSourceText } from "../../../scripts/audit-i18n.mjs";
 import { CoreActionModalButton } from "./core-action-modal";
 
 describe("CoreActionModalButton", () => {
@@ -122,5 +126,16 @@ describe("CoreActionModalButton", () => {
     );
     expect(screen.getByText("Create a free trial workspace with your Google account.")).toBeInTheDocument();
     expect(screen.queryByText("Start a free trial workspace with your Google account.")).not.toBeInTheDocument();
+  });
+
+  it("keeps shared core modal and focus helpers clean for the i18n source scanner", () => {
+    const sourceFiles = ["src/components/core/core-action-modal.tsx", "src/components/core/use-dialog-focus.ts"];
+
+    for (const sourceFile of sourceFiles) {
+      const scan = scanSourceText(readFileSync(resolve(process.cwd(), sourceFile), "utf8"), sourceFile);
+
+      expect(scan.hardcodedText).toEqual([]);
+      expect(scan.absoluteHrefs).toEqual([]);
+    }
   });
 });

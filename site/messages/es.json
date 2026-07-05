@@ -1,1723 +1,1538 @@
 {
   "metadata": {
     "title": "toolars",
-    "description": "Search-first calculators and AI content tools."
+    "description": "Calculadoras y herramientas de contenido IA centradas en la búsqueda."
   },
   "common": {
-    "free": "Free",
-    "noLogin": "No login",
-    "localActions": "Local actions",
-    "freeCalculators": "Free calculators",
-    "localBrowserCalculations": "Local browser calculations",
-    "noSignupForCalculators": "No signup for calculators",
-    "multilingualReady": "Multilingual ready",
-    "aiToolsRequireAccount": "AI tools require account",
-    "calculators": "calculators",
-    "aiSaaSTools": "AI SaaS tools",
-    "ai": "AI"
+    "free": "Gratis",
+    "noLogin": "Sin inicio de sesión",
+    "localActions": "Procesamiento local",
+    "freeCalculators": "Calculadoras gratuitas",
+    "localBrowserCalculations": "Cálculos locales en el navegador",
+    "noSignupForCalculators": "Sin registro para calculadoras",
+    "multilingualReady": "Listo para varios idiomas",
+    "aiToolsRequireAccount": "Las herramientas IA requieren cuenta",
+    "calculators": "calculadoras",
+    "aiSaaSTools": "Herramientas IA SaaS",
+    "ai": "IA"
   },
   "nav": {
     "brand": "toolars",
-    "toolsMenu": "Tools",
-    "openToolsMenu": "Open tools menu",
-    "aiTools": "AI Tools",
+    "toolsMenu": "Herramientas",
+    "openToolsMenu": "Abrir menú de herramientas",
+    "aiTools": "Herramientas IA",
     "blog": "Blog",
-    "signIn": "Sign in",
-    "openApp": "Open app",
-    "openNavigation": "Open navigation menu",
-    "closeNavigation": "Close navigation menu",
-    "openSearch": "Open search",
-    "searchTools": "Search tools",
-    "searchPlaceholder": "Search 73 calculators and AI tools...",
-    "allTools": "All Tools",
-    "health": "Health",
-    "finance": "Finance",
-    "popularCalculators": "Popular Calculators",
-    "categories": "Categories",
-    "solutions": "Solutions",
-    "resources": "Resources",
-    "recentTools": "Recent tools",
-    "recentToolsHint": "Recent tools appear here after you use calculators.",
-    "searchAnything": "Press ⌘K to search anything",
-    "solutionsFastLookup": "Fast Calculator Lookup",
-    "solutionsCreator": "Creator Repurposing",
-    "solutionsFinance": "Personal Finance Planning",
-    "resourcesGuides": "Guides",
-    "languageSwitcher": "Switch language"
+    "signIn": "Iniciar sesión",
+    "openApp": "Abrir app",
+    "openNavigation": "Abrir menú de navegación",
+    "closeNavigation": "Cerrar menú de navegación",
+    "openSearch": "Abrir búsqueda",
+    "searchTools": "Buscar herramientas",
+    "searchPlaceholder": "Buscar 73 calculadoras y herramientas IA…",
+    "allTools": "Todas las herramientas",
+    "health": "Salud",
+    "finance": "Finanzas",
+    "popularCalculators": "Calculadoras populares",
+    "categories": "Categorías",
+    "solutions": "Soluciones",
+    "resources": "Recursos",
+    "recentTools": "Recientes",
+    "recentToolsHint": "Las herramientas recientes aparecen aquí tras usar las calculadoras.",
+    "searchAnything": "Pulsa ⌘K para buscar cualquier cosa",
+    "solutionsFastLookup": "Búsqueda rápida de calculadoras",
+    "solutionsCreator": "Reutilización para creadores",
+    "solutionsFinance": "Planificación de finanzas personales",
+    "resourcesGuides": "Guías",
+    "languageSwitcher": "Cambiar idioma"
   },
   "home": {
-    "heroHeading": "Search 73 calculators and AI tools",
-    "heroDescription": "A search-first utility dashboard for health, finance, wellness, and content workflows. Public calculators stay usable without signup.",
-    "popularTools": "Popular Tools",
-    "featuredAiEyebrow": "Featured AI Tool",
-    "featuredAiTitle": "AI Content Repurposer",
-    "featuredAiBody": "Transform one source into posts, email, articles, and launch updates.",
-    "featuredAiLink": "View AI tools",
-    "quickActions": "Quick Actions",
-    "quickActionBmi": "Calculate BMI",
-    "quickActionMortgage": "Estimate mortgage",
-    "quickActionInterest": "Compare interest",
-    "quickActionRepurpose": "Repurpose content",
-    "continueHeading": "Continue where you left off",
-    "comparisonHeading": "Comparison mode",
-    "comparisonBody": "Compare saved calculator results locally, keep anonymous calculator work private, and upgrade later only for cross-device sync or premium exports.",
-    "comparisonCta": "Browse calculators",
-    "categoriesLabel": "Tool categories",
-    "discoveryLabel": "Tool discovery dashboard",
-    "comparisonLabel": "Comparison mode",
-    "featuredLabel": "Featured tools",
-    "previewAiDashboard": "AI Dashboard Preview",
-    "previewAiDashboardBody": "Plan usage, model preferences, and platform outputs stay grouped in one account workspace.",
-    "previewTemplates": "Calculator Templates",
-    "previewTemplatesBody": "Shared calculator layouts keep formulas, examples, FAQ, and related tools consistent.",
-    "previewAnalytics": "Analytics Preview",
-    "previewAnalyticsBody": "Pro AI workspaces can track content volume, platform mix, and saved outputs."
+    "heroHeading": "Busca 73 calculadoras y herramientas IA",
+    "heroDescription": "Un panel de utilidades centrado en la búsqueda para salud, finanzas, bienestar y flujos de contenido. Las calculadoras públicas se pueden usar sin registro.",
+    "popularTools": "Herramientas populares",
+    "featuredAiEyebrow": "Herramienta IA destacada",
+    "featuredAiTitle": "Reutilización de contenido IA",
+    "featuredAiBody": "Transforma una sola fuente en publicaciones, correos, artículos y novedades de lanzamiento.",
+    "featuredAiLink": "Ver herramientas IA",
+    "quickActions": "Acciones rápidas",
+    "quickActionBmi": "Calcular IMC",
+    "quickActionMortgage": "Estimar hipoteca",
+    "quickActionInterest": "Comparar interés",
+    "quickActionRepurpose": "Reutilizar contenido",
+    "continueHeading": "Continúa donde lo dejaste",
+    "comparisonHeading": "Modo comparación",
+    "comparisonBody": "Compara resultados guardados de calculadoras en local, mantén privadas las calculadoras anónimas y mejora más adelante solo para sincronización entre dispositivos o exportaciones premium.",
+    "comparisonCta": "Explorar calculadoras",
+    "categoriesLabel": "Categorías de herramientas",
+    "discoveryLabel": "Panel de descubrimiento de herramientas",
+    "comparisonLabel": "Modo comparación",
+    "featuredLabel": "Herramientas destacadas",
+    "previewAiDashboard": "Vista previa del panel IA",
+    "previewAiDashboardBody": "El uso, las preferencias de modelo y las salidas por plataforma se mantienen agrupadas en un espacio de trabajo por cuenta.",
+    "previewTemplates": "Plantillas de calculadoras",
+    "previewTemplatesBody": "Los diseños compartidos de calculadoras mantienen consistentes fórmulas, ejemplos, preguntas frecuentes y herramientas relacionadas.",
+    "previewAnalytics": "Vista previa de analítica",
+    "previewAnalyticsBody": "Los espacios IA Pro pueden hacer seguimiento del volumen de contenido, la combinación de plataformas y las salidas guardadas."
   },
   "savedTools": {
-    "title": "Recently saved",
-    "empty": "No saved results yet. Run a calculator and choose “Save result” to keep it here for quick access on this device.",
-    "browseCta": "Browse calculators"
+    "title": "Guardados recientemente",
+    "empty": "Aún no hay resultados guardados. Ejecuta una calculadora y elige «Guardar resultado» para tenerlo a mano en este dispositivo.",
+    "browseCta": "Explorar calculadoras"
   },
   "search": {
-    "dialogLabel": "Search tools",
-    "searchboxLabel": "Search 73 calculators and AI tools",
-    "resultsLabel": "Search results",
-    "generatedOutputs": "Generated outputs",
-    "tabAll": "All",
-    "tabCalculators": "Calculators",
-    "tabAi": "AI Tools",
-    "tabHealth": "Health",
-    "tabFinance": "Finance",
-    "tabArticles": "Articles",
-    "emptyTitle": "No results found",
-    "emptyBody": "We couldn't find anything for “{query}”.",
-    "emptySuggestionSpell": "Check spelling or try different keywords",
-    "emptySuggestionBrowse": "Browse all calculators",
-    "emptySuggestionArticles": "Search articles and guides",
-    "popularSearches": "Popular searches",
-    "shortcutsHeading": "Keyboard shortcuts",
-    "shortcutsArrows": "Arrow keys",
-    "shortcutsEnter": "Enter",
+    "dialogLabel": "Buscar herramientas",
+    "searchboxLabel": "Buscar 73 calculadoras y herramientas IA",
+    "resultsLabel": "Resultados de búsqueda",
+    "generatedOutputs": "Salidas generadas",
+    "tabAll": "Todo",
+    "tabCalculators": "Calculadoras",
+    "tabAi": "Herramientas IA",
+    "tabHealth": "Salud",
+    "tabFinance": "Finanzas",
+    "tabArticles": "Artículos",
+    "emptyTitle": "No se encontraron resultados",
+    "emptyBody": "No encontramos nada para «{query}».",
+    "emptySuggestionSpell": "Revisa la ortografía o prueba con otras palabras clave",
+    "emptySuggestionBrowse": "Explora todas las calculadoras",
+    "emptySuggestionArticles": "Busca artículos y guías",
+    "popularSearches": "Búsquedas populares",
+    "shortcutsHeading": "Atajos de teclado",
+    "shortcutsArrows": "Teclas de flecha",
+    "shortcutsEnter": "Intro",
     "shortcutsCmd": "Cmd/Ctrl + K",
-    "footer": "Recent tools and favorites will sync when signed in.",
-    "close": "Close search"
+    "footer": "Las herramientas recientes y los favoritos se sincronizarán al iniciar sesión.",
+    "close": "Cerrar búsqueda"
   },
   "tools": {
-    "directoryHeading": "All Tools Directory",
-    "directoryDescription": "Browse every calculator and AI tool on toolars. Calculators are free and private; AI tools live in your workspace.",
-    "searchLabel": "Search all tools",
-    "searchPlaceholder": "Search all calculators and AI tools...",
-    "filters": "Filters",
-    "filterCategory": "Category",
-    "filterToolType": "Tool type",
-    "filterPricing": "Pricing",
-    "filterSort": "Sort",
-    "optionAllCategories": "All categories",
-    "optionAiContent": "AI Content",
-    "optionHealthTools": "Health tools",
-    "optionFinance": "Finance",
-    "optionWealth": "Wealth",
-    "optionAllTools": "All tools",
-    "optionCalculator": "Calculator",
-    "optionAiTool": "AI Tool",
-    "optionAnyPricing": "Any pricing",
-    "optionFree": "Free",
+    "directoryHeading": "Directorio de todas las herramientas",
+    "directoryDescription": "Explora todas las calculadoras y herramientas IA de toolars. Las calculadoras son gratuitas y privadas; las herramientas IA están en tu espacio de trabajo.",
+    "searchLabel": "Buscar todas las herramientas",
+    "searchPlaceholder": "Buscar todas las calculadoras y herramientas IA…",
+    "filters": "Filtros",
+    "filterCategory": "Categoría",
+    "filterToolType": "Tipo de herramienta",
+    "filterPricing": "Precio",
+    "filterSort": "Ordenar",
+    "optionAllCategories": "Todas las categorías",
+    "optionAiContent": "Contenido IA",
+    "optionHealthTools": "Herramientas de salud",
+    "optionFinance": "Finanzas",
+    "optionWealth": "Patrimonio",
+    "optionAllTools": "Todas las herramientas",
+    "optionCalculator": "Calculadora",
+    "optionAiTool": "Herramienta IA",
+    "optionAnyPricing": "Cualquier precio",
+    "optionFree": "Gratis",
     "optionFreemium": "Freemium",
-    "optionSubscription": "Subscription",
-    "optionMostPopular": "Most popular",
-    "optionNewest": "Newest",
-    "optionHighestRated": "Highest rated",
+    "optionSubscription": "Suscripción",
+    "optionMostPopular": "Más populares",
+    "optionNewest": "Más recientes",
+    "optionHighestRated": "Mejor valoradas",
     "optionAZ": "A-Z",
-    "categoriesTitle": "Categories",
-    "directoryNote": "Showing 12 tools first — use search to surface the rest."
+    "categoriesTitle": "Categorías",
+    "directoryNote": "Se muestran primero 12 herramientas — usa la búsqueda para ver el resto."
   },
   "calculator": {
-    "inputsTitle": "Calculator inputs",
-    "inputsDescription": "Calculators stay free and private. Results run in your browser and basic use never requires an account.",
-    "calculate": "Calculate",
-    "reset": "Reset",
-    "defaultsRestored": "Defaults restored.",
-    "resultRegion": "Result",
-    "resultLabel": "Instant result",
-    "needsValidInputs": "Needs valid inputs",
-    "resultUpdated": "Result updated.",
-    "checkInputs": "Check the highlighted inputs.",
-    "savedLocally": "Saved locally on this device.",
-    "addedToCompare": "Added to compare.",
-    "shareLinkCopied": "Share link copied.",
-    "saveResult": "Save result",
-    "addToCompare": "Add to compare",
-    "copyShareLink": "Copy share link",
-    "yes": "Yes",
+    "inputsTitle": "Entradas de la calculadora",
+    "inputsDescription": "Las calculadoras son gratuitas y privadas. Los resultados se calculan en tu navegador y el uso básico nunca requiere una cuenta.",
+    "calculate": "Calcular",
+    "reset": "Restablecer",
+    "defaultsRestored": "Valores predeterminados restaurados.",
+    "resultRegion": "Resultado",
+    "resultLabel": "Resultado instantáneo",
+    "needsValidInputs": "Necesita entradas válidas",
+    "resultUpdated": "Resultado actualizado.",
+    "checkInputs": "Revisa las entradas resaltadas.",
+    "savedLocally": "Guardado localmente en este dispositivo.",
+    "addedToCompare": "Añadido a comparar.",
+    "shareLinkCopied": "Enlace de compartir copiado.",
+    "saveResult": "Guardar resultado",
+    "addToCompare": "Añadir a comparar",
+    "copyShareLink": "Copiar enlace de compartir",
+    "yes": "Sí",
     "no": "No",
-    "howItWorks": "How the calculation works",
-    "howItWorksBody": "This page uses the migrated pure formula engine for {title}. Inputs are validated before a result is shown, and the formula stays independent from account, billing, and network state so search engines can crawl the public page cleanly.",
-    "faqTitle": "FAQ",
-    "faqAccountQuestion": "Do I need an account?",
-    "faqAccountAnswer": "No. Basic calculator use is free and does not require login.",
-    "faqStorageQuestion": "Where are saved results stored?",
-    "faqStorageAnswer": "Saved and comparison results use local browser storage in this release.",
-    "formulaLabel": "Formula",
-    "breadcrumbTools": "Tools",
-    "relatedTools": "Related tools",
-    "workspaceLabel": "{title} workspace",
-    "notFoundTitle": "Tool not found | toolars",
-    "howItWorksNote": "This page uses the migrated pure formula engine for {title}. Inputs are validated before a result is shown.",
+    "howItWorks": "Cómo funciona el cálculo",
+    "howItWorksBody": "Esta página usa el motor de fórmula pura migrado para {title}. Las entradas se validan antes de mostrar un resultado, y la fórmula se mantiene independiente de la cuenta, la facturación y el estado de la red para que los buscadores puedan rastrear la página pública de forma limpia.",
+    "faqTitle": "Preguntas frecuentes",
+    "faqAccountQuestion": "¿Necesito una cuenta?",
+    "faqAccountAnswer": "No. El uso básico de la calculadora es gratuito y no requiere inicio de sesión.",
+    "faqStorageQuestion": "¿Dónde se guardan los resultados guardados?",
+    "faqStorageAnswer": "Los resultados guardados y de comparación usan almacenamiento local del navegador en esta versión.",
+    "formulaLabel": "Fórmula",
+    "breadcrumbTools": "Herramientas",
+    "relatedTools": "Herramientas relacionadas",
+    "workspaceLabel": "Espacio de trabajo de {title}",
+    "notFoundTitle": "Herramienta no encontrada | toolars",
+    "howItWorksNote": "Esta página usa el motor de fórmula pura migrado para {title}. Las entradas se validan antes de mostrar un resultado.",
     "errors": {
-      "invalidNumber": "{label} must be a valid number.",
-      "greaterThan": "{label} must be greater than {bound}.",
-      "atLeast": "{label} must be at least {bound}.",
-      "atMost": "{label} must be at most {bound}."
+      "invalidNumber": "{label} debe ser un número válido.",
+      "greaterThan": "{label} debe ser mayor que {bound}.",
+      "atLeast": "{label} debe ser al menos {bound}.",
+      "atMost": "{label} debe ser como máximo {bound}."
     },
     "resultValues": {
-      "category": "Category"
+      "category": "Categoría"
     }
-  },
-  "ai": {
-    "workspaceLabel": "AI workspace",
-    "aiSaaS": "AI workspace",
-    "workspaceTitle": "toolars workspace",
-    "workspaceBody": "Content repurposing, brand voice, history, and analytics in one place.",
-    "workspaceCard": "Workspace",
-    "workspaceCardBody": "AI generation is free during v1. Save drafts locally and track recent activity.",
-    "navRepurpose": "Repurpose",
-    "navTemplates": "Templates",
-    "navBrandVoice": "Brand Voice",
-    "navHistory": "History",
-    "navAnalytics": "Analytics",
-    "navSettings": "Settings",
-    "navLabel": "AI app navigation",
-    "directoryHeading": "AI Tools Directory",
-    "directoryDescription": "Repurpose content, manage brand voice, and track performance across platforms.",
-    "featuredInputSources": "Input sources",
-    "featuredInputSourcesBody": "Paste text or drop in a URL — the repurposer pulls the key points.",
-    "featuredOutputControls": "Output controls",
-    "featuredOutputControlsBody": "Pick platforms, tone, brand voice, and model before you generate.",
-    "featuredWorkspaceMemory": "Workspace memory",
-    "featuredWorkspaceMemoryBody": "History and saved drafts stay organized per workspace.",
-    "usagePlan": "Usage plan",
-    "platformSupport": "Platform support",
-    "accountRequired": "Account required",
-    "streamingWorkflow": "Streaming workflow",
-    "previewAccount": "Preview account",
-    "brandVoiceBadge": "Brand voice",
-    "repurposeHeading": "AI Content Repurposer",
-    "repurposeBody": "Turn one source into platform-native drafts for social, newsletters, articles, and community launches. Canceling preserves partial output.",
-    "authGateHeading": "Sign in to use AI Content Repurposer",
-    "authGateAiTool": "AI tool",
-    "authGateBody": "AI generation, history, and brand voices live in your workspace. Public calculators stay free and do not use this gate.",
-    "authGateSignIn": "Sign in",
-    "authGateCreateAccount": "Create account",
-    "authGateContinuePreview": "Continue in preview",
-    "publicCalculatorsStayFree": "Public calculators stay free",
-    "analyticsBadge": "Analytics",
-    "analyticsHeading": "Performance Analytics",
-    "analyticsBody": "Track usage, generated outputs, credits, platform mix, tone mix, and recent workspace activity.",
-    "platformBreakdown": "Platform breakdown",
-    "toneBreakdown": "Tone breakdown",
-    "recentActivity": "Recent activity",
-    "recentActivityNewsletter": "Generated newsletter brief",
-    "recentActivityLinkedIn": "Copied LinkedIn post",
-    "recentActivityTwitter": "Canceled Twitter thread",
-    "brandVoiceBadgeTitle": "Brand Voice",
-    "brandVoiceHeading": "Brand Voice",
-    "brandVoiceBody": "Create, edit, delete, assign, and preview reusable voices for consistent AI output across workspaces.",
-    "createVoice": "Create voice",
-    "workspaceAssignment": "Workspace assignment:",
-    "actionEdit": "Edit",
-    "actionPreview": "Preview",
-    "actionDelete": "Delete",
-    "historyBadge": "History",
-    "historyBadgeCopy": "Copy",
-    "historyBadgeRegenerate": "Regenerate",
-    "historyHeading": "Content History",
-    "historyBody": "Search previous AI jobs, filter by status, platform, date, and tone, then reopen details for copy or regeneration.",
-    "searchHistoryLabel": "Search history",
-    "searchHistoryPlaceholder": "Search history...",
-    "filterStatus": "Status",
-    "filterPlatform": "Platform",
-    "filterDate": "Date",
-    "filterTone": "Tone",
-    "actionOpenDetail": "Open detail",
-    "actionCopyOutputs": "Copy outputs",
-    "actionRegenerate": "Regenerate",
-    "settingsBadge": "Settings",
-    "settingsBadgeAccount": "Account",
-    "settingsHeading": "Workspace Settings",
-    "settingsBody": "Manage profile, workspace, API keys, notifications, data export, and destructive account actions.",
-    "sectionProfileTitle": "Profile",
-    "sectionProfileCopy": "Name, email, timezone, and workspace role.",
-    "sectionWorkspaceTitle": "Workspace",
-    "sectionWorkspaceCopy": "Team name, default model, brand defaults, and permissions.",
-    "sectionApiKeysTitle": "API keys",
-    "sectionApiKeysCopy": "Provider keys and workspace-level secret management.",
-    "sectionNotificationsTitle": "Notifications",
-    "sectionNotificationsCopy": "Generation activity and weekly digest preferences.",
-    "sectionDataExportTitle": "Data export",
-    "sectionDataExportCopy": "Export your workspace data or transfer ownership.",
-    "sectionDangerZoneTitle": "Danger zone",
-    "sectionDangerZoneCopy": "Close workspace and remove stored content.",
-    "actionManage": "Manage",
-    "templatesBadge": "AI templates",
-    "templatesGroupSocial": "Social",
-    "templatesGroupLongForm": "Long-form",
-    "templatesGroupEmail": "Email",
-    "templatesGroupCommunity": "Community",
-    "templatesHeading": "Template Library",
-    "templatesBody": "Reusable content workflows for social launches, long-form articles, newsletters, and community posts.",
-    "labelOutputType": "Output type",
-    "labelPlatformSupport": "Platform support",
-    "labelEstimatedLength": "Estimated length",
-    "useTemplate": "Use template",
-    "metadataRepurpose": "AI Content Repurposer | toolars",
-    "metadataAnalytics": "Performance Analytics | toolars",
-    "metadataBrandVoice": "Brand Voice | toolars",
-    "metadataHistory": "Content History | toolars",
-    "metadataSettings": "Workspace Settings | toolars",
-    "metadataTemplates": "Template Library | toolars"
-  },
-  "blog": {
-    "listHeading": "toolars Blog",
-    "listDescription": "Guides on calculator SEO, AI content workflows, and product updates.",
-    "englishFirst": "English-first",
-    "calculatorSeo": "Calculator SEO",
-    "aiWorkflows": "AI workflows",
-    "searchLabel": "Search blog articles",
-    "searchPlaceholder": "Search guides, calculator SEO, AI workflows...",
-    "latestArticles": "Latest articles",
-    "updated": "Updated",
-    "readGuide": "Read guide",
-    "editorialFocus": "Editorial Focus",
-    "editorialFocusBody": "Practical, English-first guides for shipping calculators and AI workflows.",
-    "englishLaunchContent": "English launch content",
-    "referencedTools": "Referenced Tools",
-    "breadcrumb": "Blog",
-    "notFoundTitle": "Article not found | toolars",
-    "by": "By {author}",
-    "faqTitle": "FAQ",
-    "backToBlog": "Back to Blog",
-    "relatedTools": "Related Tools"
-  },
-  "category": {
-    "healthHeading": "Health Calculators",
-    "healthDescription": "Body composition, fitness, nutrition, and everyday wellness tools.",
-    "healthBodyBadge": "Body",
-    "healthFitnessBadge": "Fitness & Nutrition",
-    "healthWellnessBadge": "Wellness",
-    "healthFooter": "All health tools run in your browser — free, private, and no signup.",
-    "popularSearches": "Popular searches",
-    "insights": "Insights",
-    "frequentlyUsed": "Frequently used",
-    "financeHeading": "Finance Calculators",
-    "financeDescription": "Loans, debt, budgets, investing, and daily money decisions.",
-    "financeLoansBadge": "Loans",
-    "financeDebtBadge": "Debt",
-    "financeInvestingBadge": "Investing",
-    "financeRetirementBadge": "Retirement",
-    "financeFooter": "All finance calculators run in your browser — free, private, and no signup.",
-    "relatedArticles": "Related articles",
-    "breadcrumbHome": "Home",
-    "breadcrumbTools": "Tools",
-    "breadcrumbHealth": "Health",
-    "breadcrumbFinance": "Finance"
-  },
-  "repurpose": {
-    "ready": "Ready to generate.",
-    "streaming": "Streaming outputs...",
-    "completed": "Completed. Outputs are ready to copy, save, or regenerate.",
-    "checkInputs": "Check the highlighted AI inputs.",
-    "failed": "Generation failed.",
-    "failedRetry": "Generation failed. Try again.",
-    "canceled": "Canceled. Partial output preserved.",
-    "savedHistory": "{platformLabel} saved to local draft history.",
-    "copied": "{platformLabel} copied.",
-    "badgeWorkspace": "AI workspace",
-    "badgePlan": "{planId} plan",
-    "cardTitle": "Source and controls",
-    "cardDescription": "Repurpose a URL or source text into platform-native drafts with tone, brand voice, model, and cancellation controls.",
-    "sourceText": "Text",
-    "sourceUrl": "URL",
-    "sourceTextLabel": "Source text",
-    "sourceUrlLabel": "Source URL",
-    "platforms": "Platforms",
-    "tone": "Tone",
-    "brandVoice": "Brand voice",
-    "model": "Model",
-    "cancel": "Cancel",
-    "generate": "Generate",
-    "reset": "Reset",
-    "outputVariants": "Output variants",
-    "outputDescription": "Streamed drafts stay visible when canceled.",
-    "outputPlaceholder": "Generated platform drafts will appear here.",
-    "toneSuffix": "{tone} tone",
-    "wordCount": "{count} words",
-    "copy": "Copy",
-    "save": "Save",
-    "regenerate": "Regenerate",
-    "sourceTypeLabel": "Source type",
-    "generatedOutputsLabel": "Generated outputs",
-    "drafting": "Drafting {label}..."
   },
   "calculators": {
     "30-30-30-method": {
-      "title": "30-30-30 Method Calculator",
-      "description": "Use 30-30-30 Method Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "protein = weight × 1.6; movement = 30 minutes",
-      "primaryLabel": "Protein target",
+      "title": "Calculadora del método 30-30-30",
+      "description": "Usa Calculadora del método 30-30-30 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "proteína = peso × 1,6; movimiento = 30 minutos",
+      "primaryLabel": "Objetivo de proteína",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         }
       },
       "results": {
-        "morningProtein": "Morning protein",
-        "movementMinutes": "Movement minutes"
+        "morningProtein": "Proteína de la mañana",
+        "movementMinutes": "Minutos de movimiento"
       }
     },
     "alcohol-metabolism": {
-      "title": "Alcohol Metabolism Calculator",
-      "description": "Use Alcohol Metabolism Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "hours = drinks × 14g / 7g per hour",
-      "primaryLabel": "Estimated hours",
+      "title": "Calculadora de metabolismo del alcohol",
+      "description": "Usa Calculadora de metabolismo del alcohol para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "horas = bebidas × 14g / 7g por hora",
+      "primaryLabel": "Horas estimadas",
       "inputs": {
         "drinks": {
-          "label": "Standard drinks",
+          "label": "Bebidas estándar",
           "unit": ""
         },
         "gramsPerDrink": {
-          "label": "Grams per drink",
+          "label": "Gramos por bebida",
           "unit": "g"
         }
       },
       "results": {
-        "alcoholGrams": "Alcohol grams"
+        "alcoholGrams": "Gramos de alcohol"
       }
     },
     "apy-calculator": {
-      "title": "APY Calculator",
-      "description": "Compare annual yield across interest rates and compounding frequencies.",
-      "formulaLabel": "APY = (1 + rate / compounds)^compounds - 1",
+      "title": "Calculadora de APY",
+      "description": "Compara el rendimiento anual entre tasas de interés y frecuencias de capitalización.",
+      "formulaLabel": "APY = (1 + tasa / capitalizaciones)^capitalizaciones - 1",
       "primaryLabel": "APY",
       "inputs": {
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         },
         "compoundsPerYear": {
-          "label": "Compounds per year",
+          "label": "Capitalizaciones por año",
           "unit": ""
         }
       },
       "results": {
-        "effectiveRate": "Effective rate"
+        "effectiveRate": "Tasa efectiva"
       }
     },
     "biological-age": {
-      "title": "Biological Age Calculator",
-      "description": "Use Biological Age Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "biological age = age + lifestyle risk adjustments",
-      "primaryLabel": "Estimated biological age",
+      "title": "Calculadora de edad biológica",
+      "description": "Usa Calculadora de edad biológica para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "edad biológica = edad + ajustes de riesgo del estilo de vida",
+      "primaryLabel": "Edad biológica estimada",
       "inputs": {
         "age": {
-          "label": "Age",
-          "unit": "years"
+          "label": "Edad",
+          "unit": "años"
         },
         "sleepHours": {
-          "label": "Sleep",
-          "unit": "hours"
+          "label": "Sueño",
+          "unit": "horas"
         },
         "exerciseDays": {
-          "label": "Exercise days",
+          "label": "Días de ejercicio",
           "unit": ""
         }
       },
       "results": {}
     },
     "blood-pressure": {
-      "title": "Blood Pressure Calculator",
-      "description": "Use Blood Pressure Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "category from systolic and diastolic thresholds",
-      "primaryLabel": "Systolic pressure",
+      "title": "Calculadora de presión arterial",
+      "description": "Usa Calculadora de presión arterial para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "categoría a partir de umbrales sistólico y diastólico",
+      "primaryLabel": "Presión sistólica",
       "inputs": {
         "systolic": {
-          "label": "Systolic",
+          "label": "Sistólica",
           "unit": "mmHg"
         },
         "diastolic": {
-          "label": "Diastolic",
+          "label": "Diastólica",
           "unit": "mmHg"
         }
       },
       "results": {
-        "diastolic": "Diastolic",
+        "diastolic": "Diastólica",
         "category": {
-          "high": "High",
-          "elevated": "Elevated",
+          "high": "Alta",
+          "elevated": "Elevada",
           "normal": "Normal"
         }
       }
     },
     "bmi-calculator": {
-      "title": "BMI Calculator",
-      "description": "Calculate Body Mass Index from height and weight, then review the healthy range.",
-      "formulaLabel": "BMI = weight (kg) / height (m)^2",
-      "primaryLabel": "BMI",
+      "title": "Calculadora de IMC",
+      "description": "Calcula el índice de masa corporal a partir de la altura y el peso, y revisa el rango saludable.",
+      "formulaLabel": "IMC = peso (kg) / altura (m)^2",
+      "primaryLabel": "IMC",
       "inputs": {
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         },
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         }
       },
       "results": {
         "category": {
-          "underweight": "Underweight",
+          "underweight": "Bajo peso",
           "normal": "Normal",
-          "overweight": "Overweight",
-          "obese": "Obese"
+          "overweight": "Sobrepeso",
+          "obese": "Obesidad"
         }
       }
     },
     "bmr-calculator": {
-      "title": "BMR Calculator",
-      "description": "Use BMR Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "Mifflin-St Jeor: 10W + 6.25H - 5A + sex offset",
+      "title": "Calculadora de BMR",
+      "description": "Usa Calculadora de BMR para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "Mifflin-St Jeor: 10P + 6,25A - 5E + ajuste por sexo",
       "primaryLabel": "BMR",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         },
         "age": {
-          "label": "Age",
-          "unit": "years"
+          "label": "Edad",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "body-fat-calculator": {
-      "title": "Body Fat Calculator",
-      "description": "Use Body Fat Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "U.S. Navy estimate from waist, neck, height, and optional hip",
-      "primaryLabel": "Body fat",
+      "title": "Calculadora de grasa corporal",
+      "description": "Usa Calculadora de grasa corporal para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "Estimación de la Marina de EE. UU. a partir de cintura, cuello, altura y cadera opcional",
+      "primaryLabel": "Grasa corporal",
       "inputs": {
         "waistCm": {
-          "label": "Waist",
+          "label": "Cintura",
           "unit": "cm"
         },
         "neckCm": {
-          "label": "Neck",
+          "label": "Cuello",
           "unit": "cm"
         },
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         },
         "hipCm": {
-          "label": "Hip",
+          "label": "Cadera",
           "unit": "cm"
         }
       },
       "results": {
-        "leanMassPercent": "Lean mass percent"
+        "leanMassPercent": "Porcentaje de masa magra"
       }
     },
     "body-recomposition": {
-      "title": "Body Recomposition Calculator",
-      "description": "Use Body Recomposition Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "target calories = maintenance - deficit; protein = weight × 1.8",
-      "primaryLabel": "Target calories",
+      "title": "Calculadora de recomposición corporal",
+      "description": "Usa Calculadora de recomposición corporal para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "calorías objetivo = mantenimiento - déficit; proteína = peso × 1,8",
+      "primaryLabel": "Calorías objetivo",
       "inputs": {
         "maintenanceCalories": {
-          "label": "Maintenance calories",
+          "label": "Calorías de mantenimiento",
           "unit": "kcal"
         },
         "deficitCalories": {
-          "label": "Deficit",
+          "label": "Déficit",
           "unit": "kcal"
         },
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         }
       },
       "results": {
-        "proteinGrams": "Protein grams"
+        "proteinGrams": "Gramos de proteína"
       }
     },
     "budget-rule": {
-      "title": "50/30/20 Budget Calculator",
-      "description": "Use 50/30/20 Budget Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "needs = income × 50%; wants = income × 30%; savings = income × 20%",
-      "primaryLabel": "Needs budget",
+      "title": "Calculadora de presupuesto 50/30/20",
+      "description": "Usa Calculadora de presupuesto 50/30/20 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "necesidades = ingresos × 50%; deseos = ingresos × 30%; ahorros = ingresos × 20%",
+      "primaryLabel": "Presupuesto de necesidades",
       "inputs": {
         "monthlyIncome": {
-          "label": "Monthly income",
+          "label": "Ingresos mensuales",
           "unit": "$"
         }
       },
       "results": {
-        "wants": "Wants",
-        "savings": "Savings"
+        "wants": "Deseos",
+        "savings": "Ahorros"
       }
     },
     "caffeine-calculator": {
-      "title": "Caffeine Calculator",
-      "description": "Use Caffeine Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "safe daily caffeine = min(weight × 6mg, 400mg)",
-      "primaryLabel": "Daily limit",
+      "title": "Calculadora de cafeína",
+      "description": "Usa Calculadora de cafeína para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "cafeína diaria segura = min(peso × 6mg, 400mg)",
+      "primaryLabel": "Límite diario",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         }
       },
       "results": {}
     },
     "calorie-deficit": {
-      "title": "Calorie Deficit Calculator",
-      "description": "Use Calorie Deficit Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "target calories = maintenance - weekly loss × 7700 / 7",
-      "primaryLabel": "Target calories",
+      "title": "Calculadora de déficit calórico",
+      "description": "Usa Calculadora de déficit calórico para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "calorías objetivo = mantenimiento - pérdida semanal × 7700 / 7",
+      "primaryLabel": "Calorías objetivo",
       "inputs": {
         "maintenanceCalories": {
-          "label": "Maintenance calories",
+          "label": "Calorías de mantenimiento",
           "unit": "kcal"
         },
         "weeklyLossKg": {
-          "label": "Weekly loss",
+          "label": "Pérdida semanal",
           "unit": "kg"
         }
       },
       "results": {}
     },
     "car-loan": {
-      "title": "Car Loan Calculator",
-      "description": "Use Car Loan Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "payment = amortized principal after down payment",
-      "primaryLabel": "Monthly payment",
+      "title": "Calculadora de préstamo de auto",
+      "description": "Usa Calculadora de préstamo de auto para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "pago = capital amortizado tras el pago inicial",
+      "primaryLabel": "Pago mensual",
       "inputs": {
         "price": {
-          "label": "Vehicle price",
+          "label": "Precio del vehículo",
           "unit": "$"
         },
         "downPayment": {
-          "label": "Down payment",
+          "label": "Pago inicial",
           "unit": "$"
         },
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         },
         "years": {
-          "label": "Term",
-          "unit": "years"
+          "label": "Plazo",
+          "unit": "años"
         }
       },
       "results": {
-        "totalInterest": "Total interest"
+        "totalInterest": "Interés total"
       }
     },
     "child-growth": {
-      "title": "Child Growth Calculator",
-      "description": "Use Child Growth Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "child BMI = weight / height^2",
-      "primaryLabel": "Child BMI",
+      "title": "Calculadora de crecimiento infantil",
+      "description": "Usa Calculadora de crecimiento infantil para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "IMC infantil = peso / altura^2",
+      "primaryLabel": "IMC infantil",
       "inputs": {
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         },
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "ageYears": {
-          "label": "Age",
-          "unit": "years"
+          "label": "Edad",
+          "unit": "años"
         }
       },
       "results": {
-        "ageYears": "Age years"
+        "ageYears": "Años de edad"
       }
     },
     "city-cost-comparison": {
-      "title": "City Cost Comparison",
-      "description": "Use City Cost Comparison for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "equivalent income = income × target cost index / current cost index",
-      "primaryLabel": "Equivalent income",
+      "title": "Comparación de costo entre ciudades",
+      "description": "Usa Comparación de costo entre ciudades para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "ingreso equivalente = ingreso × índice de costo destino / índice de costo actual",
+      "primaryLabel": "Ingreso equivalente",
       "inputs": {
         "currentIncome": {
-          "label": "Current income",
+          "label": "Ingreso actual",
           "unit": "$"
         },
         "currentIndex": {
-          "label": "Current city index",
+          "label": "Índice de ciudad actual",
           "unit": ""
         },
         "targetIndex": {
-          "label": "Target city index",
+          "label": "Índice de ciudad destino",
           "unit": ""
         }
       },
       "results": {}
     },
     "coast-fire": {
-      "title": "Coast FIRE Calculator",
-      "description": "Use Coast FIRE Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "coast number = retirement need / (1 + return)^years",
-      "primaryLabel": "Coast FIRE number",
+      "title": "Calculadora de Coast FIRE",
+      "description": "Usa Calculadora de Coast FIRE para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "cifra coast = necesidad de jubilación / (1 + rentabilidad)^años",
+      "primaryLabel": "Cifra de Coast FIRE",
       "inputs": {
         "retirementNeed": {
-          "label": "Retirement need",
+          "label": "Necesidad de jubilación",
           "unit": "$"
         },
         "annualReturn": {
-          "label": "Annual return",
+          "label": "Rentabilidad anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years to retirement",
-          "unit": "years"
+          "label": "Años hasta la jubilación",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "compound-interest": {
-      "title": "Compound Interest Calculator",
-      "description": "Project how money can grow over time with recurring deposits and compound interest.",
+      "title": "Calculadora de interés compuesto",
+      "description": "Proyecta cómo puede crecer el dinero a lo largo del tiempo con depósitos recurrentes e interés compuesto.",
       "formulaLabel": "A = P(1 + r/12)^(12t) + PMT × (((1 + r/12)^(12t) - 1) / (r/12))",
-      "primaryLabel": "Future value",
+      "primaryLabel": "Valor futuro",
       "inputs": {
         "principal": {
           "label": "Principal",
           "unit": "$"
         },
         "monthlyContribution": {
-          "label": "Monthly contribution",
+          "label": "Aporte mensual",
           "unit": "$"
         },
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {
         "principal": "Principal",
-        "totalContributions": "Total contributions",
-        "interest": "Interest"
+        "totalContributions": "Aportes totales",
+        "interest": "Interés"
       }
     },
     "credit-card-apr": {
-      "title": "Credit Card APR Calculator",
-      "description": "Use Credit Card APR Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "monthly interest = balance × APR / 12",
-      "primaryLabel": "Months to payoff",
+      "title": "Calculadora de TAE de tarjeta de crédito",
+      "description": "Usa Calculadora de TAE de tarjeta de crédito para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "interés mensual = saldo × TAE / 12",
+      "primaryLabel": "Meses para pagar",
       "inputs": {
         "balance": {
-          "label": "Balance",
+          "label": "Saldo",
           "unit": "$"
         },
         "annualRate": {
-          "label": "APR",
+          "label": "TAE",
           "unit": "%"
         },
         "monthlyPayment": {
-          "label": "Monthly payment",
+          "label": "Pago mensual",
           "unit": "$"
         }
       },
       "results": {
-        "firstMonthInterest": "First month interest"
+        "firstMonthInterest": "Interés del primer mes"
       }
     },
     "credit-score-simulator": {
-      "title": "Credit Score Simulator",
-      "description": "Estimate how payments, balances, utilization, and new accounts may affect credit score.",
-      "formulaLabel": "score estimate from utilization, payment history, and new accounts",
-      "primaryLabel": "Simulated score",
+      "title": "Simulador de puntaje crediticio",
+      "description": "Estima cómo los pagos, los saldos, la utilización y las cuentas nuevas pueden afectar el puntaje crediticio.",
+      "formulaLabel": "estimación de puntaje a partir de utilización, historial de pagos y cuentas nuevas",
+      "primaryLabel": "Puntaje simulado",
       "inputs": {
         "currentScore": {
-          "label": "Current score",
+          "label": "Puntaje actual",
           "unit": ""
         },
         "utilization": {
-          "label": "Utilization",
+          "label": "Utilización",
           "unit": "%"
         },
         "latePayments": {
-          "label": "Late payments",
+          "label": "Pagos atrasados",
           "unit": ""
         },
         "newAccounts": {
-          "label": "New accounts",
+          "label": "Cuentas nuevas",
           "unit": ""
         }
       },
       "results": {}
     },
     "crypto-tax": {
-      "title": "Crypto Tax Calculator",
-      "description": "Use Crypto Tax Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "tax = max(sale - cost basis, 0) × tax rate",
-      "primaryLabel": "Estimated tax",
+      "title": "Calculadora de impuestos de cripto",
+      "description": "Usa Calculadora de impuestos de cripto para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "impuesto = max(venta - costo base, 0) × tasa de impuesto",
+      "primaryLabel": "Impuesto estimado",
       "inputs": {
         "saleValue": {
-          "label": "Sale value",
+          "label": "Valor de venta",
           "unit": "$"
         },
         "costBasis": {
-          "label": "Cost basis",
+          "label": "Costo base",
           "unit": "$"
         },
         "taxRate": {
-          "label": "Tax rate",
+          "label": "Tasa de impuesto",
           "unit": "%"
         }
       },
       "results": {
-        "gain": "Gain"
+        "gain": "Ganancia"
       }
     },
     "currency-converter": {
-      "title": "Currency Converter",
-      "description": "Use Currency Converter for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "converted amount = amount × exchange rate",
-      "primaryLabel": "Converted amount",
+      "title": "Convertidor de moneda",
+      "description": "Usa Convertidor de moneda para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "monto convertido = monto × tipo de cambio",
+      "primaryLabel": "Monto convertido",
       "inputs": {
         "amount": {
-          "label": "Amount",
+          "label": "Monto",
           "unit": ""
         },
         "exchangeRate": {
-          "label": "Exchange rate",
+          "label": "Tipo de cambio",
           "unit": ""
         }
       },
       "results": {}
     },
     "debt-payoff": {
-      "title": "Debt Payoff Calculator",
-      "description": "Use Debt Payoff Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "months = amortized payoff from balance, APR, and payment",
-      "primaryLabel": "Months to payoff",
+      "title": "Calculadora de pago de deudas",
+      "description": "Usa Calculadora de pago de deudas para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "meses = amortización de pago a partir de saldo, TAE y pago",
+      "primaryLabel": "Meses para pagar",
       "inputs": {
         "balance": {
-          "label": "Balance",
+          "label": "Saldo",
           "unit": "$"
         },
         "annualRate": {
-          "label": "APR",
+          "label": "TAE",
           "unit": "%"
         },
         "monthlyPayment": {
-          "label": "Monthly payment",
+          "label": "Pago mensual",
           "unit": "$"
         }
       },
       "results": {
-        "totalPaid": "Total paid"
+        "totalPaid": "Total pagado"
       }
     },
     "discount-calculator": {
-      "title": "Discount Calculator",
-      "description": "Use Discount Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "sale price = original price × (1 - discount rate)",
-      "primaryLabel": "Sale price",
+      "title": "Calculadora de descuento",
+      "description": "Usa Calculadora de descuento para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "precio de venta = precio original × (1 - tasa de descuento)",
+      "primaryLabel": "Precio de venta",
       "inputs": {
         "originalPrice": {
-          "label": "Original price",
+          "label": "Precio original",
           "unit": "$"
         },
         "discountRate": {
-          "label": "Discount rate",
+          "label": "Tasa de descuento",
           "unit": "%"
         }
       },
       "results": {
-        "savings": "Savings"
+        "savings": "Ahorro"
       }
     },
     "dividend-reinvestment": {
-      "title": "Dividend Reinvestment Calculator",
-      "description": "Use Dividend Reinvestment Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "future value = principal compounded by yield plus monthly additions",
-      "primaryLabel": "Future value",
+      "title": "Calculadora de reinversión de dividendos",
+      "description": "Usa Calculadora de reinversión de dividendos para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "valor futuro = principal capitalizado por rendimiento más aportes mensuales",
+      "primaryLabel": "Valor futuro",
       "inputs": {
         "principal": {
           "label": "Principal",
           "unit": "$"
         },
         "monthlyContribution": {
-          "label": "Monthly contribution",
+          "label": "Aporte mensual",
           "unit": "$"
         },
         "dividendYield": {
-          "label": "Dividend yield",
+          "label": "Rendimiento de dividendo",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "drink-calories": {
-      "title": "Drink Calories Calculator",
-      "description": "Use Drink Calories Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "total calories = drinks × calories per drink",
-      "primaryLabel": "Total calories",
+      "title": "Calculadora de calorías de bebidas",
+      "description": "Usa Calculadora de calorías de bebidas para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "calorías totales = bebidas × calorías por bebida",
+      "primaryLabel": "Calorías totales",
       "inputs": {
         "drinks": {
-          "label": "Drinks",
+          "label": "Bebidas",
           "unit": ""
         },
         "caloriesPerDrink": {
-          "label": "Calories per drink",
+          "label": "Calorías por bebida",
           "unit": "kcal"
         }
       },
       "results": {}
     },
     "dti-calculator": {
-      "title": "DTI Calculator",
-      "description": "Use DTI Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "DTI = monthly debt / gross monthly income",
-      "primaryLabel": "Debt-to-income ratio",
+      "title": "Calculadora de DTI",
+      "description": "Usa Calculadora de DTI para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "DTI = deuda mensual / ingreso mensual bruto",
+      "primaryLabel": "Ratio deuda-ingreso",
       "inputs": {
         "monthlyDebt": {
-          "label": "Monthly debt",
+          "label": "Deuda mensual",
           "unit": "$"
         },
         "monthlyIncome": {
-          "label": "Monthly income",
+          "label": "Ingresos mensuales",
           "unit": "$"
         }
       },
       "results": {}
     },
     "emergency-fund": {
-      "title": "Emergency Fund Calculator",
-      "description": "Use Emergency Fund Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "fund target = monthly essential expenses × months",
-      "primaryLabel": "Fund target",
+      "title": "Calculadora de fondo de emergencia",
+      "description": "Usa Calculadora de fondo de emergencia para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "meta del fondo = gastos esenciales mensuales × meses",
+      "primaryLabel": "Meta del fondo",
       "inputs": {
         "monthlyExpenses": {
-          "label": "Monthly expenses",
+          "label": "Gastos mensuales",
           "unit": "$"
         },
         "months": {
-          "label": "Months",
+          "label": "Meses",
           "unit": ""
         }
       },
       "results": {}
     },
     "fiber-intake": {
-      "title": "Fiber Intake Calculator",
-      "description": "Use Fiber Intake Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "fiber target = calories / 1000 × 14g",
-      "primaryLabel": "Daily fiber",
+      "title": "Calculadora de ingesta de fibra",
+      "description": "Usa Calculadora de ingesta de fibra para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "objetivo de fibra = calorías / 1000 × 14g",
+      "primaryLabel": "Fibra diaria",
       "inputs": {
         "calories": {
-          "label": "Calories",
+          "label": "Calorías",
           "unit": "kcal"
         }
       },
       "results": {}
     },
     "fire-calculator": {
-      "title": "FIRE Calculator",
-      "description": "Use FIRE Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "FIRE number = annual expenses × 25",
-      "primaryLabel": "FIRE number",
+      "title": "Calculadora de FIRE",
+      "description": "Usa Calculadora de FIRE para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "cifra FIRE = gastos anuales × 25",
+      "primaryLabel": "Cifra FIRE",
       "inputs": {
         "annualExpenses": {
-          "label": "Annual expenses",
+          "label": "Gastos anuales",
           "unit": "$"
         }
       },
       "results": {}
     },
     "gad7-anxiety": {
-      "title": "GAD-7 Anxiety Screening",
-      "description": "Use GAD-7 Anxiety Screening for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "GAD-7 total = sum of seven item scores",
-      "primaryLabel": "GAD-7 score",
+      "title": "Cribado de ansiedad GAD-7",
+      "description": "Usa Cribado de ansiedad GAD-7 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "total GAD-7 = suma de las puntuaciones de siete ítems",
+      "primaryLabel": "Puntuación GAD-7",
       "inputs": {
         "score": {
-          "label": "GAD-7 total score",
+          "label": "Puntuación total GAD-7",
           "unit": ""
         }
       },
       "results": {
         "severity": {
-          "minimal": "Minimal",
-          "mild": "Mild",
-          "moderate": "Moderate",
-          "severe": "Severe"
+          "minimal": "Mínima",
+          "mild": "Leve",
+          "moderate": "Moderada",
+          "severe": "Grave"
         }
       }
     },
     "glp1-eligibility": {
-      "title": "GLP-1 Eligibility Checker",
-      "description": "Check GLP-1 medication eligibility using BMI, health conditions, and risk factors.",
-      "formulaLabel": "eligibility from BMI and metabolic risk factors",
-      "primaryLabel": "BMI",
+      "title": "Verificador de elegibilidad para GLP-1",
+      "description": "Comprueba la elegibilidad para medicamentos GLP-1 usando el IMC, condiciones de salud y factores de riesgo.",
+      "formulaLabel": "elegibilidad a partir de IMC y factores de riesgo metabólico",
+      "primaryLabel": "IMC",
       "inputs": {
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         },
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "riskFactors": {
-          "label": "Risk factors",
+          "label": "Factores de riesgo",
           "unit": ""
         }
       },
       "results": {
-        "eligible": "Eligible",
+        "eligible": "Elegible",
         "category": {
-          "potentiallyEligible": "Potentially eligible",
-          "mayNotQualify": "May not qualify"
+          "potentiallyEligible": "Potencialmente elegible",
+          "mayNotQualify": "Podría no calificar"
         }
       }
     },
     "glp1-nutrition": {
-      "title": "GLP-1 Nutrition Calculator",
-      "description": "Use GLP-1 Nutrition Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "protein = max(weight × 1.2, ideal weight × 1.6)",
-      "primaryLabel": "Protein target",
+      "title": "Calculadora de nutrición para GLP-1",
+      "description": "Usa Calculadora de nutrición para GLP-1 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "proteína = max(peso × 1,2, peso ideal × 1,6)",
+      "primaryLabel": "Objetivo de proteína",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "idealWeightKg": {
-          "label": "Ideal weight",
+          "label": "Peso ideal",
           "unit": "kg"
         }
       },
       "results": {
-        "minimumCalories": "Minimum calories"
+        "minimumCalories": "Calorías mínimas"
       }
     },
     "glycemic-load": {
-      "title": "Glycemic Load Calculator",
-      "description": "Use Glycemic Load Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "glycemic load = GI × available carbs / 100",
-      "primaryLabel": "Glycemic load",
+      "title": "Calculadora de carga glucémica",
+      "description": "Usa Calculadora de carga glucémica para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "carga glucémica = IG × carbohidratos disponibles / 100",
+      "primaryLabel": "Carga glucémica",
       "inputs": {
         "glycemicIndex": {
-          "label": "Glycemic index",
+          "label": "Índice glucémico",
           "unit": ""
         },
         "carbsGrams": {
-          "label": "Carbs",
+          "label": "Carbohidratos",
           "unit": "g"
         }
       },
       "results": {}
     },
     "habit-cost": {
-      "title": "Habit Cost Calculator",
-      "description": "Use Habit Cost Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "annual habit cost = daily cost × frequency × 52",
-      "primaryLabel": "Annual cost",
+      "title": "Calculadora de costo de hábitos",
+      "description": "Usa Calculadora de costo de hábitos para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "costo anual del hábito = costo diario × frecuencia × 52",
+      "primaryLabel": "Costo anual",
       "inputs": {
         "costPerUse": {
-          "label": "Cost per use",
+          "label": "Costo por uso",
           "unit": "$"
         },
         "usesPerWeek": {
-          "label": "Uses per week",
+          "label": "Usos por semana",
           "unit": ""
         }
       },
       "results": {}
     },
     "heart-rate-zone": {
-      "title": "Heart Rate Zone Calculator",
-      "description": "Use Heart Rate Zone Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "max heart rate = 220 - age",
-      "primaryLabel": "Max heart rate",
+      "title": "Calculadora de zonas de frecuencia cardiaca",
+      "description": "Usa Calculadora de zonas de frecuencia cardiaca para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "frecuencia cardiaca máxima = 220 - edad",
+      "primaryLabel": "Frecuencia cardiaca máxima",
       "inputs": {
         "age": {
-          "label": "Age",
-          "unit": "years"
+          "label": "Edad",
+          "unit": "años"
         },
         "restingHeartRate": {
-          "label": "Resting heart rate",
+          "label": "Frecuencia cardiaca en reposo",
           "unit": "bpm"
         }
       },
       "results": {
-        "zone2Low": "Zone 2 low",
-        "zone2High": "Zone 2 high"
+        "zone2Low": "Zona 2 mínima",
+        "zone2High": "Zona 2 máxima"
       }
     },
     "homa-ir": {
-      "title": "HOMA-IR Calculator",
-      "description": "Use HOMA-IR Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "HOMA-IR = fasting glucose × fasting insulin / 405",
+      "title": "Calculadora de HOMA-IR",
+      "description": "Usa Calculadora de HOMA-IR para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "HOMA-IR = glucosa en ayunas × insulina en ayunas / 405",
       "primaryLabel": "HOMA-IR",
       "inputs": {
         "glucoseMgDl": {
-          "label": "Glucose",
+          "label": "Glucosa",
           "unit": "mg/dL"
         },
         "insulinUiuMl": {
-          "label": "Insulin",
+          "label": "Insulina",
           "unit": "uIU/mL"
         }
       },
       "results": {}
     },
     "hourly-to-salary": {
-      "title": "Hourly to Salary Calculator",
-      "description": "Use Hourly to Salary Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "annual salary = hourly rate × weekly hours × weeks",
-      "primaryLabel": "Annual salary",
+      "title": "Calculadora de pago por hora a salario",
+      "description": "Usa Calculadora de pago por hora a salario para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "salario anual = tarifa por hora × horas semanales × semanas",
+      "primaryLabel": "Salario anual",
       "inputs": {
         "hourlyRate": {
-          "label": "Hourly rate",
+          "label": "Tarifa por hora",
           "unit": "$"
         },
         "hoursPerWeek": {
-          "label": "Hours per week",
+          "label": "Horas por semana",
           "unit": ""
         },
         "weeksPerYear": {
-          "label": "Weeks per year",
+          "label": "Semanas por año",
           "unit": ""
         }
       },
       "results": {}
     },
     "ideal-weight-calculator": {
-      "title": "Ideal Weight Calculator",
-      "description": "Use Ideal Weight Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "Devine estimate = base weight + 2.3kg per inch over 5ft",
-      "primaryLabel": "Ideal weight",
+      "title": "Calculadora de peso ideal",
+      "description": "Usa Calculadora de peso ideal para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "Estimación de Devine = peso base + 2,3kg por pulgada sobre 5 pies",
+      "primaryLabel": "Peso ideal",
       "inputs": {
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         }
       },
       "results": {}
     },
     "income-tax": {
-      "title": "Income Tax Calculator",
-      "description": "Use Income Tax Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "tax = taxable income × effective tax rate",
-      "primaryLabel": "Estimated tax",
+      "title": "Calculadora de impuesto sobre la renta",
+      "description": "Usa Calculadora de impuesto sobre la renta para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "impuesto = ingreso gravable × tasa de impuesto efectiva",
+      "primaryLabel": "Impuesto estimado",
       "inputs": {
         "income": {
-          "label": "Income",
+          "label": "Ingresos",
           "unit": "$"
         },
         "deductions": {
-          "label": "Deductions",
+          "label": "Deducciones",
           "unit": "$"
         },
         "effectiveRate": {
-          "label": "Effective tax rate",
+          "label": "Tasa de impuesto efectiva",
           "unit": "%"
         }
       },
       "results": {}
     },
     "inflation-calculator": {
-      "title": "Inflation Calculator",
-      "description": "Use Inflation Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "future cost = amount × (1 + inflation)^years",
-      "primaryLabel": "Future cost",
+      "title": "Calculadora de inflación",
+      "description": "Usa Calculadora de inflación para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "costo futuro = monto × (1 + inflación)^años",
+      "primaryLabel": "Costo futuro",
       "inputs": {
         "amount": {
-          "label": "Amount",
+          "label": "Monto",
           "unit": "$"
         },
         "inflationRate": {
-          "label": "Inflation rate",
+          "label": "Tasa de inflación",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "intermittent-fasting": {
-      "title": "Intermittent Fasting Calculator",
-      "description": "Use Intermittent Fasting Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "eating duration = 24 - fasting hours",
-      "primaryLabel": "Eating duration",
+      "title": "Calculadora de ayuno intermitente",
+      "description": "Usa Calculadora de ayuno intermitente para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "duración de alimentación = 24 - horas de ayuno",
+      "primaryLabel": "Duración de alimentación",
       "inputs": {
         "fastingHours": {
-          "label": "Fasting hours",
-          "unit": "hours"
+          "label": "Horas de ayuno",
+          "unit": "horas"
         }
       },
       "results": {}
     },
     "investment-fee": {
-      "title": "Investment Fee Calculator",
-      "description": "Use Investment Fee Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "fee drag = gross future value - net future value",
-      "primaryLabel": "Fee drag",
+      "title": "Calculadora de comisiones de inversión",
+      "description": "Usa Calculadora de comisiones de inversión para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "arrastramiento por comisión = valor futuro bruto - valor futuro neto",
+      "primaryLabel": "Arrastramiento por comisión",
       "inputs": {
         "principal": {
           "label": "Principal",
           "unit": "$"
         },
         "annualReturn": {
-          "label": "Annual return",
+          "label": "Rentabilidad anual",
           "unit": "%"
         },
         "feeRate": {
-          "label": "Fee rate",
+          "label": "Tasa de comisión",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {
-        "netValue": "Net value",
-        "grossValue": "Gross value"
+        "netValue": "Valor neto",
+        "grossValue": "Valor bruto"
       }
     },
     "investment-goal": {
-      "title": "Investment Goal Calculator",
-      "description": "Use Investment Goal Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "monthly investment solves future value target",
-      "primaryLabel": "Monthly investment",
+      "title": "Calculadora de meta de inversión",
+      "description": "Usa Calculadora de meta de inversión para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "inversión mensual resuelve el objetivo de valor futuro",
+      "primaryLabel": "Inversión mensual",
       "inputs": {
         "target": {
-          "label": "Target",
+          "label": "Meta",
           "unit": "$"
         },
         "currentSavings": {
-          "label": "Current savings",
+          "label": "Ahorros actuales",
           "unit": "$"
         },
         "annualReturn": {
-          "label": "Annual return",
+          "label": "Rentabilidad anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "lean-body-mass": {
-      "title": "Lean Body Mass Calculator",
-      "description": "Use Lean Body Mass Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "lean mass = weight × (1 - body fat percentage)",
-      "primaryLabel": "Lean body mass",
+      "title": "Calculadora de masa corporal magra",
+      "description": "Usa Calculadora de masa corporal magra para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "masa magra = peso × (1 - porcentaje de grasa corporal)",
+      "primaryLabel": "Masa corporal magra",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "bodyFatPercent": {
-          "label": "Body fat",
+          "label": "Grasa corporal",
           "unit": "%"
         }
       },
       "results": {}
     },
     "loan-calculator": {
-      "title": "Loan Calculator",
-      "description": "Use Loan Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "payment = amortized principal payment",
-      "primaryLabel": "Monthly payment",
+      "title": "Calculadora de préstamo",
+      "description": "Usa Calculadora de préstamo para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "pago = pago de capital amortizado",
+      "primaryLabel": "Pago mensual",
       "inputs": {
         "loanAmount": {
-          "label": "Loan amount",
+          "label": "Monto del préstamo",
           "unit": "$"
         },
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {
-        "totalInterest": "Total interest"
+        "totalInterest": "Interés total"
       }
     },
     "macro-calculator": {
-      "title": "Macro Calculator",
-      "description": "Use Macro Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "protein/carbs/fat from calorie split",
-      "primaryLabel": "Protein grams",
+      "title": "Calculadora de macronutrientes",
+      "description": "Usa Calculadora de macronutrientes para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "proteína/carbohidratos/grasa a partir del reparto de calorías",
+      "primaryLabel": "Gramos de proteína",
       "inputs": {
         "calories": {
-          "label": "Calories",
+          "label": "Calorías",
           "unit": "kcal"
         },
         "proteinPercent": {
-          "label": "Protein percent",
+          "label": "Porcentaje de proteína",
           "unit": "%"
         },
         "fatPercent": {
-          "label": "Fat percent",
+          "label": "Porcentaje de grasa",
           "unit": "%"
         }
       },
       "results": {
-        "carbsGrams": "Carbs grams",
-        "fatGrams": "Fat grams"
+        "carbsGrams": "Gramos de carbohidratos",
+        "fatGrams": "Gramos de grasa"
       }
     },
     "mortgage-calculator": {
-      "title": "Mortgage Calculator",
-      "description": "Estimate monthly mortgage payment, total interest, and amortization for a home loan.",
+      "title": "Calculadora de hipoteca",
+      "description": "Estima el pago mensual de la hipoteca, el interés total y la amortización de un préstamo hipotecario.",
       "formulaLabel": "M = P × r(1+r)^n / ((1+r)^n - 1)",
-      "primaryLabel": "Monthly payment",
+      "primaryLabel": "Pago mensual",
       "inputs": {
         "loanAmount": {
-          "label": "Loan amount",
+          "label": "Monto del préstamo",
           "unit": "$"
         },
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {
-        "totalInterest": "Total interest",
-        "totalCost": "Total cost"
+        "totalInterest": "Interés total",
+        "totalCost": "Costo total"
       }
     },
     "net-worth-calculator": {
-      "title": "Net Worth Calculator",
-      "description": "Use Net Worth Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "net worth = assets - liabilities",
-      "primaryLabel": "Net worth",
+      "title": "Calculadora de patrimonio neto",
+      "description": "Usa Calculadora de patrimonio neto para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "patrimonio neto = activos - pasivos",
+      "primaryLabel": "Patrimonio neto",
       "inputs": {
         "assets": {
-          "label": "Assets",
+          "label": "Activos",
           "unit": "$"
         },
         "liabilities": {
-          "label": "Liabilities",
+          "label": "Pasivos",
           "unit": "$"
         }
       },
       "results": {}
     },
     "one-rep-max": {
-      "title": "One Rep Max Calculator",
-      "description": "Use One Rep Max Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "Epley estimate = weight × (1 + reps / 30)",
-      "primaryLabel": "One-rep max",
+      "title": "Calculadora de repetición máxima (1RM)",
+      "description": "Usa Calculadora de repetición máxima (1RM) para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "Estimación de Epley = peso × (1 + repeticiones / 30)",
+      "primaryLabel": "Repetición máxima (1RM)",
       "inputs": {
         "weight": {
-          "label": "Weight lifted",
+          "label": "Peso levantado",
           "unit": ""
         },
         "reps": {
-          "label": "Reps",
+          "label": "Repeticiones",
           "unit": ""
         }
       },
       "results": {}
     },
     "ovulation-calculator": {
-      "title": "Ovulation Calculator",
-      "description": "Use Ovulation Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "ovulation day = cycle length - 14",
-      "primaryLabel": "Ovulation day",
+      "title": "Calculadora de ovulación",
+      "description": "Usa Calculadora de ovulación para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "día de ovulación = duración del ciclo - 14",
+      "primaryLabel": "Día de ovulación",
       "inputs": {
         "cycleLength": {
-          "label": "Cycle length",
-          "unit": "days"
+          "label": "Duración del ciclo",
+          "unit": "días"
         }
       },
       "results": {
-        "fertileWindowStart": "Fertile window start",
-        "fertileWindowEnd": "Fertile window end"
+        "fertileWindowStart": "Inicio de ventana fértil",
+        "fertileWindowEnd": "Fin de ventana fértil"
       }
     },
     "percentage-calculator": {
-      "title": "Percentage Calculator",
-      "description": "Use Percentage Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "result = value × percent / 100",
-      "primaryLabel": "Percentage value",
+      "title": "Calculadora de porcentaje",
+      "description": "Usa Calculadora de porcentaje para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "resultado = valor × porcentaje / 100",
+      "primaryLabel": "Valor porcentual",
       "inputs": {
         "value": {
-          "label": "Value",
+          "label": "Valor",
           "unit": ""
         },
         "percent": {
-          "label": "Percent",
+          "label": "Porcentaje",
           "unit": "%"
         }
       },
       "results": {}
     },
     "phq9-depression": {
-      "title": "PHQ-9 Depression Screening",
-      "description": "Use PHQ-9 Depression Screening for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "PHQ-9 total = sum of nine item scores",
-      "primaryLabel": "PHQ-9 score",
+      "title": "Cribado de depresión PHQ-9",
+      "description": "Usa Cribado de depresión PHQ-9 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "total PHQ-9 = suma de las puntuaciones de nueve ítems",
+      "primaryLabel": "Puntuación PHQ-9",
       "inputs": {
         "score": {
-          "label": "PHQ-9 total score",
+          "label": "Puntuación total PHQ-9",
           "unit": ""
         }
       },
       "results": {
         "severity": {
-          "minimal": "Minimal",
-          "mild": "Mild",
-          "moderate": "Moderate",
-          "moderatelySevere": "Moderately severe",
-          "severe": "Severe"
+          "minimal": "Mínima",
+          "mild": "Leve",
+          "moderate": "Moderada",
+          "moderatelySevere": "Moderadamente grave",
+          "severe": "Grave"
         }
       }
     },
     "pregnancy-due-date": {
-      "title": "Pregnancy Due Date Calculator",
-      "description": "Use Pregnancy Due Date Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "due in days = 280 - days since last menstrual period",
-      "primaryLabel": "Days until due date",
+      "title": "Calculadora de fecha probable de parto",
+      "description": "Usa Calculadora de fecha probable de parto para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "días para el parto = 280 - días desde la última menstruación",
+      "primaryLabel": "Días hasta la fecha de parto",
       "inputs": {
         "daysSinceLmp": {
-          "label": "Days since LMP",
-          "unit": "days"
+          "label": "Días desde la última menstruación",
+          "unit": "días"
         }
       },
       "results": {
-        "gestationalWeeks": "Gestational weeks"
+        "gestationalWeeks": "Semanas de gestación"
       }
     },
     "protein-calculator": {
-      "title": "Protein Calculator",
-      "description": "Use Protein Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "protein target = weight × activity factor",
-      "primaryLabel": "Daily protein",
+      "title": "Calculadora de proteína",
+      "description": "Usa Calculadora de proteína para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "objetivo de proteína = peso × factor de actividad",
+      "primaryLabel": "Proteína diaria",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "factor": {
-          "label": "Protein factor",
+          "label": "Factor de proteína",
           "unit": "g/kg"
         }
       },
       "results": {}
     },
     "pss10-stress": {
-      "title": "PSS-10 Stress Scale",
-      "description": "Use PSS-10 Stress Scale for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "PSS-10 total = scored survey sum",
-      "primaryLabel": "PSS-10 score",
+      "title": "Escala de estrés PSS-10",
+      "description": "Usa Escala de estrés PSS-10 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "total PSS-10 = suma de la encuesta puntuada",
+      "primaryLabel": "Puntuación PSS-10",
       "inputs": {
         "score": {
-          "label": "PSS-10 score",
+          "label": "Puntuación PSS-10",
           "unit": ""
         }
       },
       "results": {
         "severity": {
-          "low": "Low",
-          "moderate": "Moderate",
-          "high": "High"
+          "low": "Baja",
+          "moderate": "Moderada",
+          "high": "Alta"
         }
       }
     },
     "rent-vs-buy": {
-      "title": "Rent vs Buy Calculator",
-      "description": "Use Rent vs Buy Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "monthly ownership cost compared with rent",
-      "primaryLabel": "Monthly difference",
+      "title": "Calculadora de alquilar vs comprar",
+      "description": "Usa Calculadora de alquilar vs comprar para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "costo mensual de propiedad comparado con el alquiler",
+      "primaryLabel": "Diferencia mensual",
       "inputs": {
         "monthlyRent": {
-          "label": "Monthly rent",
+          "label": "Alquiler mensual",
           "unit": "$"
         },
         "homePrice": {
-          "label": "Home price",
+          "label": "Precio de la vivienda",
           "unit": "$"
         },
         "downPayment": {
-          "label": "Down payment",
+          "label": "Pago inicial",
           "unit": "$"
         },
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         }
       },
       "results": {
-        "monthlyOwnership": "Monthly ownership"
+        "monthlyOwnership": "Costo mensual de propiedad"
       }
     },
     "retirement-calculator": {
-      "title": "Retirement Calculator",
-      "description": "Use Retirement Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "future savings = current savings compounded plus monthly contributions",
-      "primaryLabel": "Projected savings",
+      "title": "Calculadora de jubilación",
+      "description": "Usa Calculadora de jubilación para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "ahorro futuro = ahorros actuales capitalizados más aportes mensuales",
+      "primaryLabel": "Ahorro proyectado",
       "inputs": {
         "currentSavings": {
-          "label": "Current savings",
+          "label": "Ahorros actuales",
           "unit": "$"
         },
         "monthlyContribution": {
-          "label": "Monthly contribution",
+          "label": "Aporte mensual",
           "unit": "$"
         },
         "annualReturn": {
-          "label": "Annual return",
+          "label": "Rentabilidad anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "roi-calculator": {
-      "title": "ROI Calculator",
-      "description": "Use ROI Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "ROI = (return - cost) / cost × 100",
+      "title": "Calculadora de ROI",
+      "description": "Usa Calculadora de ROI para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "ROI = (retorno - costo) / costo × 100",
       "primaryLabel": "ROI",
       "inputs": {
         "returnValue": {
-          "label": "Return value",
+          "label": "Valor de retorno",
           "unit": "$"
         },
         "cost": {
-          "label": "Cost",
+          "label": "Costo",
           "unit": "$"
         }
       },
       "results": {}
     },
     "rule-of-72": {
-      "title": "Rule of 72 Calculator",
-      "description": "Use Rule of 72 Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "years to double = 72 / annual return",
-      "primaryLabel": "Years to double",
+      "title": "Calculadora de la regla del 72",
+      "description": "Usa Calculadora de la regla del 72 para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "años para duplicar = 72 / rentabilidad anual",
+      "primaryLabel": "Años para duplicar",
       "inputs": {
         "annualRate": {
-          "label": "Annual rate",
+          "label": "Tasa anual",
           "unit": "%"
         }
       },
       "results": {}
     },
     "running-pace": {
-      "title": "Running Pace Calculator",
-      "description": "Use Running Pace Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "pace = total minutes / distance",
-      "primaryLabel": "Pace per km",
+      "title": "Calculadora de ritmo de carrera",
+      "description": "Usa Calculadora de ritmo de carrera para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "ritmo = minutos totales / distancia",
+      "primaryLabel": "Ritmo por km",
       "inputs": {
         "distanceKm": {
-          "label": "Distance",
+          "label": "Distancia",
           "unit": "km"
         },
         "timeMinutes": {
-          "label": "Time",
-          "unit": "minutes"
+          "label": "Tiempo",
+          "unit": "minutos"
         }
       },
       "results": {}
     },
     "savings-goal": {
-      "title": "Savings Goal Calculator",
-      "description": "Use Savings Goal Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "months = (goal - current savings) / monthly saving",
-      "primaryLabel": "Months to goal",
+      "title": "Calculadora de meta de ahorro",
+      "description": "Usa Calculadora de meta de ahorro para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "meses = (meta - ahorros actuales) / ahorro mensual",
+      "primaryLabel": "Meses hasta la meta",
       "inputs": {
         "goal": {
-          "label": "Goal",
+          "label": "Meta",
           "unit": "$"
         },
         "currentSavings": {
-          "label": "Current savings",
+          "label": "Ahorros actuales",
           "unit": "$"
         },
         "monthlySaving": {
-          "label": "Monthly saving",
+          "label": "Ahorro mensual",
           "unit": "$"
         }
       },
       "results": {}
     },
     "side-income-tax": {
-      "title": "Side Income Tax Calculator",
-      "description": "Use Side Income Tax Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "estimated tax = side income × tax rate",
-      "primaryLabel": "Estimated tax",
+      "title": "Calculadora de impuesto sobre ingresos secundarios",
+      "description": "Usa Calculadora de impuesto sobre ingresos secundarios para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "impuesto estimado = ingreso secundario × tasa de impuesto",
+      "primaryLabel": "Impuesto estimado",
       "inputs": {
         "sideIncome": {
-          "label": "Side income",
+          "label": "Ingreso secundario",
           "unit": "$"
         },
         "taxRate": {
-          "label": "Tax rate",
+          "label": "Tasa de impuesto",
           "unit": "%"
         }
       },
       "results": {}
     },
     "sip-calculator": {
-      "title": "SIP Calculator",
-      "description": "Use SIP Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "future value of monthly investment contributions",
-      "primaryLabel": "Future value",
+      "title": "Calculadora de SIP",
+      "description": "Usa Calculadora de SIP para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "valor futuro de los aportes mensuales de inversión",
+      "primaryLabel": "Valor futuro",
       "inputs": {
         "monthlyInvestment": {
-          "label": "Monthly investment",
+          "label": "Inversión mensual",
           "unit": "$"
         },
         "annualReturn": {
-          "label": "Annual return",
+          "label": "Rentabilidad anual",
           "unit": "%"
         },
         "years": {
-          "label": "Years",
-          "unit": "years"
+          "label": "Años",
+          "unit": "años"
         }
       },
       "results": {}
     },
     "sleep-calculator": {
-      "title": "Sleep Calculator",
-      "description": "Use Sleep Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "bedtime = wake hour - cycles × 90 minutes - 15 minutes",
-      "primaryLabel": "Recommended bedtime hour",
+      "title": "Calculadora de sueño",
+      "description": "Usa Calculadora de sueño para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "hora de dormir = hora de despertar - ciclos × 90 minutos - 15 minutos",
+      "primaryLabel": "Hora recomendada para dormir",
       "inputs": {
         "wakeHour": {
-          "label": "Wake hour",
+          "label": "Hora de despertar",
           "unit": ""
         },
         "cycles": {
-          "label": "Sleep cycles",
+          "label": "Ciclos de sueño",
           "unit": ""
         }
       },
       "results": {
-        "bedtimeMinutesAfterMidnight": "Bedtime minutes after midnight"
+        "bedtimeMinutesAfterMidnight": "Minutos para dormir tras la medianoche"
       }
     },
     "smoke-free": {
-      "title": "Quit Smoking Calculator",
-      "description": "Use Quit Smoking Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "money saved = cigarettes avoided / pack size × pack price",
-      "primaryLabel": "Money saved",
+      "title": "Calculadora para dejar de fumar",
+      "description": "Usa Calculadora para dejar de fumar para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "dinero ahorrado = cigarrillos evitados / tamaño del paquete × precio del paquete",
+      "primaryLabel": "Dinero ahorrado",
       "inputs": {
         "cigarettesPerDay": {
-          "label": "Cigarettes per day",
+          "label": "Cigarrillos por día",
           "unit": ""
         },
         "packPrice": {
-          "label": "Pack price",
+          "label": "Precio del paquete",
           "unit": "$"
         },
         "daysSmokeFree": {
-          "label": "Days smoke-free",
-          "unit": "days"
+          "label": "Días sin fumar",
+          "unit": "días"
         }
       },
       "results": {}
     },
     "steps-to-calories": {
-      "title": "Steps to Calories Calculator",
-      "description": "Use Steps to Calories Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "calories = steps × weight × 0.0005",
-      "primaryLabel": "Calories burned",
+      "title": "Calculadora de pasos a calorías",
+      "description": "Usa Calculadora de pasos a calorías para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "calorías = pasos × peso × 0,0005",
+      "primaryLabel": "Calorías quemadas",
       "inputs": {
         "steps": {
-          "label": "Steps",
+          "label": "Pasos",
           "unit": ""
         },
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         }
       },
       "results": {}
     },
     "stock-average": {
-      "title": "Stock Average Calculator",
-      "description": "Use Stock Average Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "average cost = total cost / total shares",
-      "primaryLabel": "Average cost",
+      "title": "Calculadora de precio medio de acciones",
+      "description": "Usa Calculadora de precio medio de acciones para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "costo promedio = costo total / total de acciones",
+      "primaryLabel": "Costo promedio",
       "inputs": {
         "sharesOwned": {
-          "label": "Shares owned",
+          "label": "Acciones en propiedad",
           "unit": ""
         },
         "averageCost": {
-          "label": "Average cost",
+          "label": "Costo promedio",
           "unit": "$"
         },
         "newShares": {
-          "label": "New shares",
+          "label": "Acciones nuevas",
           "unit": ""
         },
         "newPrice": {
-          "label": "New price",
+          "label": "Precio nuevo",
           "unit": "$"
         }
       },
       "results": {}
     },
     "tdee-calculator": {
-      "title": "TDEE Calculator",
-      "description": "Use TDEE Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "TDEE = BMR × activity multiplier",
+      "title": "Calculadora de TDEE",
+      "description": "Usa Calculadora de TDEE para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "TDEE = BMR × multiplicador de actividad",
       "primaryLabel": "TDEE",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         },
         "heightCm": {
-          "label": "Height",
+          "label": "Altura",
           "unit": "cm"
         },
         "age": {
-          "label": "Age",
-          "unit": "years"
+          "label": "Edad",
+          "unit": "años"
         },
         "activityMultiplier": {
-          "label": "Activity multiplier",
+          "label": "Multiplicador de actividad",
           "unit": ""
         }
       },
@@ -1726,13 +1541,13 @@
       }
     },
     "testosterone-calculator": {
-      "title": "Testosterone Calculator",
-      "description": "Use Testosterone Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "free testosterone index = total testosterone / SHBG × 100",
-      "primaryLabel": "Free androgen index",
+      "title": "Calculadora de testosterona",
+      "description": "Usa Calculadora de testosterona para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "índice de testosterona libre = testosterona total / SHBG × 100",
+      "primaryLabel": "Índice de andrógeno libre",
       "inputs": {
         "totalTestosterone": {
-          "label": "Total testosterone",
+          "label": "Testosterona total",
           "unit": "ng/dL"
         },
         "shbg": {
@@ -1743,117 +1558,302 @@
       "results": {}
     },
     "tip-calculator": {
-      "title": "Tip Calculator",
-      "description": "Figure out the tip, total bill, and per-person split for any purchase.",
-      "formulaLabel": "tip = bill × tip percentage; split = total / people",
-      "primaryLabel": "Total bill",
+      "title": "Calculadora de propina",
+      "description": "Calcula la propina, la cuenta total y la división por persona para cualquier compra.",
+      "formulaLabel": "propina = cuenta × porcentaje de propina; división = total / personas",
+      "primaryLabel": "Cuenta total",
       "inputs": {
         "bill": {
-          "label": "Bill",
+          "label": "Cuenta",
           "unit": "$"
         },
         "tipPercent": {
-          "label": "Tip percent",
+          "label": "Porcentaje de propina",
           "unit": "%"
         },
         "people": {
-          "label": "People",
+          "label": "Personas",
           "unit": ""
         }
       },
       "results": {
-        "tip": "Tip",
-        "perPerson": "Per person"
+        "tip": "Propina",
+        "perPerson": "Por persona"
       }
     },
     "vo2-max": {
-      "title": "VO2 Max Calculator",
-      "description": "Use VO2 Max Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "VO2 max estimate = 15.3 × max heart rate / resting heart rate",
-      "primaryLabel": "VO2 max",
+      "title": "Calculadora de VO2 máximo",
+      "description": "Usa Calculadora de VO2 máximo para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "estimación de VO2 máximo = 15,3 × frecuencia cardiaca máxima / frecuencia cardiaca en reposo",
+      "primaryLabel": "VO2 máximo",
       "inputs": {
         "age": {
-          "label": "Age",
-          "unit": "years"
+          "label": "Edad",
+          "unit": "años"
         },
         "restingHeartRate": {
-          "label": "Resting heart rate",
+          "label": "Frecuencia cardiaca en reposo",
           "unit": "bpm"
         }
       },
       "results": {}
     },
     "waist-hip-ratio": {
-      "title": "Waist-to-Hip Ratio Calculator",
-      "description": "Use Waist-to-Hip Ratio Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "WHR = waist circumference / hip circumference",
-      "primaryLabel": "Waist-to-hip ratio",
+      "title": "Calculadora de relación cintura-cadera",
+      "description": "Usa Calculadora de relación cintura-cadera para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "WHR = circunferencia de cintura / circunferencia de cadera",
+      "primaryLabel": "Relación cintura-cadera",
       "inputs": {
         "waistCm": {
-          "label": "Waist",
+          "label": "Cintura",
           "unit": "cm"
         },
         "hipCm": {
-          "label": "Hip",
+          "label": "Cadera",
           "unit": "cm"
         }
       },
       "results": {
         "risk": {
-          "higherRisk": "Higher risk",
-          "lowerRisk": "Lower risk"
+          "higherRisk": "Riesgo más alto",
+          "lowerRisk": "Riesgo más bajo"
         }
       }
     },
     "water-intake": {
-      "title": "Water Intake Calculator",
-      "description": "Use Water Intake Calculator for a fast, privacy-aware estimate with clear inputs, result summaries, and related tool guidance.",
-      "formulaLabel": "water target = weight × 35ml",
-      "primaryLabel": "Daily water",
+      "title": "Calculadora de ingesta de agua",
+      "description": "Usa Calculadora de ingesta de agua para una estimación rápida y privada con entradas claras, resúmenes de resultados y orientación sobre herramientas relacionadas.",
+      "formulaLabel": "objetivo de agua = peso × 35ml",
+      "primaryLabel": "Agua diaria",
       "inputs": {
         "weightKg": {
-          "label": "Weight",
+          "label": "Peso",
           "unit": "kg"
         }
       },
       "results": {
-        "liters": "Liters"
+        "liters": "Litros"
       }
     }
   },
+  "ai": {
+    "workspaceLabel": "Espacio de trabajo IA",
+    "aiSaaS": "Espacio de trabajo IA",
+    "workspaceTitle": "Espacio de trabajo de toolars",
+    "workspaceBody": "Reutilización de contenido, voz de marca, historial y analítica en un solo lugar.",
+    "workspaceCard": "Espacio de trabajo",
+    "workspaceCardBody": "La generación con IA es gratuita durante la v1. Guarda borradores localmente y haz seguimiento de la actividad reciente.",
+    "navRepurpose": "Reutilizar",
+    "navTemplates": "Plantillas",
+    "navBrandVoice": "Voz de marca",
+    "navHistory": "Historial",
+    "navAnalytics": "Analítica",
+    "navSettings": "Ajustes",
+    "navLabel": "Navegación de la app IA",
+    "directoryHeading": "Directorio de herramientas IA",
+    "directoryDescription": "Reutiliza contenido, gestiona la voz de marca y haz seguimiento del rendimiento en todas las plataformas.",
+    "featuredInputSources": "Fuentes de entrada",
+    "featuredInputSourcesBody": "Pega texto o añade una URL: la herramienta de reutilización extrae los puntos clave.",
+    "featuredOutputControls": "Controles de salida",
+    "featuredOutputControlsBody": "Elige plataformas, tono, voz de marca y modelo antes de generar.",
+    "featuredWorkspaceMemory": "Memoria del espacio de trabajo",
+    "featuredWorkspaceMemoryBody": "El historial y los borradores guardados se mantienen organizados por espacio de trabajo.",
+    "usagePlan": "Plan de uso",
+    "platformSupport": "Soporte de plataformas",
+    "accountRequired": "Se requiere cuenta",
+    "streamingWorkflow": "Flujo de streaming",
+    "previewAccount": "Cuenta de vista previa",
+    "brandVoiceBadge": "Voz de marca",
+    "repurposeHeading": "Reutilización de contenido IA",
+    "repurposeBody": "Convierte una sola fuente en borradores nativos para redes sociales, boletines, artículos y lanzamientos comunitarios. Al cancelar se conserva la salida parcial.",
+    "authGateHeading": "Inicia sesión para usar la Reutilización de contenido IA",
+    "authGateAiTool": "Herramienta IA",
+    "authGateBody": "La generación con IA, el historial y las voces de marca están en tu espacio de trabajo. Las calculadoras públicas siguen siendo gratuitas y no usan esta restricción.",
+    "authGateSignIn": "Iniciar sesión",
+    "authGateCreateAccount": "Crear cuenta",
+    "authGateContinuePreview": "Continuar en vista previa",
+    "publicCalculatorsStayFree": "Las calculadoras públicas siguen siendo gratuitas",
+    "analyticsBadge": "Analítica",
+    "analyticsHeading": "Analítica de rendimiento",
+    "analyticsBody": "Haz seguimiento del uso, las salidas generadas, los créditos, la combinación de plataformas, la combinación de tonos y la actividad reciente del espacio de trabajo.",
+    "platformBreakdown": "Desglose por plataforma",
+    "toneBreakdown": "Desglose por tono",
+    "recentActivity": "Actividad reciente",
+    "recentActivityNewsletter": "Resumen de boletín generado",
+    "recentActivityLinkedIn": "Publicación de LinkedIn copiada",
+    "recentActivityTwitter": "Hilo de Twitter cancelado",
+    "brandVoiceBadgeTitle": "Voz de marca",
+    "brandVoiceHeading": "Voz de marca",
+    "brandVoiceBody": "Crea, edita, elimina, asigna y previsualiza voces reutilizables para una salida de IA consistente en todos los espacios de trabajo.",
+    "createVoice": "Crear voz",
+    "workspaceAssignment": "Asignación de espacio de trabajo:",
+    "actionEdit": "Editar",
+    "actionPreview": "Vista previa",
+    "actionDelete": "Eliminar",
+    "historyBadge": "Historial",
+    "historyBadgeCopy": "Copiar",
+    "historyBadgeRegenerate": "Regenerar",
+    "historyHeading": "Historial de contenido",
+    "historyBody": "Busca trabajos de IA anteriores, filtra por estado, plataforma, fecha y tono, y vuelve a abrir los detalles para copiar o regenerar.",
+    "searchHistoryLabel": "Buscar historial",
+    "searchHistoryPlaceholder": "Buscar historial…",
+    "filterStatus": "Estado",
+    "filterPlatform": "Plataforma",
+    "filterDate": "Fecha",
+    "filterTone": "Tono",
+    "actionOpenDetail": "Abrir detalle",
+    "actionCopyOutputs": "Copiar salidas",
+    "actionRegenerate": "Regenerar",
+    "settingsBadge": "Ajustes",
+    "settingsBadgeAccount": "Cuenta",
+    "settingsHeading": "Ajustes del espacio de trabajo",
+    "settingsBody": "Gestiona el perfil, el espacio de trabajo, las claves de API, las notificaciones, la exportación de datos y las acciones destructivas de la cuenta.",
+    "sectionProfileTitle": "Perfil",
+    "sectionProfileCopy": "Nombre, correo, zona horaria y rol en el espacio de trabajo.",
+    "sectionWorkspaceTitle": "Espacio de trabajo",
+    "sectionWorkspaceCopy": "Nombre del equipo, modelo predeterminado, valores de marca predeterminados y permisos.",
+    "sectionApiKeysTitle": "Claves de API",
+    "sectionApiKeysCopy": "Claves de proveedor y gestión de secretos a nivel de espacio de trabajo.",
+    "sectionNotificationsTitle": "Notificaciones",
+    "sectionNotificationsCopy": "Actividad de generación y preferencias del resumen semanal.",
+    "sectionDataExportTitle": "Exportación de datos",
+    "sectionDataExportCopy": "Exporta los datos de tu espacio de trabajo o transfiere la propiedad.",
+    "sectionDangerZoneTitle": "Zona de peligro",
+    "sectionDangerZoneCopy": "Cierra el espacio de trabajo y elimina el contenido almacenado.",
+    "actionManage": "Gestionar",
+    "templatesBadge": "Plantillas IA",
+    "templatesGroupSocial": "Redes sociales",
+    "templatesGroupLongForm": "Artículos largos",
+    "templatesGroupEmail": "Correo",
+    "templatesGroupCommunity": "Comunidad",
+    "templatesHeading": "Biblioteca de plantillas",
+    "templatesBody": "Flujos de contenido reutilizables para lanzamientos en redes sociales, artículos largos, boletines y publicaciones comunitarias.",
+    "labelOutputType": "Tipo de salida",
+    "labelPlatformSupport": "Soporte de plataformas",
+    "labelEstimatedLength": "Longitud estimada",
+    "useTemplate": "Usar plantilla",
+    "metadataRepurpose": "Reutilización de contenido IA | toolars",
+    "metadataAnalytics": "Analítica de rendimiento | toolars",
+    "metadataBrandVoice": "Voz de marca | toolars",
+    "metadataHistory": "Historial de contenido | toolars",
+    "metadataSettings": "Ajustes del espacio de trabajo | toolars",
+    "metadataTemplates": "Biblioteca de plantillas | toolars"
+  },
+  "blog": {
+    "listHeading": "Blog de toolars",
+    "listDescription": "Guías sobre SEO para calculadoras, flujos de contenido IA y novedades del producto.",
+    "englishFirst": "Primero en inglés",
+    "calculatorSeo": "SEO para calculadoras",
+    "aiWorkflows": "Flujos de trabajo IA",
+    "searchLabel": "Buscar artículos del blog",
+    "searchPlaceholder": "Buscar guías, SEO para calculadoras, flujos IA…",
+    "latestArticles": "Últimos artículos",
+    "updated": "Actualizado",
+    "readGuide": "Leer guía",
+    "editorialFocus": "Enfoque editorial",
+    "editorialFocusBody": "Guías prácticas, primero en inglés, para publicar calculadoras y flujos de trabajo IA.",
+    "englishLaunchContent": "Contenido de lanzamiento en inglés",
+    "referencedTools": "Herramientas referenciadas",
+    "breadcrumb": "Blog",
+    "notFoundTitle": "Artículo no encontrado | toolars",
+    "by": "Por {author}",
+    "faqTitle": "Preguntas frecuentes",
+    "backToBlog": "Volver al blog",
+    "relatedTools": "Herramientas relacionadas"
+  },
+  "category": {
+    "healthHeading": "Calculadoras de salud",
+    "healthDescription": "Composición corporal, condición física, nutrición y herramientas de bienestar cotidiano.",
+    "healthBodyBadge": "Cuerpo",
+    "healthFitnessBadge": "Fitness y nutrición",
+    "healthWellnessBadge": "Bienestar",
+    "healthFooter": "Todas las herramientas de salud se ejecutan en tu navegador: gratuitas, privadas y sin registro.",
+    "popularSearches": "Búsquedas populares",
+    "insights": "Perspectivas",
+    "frequentlyUsed": "Usadas con frecuencia",
+    "financeHeading": "Calculadoras de finanzas",
+    "financeDescription": "Préstamos, deudas, presupuestos, inversión y decisiones monetarias del día a día.",
+    "financeLoansBadge": "Préstamos",
+    "financeDebtBadge": "Deudas",
+    "financeInvestingBadge": "Inversión",
+    "financeRetirementBadge": "Jubilación",
+    "financeFooter": "Todas las calculadoras de finanzas se ejecutan en tu navegador: gratuitas, privadas y sin registro.",
+    "relatedArticles": "Artículos relacionados",
+    "breadcrumbHome": "Inicio",
+    "breadcrumbTools": "Herramientas",
+    "breadcrumbHealth": "Salud",
+    "breadcrumbFinance": "Finanzas"
+  },
+  "repurpose": {
+    "ready": "Listo para generar.",
+    "streaming": "Generando salidas…",
+    "completed": "Completado. Las salidas están listas para copiar, guardar o regenerar.",
+    "checkInputs": "Revisa las entradas de IA resaltadas.",
+    "failed": "La generación falló.",
+    "failedRetry": "La generación falló. Inténtalo de nuevo.",
+    "canceled": "Cancelado. Se conserva la salida parcial.",
+    "savedHistory": "{platformLabel} guardado en el historial local de borradores.",
+    "copied": "{platformLabel} copiado.",
+    "badgeWorkspace": "Espacio de trabajo IA",
+    "badgePlan": "Plan {planId}",
+    "cardTitle": "Fuente y controles",
+    "cardDescription": "Reutiliza una URL o texto fuente en borradores nativos por plataforma con tono, voz de marca, modelo y controles de cancelación.",
+    "sourceText": "Texto",
+    "sourceUrl": "URL",
+    "sourceTextLabel": "Texto fuente",
+    "sourceUrlLabel": "URL fuente",
+    "platforms": "Plataformas",
+    "tone": "Tono",
+    "brandVoice": "Voz de marca",
+    "model": "Modelo",
+    "cancel": "Cancelar",
+    "generate": "Generar",
+    "reset": "Restablecer",
+    "outputVariants": "Variantes de salida",
+    "outputDescription": "Los borradores en streaming se mantienen visibles al cancelar.",
+    "outputPlaceholder": "Los borradores generados por plataforma aparecerán aquí.",
+    "toneSuffix": "tono {tone}",
+    "wordCount": "{count} palabras",
+    "copy": "Copiar",
+    "save": "Guardar",
+    "regenerate": "Regenerar",
+    "sourceTypeLabel": "Tipo de fuente",
+    "generatedOutputsLabel": "Salidas generadas",
+    "drafting": "Generando {label}…"
+  },
   "auth": {
-    "loginTitle": "Sign in",
-    "loginHeading": "Sign in to toolars",
-    "loginBody": "Access your AI workspace, saved results, and brand voices.",
-    "registerTitle": "Create account",
-    "registerHeading": "Create your toolars account",
-    "registerBody": "Start repurposing content and saving calculator results.",
-    "email": "Email",
-    "emailPlaceholder": "you@example.com",
-    "password": "Password",
-    "passwordPlaceholder": "Your password",
-    "signInSubmit": "Sign in",
-    "signUpSubmit": "Create account",
-    "signingIn": "Signing in…",
-    "creatingAccount": "Creating account…",
-    "invalidCredentials": "Invalid email or password.",
-    "signUpSuccess": "Account created. You can sign in now.",
-    "signUpCheckEmail": "Check your email to confirm your account, then sign in.",
-    "orContinueWith": "Or continue with",
+    "loginTitle": "Iniciar sesión",
+    "loginHeading": "Inicia sesión en toolars",
+    "loginBody": "Accede a tu espacio de trabajo IA, resultados guardados y voces de marca.",
+    "registerTitle": "Crear cuenta",
+    "registerHeading": "Crea tu cuenta de toolars",
+    "registerBody": "Empieza a reutilizar contenido y a guardar resultados de calculadoras.",
+    "email": "Correo",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Tu contraseña",
+    "signInSubmit": "Iniciar sesión",
+    "signUpSubmit": "Crear cuenta",
+    "signingIn": "Iniciando sesión…",
+    "creatingAccount": "Creando cuenta…",
+    "invalidCredentials": "Correo o contraseña no válidos.",
+    "signUpSuccess": "Cuenta creada. Ya puedes iniciar sesión.",
+    "signUpCheckEmail": "Revisa tu correo para confirmar tu cuenta y luego inicia sesión.",
+    "orContinueWith": "O continúa con",
     "google": "Google",
     "github": "GitHub",
-    "needAccount": "Need an account?",
-    "haveAccount": "Already have an account?",
-    "createAccountLink": "Create one",
-    "signInLink": "Sign in",
-    "signOut": "Sign out",
-    "redirectNotice": "Sign in to continue.",
-    "missingEnv": "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local",
+    "needAccount": "¿Necesitas una cuenta?",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "createAccountLink": "Crear una",
+    "signInLink": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "redirectNotice": "Inicia sesión para continuar.",
+    "missingEnv": "Supabase no está configurado. Define NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY en .env.local",
     "errors": {
-      "emailRequired": "Email is required.",
-      "emailInvalid": "Enter a valid email address.",
-      "passwordRequired": "Password is required.",
-      "passwordShort": "Password must be at least 6 characters."
+      "emailRequired": "El correo es obligatorio.",
+      "emailInvalid": "Introduce un correo válido.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordShort": "La contraseña debe tener al menos 6 caracteres."
     }
   }
 }

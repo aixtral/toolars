@@ -44,6 +44,13 @@ function writeList(key: string, results: readonly StoredCalculatorResult[]) {
   if (!localStorage) return;
 
   localStorage.setItem(key, JSON.stringify(results.slice(0, maxLocalItems)));
+
+  // Notify client components (e.g. SavedToolsCard) that saved results changed,
+  // so they can re-read localStorage without polling. `storage` events only
+  // fire across tabs, so we also dispatch a same-tab custom event.
+  if (typeof window !== 'undefined' && key === savedResultsKey) {
+    window.dispatchEvent(new CustomEvent('toolars:saved-results-changed'));
+  }
 }
 
 function createStoredResult(result: CalculatorStorageInput): StoredCalculatorResult {

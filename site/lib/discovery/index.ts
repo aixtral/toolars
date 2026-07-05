@@ -1,7 +1,7 @@
 import { AI_TOOLS } from '@/data/ai-tools';
 import { TOOL_CATEGORIES } from '@/data/categories';
 import { ALL_TOOLS, getPopularTools, getToolsByCategory } from '@/data/tools';
-import type { ToolCategory, ToolDefinition } from '@/data/types';
+import type { ToolCategory } from '@/data/types';
 
 export const directoryTabs = [
   'All',
@@ -61,26 +61,6 @@ export function categoryCount(category: ToolCategory) {
 
 export function featuredTools() {
   return getPopularTools(8);
-}
-
-export function recentTools() {
-  return [
-    'mortgage-calculator',
-    'bmi-calculator',
-    'compound-interest',
-  ]
-    .map((slug) => ALL_TOOLS.find((tool) => tool.slug === slug))
-    .filter(Boolean) as ToolDefinition[];
-}
-
-export function favoriteTools() {
-  return [
-    'ai-content-repurposer',
-    'retirement-calculator',
-    'protein-calculator',
-  ]
-    .map((slug) => ALL_TOOLS.find((tool) => tool.slug === slug))
-    .filter(Boolean) as ToolDefinition[];
 }
 
 export function categoryCards() {

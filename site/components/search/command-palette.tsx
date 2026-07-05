@@ -1,12 +1,13 @@
 'use client';
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpDown, Command, CornerDownLeft, Search, X } from 'lucide-react';
-import { TOOL_CATEGORIES } from '@/data/categories';
 import { getPopularTools } from '@/data/tools';
 import type { ToolCategory, ToolDefinition, ToolType } from '@/data/types';
 import { searchTools } from '@/lib/search';
+import { categoryCards } from '@/lib/discovery';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/components/ui/classnames';
@@ -17,15 +18,6 @@ interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-const tabs: readonly { id: PaletteTab; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'calculator', label: 'Calculators' },
-  { id: 'ai', label: 'AI Tools' },
-  { id: 'health', label: 'Health' },
-  { id: 'finance', label: 'Finance' },
-  { id: 'articles', label: 'Articles' },
-];
 
 const popularSearches = ['BMI', 'mortgage payment', 'compound interest', 'brand voice'];
 
@@ -69,10 +61,21 @@ function ToolResult({ tool, index, active }: { tool: ToolDefinition; index: numb
 }
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
+  const t = useTranslations('search');
+  const tNav = useTranslations('nav');
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState<PaletteTab>('all');
   const [activeIndex, setActiveIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const tabs: readonly { id: PaletteTab; label: string }[] = [
+    { id: 'all', label: t('tabAll') },
+    { id: 'calculator', label: t('tabCalculators') },
+    { id: 'ai', label: t('tabAi') },
+    { id: 'health', label: t('tabHealth') },
+    { id: 'finance', label: t('tabFinance') },
+    { id: 'articles', label: t('tabArticles') },
+  ];
 
   const results = useMemo(() => {
     if (activeTab === 'articles') return [];
@@ -107,12 +110,12 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Search tools"
+        aria-label={t('dialogLabel')}
         className="mx-auto flex max-h-[calc(100vh-48px)] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-lg"
       >
         <div className="border-b border-neutral-200 p-4">
           <label className="sr-only" htmlFor="command-search">
-            Search 73 calculators and AI tools
+            {t('searchboxLabel')}
           </label>
           <div className="grid grid-cols-[20px_1fr] items-center gap-2 rounded-lg border border-neutral-300 px-3 focus-within:ring-2 focus-within:ring-brand-500">
             <Search aria-hidden="true" className="text-neutral-500" size={18} strokeWidth={2} />
@@ -122,10 +125,10 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               role="searchbox"
               type="search"
               value={query}
-              aria-label="Search 73 calculators and AI tools"
+              aria-label={t('searchboxLabel')}
               aria-activedescendant={activeIndex >= 0 ? `command-result-${activeIndex}` : undefined}
               aria-controls="command-results"
-              placeholder="Search 73 calculators and AI tools..."
+              placeholder={tNav('searchPlaceholder')}
               className="min-h-11 w-full border-0 bg-transparent py-2 text-base text-ink focus-visible:outline-none"
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -172,7 +175,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         </div>
 
         <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 md:grid-cols-[1fr_220px]">
-          <div id="command-results" role="listbox" aria-label="Search results" className="space-y-2">
+          <div id="command-results" role="listbox" aria-label={t('resultsLabel')} className="space-y-2">
             {results.map((tool, index) => (
               <ToolResult
                 key={tool.slug}
@@ -184,18 +187,18 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
             {showEmpty ? (
               <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-                <h3 className="text-xl font-semibold text-ink">No results found</h3>
+                <h3 className="text-xl font-semibold text-ink">{t('emptyTitle')}</h3>
                 <p className="mt-2 text-sm text-neutral-600">
-                  We couldn&apos;t find anything for &ldquo;{query}&rdquo;.
+                  {t('emptyBody', { query })}
                 </p>
                 <ul className="mt-3 space-y-2 text-sm text-neutral-600">
-                  <li>Check spelling or try different keywords</li>
+                  <li>{t('emptySuggestionSpell')}</li>
                   <li>
                     <Link className="font-semibold text-brand-700 hover:underline" href="/tools">
-                      Browse all calculators
+                      {t('emptySuggestionBrowse')}
                     </Link>
                   </li>
-                  <li>Search articles and guides</li>
+                  <li>{t('emptySuggestionArticles')}</li>
                 </ul>
               </div>
             ) : null}
@@ -203,7 +206,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
           <aside className="space-y-4 border-t border-neutral-200 pt-4 md:border-l md:border-t-0 md:pl-4 md:pt-0">
             <section>
-              <h3 className="text-xs font-semibold uppercase text-neutral-600">Popular searches</h3>
+              <h3 className="text-xs font-semibold uppercase text-neutral-600">{t('popularSearches')}</h3>
               <div className="mt-2 flex flex-wrap gap-2">
                 {popularSearches.map((search) => (
                   <button
@@ -224,7 +227,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             <section>
               <h3 className="text-xs font-semibold uppercase text-neutral-600">Categories</h3>
               <div className="mt-2 space-y-2">
-                {TOOL_CATEGORIES.slice(0, 4).map((category) => (
+                {categoryCards().slice(0, 4).map((category) => (
                   <a
                     key={category.slug}
                     href={category.route}
@@ -237,19 +240,19 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
             </section>
 
             <section className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-600">
-              <h3 className="font-semibold text-ink">Keyboard shortcuts</h3>
+              <h3 className="font-semibold text-ink">{t('shortcutsHeading')}</h3>
               <div className="mt-2 grid gap-2">
                 <span className="inline-flex items-center gap-2">
                   <ArrowUpDown aria-hidden="true" size={16} strokeWidth={2} />
-                  Arrow keys
+                  {t('shortcutsArrows')}
                 </span>
                 <span className="inline-flex items-center gap-2">
                   <CornerDownLeft aria-hidden="true" size={16} strokeWidth={2} />
-                  Enter
+                  {t('shortcutsEnter')}
                 </span>
                 <span className="inline-flex items-center gap-2">
                   <Command aria-hidden="true" size={16} strokeWidth={2} />
-                  Cmd/Ctrl + K
+                  {t('shortcutsCmd')}
                 </span>
               </div>
             </section>
@@ -257,11 +260,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         </div>
 
         <div className="flex items-center justify-between border-t border-neutral-200 px-4 py-3 text-sm text-neutral-600">
-          <span>Recent tools and favorites will sync when signed in.</span>
+          <span>{t('footer')}</span>
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Close search"
+            aria-label={t('close')}
             onClick={() => onOpenChange(false)}
           >
             <X aria-hidden="true" size={20} strokeWidth={2} />

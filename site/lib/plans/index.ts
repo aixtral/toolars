@@ -86,35 +86,14 @@ export function canUsePlanFeature(planId: PlanId, feature: PlanFeature) {
 
 export function evaluateAiGenerationAccess({
   planId,
-  selectedPlatformCount,
-  usedGenerations,
 }: AiGenerationAccessInput): PlanGateDecision {
+  // v1 decision: AI generation is free for every logged-in user.
+  // The paywall is disabled at this chokepoint so both the API route
+  // (app/api/ai/repurpose) and the client workspace can call this function
+  // without ever hitting a 402. PLAN_DEFINITIONS and canUsePlanFeature are
+  // preserved as data so phase-two can re-enable gating (Stripe, quotas) by
+  // restoring the original branch logic here without touching call sites.
   const plan = getPlanById(planId);
-
-  if (!canUsePlanFeature(planId, 'ai.generate')) {
-    return {
-      allowed: false,
-      reason: 'AI generation requires a Pro subscription.',
-      upgradeLabel: 'Upgrade to Pro',
-    };
-  }
-
-  if (selectedPlatformCount > plan.maxPlatforms) {
-    return {
-      allowed: false,
-      reason: `${plan.name} supports up to ${plan.maxPlatforms} platforms per generation.`,
-      upgradeLabel: planId === 'pro' ? 'Talk to sales' : 'Upgrade to Pro',
-    };
-  }
-
-  if (usedGenerations >= plan.monthlyAiGenerations) {
-    return {
-      allowed: false,
-      reason: `${plan.name} monthly AI generation limit reached.`,
-      upgradeLabel: planId === 'team' ? 'Manage plan' : 'Upgrade to Pro',
-    };
-  }
-
   return {
     allowed: true,
     reason: `${plan.name} AI access active.`,

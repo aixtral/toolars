@@ -1,0 +1,159 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft, Clock } from 'lucide-react';
+import { Container } from '@/components/layout';
+import { ToolCard } from '@/components/tools';
+import { Badge } from '@/components/ui';
+import { BLOG_ARTICLES, getBlogArticle } from '@/data/blog';
+import type { ToolDefinition } from '@/data/types';
+import { getToolBySlug } from '@/data/tools';
+import {
+  buildArticleMetadata,
+  buildBlogPostingSchema,
+  buildBreadcrumbSchema,
+  buildFaqPageSchema,
+  serializeJsonLd,
+} from '@/lib/seo';
+
+interface BlogArticlePageProps {
+  params: Promise<{
+    locale: string;
+    slug: string;
+  }>;
+}
+
+function isTool(tool: ToolDefinition | undefined): tool is ToolDefinition {
+  return Boolean(tool);
+}
+
+export function generateStaticParams() {
+  return BLOG_ARTICLES.map((article) => ({ slug: article.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: BlogArticlePageProps): Promise<Metadata> {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: 'blog' });
+  const article = getBlogArticle(slug);
+
+  if (!article) {
+    return {
+      title: t('notFoundTitle'),
+    };
+  }
+
+  return buildArticleMetadata(article);
+}
+
+export default async function BlogArticlePage({ params }: BlogArticlePageProps) {
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('blog');
+  const article = getBlogArticle(slug);
+
+  if (!article) notFound();
+
+  const relatedTools = article.featuredToolSlugs
+    .map((toolSlug) => getToolBySlug(toolSlug))
+    .filter(isTool);
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: t('breadcrumb'), url: '/blog' },
+    { name: article.title, url: `/blog/${article.slug}` },
+  ]);
+  const articleSchema = buildBlogPostingSchema(article);
+  const faqSchema = buildFaqPageSchema(article.faq);
+
+  return (
+    <main className="min-h-screen bg-porcelain text-ink">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqSchema) }}
+      />
+      <Container className="grid gap-7 py-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <article className="min-w-0">
+          <nav aria-label="Breadcrumb" className="text-sm font-semibold text-neutral-600">
+            <Link className="hover:text-brand-700" href="/blog">
+              {t('breadcrumb')}
+            </Link>
+            <span aria-hidden="true" className="px-2 text-neutral-400">
+              /
+            </span>
+            <span className="text-ink">{article.title}</span>
+          </nav>
+
+          <header className="mt-5 border-b border-neutral-200 pb-7">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant={article.category === 'AI Workflow' ? 'ai' : 'default'}>
+                {article.category}
+              </Badge>
+              <span className="inline-flex min-h-8 items-center gap-2 rounded-lg border border-neutral-200 bg-white px-3 text-sm font-semibold text-neutral-600">
+                <Clock aria-hidden="true" size={15} strokeWidth={2} />
+                {article.readTime}
+              </span>
+            </div>
+            <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-[44px] text-ink">
+              {article.title}
+            </h1>
+            <p className="mt-3 max-w-3xl text-base leading-6 text-neutral-600">
+              {article.description}
+            </p>
+            <p className="mt-4 text-sm font-semibold text-neutral-500">
+              {t('by', { author: article.author })} / {t('updated')}{' '}
+              <time dateTime={article.updatedAt}>{article.updatedAt}</time>
+            </p>
+          </header>
+
+          <div className="mt-7 space-y-7">
+            {article.sections.map((section) => (
+              <section key={section.heading}>
+                <h2 className="text-2xl font-bold leading-8 text-ink">{section.heading}</h2>
+                <p className="mt-3 text-base leading-7 text-neutral-600">{section.body}</p>
+              </section>
+            ))}
+          </div>
+
+          <section className="mt-8 rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
+            <h2 className="text-2xl font-bold leading-8 text-ink">{t('faqTitle')}</h2>
+            <div className="mt-4 grid gap-4">
+              {article.faq.map((faq) => (
+                <div key={faq.question}>
+                  <h3 className="text-sm font-bold text-ink">{faq.question}</h3>
+                  <p className="mt-1 text-sm leading-5 text-neutral-600">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </article>
+
+        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+          <Link
+            href="/blog"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 text-sm font-bold text-neutral-700 shadow-sm hover:border-brand-500 hover:text-ink"
+          >
+            <ArrowLeft aria-hidden="true" size={16} strokeWidth={2} />
+            {t('backToBlog')}
+          </Link>
+
+          <section aria-label={t('relatedTools')} className="grid gap-3">
+            <h2 className="text-xl font-bold leading-7 text-ink">{t('relatedTools')}</h2>
+            {relatedTools.map((tool) => (
+              <ToolCard key={tool.slug} tool={tool} />
+            ))}
+          </section>
+        </aside>
+      </Container>
+    </main>
+  );
+}

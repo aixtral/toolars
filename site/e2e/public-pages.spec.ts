@@ -4,12 +4,17 @@ const publicPages = [
   {
     path: '/',
     heading: /search 73 calculators and ai tools/i,
-    checks: [/Recent Tools/i, /Favorites/i, /Quick Actions/i],
+    // v1: "Recent Tools"/"Favorites" replaced by the localStorage-backed
+    // "Recently saved" surface (SavedToolsCard).
+    checks: [/Recently saved/i, /Quick Actions/i, /Comparison mode/i],
   },
   {
     path: '/tools',
     heading: /all tools directory/i,
-    checks: [/Favorites and Recently Used/i, /Health & Wellness/i, /Mortgage Calculator/i],
+    // /tools shows the first 12 tools from ALL_TOOLS (BMI is index 5); the
+    // previous "Mortgage Calculator" check was pre-existing dead — mortgage
+    // sits at index ~50 and never appears in the slice.
+    checks: [/Recently saved/i, /Health & Wellness/i, /BMI Calculator/i],
   },
   {
     path: '/categories/health',

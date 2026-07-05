@@ -82,8 +82,20 @@ describe('calculator engine registry', () => {
     if (result.ok) return;
 
     expect(result.errors).toEqual([
-      { field: 'heightCm', message: 'Height must be greater than 0.' },
-      { field: 'weightKg', message: 'Weight must be greater than 0.' },
+      {
+        field: 'heightCm',
+        message: 'Height must be greater than 0.',
+        code: 'greaterThan',
+        label: 'Height',
+        bound: 0,
+      },
+      {
+        field: 'weightKg',
+        message: 'Weight must be greater than 0.',
+        code: 'greaterThan',
+        label: 'Weight',
+        bound: 0,
+      },
     ]);
   });
 });

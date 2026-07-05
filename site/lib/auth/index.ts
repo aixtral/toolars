@@ -1,19 +1,27 @@
 import { isPlanId } from '@/lib/plans';
 import type { PlanId } from '@/lib/plans';
 
-export interface ToolarsSession {
-  userId: string;
-  email: string;
-  planId: PlanId;
-  isAuthenticated: true;
-}
+export type { ToolarsSession } from './session';
+export { getSession } from './session';
 
-export function createPreviewSession(planId: PlanId = 'pro'): ToolarsSession {
+/**
+ * Development-only preview session backdoor.
+ *
+ * Lets you exercise the AI workspace UI without registering during local dev.
+ * In production (NODE_ENV === 'production' without TOOLARS_ENABLE_PREVIEW_AUTH)
+ * these helpers always return null — only real Supabase sessions work.
+ *
+ * Phase-four migration: Server Components and Route Handlers should call
+ * `getSession()` from this module instead. The preview helpers remain only for
+ * the dev backdoor and are not a security boundary.
+ */
+
+function createPreviewSession(planId: PlanId = 'pro') {
   return {
     userId: `preview-${planId}-user`,
     email: `${planId}@preview.toolars.test`,
     planId,
-    isAuthenticated: true,
+    isAuthenticated: true as const,
   };
 }
 
@@ -22,24 +30,21 @@ function planFromPreview(value: string | undefined) {
   return isPlanId(value) ? value : undefined;
 }
 
-function previewAuthEnabled() {
+export function previewAuthEnabled() {
   return (
     process.env.NODE_ENV !== 'production' ||
     process.env.TOOLARS_ENABLE_PREVIEW_AUTH === 'true'
   );
 }
 
-export function getSessionFromSearchParams(searchParams: Record<string, string | undefined>) {
+/**
+ * Dev backdoor: `?preview=pro` query param synthesizes a session. Returns null
+ * in production. Prefer `getSession()` for real auth.
+ */
+export function getPreviewSessionFromSearchParams(
+  searchParams: Record<string, string | undefined>,
+) {
   if (!previewAuthEnabled()) return null;
-
   const planId = planFromPreview(searchParams.preview);
   return planId ? createPreviewSession(planId) : null;
-}
-
-export function getSessionFromRequest(request: Request) {
-  if (!previewAuthEnabled()) return null;
-  if (request.headers.get('x-toolars-preview-user') !== 'true') return null;
-
-  const requestedPlan = request.headers.get('x-toolars-preview-plan');
-  return createPreviewSession(isPlanId(requestedPlan) ? requestedPlan : 'pro');
 }

@@ -10,6 +10,7 @@ import {
   categoryCards,
   directoryTabs,
 } from '@/lib/discovery';
+import { buildAlternates } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -21,6 +22,7 @@ export async function generateMetadata({
   return {
     title: t('directoryHeading'),
     description: t('directoryDescription'),
+    alternates: buildAlternates('/tools'),
   };
 }
 

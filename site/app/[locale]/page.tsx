@@ -5,6 +5,7 @@ import { SavedToolsCard } from '@/components/discovery';
 import { CategoryCard, ToolCard } from '@/components/tools';
 import { Badge, Card, CardContent, CardHeader, CardTitle, Input } from '@/components/ui';
 import { categoryCards, featuredTools } from '@/lib/discovery';
+import { buildAlternates } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -16,6 +17,7 @@ export async function generateMetadata({
   return {
     title: t('title'),
     description: t('description'),
+    alternates: buildAlternates('/'),
   };
 }
 

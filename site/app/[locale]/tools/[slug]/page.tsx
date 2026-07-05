@@ -11,6 +11,7 @@ import { ALL_TOOLS, getPopularTools, getToolBySlug } from '@/data/tools';
 import type { CalculatorSlug } from '@/lib/calculators';
 import { getCalculatorEngine } from '@/lib/calculators';
 import {
+  buildAlternates,
   buildBreadcrumbSchema,
   buildFaqPageSchema,
   buildWebApplicationSchema,
@@ -72,9 +73,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     title: tool.seo.title,
     description: tool.seo.description,
     keywords: tool.seo.keywords,
-    alternates: {
-      canonical: tool.route,
-    },
+    alternates: buildAlternates(`/tools/${slug}`),
   };
 }
 

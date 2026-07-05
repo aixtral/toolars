@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import HomePage from '@/app/page';
+import HomePage from '@/app/[locale]/page';
 
 describe('HomePage', () => {
-  it('renders the toolars search-first dashboard shell', () => {
-    render(<HomePage />);
+  it('renders the toolars search-first dashboard shell', async () => {
+    render(await HomePage({ params: Promise.resolve({ locale: 'en' }) }));
 
     expect(
       screen.getByRole('region', { name: /tool discovery dashboard/i }),
@@ -21,11 +21,13 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('heading', { name: 'Popular Tools' }),
     ).toBeInTheDocument();
+    // The "recently saved" surface is a client component reading localStorage;
+    // on first render it shows the empty-state CTA rather than a hard-coded list.
     expect(
-      screen.getByRole('heading', { name: /continue where you left off/i }),
+      screen.getByRole('heading', { name: /recently saved/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /favorites/i }),
+      screen.getByText(/no saved results yet/i),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('region', { name: /comparison mode/i }),

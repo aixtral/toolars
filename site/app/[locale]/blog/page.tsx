@@ -6,6 +6,7 @@ import { Badge, Card, CardContent, CardHeader, CardTitle, Input } from '@/compon
 import { BLOG_ARTICLES } from '@/data/blog';
 import type { ToolDefinition } from '@/data/types';
 import { getToolBySlug } from '@/data/tools';
+import { buildBlogMetadata } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -14,7 +15,10 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'blog' });
+  // Preserve the translated title/description but inherit the canonical +
+  // alternate-language links from the shared SEO builder.
   return {
+    ...buildBlogMetadata(),
     title: t('listHeading'),
     description: t('listDescription'),
   };

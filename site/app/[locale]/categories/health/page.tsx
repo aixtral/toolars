@@ -4,6 +4,7 @@ import { Container } from '@/components/layout';
 import { ToolCard } from '@/components/tools';
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui';
 import { healthCategories, toolsForCategories } from '@/lib/discovery';
+import { buildAlternates } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -15,6 +16,7 @@ export async function generateMetadata({
   return {
     title: t('healthHeading'),
     description: t('healthDescription'),
+    alternates: buildAlternates('/categories/health'),
   };
 }
 

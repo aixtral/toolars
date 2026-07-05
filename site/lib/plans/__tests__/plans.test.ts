@@ -18,18 +18,23 @@ describe('plan gates', () => {
     expect(canUsePlanFeature('team', 'workspace.admin')).toBe(true);
   });
 
-  it('blocks limited plans with an upgrade path when AI limits are exceeded', () => {
-    const decision = evaluateAiGenerationAccess({
+  it('keeps AI generation free for every plan during v1 (paywall disabled)', () => {
+    // v1 decision: AI is free for all logged-in users. The paywall is
+    // disabled at the access-evaluation layer; plan feature flags below
+    // remain as data so phase-two can re-enable gating without API churn.
+    const freeDecision = evaluateAiGenerationAccess({
       planId: 'free',
-      selectedPlatformCount: 2,
+      selectedPlatformCount: 14,
+      usedGenerations: 999,
+    });
+    expect(freeDecision.allowed).toBe(true);
+
+    const proDecision = evaluateAiGenerationAccess({
+      planId: 'pro',
+      selectedPlatformCount: 14,
       usedGenerations: 0,
     });
-
-    expect(decision).toEqual({
-      allowed: false,
-      reason: 'AI generation requires a Pro subscription.',
-      upgradeLabel: 'Upgrade to Pro',
-    });
+    expect(proDecision.allowed).toBe(true);
   });
 
   it('allows Pro users within generation and platform limits', () => {
@@ -41,6 +46,5 @@ describe('plan gates', () => {
     });
 
     expect(decision.allowed).toBe(true);
-    expect(decision.reason).toBe('Pro AI access active.');
   });
 });

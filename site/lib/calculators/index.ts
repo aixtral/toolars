@@ -15,9 +15,22 @@ export interface CalculatorInputDefinition {
   max?: number;
 }
 
+export type CalculatorValidationErrorCode =
+  | 'invalidNumber'
+  | 'greaterThan'
+  | 'atLeast'
+  | 'atMost';
+
 export interface CalculatorValidationError {
   field: string;
+  /** English fallback message; rendering layer prefers i18n when code is set. */
   message: string;
+  /** When set, the renderer translates via calculator.errors.{code} with params. */
+  code?: CalculatorValidationErrorCode;
+  /** Field name passed to the translator for label interpolation. */
+  label?: string;
+  /** Numeric bound involved in the validation (min/max). */
+  bound?: number;
 }
 
 export interface CalculatorSuccess {
@@ -81,7 +94,12 @@ function readNumber(
   const numberValue = typeof value === 'number' ? value : Number(value);
 
   if (!Number.isFinite(numberValue)) {
-    errors.push({ field, message: `${options.label} must be a valid number.` });
+    errors.push({
+      field,
+      message: `${options.label} must be a valid number.`,
+      code: 'invalidNumber',
+      label: options.label,
+    });
     return options.defaultValue;
   }
 
@@ -89,15 +107,30 @@ function readNumber(
     errors.push({
       field,
       message: `${options.label} must be greater than ${options.minExclusive}.`,
+      code: 'greaterThan',
+      label: options.label,
+      bound: options.minExclusive,
     });
   }
 
   if (options.min !== undefined && numberValue < options.min) {
-    errors.push({ field, message: `${options.label} must be at least ${options.min}.` });
+    errors.push({
+      field,
+      message: `${options.label} must be at least ${options.min}.`,
+      code: 'atLeast',
+      label: options.label,
+      bound: options.min,
+    });
   }
 
   if (options.max !== undefined && numberValue > options.max) {
-    errors.push({ field, message: `${options.label} must be at most ${options.max}.` });
+    errors.push({
+      field,
+      message: `${options.label} must be at most ${options.max}.`,
+      code: 'atMost',
+      label: options.label,
+      bound: options.max,
+    });
   }
 
   return numberValue;

@@ -10,6 +10,7 @@ import {
   Square,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import {
   AI_BRAND_VOICES,
   AI_MODELS,
@@ -26,9 +27,7 @@ import type {
   RepurposeStatus,
   RepurposeTone,
 } from '@/lib/ai';
-import { UpgradePrompt } from '@/components/billing';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input } from '@/components/ui';
-import { evaluateAiGenerationAccess } from '@/lib/plans';
 import type { PlanId } from '@/lib/plans';
 
 const defaultPlatforms: RepurposePlatform[] = ['twitter-thread', 'linkedin-post'];
@@ -48,17 +47,20 @@ function initialRequest(): RepurposeRequest {
   };
 }
 
-function emptyOutput(platform: RepurposePlatform, tone: RepurposeTone): RepurposeOutput {
+function emptyOutput(
+  platform: RepurposePlatform,
+  tone: RepurposeTone,
+  draftContent: string,
+): RepurposeOutput {
   const definition = AI_PLATFORMS.find((item) => item.id === platform);
-  const content = `Drafting ${definition?.label ?? platform}...`;
 
   return {
     id: `${platform}-draft`,
     platform,
     platformLabel: definition?.label ?? platform,
     tone,
-    content,
-    wordCount: wordCount(content),
+    content: draftContent,
+    wordCount: wordCount(draftContent),
     status: 'streaming',
     createdAt: new Date().toISOString(),
   };
@@ -69,6 +71,7 @@ interface RepurposeWorkspaceProps {
 }
 
 export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) {
+  const t = useTranslations('repurpose');
   const [sourceType, setSourceType] = useState<RepurposeSourceType>('text');
   const [sourceValue, setSourceValue] = useState('');
   const [platforms, setPlatforms] = useState<RepurposePlatform[]>(defaultPlatforms);
@@ -78,8 +81,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
   const [status, setStatus] = useState<RepurposeStatus>('draft');
   const [outputs, setOutputs] = useState<RepurposeOutput[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
-  const [message, setMessage] = useState('Ready to generate.');
-  const [upgradeReason, setUpgradeReason] = useState('');
+  const [message, setMessage] = useState(t('ready'));
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
 
@@ -145,42 +147,35 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
       if (completed) {
         clearStream();
         setStatus('completed');
-        setMessage('Completed. Outputs are ready to copy, save, or regenerate.');
+        setMessage(t('completed'));
       }
     }, 90);
   }
 
   async function generate(request: RepurposeRequest = selectedRequest) {
-    setUpgradeReason('');
     const validationErrors = validateRepurposeRequest(request);
     setErrors(validationErrors);
 
     if (validationErrors.length > 0) {
       setStatus('failed');
-      setMessage('Check the highlighted AI inputs.');
+      setMessage(t('checkInputs'));
       return;
     }
 
-    const gate = evaluateAiGenerationAccess({
-      planId,
-      selectedPlatformCount: request.platforms.length,
-      usedGenerations: 0,
-    });
-
-    if (!gate.allowed) {
-      setStatus('failed');
-      setUpgradeReason(gate.reason);
-      setMessage(gate.reason);
-      return;
-    }
-
+    // v1: AI generation is free for all logged-in users; no client-side paywall.
     clearStream();
     controllerRef.current?.abort();
     controllerRef.current = new AbortController();
 
     setStatus('streaming');
-    setMessage('Streaming outputs...');
-    setOutputs(request.platforms.map((platform) => emptyOutput(platform, request.tone)));
+    setMessage(t('streaming'));
+    setOutputs(
+      request.platforms.map((platform) => {
+        const definition = AI_PLATFORMS.find((item) => item.id === platform);
+        const draftContent = t('drafting', { label: definition?.label ?? platform });
+        return emptyOutput(platform, request.tone, draftContent);
+      }),
+    );
 
     try {
       const response = await fetch('/api/ai/repurpose', {
@@ -196,9 +191,8 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
 
       if (!response.ok) {
         const payload = (await response.json()) as { error?: string; errors?: string[] };
-        const nextErrors = payload.errors ?? [payload.error ?? 'Generation failed.'];
+        const nextErrors = payload.errors ?? [payload.error ?? t('failed')];
         setErrors(nextErrors);
-        setUpgradeReason(response.status === 402 ? nextErrors.join(' ') : '');
         setStatus('failed');
         setMessage(nextErrors.join(' '));
         return;
@@ -209,7 +203,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
     } catch (error) {
       if ((error as Error).name === 'AbortError') return;
       setStatus('failed');
-      setMessage('Generation failed. Try again.');
+      setMessage(t('failedRetry'));
     }
   }
 
@@ -223,16 +217,16 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
       })),
     );
     setStatus('canceled');
-    setMessage('Canceled. Partial output preserved.');
+    setMessage(t('canceled'));
   }
 
   function saveOutput(platformLabel: string) {
-    setMessage(`${platformLabel} saved to local draft history.`);
+    setMessage(t('savedHistory', { platformLabel }));
   }
 
   function copyOutput(output: RepurposeOutput) {
     void navigator.clipboard?.writeText(output.content).catch(() => undefined);
-    setMessage(`${output.platformLabel} copied.`);
+    setMessage(t('copied', { platformLabel: output.platformLabel }));
   }
 
   return (
@@ -240,26 +234,23 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
       <Card className="overflow-hidden">
         <CardHeader className="border-b border-neutral-200 bg-neutral-50">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="ai">AI workspace</Badge>
-            <Badge>Account required</Badge>
-            <Badge variant="warning">Pro preview</Badge>
-            <Badge>{planId} plan</Badge>
+            <Badge variant="ai">{t('badgeWorkspace')}</Badge>
+            <Badge>{t('badgePlan', { planId })}</Badge>
           </div>
-          <CardTitle className="text-2xl leading-8">Source and controls</CardTitle>
+          <CardTitle className="text-2xl leading-8">{t('cardTitle')}</CardTitle>
           <p className="text-sm leading-5 text-neutral-600">
-            Repurpose a URL or source text into platform-native drafts with tone,
-            brand voice, model, and cancellation controls.
+            {t('cardDescription')}
           </p>
         </CardHeader>
         <CardContent className="space-y-5 p-5">
-          <div className="grid grid-cols-2 gap-2" aria-label="Source type">
+          <div className="grid grid-cols-2 gap-2" aria-label={t('sourceTypeLabel')}>
             <Button
               type="button"
               variant={sourceType === 'text' ? 'primary' : 'secondary'}
               onClick={() => setSourceType('text')}
             >
               <FileText aria-hidden="true" size={18} strokeWidth={2} />
-              Text
+              {t('sourceText')}
             </Button>
             <Button
               type="button"
@@ -267,7 +258,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
               onClick={() => setSourceType('url')}
             >
               <Globe2 aria-hidden="true" size={18} strokeWidth={2} />
-              URL
+              {t('sourceUrl')}
             </Button>
           </div>
 
@@ -275,11 +266,11 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             {sourceType === 'text' ? (
               <>
                 <label className="text-sm font-semibold text-neutral-700" htmlFor="source-text">
-                  Source text
+                  {t('sourceTextLabel')}
                 </label>
                 <textarea
                   id="source-text"
-                  aria-label="Source text"
+                  aria-label={t('sourceTextLabel')}
                   className="min-h-36 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-base text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                   value={sourceValue}
                   onChange={(event) => setSourceValue(event.target.value)}
@@ -288,11 +279,11 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             ) : (
               <>
                 <label className="text-sm font-semibold text-neutral-700" htmlFor="source-url">
-                  Source URL
+                  {t('sourceUrlLabel')}
                 </label>
                 <Input
                   id="source-url"
-                  aria-label="Source URL"
+                  aria-label={t('sourceUrlLabel')}
                   type="url"
                   placeholder="https://example.com/article"
                   value={sourceValue}
@@ -303,7 +294,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
           </div>
 
           <fieldset className="grid gap-3">
-            <legend className="text-sm font-semibold text-neutral-700">Platforms</legend>
+            <legend className="text-sm font-semibold text-neutral-700">{t('platforms')}</legend>
             <div className="grid max-h-64 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-1">
               {AI_PLATFORMS.map((platform) => (
                 <label
@@ -323,7 +314,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
 
           <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-1">
             <label className="grid gap-2 text-sm font-semibold text-neutral-700">
-              Tone
+              {t('tone')}
               <select
                 className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-base text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                 value={tone}
@@ -337,7 +328,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
               </select>
             </label>
             <label className="grid gap-2 text-sm font-semibold text-neutral-700">
-              Brand voice
+              {t('brandVoice')}
               <select
                 className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-base text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                 value={brandVoiceId}
@@ -351,7 +342,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
               </select>
             </label>
             <label className="grid gap-2 text-sm font-semibold text-neutral-700">
-              Model
+              {t('model')}
               <select
                 className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-base text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                 value={model}
@@ -379,12 +370,12 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
             {status === 'streaming' ? (
               <Button type="button" variant="danger" onClick={cancelGeneration}>
                 <Square aria-hidden="true" size={18} strokeWidth={2} />
-                Cancel
+                {t('cancel')}
               </Button>
             ) : (
               <Button type="button" onClick={() => void generate()}>
                 <Play aria-hidden="true" size={18} strokeWidth={2} />
-                Generate
+                {t('generate')}
               </Button>
             )}
             <Button
@@ -401,27 +392,23 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
                 setOutputs([]);
                 setErrors([]);
                 setStatus('draft');
-                setMessage('Ready to generate.');
+                setMessage(t('ready'));
               }}
             >
-              Reset
+              {t('reset')}
             </Button>
           </div>
         </CardContent>
       </Card>
 
       <section className="space-y-5">
-        {upgradeReason ? (
-          <UpgradePrompt feature="AI generation" reason={upgradeReason} />
-        ) : null}
-
         <Card>
           <CardHeader className="border-b border-neutral-200">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <CardTitle className="text-2xl leading-8">Output variants</CardTitle>
+                <CardTitle className="text-2xl leading-8">{t('outputVariants')}</CardTitle>
                 <p className="mt-1 text-sm leading-5 text-neutral-600">
-                  Streamed drafts stay visible when canceled.
+                  {t('outputDescription')}
                 </p>
               </div>
               <Badge variant={status === 'failed' ? 'warning' : status === 'completed' ? 'success' : 'ai'}>
@@ -434,14 +421,14 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
           </CardHeader>
           <CardContent className="p-5">
             <div
-              aria-label="Generated outputs"
+              aria-label={t('generatedOutputsLabel')}
               aria-live="polite"
               className="grid gap-4 lg:grid-cols-2"
               role="region"
             >
               {outputs.length === 0 ? (
                 <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-5 text-sm font-semibold text-neutral-600">
-                  Generated platform drafts will appear here.
+                  {t('outputPlaceholder')}
                 </div>
               ) : (
                 outputs.map((output) => (
@@ -453,7 +440,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
                       <div>
                         <h3 className="text-base font-bold text-ink">{output.platformLabel}</h3>
                         <p className="text-xs font-semibold uppercase text-neutral-500">
-                          {output.tone} tone
+                          {t('toneSuffix', { tone: output.tone })}
                         </p>
                       </div>
                       <Badge variant={output.status === 'canceled' ? 'warning' : 'ai'}>
@@ -465,16 +452,16 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
                     </p>
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                       <span className="text-xs font-semibold text-neutral-500">
-                        {output.wordCount} words
+                        {t('wordCount', { count: output.wordCount })}
                       </span>
                       <div className="flex flex-wrap gap-2">
                         <Button type="button" size="sm" variant="secondary" onClick={() => copyOutput(output)}>
                           <Copy aria-hidden="true" size={16} strokeWidth={2} />
-                          Copy
+                          {t('copy')}
                         </Button>
                         <Button type="button" size="sm" variant="secondary" onClick={() => saveOutput(output.platformLabel)}>
                           <Save aria-hidden="true" size={16} strokeWidth={2} />
-                          Save
+                          {t('save')}
                         </Button>
                         <Button
                           type="button"
@@ -488,7 +475,7 @@ export function RepurposeWorkspace({ planId = 'pro' }: RepurposeWorkspaceProps) 
                           }
                         >
                           <RefreshCw aria-hidden="true" size={16} strokeWidth={2} />
-                          Regenerate
+                          {t('regenerate')}
                         </Button>
                       </div>
                     </div>

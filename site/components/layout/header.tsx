@@ -1,14 +1,17 @@
 'use client';
 
-import Link from 'next/link';
-import { ChevronDown, CircleUser, Globe, Menu, Search } from 'lucide-react';
+import { ChevronDown, Menu, Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { CommandPalette } from '@/components/search';
-import { MegaMenu, MobileDrawer } from '@/components/navigation';
+import { MegaMenu, MobileDrawer, LanguageSwitcher } from '@/components/navigation';
+import { UserMenu } from '@/components/layout/user-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export function Header() {
+  const t = useTranslations('nav');
   const [menuOpen, setMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
@@ -59,7 +62,7 @@ export function Header() {
             className="col-start-1 row-start-1 lg:hidden"
             variant="ghost"
             size="icon"
-            aria-label="Open navigation menu"
+            aria-label={t('openNavigation')}
             onClick={() => setDrawerOpen(true)}
           >
             <Menu aria-hidden="true" size={20} strokeWidth={2} />
@@ -68,20 +71,20 @@ export function Header() {
           <Link
             href="/"
             className="col-start-2 row-start-1 justify-self-center text-2xl font-semibold text-ink lg:col-start-1 lg:justify-self-start"
-            aria-label="toolars"
+            aria-label={t('brand')}
           >
-            toolars
+            {t('brand')}
           </Link>
 
           <div className="col-start-2 row-start-1 hidden w-full justify-self-center lg:block">
             <label className="sr-only" htmlFor="global-search">
-              Search tools
+              {t('searchTools')}
             </label>
             <Input
               id="global-search"
               type="search"
-              aria-label="Search tools"
-              placeholder="Search 73 calculators and AI tools..."
+              aria-label={t('searchTools')}
+              placeholder={t('searchPlaceholder')}
               readOnly
               onFocus={() => setCommandOpen(true)}
               onClick={() => setCommandOpen(true)}
@@ -94,40 +97,25 @@ export function Header() {
               size="sm"
               aria-expanded={menuOpen}
               aria-controls="tools-mega-menu"
-              aria-label="Open tools menu"
+              aria-label={t('openToolsMenu')}
               onClick={() => setMenuOpen((current) => !current)}
             >
-              Tools
+              {t('toolsMenu')}
               <ChevronDown aria-hidden="true" size={16} strokeWidth={2} />
             </Button>
             <Link className="min-h-11 px-1 py-3 text-sm font-semibold text-neutral-700 hover:text-ink" href="/ai">
-              AI Tools
+              {t('aiTools')}
             </Link>
             <Link className="min-h-11 px-1 py-3 text-sm font-semibold text-neutral-700 hover:text-ink" href="/blog">
-              Blog
+              {t('blog')}
             </Link>
-            <Link
-              className="min-h-11 px-1 py-3 text-sm font-semibold text-neutral-700 hover:text-ink"
-              href="/pricing"
-            >
-              Pricing
-            </Link>
-            <Link
-              className="inline-flex min-h-11 items-center gap-1 px-1 py-3 text-sm font-semibold text-neutral-700 hover:text-ink"
-              href="/en"
-              aria-label="Language English"
-            >
-              <Globe aria-hidden="true" size={16} strokeWidth={2} />
-              EN
-            </Link>
-            <Link className="min-h-11 px-1 py-3 text-sm font-semibold text-neutral-700 hover:text-ink" href="/login">
-              Sign in
-            </Link>
+            <LanguageSwitcher />
+            <UserMenu />
             <Link
               className="min-h-11 rounded-lg bg-brand-500 px-4 py-3 text-sm font-semibold text-white hover:bg-brand-600"
               href="/app/repurpose"
             >
-              Open app
+              {t('openApp')}
             </Link>
             {menuOpen ? <MegaMenu /> : null}
           </div>
@@ -137,17 +125,12 @@ export function Header() {
               variant="secondary"
               size="icon"
               onClick={() => setCommandOpen(true)}
-              aria-label="Open search"
+              aria-label={t('openSearch')}
             >
               <Search aria-hidden="true" size={20} strokeWidth={2} />
             </Button>
-            <Link
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-transparent text-neutral-700 hover:bg-neutral-100 hover:text-ink"
-              href="/login"
-              aria-label="Sign in"
-            >
-              <CircleUser aria-hidden="true" size={20} strokeWidth={2} />
-            </Link>
+            <LanguageSwitcher compact />
+            <UserMenu showLabel={false} />
           </div>
         </div>
       </header>

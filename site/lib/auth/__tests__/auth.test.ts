@@ -1,61 +1,55 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import {
-  createPreviewSession,
-  getSessionFromRequest,
-  getSessionFromSearchParams,
-} from '@/lib/auth';
+import { getPreviewSessionFromSearchParams, previewAuthEnabled } from '@/lib/auth';
 
-describe('auth preview sessions', () => {
+// Mock the Supabase server client so getSession() doesn't require a real project.
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(async () => ({
+    auth: {
+      getUser: vi.fn(async () => ({ data: { user: null } })),
+    },
+  })),
+}));
+
+describe('preview auth backdoor (dev-only)', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
   });
 
   it('returns null when no account context is present', () => {
-    expect(getSessionFromSearchParams({})).toBeNull();
-    expect(getSessionFromRequest(new Request('http://127.0.0.1/api'))).toBeNull();
+    expect(getPreviewSessionFromSearchParams({})).toBeNull();
   });
 
-  it('maps preview query values to plan-aware sessions', () => {
-    expect(getSessionFromSearchParams({ preview: 'free' })).toMatchObject({
+  it('maps preview query values to plan-aware sessions in dev', () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    expect(getPreviewSessionFromSearchParams({ preview: 'free' })).toMatchObject({
       userId: 'preview-free-user',
       planId: 'free',
       isAuthenticated: true,
     });
-    expect(getSessionFromSearchParams({ preview: '1' })).toMatchObject({
+    expect(getPreviewSessionFromSearchParams({ preview: '1' })).toMatchObject({
       planId: 'pro',
     });
   });
 
-  it('reads preview account headers for route handlers', () => {
-    const request = new Request('http://127.0.0.1/api', {
-      headers: {
-        'x-toolars-preview-user': 'true',
-        'x-toolars-preview-plan': 'team',
-      },
-    });
-
-    expect(getSessionFromRequest(request)).toEqual(createPreviewSession('team'));
-  });
-
-  it('does not trust preview sessions in production unless explicitly enabled', () => {
+  it('disables the preview backdoor in production unless explicitly enabled', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', '');
 
-    const request = new Request('http://127.0.0.1/api', {
-      headers: {
-        'x-toolars-preview-user': 'true',
-        'x-toolars-preview-plan': 'pro',
-      },
-    });
-
-    expect(getSessionFromSearchParams({ preview: 'pro' })).toBeNull();
-    expect(getSessionFromRequest(request)).toBeNull();
+    expect(previewAuthEnabled()).toBe(false);
+    expect(getPreviewSessionFromSearchParams({ preview: 'pro' })).toBeNull();
 
     vi.stubEnv('TOOLARS_ENABLE_PREVIEW_AUTH', 'true');
-
-    expect(getSessionFromSearchParams({ preview: 'pro' })).toMatchObject({
+    expect(previewAuthEnabled()).toBe(true);
+    expect(getPreviewSessionFromSearchParams({ preview: 'pro' })).toMatchObject({
       planId: 'pro',
     });
-    expect(getSessionFromRequest(request)).toEqual(createPreviewSession('pro'));
+  });
+});
+
+describe('getSession', () => {
+  it('returns null when Supabase has no user', async () => {
+    const { getSession } = await import('@/lib/auth');
+    const session = await getSession();
+    expect(session).toBeNull();
   });
 });

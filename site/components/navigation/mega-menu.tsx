@@ -1,32 +1,37 @@
+'use client';
+
 import { getPopularTools } from '@/data/tools';
 import { Badge } from '@/components/ui/badge';
 import { Command } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { categoryCards } from '@/lib/discovery';
 
-const solutions = [
-  { title: 'Fast Calculator Lookup', href: '/tools' },
-  { title: 'Creator Repurposing', href: '/ai' },
-  { title: 'Personal Finance Planning', href: '/categories/finance' },
-];
-
-const resources = [
-  { title: 'Guides', href: '/blog' },
-  { title: 'Compare Saved Results', href: '/compare' },
-  { title: 'Pricing', href: '/pricing' },
-];
-
 export function MegaMenu() {
+  const t = useTranslations('nav');
   const popularTools = getPopularTools(5);
   const categories = categoryCards();
+
+  const solutions = [
+    { title: t('solutionsFastLookup'), href: '/tools' },
+    { title: t('solutionsCreator'), href: '/ai' },
+    { title: t('solutionsFinance'), href: '/categories/finance' },
+  ];
+
+  const resources = [
+    { title: t('resourcesGuides'), href: '/blog' },
+    // TODO(phase-two): re-enable once /compare and /pricing routes ship.
+    // { title: 'Compare Saved Results', href: '/compare' },
+    // { title: 'Pricing', href: '/pricing' },
+  ];
 
   return (
     <div
       role="region"
-      aria-label="Tools menu"
+      aria-label={t('toolsMenu')}
       className="absolute left-1/2 top-full z-40 mt-3 grid w-[min(920px,calc(100vw-32px))] -translate-x-1/2 gap-5 rounded-xl border border-neutral-200 bg-white p-5 shadow-lg md:grid-cols-[1.2fr_1fr_1fr]"
     >
       <section>
-        <h2 className="text-lg font-semibold text-ink">Popular Calculators</h2>
+        <h2 className="text-lg font-semibold text-ink">{t('popularCalculators')}</h2>
         <div className="mt-3 space-y-2">
           {popularTools.map((tool) => (
             <a
@@ -49,7 +54,7 @@ export function MegaMenu() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold text-ink">Categories</h2>
+        <h2 className="text-lg font-semibold text-ink">{t('categories')}</h2>
         <div className="mt-3 grid gap-2">
           {categories.map((category) => (
             <a
@@ -65,7 +70,7 @@ export function MegaMenu() {
 
       <div className="grid gap-4">
         <section>
-          <h2 className="text-lg font-semibold text-ink">Solutions</h2>
+          <h2 className="text-lg font-semibold text-ink">{t('solutions')}</h2>
           <div className="mt-3 space-y-2">
             {solutions.map((solution) => (
               <a
@@ -80,7 +85,7 @@ export function MegaMenu() {
         </section>
 
         <section>
-          <h2 className="text-lg font-semibold text-ink">Resources</h2>
+          <h2 className="text-lg font-semibold text-ink">{t('resources')}</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             {resources.map((resource) => (
               <a key={resource.href} href={resource.href}>
@@ -91,11 +96,11 @@ export function MegaMenu() {
         </section>
 
         <section className="rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-600">
-          <h2 className="font-semibold text-ink">Recent tools</h2>
-          <p className="mt-1">Recent tools appear here after you use calculators.</p>
+          <h2 className="font-semibold text-ink">{t('recentTools')}</h2>
+          <p className="mt-1">{t('recentToolsHint')}</p>
           <p className="mt-2 inline-flex items-center gap-2 font-semibold text-brand-700">
             <Command aria-hidden="true" size={16} strokeWidth={2} />
-            Press ⌘K to search anything
+            {t('searchAnything')}
           </p>
         </section>
       </div>

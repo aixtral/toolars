@@ -17,7 +17,7 @@ describe('Header navigation', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /open tools menu/i }));
 
-    const menu = screen.getByRole('region', { name: /tools menu/i });
+    const menu = screen.getByRole('region', { name: /^tools$/i });
     expect(within(menu).getByText('Popular Calculators')).toBeInTheDocument();
     expect(within(menu).getByText('Categories')).toBeInTheDocument();
     expect(within(menu).getByText('Solutions')).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('Header navigation', () => {
     expect(within(menu).getByText('Press ⌘K to search anything')).toBeInTheDocument();
 
     fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.queryByRole('region', { name: /tools menu/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: /^tools$/i })).not.toBeInTheDocument();
   });
 
   it('opens the mobile navigation drawer with account and directory links', async () => {
@@ -43,10 +43,14 @@ describe('Header navigation', () => {
       'href',
       '/ai',
     );
-    expect(within(drawer).getByRole('link', { name: 'Sign in' })).toHaveAttribute(
+    expect(within(drawer).getByRole('link', { name: 'Finance' })).toHaveAttribute(
       'href',
-      '/login',
+      '/categories/finance',
     );
+    // v1: Pricing and Sign-in links are intentionally removed until the
+    // /pricing and /login routes ship; assert they do not leak back.
+    expect(within(drawer).queryByRole('link', { name: /pricing/i })).toBeNull();
+    expect(within(drawer).queryByRole('link', { name: /^sign in$/i })).toBeNull();
   });
 });
 

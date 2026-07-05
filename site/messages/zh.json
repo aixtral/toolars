@@ -1,0 +1,1859 @@
+{
+  "metadata": {
+    "title": "toolars",
+    "description": "以搜索为先的计算器与 AI 内容工具。"
+  },
+  "common": {
+    "free": "免费",
+    "noLogin": "无需登录",
+    "localActions": "本地运算",
+    "freeCalculators": "免费计算器",
+    "localBrowserCalculations": "浏览器本地计算",
+    "noSignupForCalculators": "计算器无需注册",
+    "multilingualReady": "多语言支持",
+    "aiToolsRequireAccount": "AI 工具需要账号",
+    "calculators": "款计算器",
+    "aiSaaSTools": "AI SaaS 工具",
+    "ai": "AI"
+  },
+  "nav": {
+    "brand": "toolars",
+    "toolsMenu": "工具",
+    "openToolsMenu": "打开工具菜单",
+    "aiTools": "AI 工具",
+    "blog": "博客",
+    "signIn": "登录",
+    "openApp": "打开应用",
+    "openNavigation": "打开导航菜单",
+    "closeNavigation": "关闭导航菜单",
+    "openSearch": "打开搜索",
+    "searchTools": "搜索工具",
+    "searchPlaceholder": "搜索 73 款计算器和 AI 工具…",
+    "allTools": "全部工具",
+    "health": "健康",
+    "finance": "财务",
+    "popularCalculators": "热门计算器",
+    "categories": "分类",
+    "solutions": "方案",
+    "resources": "资源",
+    "recentTools": "最近使用",
+    "recentToolsHint": "使用计算器后，最近工具会显示在这里。",
+    "searchAnything": "按 ⌘K 搜索任何内容",
+    "solutionsFastLookup": "计算器快速查找",
+    "solutionsCreator": "内容创作再利用",
+    "solutionsFinance": "个人财务规划",
+    "resourcesGuides": "指南",
+    "languageSwitcher": "切换语言"
+  },
+  "home": {
+    "heroHeading": "搜索 73 款计算器和 AI 工具",
+    "heroDescription": "面向健康、财务、健康和内容工作流的搜索优先工具台。公开计算器无需注册即可使用。",
+    "popularTools": "热门工具",
+    "featuredAiEyebrow": "精选 AI 工具",
+    "featuredAiTitle": "AI 内容再利用",
+    "featuredAiBody": "将一个素材转化为帖子、邮件、文章和发布动态。",
+    "featuredAiLink": "查看 AI 工具",
+    "quickActions": "快捷操作",
+    "quickActionBmi": "计算 BMI",
+    "quickActionMortgage": "估算房贷",
+    "quickActionInterest": "比较利率",
+    "quickActionRepurpose": "内容再利用",
+    "continueHeading": "从上次继续",
+    "comparisonHeading": "对比模式",
+    "comparisonBody": "在本地对比已保存的计算器结果，让匿名计算保持私密，后续仅需为跨设备同步或高级导出升级。",
+    "comparisonCta": "浏览计算器",
+    "categoriesLabel": "工具分类",
+    "discoveryLabel": "工具发现面板",
+    "comparisonLabel": "对比模式",
+    "featuredLabel": "精选工具",
+    "previewAiDashboard": "AI 面板预览",
+    "previewAiDashboardBody": "用量、模型偏好和平台输出集中在一个账号工作区。",
+    "previewTemplates": "计算器模板",
+    "previewTemplatesBody": "共享的计算器布局保持公式、示例、FAQ 和相关工具的一致性。",
+    "previewAnalytics": "分析预览",
+    "previewAnalyticsBody": "Pro AI 工作区可追踪内容量、平台分布和已保存输出。"
+  },
+  "savedTools": {
+    "title": "最近保存",
+    "empty": "暂无保存结果。运行计算器并选择“保存结果”，即可在此快速访问（仅本设备）。",
+    "browseCta": "浏览计算器"
+  },
+  "search": {
+    "dialogLabel": "搜索工具",
+    "searchboxLabel": "搜索 73 款计算器和 AI 工具",
+    "resultsLabel": "搜索结果",
+    "generatedOutputs": "已生成的输出",
+    "tabAll": "全部",
+    "tabCalculators": "计算器",
+    "tabAi": "AI 工具",
+    "tabHealth": "健康",
+    "tabFinance": "财务",
+    "tabArticles": "文章",
+    "emptyTitle": "未找到结果",
+    "emptyBody": "没有找到与“{query}”相关的内容。",
+    "emptySuggestionSpell": "检查拼写或尝试其他关键词",
+    "emptySuggestionBrowse": "浏览全部计算器",
+    "emptySuggestionArticles": "搜索文章和指南",
+    "popularSearches": "热门搜索",
+    "shortcutsHeading": "键盘快捷键",
+    "shortcutsArrows": "方向键",
+    "shortcutsEnter": "回车",
+    "shortcutsCmd": "Cmd/Ctrl + K",
+    "footer": "登录后可同步最近工具和收藏。",
+    "close": "关闭搜索"
+  },
+  "tools": {
+    "directoryHeading": "全部工具目录",
+    "directoryDescription": "浏览 toolars 上的每一款计算器和 AI 工具。计算器免费且私密；AI 工具位于你的工作区。",
+    "searchLabel": "搜索全部工具",
+    "searchPlaceholder": "搜索全部计算器和 AI 工具…",
+    "filters": "筛选",
+    "filterCategory": "分类",
+    "filterToolType": "工具类型",
+    "filterPricing": "价格",
+    "filterSort": "排序",
+    "optionAllCategories": "全部分类",
+    "optionAiContent": "AI 内容",
+    "optionHealthTools": "健康工具",
+    "optionFinance": "财务",
+    "optionWealth": "财富",
+    "optionAllTools": "全部工具",
+    "optionCalculator": "计算器",
+    "optionAiTool": "AI 工具",
+    "optionAnyPricing": "任意价格",
+    "optionFree": "免费",
+    "optionFreemium": "部分免费",
+    "optionSubscription": "订阅",
+    "optionMostPopular": "最热门",
+    "optionNewest": "最新",
+    "optionHighestRated": "评分最高",
+    "optionAZ": "A-Z",
+    "categoriesTitle": "分类",
+    "directoryNote": "先显示 12 款工具 — 使用搜索查看其余工具。"
+  },
+  "calculator": {
+    "inputsTitle": "计算器输入",
+    "inputsDescription": "计算器免费且私密。结果在浏览器中运算，基础功能永不要求账号。",
+    "calculate": "计算",
+    "reset": "重置",
+    "defaultsRestored": "已恢复默认值。",
+    "resultRegion": "结果",
+    "resultLabel": "即时结果",
+    "needsValidInputs": "需要有效输入",
+    "resultUpdated": "结果已更新。",
+    "checkInputs": "请检查高亮的输入项。",
+    "savedLocally": "已保存在本设备。",
+    "addedToCompare": "已加入对比。",
+    "shareLinkCopied": "分享链接已复制。",
+    "saveResult": "保存结果",
+    "addToCompare": "加入对比",
+    "copyShareLink": "复制分享链接",
+    "yes": "是",
+    "no": "否",
+    "howItWorks": "计算方式",
+    "howItWorksBody": "本页面使用迁移后的纯公式引擎计算 {title}。输入会在显示结果前校验，公式独立于账号、计费和网络状态，确保搜索引擎能正常抓取公开页面。",
+    "faqTitle": "常见问题",
+    "faqAccountQuestion": "需要账号吗？",
+    "faqAccountAnswer": "不需要。基础计算器免费使用，无需登录。",
+    "faqStorageQuestion": "保存的结果存在哪里？",
+    "faqStorageAnswer": "本版本中，保存和对比结果使用浏览器本地存储。",
+    "formulaLabel": "公式",
+    "breadcrumbTools": "工具",
+    "relatedTools": "相关工具",
+    "workspaceLabel": "{title} 工作区",
+    "notFoundTitle": "未找到工具 | toolars",
+    "howItWorksNote": "本页面使用迁移后的纯公式引擎计算 {title}。输入会在显示结果前校验。",
+    "errors": {
+      "invalidNumber": "{label}必须是有效数字。",
+      "greaterThan": "{label}必须大于{bound}。",
+      "atLeast": "{label}必须至少为{bound}。",
+      "atMost": "{label}最多为{bound}。"
+    },
+    "resultValues": {
+      "category": "分类"
+    }
+  },
+  "ai": {
+    "workspaceLabel": "AI 工作区",
+    "aiSaaS": "AI 工作区",
+    "workspaceTitle": "toolars 工作区",
+    "workspaceBody": "内容再利用、品牌语调、历史和分析集中一处。",
+    "workspaceCard": "工作区",
+    "workspaceCardBody": "v1 期间 AI 生成免费。本地保存草稿并跟踪最近活动。",
+    "navRepurpose": "再利用",
+    "navTemplates": "模板",
+    "navBrandVoice": "品牌语调",
+    "navHistory": "历史",
+    "navAnalytics": "分析",
+    "navSettings": "设置",
+    "navLabel": "AI 应用导航",
+    "directoryHeading": "AI 工具目录",
+    "directoryDescription": "跨平台再利用内容、管理品牌语调并追踪表现。",
+    "featuredInputSources": "输入来源",
+    "featuredInputSourcesBody": "粘贴文本或填入链接 — 再利用器会提取要点。",
+    "featuredOutputControls": "输出控制",
+    "featuredOutputControlsBody": "生成前选择平台、语调、品牌声调和模型。",
+    "featuredWorkspaceMemory": "工作区记忆",
+    "featuredWorkspaceMemoryBody": "历史和已保存草稿按工作区整理。",
+    "usagePlan": "用量方案",
+    "platformSupport": "平台支持",
+    "accountRequired": "需要账号",
+    "streamingWorkflow": "流式工作流",
+    "previewAccount": "预览账号",
+    "brandVoiceBadge": "品牌语调",
+    "repurposeHeading": "AI 内容再利用",
+    "repurposeBody": "将一个素材转化为面向社交、邮件、文章和社区发布的原生草稿。取消时保留部分输出。",
+    "authGateHeading": "登录以使用 AI 内容再利用",
+    "authGateAiTool": "AI 工具",
+    "authGateBody": "AI 生成、历史和品牌语调位于你的工作区。公开计算器保持免费，不使用此门禁。",
+    "authGateSignIn": "登录",
+    "authGateCreateAccount": "创建账号",
+    "authGateContinuePreview": "在预览中继续",
+    "publicCalculatorsStayFree": "公开计算器保持免费",
+    "analyticsBadge": "分析",
+    "analyticsHeading": "表现分析",
+    "analyticsBody": "追踪使用量、已生成输出、额度、平台分布、语调分布和最近的工作区活动。",
+    "platformBreakdown": "平台分布",
+    "toneBreakdown": "语调分布",
+    "recentActivity": "最近活动",
+    "recentActivityNewsletter": "生成了邮件简报",
+    "recentActivityLinkedIn": "复制了 LinkedIn 帖子",
+    "recentActivityTwitter": "取消了 Twitter 长帖",
+    "brandVoiceBadgeTitle": "品牌语调",
+    "brandVoiceHeading": "品牌语调",
+    "brandVoiceBody": "创建、编辑、删除、分配和预览可复用的品牌语调，确保跨工作区的 AI 输出一致。",
+    "createVoice": "创建语调",
+    "workspaceAssignment": "工作区分配：",
+    "actionEdit": "编辑",
+    "actionPreview": "预览",
+    "actionDelete": "删除",
+    "historyBadge": "历史",
+    "historyBadgeCopy": "复制",
+    "historyBadgeRegenerate": "重新生成",
+    "historyHeading": "内容历史",
+    "historyBody": "搜索历史 AI 任务，按状态、平台、日期和语调筛选，然后重新打开详情以复制或重新生成。",
+    "searchHistoryLabel": "搜索历史",
+    "searchHistoryPlaceholder": "搜索历史…",
+    "filterStatus": "状态",
+    "filterPlatform": "平台",
+    "filterDate": "日期",
+    "filterTone": "语调",
+    "actionOpenDetail": "打开详情",
+    "actionCopyOutputs": "复制输出",
+    "actionRegenerate": "重新生成",
+    "settingsBadge": "设置",
+    "settingsBadgeAccount": "账号",
+    "settingsHeading": "工作区设置",
+    "settingsBody": "管理个人资料、工作区、API 密钥、通知、数据导出和破坏性账号操作。",
+    "sectionProfileTitle": "个人资料",
+    "sectionProfileCopy": "姓名、邮箱、时区和工作区角色。",
+    "sectionWorkspaceTitle": "工作区",
+    "sectionWorkspaceCopy": "团队名称、默认模型、品牌默认值和权限。",
+    "sectionApiKeysTitle": "API 密钥",
+    "sectionApiKeysCopy": "提供商密钥和工作区级别的密钥管理。",
+    "sectionNotificationsTitle": "通知",
+    "sectionNotificationsCopy": "生成活动和每周摘要偏好。",
+    "sectionDataExportTitle": "数据导出",
+    "sectionDataExportCopy": "导出工作区数据或转移所有权。",
+    "sectionDangerZoneTitle": "危险区",
+    "sectionDangerZoneCopy": "关闭工作区并删除已存储内容。",
+    "actionManage": "管理",
+    "templatesBadge": "AI 模板",
+    "templatesGroupSocial": "社交",
+    "templatesGroupLongForm": "长文",
+    "templatesGroupEmail": "邮件",
+    "templatesGroupCommunity": "社区",
+    "templatesHeading": "模板库",
+    "templatesBody": "用于社交发布、长文、邮件简报和社区帖子的可复用内容工作流。",
+    "labelOutputType": "输出类型",
+    "labelPlatformSupport": "平台支持",
+    "labelEstimatedLength": "预计长度",
+    "useTemplate": "使用模板",
+    "metadataRepurpose": "AI 内容再利用 | toolars",
+    "metadataAnalytics": "表现分析 | toolars",
+    "metadataBrandVoice": "品牌语调 | toolars",
+    "metadataHistory": "内容历史 | toolars",
+    "metadataSettings": "工作区设置 | toolars",
+    "metadataTemplates": "模板库 | toolars"
+  },
+  "blog": {
+    "listHeading": "toolars 博客",
+    "listDescription": "关于计算器 SEO、AI 内容工作流和产品更新的指南。",
+    "englishFirst": "英文优先",
+    "calculatorSeo": "计算器 SEO",
+    "aiWorkflows": "AI 工作流",
+    "searchLabel": "搜索博客文章",
+    "searchPlaceholder": "搜索指南、计算器 SEO、AI 工作流…",
+    "latestArticles": "最新文章",
+    "updated": "更新于",
+    "readGuide": "阅读指南",
+    "editorialFocus": "编辑方向",
+    "editorialFocusBody": "面向发布计算器和 AI 工作流的实用、英文优先指南。",
+    "englishLaunchContent": "英文首发内容",
+    "referencedTools": "引用的工具",
+    "breadcrumb": "博客",
+    "notFoundTitle": "未找到文章 | toolars",
+    "by": "作者：{author}",
+    "faqTitle": "常见问题",
+    "backToBlog": "返回博客",
+    "relatedTools": "相关工具"
+  },
+  "category": {
+    "healthHeading": "健康计算器",
+    "healthDescription": "身体成分、健身、营养和日常健康工具。",
+    "healthBodyBadge": "身体",
+    "healthFitnessBadge": "健身与营养",
+    "healthWellnessBadge": "健康",
+    "healthFooter": "所有健康工具在浏览器中运行 — 免费、私密、无需注册。",
+    "popularSearches": "热门搜索",
+    "insights": "见解",
+    "frequentlyUsed": "常用工具",
+    "financeHeading": "财务计算器",
+    "financeDescription": "贷款、债务、预算、投资和日常财务决策。",
+    "financeLoansBadge": "贷款",
+    "financeDebtBadge": "债务",
+    "financeInvestingBadge": "投资",
+    "financeRetirementBadge": "退休",
+    "financeFooter": "所有财务计算器在浏览器中运行 — 免费、私密、无需注册。",
+    "relatedArticles": "相关文章",
+    "breadcrumbHome": "首页",
+    "breadcrumbTools": "工具",
+    "breadcrumbHealth": "健康",
+    "breadcrumbFinance": "财务"
+  },
+  "repurpose": {
+    "ready": "准备生成。",
+    "streaming": "正在流式输出…",
+    "completed": "已完成。可复制、保存或重新生成输出。",
+    "checkInputs": "请检查高亮的 AI 输入项。",
+    "failed": "生成失败。",
+    "failedRetry": "生成失败，请重试。",
+    "canceled": "已取消。已保留部分输出。",
+    "savedHistory": "{platformLabel} 已保存到本地草稿历史。",
+    "copied": "{platformLabel} 已复制。",
+    "badgeWorkspace": "AI 工作区",
+    "badgePlan": "{planId} 套餐",
+    "cardTitle": "来源与控制",
+    "cardDescription": "将链接或源文本再利用为带语调、品牌声调、模型和取消控制的原生平台草稿。",
+    "sourceText": "文本",
+    "sourceUrl": "链接",
+    "sourceTextLabel": "源文本",
+    "sourceUrlLabel": "源链接",
+    "platforms": "平台",
+    "tone": "语调",
+    "brandVoice": "品牌声调",
+    "model": "模型",
+    "cancel": "取消",
+    "generate": "生成",
+    "reset": "重置",
+    "outputVariants": "输出变体",
+    "outputDescription": "取消时流式草稿保持可见。",
+    "outputPlaceholder": "生成的平台草稿将显示在这里。",
+    "toneSuffix": "{tone} 语调",
+    "wordCount": "{count} 词",
+    "copy": "复制",
+    "save": "保存",
+    "regenerate": "重新生成",
+    "sourceTypeLabel": "来源类型",
+    "generatedOutputsLabel": "已生成的输出",
+    "drafting": "正在生成 {label}…"
+  },
+  "calculators": {
+    "30-30-30-method": {
+      "title": "30-30-30 法则计算器",
+      "description": "使用30-30-30 法则计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "蛋白质 = 体重 × 1.6；运动 = 30 分钟",
+      "primaryLabel": "蛋白质目标",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        }
+      },
+      "results": {
+        "morningProtein": "晨间蛋白质",
+        "movementMinutes": "运动分钟数"
+      }
+    },
+    "alcohol-metabolism": {
+      "title": "酒精代谢计算器",
+      "description": "使用酒精代谢计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "小时数 = 饮酒量 × 14g / 每小时 7g",
+      "primaryLabel": "预计小时数",
+      "inputs": {
+        "drinks": {
+          "label": "标准杯",
+          "unit": ""
+        },
+        "gramsPerDrink": {
+          "label": "每杯克数",
+          "unit": "g"
+        }
+      },
+      "results": {
+        "alcoholGrams": "酒精克数"
+      }
+    },
+    "apy-calculator": {
+      "title": "APY 计算器",
+      "description": "比较不同利率和复利频率下的年化收益率。",
+      "formulaLabel": "APY = (1 + 利率 / 复利次数)^复利次数 - 1",
+      "primaryLabel": "APY",
+      "inputs": {
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        },
+        "compoundsPerYear": {
+          "label": "每年复利次数",
+          "unit": ""
+        }
+      },
+      "results": {
+        "effectiveRate": "实际收益率"
+      }
+    },
+    "biological-age": {
+      "title": "生理年龄计算器",
+      "description": "使用生理年龄计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "生理年龄 = 年龄 + 生活方式风险调整",
+      "primaryLabel": "预计生理年龄",
+      "inputs": {
+        "age": {
+          "label": "年龄",
+          "unit": "年"
+        },
+        "sleepHours": {
+          "label": "睡眠",
+          "unit": "小时"
+        },
+        "exerciseDays": {
+          "label": "运动天数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "blood-pressure": {
+      "title": "血压计算器",
+      "description": "使用血压计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "根据收缩压和舒张压阈值分类",
+      "primaryLabel": "收缩压",
+      "inputs": {
+        "systolic": {
+          "label": "收缩压",
+          "unit": "mmHg"
+        },
+        "diastolic": {
+          "label": "舒张压",
+          "unit": "mmHg"
+        }
+      },
+      "results": {
+        "diastolic": "舒张压",
+        "category": {
+          "high": "偏高",
+          "elevated": "偏高",
+          "normal": "正常"
+        }
+      }
+    },
+    "bmi-calculator": {
+      "title": "BMI 计算器",
+      "description": "根据身高和体重计算体质指数（BMI），并查看健康范围。",
+      "formulaLabel": "BMI = 体重 (kg) / 身高 (m)^2",
+      "primaryLabel": "BMI",
+      "inputs": {
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        },
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        }
+      },
+      "results": {
+        "category": {
+          "underweight": "偏瘦",
+          "normal": "正常",
+          "overweight": "超重",
+          "obese": "肥胖"
+        }
+      }
+    },
+    "bmr-calculator": {
+      "title": "BMR 计算器",
+      "description": "使用BMR 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "Mifflin-St Jeor：10×体重 + 6.25×身高 - 5×年龄 + 性别修正",
+      "primaryLabel": "BMR",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        },
+        "age": {
+          "label": "年龄",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "body-fat-calculator": {
+      "title": "体脂率计算器",
+      "description": "使用体脂率计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "美国海军估算法：根据腰围、颈围、身高和可选臀围",
+      "primaryLabel": "体脂率",
+      "inputs": {
+        "waistCm": {
+          "label": "腰围",
+          "unit": "cm"
+        },
+        "neckCm": {
+          "label": "颈围",
+          "unit": "cm"
+        },
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        },
+        "hipCm": {
+          "label": "臀围",
+          "unit": "cm"
+        }
+      },
+      "results": {
+        "leanMassPercent": "瘦体重百分比"
+      }
+    },
+    "body-recomposition": {
+      "title": "身体重塑计算器",
+      "description": "使用身体重塑计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "目标热量 = 维持热量 - 缺口；蛋白质 = 体重 × 1.8",
+      "primaryLabel": "目标热量",
+      "inputs": {
+        "maintenanceCalories": {
+          "label": "维持热量",
+          "unit": "kcal"
+        },
+        "deficitCalories": {
+          "label": "热量缺口",
+          "unit": "kcal"
+        },
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        }
+      },
+      "results": {
+        "proteinGrams": "蛋白质克数"
+      }
+    },
+    "budget-rule": {
+      "title": "50/30/20 预算计算器",
+      "description": "使用50/30/20 预算计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "必需 = 收入 × 50%；想要 = 收入 × 30%；储蓄 = 收入 × 20%",
+      "primaryLabel": "必需预算",
+      "inputs": {
+        "monthlyIncome": {
+          "label": "月收入",
+          "unit": "$"
+        }
+      },
+      "results": {
+        "wants": "想要",
+        "savings": "储蓄"
+      }
+    },
+    "caffeine-calculator": {
+      "title": "咖啡因计算器",
+      "description": "使用咖啡因计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "每日安全咖啡因 = min(体重 × 6mg, 400mg)",
+      "primaryLabel": "每日上限",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        }
+      },
+      "results": {}
+    },
+    "calorie-deficit": {
+      "title": "热量缺口计算器",
+      "description": "使用热量缺口计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "目标热量 = 维持热量 - 每周减重 × 7700 / 7",
+      "primaryLabel": "目标热量",
+      "inputs": {
+        "maintenanceCalories": {
+          "label": "维持热量",
+          "unit": "kcal"
+        },
+        "weeklyLossKg": {
+          "label": "每周减重",
+          "unit": "kg"
+        }
+      },
+      "results": {}
+    },
+    "car-loan": {
+      "title": "车贷计算器",
+      "description": "使用车贷计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月供 = 首付后本金的摊销还款",
+      "primaryLabel": "月供",
+      "inputs": {
+        "price": {
+          "label": "车价",
+          "unit": "$"
+        },
+        "downPayment": {
+          "label": "首付",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "期限",
+          "unit": "年"
+        }
+      },
+      "results": {
+        "totalInterest": "总利息"
+      }
+    },
+    "child-growth": {
+      "title": "儿童生长计算器",
+      "description": "使用儿童生长计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "儿童 BMI = 体重 / 身高^2",
+      "primaryLabel": "儿童 BMI",
+      "inputs": {
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        },
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "ageYears": {
+          "label": "年龄",
+          "unit": "年"
+        }
+      },
+      "results": {
+        "ageYears": "年龄"
+      }
+    },
+    "city-cost-comparison": {
+      "title": "城市生活成本对比",
+      "description": "使用城市生活成本对比进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "等效收入 = 收入 × 目标城市指数 / 当前城市指数",
+      "primaryLabel": "等效收入",
+      "inputs": {
+        "currentIncome": {
+          "label": "当前收入",
+          "unit": "$"
+        },
+        "currentIndex": {
+          "label": "当前城市指数",
+          "unit": ""
+        },
+        "targetIndex": {
+          "label": "目标城市指数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "coast-fire": {
+      "title": "Coast FIRE 计算器",
+      "description": "使用Coast FIRE 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "Coast 数字 = 退休需求 / (1 + 收益率)^年数",
+      "primaryLabel": "Coast FIRE 数字",
+      "inputs": {
+        "retirementNeed": {
+          "label": "退休需求",
+          "unit": "$"
+        },
+        "annualReturn": {
+          "label": "年收益率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "距退休年数",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "compound-interest": {
+      "title": "复利计算器",
+      "description": "通过定期存款和复利，预测资金随时间的增长。",
+      "formulaLabel": "A = P(1 + r/12)^(12t) + PMT × (((1 + r/12)^(12t) - 1) / (r/12))",
+      "primaryLabel": "未来价值",
+      "inputs": {
+        "principal": {
+          "label": "本金",
+          "unit": "$"
+        },
+        "monthlyContribution": {
+          "label": "月度存入",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {
+        "principal": "本金",
+        "totalContributions": "总存入金额",
+        "interest": "利息"
+      }
+    },
+    "credit-card-apr": {
+      "title": "信用卡 APR 计算器",
+      "description": "使用信用卡 APR 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月利息 = 余额 × APR / 12",
+      "primaryLabel": "还清月数",
+      "inputs": {
+        "balance": {
+          "label": "余额",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "APR",
+          "unit": "%"
+        },
+        "monthlyPayment": {
+          "label": "月供",
+          "unit": "$"
+        }
+      },
+      "results": {
+        "firstMonthInterest": "首月利息"
+      }
+    },
+    "credit-score-simulator": {
+      "title": "信用评分模拟器",
+      "description": "估算还款、余额、信用利用率和新增账户如何影响信用评分。",
+      "formulaLabel": "根据信用利用率、还款记录和新增账户估算评分",
+      "primaryLabel": "模拟评分",
+      "inputs": {
+        "currentScore": {
+          "label": "当前评分",
+          "unit": ""
+        },
+        "utilization": {
+          "label": "信用利用率",
+          "unit": "%"
+        },
+        "latePayments": {
+          "label": "逾期次数",
+          "unit": ""
+        },
+        "newAccounts": {
+          "label": "新增账户数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "crypto-tax": {
+      "title": "加密货币税费计算器",
+      "description": "使用加密货币税费计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "税费 = max(卖出价 - 成本基准, 0) × 税率",
+      "primaryLabel": "预计税费",
+      "inputs": {
+        "saleValue": {
+          "label": "卖出价值",
+          "unit": "$"
+        },
+        "costBasis": {
+          "label": "成本基准",
+          "unit": "$"
+        },
+        "taxRate": {
+          "label": "税率",
+          "unit": "%"
+        }
+      },
+      "results": {
+        "gain": "收益"
+      }
+    },
+    "currency-converter": {
+      "title": "汇率换算器",
+      "description": "使用汇率换算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "换算金额 = 金额 × 汇率",
+      "primaryLabel": "换算金额",
+      "inputs": {
+        "amount": {
+          "label": "金额",
+          "unit": ""
+        },
+        "exchangeRate": {
+          "label": "汇率",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "debt-payoff": {
+      "title": "债务还清计算器",
+      "description": "使用债务还清计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月数 = 根据余额、APR 和月供的摊销还清",
+      "primaryLabel": "还清月数",
+      "inputs": {
+        "balance": {
+          "label": "余额",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "APR",
+          "unit": "%"
+        },
+        "monthlyPayment": {
+          "label": "月供",
+          "unit": "$"
+        }
+      },
+      "results": {
+        "totalPaid": "总还款额"
+      }
+    },
+    "discount-calculator": {
+      "title": "折扣计算器",
+      "description": "使用折扣计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "折后价 = 原价 × (1 - 折扣率)",
+      "primaryLabel": "折后价",
+      "inputs": {
+        "originalPrice": {
+          "label": "原价",
+          "unit": "$"
+        },
+        "discountRate": {
+          "label": "折扣率",
+          "unit": "%"
+        }
+      },
+      "results": {
+        "savings": "节省金额"
+      }
+    },
+    "dividend-reinvestment": {
+      "title": "股息再投资计算器",
+      "description": "使用股息再投资计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "未来价值 = 本金按股息率复利 + 月度追加",
+      "primaryLabel": "未来价值",
+      "inputs": {
+        "principal": {
+          "label": "本金",
+          "unit": "$"
+        },
+        "monthlyContribution": {
+          "label": "月度存入",
+          "unit": "$"
+        },
+        "dividendYield": {
+          "label": "股息率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "drink-calories": {
+      "title": "饮品热量计算器",
+      "description": "使用饮品热量计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "总热量 = 杯数 × 每杯热量",
+      "primaryLabel": "总热量",
+      "inputs": {
+        "drinks": {
+          "label": "杯数",
+          "unit": ""
+        },
+        "caloriesPerDrink": {
+          "label": "每杯热量",
+          "unit": "kcal"
+        }
+      },
+      "results": {}
+    },
+    "dti-calculator": {
+      "title": "DTI 计算器",
+      "description": "使用DTI 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "DTI = 月度负债 / 月总收入",
+      "primaryLabel": "负债收入比",
+      "inputs": {
+        "monthlyDebt": {
+          "label": "月度负债",
+          "unit": "$"
+        },
+        "monthlyIncome": {
+          "label": "月收入",
+          "unit": "$"
+        }
+      },
+      "results": {}
+    },
+    "emergency-fund": {
+      "title": "应急基金计算器",
+      "description": "使用应急基金计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "基金目标 = 月度必需支出 × 月数",
+      "primaryLabel": "基金目标",
+      "inputs": {
+        "monthlyExpenses": {
+          "label": "月度支出",
+          "unit": "$"
+        },
+        "months": {
+          "label": "月数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "fiber-intake": {
+      "title": "纤维摄入量计算器",
+      "description": "使用纤维摄入量计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "纤维目标 = 热量 / 1000 × 14g",
+      "primaryLabel": "每日纤维",
+      "inputs": {
+        "calories": {
+          "label": "热量",
+          "unit": "kcal"
+        }
+      },
+      "results": {}
+    },
+    "fire-calculator": {
+      "title": "FIRE 计算器",
+      "description": "使用FIRE 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "FIRE 数字 = 年度支出 × 25",
+      "primaryLabel": "FIRE 数字",
+      "inputs": {
+        "annualExpenses": {
+          "label": "年度支出",
+          "unit": "$"
+        }
+      },
+      "results": {}
+    },
+    "gad7-anxiety": {
+      "title": "GAD-7 焦虑筛查",
+      "description": "使用GAD-7 焦虑筛查进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "GAD-7 总分 = 七项评分之和",
+      "primaryLabel": "GAD-7 评分",
+      "inputs": {
+        "score": {
+          "label": "GAD-7 总分",
+          "unit": ""
+        }
+      },
+      "results": {
+        "severity": {
+          "minimal": "轻微",
+          "mild": "轻度",
+          "moderate": "中度",
+          "severe": "重度"
+        }
+      }
+    },
+    "glp1-eligibility": {
+      "title": "GLP-1 资格评估器",
+      "description": "根据 BMI、健康状况和风险因素评估 GLP-1 药物资格。",
+      "formulaLabel": "根据 BMI 和代谢风险因素评估资格",
+      "primaryLabel": "BMI",
+      "inputs": {
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        },
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "riskFactors": {
+          "label": "风险因素",
+          "unit": ""
+        }
+      },
+      "results": {
+        "eligible": "是否符合条件",
+        "category": {
+          "potentiallyEligible": "可能符合条件",
+          "mayNotQualify": "可能不符合"
+        }
+      }
+    },
+    "glp1-nutrition": {
+      "title": "GLP-1 营养计算器",
+      "description": "使用GLP-1 营养计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "蛋白质 = max(体重 × 1.2, 理想体重 × 1.6)",
+      "primaryLabel": "蛋白质目标",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "idealWeightKg": {
+          "label": "理想体重",
+          "unit": "kg"
+        }
+      },
+      "results": {
+        "minimumCalories": "最低热量"
+      }
+    },
+    "glycemic-load": {
+      "title": "血糖负荷计算器",
+      "description": "使用血糖负荷计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "血糖负荷 = GI × 可利用碳水 / 100",
+      "primaryLabel": "血糖负荷",
+      "inputs": {
+        "glycemicIndex": {
+          "label": "血糖指数",
+          "unit": ""
+        },
+        "carbsGrams": {
+          "label": "碳水",
+          "unit": "g"
+        }
+      },
+      "results": {}
+    },
+    "habit-cost": {
+      "title": "习惯开销计算器",
+      "description": "使用习惯开销计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "年度习惯开销 = 每次花费 × 每周次数 × 52",
+      "primaryLabel": "年度开销",
+      "inputs": {
+        "costPerUse": {
+          "label": "每次花费",
+          "unit": "$"
+        },
+        "usesPerWeek": {
+          "label": "每周次数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "heart-rate-zone": {
+      "title": "心率区间计算器",
+      "description": "使用心率区间计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "最大心率 = 220 - 年龄",
+      "primaryLabel": "最大心率",
+      "inputs": {
+        "age": {
+          "label": "年龄",
+          "unit": "年"
+        },
+        "restingHeartRate": {
+          "label": "静息心率",
+          "unit": "bpm"
+        }
+      },
+      "results": {
+        "zone2Low": "区间 2 下限",
+        "zone2High": "区间 2 上限"
+      }
+    },
+    "homa-ir": {
+      "title": "HOMA-IR 计算器",
+      "description": "使用HOMA-IR 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "HOMA-IR = 空腹血糖 × 空腹胰岛素 / 405",
+      "primaryLabel": "HOMA-IR",
+      "inputs": {
+        "glucoseMgDl": {
+          "label": "血糖",
+          "unit": "mg/dL"
+        },
+        "insulinUiuMl": {
+          "label": "胰岛素",
+          "unit": "uIU/mL"
+        }
+      },
+      "results": {}
+    },
+    "hourly-to-salary": {
+      "title": "时薪转年薪计算器",
+      "description": "使用时薪转年薪计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "年薪 = 时薪 × 每周工时 × 周数",
+      "primaryLabel": "年薪",
+      "inputs": {
+        "hourlyRate": {
+          "label": "时薪",
+          "unit": "$"
+        },
+        "hoursPerWeek": {
+          "label": "每周工时",
+          "unit": ""
+        },
+        "weeksPerYear": {
+          "label": "每年周数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "ideal-weight-calculator": {
+      "title": "理想体重计算器",
+      "description": "使用理想体重计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "Devine 估算 = 基础体重 + 超过 5 英尺每英寸 2.3kg",
+      "primaryLabel": "理想体重",
+      "inputs": {
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        }
+      },
+      "results": {}
+    },
+    "income-tax": {
+      "title": "所得税计算器",
+      "description": "使用所得税计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "税费 = 应税收入 × 实际税率",
+      "primaryLabel": "预计税费",
+      "inputs": {
+        "income": {
+          "label": "收入",
+          "unit": "$"
+        },
+        "deductions": {
+          "label": "扣除额",
+          "unit": "$"
+        },
+        "effectiveRate": {
+          "label": "实际税率",
+          "unit": "%"
+        }
+      },
+      "results": {}
+    },
+    "inflation-calculator": {
+      "title": "通胀计算器",
+      "description": "使用通胀计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "未来成本 = 金额 × (1 + 通胀率)^年数",
+      "primaryLabel": "未来成本",
+      "inputs": {
+        "amount": {
+          "label": "金额",
+          "unit": "$"
+        },
+        "inflationRate": {
+          "label": "通胀率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "intermittent-fasting": {
+      "title": "间歇性断食计算器",
+      "description": "使用间歇性断食计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "进食时长 = 24 - 断食小时数",
+      "primaryLabel": "进食时长",
+      "inputs": {
+        "fastingHours": {
+          "label": "断食小时数",
+          "unit": "小时"
+        }
+      },
+      "results": {}
+    },
+    "investment-fee": {
+      "title": "投资费用计算器",
+      "description": "使用投资费用计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "费用拖累 = 毛未来价值 - 净未来价值",
+      "primaryLabel": "费用拖累",
+      "inputs": {
+        "principal": {
+          "label": "本金",
+          "unit": "$"
+        },
+        "annualReturn": {
+          "label": "年收益率",
+          "unit": "%"
+        },
+        "feeRate": {
+          "label": "费率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {
+        "netValue": "净价值",
+        "grossValue": "毛价值"
+      }
+    },
+    "investment-goal": {
+      "title": "投资目标计算器",
+      "description": "使用投资目标计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月度投资额求解未来价值目标",
+      "primaryLabel": "月度投资额",
+      "inputs": {
+        "target": {
+          "label": "目标",
+          "unit": "$"
+        },
+        "currentSavings": {
+          "label": "当前储蓄",
+          "unit": "$"
+        },
+        "annualReturn": {
+          "label": "年收益率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "lean-body-mass": {
+      "title": "瘦体重计算器",
+      "description": "使用瘦体重计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "瘦体重 = 体重 × (1 - 体脂率)",
+      "primaryLabel": "瘦体重",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "bodyFatPercent": {
+          "label": "体脂率",
+          "unit": "%"
+        }
+      },
+      "results": {}
+    },
+    "loan-calculator": {
+      "title": "贷款计算器",
+      "description": "使用贷款计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月供 = 本金摊销还款",
+      "primaryLabel": "月供",
+      "inputs": {
+        "loanAmount": {
+          "label": "贷款金额",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {
+        "totalInterest": "总利息"
+      }
+    },
+    "macro-calculator": {
+      "title": "宏量营养素计算器",
+      "description": "使用宏量营养素计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "蛋白质/碳水/脂肪按热量比例分配",
+      "primaryLabel": "蛋白质克数",
+      "inputs": {
+        "calories": {
+          "label": "热量",
+          "unit": "kcal"
+        },
+        "proteinPercent": {
+          "label": "蛋白质比例",
+          "unit": "%"
+        },
+        "fatPercent": {
+          "label": "脂肪比例",
+          "unit": "%"
+        }
+      },
+      "results": {
+        "carbsGrams": "碳水克数",
+        "fatGrams": "脂肪克数"
+      }
+    },
+    "mortgage-calculator": {
+      "title": "房贷计算器",
+      "description": "估算房贷月供、总利息和摊销。",
+      "formulaLabel": "M = P × r(1+r)^n / ((1+r)^n - 1)",
+      "primaryLabel": "月供",
+      "inputs": {
+        "loanAmount": {
+          "label": "贷款金额",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {
+        "totalInterest": "总利息",
+        "totalCost": "总成本"
+      }
+    },
+    "net-worth-calculator": {
+      "title": "净资产计算器",
+      "description": "使用净资产计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "净资产 = 资产 - 负债",
+      "primaryLabel": "净资产",
+      "inputs": {
+        "assets": {
+          "label": "资产",
+          "unit": "$"
+        },
+        "liabilities": {
+          "label": "负债",
+          "unit": "$"
+        }
+      },
+      "results": {}
+    },
+    "one-rep-max": {
+      "title": "单次最大重量计算器",
+      "description": "使用单次最大重量计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "Epley 估算 = 重量 × (1 + 次数 / 30)",
+      "primaryLabel": "单次最大重量",
+      "inputs": {
+        "weight": {
+          "label": "举起重物",
+          "unit": ""
+        },
+        "reps": {
+          "label": "次数",
+          "unit": ""
+        }
+      },
+      "results": {}
+    },
+    "ovulation-calculator": {
+      "title": "排卵期计算器",
+      "description": "使用排卵期计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "排卵日 = 月经周期 - 14",
+      "primaryLabel": "排卵日",
+      "inputs": {
+        "cycleLength": {
+          "label": "月经周期",
+          "unit": "天"
+        }
+      },
+      "results": {
+        "fertileWindowStart": "易孕期开始",
+        "fertileWindowEnd": "易孕期结束"
+      }
+    },
+    "percentage-calculator": {
+      "title": "百分比计算器",
+      "description": "使用百分比计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "结果 = 数值 × 百分比 / 100",
+      "primaryLabel": "百分比值",
+      "inputs": {
+        "value": {
+          "label": "数值",
+          "unit": ""
+        },
+        "percent": {
+          "label": "百分比",
+          "unit": "%"
+        }
+      },
+      "results": {}
+    },
+    "phq9-depression": {
+      "title": "PHQ-9 抑郁筛查",
+      "description": "使用PHQ-9 抑郁筛查进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "PHQ-9 总分 = 九项评分之和",
+      "primaryLabel": "PHQ-9 评分",
+      "inputs": {
+        "score": {
+          "label": "PHQ-9 总分",
+          "unit": ""
+        }
+      },
+      "results": {
+        "severity": {
+          "minimal": "轻微",
+          "mild": "轻度",
+          "moderate": "中度",
+          "moderatelySevere": "中重度",
+          "severe": "重度"
+        }
+      }
+    },
+    "pregnancy-due-date": {
+      "title": "预产期计算器",
+      "description": "使用预产期计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "距预产期天数 = 280 - 末次月经后天数",
+      "primaryLabel": "距预产期天数",
+      "inputs": {
+        "daysSinceLmp": {
+          "label": "末次月经后天数",
+          "unit": "天"
+        }
+      },
+      "results": {
+        "gestationalWeeks": "孕周"
+      }
+    },
+    "protein-calculator": {
+      "title": "蛋白质计算器",
+      "description": "使用蛋白质计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "蛋白质目标 = 体重 × 活动系数",
+      "primaryLabel": "每日蛋白质",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "factor": {
+          "label": "蛋白质系数",
+          "unit": "g/kg"
+        }
+      },
+      "results": {}
+    },
+    "pss10-stress": {
+      "title": "PSS-10 压力量表",
+      "description": "使用PSS-10 压力量表进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "PSS-10 总分 = 评分调查之和",
+      "primaryLabel": "PSS-10 评分",
+      "inputs": {
+        "score": {
+          "label": "PSS-10 评分",
+          "unit": ""
+        }
+      },
+      "results": {
+        "severity": {
+          "low": "低",
+          "moderate": "中度",
+          "high": "高"
+        }
+      }
+    },
+    "rent-vs-buy": {
+      "title": "租房 vs 买房计算器",
+      "description": "使用租房 vs 买房计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "对比月度持有成本与租金",
+      "primaryLabel": "月度差额",
+      "inputs": {
+        "monthlyRent": {
+          "label": "月租金",
+          "unit": "$"
+        },
+        "homePrice": {
+          "label": "房价",
+          "unit": "$"
+        },
+        "downPayment": {
+          "label": "首付",
+          "unit": "$"
+        },
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        }
+      },
+      "results": {
+        "monthlyOwnership": "月度持有成本"
+      }
+    },
+    "retirement-calculator": {
+      "title": "退休计算器",
+      "description": "使用退休计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "未来储蓄 = 当前储蓄复利 + 月度存入",
+      "primaryLabel": "预计储蓄",
+      "inputs": {
+        "currentSavings": {
+          "label": "当前储蓄",
+          "unit": "$"
+        },
+        "monthlyContribution": {
+          "label": "月度存入",
+          "unit": "$"
+        },
+        "annualReturn": {
+          "label": "年收益率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "roi-calculator": {
+      "title": "ROI 计算器",
+      "description": "使用ROI 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "ROI = (回报 - 成本) / 成本 × 100",
+      "primaryLabel": "ROI",
+      "inputs": {
+        "returnValue": {
+          "label": "回报价值",
+          "unit": "$"
+        },
+        "cost": {
+          "label": "成本",
+          "unit": "$"
+        }
+      },
+      "results": {}
+    },
+    "rule-of-72": {
+      "title": "72 法则计算器",
+      "description": "使用72 法则计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "翻倍年数 = 72 / 年收益率",
+      "primaryLabel": "翻倍年数",
+      "inputs": {
+        "annualRate": {
+          "label": "年利率",
+          "unit": "%"
+        }
+      },
+      "results": {}
+    },
+    "running-pace": {
+      "title": "跑步配速计算器",
+      "description": "使用跑步配速计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "配速 = 总分钟数 / 距离",
+      "primaryLabel": "每公里配速",
+      "inputs": {
+        "distanceKm": {
+          "label": "距离",
+          "unit": "km"
+        },
+        "timeMinutes": {
+          "label": "时间",
+          "unit": "分钟"
+        }
+      },
+      "results": {}
+    },
+    "savings-goal": {
+      "title": "储蓄目标计算器",
+      "description": "使用储蓄目标计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月数 = (目标 - 当前储蓄) / 每月储蓄",
+      "primaryLabel": "达成目标月数",
+      "inputs": {
+        "goal": {
+          "label": "目标",
+          "unit": "$"
+        },
+        "currentSavings": {
+          "label": "当前储蓄",
+          "unit": "$"
+        },
+        "monthlySaving": {
+          "label": "每月储蓄",
+          "unit": "$"
+        }
+      },
+      "results": {}
+    },
+    "side-income-tax": {
+      "title": "副业收入税费计算器",
+      "description": "使用副业收入税费计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "预计税费 = 副业收入 × 税率",
+      "primaryLabel": "预计税费",
+      "inputs": {
+        "sideIncome": {
+          "label": "副业收入",
+          "unit": "$"
+        },
+        "taxRate": {
+          "label": "税率",
+          "unit": "%"
+        }
+      },
+      "results": {}
+    },
+    "sip-calculator": {
+      "title": "SIP 计算器",
+      "description": "使用SIP 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "月度定投的未来价值",
+      "primaryLabel": "未来价值",
+      "inputs": {
+        "monthlyInvestment": {
+          "label": "月度投资",
+          "unit": "$"
+        },
+        "annualReturn": {
+          "label": "年收益率",
+          "unit": "%"
+        },
+        "years": {
+          "label": "年数",
+          "unit": "年"
+        }
+      },
+      "results": {}
+    },
+    "sleep-calculator": {
+      "title": "睡眠计算器",
+      "description": "使用睡眠计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "就寝时间 = 起床时间 - 周期数 × 90 分钟 - 15 分钟",
+      "primaryLabel": "建议就寝时间",
+      "inputs": {
+        "wakeHour": {
+          "label": "起床时间",
+          "unit": ""
+        },
+        "cycles": {
+          "label": "睡眠周期数",
+          "unit": ""
+        }
+      },
+      "results": {
+        "bedtimeMinutesAfterMidnight": "午夜后就寝分钟数"
+      }
+    },
+    "smoke-free": {
+      "title": "戒烟计算器",
+      "description": "使用戒烟计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "节省金额 = 避免的香烟数 / 每包支数 × 每包价格",
+      "primaryLabel": "节省金额",
+      "inputs": {
+        "cigarettesPerDay": {
+          "label": "每日吸烟数",
+          "unit": ""
+        },
+        "packPrice": {
+          "label": "每包价格",
+          "unit": "$"
+        },
+        "daysSmokeFree": {
+          "label": "戒烟天数",
+          "unit": "天"
+        }
+      },
+      "results": {}
+    },
+    "steps-to-calories": {
+      "title": "步数转热量计算器",
+      "description": "使用步数转热量计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "热量 = 步数 × 体重 × 0.0005",
+      "primaryLabel": "消耗热量",
+      "inputs": {
+        "steps": {
+          "label": "步数",
+          "unit": ""
+        },
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        }
+      },
+      "results": {}
+    },
+    "stock-average": {
+      "title": "股票均价计算器",
+      "description": "使用股票均价计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "平均成本 = 总成本 / 总股数",
+      "primaryLabel": "平均成本",
+      "inputs": {
+        "sharesOwned": {
+          "label": "已持有股数",
+          "unit": ""
+        },
+        "averageCost": {
+          "label": "平均成本",
+          "unit": "$"
+        },
+        "newShares": {
+          "label": "新增股数",
+          "unit": ""
+        },
+        "newPrice": {
+          "label": "新价格",
+          "unit": "$"
+        }
+      },
+      "results": {}
+    },
+    "tdee-calculator": {
+      "title": "TDEE 计算器",
+      "description": "使用TDEE 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "TDEE = BMR × 活动系数",
+      "primaryLabel": "TDEE",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        },
+        "heightCm": {
+          "label": "身高",
+          "unit": "cm"
+        },
+        "age": {
+          "label": "年龄",
+          "unit": "年"
+        },
+        "activityMultiplier": {
+          "label": "活动系数",
+          "unit": ""
+        }
+      },
+      "results": {
+        "bmr": "BMR"
+      }
+    },
+    "testosterone-calculator": {
+      "title": "睾酮计算器",
+      "description": "使用睾酮计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "游离雄激素指数 = 总睾酮 / SHBG × 100",
+      "primaryLabel": "游离雄激素指数",
+      "inputs": {
+        "totalTestosterone": {
+          "label": "总睾酮",
+          "unit": "ng/dL"
+        },
+        "shbg": {
+          "label": "SHBG",
+          "unit": "nmol/L"
+        }
+      },
+      "results": {}
+    },
+    "tip-calculator": {
+      "title": "小费计算器",
+      "description": "计算任意消费的小费、账单总额和人均分摊。",
+      "formulaLabel": "小费 = 账单 × 小费比例；分摊 = 总额 / 人数",
+      "primaryLabel": "账单总额",
+      "inputs": {
+        "bill": {
+          "label": "账单",
+          "unit": "$"
+        },
+        "tipPercent": {
+          "label": "小费比例",
+          "unit": "%"
+        },
+        "people": {
+          "label": "人数",
+          "unit": ""
+        }
+      },
+      "results": {
+        "tip": "小费",
+        "perPerson": "人均"
+      }
+    },
+    "vo2-max": {
+      "title": "VO2 Max 计算器",
+      "description": "使用VO2 Max 计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "VO2 max 估算 = 15.3 × 最大心率 / 静息心率",
+      "primaryLabel": "VO2 max",
+      "inputs": {
+        "age": {
+          "label": "年龄",
+          "unit": "年"
+        },
+        "restingHeartRate": {
+          "label": "静息心率",
+          "unit": "bpm"
+        }
+      },
+      "results": {}
+    },
+    "waist-hip-ratio": {
+      "title": "腰臀比计算器",
+      "description": "使用腰臀比计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "WHR = 腰围 / 臀围",
+      "primaryLabel": "腰臀比",
+      "inputs": {
+        "waistCm": {
+          "label": "腰围",
+          "unit": "cm"
+        },
+        "hipCm": {
+          "label": "臀围",
+          "unit": "cm"
+        }
+      },
+      "results": {
+        "risk": {
+          "higherRisk": "风险较高",
+          "lowerRisk": "风险较低"
+        }
+      }
+    },
+    "water-intake": {
+      "title": "饮水量计算器",
+      "description": "使用饮水量计算器进行快速、注重隐私的估算，提供清晰的输入项、结果摘要及相关工具指引。",
+      "formulaLabel": "饮水目标 = 体重 × 35ml",
+      "primaryLabel": "每日饮水量",
+      "inputs": {
+        "weightKg": {
+          "label": "体重",
+          "unit": "kg"
+        }
+      },
+      "results": {
+        "liters": "升"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "登录",
+    "loginHeading": "登录 toolars",
+    "loginBody": "访问你的 AI 工作区、保存的结果和品牌声调。",
+    "registerTitle": "创建账号",
+    "registerHeading": "创建你的 toolars 账号",
+    "registerBody": "开始再利用内容并保存计算器结果。",
+    "email": "邮箱",
+    "emailPlaceholder": "you@example.com",
+    "password": "密码",
+    "passwordPlaceholder": "你的密码",
+    "signInSubmit": "登录",
+    "signUpSubmit": "创建账号",
+    "signingIn": "正在登录…",
+    "creatingAccount": "正在创建账号…",
+    "invalidCredentials": "邮箱或密码无效。",
+    "signUpSuccess": "账号已创建。你现在可以登录了。",
+    "signUpCheckEmail": "请检查邮箱确认账号，然后登录。",
+    "orContinueWith": "或使用以下方式登录",
+    "google": "Google",
+    "github": "GitHub",
+    "needAccount": "还没有账号？",
+    "haveAccount": "已有账号？",
+    "createAccountLink": "立即注册",
+    "signInLink": "登录",
+    "signOut": "退出登录",
+    "redirectNotice": "请登录后继续。",
+    "missingEnv": "Supabase 未配置。请在 .env.local 中设置 NEXT_PUBLIC_SUPABASE_URL 和 NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "errors": {
+      "emailRequired": "请输入邮箱。",
+      "emailInvalid": "请输入有效的邮箱地址。",
+      "passwordRequired": "请输入密码。",
+      "passwordShort": "密码至少 6 个字符。"
+    }
+  }
+}

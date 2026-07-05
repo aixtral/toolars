@@ -1,6 +1,24 @@
 import type { Metadata } from 'next';
 import type { ToolDefinition } from '@/data/types';
-import { getAlternateLanguageLinks } from '@/lib/i18n';
+import { LAUNCH_LOCALES } from '@/i18n/routing';
+
+/**
+ * Build alternates (canonical + hreflang languages) for a path across all
+ * launch locales. Every launch locale gets a prefixed URL (including English
+ * at /en/...) plus an x-default pointing at English.
+ */
+export function buildAlternates(path: string): {
+  canonical: string;
+  languages: Record<string, string>;
+} {
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  const languages: Record<string, string> = {};
+  for (const locale of LAUNCH_LOCALES) {
+    languages[locale] = `/${locale}${normalized === '/' ? '' : normalized}`;
+  }
+  languages['x-default'] = `/en${normalized === '/' ? '' : normalized}`;
+  return { canonical: normalized, languages };
+}
 
 type DirectoryPage = 'home' | 'tools' | 'ai';
 type PublicCategoryPage = 'health' | 'finance';
@@ -83,10 +101,7 @@ export function buildBlogMetadata(): Metadata {
     title: 'Blog | toolars',
     description:
       'Read English-first guides for free calculators, SEO-ready tool pages, and AI content workflows.',
-    alternates: {
-      canonical: '/blog',
-      languages: getAlternateLanguageLinks('/blog', ['en']),
-    },
+    alternates: buildAlternates('/blog'),
   };
 }
 
@@ -94,10 +109,7 @@ export function buildArticleMetadata(article: SeoArticle): Metadata {
   return {
     title: `${article.title} | toolars`,
     description: article.description,
-    alternates: {
-      canonical: `/blog/${article.slug}`,
-      languages: getAlternateLanguageLinks(`/blog/${article.slug}`, ['en']),
-    },
+    alternates: buildAlternates(`/blog/${article.slug}`),
     openGraph: {
       type: 'article',
       title: article.title,

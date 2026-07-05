@@ -38,7 +38,7 @@ export const LOCALE_CONFIGS: readonly LocaleConfig[] = [
     nativeName: 'Espanol',
     direction: 'ltr',
     pathPrefix: '/es',
-    phase: 'phase-two',
+    phase: 'launch',
   },
   {
     code: 'fr',
@@ -54,7 +54,7 @@ export const LOCALE_CONFIGS: readonly LocaleConfig[] = [
     nativeName: '中文',
     direction: 'ltr',
     pathPrefix: '/zh',
-    phase: 'phase-two',
+    phase: 'launch',
   },
   {
     code: 'ja',
@@ -86,7 +86,7 @@ export const LOCALE_CONFIGS: readonly LocaleConfig[] = [
     nativeName: 'Portugues',
     direction: 'ltr',
     pathPrefix: '/pt',
-    phase: 'phase-two',
+    phase: 'launch',
   },
   {
     code: 'hi',

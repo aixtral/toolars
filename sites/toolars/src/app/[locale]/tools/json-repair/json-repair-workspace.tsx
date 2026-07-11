@@ -133,8 +133,8 @@ export function JsonRepairWorkspace() {
           </span>
         </div>
         <div className="button-row">
-          <button className="button button-outline" type="button">{t("actions.saveStack")}</button>
-          <button className="button button-solid" type="button">{t("actions.useApi")}</button>
+          <button disabled className="button button-outline" type="button">{t("actions.saveStack")}</button>
+          <button disabled className="button button-solid" type="button">{t("actions.useApi")}</button>
         </div>
       </aside>
     </AiLabWorkbenchShell>

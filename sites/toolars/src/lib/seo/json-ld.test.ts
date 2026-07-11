@@ -27,6 +27,7 @@ const bmiTool: ToolDefinition = {
   accent: "teal",
   status: "ready",
   visibility: "public",
+  launchCertified: true,
   href: "/tools/bmi-calculator",
   aboutHref: "/tools/bmi-calculator/about"
 } as const;

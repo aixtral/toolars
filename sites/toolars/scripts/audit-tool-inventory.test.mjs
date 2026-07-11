@@ -167,9 +167,84 @@ describe("tool inventory audit", () => {
       vitalcalc: 86
     });
     expect(audit.summary.toolars.publicTools).toBe(190);
+    expect(audit.summary.toolars.launchCertifiedTools).toBe(55);
+    expect(audit.summary.toolars.publicUncertifiedTools).toBe(135);
     expect(audit.summary.sources.vitalcalc.rootToolPages).toBe(86);
     expect(audit.summary.sources.aixtralLab.configTools).toBe(92);
     expect(audit.summary.sources.aixtralLab.implementedTools).toBe(66);
+  });
+
+  it("reports launch-certified tools separately from public preview inventory", async () => {
+    const audit = await createToolInventoryAudit({ siteRoot, ...sourceRoots });
+    const bySlug = new Map(audit.entries.map((entry) => [entry.slug, entry]));
+
+    expect(audit.gaps.toolars.publicUncertifiedTools).toHaveLength(135);
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("token-counter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("json-formatter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("jwt-decoder");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("url-encoder");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("hash-generator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("regex-tester");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("json-diff");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("csv-to-json");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("json-to-csv");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("yaml-validator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("xml-formatter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("markdown-to-json");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("diff-checker");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("text-diff");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("url-parser");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("number-base-converter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("file-size-converter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("chmod-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("ipv4-subnet-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("user-agent-parser");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("color-converter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("base64-image-encoder");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("case-converter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("code-minifier");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("cron-explainer");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("docker-compose-converter");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("html-entity-encoder");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("css-gradient-generator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("css-border-radius-generator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("slug-generator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("text-stats");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("discount-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("tip-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("bill-split-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("hourly-to-salary");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("rule-of-72");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("retirement-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("roi-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("apy-calculator");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("savings-goal");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("stock-average");
+    expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("json-repair");
+    expect(bySlug.get("json-repair")).toMatchObject({
+      slug: "json-repair",
+      launchCertified: true
+    });
+    expect(bySlug.get("token-counter")).toMatchObject({
+      slug: "token-counter",
+      launchCertified: true
+    });
+    expect(bySlug.get("json-formatter")).toMatchObject({
+      slug: "json-formatter",
+      launchCertified: true
+    });
+    expect(bySlug.get("json-diff")).toMatchObject({
+      slug: "json-diff",
+      launchCertified: true
+    });
+    expect(bySlug.get("markdown-to-json")).toMatchObject({
+      slug: "markdown-to-json",
+      launchCertified: true
+    });
+    expect(bySlug.get("file-size-converter")).toMatchObject({
+      slug: "file-size-converter",
+      launchCertified: true
+    });
   });
 
   it("derives category count mismatches from real registered tools", async () => {

@@ -16,8 +16,19 @@ const bmiTool: ToolDefinition = {
   accent: "teal",
   status: "ready",
   visibility: "public",
+  launchCertified: true,
   href: "/tools/bmi-calculator",
   aboutHref: "/tools/bmi-calculator/about"
+} as const;
+
+const uncertifiedTool: ToolDefinition = {
+  ...bmiTool,
+  slug: "token-counter",
+  name: "Token Counter",
+  description: "Count tokens for model planning.",
+  launchCertified: false,
+  href: "/tools/token-counter",
+  aboutHref: "/tools/token-counter/about"
 } as const;
 
 describe("buildToolMetadata", () => {
@@ -47,6 +58,19 @@ describe("buildToolMetadata", () => {
     const ogDescription = typeof metadata.openGraph?.description === "string" ? metadata.openGraph.description : "";
     expect(ogDescription.toLowerCase()).toContain("local");
   });
+
+  it("does not add robots restrictions to launch-certified tools", () => {
+    const metadata = buildToolMetadata(bmiTool);
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it("marks uncertified tool workspace pages as noindex previews", () => {
+    const metadata = buildToolMetadata(uncertifiedTool);
+    expect(metadata.robots).toMatchObject({
+      index: false,
+      follow: false
+    });
+  });
 });
 
 describe("buildToolAboutMetadata", () => {
@@ -58,5 +82,13 @@ describe("buildToolAboutMetadata", () => {
   it("sets the canonical url to the tool about path", () => {
     const metadata = buildToolAboutMetadata(bmiTool);
     expect(metadata.alternates?.canonical).toBe("/tools/bmi-calculator/about");
+  });
+
+  it("marks uncertified tool about pages as noindex previews", () => {
+    const metadata = buildToolAboutMetadata(uncertifiedTool);
+    expect(metadata.robots).toMatchObject({
+      index: false,
+      follow: false
+    });
   });
 });

@@ -29,7 +29,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { ResourceCard } from "@/components/tools/resource-card";
 import { ToolCard } from "@/components/tools/tool-card";
 import { getAllArticlesSync as getAllArticles } from "@/data/blog";
-import { aiDeveloperLabTools, tools, workflows } from "@/data/registry";
+import { aiDeveloperLabTools, launchCertifiedTools, workflows } from "@/data/registry";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { buildGraph, buildOrganizationSchema, buildWebSiteSchema } from "@/lib/seo/json-ld";
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
@@ -138,7 +138,7 @@ export default function HomePage() {
   const localizedHref = (href: string) => {
     return localizeHomeHref(href, localeCode);
   };
-  const popularTools = tools.filter((tool) => {
+  const popularTools = launchCertifiedTools.filter((tool) => {
     return ["json-repair", "mortgage-calculator", "llm-cost-calculator", "pdf-toolkit", "prompt-injection-scanner", "mcp-server-builder"].includes(tool.slug);
   });
   const workflowMessages = t.raw("workflowsPage.workflowCards") as HomeWorkflowCopyMap;
@@ -322,13 +322,13 @@ function MobileHomeApp() {
             })}
           </div>
           <div className="home-mobile-segmented" role="group" aria-label={t("home.aria.toolType")}>
-            <button aria-pressed="true" type="button">
+            <button disabled aria-pressed="true" type="button">
               <Monitor size={18} aria-hidden="true" /> {t("home.toolTypes.traditional")}
             </button>
-            <button aria-pressed="false" type="button">
+            <button disabled aria-pressed="false" type="button">
               <Sparkles size={18} aria-hidden="true" /> {t("home.toolTypes.ai")}
             </button>
-            <button aria-pressed="false" type="button">
+            <button disabled aria-pressed="false" type="button">
               <Workflow size={18} aria-hidden="true" /> {t("home.toolTypes.workflow")}
             </button>
           </div>

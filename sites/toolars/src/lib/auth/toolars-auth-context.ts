@@ -6,7 +6,7 @@ export interface ToolarsAuthContext {
   accountEmail: string | null;
   accountId: string | null;
   isAuthenticated: boolean;
-  source: "anonymous" | "preview-header" | "session";
+  source: "anonymous" | "preview-header" | "session" | "supabase";
   workspaceId: string;
 }
 

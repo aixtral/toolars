@@ -619,23 +619,36 @@
     "rights": "مسودة عربية 211: All rights reserved."
   },
   "auth": {
+    "emailLabel": "مسودة عربية 212: Email",
+    "passwordLabel": "مسودة عربية 213: Password",
+    "passwordHint": "مسودة عربية 214: Use at least 6 characters.",
+    "status": {
+      "checkEmail": "مسودة عربية 215: Check your email to confirm the account.",
+      "failed": "مسودة عربية 216: Supabase could not complete this request. Check the credentials and try again.",
+      "invalidInput": "مسودة عربية 217: Enter an email and password to continue.",
+      "notConfigured": "مسودة عربية 218: Supabase is not configured yet. Add the Supabase URL and publishable key first.",
+      "signedIn": "مسودة عربية 219: Signed in. Your workspace is syncing.",
+      "submitting": "مسودة عربية 220: Connecting..."
+    },
     "signIn": {
       "title": "مسودة عربية 212: Sign in to Toolars",
       "eyebrow": "مسودة عربية 213: Account",
-      "description": "مسودة عربية 214: Use Google to keep trial history, saved collections, and account settings in sync.",
-      "google": "مسودة عربية 215: Continue with Google",
-      "googleDescription": "مسودة عربية 216: Start a free trial workspace with your Google account.",
+      "description": "مسودة عربية 221: Use Supabase Auth to keep history, saved collections, and account settings in sync.",
+      "submit": "مسودة عربية 222: Sign in with Supabase",
       "freeTrial": "مسودة عربية 217: Free trial mode",
       "freeTrialDescription": "مسودة عربية 218: No card is required during the beta."
     },
     "signUp": {
       "title": "مسودة عربية 219: Create your Toolars account",
       "eyebrow": "مسودة عربية 220: Account",
-      "description": "مسودة عربية 221: Create a free Toolars workspace with your Google account to sync history and saved collections.",
-      "google": "مسودة عربية 222: Continue with Google",
-      "googleDescription": "مسودة عربية 223: Create a free trial workspace with your Google account.",
+      "description": "مسودة عربية 223: Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
+      "submit": "مسودة عربية 224: Create Supabase account",
       "freeTrial": "مسودة عربية 224: Free trial mode",
       "freeTrialDescription": "مسودة عربية 225: No card is required during the beta."
+    },
+    "signOut": {
+      "button": "مسودة عربية 226: Sign out",
+      "signedOut": "مسودة عربية 227: Signed out."
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "مسودة عربية 250: Upgrade workspace",
       "description": "مسودة عربية 251: Review future plan benefits. Paid upgrades are parked while the beta trial is active.",
       "futurePlan": "مسودة عربية 252: Future plan",
+      "planLabel": "مسودة عربية 252A: {planName} future plan",
+      "phase2Notice": "مسودة عربية 252B: Paid upgrades are parked for Phase 2.",
+      "phase2Cta": "مسودة عربية 252C: Phase 2 waitlist",
       "start": "مسودة عربية 253: Start upgrade"
     }
   },

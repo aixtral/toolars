@@ -77,8 +77,8 @@ export function PricingView() {
         </p>
         {freeTrialMode ? null : (
           <div className="pricing-toggle" role="group" aria-label={t("billingToggle.ariaLabel")}>
-            <button type="button">{t("billingToggle.monthly")}</button>
-            <button aria-pressed="true" type="button">
+            <button disabled type="button">{t("billingToggle.monthly")}</button>
+            <button disabled aria-pressed="true" type="button">
               {t("billingToggle.yearly")} <span>{t("billingToggle.savings")}</span>
             </button>
           </div>

@@ -1,7 +1,7 @@
 # Toolars Launch Readiness Reset And Roadmap
 
 日期: 2026-07-04
-状态: Internal Alpha, not launch ready  
+状态: Internal Alpha, not launch ready
 证据入口: `cd sites/toolars && pnpm audit:tool-inventory`
 
 ## 1. Executive Reset
@@ -217,7 +217,7 @@ Exit criteria:
 
 ### Phase 3: Tool Functionality Completion
 
-Status: source and Toolars wiring complete; source-behavior golden coverage and full browser smoke still pending.
+Status: source and Toolars wiring complete; 190 public workspace route smoke passes; 55 launch-certified tools have semantic smoke; source-behavior golden coverage and remaining per-tool semantic smoke still pending.
 
 Tasks:
 
@@ -227,12 +227,23 @@ Tasks:
 - For Aixtral Lab, reconcile slug mismatches such as `synthetic-dataset-gen` vs `synthetic-dataset-generator` and `http-status-reference` vs `http-status-codes`. Done through inventory aliases and Toolars-native source exceptions.
 - Hide or mark preview for registry tools without dedicated implementation. Done; public missing workspace/lib is zero.
 - Add per-tool acceptance fixtures.
+- Add a browser route smoke for every public tool workspace. Done through `pnpm run smoke:public-workspaces`; local production evidence on 2026-07-08 passed 190/190.
+- Expand launch-certified semantic smoke batch 2. Done for `token-counter`, `base64-converter`, `password-generator`, `uuid-generator`, and `timestamp-converter`; local production evidence on 2026-07-08 passed 15/15.
+- Expand launch-certified semantic smoke batch 3. Done for `json-formatter`, `jwt-decoder`, `url-encoder`, `hash-generator`, and `regex-tester`; local production evidence on 2026-07-08 passed 20/20.
+- Expand launch-certified semantic smoke batch 4. Done for `json-diff`, `csv-to-json`, `json-to-csv`, `yaml-validator`, and `xml-formatter`; local production evidence on 2026-07-08 passed 25/25.
+- Expand launch-certified semantic smoke batch 5. Done for `markdown-to-json`, `diff-checker`, `text-diff`, `url-parser`, and `number-base-converter`; local production evidence on 2026-07-09 passed 30/30.
+- Expand launch-certified semantic smoke batch 6. Done for `file-size-converter`, `chmod-calculator`, `ipv4-subnet-calculator`, `user-agent-parser`, and `color-converter`; local production evidence on 2026-07-10 passed 35/35.
+- Expand launch-certified semantic smoke batch 7. Done for `base64-image-encoder`, `case-converter`, `code-minifier`, `cron-explainer`, and `docker-compose-converter`; local production evidence on 2026-07-10 passed 40/40.
+- Expand launch-certified semantic smoke batch 8. Done for `html-entity-encoder`, `css-gradient-generator`, `css-border-radius-generator`, `slug-generator`, and `text-stats`; local production evidence on 2026-07-10 passed 45/45.
+- Expand launch-certified semantic smoke batch 9. Done for `discount-calculator`, `tip-calculator`, `bill-split-calculator`, `hourly-to-salary`, and `rule-of-72`; local production evidence on 2026-07-10 passed 50/50.
+- Expand launch-certified semantic smoke batch 10. Done for `retirement-calculator`, `roi-calculator`, `apy-calculator`, `savings-goal`, and `stock-average`; local production evidence on 2026-07-11 passed 55/55.
 
 Exit criteria:
 
 - Launch batch tools pass unit, workspace, and browser smoke tests.
 - Generic fallback is not used to imply full feature completion.
 - Non-functional source tools are hidden from public discovery.
+- Every public tool route passes baseline browser workspace smoke; every launch-certified tool has semantic input/run/output smoke.
 
 ### Phase 4: Discovery, Time, And Category Consistency
 
@@ -270,7 +281,7 @@ Exit criteria:
 
 ### Phase 6: Release Gates
 
-Status: started.
+Status: managed production full gate passed locally; CI wiring, production health gate, and public workspace browser smoke added, pending first remote CI run and real deployment health evidence.
 
 Tasks:
 
@@ -278,18 +289,37 @@ Tasks:
   - `pnpm test`
   - `pnpm typecheck`
   - `pnpm build`
+  - production health through managed production server
   - `pnpm audit:tool-inventory`
+  - certified tool smoke through managed production server
+  - public tool workspace smoke through managed production server
   - i18n residue audit
   - route crawl in full mode
   - visual release gate in full mode
 - Produce a Markdown/JSON launch report. Done under `output/launch-readiness/<run>/`.
+- Run browser gates against `next start`, not `next dev`. Done through `scripts/with-production-server.mjs`; browser gates in `launch:readiness` now wrap commands with a managed production server at the requested `--base-url`.
+- Fix CLI `--full` parsing so browser and visual gates run when full mode is requested. Done in `scripts/launch-readiness-report.mjs`.
+- Full managed local evidence: `/tmp/toolars-launch-readiness-full-managed-fixed` passed on 2026-07-08 with route crawl 236/236, language UX 4/4, draft locale 3/3, mobile visual 28/28, and desktop visual 4/4.
+- CI wiring added: `.github/workflows/ci.yml` now installs Playwright Chromium, runs `pnpm run launch:readiness -- --full --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci`, and uploads the launch readiness artifact. First remote run is still required as release evidence.
+- Production health gate added: `pnpm run release:health -- --base-url <deployment-url>` checks `/api/system/production-health` with Phase 1 semantics, and `launch:readiness` now runs it through the managed production server after build. Supabase public config and Free Trial Mode are release blockers; AI/Billing providers remain warnings unless explicitly required.
+- Remote deployment health evidence is still blocked on real deployment URLs. Repository/config search on 2026-07-10 found only placeholders and test fixtures; release owner must provide `TOOLARS_PREPRODUCTION_URL` and `TOOLARS_PRODUCTION_URL`, then run `pnpm run release:health -- --base-url <url>` for each deployed environment.
+- Local Supabase env evidence: on 2026-07-09, `.env.local` was configured with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; local `release:health` against `http://127.0.0.1:9088` returned `Status: pass` with no blockers and AI provider warning only.
+- Default launch readiness evidence with health gate: `/tmp/toolars-launch-readiness-health-gate-fixed` passed 9/9 on 2026-07-09, including unit tests 537 files / 1674 tests, typecheck, production build, production health, tool inventory, 30/30 certified tool smoke, button behavior, i18n audit, and i18n quality audit.
+- Default launch readiness evidence after certified batch 6: `/tmp/toolars-launch-readiness-35-certified` passed 9/9 on 2026-07-10, including unit tests 537 files / 1674 tests, typecheck, production build, production health, tool inventory, 35/35 certified tool smoke, button behavior, i18n audit, and i18n quality audit.
+- Default launch readiness evidence after certified batch 7: `/tmp/toolars-launch-readiness-40-certified` passed 9/9 on 2026-07-10, including unit tests 537 files / 1674 tests, typecheck, production build, production health, tool inventory, 40/40 certified tool smoke, button behavior, i18n audit, and i18n quality audit.
+- Default launch readiness evidence after certified batch 8: `/tmp/toolars-launch-readiness-45-certified` passed 9/9 on 2026-07-10, including unit tests 537 files / 1674 tests, typecheck, production build, production health, tool inventory, 45/45 certified tool smoke, button behavior, i18n audit, and i18n quality audit.
+- Default launch readiness evidence after certified batch 9: `/tmp/toolars-launch-readiness-50-certified` passed 9/9 on 2026-07-10, including unit tests 537 files / 1674 tests, typecheck, production build, production health, tool inventory, 50/50 certified tool smoke, button behavior, i18n audit, and i18n quality audit.
+- Default launch readiness evidence after certified batch 10: `/tmp/toolars-launch-readiness-55-certified` passed 9/9 on 2026-07-11, including unit tests 537 files / 1674 tests, typecheck, production build, production health, tool inventory, 55/55 certified tool smoke, button behavior, i18n audit, and i18n quality audit.
+- Public workspace smoke added: `pnpm run smoke:public-workspaces` checks all 190 public tool workspace routes for navigation, workspace markers, visible controls, and browser errors. Local production evidence: `/tmp/toolars-public-workspace-smoke-full`, 190/190 pass.
+- Certified tool smoke now covers 55 launch-certified tools. Local production evidence: `/tmp/toolars-certified-tool-smoke-55`, 55/55 pass.
 
 Exit criteria:
 
 - All gates pass.
 - All public routes crawl successfully in every supported locale.
-- All public tools run a smoke interaction.
+- All public tools pass baseline workspace smoke; launch-certified tools run semantic smoke interactions.
 - Visual diff thresholds pass for the agreed screen set.
+- Preflight production health returns `Status: pass` on preproduction and production deployment URLs.
 
 ## 5. Test And Verification Plan
 
@@ -300,15 +330,17 @@ Exit criteria:
 | Workspace tests | `pnpm test src/app/[locale]/tools/<slug>/<slug>-workspace.test.tsx` | Verify input/run/output UI behavior |
 | I18n contract | `pnpm audit:i18n` | Verify key parity, locale links, and English residue |
 | Category contract | planned registry/catalog tests | Verify derived counts and visible lists |
-| Route crawl | `pnpm launch:readiness -- --full --base-url http://127.0.0.1:9320` | Verify sitemap routes, language switching, draft-locale policy, and visual gates against a running app |
+| Route crawl | `pnpm launch:readiness -- --full --base-url http://127.0.0.1:9088` | Verify sitemap routes, language switching, draft-locale policy, and visual gates against a managed production server |
+| Public workspace smoke | `pnpm run smoke:public-workspaces -- --base-url http://127.0.0.1:9088` | Verify all 190 public tool workspaces load with marker, controls, and no browser errors |
 | Blog E2E | route crawl plus visual release gate | Verify locale metadata, links, and PC/mobile layout |
 | Visual gate | `pnpm visual:release-gate` | Verify high-fidelity parity for selected screens |
+| Production health | `pnpm run release:health -- --base-url <deployment-url>` and `pnpm launch:readiness` production-health gate | Verify Supabase public config, Phase 1 free mode, and accepted provider gaps without exposing secret values |
 | Production dry run | `pnpm build && pnpm start` plus crawler | Verify deployable app and route health |
 
 ## 6. Immediate Next Work
 
-1. Run `pnpm launch:readiness -- --full --base-url http://127.0.0.1:9320` against a production server and triage browser/visual failures.
-2. Add browser smoke for every public tool workspace, starting with input/run/output availability rather than full semantic assertions.
-3. Add source golden fixtures for the highest-risk VitalCalc formulas and Aixtral Lab transformations.
-4. Add CI wiring for `pnpm launch:readiness` on beta/release branches.
+1. Run the new GitHub Actions workflow remotely on PR/main and attach the launch readiness artifact to the release candidate.
+2. Configure preproduction and production Supabase/env, run `pnpm run release:health -- --base-url <deployment-url>` for each deployed URL, and attach the pass output to the release candidate.
+3. Expand semantic browser smoke beyond the 55 launch-certified tools, starting with the remaining high-traffic public uncertified finance/health/developer tools.
+4. Add source golden fixtures for the highest-risk VitalCalc formulas and Aixtral Lab transformations.
 5. Decide whether the six draft locales stay non-public for this release or graduate through the launch-locale checklist.

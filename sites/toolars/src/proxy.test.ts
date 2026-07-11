@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectLocale, isStaticAssetPath } from "./proxy";
+import { detectLocale, getLaunchCertificationRobotsHeader, isStaticAssetPath } from "./proxy";
 
 describe("proxy locale detection", () => {
   it("detects only launch locales for public routing", () => {
@@ -22,5 +22,19 @@ describe("proxy static asset routing", () => {
     expect(isStaticAssetPath("/brand/toolars-stack-monolith-mark-v9.png")).toBe(true);
     expect(isStaticAssetPath("/favicon.svg")).toBe(true);
     expect(isStaticAssetPath("/tools/json-repair")).toBe(false);
+  });
+});
+
+describe("proxy tool certification robots header", () => {
+  it("marks uncertified tool workspace and about paths as noindex", () => {
+    expect(getLaunchCertificationRobotsHeader("/tools/color-contrast-checker")).toBe("noindex, nofollow");
+    expect(getLaunchCertificationRobotsHeader("/en/tools/color-contrast-checker")).toBe("noindex, nofollow");
+    expect(getLaunchCertificationRobotsHeader("/zh-hans/tools/color-contrast-checker/about")).toBe("noindex, nofollow");
+  });
+
+  it("keeps launch-certified tools and non-tool paths indexable", () => {
+    expect(getLaunchCertificationRobotsHeader("/tools/json-repair")).toBeNull();
+    expect(getLaunchCertificationRobotsHeader("/es/tools/json-repair/about")).toBeNull();
+    expect(getLaunchCertificationRobotsHeader("/explore/pdf")).toBeNull();
   });
 });

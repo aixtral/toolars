@@ -174,7 +174,7 @@ export function TeamSettingsView() {
           <section className="panel settings-subpage-card">
             <h2>{t("sections.ownership")}</h2>
             <p className="tool-description">{t("ownership.description")}</p>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Crown size={15} aria-hidden="true" /> {t("ownership.transferOwnership")}
             </button>
           </section>

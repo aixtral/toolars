@@ -82,16 +82,16 @@ export function AdminReviewView() {
               <label className="input-like" htmlFor="admin-search">
                 {t("toolbar.search")}
               </label>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("toolbar.sortNewest")}
               </button>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("toolbar.allStatuses")}
               </button>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("toolbar.filters")}
               </button>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 <Download size={15} aria-hidden="true" /> {t("toolbar.exportCsv")}
               </button>
             </div>
@@ -125,7 +125,7 @@ export function AdminReviewView() {
                     <span className="badge local">{t(`statuses.${submission.statusKey}`)}</span>
                     <span className={`admin-risk ${submission.riskKey}`}>{t(`risks.${submission.riskKey}`)}</span>
                     <span>{t(`updated.${submission.updatedKey}`)}</span>
-                    <button aria-label={t("table.reviewAction", { tool: toolName })} className="icon-button" type="button">
+                    <button disabled aria-label={t("table.reviewAction", { tool: toolName })} className="icon-button" type="button">
                       <MoreHorizontal size={16} aria-hidden="true" />
                     </button>
                   </article>
@@ -214,13 +214,13 @@ export function AdminReviewView() {
           </section>
 
           <div className="admin-action-row">
-            <button className="button button-solid" type="button">
+            <button disabled className="button button-solid" type="button">
               <ShieldCheck size={15} aria-hidden="true" /> {t("actions.approve")}
             </button>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               {t("actions.requestChanges")}
             </button>
-            <button className="button button-danger" type="button">
+            <button disabled className="button button-danger" type="button">
               {t("actions.reject")}
             </button>
           </div>

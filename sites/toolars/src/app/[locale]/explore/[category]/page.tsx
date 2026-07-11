@@ -9,7 +9,7 @@ import {
   exploreCategorySlugs,
   getCategoryHref,
   getCategoryLabelBySlug,
-  getPublicToolsByCategory,
+  getLaunchCertifiedToolsByCategory,
   workflows
 } from "@/data/registry";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
@@ -51,7 +51,7 @@ export default async function ExploreCategoryPage({ params }: { params: Promise<
 }
 
 function ExploreCategoryView({ category, label }: Readonly<{ category: string; label: string }>) {
-  const categoryTools = getPublicToolsByCategory(label);
+  const categoryTools = getLaunchCertifiedToolsByCategory(label);
   const categoryWorkflows = workflows.filter((workflow) => workflow.category === label);
   const t = useTranslations();
   const locale = useLocale();

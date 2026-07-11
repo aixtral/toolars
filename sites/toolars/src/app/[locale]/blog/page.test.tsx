@@ -95,8 +95,8 @@ describe("Blog pages", () => {
     const graph = JSON.parse(container.querySelector('script[type="application/ld+json"]')?.textContent ?? "{}");
     const articleSchema = graph["@graph"]?.find((node: Record<string, unknown>) => node["@type"] === "Article");
 
-    expect(articleSchema?.url).toBe("http://localhost:9320/es/blog/json-repair-guide");
-    expect(articleSchema?.mainEntityOfPage).toBe("http://localhost:9320/es/blog/json-repair-guide");
+    expect(articleSchema?.url).toBe("http://localhost:9088/es/blog/json-repair-guide");
+    expect(articleSchema?.mainEntityOfPage).toBe("http://localhost:9088/es/blog/json-repair-guide");
     expect(articleSchema?.inLanguage).toBe("es");
   });
 
@@ -151,13 +151,13 @@ describe("Blog pages", () => {
     expect(metadata.title).toBe("Cómo reparar JSON roto en segundos");
     expect(metadata.description).toContain("Aquí te explicamos cómo corregir JSON mal formado rápido");
     expect(metadata.alternates?.canonical).toBe("/es/blog/json-repair-guide");
-    expect(metadata.metadataBase?.toString()).toBe("http://localhost:9320/");
+    expect(metadata.metadataBase?.toString()).toBe("http://localhost:9088/");
     expect(metadata.alternates?.languages).toMatchObject({
-      en: "http://localhost:9320/blog/json-repair-guide",
-      es: "http://localhost:9320/es/blog/json-repair-guide",
-      "zh-Hans": "http://localhost:9320/zh-hans/blog/json-repair-guide",
-      "zh-Hant": "http://localhost:9320/zh-hant/blog/json-repair-guide",
-      "x-default": "http://localhost:9320/blog/json-repair-guide"
+      en: "http://localhost:9088/blog/json-repair-guide",
+      es: "http://localhost:9088/es/blog/json-repair-guide",
+      "zh-Hans": "http://localhost:9088/zh-hans/blog/json-repair-guide",
+      "zh-Hant": "http://localhost:9088/zh-hant/blog/json-repair-guide",
+      "x-default": "http://localhost:9088/blog/json-repair-guide"
     });
     expect(metadata.openGraph).toMatchObject({
       title: "Cómo reparar JSON roto en segundos — Toolars Blog",
@@ -173,7 +173,7 @@ describe("Blog pages", () => {
     expect(String(metadata.title)).toContain("Blog de Toolars");
     expect(String(metadata.description)).toContain("Guías prácticas y sin anuncios");
     expect(metadata.alternates?.canonical).toBe("/es/blog");
-    expect(metadata.metadataBase?.toString()).toBe("http://localhost:9320/");
+    expect(metadata.metadataBase?.toString()).toBe("http://localhost:9088/");
     expect(metadata.openGraph).toMatchObject({
       title: "Blog de Toolars",
       description: "Guías para herramientas, IA y flujos de desarrollo",
@@ -189,11 +189,11 @@ describe("Blog pages", () => {
     expect(metadata.title).toBe("¿Qué es el IMC? Cómo entender el índice de masa corporal");
     expect(metadata.alternates?.canonical).toBe("/es/blog/what-is-bmi");
     expect(metadata.alternates?.languages).toMatchObject({
-      en: "http://localhost:9320/blog/what-is-bmi",
-      es: "http://localhost:9320/es/blog/what-is-bmi",
-      "zh-Hans": "http://localhost:9320/zh-hans/blog/what-is-bmi",
-      "zh-Hant": "http://localhost:9320/zh-hant/blog/what-is-bmi",
-      "x-default": "http://localhost:9320/blog/what-is-bmi"
+      en: "http://localhost:9088/blog/what-is-bmi",
+      es: "http://localhost:9088/es/blog/what-is-bmi",
+      "zh-Hans": "http://localhost:9088/zh-hans/blog/what-is-bmi",
+      "zh-Hant": "http://localhost:9088/zh-hant/blog/what-is-bmi",
+      "x-default": "http://localhost:9088/blog/what-is-bmi"
     });
   });
 

@@ -91,6 +91,7 @@ function writeAccountStore(store: ToolarsAccountStore) {
     return;
   }
 
+  assertLegacyAccountStoreWritable();
   const storagePath = getAccountStoreStoragePath();
   mkdirSync(/*turbopackIgnore: true*/ dirname(storagePath), { recursive: true });
   writeFileSync(/*turbopackIgnore: true*/ storagePath, `${JSON.stringify(store, null, 2)}\n`);
@@ -161,6 +162,16 @@ function getAccountStoreStoragePath() {
       fileName: TOOLARS_RUNTIME_FILES.accountStore
     })
   );
+}
+
+function assertLegacyAccountStoreWritable() {
+  if (storagePathForTest || getRuntimeEnvironment() !== "production") return;
+  throw new Error("Toolars local account store is disabled in production. Use Supabase profiles instead.");
+}
+
+function getRuntimeEnvironment() {
+  if (typeof process === "undefined") return "production";
+  return process.env.NODE_ENV ?? "production";
 }
 
 function normalizeAccountId(accountId: string) {

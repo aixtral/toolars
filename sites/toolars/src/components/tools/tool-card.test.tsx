@@ -23,6 +23,7 @@ const localizedTool: ToolDefinition = {
   accent: "#2563eb",
   status: "ready",
   visibility: "public",
+  launchCertified: true,
   featured: true,
   href: "/tools/json-repair",
   aboutHref: "/tools/json-repair/about"

@@ -137,7 +137,7 @@ function defaultOutputRoot() {
 }
 
 async function runCli() {
-  const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9320").replace(/\/$/, "");
+  const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088").replace(/\/$/, "");
   const outputRoot = process.env.TOOLARS_ROUTE_CRAWL_OUTPUT_DIR
     ? path.resolve(process.env.TOOLARS_ROUTE_CRAWL_OUTPUT_DIR)
     : defaultOutputRoot();

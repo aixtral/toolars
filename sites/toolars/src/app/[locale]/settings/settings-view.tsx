@@ -73,6 +73,7 @@ interface SettingsAuthSessionPayload {
     workspaceId?: string;
   } | null;
   session?: {
+    provider?: string;
     sessionId?: string;
     status?: string;
   } | null;
@@ -220,7 +221,7 @@ export function SettingsView() {
               <strong>{t("cards.productionKey")}</strong>
               <small>{mobileProductionKeyPreview}</small>
             </span>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               {t("mobilePreview.copy")}
             </button>
           </div>
@@ -549,14 +550,14 @@ export function SettingsView() {
 function buildAccountSessionRows(payload: SettingsAuthSessionPayload | null): AccountSessionRow[] {
   const email = payload?.account?.accountEmail ?? payload?.auth?.accountEmail ?? undefined;
   const accountId = payload?.account?.accountId ?? payload?.auth?.accountId ?? undefined;
-  const sessionId = payload?.session?.sessionId ?? payload?.auth?.sessionId ?? undefined;
+  const sessionIdentity = payload?.session?.sessionId ?? payload?.auth?.sessionId ?? payload?.session?.provider ?? undefined;
   const source = payload?.auth?.source ?? payload?.account?.source ?? undefined;
   const isAuthenticated = Boolean(payload?.auth?.isAuthenticated);
 
   return [
     { fallbackKey: "notSignedIn", labelKey: "email", stateKey: isAuthenticated ? "synced" : "local", value: email },
     { fallbackKey: "anonymousWorkspace", labelKey: "accountId", stateKey: isAuthenticated ? "synced" : "local", value: accountId },
-    { fallbackKey: "noActiveSession", labelKey: "sessionId", stateKey: payload?.session?.status === "active" ? "synced" : "pending", value: sessionId },
+    { fallbackKey: "noActiveSession", labelKey: "sessionId", stateKey: payload?.session?.status === "active" ? "synced" : "pending", value: sessionIdentity },
     { fallbackKey: "anonymous", labelKey: "source", stateKey: isAuthenticated ? "synced" : "local", value: source }
   ];
 }

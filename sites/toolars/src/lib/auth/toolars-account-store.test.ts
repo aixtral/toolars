@@ -1,7 +1,7 @@
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   getToolarsAccountProfile,
   resetToolarsAccountStore,
@@ -19,6 +19,7 @@ describe("toolars account store", () => {
   });
 
   afterEach(() => {
+    vi.unstubAllEnvs();
     setToolarsAccountStoreStoragePathForTest(null);
     rmSync(tempDirectory, { force: true, recursive: true });
   });
@@ -88,6 +89,25 @@ describe("toolars account store", () => {
         },
         version: 1
       });
+    } finally {
+      process.env.TOOLARS_ACCOUNT_STORE_PATH = originalAccountStorePath;
+    }
+  });
+
+  it("rejects production writes to the legacy local account store", () => {
+    const originalAccountStorePath = process.env.TOOLARS_ACCOUNT_STORE_PATH;
+    setToolarsAccountStoreStoragePathForTest(null);
+    vi.stubEnv("NODE_ENV", "production");
+    process.env.TOOLARS_ACCOUNT_STORE_PATH = join(tempDirectory, "runtime", "accounts.json");
+
+    try {
+      expect(() =>
+        upsertToolarsAccountProfile({
+          accountEmail: "runtime@example.com",
+          accountId: "acct-runtime",
+          signedInAt: "2026-06-21T12:00:00Z"
+        })
+      ).toThrow(/Supabase profiles/);
     } finally {
       process.env.TOOLARS_ACCOUNT_STORE_PATH = originalAccountStorePath;
     }

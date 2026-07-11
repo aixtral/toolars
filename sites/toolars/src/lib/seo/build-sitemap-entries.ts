@@ -1,6 +1,6 @@
 import { allArticleSlugs, getArticleAvailableLocales } from "@/data/blog";
 import type { LocaleCode } from "@/data/locales";
-import { collections, tools, workflows } from "@/data/registry";
+import { collections, launchCertifiedTools, workflows } from "@/data/registry";
 
 export interface SitemapEntry {
   url: string;
@@ -25,8 +25,8 @@ const STATIC_DIRECTORIES: Array<{ path: string; changeFrequency: SitemapEntry["c
 
 /**
  * Build the full list of public sitemap entries for the Toolars site.
- * Includes the homepage, directories, every tool workspace + about page,
- * every workflow, and every collection.
+ * Includes the homepage, directories, launch-certified tool workspace + about
+ * pages, every workflow, and every collection.
  */
 export function buildSitemapEntries(baseUrl: string): SitemapEntry[] {
   const normalizedBase = baseUrl.replace(/\/+$/g, "");
@@ -40,7 +40,7 @@ export function buildSitemapEntries(baseUrl: string): SitemapEntry[] {
     });
   }
 
-  for (const tool of tools) {
+  for (const tool of launchCertifiedTools) {
     entries.push({
       url: `${normalizedBase}${tool.href}`,
       changeFrequency: "weekly",

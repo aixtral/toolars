@@ -7,7 +7,7 @@ import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import es from "../../../messages/es.json";
 import zhHans from "../../../messages/zh-hans.json";
-import { categories, getCategoryHref } from "@/data/registry";
+import { getCategoryHref, launchCertifiedCategories } from "@/data/registry";
 import { ToolarsShell } from "./toolars-shell";
 
 type AuditCandidate = {
@@ -127,8 +127,10 @@ describe("ToolarsShell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
     expect(screen.getByRole("dialog", { name: "Sign in to Toolars" })).toBeInTheDocument();
-    expect(screen.queryByText("Continue with email")).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continue with Google" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Email")).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign in with Supabase" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
   });
 
   it("renders a grouped account and language action cluster in the topbar", () => {
@@ -313,7 +315,10 @@ describe("ToolarsShell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign up" }));
 
     expect(screen.getByRole("dialog", { name: "Create your Toolars account" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continue with Google" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Email")).toBeInTheDocument();
+    expect(screen.getByLabelText("Password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Create Supabase account" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
   });
 
   it("renders free trial sidebar copy instead of paid billing navigation in free trial mode", () => {
@@ -331,14 +336,14 @@ describe("ToolarsShell", () => {
     expect(screen.queryByText("30-day money-back guarantee")).not.toBeInTheDocument();
   });
 
-  it("renders every tool category in the default sidebar as a navigable link", () => {
+  it("renders every launch-certified tool category in the default sidebar as a navigable link", () => {
     renderWithIntl(
       <ToolarsShell active="explore">
         <h1>Explore content</h1>
       </ToolarsShell>
     );
 
-    for (const category of categories) {
+    for (const category of launchCertifiedCategories) {
       const link = sidebarLink(category.label);
 
       expect(link).toHaveAttribute("href", getCategoryHref(category.label));
@@ -346,6 +351,7 @@ describe("ToolarsShell", () => {
       expect(link).not.toHaveClass("side-link-static");
       expect(link.querySelector("svg")).toBeInTheDocument();
     }
+    expect(screen.queryByText("Image")).not.toBeInTheDocument();
   });
 
   it("routes workflow sidebar categories to real pages or existing sections", () => {

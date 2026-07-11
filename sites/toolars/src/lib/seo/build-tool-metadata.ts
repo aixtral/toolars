@@ -16,6 +16,10 @@ function buildOpenGraphDescription(tool: ToolDefinition): string {
   return `${tool.description}${localNote}`;
 }
 
+function buildToolRobots(tool: ToolDefinition): Metadata["robots"] {
+  return tool.launchCertified ? undefined : { index: false, follow: false };
+}
+
 /**
  * Build Next.js Metadata for a tool workspace page (`/tools/[slug]`).
  * The title template in the root layout appends the brand name automatically.
@@ -28,6 +32,7 @@ export function buildToolMetadata(tool: ToolDefinition): Metadata {
     alternates: {
       canonical: tool.href
     },
+    robots: buildToolRobots(tool),
     openGraph: {
       type: "website",
       title: `${tool.name} — Toolars`,
@@ -53,6 +58,7 @@ export function buildToolAboutMetadata(tool: ToolDefinition): Metadata {
     alternates: {
       canonical: tool.aboutHref
     },
+    robots: buildToolRobots(tool),
     openGraph: {
       type: "article",
       title: `${tool.name} overview — Toolars`,

@@ -43,6 +43,22 @@ describe("sitemap locale routing", () => {
     expect(paths).toContain("/zh-hant/blog/what-is-bmi");
   });
 
+  it("publishes localized sitemap URLs only for launch-certified tools", () => {
+    const routes = sitemap();
+    const paths = routes.map((route) => new URL(route.url).pathname);
+
+    expect(paths).toContain("/tools/json-repair");
+    expect(paths).toContain("/es/tools/json-repair");
+    expect(paths).toContain("/zh-hans/tools/json-repair");
+    expect(paths).toContain("/zh-hant/tools/json-repair");
+
+    expect(paths).not.toContain("/tools/color-contrast-checker");
+    expect(paths).not.toContain("/tools/color-contrast-checker/about");
+    expect(paths).not.toContain("/es/tools/color-contrast-checker");
+    expect(paths).not.toContain("/zh-hans/tools/color-contrast-checker");
+    expect(paths).not.toContain("/zh-hant/tools/color-contrast-checker");
+  });
+
   it("adds hreflang alternates for localized article fallback routes", () => {
     const routes = sitemap();
     const englishVitalCalcRoute = routes.find((route) => new URL(route.url).pathname === "/blog/what-is-bmi");
@@ -50,13 +66,13 @@ describe("sitemap locale routing", () => {
     const vitalCalcAlternates = Object.values(englishVitalCalcRoute?.alternates?.languages ?? {});
     const launchAlternates = Object.values(englishLaunchRoute?.alternates?.languages ?? {});
 
-    expect(vitalCalcAlternates).toContain("http://localhost:9320/blog/what-is-bmi");
-    expect(vitalCalcAlternates).toContain("http://localhost:9320/es/blog/what-is-bmi");
-    expect(vitalCalcAlternates).toContain("http://localhost:9320/zh-hans/blog/what-is-bmi");
-    expect(vitalCalcAlternates).toContain("http://localhost:9320/zh-hant/blog/what-is-bmi");
+    expect(vitalCalcAlternates).toContain("http://localhost:9088/blog/what-is-bmi");
+    expect(vitalCalcAlternates).toContain("http://localhost:9088/es/blog/what-is-bmi");
+    expect(vitalCalcAlternates).toContain("http://localhost:9088/zh-hans/blog/what-is-bmi");
+    expect(vitalCalcAlternates).toContain("http://localhost:9088/zh-hant/blog/what-is-bmi");
 
-    expect(launchAlternates).toContain("http://localhost:9320/es/blog/json-repair-guide");
-    expect(launchAlternates).toContain("http://localhost:9320/zh-hans/blog/json-repair-guide");
-    expect(launchAlternates).toContain("http://localhost:9320/zh-hant/blog/json-repair-guide");
+    expect(launchAlternates).toContain("http://localhost:9088/es/blog/json-repair-guide");
+    expect(launchAlternates).toContain("http://localhost:9088/zh-hans/blog/json-repair-guide");
+    expect(launchAlternates).toContain("http://localhost:9088/zh-hant/blog/json-repair-guide");
   });
 });

@@ -162,7 +162,7 @@ describe("CommandCenter", () => {
     expect(screen.getByText("Try a tool name, file type, or task like summarize pdf.")).toBeInTheDocument();
   });
 
-  it("renders long search results in the scroll region while keeping the footer mounted", () => {
+  it("renders certified search results in the scroll region while keeping the footer mounted", () => {
     renderWithIntl(<CommandCenter />);
 
     fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
@@ -174,7 +174,7 @@ describe("CommandCenter", () => {
     const resultsRegion = within(dialog).getByRole("listbox", { name: "Command results" });
     const resultLinks = within(resultsRegion).getAllByRole("link");
 
-    expect(resultLinks.length).toBeGreaterThan(8);
+    expect(resultLinks.length).toBeGreaterThan(3);
     expect(within(dialog).getByText("Escape Close")).toBeInTheDocument();
 
     resultLinks.at(-1)?.focus();

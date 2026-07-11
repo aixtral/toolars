@@ -124,7 +124,7 @@ export function CompoundInterestWorkspace() {
                   : t("resultSection.emptyDescription")}
               </p>
             </div>
-            <button className="button button-outline" type="button">
+            <button disabled className="button button-outline" type="button">
               <Download size={16} aria-hidden="true" /> {t("actions.export")}
             </button>
           </div>

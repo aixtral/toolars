@@ -1,7 +1,7 @@
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createToolarsAuthSessionCookie } from "./toolars-auth-session";
 import {
   getToolarsStoredAuthSession,
@@ -22,6 +22,7 @@ describe("toolars auth session ledger", () => {
   });
 
   afterEach(() => {
+    vi.unstubAllEnvs();
     setToolarsAuthSessionLedgerStoragePathForTest(null);
     rmSync(tempDirectory, { force: true, recursive: true });
   });
@@ -137,6 +138,27 @@ describe("toolars auth session ledger", () => {
         },
         version: 1
       });
+    } finally {
+      process.env.TOOLARS_AUTH_SESSION_LEDGER_PATH = originalSessionLedgerPath;
+    }
+  });
+
+  it("rejects production writes to the legacy local auth session ledger", () => {
+    const originalSessionLedgerPath = process.env.TOOLARS_AUTH_SESSION_LEDGER_PATH;
+    setToolarsAuthSessionLedgerStoragePathForTest(null);
+    vi.stubEnv("NODE_ENV", "production");
+    process.env.TOOLARS_AUTH_SESSION_LEDGER_PATH = join(tempDirectory, "runtime", "sessions.json");
+    const { session } = createToolarsAuthSessionCookie({
+      accountEmail: "runtime@example.com",
+      accountId: "acct-runtime",
+      expiresAt: "2026-06-21T13:00:00Z",
+      issuedAt: "2026-06-21T12:00:00Z",
+      secret: "test-session-secret",
+      sessionId: "sess_runtime"
+    });
+
+    try {
+      expect(() => persistToolarsAuthSession(session)).toThrow(/Supabase Auth/);
     } finally {
       process.env.TOOLARS_AUTH_SESSION_LEDGER_PATH = originalSessionLedgerPath;
     }

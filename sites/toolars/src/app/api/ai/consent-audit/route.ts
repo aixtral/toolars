@@ -6,12 +6,12 @@ import {
   getServerConsentAuditLedger,
   summarizeServerConsentUsageAnalytics
 } from "@/lib/ai/server-consent-audit-ledger";
-import { resolveToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
+import { resolveToolarsApiAuthContext } from "@/lib/auth/toolars-api-auth-context";
 
 export const runtime = "nodejs";
 
-export function GET(request?: Request) {
-  const auth = resolveToolarsAuthContext(request);
+export async function GET(request?: Request) {
+  const auth = await resolveToolarsApiAuthContext(request);
   if (auth.accountId) {
     const ledger = getServerConsentAuditLedgerForAccount(auth.accountId);
     return Response.json({
@@ -31,7 +31,7 @@ export function GET(request?: Request) {
 
 export async function POST(request: Request) {
   try {
-    const auth = resolveToolarsAuthContext(request);
+    const auth = await resolveToolarsApiAuthContext(request);
     const body = await request.json();
     const ledger = appendServerConsentAuditRecord({
       accountId: auth.accountId,
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const auth = resolveToolarsAuthContext(request);
+    const auth = await resolveToolarsApiAuthContext(request);
     const body = await request.json();
     const { binding, ledger } = bindServerConsentAuditWorkspaceToAccount({
       accountEmail: auth.accountEmail ?? body.accountEmail,
@@ -73,8 +73,8 @@ export async function PATCH(request: Request) {
   }
 }
 
-export function DELETE(request?: Request) {
-  const auth = resolveToolarsAuthContext(request);
+export async function DELETE(request?: Request) {
+  const auth = await resolveToolarsApiAuthContext(request);
   const { deletion, ledger } = clearServerConsentAuditLedger({ workspaceId: auth.workspaceId });
   return Response.json({ auth, deletion, ledger });
 }

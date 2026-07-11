@@ -29,10 +29,10 @@ describe("launch route crawl", () => {
       <loc>https://toolars.com/fr/tools/json-repair</loc>
     `;
 
-    expect(createRouteCrawlTargets(xml, { baseUrl: "http://127.0.0.1:9320" })).toEqual([
-      "http://127.0.0.1:9320/tools/json-repair",
-      "http://127.0.0.1:9320/es/tools/json-repair",
-      "http://127.0.0.1:9320/zh-hans/blog/pdf-workflows"
+    expect(createRouteCrawlTargets(xml, { baseUrl: "http://127.0.0.1:9088" })).toEqual([
+      "http://127.0.0.1:9088/tools/json-repair",
+      "http://127.0.0.1:9088/es/tools/json-repair",
+      "http://127.0.0.1:9088/zh-hans/blog/pdf-workflows"
     ]);
   });
 

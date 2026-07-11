@@ -70,7 +70,7 @@ export function LlmCostReviewWorkflow() {
               <h2>{t("canvas.title")}</h2>
               <p className="tool-description">{t("canvas.description")}</p>
             </div>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Save size={16} aria-hidden="true" /> {t("canvas.save")}
             </button>
           </div>

@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, Copy, LockKeyhole, Sparkles } from "lucide-react";
-import { getOrCreateWorkspaceIdentity } from "@/lib/workspace/workspace-identity";
+import { submitToolarsSupabaseEmailAuth } from "@/lib/supabase/toolars-supabase-auth-client";
+import { bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
 
 type CoreModalKind = "share" | "save-collection" | "sign-in" | "sign-up" | "upgrade";
 
@@ -33,10 +34,16 @@ export function CoreActionModalButton({
   planFeatures = []
 }: CoreActionModalButtonProps) {
   const t = useTranslations();
+  const authMode = kind === "sign-up" ? "sign-up" : "sign-in";
+  const isAuthModal = kind === "sign-in" || kind === "sign-up";
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [submittingAuth, setSubmittingAuth] = useState(false);
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const instanceId = useId();
   const titleId = `${instanceId}-title`;
+  const passwordHintId = `${instanceId}-password-hint`;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef(null as HTMLElement | null);
   const title = kind === "share" && shareTitle ? shareTitle : t(modalTitleKey(kind));
@@ -102,8 +109,31 @@ export function CoreActionModalButton({
     setStatus("Collection saved locally");
   }
 
-  function startUpgrade() {
-    setStatus("Upgrade request queued");
+  async function submitAuth(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmittingAuth(true);
+    setStatus("");
+
+    const result = await submitToolarsSupabaseEmailAuth({
+      email: authEmail,
+      emailRedirectTo: buildEmailRedirectTo(),
+      mode: authMode,
+      password: authPassword
+    });
+
+    setSubmittingAuth(false);
+
+    if (!result.ok) {
+      setStatus(t(authStatusKey(result.errorCode)));
+      return;
+    }
+
+    bindWorkspaceIdentityToAccount({
+      accountEmail: result.accountEmail,
+      accountId: result.accountId
+    });
+    notifyAuthSessionChanged();
+    setStatus(t(result.needsEmailConfirmation ? "auth.status.checkEmail" : "auth.status.signedIn"));
   }
 
   return (
@@ -186,50 +216,47 @@ export function CoreActionModalButton({
               </div>
             ) : null}
 
-            {kind === "sign-in" ? (
+            {isAuthModal ? (
               <div className="core-modal-body">
-                <div className="core-modal-option-list">
-                  <a
-                    aria-label={t("auth.signIn.google")}
-                    className="core-modal-auth-option"
-                    href={buildGoogleSignInHref()}
-                  >
+                <form className="core-modal-auth-form" onSubmit={(event) => void submitAuth(event)}>
+                  <label className="core-modal-field">
+                    <span>{t("auth.emailLabel")}</span>
+                    <input
+                      autoComplete="email"
+                      inputMode="email"
+                      onChange={(event) => setAuthEmail(event.target.value)}
+                      required
+                      type="email"
+                      value={authEmail}
+                    />
+                  </label>
+                  <label className="core-modal-field">
+                    <span>{t("auth.passwordLabel")}</span>
+                    <input
+                      aria-describedby={passwordHintId}
+                      autoComplete={kind === "sign-up" ? "new-password" : "current-password"}
+                      minLength={6}
+                      onChange={(event) => setAuthPassword(event.target.value)}
+                      required
+                      type="password"
+                      value={authPassword}
+                    />
+                  </label>
+                  <small id={passwordHintId}>{t("auth.passwordHint")}</small>
+                  <button className="button button-solid" disabled={submittingAuth} type="submit">
                     <LockKeyhole size={16} aria-hidden="true" />
-                    <span>
-                      <strong>{t("auth.signIn.google")}</strong>
-                      <small>{t("auth.signIn.googleDescription")}</small>
-                    </span>
-                  </a>
-                  <div className="core-modal-auth-option" aria-label={t("auth.signIn.freeTrial")}>
+                    {submittingAuth ? t("auth.status.submitting") : t(kind === "sign-up" ? "auth.signUp.submit" : "auth.signIn.submit")}
+                  </button>
+                </form>
+                <div className="core-modal-option-list">
+                  <div
+                    className="core-modal-auth-option"
+                    aria-label={t(kind === "sign-up" ? "auth.signUp.freeTrial" : "auth.signIn.freeTrial")}
+                  >
                     <Sparkles size={16} aria-hidden="true" />
                     <span>
-                      <strong>{t("auth.signIn.freeTrial")}</strong>
-                      <small>{t("auth.signIn.freeTrialDescription")}</small>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-
-            {kind === "sign-up" ? (
-              <div className="core-modal-body">
-                <div className="core-modal-option-list">
-                  <a
-                    aria-label={t("auth.signUp.google")}
-                    className="core-modal-auth-option"
-                    href={buildGoogleSignInHref()}
-                  >
-                    <LockKeyhole size={16} aria-hidden="true" />
-                    <span>
-                      <strong>{t("auth.signUp.google")}</strong>
-                      <small>{t("auth.signUp.googleDescription")}</small>
-                    </span>
-                  </a>
-                  <div className="core-modal-auth-option" aria-label={t("auth.signUp.freeTrial")}>
-                    <Sparkles size={16} aria-hidden="true" />
-                    <span>
-                      <strong>{t("auth.signUp.freeTrial")}</strong>
-                      <small>{t("auth.signUp.freeTrialDescription")}</small>
+                      <strong>{t(kind === "sign-up" ? "auth.signUp.freeTrial" : "auth.signIn.freeTrial")}</strong>
+                      <small>{t(kind === "sign-up" ? "auth.signUp.freeTrialDescription" : "auth.signIn.freeTrialDescription")}</small>
                     </span>
                   </div>
                 </div>
@@ -238,8 +265,11 @@ export function CoreActionModalButton({
 
             {kind === "upgrade" ? (
               <div className="core-modal-body">
-                <strong className="core-modal-subject">{planName ? `${planName} plan` : t("modal.upgrade.futurePlan")}</strong>
+                <strong className="core-modal-subject">
+                  {planName ? t("modal.upgrade.planLabel", { planName }) : t("modal.upgrade.futurePlan")}
+                </strong>
                 {planPrice ? <p className="core-modal-price">{planPrice}</p> : null}
+                <p className="tool-description">{t("modal.upgrade.phase2Notice")}</p>
                 <ul className="core-modal-feature-list">
                   {planFeatures.slice(0, 5).map((feature) => (
                     <li key={feature}>
@@ -248,8 +278,8 @@ export function CoreActionModalButton({
                     </li>
                   ))}
                 </ul>
-                <button className="button button-solid" type="button" onClick={startUpgrade}>
-                  {t("modal.upgrade.start")}
+                <button className="button button-solid" disabled type="button">
+                  {t("modal.upgrade.phase2Cta")}
                 </button>
               </div>
             ) : null}
@@ -290,7 +320,18 @@ function modalDescriptionKey(kind: CoreModalKind): string {
   return "modal.upgrade.description";
 }
 
-function buildGoogleSignInHref() {
-  const workspaceId = getOrCreateWorkspaceIdentity().workspaceId;
-  return `/api/auth/google/start?workspaceId=${encodeURIComponent(workspaceId)}`;
+function authStatusKey(errorCode: "invalid-input" | "not-configured" | "provider-error") {
+  if (errorCode === "not-configured") return "auth.status.notConfigured";
+  if (errorCode === "invalid-input") return "auth.status.invalidInput";
+  return "auth.status.failed";
+}
+
+function buildEmailRedirectTo() {
+  if (typeof window === "undefined") return undefined;
+  return window.location.href;
+}
+
+function notifyAuthSessionChanged() {
+  if (typeof window === "undefined" || typeof CustomEvent === "undefined") return;
+  window.dispatchEvent(new CustomEvent("toolars:auth-session-changed"));
 }

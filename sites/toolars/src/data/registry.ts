@@ -1,3 +1,5 @@
+import { launchCertifiedToolSlugs } from "./tool-launch-certification";
+
 export type ToolType = "traditional" | "ai" | "workflow";
 export type ProcessingMode = "local" | "cloud" | "ai-consent";
 export type PricingMode = "free" | "freemium" | "paid";
@@ -20,6 +22,7 @@ export interface ToolDefinition {
   accent: string;
   status: ToolLaunchStatus;
   visibility: ToolVisibility;
+  launchCertified: boolean;
   featured?: boolean;
   href: string;
   aboutHref: string;
@@ -143,8 +146,8 @@ const toolarsNativeAiDeveloperRegistrySlugs = new Set(["json-formatter", "synthe
 
 const makeHref = (slug: string) => `/tools/${slug}`;
 
-type ToolDefinitionInput = Omit<ToolDefinition, "href" | "aboutHref" | "status" | "visibility"> &
-  Partial<Pick<ToolDefinition, "status" | "visibility">>;
+type ToolDefinitionInput = Omit<ToolDefinition, "href" | "aboutHref" | "status" | "visibility" | "launchCertified"> &
+  Partial<Pick<ToolDefinition, "status" | "visibility" | "launchCertified">>;
 
 const tool = (
   definition: ToolDefinitionInput
@@ -155,6 +158,7 @@ const tool = (
     ...definition,
     status,
     visibility: definition.visibility ?? getDefaultToolVisibility(status),
+    launchCertified: definition.launchCertified ?? launchCertifiedToolSlugs.has(definition.slug),
     href: makeHref(definition.slug),
     aboutHref: `/tools/${definition.slug}/about`
   };
@@ -2221,6 +2225,12 @@ export function isPublicTool(tool: ToolDefinition): boolean {
 
 export const publicTools = tools.filter(isPublicTool);
 
+export function isLaunchCertifiedTool(tool: ToolDefinition): boolean {
+  return isPublicTool(tool) && tool.launchCertified;
+}
+
+export const launchCertifiedTools = publicTools.filter(isLaunchCertifiedTool);
+
 const categoryDefinitions: Array<{
   label: string;
   matches: (tool: ToolDefinition) => boolean;
@@ -2249,12 +2259,28 @@ export function getPublicToolsByCategory(category: string): ToolDefinition[] {
   return publicTools.filter(matches);
 }
 
+export function getLaunchCertifiedToolsByCategory(category: string): ToolDefinition[] {
+  const definition = categoryDefinitions.find((item) => item.label === category);
+  const matches = definition?.matches ?? ((tool: ToolDefinition) => tool.category === category);
+
+  return launchCertifiedTools.filter(matches);
+}
+
 export const categories = categoryDefinitions
   .map((category) => ({
     label: category.label,
     slug: getCategorySlug(category.label),
     href: getCategoryHref(category.label),
     count: getPublicToolsByCategory(category.label).length
+  }))
+  .filter((category) => category.count > 0);
+
+export const launchCertifiedCategories = categoryDefinitions
+  .map((category) => ({
+    label: category.label,
+    slug: getCategorySlug(category.label),
+    href: getCategoryHref(category.label),
+    count: getLaunchCertifiedToolsByCategory(category.label).length
   }))
   .filter((category) => category.count > 0);
 
@@ -2357,8 +2383,8 @@ export const collections: CollectionDefinition[] = [
 ];
 
 export const featuredTools = publicTools.filter((item) => item.featured);
-export const pdfTools = getPublicToolsByCategory("PDF");
-export const aiDeveloperLabTools = publicTools.filter((item) => item.group === "AI Developer Lab");
+export const pdfTools = getLaunchCertifiedToolsByCategory("PDF");
+export const aiDeveloperLabTools = launchCertifiedTools.filter((item) => item.group === "AI Developer Lab");
 
 export function getToolsByGroup(group: ToolGroup): ToolDefinition[] {
   return tools.filter((item) => item.group === group);

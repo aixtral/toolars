@@ -619,23 +619,36 @@
     "rights": "Todos os direitos reservados."
   },
   "auth": {
+    "emailLabel": "E-mail",
+    "passwordLabel": "Senha",
+    "passwordHint": "Use pelo menos 6 caracteres.",
+    "status": {
+      "checkEmail": "Verifique seu e-mail para confirmar a conta.",
+      "failed": "O Supabase não conseguiu concluir esta solicitação. Verifique as credenciais e tente novamente.",
+      "invalidInput": "Digite um e-mail e uma senha para continuar.",
+      "notConfigured": "O Supabase ainda não está configurado. Adicione primeiro a URL e a chave publicável.",
+      "signedIn": "Sessão iniciada. Seu espaço de trabalho está sincronizando.",
+      "submitting": "Conectando..."
+    },
     "signIn": {
       "title": "Entrar no Toolars",
-      "eyebrow": "Account",
-      "description": "Use o Google para manter histórico de teste, coleções salvas e configurações da conta em sincronia.",
-      "google": "Continuar com o Google",
-      "googleDescription": "Inicie um espaço de trabalho de teste gratuito com sua conta do Google.",
+      "eyebrow": "Conta",
+      "description": "Use Supabase Auth para sincronizar histórico, coleções salvas e configurações da conta.",
+      "submit": "Entrar com Supabase",
       "freeTrial": "Modo de teste gratuito",
       "freeTrialDescription": "Nenhum cartão é exigido durante a beta."
     },
     "signUp": {
       "title": "Crie sua conta no Toolars",
-      "eyebrow": "Account",
-      "description": "Crie um espaço de trabalho gratuito do Toolars com sua conta do Google para sincronizar histórico e coleções salvas.",
-      "google": "Continuar com o Google",
-      "googleDescription": "Crie um espaço de trabalho de teste gratuito com sua conta do Google.",
+      "eyebrow": "Conta",
+      "description": "Crie um espaço gratuito do Toolars com Supabase Auth para sincronizar histórico e coleções salvas.",
+      "submit": "Criar conta Supabase",
       "freeTrial": "Modo de teste gratuito",
       "freeTrialDescription": "Nenhum cartão é exigido durante a beta."
+    },
+    "signOut": {
+      "button": "Sair",
+      "signedOut": "Sessão encerrada."
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "Atualizar espaço de trabalho",
       "description": "Revise os benefícios futuros do plano. Upgrades pagos ficam pausados enquanto o teste beta está ativo.",
       "futurePlan": "Plano futuro",
+      "planLabel": "Plano futuro {planName}",
+      "phase2Notice": "Upgrades pagos ficam reservados para a fase 2.",
+      "phase2Cta": "Lista de espera fase 2",
       "start": "Iniciar atualização"
     }
   },

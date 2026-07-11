@@ -111,31 +111,22 @@ describe("SettingsView", () => {
       json: vi.fn().mockResolvedValue({
         account: {
           accountEmail: "ops@example.com",
-          accountId: "acct-settings-001",
-          createdAt: "2026-06-20T10:00:00Z",
-          lastSignedInAt: "2026-06-21T09:30:00Z",
-          source: "session",
-          updatedAt: "2026-06-21T09:30:00Z",
+          accountId: "user_settings_001",
+          source: "supabase",
           version: 1
         },
         auth: {
           accountEmail: "ops@example.com",
-          accountId: "acct-settings-001",
+          accountId: "user_settings_001",
           isAuthenticated: true,
-          sessionId: "sess_settings_001",
-          source: "session",
+          source: "supabase",
           workspaceId: "toolars_ws_settings_test"
         },
         session: {
           accountEmail: "ops@example.com",
-          accountId: "acct-settings-001",
-          createdAt: "2026-06-21T09:30:00Z",
-          expiresAt: "2026-07-21T09:30:00Z",
-          issuedAt: "2026-06-21T09:30:00Z",
-          lastSeenAt: "2026-06-21T09:45:00Z",
-          sessionId: "sess_settings_001",
-          status: "active",
-          version: 1
+          accountId: "user_settings_001",
+          provider: "supabase",
+          status: "active"
         }
       }),
       ok: true
@@ -146,9 +137,8 @@ describe("SettingsView", () => {
 
     expect(await screen.findByText("Account session synced")).toBeInTheDocument();
     expect(screen.getByText("ops@example.com")).toBeInTheDocument();
-    expect(screen.getByText("acct-settings-001")).toBeInTheDocument();
-    expect(screen.getByText("sess_settings_001")).toBeInTheDocument();
-    expect(screen.getByText("session")).toBeInTheDocument();
+    expect(screen.getByText("user_settings_001")).toBeInTheDocument();
+    expect(screen.getAllByText("supabase")).toHaveLength(2);
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/auth/session",
       expect.objectContaining({

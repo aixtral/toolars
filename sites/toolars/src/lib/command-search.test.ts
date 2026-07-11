@@ -22,6 +22,12 @@ describe("searchCommandResults", () => {
     expect(titles).toContain("MCP Tool Launch");
   });
 
+  it("indexes launch-certified tools by default instead of every public preview tool", () => {
+    const titles = searchCommandResults("color contrast checker", { limit: 24 }).map((result) => result.title);
+
+    expect(titles).not.toContain("Color Contrast Checker");
+  });
+
   it("returns an empty array for unrelated queries", () => {
     expect(searchCommandResults("zzzz no matching task")).toEqual([]);
   });
@@ -29,7 +35,8 @@ describe("searchCommandResults", () => {
   it("allows callers to request a larger stress result window", () => {
     const results = searchCommandResults("calculator", { limit: 24 });
 
-    expect(results.length).toBeGreaterThan(12);
+    expect(results.length).toBeGreaterThan(3);
+    expect(results.map((result) => result.title)).not.toContain("Token Counter");
     expect(results.every((result) => result.title.toLowerCase().includes("calculator") || result.keywords.join(" ").toLowerCase().includes("calculator"))).toBe(true);
   });
 });

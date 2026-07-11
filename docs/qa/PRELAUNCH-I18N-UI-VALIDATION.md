@@ -86,8 +86,8 @@ pnpm run build
 浏览器门禁必须对生产构建或当前待发布 server 执行:
 
 ```bash
-TOOLARS_BASE_URL=http://127.0.0.1:9320 TOOLARS_LANGUAGE_UX_OUTPUT_DIR=/tmp/toolars-language-ux-smoke node scripts/language-ux-smoke.mjs
-TOOLARS_BASE_URL=http://127.0.0.1:9320 TOOLARS_DRAFT_LOCALE_SMOKE_OUTPUT_DIR=/tmp/toolars-draft-locale-smoke node scripts/draft-locale-non-public-smoke.mjs
+TOOLARS_BASE_URL=http://127.0.0.1:9088 TOOLARS_LANGUAGE_UX_OUTPUT_DIR=/tmp/toolars-language-ux-smoke node scripts/language-ux-smoke.mjs
+TOOLARS_BASE_URL=http://127.0.0.1:9088 TOOLARS_DRAFT_LOCALE_SMOKE_OUTPUT_DIR=/tmp/toolars-draft-locale-smoke node scripts/draft-locale-non-public-smoke.mjs
 ```
 
 路由 sweep 必须覆盖每个 launch locale:

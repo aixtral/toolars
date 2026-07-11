@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { isLaunchLocale, localizePath } from "@/lib/i18n";
 import { isFeatureEnabled } from "@/lib/product/feature-flags";
 
 /**
@@ -6,9 +7,15 @@ import { isFeatureEnabled } from "@/lib/product/feature-flags";
  * When disabled, redirects to home. The view component is preserved
  * for when the feature is re-enabled.
  */
-export default function SubmitPage() {
+export function getDisabledSubmitRedirectPath(locale: string) {
+  return isLaunchLocale(locale) ? localizePath("/", locale) : "/";
+}
+
+export default async function SubmitPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+
   if (!isFeatureEnabled("submit")) {
-    redirect("/");
+    redirect(getDisabledSubmitRedirectPath(locale));
   }
 
   // Lazy import only when feature is enabled (code preserved but not bundled in main chunk)

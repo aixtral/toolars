@@ -619,23 +619,36 @@
     "rights": "हिंदी मसौदा 209: All rights reserved."
   },
   "auth": {
+    "emailLabel": "हिंदी मसौदा 210: Email",
+    "passwordLabel": "हिंदी मसौदा 211: Password",
+    "passwordHint": "हिंदी मसौदा 212: Use at least 6 characters.",
+    "status": {
+      "checkEmail": "हिंदी मसौदा 213: Check your email to confirm the account.",
+      "failed": "हिंदी मसौदा 214: Supabase could not complete this request. Check the credentials and try again.",
+      "invalidInput": "हिंदी मसौदा 215: Enter an email and password to continue.",
+      "notConfigured": "हिंदी मसौदा 216: Supabase is not configured yet. Add the Supabase URL and publishable key first.",
+      "signedIn": "हिंदी मसौदा 217: Signed in. Your workspace is syncing.",
+      "submitting": "हिंदी मसौदा 218: Connecting..."
+    },
     "signIn": {
       "title": "हिंदी मसौदा 210: Sign in to Toolars",
       "eyebrow": "हिंदी मसौदा 211: Account",
-      "description": "हिंदी मसौदा 212: Use Google to keep trial history, saved collections, and account settings in sync.",
-      "google": "हिंदी मसौदा 213: Continue with Google",
-      "googleDescription": "हिंदी मसौदा 214: Start a free trial workspace with your Google account.",
+      "description": "हिंदी मसौदा 219: Use Supabase Auth to keep history, saved collections, and account settings in sync.",
+      "submit": "हिंदी मसौदा 220: Sign in with Supabase",
       "freeTrial": "हिंदी मसौदा 215: Free trial mode",
       "freeTrialDescription": "हिंदी मसौदा 216: No card is required during the beta."
     },
     "signUp": {
       "title": "हिंदी मसौदा 217: Create your Toolars account",
       "eyebrow": "हिंदी मसौदा 218: Account",
-      "description": "हिंदी मसौदा 219: Create a free Toolars workspace with your Google account to sync history and saved collections.",
-      "google": "हिंदी मसौदा 220: Continue with Google",
-      "googleDescription": "हिंदी मसौदा 221: Create a free trial workspace with your Google account.",
+      "description": "हिंदी मसौदा 221: Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
+      "submit": "हिंदी मसौदा 222: Create Supabase account",
       "freeTrial": "हिंदी मसौदा 222: Free trial mode",
       "freeTrialDescription": "हिंदी मसौदा 223: No card is required during the beta."
+    },
+    "signOut": {
+      "button": "हिंदी मसौदा 224: Sign out",
+      "signedOut": "हिंदी मसौदा 225: Signed out."
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "हिंदी मसौदा 248: Upgrade workspace",
       "description": "हिंदी मसौदा 249: Review future plan benefits. Paid upgrades are parked while the beta trial is active.",
       "futurePlan": "हिंदी मसौदा 250: Future plan",
+      "planLabel": "हिंदी मसौदा 250A: {planName} future plan",
+      "phase2Notice": "हिंदी मसौदा 250B: Paid upgrades are parked for Phase 2.",
+      "phase2Cta": "हिंदी मसौदा 250C: Phase 2 waitlist",
       "start": "हिंदी मसौदा 251: Start upgrade"
     }
   },

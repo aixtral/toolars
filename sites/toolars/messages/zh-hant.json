@@ -619,23 +619,36 @@
     "rights": "保留所有權利。"
   },
   "auth": {
+    "emailLabel": "電子郵箱",
+    "passwordLabel": "密碼",
+    "passwordHint": "至少使用 6 個字符。",
+    "status": {
+      "checkEmail": "請查看郵箱並確認賬戶。",
+      "failed": "後端認證服務暫時無法完成請求，請檢查憑據後重試。",
+      "invalidInput": "請輸入電子郵箱和密碼後繼續。",
+      "notConfigured": "後端認證服務尚未配置，請先添加服務地址和發布密鑰。",
+      "signedIn": "已登入，工作區正在同步。",
+      "submitting": "正在連接..."
+    },
     "signIn": {
       "title": "登入 Toolars",
       "eyebrow": "賬戶",
-      "description": "使用 Google 同步試用記錄、已保存的集合和賬戶設置。",
-      "google": "使用 Google 繼續",
-      "googleDescription": "用你的 Google 賬號開始一個免費試用工作區。",
+      "description": "使用後端認證服務同步歷史記錄、已保存的集合和賬戶設置。",
+      "submit": "通過後端認證登入",
       "freeTrial": "免費試用模式",
       "freeTrialDescription": "測試期間無需信用卡。"
     },
     "signUp": {
       "title": "創建你的 Toolars 賬戶",
       "eyebrow": "賬戶",
-      "description": "用你的 Google 賬號創建一個免費的 Toolars 工作區，同步記錄和已保存的集合。",
-      "google": "使用 Google 繼續",
-      "googleDescription": "用你的 Google 賬號創建一個免費試用工作區。",
+      "description": "使用後端認證服務創建免費的 Toolars 工作區，同步歷史記錄和已保存的集合。",
+      "submit": "創建認證賬戶",
       "freeTrial": "免費試用模式",
       "freeTrialDescription": "測試期間無需信用卡。"
+    },
+    "signOut": {
+      "button": "登出",
+      "signedOut": "已登出。"
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "升級工作區",
       "description": "查看未來計劃權益。測試期間付費升級暫停。",
       "futurePlan": "未來計劃",
+      "planLabel": "{planName} 未來計劃",
+      "phase2Notice": "付費升級已停靠到第二階段。",
+      "phase2Cta": "第二階段候補名單",
       "start": "開始升級"
     }
   },

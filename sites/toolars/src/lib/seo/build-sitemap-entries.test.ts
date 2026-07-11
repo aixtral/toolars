@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { launchCertifiedTools } from "@/data/registry";
 import { buildSitemapEntries, type SitemapEntry } from "./build-sitemap-entries";
 
 describe("buildSitemapEntries", () => {
@@ -15,13 +16,17 @@ describe("buildSitemapEntries", () => {
     expect(paths).not.toContain("https://toolars.app/submit");
   });
 
-  it("emits an entry for every tool workspace and about page", () => {
+  it("emits entries only for launch-certified tool workspace and about pages", () => {
     const entries = buildSitemapEntries("https://toolars.app");
-    const hasBmiWorkspace = entries.some((entry) => entry.url === "https://toolars.app/tools/bmi-calculator");
-    const hasBmiAbout = entries.some((entry) => entry.url === "https://toolars.app/tools/bmi-calculator/about");
+    const paths = entries.map((entry) => entry.url);
+    const toolEntries = paths.filter((path) => new URL(path).pathname.startsWith("/tools/"));
 
-    expect(hasBmiWorkspace).toBe(true);
-    expect(hasBmiAbout).toBe(true);
+    expect(toolEntries).toHaveLength(launchCertifiedTools.length * 2);
+    expect(paths).toContain("https://toolars.app/tools/bmi-calculator");
+    expect(paths).toContain("https://toolars.app/tools/bmi-calculator/about");
+    expect(paths).toContain("https://toolars.app/tools/json-repair");
+    expect(paths).not.toContain("https://toolars.app/tools/color-contrast-checker");
+    expect(paths).not.toContain("https://toolars.app/tools/color-contrast-checker/about");
   });
 
   it("emits an entry for every workflow and collection", () => {

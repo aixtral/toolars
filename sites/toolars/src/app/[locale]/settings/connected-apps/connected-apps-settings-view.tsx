@@ -247,10 +247,10 @@ export function ConnectedAppsSettingsView() {
             <h2>{t("sections.connectNew")}</h2>
             <p className="tool-description">{t("connectNew.description")}</p>
             <div className="settings-button-row">
-              <button className="button button-solid" type="button">
+              <button disabled className="button button-solid" type="button">
                 <Plug size={15} aria-hidden="true" /> {t("connectNew.connectSlack")}
               </button>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("connectNew.requestPrivateConnector")}
               </button>
             </div>

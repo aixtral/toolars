@@ -167,14 +167,14 @@ export function WorkflowsIndexView() {
           <h1 className="title">{t("pageHeroTitle")}</h1>
           <p className="subtitle">{t("pageHeroCopy")}</p>
           <div className="landing-action-row">
-            <button className="button button-solid" type="button">
+            <button disabled className="button button-solid" type="button">
               <Workflow size={16} aria-hidden="true" /> {t("createWorkflow")}
             </button>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <FolderOpen size={16} aria-hidden="true" /> {t("browseTemplates")}
             </button>
           </div>
-          <button className="button button-solid workflow-mobile-primary-action" type="button">
+          <button disabled className="button button-solid workflow-mobile-primary-action" type="button">
             {t("buildFromScratch")}
           </button>
           <div className="search-panel landing-search-panel">
@@ -198,7 +198,7 @@ export function WorkflowsIndexView() {
           </div>
           <div className="workflow-mobile-filter-row" role="group" aria-label={t("filtersAriaLabel")}>
             {workflowFilters.map((filter, index) => (
-              <button className={index === 0 ? "chip active" : "chip"} aria-pressed={index === 0 ? "true" : "false"} key={filter} type="button">
+              <button disabled className={index === 0 ? "chip active" : "chip"} aria-pressed={index === 0 ? "true" : "false"} key={filter} type="button">
                 {filter}
               </button>
             ))}
@@ -269,7 +269,7 @@ export function WorkflowsIndexView() {
         <section className="panel landing-build-card">
           <h2>{t("buildTitle")}</h2>
           <p className="tool-description">{t("buildDescription")}</p>
-          <button className="button button-outline-neutral" type="button">
+          <button disabled className="button button-outline-neutral" type="button">
             <Workflow size={16} aria-hidden="true" /> {t("createCustom")}
           </button>
         </section>

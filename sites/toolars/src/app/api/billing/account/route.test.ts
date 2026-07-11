@@ -1,48 +1,53 @@
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createToolarsAuthSessionCookie } from "@/lib/auth/toolars-auth-session";
-import {
-  persistToolarsAuthSession,
-  resetToolarsAuthSessionLedger,
-  setToolarsAuthSessionLedgerStoragePathForTest
-} from "@/lib/auth/toolars-auth-session-ledger";
 import { setToolarsBillingDriverForTest } from "@/lib/billing/billing-account";
+import { setToolarsSupabaseServerAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-server";
 import { GET } from "./route";
 
-/**
- * Build ISO timestamps anchored to the current time so session fixtures never
- * go stale. Sessions are issued 1 hour ago and expire 1 hour from now.
- */
-function buildSessionTimestamps() {
-  const now = Date.now();
-  return {
-    issuedAt: new Date(now - 60 * 60 * 1000).toISOString(),
-    expiresAt: new Date(now + 60 * 60 * 1000).toISOString()
-  };
-}
-
 describe("/api/billing/account", () => {
-  let tempDirectory: string | null = null;
   const originalEndpoint = process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT;
   const originalApiKey = process.env.TOOLARS_BILLING_PROVIDER_API_KEY;
-  const originalSessionSecret = process.env.TOOLARS_AUTH_SESSION_SECRET;
+  const originalFreeTrialMode = process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE;
+  const originalServerFreeTrialMode = process.env.TOOLARS_FREE_TRIAL_MODE;
 
   afterEach(() => {
     process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT = originalEndpoint;
     process.env.TOOLARS_BILLING_PROVIDER_API_KEY = originalApiKey;
-    process.env.TOOLARS_AUTH_SESSION_SECRET = originalSessionSecret;
-    setToolarsAuthSessionLedgerStoragePathForTest(null);
+    restoreEnvValue("NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE", originalFreeTrialMode);
+    restoreEnvValue("TOOLARS_FREE_TRIAL_MODE", originalServerFreeTrialMode);
     setToolarsBillingDriverForTest(null);
+    setToolarsSupabaseServerAuthDriverForTest(null);
     vi.unstubAllGlobals();
-    if (tempDirectory) {
-      rmSync(tempDirectory, { force: true, recursive: true });
-      tempDirectory = null;
-    }
+  });
+
+  it("parks billing account access during the free launch without touching billing providers", async () => {
+    process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE = "enabled";
+    process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT = "https://billing-provider.toolars.test";
+    process.env.TOOLARS_BILLING_PROVIDER_API_KEY = "provider-secret";
+    const getAccount = vi.fn();
+    const fetchMock = vi.fn();
+    setToolarsBillingDriverForTest({ getAccount });
+    setSupabaseUser({ email: "owner@example.com", id: "user_billing_parked" });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await GET(new Request("http://toolars.test/api/billing/account"));
+    const payload = await response.json();
+
+    expect(response.status).toBe(410);
+    expect(payload).toMatchObject({
+      auth: {
+        accountId: "user_billing_parked",
+        isAuthenticated: true,
+        source: "supabase"
+      },
+      code: "billing_phase2_parked",
+      error: "Billing is parked for Phase 2 free launch"
+    });
+    expect(getAccount).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("rejects anonymous billing requests", async () => {
+    disableFreeTrialMode();
     const response = await GET(new Request("http://toolars.test/api/billing/account"));
     const payload = await response.json();
 
@@ -51,7 +56,9 @@ describe("/api/billing/account", () => {
     expect(payload.auth.isAuthenticated).toBe(false);
   });
 
-  it("returns billing account state for a preview authenticated account", async () => {
+  it("returns billing account state for a Supabase authenticated account", async () => {
+    disableFreeTrialMode();
+    setSupabaseUser({ email: "owner@example.com", id: "user_billing_123" });
     setToolarsBillingDriverForTest({
       getAccount: (accountId) => ({
         accountId,
@@ -77,8 +84,6 @@ describe("/api/billing/account", () => {
     const response = await GET(
       new Request("http://toolars.test/api/billing/account", {
         headers: {
-          "x-toolars-account-email": "owner@example.com",
-          "x-toolars-account-id": "acct-preview-123",
           "x-toolars-workspace-id": "toolars_ws_preview"
         }
       })
@@ -87,30 +92,22 @@ describe("/api/billing/account", () => {
 
     expect(response.status).toBe(200);
     expect(payload.auth).toMatchObject({
-      accountId: "acct-preview-123",
+      accountId: "user_billing_123",
       isAuthenticated: true,
-      source: "preview-header"
+      source: "supabase"
     });
     expect(payload.billing).toMatchObject({
-      accountId: "acct-preview-123",
+      accountId: "user_billing_123",
       planId: "pro",
       status: "active"
     });
   });
 
-  it("reads customer, subscription, invoice, and portal data from the configured billing provider for a session account", async () => {
+  it("reads customer, subscription, invoice, and portal data from the configured billing provider for a Supabase account", async () => {
+    disableFreeTrialMode();
     process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT = "https://billing-provider.toolars.test";
     process.env.TOOLARS_BILLING_PROVIDER_API_KEY = "provider-secret";
-    process.env.TOOLARS_AUTH_SESSION_SECRET = "test-session-secret";
-    prepareSessionLedger();
-    const { cookie, session } = createToolarsAuthSessionCookie({
-      accountEmail: "owner@example.com",
-      accountId: "acct_session_owner",
-      ...buildSessionTimestamps(),
-      secret: "test-session-secret",
-      sessionId: "sess_billing"
-    });
-    persistToolarsAuthSession(session);
+    setSupabaseUser({ email: "owner@example.com", id: "user_billing_provider" });
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({
         customer: {
@@ -150,7 +147,6 @@ describe("/api/billing/account", () => {
     const response = await GET(
       new Request("http://toolars.test/api/billing/account", {
         headers: {
-          cookie,
           "x-toolars-workspace-id": "toolars_ws_billing_session"
         }
       })
@@ -158,19 +154,19 @@ describe("/api/billing/account", () => {
     const payload = await response.json();
 
     expect(response.status).toBe(200);
-    expect(fetchMock).toHaveBeenCalledWith("https://billing-provider.toolars.test/accounts/acct_session_owner", {
+    expect(fetchMock).toHaveBeenCalledWith("https://billing-provider.toolars.test/accounts/user_billing_provider", {
       headers: {
         Authorization: "Bearer provider-secret",
         Accept: "application/json"
       }
     });
     expect(payload.auth).toMatchObject({
-      accountId: "acct_session_owner",
+      accountId: "user_billing_provider",
       isAuthenticated: true,
-      source: "session"
+      source: "supabase"
     });
     expect(payload.billing).toMatchObject({
-      accountId: "acct_session_owner",
+      accountId: "user_billing_provider",
       billingEmail: "billing@example.com",
       customerPortalUrl: "https://billing-provider.toolars.test/portal/cus_toolars_123",
       planId: "pro",
@@ -191,18 +187,10 @@ describe("/api/billing/account", () => {
   });
 
   it("returns a provider error instead of falling back to preview billing when the configured billing provider fails", async () => {
+    disableFreeTrialMode();
     process.env.TOOLARS_BILLING_PROVIDER_ENDPOINT = "https://billing-provider.toolars.test";
     process.env.TOOLARS_BILLING_PROVIDER_API_KEY = "provider-secret";
-    process.env.TOOLARS_AUTH_SESSION_SECRET = "test-session-secret";
-    prepareSessionLedger();
-    const { cookie, session } = createToolarsAuthSessionCookie({
-      accountEmail: "owner@example.com",
-      accountId: "acct_session_owner",
-      ...buildSessionTimestamps(),
-      secret: "test-session-secret",
-      sessionId: "sess_billing_failure"
-    });
-    persistToolarsAuthSession(session);
+    setSupabaseUser({ email: "owner@example.com", id: "user_billing_failure" });
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -214,7 +202,6 @@ describe("/api/billing/account", () => {
     const response = await GET(
       new Request("http://toolars.test/api/billing/account", {
         headers: {
-          cookie,
           "x-toolars-workspace-id": "toolars_ws_billing_session"
         }
       })
@@ -224,14 +211,32 @@ describe("/api/billing/account", () => {
     expect(response.status).toBe(502);
     expect(payload.error).toBe("Billing provider unavailable");
     expect(payload.auth).toMatchObject({
-      accountId: "acct_session_owner",
-      source: "session"
+      accountId: "user_billing_failure",
+      source: "supabase"
     });
   });
-
-  function prepareSessionLedger() {
-    tempDirectory = mkdtempSync(join(tmpdir(), "toolars-billing-session-"));
-    setToolarsAuthSessionLedgerStoragePathForTest(join(tempDirectory, "sessions.json"));
-    resetToolarsAuthSessionLedger();
-  }
 });
+
+function setSupabaseUser(user: { email: string; id: string }) {
+  setToolarsSupabaseServerAuthDriverForTest({
+    getUser: vi.fn().mockResolvedValue({
+      data: { user },
+      error: null
+    }),
+    signOut: vi.fn()
+  });
+}
+
+function disableFreeTrialMode() {
+  process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE = "disabled";
+  process.env.TOOLARS_FREE_TRIAL_MODE = "disabled";
+}
+
+function restoreEnvValue(key: string, value: string | undefined) {
+  if (value === undefined) {
+    delete process.env[key];
+    return;
+  }
+
+  process.env[key] = value;
+}

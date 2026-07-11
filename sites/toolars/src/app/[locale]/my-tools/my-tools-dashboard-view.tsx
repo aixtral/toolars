@@ -302,7 +302,7 @@ export function MyToolsDashboardView() {
             <p className="tool-description">{t("storage.usage")}</p>
             <h2 style={{ marginTop: 18 }}>{t("extension.title")}</h2>
             <p className="tool-description">{t("extension.description")}</p>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Puzzle size={16} aria-hidden="true" /> {t("extension.action")}
             </button>
           </section>
@@ -318,7 +318,7 @@ export function MyToolsDashboardView() {
             <strong>{t("teamUpsell.title")}</strong>
             <small>{t("teamUpsell.description")}</small>
           </span>
-          <button className="button button-outline-neutral" type="button">
+          <button disabled className="button button-outline-neutral" type="button">
             {t("teamUpsell.action")}
           </button>
         </div>

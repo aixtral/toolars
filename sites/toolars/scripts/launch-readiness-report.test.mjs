@@ -2,10 +2,24 @@ import { describe, expect, it } from "vitest";
 import {
   createLaunchReadinessPlan,
   formatLaunchReadinessMarkdown,
+  parseLaunchReadinessArgs,
   runLaunchReadinessPlan
 } from "./launch-readiness-report.mjs";
 
 describe("launch readiness report", () => {
+  const wrappedCommand = (gate) => [gate?.command, ...(gate?.args ?? [])];
+
+  it("lets --full enable browser and visual gates unless explicitly overridden", () => {
+    const parsed = parseLaunchReadinessArgs(["--full", "--base-url", "http://127.0.0.1:9188"]);
+
+    expect(parsed).toMatchObject({
+      full: true,
+      baseUrl: "http://127.0.0.1:9188"
+    });
+    expect(parsed).not.toHaveProperty("browser");
+    expect(parsed).not.toHaveProperty("visual");
+  });
+
   it("runs the core release gates by default", () => {
     const plan = createLaunchReadinessPlan({
       outputRoot: "/tmp/toolars-launch-readiness"
@@ -15,17 +29,45 @@ describe("launch readiness report", () => {
       "unit-tests",
       "typecheck",
       "production-build",
+      "production-health",
       "tool-inventory-audit",
+      "certified-tool-smoke",
+      "button-behavior-audit",
       "i18n-audit",
       "i18n-quality-audit"
     ]);
     expect(plan.find((gate) => gate.id === "tool-inventory-audit")?.args).toContain("/tmp/toolars-launch-readiness/audits/tool-inventory.json");
+    expect(wrappedCommand(plan.find((gate) => gate.id === "production-health"))).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node",
+      "scripts/check-production-health.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088"
+    ]);
+    expect(wrappedCommand(plan.find((gate) => gate.id === "certified-tool-smoke"))).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node",
+      "scripts/certified-tool-smoke.mjs",
+      "--write",
+      "/tmp/toolars-launch-readiness/audits/certified-tool-smoke.json",
+      "--output-dir",
+      "/tmp/toolars-launch-readiness/browser/certified-tools"
+    ]);
+    expect(plan.find((gate) => gate.id === "button-behavior-audit")?.args).toContain("scripts/audit-button-behavior.mjs");
   });
 
   it("adds browser smoke and visual gates for full release mode", () => {
     const plan = createLaunchReadinessPlan({
       full: true,
-      baseUrl: "http://127.0.0.1:9320",
+      baseUrl: "http://127.0.0.1:9088",
       outputRoot: "/tmp/toolars-launch-readiness"
     });
 
@@ -33,20 +75,53 @@ describe("launch readiness report", () => {
       "unit-tests",
       "typecheck",
       "production-build",
+      "production-health",
       "tool-inventory-audit",
+      "certified-tool-smoke",
+      "button-behavior-audit",
       "i18n-audit",
       "i18n-quality-audit",
+      "public-tool-workspace-smoke",
       "route-crawl",
       "language-ux-smoke",
       "draft-locale-smoke",
       "visual-release-gate"
     ]);
+    expect(wrappedCommand(plan.find((gate) => gate.id === "public-tool-workspace-smoke"))).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node",
+      "scripts/public-tool-workspace-smoke.mjs",
+      "--write",
+      "/tmp/toolars-launch-readiness/audits/public-tool-workspace-smoke.json",
+      "--output-dir",
+      "/tmp/toolars-launch-readiness/browser/public-workspaces"
+    ]);
+    expect(wrappedCommand(plan.find((gate) => gate.id === "route-crawl")).slice(0, 6)).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node"
+    ]);
+    expect(wrappedCommand(plan.find((gate) => gate.id === "visual-release-gate")).slice(0, 6)).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node"
+    ]);
     expect(plan.find((gate) => gate.id === "language-ux-smoke")?.env).toMatchObject({
-      TOOLARS_BASE_URL: "http://127.0.0.1:9320",
+      TOOLARS_BASE_URL: "http://127.0.0.1:9088",
       TOOLARS_LANGUAGE_UX_OUTPUT_DIR: "/tmp/toolars-launch-readiness/browser/language-ux"
     });
     expect(plan.find((gate) => gate.id === "route-crawl")?.env).toMatchObject({
-      TOOLARS_BASE_URL: "http://127.0.0.1:9320",
+      TOOLARS_BASE_URL: "http://127.0.0.1:9088",
       TOOLARS_ROUTE_CRAWL_OUTPUT_DIR: "/tmp/toolars-launch-readiness/browser/route-crawl"
     });
   });

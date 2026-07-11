@@ -619,23 +619,36 @@
     "rights": "Tous droits réservés."
   },
   "auth": {
+    "emailLabel": "E-mail",
+    "passwordLabel": "Mot de passe",
+    "passwordHint": "Utilisez au moins 6 caractères.",
+    "status": {
+      "checkEmail": "Consultez votre e-mail pour confirmer le compte.",
+      "failed": "Supabase n'a pas pu terminer cette demande. Vérifiez les identifiants et réessayez.",
+      "invalidInput": "Saisissez un e-mail et un mot de passe pour continuer.",
+      "notConfigured": "Supabase n'est pas encore configuré. Ajoutez d'abord l'URL et la clé publiable.",
+      "signedIn": "Connexion réussie. Votre espace de travail se synchronise.",
+      "submitting": "Connexion..."
+    },
     "signIn": {
       "title": "Se connecter à Toolars",
-      "eyebrow": "Account",
-      "description": "Utilisez Google pour synchroniser l'historique d'essai, les collections enregistrées et les paramètres du compte.",
-      "google": "Continuer avec Google",
-      "googleDescription": "Démarrez un espace d'essai gratuit avec votre compte Google.",
+      "eyebrow": "Compte",
+      "description": "Utilisez Supabase Auth pour synchroniser l'historique, les collections enregistrées et les paramètres du compte.",
+      "submit": "Se connecter avec Supabase",
       "freeTrial": "Mode essai gratuit",
       "freeTrialDescription": "Aucune carte n'est requise pendant la bêta."
     },
     "signUp": {
       "title": "Créer votre compte Toolars",
-      "eyebrow": "Account",
-      "description": "Créez un espace de travail Toolars gratuit avec votre compte Google pour synchroniser l'historique et les collections enregistrées.",
-      "google": "Continuer avec Google",
-      "googleDescription": "Créez un espace d'essai gratuit avec votre compte Google.",
+      "eyebrow": "Compte",
+      "description": "Créez un espace Toolars gratuit avec Supabase Auth pour synchroniser l'historique et les collections enregistrées.",
+      "submit": "Créer un compte Supabase",
       "freeTrial": "Mode essai gratuit",
       "freeTrialDescription": "Aucune carte n'est requise pendant la bêta."
+    },
+    "signOut": {
+      "button": "Se déconnecter",
+      "signedOut": "Déconnecté."
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "Mettre à niveau l'espace de travail",
       "description": "Passez en revue les avantages des futures offres. Les mises à niveau payantes sont suspendues pendant l'essai bêta.",
       "futurePlan": "Future offre",
+      "planLabel": "Future offre {planName}",
+      "phase2Notice": "Les mises à niveau payantes sont réservées à la phase 2.",
+      "phase2Cta": "Liste d'attente phase 2",
       "start": "Démarrer la mise à niveau"
     }
   },

@@ -619,23 +619,36 @@
     "rights": "Todos los derechos reservados."
   },
   "auth": {
+    "emailLabel": "Correo electrónico",
+    "passwordLabel": "Contraseña",
+    "passwordHint": "Usa al menos 6 caracteres.",
+    "status": {
+      "checkEmail": "Revisa tu correo para confirmar la cuenta.",
+      "failed": "Supabase no pudo completar esta solicitud. Revisa las credenciales e inténtalo de nuevo.",
+      "invalidInput": "Introduce un correo y una contraseña para continuar.",
+      "notConfigured": "Supabase aún no está configurado. Añade primero la URL y la clave publicable.",
+      "signedIn": "Sesión iniciada. Tu espacio se está sincronizando.",
+      "submitting": "Conectando..."
+    },
     "signIn": {
       "title": "Inicia sesión en Toolars",
       "eyebrow": "Cuenta",
-      "description": "Usa Google para sincronizar el historial de prueba, las colecciones guardadas y la configuración de la cuenta.",
-      "google": "Continuar con Google",
-      "googleDescription": "Inicia un espacio de prueba gratuito con tu cuenta de Google.",
+      "description": "Usa Supabase Auth para sincronizar historial, colecciones guardadas y configuración de cuenta.",
+      "submit": "Iniciar sesión con Supabase",
       "freeTrial": "Modo de prueba gratuito",
       "freeTrialDescription": "No se necesita tarjeta durante la versión beta."
     },
     "signUp": {
       "title": "Crea tu cuenta de Toolars",
       "eyebrow": "Cuenta",
-      "description": "Crea un espacio gratuito de Toolars con tu cuenta de Google para sincronizar el historial y las colecciones guardadas.",
-      "google": "Continuar con Google",
-      "googleDescription": "Crea un espacio de prueba gratuito con tu cuenta de Google.",
+      "description": "Crea un espacio gratuito de Toolars con Supabase Auth para sincronizar historial y colecciones guardadas.",
+      "submit": "Crear cuenta Supabase",
       "freeTrial": "Modo de prueba gratuito",
       "freeTrialDescription": "No se necesita tarjeta durante la versión beta."
+    },
+    "signOut": {
+      "button": "Cerrar sesión",
+      "signedOut": "Sesión cerrada."
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "Mejorar espacio de trabajo",
       "description": "Revisa los beneficios de planes futuros. Las mejoras de pago están en espera mientras la versión beta esté activa.",
       "futurePlan": "Plan futuro",
+      "planLabel": "Plan futuro {planName}",
+      "phase2Notice": "Las mejoras de pago están reservadas para la fase 2.",
+      "phase2Cta": "Lista de espera fase 2",
       "start": "Iniciar mejora"
     }
   },

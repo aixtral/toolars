@@ -295,10 +295,10 @@ export function PrivacyAiSettingsView() {
               <strong>{t("labels.beforeAiProcessing")}</strong>
               <p>{t("copy.consentPreviewDescription")}</p>
               <div className="settings-button-row">
-                <button className="button button-solid" type="button">
+                <button disabled className="button button-solid" type="button">
                   {t("actions.allowOnce")}
                 </button>
-                <button className="button button-outline-neutral" type="button">
+                <button disabled className="button button-outline-neutral" type="button">
                   {t("actions.useLocalTool")}
                 </button>
               </div>

@@ -10,7 +10,7 @@ const runId = new Date().toISOString().replace(/[:.]/g, "-");
 const outputRoot = process.env.TOOLARS_LANGUAGE_UX_OUTPUT_DIR
   ? path.resolve(process.env.TOOLARS_LANGUAGE_UX_OUTPUT_DIR)
   : path.join(repoRoot, "output", "language-ux-smoke", runId);
-const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9321").replace(/\/$/, "");
+const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088").replace(/\/$/, "");
 const launchLocaleLabels = ["English", "Español", "简体中文", "繁體中文"];
 const draftLocaleLabels = ["العربية", "Français", "हिन्दी", "日本語", "Português", "Русский"];
 

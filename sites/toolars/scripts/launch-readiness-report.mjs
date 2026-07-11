@@ -11,7 +11,7 @@ export function createLaunchReadinessPlan({
   full = false,
   browser = full,
   visual = full,
-  baseUrl = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9320",
+  baseUrl = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088",
   outputRoot = defaultOutputRoot()
 } = {}) {
   const auditsRoot = path.join(outputRoot, "audits");
@@ -19,11 +19,28 @@ export function createLaunchReadinessPlan({
     gate("unit-tests", "Vitest unit and workspace tests", "pnpm", ["test"]),
     gate("typecheck", "TypeScript typecheck", "pnpm", ["run", "typecheck"]),
     gate("production-build", "Next.js production build", "pnpm", ["run", "build"]),
+    browserGate("production-health", "Production health gate", "node", [
+      "scripts/check-production-health.mjs",
+      "--base-url",
+      baseUrl
+    ], baseUrl, {
+      TOOLARS_BASE_URL: baseUrl
+    }),
     gate("tool-inventory-audit", "Tool inventory audit", "node", [
       "scripts/audit-tool-inventory.mjs",
       "--write",
       path.join(auditsRoot, "tool-inventory.json")
     ]),
+    browserGate("certified-tool-smoke", "Certified tool browser smoke", "node", [
+      "scripts/certified-tool-smoke.mjs",
+      "--write",
+      path.join(auditsRoot, "certified-tool-smoke.json"),
+      "--output-dir",
+      path.join(outputRoot, "browser", "certified-tools")
+    ], baseUrl, {
+      TOOLARS_BASE_URL: baseUrl
+    }),
+    gate("button-behavior-audit", "Button behavior audit", "node", ["scripts/audit-button-behavior.mjs"]),
     gate("i18n-audit", "I18n residue audit", "node", [
       "scripts/audit-i18n.mjs",
       "--write",
@@ -40,15 +57,24 @@ export function createLaunchReadinessPlan({
 
   if (browser) {
     gates.push(
-      gate("route-crawl", "Launch sitemap route crawl", "node", ["scripts/launch-route-crawl.mjs"], {
+      browserGate("public-tool-workspace-smoke", "Public tool workspace browser smoke", "node", [
+        "scripts/public-tool-workspace-smoke.mjs",
+        "--write",
+        path.join(auditsRoot, "public-tool-workspace-smoke.json"),
+        "--output-dir",
+        path.join(outputRoot, "browser", "public-workspaces")
+      ], baseUrl, {
+        TOOLARS_BASE_URL: baseUrl
+      }),
+      browserGate("route-crawl", "Launch sitemap route crawl", "node", ["scripts/launch-route-crawl.mjs"], baseUrl, {
         TOOLARS_BASE_URL: baseUrl,
         TOOLARS_ROUTE_CRAWL_OUTPUT_DIR: path.join(outputRoot, "browser", "route-crawl")
       }),
-      gate("language-ux-smoke", "Language switcher browser smoke", "node", ["scripts/language-ux-smoke.mjs"], {
+      browserGate("language-ux-smoke", "Language switcher browser smoke", "node", ["scripts/language-ux-smoke.mjs"], baseUrl, {
         TOOLARS_BASE_URL: baseUrl,
         TOOLARS_LANGUAGE_UX_OUTPUT_DIR: path.join(outputRoot, "browser", "language-ux")
       }),
-      gate("draft-locale-smoke", "Draft locale non-public smoke", "node", ["scripts/draft-locale-non-public-smoke.mjs"], {
+      browserGate("draft-locale-smoke", "Draft locale non-public smoke", "node", ["scripts/draft-locale-non-public-smoke.mjs"], baseUrl, {
         TOOLARS_BASE_URL: baseUrl,
         TOOLARS_DRAFT_LOCALE_SMOKE_OUTPUT_DIR: path.join(outputRoot, "browser", "draft-locales")
       })
@@ -57,7 +83,7 @@ export function createLaunchReadinessPlan({
 
   if (visual) {
     gates.push(
-      gate("visual-release-gate", "Visual release gate", "node", ["scripts/visual-release-gate.mjs"], {
+      browserGate("visual-release-gate", "Visual release gate", "node", ["scripts/visual-release-gate.mjs"], baseUrl, {
         TOOLARS_BASE_URL: baseUrl,
         TOOLARS_RELEASE_GATE_OUTPUT_DIR: path.join(outputRoot, "visual-release-gate")
       })
@@ -151,6 +177,16 @@ function gate(id, label, command, args, env = {}) {
   };
 }
 
+function browserGate(id, label, command, args, baseUrl, env = {}) {
+  return gate(
+    id,
+    label,
+    "node",
+    ["scripts/with-production-server.mjs", "--base-url", baseUrl, "--", command, ...args],
+    env
+  );
+}
+
 function defaultRunner(gate) {
   return spawnSync(gate.command, gate.args, {
     cwd: gate.cwd,
@@ -181,24 +217,27 @@ function defaultOutputRoot() {
   return path.join(repoRoot, "output", "launch-readiness", runId);
 }
 
-function parseArgs(argv) {
+export function parseLaunchReadinessArgs(argv) {
   const args = new Set(argv);
   const valueAfter = (name) => {
     const index = argv.indexOf(name);
     return index >= 0 ? argv[index + 1] : undefined;
   };
 
-  return {
+  const parsed = {
     full: args.has("--full"),
-    browser: args.has("--browser"),
-    visual: args.has("--visual"),
-    baseUrl: valueAfter("--base-url") ?? process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9320",
+    baseUrl: valueAfter("--base-url") ?? process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088",
     outputRoot: valueAfter("--output")
   };
+
+  if (args.has("--browser")) parsed.browser = true;
+  if (args.has("--visual")) parsed.visual = true;
+
+  return parsed;
 }
 
 function runCli() {
-  const options = parseArgs(process.argv.slice(2));
+  const options = parseLaunchReadinessArgs(process.argv.slice(2));
   const outputRoot = options.outputRoot ? path.resolve(options.outputRoot) : defaultOutputRoot();
   mkdirSync(outputRoot, { recursive: true });
 

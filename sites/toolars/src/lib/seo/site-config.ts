@@ -1,4 +1,4 @@
-const FALLBACK_BASE_URL = "http://localhost:9320";
+const FALLBACK_BASE_URL = "http://localhost:9088";
 
 /**
  * Resolve the canonical site base URL. Reads NEXT_PUBLIC_SITE_URL so the same

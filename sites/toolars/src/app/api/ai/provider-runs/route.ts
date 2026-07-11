@@ -4,7 +4,8 @@ import {
 } from "@/lib/ai/server-consent-audit-ledger";
 import type { AiConsentAuditEvent } from "@/lib/ai/consent-audit-storage";
 import type { AiConsentRunMetadata, AiConsentRunUsage } from "@/lib/ai/consent-audit-run-metadata";
-import { resolveToolarsAuthContext, type ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
+import { resolveToolarsApiAuthContext } from "@/lib/auth/toolars-api-auth-context";
+import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
 
 export const runtime = "nodejs";
 
@@ -29,7 +30,7 @@ class AiProviderExecutionError extends Error {
 }
 
 export async function POST(request: Request) {
-  const auth = resolveToolarsAuthContext(request);
+  const auth = await resolveToolarsApiAuthContext(request);
   let body: ProviderRunRequestBody | null = null;
 
   try {

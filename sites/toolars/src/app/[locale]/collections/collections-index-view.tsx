@@ -133,14 +133,14 @@ export function CollectionsIndexView() {
           <h1 className="title collections-title-mobile">{t("heroTitleMobile")}</h1>
           <p className="subtitle collections-copy-desktop">{t("heroCopyDesktop")}</p>
           <p className="subtitle collections-copy-mobile">{t("heroCopyMobile")}</p>
-          <button className="button button-solid collections-mobile-primary-action" type="button">
+          <button disabled className="button button-solid collections-mobile-primary-action" type="button">
             <FolderPlus size={16} aria-hidden="true" /> {t("createPrivate")}
           </button>
           <div className="landing-action-row">
-            <button className="button button-solid" type="button">
+            <button disabled className="button button-solid" type="button">
               <FolderPlus size={16} aria-hidden="true" /> {t("createCollection")}
             </button>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Import size={16} aria-hidden="true" /> {t("importBookmarks")}
             </button>
             <a className="button button-outline-neutral" href="#all-collections">
@@ -251,7 +251,7 @@ export function CollectionsIndexView() {
           </span>
           <h2>{t("createPrivateTitle")}</h2>
           <p className="tool-description">{t("createPrivateDescription")}</p>
-          <button className="button button-solid" type="button">
+          <button disabled className="button button-solid" type="button">
             {t("createPrivate")}
           </button>
         </section>

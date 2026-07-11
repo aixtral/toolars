@@ -1,5 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { isLaunchCertifiedToolSlug } from "@/data/tool-launch-certification";
 import { DEFAULT_LOCALE, ROUTED_LOCALES, isLaunchLocale } from "@/lib/i18n";
+
+const PREVIEW_TOOL_ROBOTS_HEADER = "noindex, nofollow";
 
 /**
  * Detect the preferred locale from the Accept-Language header, falling back to
@@ -41,6 +44,35 @@ export function isStaticAssetPath(pathname: string): boolean {
   );
 }
 
+export function getLaunchCertificationRobotsHeader(pathname: string): string | null {
+  const slug = getToolSlugFromPathname(pathname);
+  if (!slug) return null;
+  return isLaunchCertifiedToolSlug(slug) ? null : PREVIEW_TOOL_ROBOTS_HEADER;
+}
+
+function getToolSlugFromPathname(pathname: string): string | null {
+  const segments = pathname.split("/").filter(Boolean);
+  const firstSegment = segments[0];
+  const startsWithLocale = ROUTED_LOCALES.some((locale) => locale.code === firstSegment);
+  const toolsIndex = startsWithLocale ? 1 : 0;
+
+  if (segments[toolsIndex] !== "tools") return null;
+  const rawSlug = segments[toolsIndex + 1];
+  if (!rawSlug) return null;
+
+  try {
+    return decodeURIComponent(rawSlug).toLowerCase();
+  } catch {
+    return rawSlug.toLowerCase();
+  }
+}
+
+function applyLaunchCertificationHeaders(response: NextResponse, pathname: string): NextResponse {
+  const robotsHeader = getLaunchCertificationRobotsHeader(pathname);
+  if (robotsHeader) response.headers.set("x-robots-tag", robotsHeader);
+  return response;
+}
+
 /**
  * Redirect requests without a locale prefix to the appropriate locale-prefixed
  * path. Keeps API routes, static assets, and already-prefixed paths untouched.
@@ -63,7 +95,7 @@ export function proxy(request: NextRequest) {
       // of truth that getRequestConfig falls back to).
       const response = NextResponse.next();
       response.headers.set("x-next-intl-locale", locale.code);
-      return response;
+      return applyLaunchCertificationHeaders(response, pathname);
     }
   }
 
@@ -71,7 +103,7 @@ export function proxy(request: NextRequest) {
   const redirectUrl = new URL(`/${detected}${pathname === "/" ? "" : pathname}${search}`, request.url);
   const redirect = NextResponse.redirect(redirectUrl, 308);
   redirect.headers.set("x-next-intl-locale", detected);
-  return redirect;
+  return applyLaunchCertificationHeaders(redirect, pathname);
 }
 
 export const config = {

@@ -13,7 +13,7 @@ const runId = new Date().toISOString().replace(/[:.]/g, "-");
 const outputRoot = process.env.TOOLARS_VISUAL_OUTPUT_DIR
   ? path.resolve(process.env.TOOLARS_VISUAL_OUTPUT_DIR)
   : path.join(repoRoot, "output", "visual-design-pack", runId);
-const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9321").replace(/\/$/, "");
+const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088").replace(/\/$/, "");
 const limit = Number(process.env.TOOLARS_VISUAL_LIMIT ?? "0");
 const requestedIds = new Set(
   (process.env.TOOLARS_VISUAL_IDS ?? "")

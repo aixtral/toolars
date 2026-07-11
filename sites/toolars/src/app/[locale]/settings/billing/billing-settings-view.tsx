@@ -167,7 +167,7 @@ export function BillingSettingsView() {
                 <div className="settings-detail-row" key={label}>
                   <strong>{label}</strong>
                   <span>{value}</span>
-                  <button className="button button-outline-neutral" type="button">
+                  <button disabled className="button button-outline-neutral" type="button">
                     {action}
                   </button>
                 </div>
@@ -221,7 +221,7 @@ export function BillingSettingsView() {
                 <strong>{t("labels.Receipt status")}</strong>
                 <small>{receiptStatus}</small>
               </span>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 <ReceiptText size={15} aria-hidden="true" /> {tx("actions.downloadMayInvoice")}
               </button>
             </div>
@@ -246,7 +246,7 @@ export function BillingSettingsView() {
                 {tx("actions.openPortal")} <ExternalLink size={15} aria-hidden="true" />
               </a>
             ) : (
-              <button className="button button-solid" type="button">
+              <button disabled className="button button-solid" type="button">
                 {tx("actions.openPortal")} <ExternalLink size={15} aria-hidden="true" />
               </button>
             )}
@@ -292,7 +292,7 @@ export function BillingSettingsView() {
                 <small>{tx("copy.invoiceExportDescription")}</small>
               </span>
             </div>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <FileText size={15} aria-hidden="true" /> {tx("actions.exportInvoices")}
             </button>
           </section>

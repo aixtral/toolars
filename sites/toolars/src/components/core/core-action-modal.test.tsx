@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithIntl } from "@/test/i18n-test-utils";
+import { setToolarsSupabaseBrowserAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-client";
 // @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
 import { scanSourceText } from "../../../scripts/audit-i18n.mjs";
 import { CoreActionModalButton } from "./core-action-modal";
@@ -14,6 +15,7 @@ describe("CoreActionModalButton", () => {
   });
 
   afterEach(() => {
+    setToolarsSupabaseBrowserAuthDriverForTest(null);
     vi.unstubAllGlobals();
   });
 
@@ -90,7 +92,17 @@ describe("CoreActionModalButton", () => {
     expect(screen.getAllByRole("dialog")).toHaveLength(1);
   });
 
-  it("keeps sign-in Google-only for free trial accounts", () => {
+  it("signs in with Supabase email auth instead of the legacy Google OAuth route", async () => {
+    const signInWithPassword = vi.fn().mockResolvedValue({
+      data: { user: { email: "owner@example.com", id: "user_123" } },
+      error: null
+    });
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn(),
+      signInWithPassword,
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
     renderWithIntl(
       <CoreActionModalButton className="button button-solid" kind="sign-in">
         Sign in
@@ -99,16 +111,29 @@ describe("CoreActionModalButton", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-    expect(screen.queryByLabelText("Work email")).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Continue with email" })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continue with Google" })).toHaveAttribute(
-      "href",
-      expect.stringMatching(/^\/api\/auth\/google\/start\?workspaceId=toolars_ws_/)
-    );
-    expect(screen.getByText("Start a free trial workspace with your Google account.")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "Owner@Example.com" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct horse" } });
+    fireEvent.click(screen.getByRole("button", { name: "Sign in with Supabase" }));
+
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Signed in. Your workspace is syncing."));
+    expect(signInWithPassword).toHaveBeenCalledWith({
+      email: "owner@example.com",
+      password: "correct horse"
+    });
   });
 
-  it("renders the sign-up modal with the Google account creation entry", () => {
+  it("renders the sign-up modal with Supabase account creation", async () => {
+    const signUp = vi.fn().mockResolvedValue({
+      data: { session: null, user: { email: "owner@example.com", id: "user_456" } },
+      error: null
+    });
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn(),
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp
+    });
     renderWithIntl(
       <CoreActionModalButton className="button button-solid" kind="sign-up">
         Sign up
@@ -120,12 +145,45 @@ describe("CoreActionModalButton", () => {
     const dialog = screen.getByRole("dialog", { name: "Create your Toolars account" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     expect(screen.getByText("Account")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Continue with Google" })).toHaveAttribute(
-      "href",
-      expect.stringMatching(/^\/api\/auth\/google\/start\?workspaceId=toolars_ws_/)
+    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "owner@example.com" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct horse" } });
+    fireEvent.click(screen.getByRole("button", { name: "Create Supabase account" }));
+
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Check your email to confirm the account."));
+    expect(signUp).toHaveBeenCalledWith({
+      email: "owner@example.com",
+      options: expect.objectContaining({
+        emailRedirectTo: expect.stringContaining("/")
+      }),
+      password: "correct horse"
+    });
+  });
+
+  it("parks paid upgrade actions for Phase 2 instead of queuing a fake upgrade", () => {
+    renderWithIntl(
+      <CoreActionModalButton
+        className="button button-solid"
+        kind="upgrade"
+        planFeatures={["Shared workflow history", "Centralized billing"]}
+        planName="Pro"
+        planPrice="$6.99 / month"
+      >
+        Upgrade to Pro
+      </CoreActionModalButton>
     );
-    expect(screen.getByText("Create a free trial workspace with your Google account.")).toBeInTheDocument();
-    expect(screen.queryByText("Start a free trial workspace with your Google account.")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Upgrade to Pro" }));
+
+    expect(screen.getByRole("dialog", { name: "Upgrade workspace" })).toBeInTheDocument();
+    expect(screen.getByText("Pro future plan")).toBeInTheDocument();
+    expect(screen.getByText("Paid upgrades are parked for Phase 2.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Phase 2 waitlist" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "Start upgrade" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Phase 2 waitlist" }));
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
   it("keeps shared core modal and focus helpers clean for the i18n source scanner", () => {

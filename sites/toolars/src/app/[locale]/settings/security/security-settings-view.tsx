@@ -333,7 +333,7 @@ export function SecuritySettingsView() {
               <ShieldAlert size={18} aria-hidden="true" />
               <strong>{t("riskActions.reviewSensitiveChanges")}</strong>
               <p>{t("riskActions.description")}</p>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("riskActions.downloadLog")}
               </button>
             </div>

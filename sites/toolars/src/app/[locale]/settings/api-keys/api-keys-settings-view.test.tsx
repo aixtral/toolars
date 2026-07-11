@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import en from "../../../../../messages/en.json";
-import { ApiKeysSettingsView } from "./api-keys-settings-view";
+import { ApiKeysSettingsView, normalizeApiKeys } from "./api-keys-settings-view";
 
 const localizedApiKeysMessages = {
   ...en,
@@ -130,6 +130,13 @@ function renderApiKeysViewInLocale() {
 }
 
 describe("ApiKeysSettingsView", () => {
+  it("normalizes localized API key statuses before rendering translation keys", () => {
+    expect(normalizeApiKeys([{ id: "zh-hans", status: "活跃" }])[0]?.status).toBe("active");
+    expect(normalizeApiKeys([{ id: "zh-hant", status: "啟用" }])[0]?.status).toBe("active");
+    expect(normalizeApiKeys([{ id: "revoked-zh-hans", status: "已撤销" }])[0]?.status).toBe("revoked");
+    expect(normalizeApiKeys([{ id: "revoked-zh-hant", status: "已撤銷" }])[0]?.status).toBe("revoked");
+  });
+
   it("renders API key management modules from the design", () => {
     const { container } = renderWithIntl(<ApiKeysSettingsView />);
 

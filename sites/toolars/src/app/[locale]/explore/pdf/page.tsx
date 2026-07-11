@@ -13,7 +13,6 @@ import { getSiteBaseUrl } from "@/lib/seo/site-config";
 
 const chipKeys = ["allPdf", "mergeSplit", "compress", "convert", "summarize", "extractData", "signProtect"] as const;
 const featuredResourceKeys = ["summary", "tables", "merge"] as const;
-const pdfDirectoryToolCount = 128;
 const recommendedStepKeys = ["extractContent", "aiSummarize", "exportShare"] as const;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -80,7 +79,7 @@ export default function PdfDirectoryPage() {
               <select className="select-like" aria-label={t("toolbar.sortLabel")}>
                 <option>{t("toolbar.sortTrending")}</option>
               </select>
-              <button className="button button-outline" type="button">
+              <button disabled className="button button-outline" type="button">
                 {t("toolbar.filters")}
               </button>
             </div>
@@ -113,7 +112,7 @@ export default function PdfDirectoryPage() {
           </section>
 
           <section className="section">
-            <h2>{t("results.toolsFound", { count: pdfDirectoryToolCount })}</h2>
+            <h2>{t("results.toolsFound", { count: pdfTools.length })}</h2>
             <div className="tool-grid pdf-directory-tool-grid">
               {pdfTools.map((tool) => (
                 <ToolCard tool={tool} key={tool.slug} />

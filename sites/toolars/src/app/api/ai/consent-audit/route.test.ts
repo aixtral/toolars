@@ -1,8 +1,9 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetServerConsentAuditLedger, setServerConsentAuditLedgerStoragePathForTest } from "@/lib/ai/server-consent-audit-ledger";
+import { setToolarsSupabaseServerAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-server";
 import { DELETE, GET, PATCH, POST } from "./route";
 
 describe("/api/ai/consent-audit", () => {
@@ -16,6 +17,7 @@ describe("/api/ai/consent-audit", () => {
 
   afterEach(() => {
     setServerConsentAuditLedgerStoragePathForTest(null);
+    setToolarsSupabaseServerAuthDriverForTest(null);
     rmSync(tempDirectory, { force: true, recursive: true });
   });
 
@@ -250,7 +252,7 @@ describe("/api/ai/consent-audit", () => {
     expect(preservedBeta.ledger.deletions).toHaveLength(0);
   });
 
-  it("binds an anonymous workspace ledger to a future account and lists it by account header", async () => {
+  it("binds an anonymous workspace ledger to a future account and lists it by Supabase account", async () => {
     const approvedAt = "2026-06-19T10:18:00Z";
 
     await POST(
@@ -307,25 +309,25 @@ describe("/api/ai/consent-audit", () => {
     });
 
     const accountResponse = await GET(
-      new Request("http://toolars.test/api/ai/consent-audit", {
-        headers: {
-          "x-toolars-account-id": "acct-preview-123"
-        }
-      })
+      new Request("http://toolars.test/api/ai/consent-audit")
     );
+    setSupabaseUser({ email: "owner@example.com", id: "acct-preview-123" });
+    const supabaseAccountResponse = await GET(new Request("http://toolars.test/api/ai/consent-audit"));
     const accountPayload = await accountResponse.json();
+    const supabaseAccountPayload = await supabaseAccountResponse.json();
 
-    expect(accountPayload.ledger.workspaceId).toBe("account:acct-preview-123");
-    expect(accountPayload.ledger.accountBindings).toHaveLength(1);
-    expect(accountPayload.ledger.runs[0].runId).toBe("run_account_bound_pdf-summary_summarize-with-ai_20260619101800Z");
+    expect(accountPayload.auth.isAuthenticated).toBe(false);
+    expect(accountPayload.ledger.workspaceId).toBe("anonymous-local");
+    expect(supabaseAccountPayload.ledger.workspaceId).toBe("account:acct-preview-123");
+    expect(supabaseAccountPayload.ledger.accountBindings).toHaveLength(1);
+    expect(supabaseAccountPayload.ledger.runs[0].runId).toBe("run_account_bound_pdf-summary_summarize-with-ai_20260619101800Z");
   });
 
   it("returns resolved auth context metadata with account-scoped ledger reads", async () => {
+    setSupabaseUser({ email: "owner@example.com", id: "acct-supabase-123" });
     const response = await GET(
       new Request("http://toolars.test/api/ai/consent-audit", {
         headers: {
-          "x-toolars-account-email": "owner@example.com",
-          "x-toolars-account-id": "acct-preview-123",
           "x-toolars-workspace-id": "anon-workspace-for-auth"
         }
       })
@@ -334,12 +336,12 @@ describe("/api/ai/consent-audit", () => {
 
     expect(payload.auth).toEqual({
       accountEmail: "owner@example.com",
-      accountId: "acct-preview-123",
+      accountId: "acct-supabase-123",
       isAuthenticated: true,
-      source: "preview-header",
+      source: "supabase",
       workspaceId: "anon-workspace-for-auth"
     });
-    expect(payload.ledger.workspaceId).toBe("account:acct-preview-123");
+    expect(payload.ledger.workspaceId).toBe("account:acct-supabase-123");
   });
 
   it("returns persisted provider usage analytics with the server audit ledger", async () => {
@@ -406,3 +408,13 @@ describe("/api/ai/consent-audit", () => {
     });
   });
 });
+
+function setSupabaseUser(user: { email: string; id: string }) {
+  setToolarsSupabaseServerAuthDriverForTest({
+    getUser: vi.fn().mockResolvedValue({
+      data: { user },
+      error: null
+    }),
+    signOut: vi.fn()
+  });
+}

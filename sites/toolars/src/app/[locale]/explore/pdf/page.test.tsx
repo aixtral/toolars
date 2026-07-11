@@ -19,7 +19,7 @@ describe("PdfDirectoryPage", () => {
 
     expect(container.querySelector('[data-pdf-directory-layout="desktop-market-v2"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "PDF tools and AI workflows" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "128 tools found" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "1 tools found" })).toBeInTheDocument();
     expect(container.querySelector(".pdf-directory-tool-grid")).toBeInTheDocument();
     expect(screen.getByText("Featured workflows")).toBeInTheDocument();
     expect(pdfLink).toHaveAttribute("href", "/explore/pdf");

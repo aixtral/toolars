@@ -10,7 +10,7 @@ const runId = new Date().toISOString().replace(/[:.]/g, "-");
 const outputRoot = process.env.TOOLARS_DRAFT_LOCALE_SMOKE_OUTPUT_DIR
   ? path.resolve(process.env.TOOLARS_DRAFT_LOCALE_SMOKE_OUTPUT_DIR)
   : path.join(repoRoot, "output", "draft-locale-smoke", runId);
-const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9321").replace(/\/$/, "");
+const baseUrl = (process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088").replace(/\/$/, "");
 
 const launchLocaleLabels = ["English", "Español", "简体中文", "繁體中文"];
 const draftLocales = [

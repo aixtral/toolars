@@ -3,6 +3,7 @@ import {
   aiDeveloperLabTools,
   categories,
   collections,
+  launchCertifiedTools,
   publicTools,
   sourceInventory,
   tools,
@@ -10,6 +11,7 @@ import {
   getCategoryHref,
   getCategoryLabelBySlug,
   getCategorySlug,
+  getLaunchCertifiedToolsByCategory,
   getPublicToolsByCategory,
   getToolsByGroup
 } from "./registry";
@@ -256,6 +258,7 @@ describe("Toolars registry", () => {
     expect(tools.length).toBeGreaterThanOrEqual(30);
 
     for (const tool of tools) {
+      expect(typeof tool.launchCertified).toBe("boolean");
       expect(tool.type).toMatch(/traditional|ai|workflow/);
       expect(tool.processing.length).toBeGreaterThan(0);
       expect(tool.pricing).toMatch(/free|freemium|paid/);
@@ -264,6 +267,169 @@ describe("Toolars registry", () => {
       expect(tool.status).toMatch(/ready|trial-ready|preview|hidden|planned/);
       expect(tool.visibility).toMatch(/public|beta|hidden/);
     }
+  });
+
+  it("separates route-visible public tools from launch-certified default surfaces", () => {
+    const certifiedSlugs = launchCertifiedTools.map((tool) => tool.slug);
+
+    expect(launchCertifiedTools).toHaveLength(55);
+    expect(launchCertifiedTools.every((tool) => publicTools.includes(tool))).toBe(true);
+    expect(certifiedSlugs).toEqual(
+      expect.arrayContaining([
+        "pdf-toolkit",
+        "json-repair",
+        "prompt-injection-scanner",
+        "llm-cost-calculator",
+        "mcp-server-builder",
+        "mortgage-calculator",
+        "bmi-calculator",
+        "compound-interest",
+        "loan-calculator",
+        "unit-converter",
+        "token-counter",
+        "base64-converter",
+        "password-generator",
+        "uuid-generator",
+        "timestamp-converter",
+        "json-formatter",
+        "jwt-decoder",
+        "url-encoder",
+        "hash-generator",
+        "regex-tester",
+        "json-diff",
+        "csv-to-json",
+        "json-to-csv",
+        "yaml-validator",
+        "xml-formatter",
+        "markdown-to-json",
+        "diff-checker",
+        "text-diff",
+        "url-parser",
+        "number-base-converter",
+        "file-size-converter",
+        "chmod-calculator",
+        "ipv4-subnet-calculator",
+        "user-agent-parser",
+        "color-converter",
+        "base64-image-encoder",
+        "case-converter",
+        "code-minifier",
+        "cron-explainer",
+        "docker-compose-converter",
+        "html-entity-encoder",
+        "css-gradient-generator",
+        "css-border-radius-generator",
+        "slug-generator",
+        "text-stats",
+        "discount-calculator",
+        "tip-calculator",
+        "bill-split-calculator",
+        "hourly-to-salary",
+        "rule-of-72",
+        "retirement-calculator",
+        "roi-calculator",
+        "apy-calculator",
+        "savings-goal",
+        "stock-average"
+      ])
+    );
+    expect(getLaunchCertifiedToolsByCategory("All")).toHaveLength(55);
+    expect(getLaunchCertifiedToolsByCategory("AI").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining([
+        "json-repair",
+        "prompt-injection-scanner",
+        "llm-cost-calculator",
+        "mcp-server-builder",
+        "token-counter",
+        "json-formatter",
+        "jwt-decoder",
+        "url-encoder",
+        "hash-generator",
+        "regex-tester",
+        "json-diff",
+        "csv-to-json",
+        "json-to-csv",
+        "yaml-validator",
+        "xml-formatter",
+        "markdown-to-json",
+        "diff-checker",
+        "text-diff",
+        "url-parser",
+        "number-base-converter",
+        "file-size-converter",
+        "chmod-calculator",
+        "ipv4-subnet-calculator",
+        "user-agent-parser",
+        "color-converter",
+        "base64-image-encoder",
+        "case-converter",
+        "code-minifier",
+        "cron-explainer",
+        "docker-compose-converter",
+        "html-entity-encoder",
+        "css-gradient-generator",
+        "css-border-radius-generator",
+        "slug-generator",
+        "text-stats"
+      ])
+    );
+    expect(getLaunchCertifiedToolsByCategory("Developer").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining([
+        "base64-converter",
+        "password-generator",
+        "uuid-generator",
+        "json-formatter",
+        "url-encoder",
+        "hash-generator",
+        "regex-tester",
+        "json-diff",
+        "yaml-validator",
+        "xml-formatter",
+        "url-parser",
+        "number-base-converter",
+        "file-size-converter",
+        "chmod-calculator",
+        "ipv4-subnet-calculator",
+        "user-agent-parser",
+        "base64-image-encoder",
+        "code-minifier",
+        "cron-explainer",
+        "docker-compose-converter",
+        "html-entity-encoder"
+      ])
+    );
+    expect(getLaunchCertifiedToolsByCategory("Frontend & Design").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining(["color-converter", "css-gradient-generator", "css-border-radius-generator"])
+    );
+    expect(getLaunchCertifiedToolsByCategory("Data").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining(["csv-to-json", "json-to-csv", "markdown-to-json"])
+    );
+    expect(getLaunchCertifiedToolsByCategory("Productivity").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining(["case-converter", "text-stats"])
+    );
+    expect(getLaunchCertifiedToolsByCategory("AI Security").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining(["prompt-injection-scanner", "jwt-decoder"])
+    );
+    expect(getLaunchCertifiedToolsByCategory("Productivity").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining(["timestamp-converter", "diff-checker", "text-diff"])
+    );
+    expect(getLaunchCertifiedToolsByCategory("Finance").map((tool) => tool.slug)).toEqual(
+      expect.arrayContaining([
+        "mortgage-calculator",
+        "compound-interest",
+        "loan-calculator",
+        "discount-calculator",
+        "tip-calculator",
+        "bill-split-calculator",
+        "hourly-to-salary",
+        "rule-of-72",
+        "retirement-calculator",
+        "roi-calculator",
+        "apy-calculator",
+        "savings-goal",
+        "stock-average"
+      ])
+    );
   });
 
   it("keeps only launch-ready or trial-ready tools in the public catalog", () => {
@@ -420,23 +586,25 @@ describe("Toolars registry", () => {
     expect(labTools).toHaveLength(94);
     expect(labTools.map((tool) => tool.slug)).toContain("json-repair");
     expect(labTools.map((tool) => tool.slug)).toContain("mcp-server-builder");
-    expect(aiDeveloperLabTools).toHaveLength(94);
+    expect(aiDeveloperLabTools).toHaveLength(39);
     expect(aiDeveloperLabTools.map((tool) => tool.slug)).toEqual(expect.arrayContaining([
       "json-repair",
       "prompt-injection-scanner",
       "llm-cost-calculator",
       "mcp-server-builder",
+      "token-counter",
       "base64-converter",
-      "case-converter",
-      "slug-generator",
-      "text-stats",
+      "password-generator",
       "uuid-generator",
+      "timestamp-converter",
+      "json-formatter",
+      "jwt-decoder",
       "url-encoder",
-      "html-entity-encoder",
-      "lorem-ipsum",
+      "hash-generator",
+      "regex-tester",
+      "json-diff",
       "csv-to-json",
       "json-to-csv",
-      "json-diff",
       "yaml-validator",
       "xml-formatter",
       "markdown-to-json",
@@ -447,52 +615,18 @@ describe("Toolars registry", () => {
       "file-size-converter",
       "chmod-calculator",
       "ipv4-subnet-calculator",
-      "timestamp-converter",
       "user-agent-parser",
-      "hash-generator",
-      "jwt-decoder",
-      "password-generator",
-      "regex-tester",
-      "nanoid-generator",
-      "json-formatter",
-      "json-path-tester",
       "color-converter",
-      "color-contrast-checker",
-      "color-palette-generator",
-      "css-gradient-generator",
-      "css-box-shadow-generator",
-      "css-border-radius-generator",
-      "css-flexbox-generator",
-      "css-grid-generator",
-      "css-unit-converter",
-      "css-to-tailwind-converter",
-      "meta-tag-generator",
-      "robots-txt-generator",
       "base64-image-encoder",
-      "barcode-generator",
-      "qr-code-generator",
-      "certificate-decoder",
-      "image-resizer",
-      "svg-optimizer",
-      "ai-guardrail-config",
-      "hallucination-checker",
-      "jailbreak-detector",
-      "pii-scanner",
-      "red-team-simulator",
-      "toxicity-scanner",
-      "code-to-image",
-      "css-animation-generator",
-      "system-prompt-compressor",
-      "system-prompt-guard",
-      "token-counter",
-      "model-comparator",
-      "context-window",
-      "token-budget-planner",
-      "mcp-tester",
-      "agent-workflow-builder",
-      "rag-eval-bench",
-      "embedding-playground",
-      "rag-chunk-visualizer"
+      "case-converter",
+      "code-minifier",
+      "cron-explainer",
+      "docker-compose-converter",
+      "html-entity-encoder",
+      "css-gradient-generator",
+      "css-border-radius-generator",
+      "slug-generator",
+      "text-stats"
     ]));
   });
 

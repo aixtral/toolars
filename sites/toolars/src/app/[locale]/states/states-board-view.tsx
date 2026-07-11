@@ -21,7 +21,7 @@ export function StatesBoardView() {
         <span className="eyebrow">{t("hero.eyebrow")}</span>
         <h1 className="title">{t("hero.title")}</h1>
         <p className="subtitle">{t("hero.subtitle")}</p>
-        <button className="button button-outline-neutral" type="button">
+        <button disabled className="button button-outline-neutral" type="button">
           {t("hero.showToast")}
         </button>
       </section>
@@ -36,7 +36,7 @@ export function StatesBoardView() {
             <a className="button button-solid" href={localizedHref("/tools/pdf-toolkit")}>
               {t("empty.openPdfToolkit")}
             </a>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               {t("empty.importBookmarks")}
             </button>
           </div>
@@ -61,10 +61,10 @@ export function StatesBoardView() {
             </span>
           </div>
           <div className="settings-button-row">
-            <button className="button button-solid" type="button">
+            <button disabled className="button button-solid" type="button">
               {t("uploadError.retryUpload")}
             </button>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               {t("uploadError.viewRequirements")}
             </button>
           </div>
@@ -91,7 +91,7 @@ export function StatesBoardView() {
               <div className={`states-toast ${toastKey}`} key={toastKey}>
                 <span className="states-dot" />
                 <strong>{t(`toasts.${toastKey}.text`)}</strong>
-                <button type="button">{t(`toasts.${toastKey}.action`)}</button>
+                <button disabled type="button">{t(`toasts.${toastKey}.action`)}</button>
               </div>
             ))}
           </div>
@@ -137,10 +137,10 @@ export function StatesBoardView() {
               <span>{t("delete.warning")}</span>
             </div>
             <div className="settings-button-row">
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("delete.cancel")}
               </button>
-              <button className="button button-danger" type="button">
+              <button disabled className="button button-danger" type="button">
                 {t("delete.deleteOutput")}
               </button>
             </div>
@@ -153,7 +153,7 @@ export function StatesBoardView() {
             <div className="states-command-input">
               <Search size={16} aria-hidden="true" />
               <span>{t("command.query")}</span>
-              <button type="button">{t("command.close")}</button>
+              <button disabled type="button">{t("command.close")}</button>
             </div>
             <strong>{t("command.suggested")}</strong>
             {commandSuggestionKeys.map((suggestionKey, index) => (

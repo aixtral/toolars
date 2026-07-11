@@ -14,6 +14,10 @@ type ApiKey = {
   status: "active" | "revoked";
 };
 
+type RawApiKey = Omit<ApiKey, "status"> & {
+  status?: string;
+};
+
 type ScopeRow = {
   scope: string;
   description: string;
@@ -31,9 +35,9 @@ type SelectOption = {
 
 export function ApiKeysSettingsView() {
   const t = useTranslations("settings.api-keys");
-  const [keys, setKeys] = useState<ApiKey[]>(() => t.raw("inventory.keys") as ApiKey[]);
+  const [keys, setKeys] = useState<ApiKey[]>(() => normalizeApiKeys(t.raw("inventory.keys")));
   const [feedback, setFeedback] = useState(() => t("feedback.initial"));
-  const newKey = t.raw("inventory.newKey") as ApiKey;
+  const newKey = normalizeApiKey(t.raw("inventory.newKey"));
   const scopeRows = t.raw("scopes.rows") as ScopeRow[];
   const activityRows = t.raw("activity.rows") as ActivityRow[];
   const checklistItems = t.raw("securityChecklist.items") as string[];
@@ -100,7 +104,7 @@ export function ApiKeysSettingsView() {
                     </div>
                   </div>
                   <div className="api-key-actions">
-                    <button className="button button-outline-neutral" type="button">
+                    <button disabled className="button button-outline-neutral" type="button">
                       <Clipboard size={15} aria-hidden="true" /> {t("actions.copy")}
                     </button>
                     {key.status === "active" ? (
@@ -174,7 +178,7 @@ export function ApiKeysSettingsView() {
                 <small>{t("webhook.rotated")}</small>
               </span>
             </div>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               {t("actions.rotateSecret")}
             </button>
           </section>
@@ -210,4 +214,28 @@ export function ApiKeysSettingsView() {
       </div>
     </div>
   );
+}
+
+export function normalizeApiKeys(rawKeys: unknown): ApiKey[] {
+  if (!Array.isArray(rawKeys)) return [];
+  return rawKeys.map(normalizeApiKey);
+}
+
+export function normalizeApiKey(rawKey: unknown): ApiKey {
+  const key = rawKey as Partial<RawApiKey>;
+
+  return {
+    environment: key.environment ?? "",
+    id: key.id ?? "local",
+    label: key.label ?? "",
+    lastUsed: key.lastUsed ?? "",
+    scopes: Array.isArray(key.scopes) ? key.scopes.filter((scope): scope is string => typeof scope === "string") : [],
+    status: normalizeApiKeyStatus(key.status),
+    token: key.token ?? ""
+  };
+}
+
+function normalizeApiKeyStatus(status: string | undefined): ApiKey["status"] {
+  if (status === "revoked" || status === "已撤销" || status === "已撤銷" || status === "Revocada") return "revoked";
+  return "active";
 }

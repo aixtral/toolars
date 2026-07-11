@@ -9,7 +9,7 @@ import { chromium } from "playwright";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
-const BASE_URL = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9320";
+const BASE_URL = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088";
 const OUTPUT_PATH = "output/visual-baseline/mobile-home-en.png";
 
 async function main() {

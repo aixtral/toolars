@@ -3,25 +3,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetServerConsentAuditLedger, setServerConsentAuditLedgerStoragePathForTest } from "@/lib/ai/server-consent-audit-ledger";
-import { createToolarsAuthSessionCookie } from "@/lib/auth/toolars-auth-session";
-import {
-  persistToolarsAuthSession,
-  resetToolarsAuthSessionLedger,
-  setToolarsAuthSessionLedgerStoragePathForTest
-} from "@/lib/auth/toolars-auth-session-ledger";
+import { setToolarsSupabaseServerAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-server";
 import { POST } from "./route";
-
-/**
- * Build ISO timestamps anchored to the current time so session fixtures never
- * go stale. Sessions are issued 1 hour ago and expire 1 hour from now.
- */
-function buildSessionTimestamps() {
-  const now = Date.now();
-  return {
-    issuedAt: new Date(now - 60 * 60 * 1000).toISOString(),
-    expiresAt: new Date(now + 60 * 60 * 1000).toISOString()
-  };
-}
 
 const event = {
   approvedAt: "2026-06-21T10:10:00Z",
@@ -49,38 +32,26 @@ describe("/api/ai/provider-runs", () => {
   let tempDirectory: string;
   const originalEndpoint = process.env.TOOLARS_AI_PROVIDER_ENDPOINT;
   const originalApiKey = process.env.TOOLARS_AI_PROVIDER_API_KEY;
-  const originalSessionSecret = process.env.TOOLARS_AUTH_SESSION_SECRET;
 
   beforeEach(() => {
     tempDirectory = mkdtempSync(join(tmpdir(), "toolars-api-provider-run-"));
     process.env.TOOLARS_AI_PROVIDER_ENDPOINT = "https://ai-provider.toolars.test";
     process.env.TOOLARS_AI_PROVIDER_API_KEY = "ai-provider-secret";
-    process.env.TOOLARS_AUTH_SESSION_SECRET = "test-session-secret";
     setServerConsentAuditLedgerStoragePathForTest(join(tempDirectory, "ledger.json"));
-    setToolarsAuthSessionLedgerStoragePathForTest(join(tempDirectory, "sessions.json"));
     resetServerConsentAuditLedger();
-    resetToolarsAuthSessionLedger();
   });
 
   afterEach(() => {
     process.env.TOOLARS_AI_PROVIDER_ENDPOINT = originalEndpoint;
     process.env.TOOLARS_AI_PROVIDER_API_KEY = originalApiKey;
-    process.env.TOOLARS_AUTH_SESSION_SECRET = originalSessionSecret;
     setServerConsentAuditLedgerStoragePathForTest(null);
-    setToolarsAuthSessionLedgerStoragePathForTest(null);
+    setToolarsSupabaseServerAuthDriverForTest(null);
     vi.unstubAllGlobals();
     rmSync(tempDirectory, { force: true, recursive: true });
   });
 
   it("executes the configured AI provider and records usage analytics in the server ledger", async () => {
-    const { cookie, session } = createToolarsAuthSessionCookie({
-      accountEmail: "owner@example.com",
-      accountId: "acct_ai_owner",
-      ...buildSessionTimestamps(),
-      secret: "test-session-secret",
-      sessionId: "sess_ai_provider"
-    });
-    persistToolarsAuthSession(session);
+    setSupabaseUser({ email: "owner@example.com", id: "user_ai_owner" });
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({
         modelId: "toolars-fast-summary-2026-06",
@@ -107,7 +78,6 @@ describe("/api/ai/provider-runs", () => {
         }),
         headers: {
           "Content-Type": "application/json",
-          cookie,
           "x-toolars-workspace-id": "toolars_ws_ai_provider_test"
         },
         method: "POST"
@@ -118,7 +88,7 @@ describe("/api/ai/provider-runs", () => {
     expect(response.status).toBe(201);
     expect(fetchMock).toHaveBeenCalledWith("https://ai-provider.toolars.test/runs", {
       body: JSON.stringify({
-        accountId: "acct_ai_owner",
+        accountId: "user_ai_owner",
         contentSummary: event.contentSummary,
         prompt: "Summarize the extracted text.",
         providerRouteId: "pdf-summary.fast-summary:v1",
@@ -200,3 +170,13 @@ describe("/api/ai/provider-runs", () => {
     });
   });
 });
+
+function setSupabaseUser(user: { email: string; id: string }) {
+  setToolarsSupabaseServerAuthDriverForTest({
+    getUser: vi.fn().mockResolvedValue({
+      data: { user },
+      error: null
+    }),
+    signOut: vi.fn()
+  });
+}

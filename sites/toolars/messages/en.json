@@ -619,23 +619,36 @@
     "rights": "All rights reserved."
   },
   "auth": {
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "passwordHint": "Use at least 6 characters.",
+    "status": {
+      "checkEmail": "Check your email to confirm the account.",
+      "failed": "Supabase could not complete this request. Check the credentials and try again.",
+      "invalidInput": "Enter an email and password to continue.",
+      "notConfigured": "Supabase is not configured yet. Add the Supabase URL and publishable key first.",
+      "signedIn": "Signed in. Your workspace is syncing.",
+      "submitting": "Connecting..."
+    },
     "signIn": {
       "title": "Sign in to Toolars",
       "eyebrow": "Account",
-      "description": "Use Google to keep trial history, saved collections, and account settings in sync.",
-      "google": "Continue with Google",
-      "googleDescription": "Start a free trial workspace with your Google account.",
+      "description": "Use Supabase Auth to keep history, saved collections, and account settings in sync.",
+      "submit": "Sign in with Supabase",
       "freeTrial": "Free trial mode",
       "freeTrialDescription": "No card is required during the beta."
     },
     "signUp": {
       "title": "Create your Toolars account",
       "eyebrow": "Account",
-      "description": "Create a free Toolars workspace with your Google account to sync history and saved collections.",
-      "google": "Continue with Google",
-      "googleDescription": "Create a free trial workspace with your Google account.",
+      "description": "Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
+      "submit": "Create Supabase account",
       "freeTrial": "Free trial mode",
       "freeTrialDescription": "No card is required during the beta."
+    },
+    "signOut": {
+      "button": "Sign out",
+      "signedOut": "Signed out."
     }
   },
   "commandCenter": {
@@ -695,6 +708,9 @@
       "title": "Upgrade workspace",
       "description": "Review future plan benefits. Paid upgrades are parked while the beta trial is active.",
       "futurePlan": "Future plan",
+      "planLabel": "{planName} future plan",
+      "phase2Notice": "Paid upgrades are parked for Phase 2.",
+      "phase2Cta": "Phase 2 waitlist",
       "start": "Start upgrade"
     }
   },

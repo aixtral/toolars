@@ -311,7 +311,7 @@ export function PdfToolkitWorkspace() {
       </section>
 
       <section className="workspace-tabs" aria-label={t("workspace.a11y.modes")}>
-        <button className="workspace-tab is-active" type="button">
+        <button disabled className="workspace-tab is-active" type="button">
           <Sparkles size={18} aria-hidden="true" />
           <span>
             <strong>{t("workspace.tabs.traditionalTool")}</strong>
@@ -357,7 +357,7 @@ export function PdfToolkitWorkspace() {
             <button ref={uploadTriggerRef} className="button button-outline" type="button" onClick={() => setIsUploadDialogOpen(true)}>
               <Upload size={16} aria-hidden="true" /> {t("workspace.files.addFiles")}
             </button>
-            <button className="button button-outline" type="button">{t("workspace.files.importFromDrive")}</button>
+            <button disabled className="button button-outline" type="button">{t("workspace.files.importFromDrive")}</button>
           </div>
 
           <div className="pdf-file-list" aria-label={t("workspace.files.selectedFiles")}>
@@ -455,7 +455,7 @@ export function PdfToolkitWorkspace() {
             <button className="button button-outline" type="button" disabled={job.status !== "completed"}>
               <Link2 size={16} aria-hidden="true" /> {t("workspace.result.copyLink")}
             </button>
-            <button className="button button-outline" type="button">
+            <button disabled className="button button-outline" type="button">
               <MoreHorizontal size={16} aria-hidden="true" />
             </button>
           </div>
@@ -499,8 +499,8 @@ export function PdfToolkitWorkspace() {
             <button className={aiSummarySelected ? "is-selected" : ""} type="button" onClick={chooseAiSummary}>
               {t("workspace.ai.summarize")}
             </button>
-            <button type="button">{t("workspace.ai.actionItems")}</button>
-            <button type="button">{t("workspace.ai.translate")}</button>
+            <button disabled type="button">{t("workspace.ai.actionItems")}</button>
+            <button disabled type="button">{t("workspace.ai.translate")}</button>
           </div>
 
           <div className="consent-box">

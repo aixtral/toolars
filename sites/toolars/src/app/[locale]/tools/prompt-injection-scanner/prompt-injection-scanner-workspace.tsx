@@ -97,7 +97,7 @@ export function PromptInjectionScannerWorkspace() {
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <button className="button button-outline" type="button">{t("actions.deepReview")}</button>
+          <button disabled className="button button-outline" type="button">{t("actions.deepReview")}</button>
           <a className="button button-outline" href={localizedHref("/tools/prompt-injection-scanner/about")}>{t("actions.details")}</a>
         </div>
       </section>
@@ -136,7 +136,7 @@ export function PromptInjectionScannerWorkspace() {
               <h2>{t("resultSection.title")}</h2>
               <p className="tool-description">{result ? t("resultSection.readyDescription") : t("resultSection.emptyDescription")}</p>
             </div>
-            <button className="button button-outline" type="button">{t("actions.exportReport")}</button>
+            <button disabled className="button button-outline" type="button">{t("actions.exportReport")}</button>
           </div>
 
           <div className="risk-meter" aria-label={t("metrics.riskScore")}>
@@ -201,8 +201,8 @@ export function PromptInjectionScannerWorkspace() {
         </div>
 
         <div className="button-row">
-          <button className="button button-outline" type="button">{t("actions.saveToLab")}</button>
-          <button className="button button-solid" type="button">
+          <button disabled className="button button-outline" type="button">{t("actions.saveToLab")}</button>
+          <button disabled className="button button-solid" type="button">
             <ClipboardCheck size={16} aria-hidden="true" /> {t("actions.createChecklist")}
           </button>
         </div>

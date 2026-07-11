@@ -46,10 +46,18 @@ import {
   Workflow
 } from "lucide-react";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
+import { ToolarsAccountActions } from "@/components/core/toolars-account-actions";
 import { LanguageSwitcher } from "@/components/shell/language-switcher";
 import { CommandCenter } from "@/components/search/command-center";
 import { ToolarsLogoMark } from "@/components/shell/toolars-logo";
-import { categories, collections, getCategoryHref, getCategoryLabelBySlug, getPublicToolsByCategory, workflows } from "@/data/registry";
+import {
+  collections,
+  getCategoryHref,
+  getCategoryLabelBySlug,
+  getLaunchCertifiedToolsByCategory,
+  launchCertifiedCategories,
+  workflows
+} from "@/data/registry";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { isFeatureEnabled } from "@/lib/product/feature-flags";
@@ -148,7 +156,7 @@ function MobileLanguageMenu({
             data-mobile-menu-section="categories"
             style={{ display: "grid", gap: 2, marginBottom: 6, paddingBottom: 6, borderBottom: "1px solid var(--border)" }}
           >
-            {categories.map((category) => {
+            {launchCertifiedCategories.map((category) => {
               const href = getCategoryHref(category.label);
               const isActive = sidebarActiveHref ? href === sidebarActiveHref : active === getCategoryActiveKey(category.label);
 
@@ -192,14 +200,14 @@ const adminNav = [
 const workflowCategories = [
   { key: "allWorkflows", count: workflows.length, icon: Workflow, href: "/workflows" },
   { key: "pdf", count: workflows.filter((workflow) => workflow.category === "PDF").length, icon: FileText, href: "/workflows/pdf-summary" },
-  { key: "data", count: getPublicToolsByCategory("Data").length, icon: BarChart3, href: "/explore/data" },
-  { key: "image", count: getPublicToolsByCategory("Image").length, icon: ImageIcon, href: "/explore/image" },
-  { key: "writing", count: getPublicToolsByCategory("Writing").length, icon: PenLine, href: "/explore/writing" },
-  { key: "developer", count: getPublicToolsByCategory("Developer").length, icon: Code2, href: "/explore/developer" },
+  { key: "data", count: getLaunchCertifiedToolsByCategory("Data").length, icon: BarChart3, href: "/explore/data" },
+  { key: "image", count: getLaunchCertifiedToolsByCategory("Image").length, icon: ImageIcon, href: "/explore/image" },
+  { key: "writing", count: getLaunchCertifiedToolsByCategory("Writing").length, icon: PenLine, href: "/explore/writing" },
+  { key: "developer", count: getLaunchCertifiedToolsByCategory("Developer").length, icon: Code2, href: "/explore/developer" },
   { key: "marketing", count: workflows.length, icon: Share2, href: "/workflows#templates" },
-  { key: "finance", count: getPublicToolsByCategory("Finance").length, icon: Wallet, href: "/explore/finance" },
-  { key: "health", count: getPublicToolsByCategory("Health").length, icon: Heart, href: "/explore/health" },
-  { key: "ai", count: getPublicToolsByCategory("AI").length, icon: Sparkles, href: "/explore/ai-developer" }
+  { key: "finance", count: getLaunchCertifiedToolsByCategory("Finance").length, icon: Wallet, href: "/explore/finance" },
+  { key: "health", count: getLaunchCertifiedToolsByCategory("Health").length, icon: Heart, href: "/explore/health" },
+  { key: "ai", count: getLaunchCertifiedToolsByCategory("AI").length, icon: Sparkles, href: "/explore/ai-developer" }
 ] as const;
 
 const workflowFilters = ["includesAi", "localFirstSteps", "teamReady", "freeToUse"] as const;
@@ -208,13 +216,13 @@ const collectionCategories = [
   { key: "featured", count: collections.length, icon: Star, href: "/collections" },
   { key: "mySaved", count: collections.length, icon: Save, href: "/my-tools#collections" },
   { key: "teamCollections", count: 0, icon: Users, href: "/settings/team" },
-  { key: "productivity", count: getPublicToolsByCategory("Productivity").length, icon: Briefcase, href: "/explore/productivity" },
-  { key: "developer", count: getPublicToolsByCategory("Developer").length, icon: Code2, href: "/explore/developer" },
-  { key: "design", count: getPublicToolsByCategory("Frontend & Design").length, icon: Palette, href: "/explore/frontend-design" },
-  { key: "writing", count: getPublicToolsByCategory("Writing").length, icon: PenLine, href: "/explore/writing" },
+  { key: "productivity", count: getLaunchCertifiedToolsByCategory("Productivity").length, icon: Briefcase, href: "/explore/productivity" },
+  { key: "developer", count: getLaunchCertifiedToolsByCategory("Developer").length, icon: Code2, href: "/explore/developer" },
+  { key: "design", count: getLaunchCertifiedToolsByCategory("Frontend & Design").length, icon: Palette, href: "/explore/frontend-design" },
+  { key: "writing", count: getLaunchCertifiedToolsByCategory("Writing").length, icon: PenLine, href: "/explore/writing" },
   { key: "pdf", count: collections.filter((collection) => collection.slug.includes("pdf")).length, icon: FileText, href: "/collections/pdf-ops-kit" },
-  { key: "finance", count: getPublicToolsByCategory("Finance").length, icon: Wallet, href: "/explore/finance" },
-  { key: "health", count: getPublicToolsByCategory("Health").length, icon: Heart, href: "/explore/health" }
+  { key: "finance", count: getLaunchCertifiedToolsByCategory("Finance").length, icon: Wallet, href: "/explore/finance" },
+  { key: "health", count: getLaunchCertifiedToolsByCategory("Health").length, icon: Heart, href: "/explore/health" }
 ] as const;
 
 const collectionFilters = ["public", "teamReady", "containsAi", "localFirst"] as const;
@@ -295,10 +303,10 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
     t("shell.workspace.proPlanFeatures.workflowRuns")
   ];
   const activeCategoryMissingFromSidebar =
-    sidebarActiveHref && !categories.some((category) => getCategoryHref(category.label) === sidebarActiveHref);
+    sidebarActiveHref && !launchCertifiedCategories.some((category) => getCategoryHref(category.label) === sidebarActiveHref);
   const activeCategoryFallbackSlug = activeCategoryMissingFromSidebar ? getExploreCategorySlugFromHref(sidebarActiveHref) : null;
   const activeCategoryFallbackLabel = activeCategoryFallbackSlug ? getCategoryLabelBySlug(activeCategoryFallbackSlug) : undefined;
-  const activeCategoryFallbackCount = activeCategoryFallbackLabel ? getPublicToolsByCategory(activeCategoryFallbackLabel).length : 0;
+  const activeCategoryFallbackCount = activeCategoryFallbackLabel ? getLaunchCertifiedToolsByCategory(activeCategoryFallbackLabel).length : 0;
 
   if (sidebarVariant === "workflows") {
     return (
@@ -324,7 +332,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             </label>
           ))}
         </section>
-        <button className="button button-outline-neutral workflow-clear-button" type="button">
+        <button disabled className="button button-outline-neutral workflow-clear-button" type="button">
           {t("shell.commonSidebars.clearFilters")}
         </button>
       </>
@@ -646,7 +654,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
     <>
       <section className="side-section">
         <p className="side-title">{t("shell.sidebar.categories")}</p>
-        {categories.map((category) => {
+        {launchCertifiedCategories.map((category) => {
           const key = getCategoryActiveKey(category.label);
           const href = getCategoryHref(category.label);
           const Icon = getCategoryIcon(category.label);
@@ -742,21 +750,14 @@ export function ToolarsShell({
         <CommandCenter />
         {sidebarVariant === "pdf-workspace" ? (
           <nav className="nav workspace-topbar-actions" aria-label={t("shell.pdfWorkspace.actionsLabel")}>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Save size={16} aria-hidden="true" /> {t("common.save")}
             </button>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Share2 size={16} aria-hidden="true" /> {t("common.share")}
             </button>
             <span className="topbar-actions-cluster" data-topbar-actions="account-language-v3">
-              <span className="topbar-account-actions" aria-label={t("auth.signIn.eyebrow")}>
-                <CoreActionModalButton className="button topbar-sign-in" kind="sign-in">
-                  {t("nav.signIn")}
-                </CoreActionModalButton>
-                <CoreActionModalButton className="button button-solid topbar-sign-up" kind="sign-up">
-                  {t("nav.signUp")}
-                </CoreActionModalButton>
-              </span>
+              <ToolarsAccountActions />
               <LanguageSwitcher />
             </span>
             <MobileLanguageMenu
@@ -765,7 +766,7 @@ export function ToolarsShell({
               localizedHref={localizedHref}
               sidebarActiveHref={sidebarActiveHref}
             />
-            <button aria-label={t("shell.pdfWorkspace.appearanceLabel")} className="button pdf-appearance-button" type="button">
+            <button disabled aria-label={t("shell.pdfWorkspace.appearanceLabel")} className="button pdf-appearance-button" type="button">
               <Sun size={17} aria-hidden="true" />
             </button>
           </nav>
@@ -785,7 +786,7 @@ export function ToolarsShell({
               );
             })}
             {active === "admin" ? (
-              <button className="button button-solid" type="button">
+              <button disabled className="button button-solid" type="button">
                 {t("nav.admin")}
               </button>
             ) : (
@@ -795,14 +796,7 @@ export function ToolarsShell({
                     <Plus size={15} aria-hidden="true" /> {t("nav.submitTool")}
                   </a>
                 ) : null}
-                <span className="topbar-account-actions" aria-label={t("auth.signIn.eyebrow")}>
-                  <CoreActionModalButton className="button topbar-sign-in" kind="sign-in">
-                    {t("nav.signIn")}
-                  </CoreActionModalButton>
-                  <CoreActionModalButton className="button button-solid topbar-sign-up" kind="sign-up">
-                    {t("nav.signUp")}
-                  </CoreActionModalButton>
-                </span>
+                <ToolarsAccountActions />
                 <LanguageSwitcher />
               </span>
             )}

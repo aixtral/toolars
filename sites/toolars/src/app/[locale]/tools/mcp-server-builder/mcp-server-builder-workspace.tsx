@@ -205,7 +205,7 @@ export function McpServerBuilderWorkspace() {
               <h2>{t("preview.title")}</h2>
               <p className="tool-description">{status}</p>
             </div>
-            <button className="button button-outline" type="button">
+            <button disabled className="button button-outline" type="button">
               <Clipboard size={16} aria-hidden="true" /> {t("actions.copyManifest")}
             </button>
           </div>

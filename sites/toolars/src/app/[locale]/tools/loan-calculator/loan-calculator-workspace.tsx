@@ -122,7 +122,7 @@ export function LoanCalculatorWorkspace() {
               <h2>{t("resultSection.title")}</h2>
               <p className="tool-description">{resultSummary}</p>
             </div>
-            <button className="button button-outline" type="button">
+            <button disabled className="button button-outline" type="button">
               <Download size={16} aria-hidden="true" /> {t("actions.exportPlan")}
             </button>
           </div>

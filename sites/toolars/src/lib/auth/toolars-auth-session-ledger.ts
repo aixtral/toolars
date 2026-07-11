@@ -126,6 +126,7 @@ function writeSessionLedgerStore(store: ToolarsAuthSessionLedgerStore) {
     return;
   }
 
+  assertLegacySessionLedgerWritable();
   const storagePath = getSessionLedgerStoragePath();
   mkdirSync(/*turbopackIgnore: true*/ dirname(storagePath), { recursive: true });
   writeFileSync(/*turbopackIgnore: true*/ storagePath, `${JSON.stringify(store, null, 2)}\n`);
@@ -211,6 +212,16 @@ function getSessionLedgerStoragePath() {
       fileName: TOOLARS_RUNTIME_FILES.authSessionLedger
     })
   );
+}
+
+function assertLegacySessionLedgerWritable() {
+  if (storagePathForTest || getRuntimeEnvironment() !== "production") return;
+  throw new Error("Toolars local auth session ledger is disabled in production. Use Supabase Auth instead.");
+}
+
+function getRuntimeEnvironment() {
+  if (typeof process === "undefined") return "production";
+  return process.env.NODE_ENV ?? "production";
 }
 
 function normalizeSessionId(sessionId: string) {

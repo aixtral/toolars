@@ -159,7 +159,7 @@ export function NotificationsSettingsView() {
             <div className="consent-preview-box">
               <strong>{t("preview.title")}</strong>
               <p>{t("preview.description")}</p>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 <MessageSquare size={15} aria-hidden="true" /> {t("preview.action")}
               </button>
             </div>

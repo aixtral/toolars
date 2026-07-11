@@ -12,14 +12,15 @@ defaults:
 
 jobs:
   verify:
-    name: Typecheck, test, build
+    name: Launch readiness
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
 
     env:
       # Required so metadataBase / sitemap / JSON-LD resolve to an absolute URL
       # during the production build. No secrets needed for the build itself.
       NEXT_PUBLIC_SITE_URL: https://toolars.app
+      NEXT_TELEMETRY_DISABLED: "1"
 
     steps:
       - name: Checkout
@@ -40,11 +41,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
-        run: pnpm typecheck
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
 
-      - name: Test
-        run: pnpm test
+      - name: Launch readiness
+        run: pnpm run launch:readiness -- --full --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
 
-      - name: Build
-        run: pnpm build
+      - name: Upload launch readiness report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: launch-readiness
+          path: output/launch-readiness/ci
+          if-no-files-found: warn

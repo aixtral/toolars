@@ -86,13 +86,13 @@ export function SubmitToolView() {
             </div>
             <p className="field-label">{t("fields.toolType")}</p>
             <div className="submit-segment-row" role="group" aria-label={t("fields.toolType")}>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("toolTypes.traditional")}
               </button>
-              <button aria-pressed="true" className="button button-soft" type="button">
+              <button disabled aria-pressed="true" className="button button-soft" type="button">
                 {t("toolTypes.aiPowered")}
               </button>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("toolTypes.workflow")}
               </button>
             </div>
@@ -116,13 +116,13 @@ export function SubmitToolView() {
               <fieldset className="submit-fieldset">
                 <legend>{t("fields.pricingModel")}</legend>
                 <div className="submit-segment-row">
-                  <button className="button button-outline-neutral" type="button">
+                  <button disabled className="button button-outline-neutral" type="button">
                     {t("pricing.free")}
                   </button>
-                  <button aria-pressed="true" className="button button-soft" type="button">
+                  <button disabled aria-pressed="true" className="button button-soft" type="button">
                     {t("pricing.freemium")}
                   </button>
-                  <button className="button button-outline-neutral" type="button">
+                  <button disabled className="button button-outline-neutral" type="button">
                     {t("pricing.paid")}
                   </button>
                 </div>
@@ -139,13 +139,13 @@ export function SubmitToolView() {
           </section>
 
           <div className="submit-action-row">
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               {t("actions.saveDraft")}
             </button>
-            <button className="button button-outline-neutral" type="button">
+            <button disabled className="button button-outline-neutral" type="button">
               <Eye size={16} aria-hidden="true" /> {t("actions.previewListing")}
             </button>
-            <button className="button button-solid" type="button">
+            <button disabled className="button button-solid" type="button">
               <Send size={16} aria-hidden="true" /> {t("actions.submitForReview")}
             </button>
           </div>
@@ -175,7 +175,7 @@ export function SubmitToolView() {
               <span>
                 <Cloud size={16} aria-hidden="true" /> {t("processing.cloud")}
               </span>
-              <button className="button button-outline-neutral" type="button">
+              <button disabled className="button button-outline-neutral" type="button">
                 {t("actions.open")} <ArrowRight size={14} aria-hidden="true" />
               </button>
             </div>
@@ -242,7 +242,7 @@ export function SubmitToolView() {
               </span>
               <h2>{t("upsell.title")}</h2>
               <p className="tool-description">{t("upsell.description")}</p>
-              <button className="button button-solid" type="button">
+              <button disabled className="button button-solid" type="button">
                 {t("actions.upgradeToPro")} <ArrowRight size={14} aria-hidden="true" />
               </button>
             </section>

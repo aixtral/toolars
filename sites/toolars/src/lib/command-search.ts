@@ -1,4 +1,4 @@
-import { collections, tools, workflows } from "@/data/registry";
+import { collections, launchCertifiedTools, workflows } from "@/data/registry";
 
 export interface CommandResult {
   group: "Tools" | "Workflows" | "Collections";
@@ -14,7 +14,7 @@ interface SearchCommandResultsOptions {
 }
 
 const index: CommandResult[] = [
-  ...tools.map((tool) => ({
+  ...launchCertifiedTools.map((tool) => ({
     group: "Tools" as const,
     title: tool.name,
     meta: `${tool.category} · ${tool.processing.join(" / ")} · ${tool.pricing}`,

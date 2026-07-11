@@ -15,7 +15,7 @@ describe("site-config", () => {
 
   it("falls back to localhost dev origin when no site url is configured", () => {
     delete process.env.NEXT_PUBLIC_SITE_URL;
-    expect(getSiteBaseUrl()).toBe("http://localhost:9320");
+    expect(getSiteBaseUrl()).toBe("http://localhost:9088");
   });
 
   it("strips trailing slashes from the configured base", () => {

@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const alt = "Toolars — All tools. One workspace.";
 export const contentType = "image/png";
 export const size = { width: 1200, height: 630 };
@@ -40,10 +39,19 @@ export default function OGImage() {
           </div>
           <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em" }}>Toolars</span>
         </div>
-        <div style={{ fontSize: 64, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.03em", maxWidth: 900 }}>
-          All tools.
-          <br />
-          One workspace.
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            fontSize: 64,
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.03em",
+            maxWidth: 900
+          }}
+        >
+          <span>All tools.</span>
+          <span>One workspace.</span>
         </div>
         <div style={{ fontSize: 28, color: "#94a3b8", marginTop: 24, maxWidth: 800, lineHeight: 1.4 }}>
           Calculators, AI tools, PDF utilities, and workflows — local-first, free to start.

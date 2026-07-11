@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const contentType = "image/png";
 export const size = { width: 1200, height: 630 };
 
@@ -132,10 +131,19 @@ export default async function OGImage({ params }: OpenGraphImageProps = {}) {
             <span style={{ fontSize: 18, color: "#bbf7d0", fontWeight: 700 }}>{imageText.tagline}</span>
           </div>
         </div>
-        <div style={{ fontSize: 64, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.03em", maxWidth: 900 }}>
-          {imageText.headline.primary}
-          <br />
-          {imageText.headline.secondary}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            fontSize: 64,
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.03em",
+            maxWidth: 900
+          }}
+        >
+          <span>{imageText.headline.primary}</span>
+          <span>{imageText.headline.secondary}</span>
         </div>
         <div style={{ fontSize: 28, color: "#94a3b8", marginTop: 24, maxWidth: 800, lineHeight: 1.4 }}>
           {imageText.subtitle}

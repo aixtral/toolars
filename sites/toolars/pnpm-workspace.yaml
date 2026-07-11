@@ -1,8 +1,8 @@
 allowBuilds:
   '@parcel/watcher': true
-  '@sentry/cli': set this to true or false
+  '@sentry/cli': true
   '@swc/core': true
-  core-js: set this to true or false
+  core-js: true
   keytar: true
   node-pty: true
   sharp: true

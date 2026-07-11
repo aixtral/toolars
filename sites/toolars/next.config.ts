@@ -3,11 +3,13 @@ import createNextIntlPlugin from "next-intl/plugin";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+const nextDeploymentRoot = __dirname;
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
+  outputFileTracingRoot: nextDeploymentRoot,
   turbopack: {
-    root: __dirname
+    root: nextDeploymentRoot
   },
   // Performance: enable image optimization for dynamic OG images and user content
   images: {

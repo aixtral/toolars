@@ -47,7 +47,7 @@ export function ToolarsAccountActions({
   }
 
   return (
-    <span className="topbar-account-actions" aria-label={t("auth.signIn.eyebrow")}>
+    <span className="topbar-account-actions" aria-label={t("auth.eyebrow")}>
       {account ? (
         <>
           <span className="topbar-account-email">{account.accountEmail ?? account.accountId}</span>

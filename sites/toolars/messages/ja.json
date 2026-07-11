@@ -619,32 +619,28 @@
     "rights": "日本語ドラフト 209: All rights reserved."
   },
   "auth": {
-    "emailLabel": "日本語ドラフト 210: Email",
-    "passwordLabel": "日本語ドラフト 211: Password",
-    "passwordHint": "日本語ドラフト 212: Use at least 6 characters.",
+    "eyebrow": "アカウント",
+    "close": "ダイアログを閉じる",
+    "continueWith": "{provider} で続行",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "ワークスペースの準備ができました",
+    "trust": "アクセス情報は非公開のままです。",
     "status": {
-      "checkEmail": "日本語ドラフト 213: Check your email to confirm the account.",
-      "failed": "日本語ドラフト 214: Supabase could not complete this request. Check the credentials and try again.",
-      "invalidInput": "日本語ドラフト 215: Enter an email and password to continue.",
-      "notConfigured": "日本語ドラフト 216: Supabase is not configured yet. Add the Supabase URL and publishable key first.",
-      "signedIn": "日本語ドラフト 217: Signed in. Your workspace is syncing.",
-      "submitting": "日本語ドラフト 218: Connecting..."
+      "failed": "{provider} を開始できませんでした。もう一度お試しください。",
+      "notConfigured": "現在サインインを利用できません。後でもう一度お試しください。",
+      "redirecting": "{provider} を開いています..."
     },
     "signIn": {
-      "title": "日本語ドラフト 210: Sign in to Toolars",
-      "eyebrow": "日本語ドラフト 211: Account",
-      "description": "日本語ドラフト 219: Use Supabase Auth to keep history, saved collections, and account settings in sync.",
-      "submit": "日本語ドラフト 220: Sign in with Supabase",
-      "freeTrial": "日本語ドラフト 215: Free trial mode",
-      "freeTrialDescription": "日本語ドラフト 216: No card is required during the beta."
+      "title": "Toolars を続ける",
+      "description": "保存したツール、実行履歴、ワークスペース設定を 1 つのアカウントで管理します。",
+      "switchPrompt": "Toolars は初めてですか？",
+      "switchAction": "アカウントを作成"
     },
     "signUp": {
-      "title": "日本語ドラフト 217: Create your Toolars account",
-      "eyebrow": "日本語ドラフト 218: Account",
-      "description": "日本語ドラフト 221: Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
-      "submit": "日本語ドラフト 222: Create Supabase account",
-      "freeTrial": "日本語ドラフト 222: Free trial mode",
-      "freeTrialDescription": "日本語ドラフト 223: No card is required during the beta."
+      "title": "ワークスペースを作成",
+      "description": "ツール、コレクション、設定を 1 つのアカウントにまとめます。",
+      "switchPrompt": "すでにアカウントをお持ちですか？",
+      "switchAction": "サインイン"
     },
     "signOut": {
       "button": "日本語ドラフト 224: Sign out",

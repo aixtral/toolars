@@ -4001,6 +4001,176 @@ select {
   box-shadow: 0 18px 55px rgba(15, 23, 42, 0.18);
 }
 
+.core-modal-dialog:focus {
+  outline: none;
+}
+
+.core-modal-auth-dialog {
+  grid-template-columns: minmax(196px, 0.72fr) minmax(0, 1.28fr);
+  width: min(780px, 100%);
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.core-modal-auth-aside {
+  display: flex;
+  min-height: 454px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 36px;
+  padding: 34px 30px;
+  background: var(--canvas-soft);
+  border-right: 1px solid var(--border);
+}
+
+.core-modal-auth-aside-status,
+.core-modal-auth-trust {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.core-modal-auth-aside-status svg,
+.core-modal-auth-trust svg {
+  flex: 0 0 auto;
+  color: var(--emerald);
+}
+
+.core-modal-auth-main {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 22px;
+  min-width: 0;
+  padding: 56px 52px 38px;
+}
+
+.core-modal-auth-head {
+  gap: 8px;
+  padding-right: 36px;
+}
+
+.core-modal-auth-head h2 {
+  font-size: 30px;
+  letter-spacing: 0;
+}
+
+.core-modal-auth-head p {
+  max-width: 39ch;
+  font-size: 14px;
+}
+
+.core-modal-icon-button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--ink-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.core-modal-icon-button:hover,
+.core-modal-icon-button:focus-visible {
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--border);
+  outline: none;
+}
+
+.core-modal-auth-providers {
+  display: grid;
+  gap: 12px;
+}
+
+.core-modal-provider-button {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  min-height: 54px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  color: var(--ink);
+  background: var(--canvas);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 760;
+  text-align: left;
+}
+
+.core-modal-provider-button:hover,
+.core-modal-provider-button:focus-visible {
+  border-color: var(--ink-secondary);
+  box-shadow: var(--shadow-soft);
+  outline: none;
+}
+
+.core-modal-provider-button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.core-modal-provider-button svg {
+  color: var(--ink);
+}
+
+.core-modal-auth-trust {
+  padding-top: 2px;
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+
+.core-modal-auth-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+  padding-top: 18px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.core-modal-auth-switch button {
+  padding: 0;
+  color: var(--emerald);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 760;
+}
+
+.core-modal-auth-switch button:hover,
+.core-modal-auth-switch button:focus-visible {
+  color: #047857;
+  outline: none;
+  text-decoration: underline;
+}
+
+.core-modal-auth-status {
+  margin: -8px 0 0;
+  color: var(--emerald);
+  font-size: 12px;
+  font-weight: 760;
+}
+
 .core-modal-head {
   display: grid;
   gap: 7px;
@@ -4136,6 +4306,41 @@ select {
   color: var(--emerald);
   font-size: 12px;
   font-weight: 800;
+}
+
+@media (max-width: 620px) {
+  .core-modal-overlay {
+    padding: 16px;
+  }
+
+  .core-modal-auth-dialog {
+    grid-template-columns: minmax(0, 1fr);
+    width: min(480px, 100%);
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
+  }
+
+  .core-modal-auth-aside {
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    padding: 18px 20px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .core-modal-auth-aside-status {
+    font-size: 12px;
+  }
+
+  .core-modal-auth-main {
+    gap: 18px;
+    padding: 50px 22px 24px;
+  }
+
+  .core-modal-auth-head h2 {
+    font-size: 25px;
+  }
 }
 
 .ai-consent-dialog {

@@ -619,32 +619,28 @@
     "rights": "مسودة عربية 211: All rights reserved."
   },
   "auth": {
-    "emailLabel": "مسودة عربية 212: Email",
-    "passwordLabel": "مسودة عربية 213: Password",
-    "passwordHint": "مسودة عربية 214: Use at least 6 characters.",
+    "eyebrow": "الحساب",
+    "close": "إغلاق مربع الحوار",
+    "continueWith": "المتابعة باستخدام {provider}",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "مساحة عملك جاهزة",
+    "trust": "يبقى وصولك خاصاً.",
     "status": {
-      "checkEmail": "مسودة عربية 215: Check your email to confirm the account.",
-      "failed": "مسودة عربية 216: Supabase could not complete this request. Check the credentials and try again.",
-      "invalidInput": "مسودة عربية 217: Enter an email and password to continue.",
-      "notConfigured": "مسودة عربية 218: Supabase is not configured yet. Add the Supabase URL and publishable key first.",
-      "signedIn": "مسودة عربية 219: Signed in. Your workspace is syncing.",
-      "submitting": "مسودة عربية 220: Connecting..."
+      "failed": "تعذر بدء {provider}. حاول مرة أخرى.",
+      "notConfigured": "تسجيل الدخول غير متاح حالياً. حاول لاحقاً.",
+      "redirecting": "جارٍ فتح {provider}..."
     },
     "signIn": {
-      "title": "مسودة عربية 212: Sign in to Toolars",
-      "eyebrow": "مسودة عربية 213: Account",
-      "description": "مسودة عربية 221: Use Supabase Auth to keep history, saved collections, and account settings in sync.",
-      "submit": "مسودة عربية 222: Sign in with Supabase",
-      "freeTrial": "مسودة عربية 217: Free trial mode",
-      "freeTrialDescription": "مسودة عربية 218: No card is required during the beta."
+      "title": "المتابعة إلى Toolars",
+      "description": "استخدم حساباً واحداً للأدوات المحفوظة وعمليات التشغيل وإعدادات مساحة العمل.",
+      "switchPrompt": "هل أنت جديد في Toolars؟",
+      "switchAction": "إنشاء حساب"
     },
     "signUp": {
-      "title": "مسودة عربية 219: Create your Toolars account",
-      "eyebrow": "مسودة عربية 220: Account",
-      "description": "مسودة عربية 223: Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
-      "submit": "مسودة عربية 224: Create Supabase account",
-      "freeTrial": "مسودة عربية 224: Free trial mode",
-      "freeTrialDescription": "مسودة عربية 225: No card is required during the beta."
+      "title": "أنشئ مساحة عملك",
+      "description": "استخدم حساباً واحداً للحفاظ على أدواتك ومجموعاتك وتفضيلاتك معاً.",
+      "switchPrompt": "لديك حساب بالفعل؟",
+      "switchAction": "تسجيل الدخول"
     },
     "signOut": {
       "button": "مسودة عربية 226: Sign out",

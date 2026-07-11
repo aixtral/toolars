@@ -619,32 +619,28 @@
     "rights": "保留所有權利。"
   },
   "auth": {
-    "emailLabel": "電子郵箱",
-    "passwordLabel": "密碼",
-    "passwordHint": "至少使用 6 個字符。",
+    "eyebrow": "帳戶",
+    "close": "關閉對話方塊",
+    "continueWith": "使用 {provider} 繼續",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "你的工作區已準備就緒",
+    "trust": "你的存取權限將保持私密。",
     "status": {
-      "checkEmail": "請查看郵箱並確認賬戶。",
-      "failed": "後端認證服務暫時無法完成請求，請檢查憑據後重試。",
-      "invalidInput": "請輸入電子郵箱和密碼後繼續。",
-      "notConfigured": "後端認證服務尚未配置，請先添加服務地址和發布密鑰。",
-      "signedIn": "已登入，工作區正在同步。",
-      "submitting": "正在連接..."
+      "failed": "無法啟動 {provider} 登入，請再試一次。",
+      "notConfigured": "登入目前無法使用，請稍後再試。",
+      "redirecting": "正在開啟 {provider}..."
     },
     "signIn": {
-      "title": "登入 Toolars",
-      "eyebrow": "賬戶",
-      "description": "使用後端認證服務同步歷史記錄、已保存的集合和賬戶設置。",
-      "submit": "通過後端認證登入",
-      "freeTrial": "免費試用模式",
-      "freeTrialDescription": "測試期間無需信用卡。"
+      "title": "繼續使用 Toolars",
+      "description": "使用一個帳戶同步已儲存的工具、執行紀錄和工作區設定。",
+      "switchPrompt": "第一次使用 Toolars？",
+      "switchAction": "建立帳戶"
     },
     "signUp": {
-      "title": "創建你的 Toolars 賬戶",
-      "eyebrow": "賬戶",
-      "description": "使用後端認證服務創建免費的 Toolars 工作區，同步歷史記錄和已保存的集合。",
-      "submit": "創建認證賬戶",
-      "freeTrial": "免費試用模式",
-      "freeTrialDescription": "測試期間無需信用卡。"
+      "title": "建立你的工作區",
+      "description": "使用一個帳戶保存你的工具、集合和偏好設定。",
+      "switchPrompt": "已經有帳戶？",
+      "switchAction": "登入"
     },
     "signOut": {
       "button": "登出",

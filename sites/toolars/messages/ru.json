@@ -619,32 +619,28 @@
     "rights": "Черновик русского 209: All rights reserved."
   },
   "auth": {
-    "emailLabel": "Черновик русского 210: Email",
-    "passwordLabel": "Черновик русского 211: Password",
-    "passwordHint": "Черновик русского 212: Use at least 6 characters.",
+    "eyebrow": "Аккаунт",
+    "close": "Закрыть диалог",
+    "continueWith": "Продолжить с {provider}",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "Ваше рабочее пространство готово",
+    "trust": "Ваш доступ остается приватным.",
     "status": {
-      "checkEmail": "Черновик русского 213: Check your email to confirm the account.",
-      "failed": "Черновик русского 214: Supabase could not complete this request. Check the credentials and try again.",
-      "invalidInput": "Черновик русского 215: Enter an email and password to continue.",
-      "notConfigured": "Черновик русского 216: Supabase is not configured yet. Add the Supabase URL and publishable key first.",
-      "signedIn": "Черновик русского 217: Signed in. Your workspace is syncing.",
-      "submitting": "Черновик русского 218: Connecting..."
+      "failed": "Не удалось запустить {provider}. Попробуйте снова.",
+      "notConfigured": "Вход сейчас недоступен. Попробуйте позже.",
+      "redirecting": "Открываем {provider}..."
     },
     "signIn": {
-      "title": "Черновик русского 210: Sign in to Toolars",
-      "eyebrow": "Черновик русского 211: Account",
-      "description": "Черновик русского 219: Use Supabase Auth to keep history, saved collections, and account settings in sync.",
-      "submit": "Черновик русского 220: Sign in with Supabase",
-      "freeTrial": "Черновик русского 215: Free trial mode",
-      "freeTrialDescription": "Черновик русского 216: No card is required during the beta."
+      "title": "Продолжить в Toolars",
+      "description": "Используйте один аккаунт для сохраненных инструментов, запусков и настроек рабочего пространства.",
+      "switchPrompt": "Впервые в Toolars?",
+      "switchAction": "Создать аккаунт"
     },
     "signUp": {
-      "title": "Черновик русского 217: Create your Toolars account",
-      "eyebrow": "Черновик русского 218: Account",
-      "description": "Черновик русского 221: Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
-      "submit": "Черновик русского 222: Create Supabase account",
-      "freeTrial": "Черновик русского 222: Free trial mode",
-      "freeTrialDescription": "Черновик русского 223: No card is required during the beta."
+      "title": "Создайте рабочее пространство",
+      "description": "Храните инструменты, коллекции и предпочтения в одном аккаунте.",
+      "switchPrompt": "Уже есть аккаунт?",
+      "switchAction": "Войти"
     },
     "signOut": {
       "button": "Черновик русского 224: Sign out",

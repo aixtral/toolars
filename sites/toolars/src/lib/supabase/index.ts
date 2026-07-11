@@ -9,6 +9,7 @@ export { createToolarsSupabaseServerClient } from "./server";
 export {
   getToolarsSupabaseBrowserUser,
   signOutToolarsSupabaseBrowserUser,
+  startToolarsSupabaseOAuth,
   submitToolarsSupabaseEmailAuth
 } from "./toolars-supabase-auth-client";
 export {

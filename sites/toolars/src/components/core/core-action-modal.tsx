@@ -1,13 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
-import { CheckCircle2, Copy, LockKeyhole, Sparkles } from "lucide-react";
-import { submitToolarsSupabaseEmailAuth } from "@/lib/supabase/toolars-supabase-auth-client";
-import { bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
+import { CheckCircle2, Copy, GitFork, Globe2, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ToolarsLogoMark } from "@/components/shell/toolars-logo";
+import { startToolarsSupabaseOAuth, type ToolarsSupabaseOAuthProvider } from "@/lib/supabase/toolars-supabase-auth-client";
 
 type CoreModalKind = "share" | "save-collection" | "sign-in" | "sign-up" | "upgrade";
+type AuthModalKind = "sign-in" | "sign-up";
 
 const activeCoreModalClosers = new Map<string, () => void>();
 
@@ -35,19 +36,18 @@ export function CoreActionModalButton({
   planFeatures = []
 }: CoreActionModalButtonProps) {
   const t = useTranslations();
-  const authMode = kind === "sign-up" ? "sign-up" : "sign-in";
+  const authMode: AuthModalKind = kind === "sign-up" ? "sign-up" : "sign-in";
   const isAuthModal = kind === "sign-in" || kind === "sign-up";
-  const [authEmail, setAuthEmail] = useState("");
-  const [authPassword, setAuthPassword] = useState("");
-  const [submittingAuth, setSubmittingAuth] = useState(false);
+  const [authPanelMode, setAuthPanelMode] = useState(authMode);
+  const [submittingProvider, setSubmittingProvider] = useState<ToolarsSupabaseOAuthProvider | null>(null);
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const instanceId = useId();
   const titleId = `${instanceId}-title`;
-  const passwordHintId = `${instanceId}-password-hint`;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef(null as HTMLElement | null);
-  const title = kind === "share" && shareTitle ? shareTitle : t(modalTitleKey(kind));
+  const renderedKind: CoreModalKind = isAuthModal ? authPanelMode : kind;
+  const title = kind === "share" && shareTitle ? shareTitle : t(modalTitleKey(renderedKind));
 
   const close = useCallback((options: { restoreFocus?: boolean } = {}) => {
     setOpen(false);
@@ -95,6 +95,8 @@ export function CoreActionModalButton({
         closeActiveModal();
       }
     }
+    setAuthPanelMode(authMode);
+    setSubmittingProvider(null);
     setStatus("");
     setOpen(true);
   }
@@ -110,31 +112,22 @@ export function CoreActionModalButton({
     setStatus("Collection saved locally");
   }
 
-  async function submitAuth(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmittingAuth(true);
+  async function startOAuth(provider: ToolarsSupabaseOAuthProvider) {
+    setSubmittingProvider(provider);
     setStatus("");
 
-    const result = await submitToolarsSupabaseEmailAuth({
-      email: authEmail,
-      emailRedirectTo: buildEmailRedirectTo(),
-      mode: authMode,
-      password: authPassword
+    const result = await startToolarsSupabaseOAuth({
+      provider,
+      redirectTo: buildOAuthRedirectTo()
     });
 
-    setSubmittingAuth(false);
-
     if (!result.ok) {
-      setStatus(t(authStatusKey(result.errorCode)));
+      setSubmittingProvider(null);
+      setStatus(t(authStatusKey(result.errorCode), { provider: authProviderLabel(t, provider) }));
       return;
     }
 
-    bindWorkspaceIdentityToAccount({
-      accountEmail: result.accountEmail,
-      accountId: result.accountId
-    });
-    notifyAuthSessionChanged();
-    setStatus(t(result.needsEmailConfirmation ? "auth.status.checkEmail" : "auth.status.signedIn"));
+    setStatus(t("auth.status.redirecting", { provider: authProviderLabel(t, provider) }));
   }
 
   return (
@@ -161,17 +154,19 @@ export function CoreActionModalButton({
             >
           <section
             ref={dialogRef}
-            className="core-modal-dialog"
+            className={`core-modal-dialog${isAuthModal ? " core-modal-auth-dialog" : ""}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
             tabIndex={-1}
           >
-            <div className="core-modal-head">
-              <span className="eyebrow">{t(modalEyebrowKey(kind))}</span>
-              <h2 id={titleId}>{title}</h2>
-              <p>{t(modalDescriptionKey(kind))}</p>
-            </div>
+            {!isAuthModal ? (
+              <div className="core-modal-head">
+                <span className="eyebrow">{t(modalEyebrowKey(kind))}</span>
+                <h2 id={titleId}>{title}</h2>
+                <p>{t(modalDescriptionKey(kind))}</p>
+              </div>
+            ) : null}
 
             {kind === "share" ? (
               <div className="core-modal-body">
@@ -219,50 +214,64 @@ export function CoreActionModalButton({
             ) : null}
 
             {isAuthModal ? (
-              <div className="core-modal-body">
-                <form className="core-modal-auth-form" onSubmit={(event) => void submitAuth(event)}>
-                  <label className="core-modal-field">
-                    <span>{t("auth.emailLabel")}</span>
-                    <input
-                      autoComplete="email"
-                      inputMode="email"
-                      onChange={(event) => setAuthEmail(event.target.value)}
-                      required
-                      type="email"
-                      value={authEmail}
-                    />
-                  </label>
-                  <label className="core-modal-field">
-                    <span>{t("auth.passwordLabel")}</span>
-                    <input
-                      aria-describedby={passwordHintId}
-                      autoComplete={kind === "sign-up" ? "new-password" : "current-password"}
-                      minLength={6}
-                      onChange={(event) => setAuthPassword(event.target.value)}
-                      required
-                      type="password"
-                      value={authPassword}
-                    />
-                  </label>
-                  <small id={passwordHintId}>{t("auth.passwordHint")}</small>
-                  <button className="button button-solid" disabled={submittingAuth} type="submit">
-                    <LockKeyhole size={16} aria-hidden="true" />
-                    {submittingAuth ? t("auth.status.submitting") : t(kind === "sign-up" ? "auth.signUp.submit" : "auth.signIn.submit")}
-                  </button>
-                </form>
-                <div className="core-modal-option-list">
-                  <div
-                    className="core-modal-auth-option"
-                    aria-label={t(kind === "sign-up" ? "auth.signUp.freeTrial" : "auth.signIn.freeTrial")}
+              <>
+                <aside className="core-modal-auth-aside">
+                  <ToolarsLogoMark label="Toolars" size="md" />
+                  <p className="core-modal-auth-aside-status">
+                    <CheckCircle2 size={18} aria-hidden="true" />
+                    {t("auth.workspaceReady")}
+                  </p>
+                </aside>
+                <div className="core-modal-auth-main">
+                  <button
+                    aria-label={t("auth.close")}
+                    className="core-modal-icon-button"
+                    onClick={() => close()}
+                    type="button"
                   >
-                    <Sparkles size={16} aria-hidden="true" />
-                    <span>
-                      <strong>{t(kind === "sign-up" ? "auth.signUp.freeTrial" : "auth.signIn.freeTrial")}</strong>
-                      <small>{t(kind === "sign-up" ? "auth.signUp.freeTrialDescription" : "auth.signIn.freeTrialDescription")}</small>
-                    </span>
+                    <X size={20} aria-hidden="true" />
+                  </button>
+                  <div className="core-modal-head core-modal-auth-head">
+                    <span className="eyebrow">{t("auth.eyebrow")}</span>
+                    <h2 id={titleId}>{title}</h2>
+                    <p>{t(modalDescriptionKey(renderedKind))}</p>
                   </div>
+                  <div className="core-modal-auth-providers">
+                    <button
+                      className="core-modal-provider-button"
+                      disabled={Boolean(submittingProvider)}
+                      onClick={() => void startOAuth("google")}
+                      type="button"
+                    >
+                      <Globe2 size={20} aria-hidden="true" />
+                      {t("auth.continueWith", { provider: t("auth.providers.google") })}
+                    </button>
+                    <button
+                      className="core-modal-provider-button"
+                      disabled={Boolean(submittingProvider)}
+                      onClick={() => void startOAuth("github")}
+                      type="button"
+                    >
+                      <GitFork size={20} aria-hidden="true" />
+                      {t("auth.continueWith", { provider: t("auth.providers.github") })}
+                    </button>
+                  </div>
+                  <p className="core-modal-auth-trust">
+                    <ShieldCheck size={17} aria-hidden="true" />
+                    {t("auth.trust")}
+                  </p>
+                  <p className="core-modal-auth-switch">
+                    <span>{t(authPanelMode === "sign-up" ? "auth.signUp.switchPrompt" : "auth.signIn.switchPrompt")}</span>
+                    <button
+                      onClick={() => setAuthPanelMode(authPanelMode === "sign-up" ? "sign-in" : "sign-up")}
+                      type="button"
+                    >
+                      {t(authPanelMode === "sign-up" ? "auth.signUp.switchAction" : "auth.signIn.switchAction")}
+                    </button>
+                  </p>
+                  {status ? <p className="core-modal-auth-status" role="status">{status}</p> : null}
                 </div>
-              </div>
+              </>
             ) : null}
 
             {kind === "upgrade" ? (
@@ -286,12 +295,14 @@ export function CoreActionModalButton({
               </div>
             ) : null}
 
-            <footer className="core-modal-footer">
-              {status ? <span role="status">{status}</span> : <span />}
-              <button className="button button-outline-neutral" type="button" onClick={() => close()}>
-                {t("modal.close")}
-              </button>
-            </footer>
+            {!isAuthModal ? (
+              <footer className="core-modal-footer">
+                {status ? <span role="status">{status}</span> : <span />}
+                <button className="button button-outline-neutral" type="button" onClick={() => close()}>
+                  {t("modal.close")}
+                </button>
+              </footer>
+            ) : null}
           </section>
             </div>,
             document.body
@@ -312,7 +323,7 @@ function modalTitleKey(kind: CoreModalKind): string {
 function modalEyebrowKey(kind: CoreModalKind): string {
   if (kind === "share") return "modal.share.eyebrow";
   if (kind === "save-collection") return "modal.saveCollection.eyebrow";
-  if (kind === "sign-in" || kind === "sign-up") return "auth.signIn.eyebrow";
+  if (kind === "sign-in" || kind === "sign-up") return "auth.eyebrow";
   return "modal.upgrade.eyebrow";
 }
 
@@ -324,18 +335,16 @@ function modalDescriptionKey(kind: CoreModalKind): string {
   return "modal.upgrade.description";
 }
 
-function authStatusKey(errorCode: "invalid-input" | "not-configured" | "provider-error") {
+function authStatusKey(errorCode: "not-configured" | "provider-error") {
   if (errorCode === "not-configured") return "auth.status.notConfigured";
-  if (errorCode === "invalid-input") return "auth.status.invalidInput";
   return "auth.status.failed";
 }
 
-function buildEmailRedirectTo() {
-  if (typeof window === "undefined") return undefined;
-  return window.location.href;
+function authProviderLabel(t: ReturnType<typeof useTranslations>, provider: ToolarsSupabaseOAuthProvider) {
+  return t(`auth.providers.${provider}`);
 }
 
-function notifyAuthSessionChanged() {
-  if (typeof window === "undefined" || typeof CustomEvent === "undefined") return;
-  window.dispatchEvent(new CustomEvent("toolars:auth-session-changed"));
+function buildOAuthRedirectTo() {
+  if (typeof window === "undefined") return undefined;
+  return `${window.location.origin}${window.location.pathname}`;
 }

@@ -619,32 +619,28 @@
     "rights": "保留所有权利。"
   },
   "auth": {
-    "emailLabel": "邮箱",
-    "passwordLabel": "密码",
-    "passwordHint": "至少使用 6 个字符。",
+    "eyebrow": "账户",
+    "close": "关闭对话框",
+    "continueWith": "使用 {provider} 继续",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "你的工作区已准备就绪",
+    "trust": "你的访问权限将保持私密。",
     "status": {
-      "checkEmail": "请查看邮箱并确认账户。",
-      "failed": "后端认证服务暂时无法完成请求，请检查凭据后重试。",
-      "invalidInput": "请输入邮箱和密码后继续。",
-      "notConfigured": "后端认证服务尚未配置，请先添加服务地址和发布密钥。",
-      "signedIn": "已登录，工作区正在同步。",
-      "submitting": "正在连接..."
+      "failed": "无法启动 {provider} 登录，请重试。",
+      "notConfigured": "登录暂时不可用，请稍后重试。",
+      "redirecting": "正在打开 {provider}..."
     },
     "signIn": {
-      "title": "登录 Toolars",
-      "eyebrow": "账户",
-      "description": "使用后端认证服务同步历史记录、已保存的集合和账户设置。",
-      "submit": "通过后端认证登录",
-      "freeTrial": "免费试用模式",
-      "freeTrialDescription": "测试期间无需信用卡。"
+      "title": "继续使用 Toolars",
+      "description": "使用一个账户同步已保存的工具、运行记录和工作区设置。",
+      "switchPrompt": "初次使用 Toolars？",
+      "switchAction": "创建账户"
     },
     "signUp": {
-      "title": "创建你的 Toolars 账户",
-      "eyebrow": "账户",
-      "description": "使用后端认证服务创建免费的 Toolars 工作区，同步历史记录和已保存的集合。",
-      "submit": "创建认证账户",
-      "freeTrial": "免费试用模式",
-      "freeTrialDescription": "测试期间无需信用卡。"
+      "title": "创建你的工作区",
+      "description": "使用一个账户保存你的工具、集合和偏好设置。",
+      "switchPrompt": "已有账户？",
+      "switchAction": "登录"
     },
     "signOut": {
       "button": "退出登录",

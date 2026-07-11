@@ -126,11 +126,11 @@ describe("ToolarsShell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-    expect(screen.getByRole("dialog", { name: "Sign in to Toolars" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Email")).toBeInTheDocument();
-    expect(screen.getByLabelText("Password")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Sign in with Supabase" })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Continue to Toolars" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue with Google" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue with GitHub" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
   });
 
   it("renders a grouped account and language action cluster in the topbar", () => {
@@ -314,11 +314,11 @@ describe("ToolarsShell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Sign up" }));
 
-    expect(screen.getByRole("dialog", { name: "Create your Toolars account" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Email")).toBeInTheDocument();
-    expect(screen.getByLabelText("Password")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Create Supabase account" })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Create your workspace" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue with Google" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue with GitHub" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
   });
 
   it("renders free trial sidebar copy instead of paid billing navigation in free trial mode", () => {

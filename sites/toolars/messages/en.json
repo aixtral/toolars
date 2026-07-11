@@ -619,32 +619,31 @@
     "rights": "All rights reserved."
   },
   "auth": {
-    "emailLabel": "Email",
-    "passwordLabel": "Password",
-    "passwordHint": "Use at least 6 characters.",
+    "eyebrow": "Account",
+    "close": "Close dialog",
+    "continueWith": "Continue with {provider}",
+    "providers": {
+      "google": "Google",
+      "github": "GitHub"
+    },
+    "workspaceReady": "Your workspace is ready",
+    "trust": "Your access stays private.",
     "status": {
-      "checkEmail": "Check your email to confirm the account.",
-      "failed": "Supabase could not complete this request. Check the credentials and try again.",
-      "invalidInput": "Enter an email and password to continue.",
-      "notConfigured": "Supabase is not configured yet. Add the Supabase URL and publishable key first.",
-      "signedIn": "Signed in. Your workspace is syncing.",
-      "submitting": "Connecting..."
+      "failed": "We couldn't start {provider}. Try again.",
+      "notConfigured": "Sign in isn't available right now. Please try again later.",
+      "redirecting": "Opening {provider}..."
     },
     "signIn": {
-      "title": "Sign in to Toolars",
-      "eyebrow": "Account",
-      "description": "Use Supabase Auth to keep history, saved collections, and account settings in sync.",
-      "submit": "Sign in with Supabase",
-      "freeTrial": "Free trial mode",
-      "freeTrialDescription": "No card is required during the beta."
+      "title": "Continue to Toolars",
+      "description": "Use one account for saved tools, runs, and workspace settings.",
+      "switchPrompt": "New to Toolars?",
+      "switchAction": "Create an account"
     },
     "signUp": {
-      "title": "Create your Toolars account",
-      "eyebrow": "Account",
-      "description": "Create a free Toolars workspace with Supabase Auth to sync history and saved collections.",
-      "submit": "Create Supabase account",
-      "freeTrial": "Free trial mode",
-      "freeTrialDescription": "No card is required during the beta."
+      "title": "Create your workspace",
+      "description": "Use one account to keep your tools, collections, and preferences together.",
+      "switchPrompt": "Already have an account?",
+      "switchAction": "Sign in"
     },
     "signOut": {
       "button": "Sign out",

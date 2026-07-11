@@ -2,6 +2,7 @@ import { createToolarsSupabaseBrowserClient } from "./client";
 import { isToolarsSupabaseConfigured } from "./toolars-supabase-config";
 
 export type ToolarsSupabaseAuthMode = "sign-in" | "sign-up";
+export type ToolarsSupabaseOAuthProvider = "github" | "google";
 
 export interface ToolarsSupabaseAuthUser {
   email?: string | null;
@@ -18,8 +19,24 @@ interface SupabaseAuthResponse {
   } | null;
 }
 
+interface SupabaseOAuthResponse {
+  data?: {
+    provider?: string;
+    url?: string | null;
+  } | null;
+  error?: {
+    message?: string;
+  } | null;
+}
+
 export interface ToolarsSupabaseBrowserAuthDriver {
   getUser: () => Promise<SupabaseAuthResponse>;
+  signInWithOAuth?: (credentials: {
+    options?: {
+      redirectTo?: string;
+    };
+    provider: ToolarsSupabaseOAuthProvider;
+  }) => Promise<SupabaseOAuthResponse>;
   signInWithPassword: (credentials: { email: string; password: string }) => Promise<SupabaseAuthResponse>;
   signOut: () => Promise<{ error?: { message?: string } | null }>;
   signUp: (credentials: {
@@ -44,10 +61,49 @@ export type ToolarsSupabaseAuthResult =
       ok: false;
     };
 
+export type ToolarsSupabaseOAuthResult =
+  | {
+      ok: true;
+      provider: ToolarsSupabaseOAuthProvider;
+    }
+  | {
+      errorCode: "not-configured" | "provider-error";
+      message?: string;
+      ok: false;
+    };
+
 let browserAuthDriverForTest: ToolarsSupabaseBrowserAuthDriver | null = null;
 
 export function setToolarsSupabaseBrowserAuthDriverForTest(driver: ToolarsSupabaseBrowserAuthDriver | null) {
   browserAuthDriverForTest = driver;
+}
+
+export async function startToolarsSupabaseOAuth({
+  provider,
+  redirectTo
+}: {
+  provider: ToolarsSupabaseOAuthProvider;
+  redirectTo?: string;
+}): Promise<ToolarsSupabaseOAuthResult> {
+  const auth = getBrowserAuthDriver();
+  if (!auth?.signInWithOAuth) return { errorCode: "not-configured", ok: false };
+
+  const response = await safeAuthRequest(() =>
+    auth.signInWithOAuth!({
+      options: redirectTo ? { redirectTo } : undefined,
+      provider
+    })
+  );
+
+  if (!response || response.error || !response.data?.url) {
+    return {
+      errorCode: "provider-error",
+      message: response?.error?.message,
+      ok: false
+    };
+  }
+
+  return { ok: true, provider };
 }
 
 export async function submitToolarsSupabaseEmailAuth({

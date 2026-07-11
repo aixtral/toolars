@@ -47,4 +47,12 @@ describe("topbar visual style contract", () => {
     expect(form).toContain("min-width: 0");
     expect(input).toContain("max-width: 100%");
   });
+
+  it("does not show the browser focus outline around the auth dialog", () => {
+    const dialog = cssBlockContaining(".core-modal-dialog:focus");
+    const closeButton = cssBlockContaining(".core-modal-icon-button:focus-visible");
+
+    expect(dialog).toContain("outline: none");
+    expect(closeButton).toContain("outline: none");
+  });
 });

@@ -619,32 +619,28 @@
     "rights": "Todos los derechos reservados."
   },
   "auth": {
-    "emailLabel": "Correo electrónico",
-    "passwordLabel": "Contraseña",
-    "passwordHint": "Usa al menos 6 caracteres.",
+    "eyebrow": "Cuenta",
+    "close": "Cerrar diálogo",
+    "continueWith": "Continuar con {provider}",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "Tu espacio de trabajo está listo",
+    "trust": "Tu acceso se mantiene privado.",
     "status": {
-      "checkEmail": "Revisa tu correo para confirmar la cuenta.",
-      "failed": "Supabase no pudo completar esta solicitud. Revisa las credenciales e inténtalo de nuevo.",
-      "invalidInput": "Introduce un correo y una contraseña para continuar.",
-      "notConfigured": "Supabase aún no está configurado. Añade primero la URL y la clave publicable.",
-      "signedIn": "Sesión iniciada. Tu espacio se está sincronizando.",
-      "submitting": "Conectando..."
+      "failed": "No pudimos iniciar {provider}. Inténtalo de nuevo.",
+      "notConfigured": "El inicio de sesión no está disponible ahora. Inténtalo más tarde.",
+      "redirecting": "Abriendo {provider}..."
     },
     "signIn": {
-      "title": "Inicia sesión en Toolars",
-      "eyebrow": "Cuenta",
-      "description": "Usa Supabase Auth para sincronizar historial, colecciones guardadas y configuración de cuenta.",
-      "submit": "Iniciar sesión con Supabase",
-      "freeTrial": "Modo de prueba gratuito",
-      "freeTrialDescription": "No se necesita tarjeta durante la versión beta."
+      "title": "Continúa en Toolars",
+      "description": "Usa una cuenta para tus herramientas guardadas, ejecuciones y ajustes del espacio.",
+      "switchPrompt": "¿Eres nuevo en Toolars?",
+      "switchAction": "Crear una cuenta"
     },
     "signUp": {
-      "title": "Crea tu cuenta de Toolars",
-      "eyebrow": "Cuenta",
-      "description": "Crea un espacio gratuito de Toolars con Supabase Auth para sincronizar historial y colecciones guardadas.",
-      "submit": "Crear cuenta Supabase",
-      "freeTrial": "Modo de prueba gratuito",
-      "freeTrialDescription": "No se necesita tarjeta durante la versión beta."
+      "title": "Crea tu espacio de trabajo",
+      "description": "Usa una cuenta para mantener juntas tus herramientas, colecciones y preferencias.",
+      "switchPrompt": "¿Ya tienes una cuenta?",
+      "switchAction": "Iniciar sesión"
     },
     "signOut": {
       "button": "Cerrar sesión",

@@ -88,7 +88,7 @@ describe("CoreActionModalButton", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
     expect(screen.queryByRole("dialog", { name: "Share this tool" })).not.toBeInTheDocument();
-    expect(screen.getByRole("dialog", { name: "Sign in to Toolars" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Continue to Toolars" })).toBeInTheDocument();
     expect(screen.getAllByRole("dialog")).toHaveLength(1);
   });
 
@@ -109,14 +109,15 @@ describe("CoreActionModalButton", () => {
     expect(container.querySelector(".core-modal-overlay")).not.toBeInTheDocument();
   });
 
-  it("signs in with Supabase email auth instead of the legacy Google OAuth route", async () => {
-    const signInWithPassword = vi.fn().mockResolvedValue({
-      data: { user: { email: "owner@example.com", id: "user_123" } },
+  it("starts Google OAuth from the sign-in modal without exposing Supabase or password auth", async () => {
+    const signInWithOAuth = vi.fn().mockResolvedValue({
+      data: { provider: "google", url: "https://project.supabase.co/auth/v1/authorize?provider=google" },
       error: null
     });
     setToolarsSupabaseBrowserAuthDriverForTest({
       getUser: vi.fn(),
-      signInWithPassword,
+      signInWithOAuth,
+      signInWithPassword: vi.fn(),
       signOut: vi.fn(),
       signUp: vi.fn()
     });
@@ -128,22 +129,27 @@ describe("CoreActionModalButton", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
-    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "Owner@Example.com" } });
-    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct horse" } });
-    fireEvent.click(screen.getByRole("button", { name: "Sign in with Supabase" }));
+    expect(screen.getByRole("button", { name: "Continue with Google" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue with GitHub" })).toBeInTheDocument();
+    expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Supabase/i)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Continue with Google" }));
 
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Signed in. Your workspace is syncing."));
-    expect(signInWithPassword).toHaveBeenCalledWith({
-      email: "owner@example.com",
-      password: "correct horse"
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Opening Google..."));
+    expect(signInWithOAuth).toHaveBeenCalledWith({
+      options: expect.objectContaining({
+        redirectTo: expect.stringContaining("/")
+      }),
+      provider: "google"
     });
   });
 
-  it("recovers the auth form when Supabase email auth rejects", async () => {
+  it("recovers the OAuth actions when the provider cannot start", async () => {
     setToolarsSupabaseBrowserAuthDriverForTest({
       getUser: vi.fn(),
-      signInWithPassword: vi.fn().mockRejectedValue(new Error("network unavailable")),
+      signInWithOAuth: vi.fn().mockRejectedValue(new Error("network unavailable")),
+      signInWithPassword: vi.fn(),
       signOut: vi.fn(),
       signUp: vi.fn()
     });
@@ -154,26 +160,25 @@ describe("CoreActionModalButton", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "owner@example.com" } });
-    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct horse" } });
-    fireEvent.click(screen.getByRole("button", { name: "Sign in with Supabase" }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue with GitHub" }));
 
     await waitFor(() =>
-      expect(screen.getByRole("status")).toHaveTextContent("Supabase could not complete this request. Check the credentials and try again.")
+      expect(screen.getByRole("status")).toHaveTextContent("We couldn't start GitHub. Try again.")
     );
-    expect(screen.getByRole("button", { name: "Sign in with Supabase" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Continue with GitHub" })).toBeEnabled();
   });
 
-  it("renders the sign-up modal with Supabase account creation", async () => {
-    const signUp = vi.fn().mockResolvedValue({
-      data: { session: null, user: { email: "owner@example.com", id: "user_456" } },
+  it("keeps the selected OAuth panel when switching from sign-up to sign-in", async () => {
+    const signInWithOAuth = vi.fn().mockResolvedValue({
+      data: { provider: "github", url: "https://project.supabase.co/auth/v1/authorize?provider=github" },
       error: null
     });
     setToolarsSupabaseBrowserAuthDriverForTest({
       getUser: vi.fn(),
       signInWithPassword: vi.fn(),
       signOut: vi.fn(),
-      signUp
+      signUp: vi.fn(),
+      signInWithOAuth
     });
     renderWithIntl(
       <CoreActionModalButton className="button button-solid" kind="sign-up">
@@ -183,22 +188,15 @@ describe("CoreActionModalButton", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Sign up" }));
 
-    const dialog = screen.getByRole("dialog", { name: "Create your Toolars account" });
+    const dialog = screen.getByRole("dialog", { name: "Create your workspace" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     expect(screen.getByText("Account")).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "owner@example.com" } });
-    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct horse" } });
-    fireEvent.click(screen.getByRole("button", { name: "Create Supabase account" }));
+    expect(screen.getByTestId("toolars-logo-mark")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    expect(screen.getByRole("heading", { name: "Continue to Toolars" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Continue with GitHub" }));
 
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Check your email to confirm the account."));
-    expect(signUp).toHaveBeenCalledWith({
-      email: "owner@example.com",
-      options: expect.objectContaining({
-        emailRedirectTo: expect.stringContaining("/")
-      }),
-      password: "correct horse"
-    });
+    await waitFor(() => expect(signInWithOAuth).toHaveBeenCalledWith(expect.objectContaining({ provider: "github" })));
   });
 
   it("parks paid upgrade actions for Phase 2 instead of queuing a fake upgrade", () => {

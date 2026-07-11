@@ -619,32 +619,28 @@
     "rights": "Todos os direitos reservados."
   },
   "auth": {
-    "emailLabel": "E-mail",
-    "passwordLabel": "Senha",
-    "passwordHint": "Use pelo menos 6 caracteres.",
+    "eyebrow": "Conta",
+    "close": "Fechar diálogo",
+    "continueWith": "Continuar com {provider}",
+    "providers": { "google": "Google", "github": "GitHub" },
+    "workspaceReady": "Seu espaço de trabalho está pronto",
+    "trust": "Seu acesso permanece privado.",
     "status": {
-      "checkEmail": "Verifique seu e-mail para confirmar a conta.",
-      "failed": "O Supabase não conseguiu concluir esta solicitação. Verifique as credenciais e tente novamente.",
-      "invalidInput": "Digite um e-mail e uma senha para continuar.",
-      "notConfigured": "O Supabase ainda não está configurado. Adicione primeiro a URL e a chave publicável.",
-      "signedIn": "Sessão iniciada. Seu espaço de trabalho está sincronizando.",
-      "submitting": "Conectando..."
+      "failed": "Não foi possível iniciar {provider}. Tente novamente.",
+      "notConfigured": "O login não está disponível agora. Tente mais tarde.",
+      "redirecting": "Abrindo {provider}..."
     },
     "signIn": {
-      "title": "Entrar no Toolars",
-      "eyebrow": "Conta",
-      "description": "Use Supabase Auth para sincronizar histórico, coleções salvas e configurações da conta.",
-      "submit": "Entrar com Supabase",
-      "freeTrial": "Modo de teste gratuito",
-      "freeTrialDescription": "Nenhum cartão é exigido durante a beta."
+      "title": "Continuar no Toolars",
+      "description": "Use uma conta para ferramentas salvas, execuções e ajustes do espaço de trabalho.",
+      "switchPrompt": "Novo no Toolars?",
+      "switchAction": "Criar uma conta"
     },
     "signUp": {
-      "title": "Crie sua conta no Toolars",
-      "eyebrow": "Conta",
-      "description": "Crie um espaço gratuito do Toolars com Supabase Auth para sincronizar histórico e coleções salvas.",
-      "submit": "Criar conta Supabase",
-      "freeTrial": "Modo de teste gratuito",
-      "freeTrialDescription": "Nenhum cartão é exigido durante a beta."
+      "title": "Crie seu espaço de trabalho",
+      "description": "Use uma conta para manter suas ferramentas, coleções e preferências juntas.",
+      "switchPrompt": "Já tem uma conta?",
+      "switchAction": "Entrar"
     },
     "signOut": {
       "button": "Sair",

@@ -4,6 +4,7 @@ import {
   getToolarsSupabaseBrowserUser,
   setToolarsSupabaseBrowserAuthDriverForTest,
   signOutToolarsSupabaseBrowserUser,
+  startToolarsSupabaseOAuth,
   submitToolarsSupabaseEmailAuth
 } from "./toolars-supabase-auth-client";
 
@@ -22,6 +23,34 @@ describe("toolars supabase browser auth", () => {
     expect(result).toEqual({
       errorCode: "not-configured",
       ok: false
+    });
+  });
+
+  it("starts Google OAuth with the current Toolars route as the return URL", async () => {
+    const signInWithOAuth = vi.fn().mockResolvedValue({
+      data: { provider: "google", url: "https://project.supabase.co/auth/v1/authorize?provider=google" },
+      error: null
+    });
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn(),
+      signInWithOAuth,
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    await expect(
+      startToolarsSupabaseOAuth({
+        provider: "google",
+        redirectTo: "https://toolars.app/zh-hans"
+      })
+    ).resolves.toEqual({
+      ok: true,
+      provider: "google"
+    });
+    expect(signInWithOAuth).toHaveBeenCalledWith({
+      options: { redirectTo: "https://toolars.app/zh-hans" },
+      provider: "google"
     });
   });
 

@@ -4032,6 +4032,12 @@ select {
   gap: 12px;
 }
 
+.core-modal-auth-form {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
 .core-modal-subject {
   color: var(--ink);
   font-size: 15px;
@@ -4045,6 +4051,7 @@ select {
 
 .core-modal-field input {
   width: 100%;
+  max-width: 100%;
   min-height: 42px;
   padding: 0 12px;
   color: var(--ink);

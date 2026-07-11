@@ -38,4 +38,13 @@ describe("topbar visual style contract", () => {
     expect(signUp).toContain("background: var(--emerald)");
     expect(signUp).toContain("border: 0");
   });
+
+  it("keeps core auth modal forms constrained inside the dialog", () => {
+    const form = cssBlockContaining(".core-modal-auth-form");
+    const input = cssBlockContaining(".core-modal-field input");
+
+    expect(form).toContain("display: grid");
+    expect(form).toContain("min-width: 0");
+    expect(input).toContain("max-width: 100%");
+  });
 });

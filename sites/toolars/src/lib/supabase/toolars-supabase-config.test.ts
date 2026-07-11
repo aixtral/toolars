@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -36,6 +38,17 @@ describe("toolars supabase config", () => {
     });
     expect(getToolarsSupabaseSecretKey(env)).toBe("sb_secret_server");
     expect(isToolarsSupabaseConfigured(env)).toBe(true);
+  });
+
+  it("keeps browser public env reads statically inlineable for Next client bundles", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/lib/supabase/toolars-supabase-config.ts"), "utf8");
+
+    expect(source).toContain("process.env.NEXT_PUBLIC_SUPABASE_URL");
+    expect(source).toContain("process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
+    expect(source).toContain("process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY");
+    expect(source).not.toContain("getToolarsSupabasePublicConfig(env: SupabaseEnv = getProcessEnv())");
+    expect(source).not.toContain("requireToolarsSupabasePublicConfig(env: SupabaseEnv = getProcessEnv())");
+    expect(source).not.toContain("isToolarsSupabaseConfigured(env: SupabaseEnv = getProcessEnv())");
   });
 
   it("supports legacy anon and service role variable names during migration", () => {

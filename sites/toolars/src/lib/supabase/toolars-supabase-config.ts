@@ -6,7 +6,13 @@ export interface ToolarsSupabasePublicConfig {
 
 type SupabaseEnv = Record<string, string | undefined>;
 
-export function getToolarsSupabasePublicConfig(env: SupabaseEnv = getProcessEnv()): ToolarsSupabasePublicConfig {
+const inlineToolarsSupabasePublicEnv = {
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL
+} satisfies SupabaseEnv;
+
+export function getToolarsSupabasePublicConfig(env: SupabaseEnv = inlineToolarsSupabasePublicEnv): ToolarsSupabasePublicConfig {
   const url = normalizeEnvValue(env.NEXT_PUBLIC_SUPABASE_URL)?.replace(/\/+$/, "") ?? null;
   const publishableKey =
     normalizeEnvValue(env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) ??
@@ -20,7 +26,7 @@ export function getToolarsSupabasePublicConfig(env: SupabaseEnv = getProcessEnv(
   };
 }
 
-export function requireToolarsSupabasePublicConfig(env: SupabaseEnv = getProcessEnv()): ToolarsSupabasePublicConfig {
+export function requireToolarsSupabasePublicConfig(env: SupabaseEnv = inlineToolarsSupabasePublicEnv): ToolarsSupabasePublicConfig {
   const config = getToolarsSupabasePublicConfig(env);
   if (config.isConfigured) return config;
 
@@ -32,7 +38,7 @@ export function requireToolarsSupabasePublicConfig(env: SupabaseEnv = getProcess
   throw new Error(`Toolars Supabase is not configured. Missing: ${missingKeys.join(", ")}`);
 }
 
-export function isToolarsSupabaseConfigured(env: SupabaseEnv = getProcessEnv()) {
+export function isToolarsSupabaseConfigured(env: SupabaseEnv = inlineToolarsSupabasePublicEnv) {
   return getToolarsSupabasePublicConfig(env).isConfigured;
 }
 

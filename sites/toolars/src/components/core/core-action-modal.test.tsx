@@ -92,6 +92,23 @@ describe("CoreActionModalButton", () => {
     expect(screen.getAllByRole("dialog")).toHaveLength(1);
   });
 
+  it("mounts modal overlays at document body so topbar stacking contexts cannot constrain them", () => {
+    const { container } = renderWithIntl(
+      <div className="topbar">
+        <CoreActionModalButton className="button button-solid" kind="sign-in">
+          Sign in
+        </CoreActionModalButton>
+      </div>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+
+    const overlay = document.querySelector(".core-modal-overlay");
+    expect(overlay).toBeInTheDocument();
+    expect(overlay?.parentElement).toBe(document.body);
+    expect(container.querySelector(".core-modal-overlay")).not.toBeInTheDocument();
+  });
+
   it("signs in with Supabase email auth instead of the legacy Google OAuth route", async () => {
     const signInWithPassword = vi.fn().mockResolvedValue({
       data: { user: { email: "owner@example.com", id: "user_123" } },
@@ -121,6 +138,30 @@ describe("CoreActionModalButton", () => {
       email: "owner@example.com",
       password: "correct horse"
     });
+  });
+
+  it("recovers the auth form when Supabase email auth rejects", async () => {
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn(),
+      signInWithPassword: vi.fn().mockRejectedValue(new Error("network unavailable")),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+    renderWithIntl(
+      <CoreActionModalButton className="button button-solid" kind="sign-in">
+        Sign in
+      </CoreActionModalButton>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "owner@example.com" } });
+    fireEvent.change(screen.getByLabelText("Password"), { target: { value: "correct horse" } });
+    fireEvent.click(screen.getByRole("button", { name: "Sign in with Supabase" }));
+
+    await waitFor(() =>
+      expect(screen.getByRole("status")).toHaveTextContent("Supabase could not complete this request. Check the credentials and try again.")
+    );
+    expect(screen.getByRole("button", { name: "Sign in with Supabase" })).toBeEnabled();
   });
 
   it("renders the sign-up modal with Supabase account creation", async () => {

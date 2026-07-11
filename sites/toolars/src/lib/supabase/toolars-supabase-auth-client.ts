@@ -69,14 +69,17 @@ export async function submitToolarsSupabaseEmailAuth({
   const auth = getBrowserAuthDriver();
   if (!auth) return { errorCode: "not-configured", ok: false };
 
-  const response =
+  const response = await safeAuthRequest(() =>
     mode === "sign-in"
-      ? await auth.signInWithPassword({ email: normalizedEmail, password })
-      : await auth.signUp({
+      ? auth.signInWithPassword({ email: normalizedEmail, password })
+      : auth.signUp({
           email: normalizedEmail,
           options: emailRedirectTo ? { emailRedirectTo } : undefined,
           password
-        });
+        })
+  );
+
+  if (!response) return { errorCode: "provider-error", ok: false };
 
   if (response.error) {
     return {
@@ -103,7 +106,9 @@ export async function getToolarsSupabaseBrowserUser() {
   const auth = getBrowserAuthDriver();
   if (!auth) return null;
 
-  const response = await auth.getUser();
+  const response = await safeAuthRequest(() => auth.getUser());
+  if (!response) return null;
+
   const user = response.data?.user;
   if (response.error || !user?.id) return null;
 
@@ -117,7 +122,9 @@ export async function signOutToolarsSupabaseBrowserUser() {
   const auth = getBrowserAuthDriver();
   if (!auth) return { errorCode: "not-configured", ok: false as const };
 
-  const response = await auth.signOut();
+  const response = await safeAuthRequest(() => auth.signOut());
+  if (!response) return { errorCode: "provider-error", ok: false as const };
+
   if (response.error) {
     return {
       errorCode: "provider-error",
@@ -127,6 +134,14 @@ export async function signOutToolarsSupabaseBrowserUser() {
   }
 
   return { ok: true as const };
+}
+
+async function safeAuthRequest<T>(request: () => Promise<T>): Promise<T | null> {
+  try {
+    return await request();
+  } catch {
+    return null;
+  }
 }
 
 function getBrowserAuthDriver(): ToolarsSupabaseBrowserAuthDriver | null {

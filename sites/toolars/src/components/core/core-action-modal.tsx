@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, Copy, LockKeyhole, Sparkles } from "lucide-react";
 import { submitToolarsSupabaseEmailAuth } from "@/lib/supabase/toolars-supabase-auth-client";
@@ -149,14 +150,15 @@ export function CoreActionModalButton({
         {children}
       </button>
 
-      {open ? (
-        <div
-          className="core-modal-overlay"
-          role="presentation"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) close();
-          }}
-        >
+      {open && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              className="core-modal-overlay"
+              role="presentation"
+              onMouseDown={(event) => {
+                if (event.target === event.currentTarget) close();
+              }}
+            >
           <section
             ref={dialogRef}
             className="core-modal-dialog"
@@ -291,8 +293,10 @@ export function CoreActionModalButton({
               </button>
             </footer>
           </section>
-        </div>
-      ) : null}
+            </div>,
+            document.body
+          )
+        : null}
     </>
   );
 }

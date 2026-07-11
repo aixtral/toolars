@@ -1,3 +1,12 @@
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@sentry/cli'
+  - '@swc/core'
+  - core-js
+  - keytar
+  - node-pty
+  - sharp
+
 allowBuilds:
   '@parcel/watcher': true
   '@sentry/cli': true

@@ -1,9 +1,10 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
-const nextDeploymentRoot = __dirname;
+const nextDeploymentRoot = path.resolve(__dirname, "../..");
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],

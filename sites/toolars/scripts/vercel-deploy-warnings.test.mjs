@@ -13,15 +13,19 @@ describe("Vercel deployment warning guards", () => {
     const workspaceConfig = readSiteFile("pnpm-workspace.yaml");
 
     expect(workspaceConfig).not.toContain("set this to true or false");
+    expect(workspaceConfig).toContain("onlyBuiltDependencies:");
+    expect(workspaceConfig).toMatch(/-\s+['"]?@sentry\/cli['"]?/);
+    expect(workspaceConfig).toMatch(/-\s+core-js/);
     expect(workspaceConfig).toMatch(/['"]?@sentry\/cli['"]?:\s+true/);
     expect(workspaceConfig).toMatch(/\bcore-js:\s+true/);
   });
 
-  it("keeps Next output tracing and Turbopack roots aligned", () => {
+  it("keeps Next output tracing and Turbopack roots aligned to the Vercel repository root", () => {
     const config = readSiteFile("next.config.ts");
     const tracingRoot = config.match(/outputFileTracingRoot:\s*([^,\n]+)/)?.[1]?.trim();
     const turbopackRoot = config.match(/turbopack:\s*{[\s\S]*?root:\s*([^,\n}]+)/)?.[1]?.trim();
 
+    expect(config).toContain("path.resolve(__dirname, \"../..\")");
     expect(tracingRoot).toBeTruthy();
     expect(turbopackRoot).toBe(tracingRoot);
   });

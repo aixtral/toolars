@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -131,6 +131,13 @@ describe("CoreActionModalButton", () => {
 
     expect(screen.getByRole("button", { name: "Continue with Google" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Continue with GitHub" })).toBeInTheDocument();
+    expect(screen.getByTestId("auth-tool-network-illustration")).toHaveAttribute(
+      "src",
+      "/brand/toolars-tool-network.png"
+    );
+    expect(screen.getByTestId("oauth-provider-icon-google")).toHaveAttribute("src", "/brand/google-g-logo.svg");
+    expect(screen.getByTestId("oauth-provider-icon-github")).toHaveAttribute("src", "/brand/github-mark.svg");
+    expect(screen.queryByText("Account")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
     expect(screen.queryByText(/Supabase/i)).not.toBeInTheDocument();
@@ -190,8 +197,11 @@ describe("CoreActionModalButton", () => {
 
     const dialog = screen.getByRole("dialog", { name: "Create your workspace" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
-    expect(screen.getByText("Account")).toBeInTheDocument();
     expect(screen.getByTestId("toolars-logo-mark")).toBeInTheDocument();
+    expect(screen.getByTestId("auth-tool-network-illustration")).toBeInTheDocument();
+    expect(screen.getByTestId("oauth-provider-icon-google")).toHaveAttribute("src", "/brand/google-g-logo.svg");
+    expect(screen.getByTestId("oauth-provider-icon-github")).toHaveAttribute("src", "/brand/github-mark.svg");
+    expect(screen.queryByText("Account")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
     expect(screen.getByRole("heading", { name: "Continue to Toolars" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Continue with GitHub" }));
@@ -233,6 +243,16 @@ describe("CoreActionModalButton", () => {
 
       expect(scan.hardcodedText).toEqual([]);
       expect(scan.absoluteHrefs).toEqual([]);
+    }
+  });
+
+  it("ships the selected workspace illustration and provider brand assets", () => {
+    for (const assetPath of [
+      "public/brand/toolars-tool-network.png",
+      "public/brand/google-g-logo.svg",
+      "public/brand/github-mark.svg"
+    ]) {
+      expect(existsSync(resolve(process.cwd(), assetPath))).toBe(true);
     }
   });
 });

@@ -20,6 +20,7 @@ describe("proxy static asset routing", () => {
   it("leaves brand SVG assets unlocalized so logo images load directly", () => {
     expect(isStaticAssetPath("/brand/toolars-stack-monolith-mark-v9.svg")).toBe(true);
     expect(isStaticAssetPath("/brand/toolars-stack-monolith-mark-v9.png")).toBe(true);
+    expect(isStaticAssetPath("/brand/toolars-tool-network.png")).toBe(true);
     expect(isStaticAssetPath("/favicon.svg")).toBe(true);
     expect(isStaticAssetPath("/tools/json-repair")).toBe(false);
   });

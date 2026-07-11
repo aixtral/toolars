@@ -4018,10 +4018,26 @@ select {
   min-height: 454px;
   flex-direction: column;
   justify-content: space-between;
-  gap: 36px;
+  gap: 24px;
   padding: 34px 30px;
   background: var(--canvas-soft);
   border-right: 1px solid var(--border);
+}
+
+.core-modal-auth-illustration {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  place-items: center;
+  margin: 0;
+}
+
+.core-modal-auth-illustration img {
+  display: block;
+  width: min(100%, 292px);
+  height: auto;
+  mix-blend-mode: multiply;
+  object-fit: contain;
 }
 
 .core-modal-auth-aside-status,
@@ -4052,7 +4068,7 @@ select {
 }
 
 .core-modal-auth-head {
-  gap: 8px;
+  gap: 10px;
   padding-right: 36px;
 }
 
@@ -4126,8 +4142,11 @@ select {
   opacity: 0.62;
 }
 
-.core-modal-provider-button svg {
-  color: var(--ink);
+.core-modal-provider-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 .core-modal-auth-trust {
@@ -4327,6 +4346,10 @@ select {
     padding: 18px 20px;
     border-right: 0;
     border-bottom: 1px solid var(--border);
+  }
+
+  .core-modal-auth-illustration {
+    display: none;
   }
 
   .core-modal-auth-aside-status {

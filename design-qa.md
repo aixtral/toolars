@@ -2,31 +2,31 @@
 
 ## Scope
 
-- Reference visual: `/Users/stanvl/.codex/generated_images/019efa2a-183f-77e2-8215-9118eea35dd9/exec-8b9d2c88-8672-47a9-beec-65e8a0aa068a.png`
+- Selected visual: `/Users/stanvl/.codex/generated_images/019efa2a-183f-77e2-8215-9118eea35dd9/exec-9a17225a-bd09-4e74-a2ec-38a1e26908e3.png`
+- Illustration asset: `/Users/stanvl/.codex/generated_images/019efa2a-183f-77e2-8215-9118eea35dd9/exec-82a6b872-f99e-49a3-9fd2-cb68a13853d5.png`
 - Implementation: `http://127.0.0.1:9088/en`
 - Viewport: 1280 x 720
-- State: home page with the Sign in modal open
+- States: home page with Sign in open, then Sign up selected from the account-switch action
 
 ## Comparison
 
-The implementation follows the selected two-column direction: a compact brand
-aside, white OAuth action panel, restrained 8px corners, existing Toolars logo,
-and clearly separated Google and GitHub sign-in actions. The account provider
-buttons are real controls and launch the configured Supabase OAuth handoff.
+The implementation follows the selected flat workspace-network direction in
+both authentication states. It keeps the existing Toolars logo, fills the left
+panel with the generated tool-network illustration, and preserves the compact
+white/slate/emerald modal language. The right panel removes the `Account`
+eyebrow, giving the title and OAuth actions a cleaner hierarchy.
 
-Focused review covered the existing Toolars logo, provider controls, close
-control, trust copy, switch between sign-in and sign-up, and keyboard focus.
-The dialog no longer renders a browser-default focus outline; interactive
-buttons retain their visible focus states.
+Google uses its multicolor G mark and GitHub uses the black Octocat mark from
+local static assets. The provider buttons retain their real Supabase OAuth
+behavior, with the same visual treatment in Sign in and Sign up.
 
 ## Evidence
 
-- In-app Browser capture reviewed after the production rebuild at the URL above.
-- Dialog copy exposes Google and GitHub, with no visible Supabase implementation
-  label or legacy email/password fields.
-- Google and GitHub controls were both exercised through their actual OAuth
-  redirects.
+- In-app Browser captures reviewed after a production rebuild and restart.
+- Sign in: illustration, Google mark, GitHub mark, no `Account` inside the dialog, and no console warnings/errors.
+- Sign up: illustration and both provider marks present after switching from Sign in; no `Account` inside the dialog and no console warnings/errors.
+- Focused test, typecheck, i18n audit, proxy asset routing test, and production build passed.
 
 ## Result
 
-Passed.
+final result: passed

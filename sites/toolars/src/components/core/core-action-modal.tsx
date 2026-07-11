@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
-import { CheckCircle2, Copy, GitFork, Globe2, ShieldCheck, Sparkles, X } from "lucide-react";
+import { CheckCircle2, Copy, ShieldCheck, Sparkles, X } from "lucide-react";
 import { ToolarsLogoMark } from "@/components/shell/toolars-logo";
 import { startToolarsSupabaseOAuth, type ToolarsSupabaseOAuthProvider } from "@/lib/supabase/toolars-supabase-auth-client";
 
@@ -217,6 +217,14 @@ export function CoreActionModalButton({
               <>
                 <aside className="core-modal-auth-aside">
                   <ToolarsLogoMark label="Toolars" size="md" />
+                  <figure aria-hidden="true" className="core-modal-auth-illustration">
+                    <img
+                      alt=""
+                      data-testid="auth-tool-network-illustration"
+                      draggable={false}
+                      src="/brand/toolars-tool-network.png"
+                    />
+                  </figure>
                   <p className="core-modal-auth-aside-status">
                     <CheckCircle2 size={18} aria-hidden="true" />
                     {t("auth.workspaceReady")}
@@ -232,7 +240,6 @@ export function CoreActionModalButton({
                     <X size={20} aria-hidden="true" />
                   </button>
                   <div className="core-modal-head core-modal-auth-head">
-                    <span className="eyebrow">{t("auth.eyebrow")}</span>
                     <h2 id={titleId}>{title}</h2>
                     <p>{t(modalDescriptionKey(renderedKind))}</p>
                   </div>
@@ -243,7 +250,13 @@ export function CoreActionModalButton({
                       onClick={() => void startOAuth("google")}
                       type="button"
                     >
-                      <Globe2 size={20} aria-hidden="true" />
+                      <img
+                        alt=""
+                        className="core-modal-provider-icon"
+                        data-testid="oauth-provider-icon-google"
+                        draggable={false}
+                        src="/brand/google-g-logo.svg"
+                      />
                       {t("auth.continueWith", { provider: t("auth.providers.google") })}
                     </button>
                     <button
@@ -252,7 +265,13 @@ export function CoreActionModalButton({
                       onClick={() => void startOAuth("github")}
                       type="button"
                     >
-                      <GitFork size={20} aria-hidden="true" />
+                      <img
+                        alt=""
+                        className="core-modal-provider-icon"
+                        data-testid="oauth-provider-icon-github"
+                        draggable={false}
+                        src="/brand/github-mark.svg"
+                      />
                       {t("auth.continueWith", { provider: t("auth.providers.github") })}
                     </button>
                   </div>

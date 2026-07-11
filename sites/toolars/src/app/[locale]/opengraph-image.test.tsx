@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/og", () => ({
@@ -15,6 +16,12 @@ vi.mock("next/og", () => ({
 import { resolveOpenGraphImageText } from "./opengraph-image";
 
 describe("locale OpenGraph image text", () => {
+  it("keeps the edge image route from bundling full locale message files", () => {
+    const source = readFileSync("src/app/[locale]/opengraph-image.tsx", "utf8");
+
+    expect(source).not.toMatch(/from\s+["']\.\.\/\.\.\/\.\.\/messages\/.*\.json["']/);
+  });
+
   it("resolves social image copy from locale messages", () => {
     expect(resolveOpenGraphImageText("en")).toMatchObject({
       alt: "Toolars - All tools. One workspace.",

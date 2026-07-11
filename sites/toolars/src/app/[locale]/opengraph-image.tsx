@@ -1,8 +1,4 @@
 import { ImageResponse } from "next/og";
-import en from "../../../messages/en.json";
-import es from "../../../messages/es.json";
-import zhHans from "../../../messages/zh-hans.json";
-import zhHant from "../../../messages/zh-hant.json";
 
 export const runtime = "edge";
 export const contentType = "image/png";
@@ -20,16 +16,6 @@ export type OpenGraphImageText = {
   readonly subtitle: string;
 };
 
-type OpenGraphImageMessageBundle = {
-  readonly openGraph: {
-    readonly image: OpenGraphImageText;
-  };
-};
-
-type OpenGraphImageMessageBundleMap = {
-  readonly [locale: string]: OpenGraphImageMessageBundle;
-};
-
 type OpenGraphImageParams = {
   readonly locale?: string;
 };
@@ -42,19 +28,51 @@ type OpenGraphImageProps = {
   readonly params?: OpenGraphImageParams | OpenGraphImageParamsThenable;
 };
 
-const openGraphMessageBundles = {
-  en,
-  es,
-  "zh-hans": zhHans,
-  "zh-hant": zhHant
-} satisfies OpenGraphImageMessageBundleMap;
+const openGraphImageTextByLocale = {
+  en: {
+    alt: "Toolars - All tools. One workspace.",
+    tagline: "All tools. One workspace.",
+    headline: {
+      primary: "All tools.",
+      secondary: "One workspace."
+    },
+    subtitle: "Calculators, AI tools, PDF utilities, and workflows - local-first, free to start."
+  },
+  es: {
+    alt: "Toolars - Todas las herramientas. Un solo espacio de trabajo.",
+    tagline: "Todas las herramientas. Un solo espacio de trabajo.",
+    headline: {
+      primary: "Todas las herramientas.",
+      secondary: "Un solo espacio de trabajo."
+    },
+    subtitle: "Calculadoras, herramientas de IA, utilidades PDF y flujos de trabajo - locales primero y gratis para empezar."
+  },
+  "zh-hans": {
+    alt: "Toolars - 全部工具，一个工作台。",
+    tagline: "全部工具，一个工作台。",
+    headline: {
+      primary: "全部工具。",
+      secondary: "一个工作台。"
+    },
+    subtitle: "计算器、AI 工具、PDF 实用工具和工作流 - 本地优先，免费开始。"
+  },
+  "zh-hant": {
+    alt: "Toolars - 全部工具，一個工作台。",
+    tagline: "全部工具，一個工作台。",
+    headline: {
+      primary: "全部工具。",
+      secondary: "一個工作台。"
+    },
+    subtitle: "計算器、AI 工具、PDF 實用工具和工作流 - 本地優先，免費開始。"
+  }
+} satisfies Record<string, OpenGraphImageText>;
 
-type OpenGraphImageLocale = keyof typeof openGraphMessageBundles;
+type OpenGraphImageLocale = keyof typeof openGraphImageTextByLocale;
 
 const fallbackOpenGraphImageLocale: OpenGraphImageLocale = "en";
 
 function hasOpenGraphImageBundle(locale: string): locale is OpenGraphImageLocale {
-  return locale in openGraphMessageBundles;
+  return locale in openGraphImageTextByLocale;
 }
 
 function isOpenGraphImageParamsThenable(value: unknown): value is OpenGraphImageParamsThenable {
@@ -68,7 +86,7 @@ async function resolveOpenGraphImageParams(params: OpenGraphImageProps["params"]
 
 export function resolveOpenGraphImageText(locale: string | null | undefined): OpenGraphImageText {
   const resolvedLocale = locale && hasOpenGraphImageBundle(locale) ? locale : fallbackOpenGraphImageLocale;
-  return openGraphMessageBundles[resolvedLocale].openGraph.image;
+  return openGraphImageTextByLocale[resolvedLocale];
 }
 
 export const alt = resolveOpenGraphImageText(fallbackOpenGraphImageLocale).alt;

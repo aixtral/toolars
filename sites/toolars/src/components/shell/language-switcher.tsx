@@ -3,9 +3,10 @@
 import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from "react";
 import { Check, ChevronDown, Globe } from "lucide-react";
 import { DEFAULT_LOCALE, isValidLocale, localizeCurrentPathForLocale, LOCALES, ROUTED_LOCALES, type LocaleCode } from "@/lib/i18n";
+import { updateToolarsWorkspacePreferences } from "@/lib/supabase/toolars-supabase-workspace-client";
 
 const LANGUAGE_MENU_WIDTH = 120;
 
@@ -82,6 +83,12 @@ export function LanguageSwitcher({ variant = "dropdown" }: LanguageSwitcherProps
     return localizeCurrentPathForLocale(pathname, targetLocale);
   }
 
+  async function changeLocale(event: ReactMouseEvent<HTMLAnchorElement>, targetLocale: LocaleCode) {
+    event.preventDefault();
+    await updateToolarsWorkspacePreferences({ locale: targetLocale, preferences: {} });
+    window.location.assign(buildHref(targetLocale));
+  }
+
   const currentLocale = LOCALES.find((l) => l.code === localeCode) ?? LOCALES[0];
 
   if (variant === "inline") {
@@ -100,6 +107,7 @@ export function LanguageSwitcher({ variant = "dropdown" }: LanguageSwitcherProps
                 className={`language-switcher-option language-switcher-inline-option ${l.code === localeCode ? "is-active" : ""}`}
                 role="option"
                 aria-selected={l.code === localeCode}
+                onClick={(event) => void changeLocale(event, l.code)}
               >
                 <span className="language-switcher-option-label">{l.label}</span>
                 <LanguageOptionCheck active={l.code === localeCode} />
@@ -146,7 +154,10 @@ export function LanguageSwitcher({ variant = "dropdown" }: LanguageSwitcherProps
                 className={`language-switcher-option ${l.code === localeCode ? "is-active" : ""}`}
                 role="option"
                 aria-selected={l.code === localeCode}
-                onClick={() => setOpen(false)}
+                onClick={(event) => {
+                  setOpen(false);
+                  void changeLocale(event, l.code);
+                }}
               >
                 <span className="language-switcher-option-label">{l.label}</span>
                 <LanguageOptionCheck active={l.code === localeCode} />

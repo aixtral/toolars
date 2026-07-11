@@ -1,5 +1,6 @@
+import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import { detectLocale, getLaunchCertificationRobotsHeader, isStaticAssetPath } from "./proxy";
+import { detectLocale, getLaunchCertificationRobotsHeader, isLaunchPublicToolPath, isStaticAssetPath, proxy } from "./proxy";
 
 describe("proxy locale detection", () => {
   it("detects only launch locales for public routing", () => {
@@ -27,6 +28,20 @@ describe("proxy static asset routing", () => {
 });
 
 describe("proxy tool certification robots header", () => {
+  it("admits only launch-certified tool paths to the public launch surface", () => {
+    expect(isLaunchPublicToolPath("/tools/json-repair")).toBe(true);
+    expect(isLaunchPublicToolPath("/es/tools/token-counter/about")).toBe(true);
+    expect(isLaunchPublicToolPath("/tools/color-contrast-checker")).toBe(false);
+    expect(isLaunchPublicToolPath("/zh-hans/tools/color-contrast-checker/about")).toBe(false);
+    expect(isLaunchPublicToolPath("/explore/pdf")).toBe(true);
+  });
+
+  it("rewrites deferred tool paths to a locale-scoped not-found route", () => {
+    const response = proxy(new NextRequest("https://toolars.test/zh-hans/tools/color-contrast-checker/about"));
+
+    expect(response.headers.get("x-middleware-rewrite")).toBe("https://toolars.test/zh-hans/__tool-unavailable__");
+  });
+
   it("marks uncertified tool workspace and about paths as noindex", () => {
     expect(getLaunchCertificationRobotsHeader("/tools/color-contrast-checker")).toBe("noindex, nofollow");
     expect(getLaunchCertificationRobotsHeader("/en/tools/color-contrast-checker")).toBe("noindex, nofollow");

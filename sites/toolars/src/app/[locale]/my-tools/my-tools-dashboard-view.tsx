@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowRight,
   BadgeDollarSign,
@@ -14,9 +16,16 @@ import {
   Star,
   Workflow
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { getToolBySlug, type ToolDefinition } from "@/data/registry";
+import { ToolIcon } from "@/components/tools/tool-icon";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
+import {
+  getToolarsSupabaseWorkspaceSnapshot,
+  type ToolarsWorkspaceSnapshot
+} from "@/lib/supabase/toolars-supabase-workspace-client";
 
 const recentOutputs = [
   { key: "q2PdfSummary", href: "/tools/pdf-toolkit" },
@@ -46,7 +55,7 @@ const nextWorkflows = [
 const sharedLinks = ["marketingReport", "cleanedData", "socialPost"] as const;
 const commandChips = ["all", "tools", "workflows", "outputs"] as const;
 
-const kpis = [
+const fallbackKpis = [
   { key: "recentOutputs", value: String(recentOutputs.length), tone: "green", icon: Clock },
   { key: "favoriteTools", value: String(favoriteTools.length), tone: "amber", icon: Star },
   { key: "savedWorkflows", value: String(nextWorkflows.length), tone: "teal", icon: Workflow },
@@ -105,12 +114,37 @@ const workflowTones = {
 
 export function MyToolsDashboardView() {
   const t = useTranslations("myToolsDashboard");
+  const tTool = useTranslations("tools");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const [workspaceSnapshot, setWorkspaceSnapshot] = useState<ToolarsWorkspaceSnapshot | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    void getToolarsSupabaseWorkspaceSnapshot({ locale: localeCode }).then((snapshot) => {
+      if (active) setWorkspaceSnapshot(snapshot);
+    });
+    return () => {
+      active = false;
+    };
+  }, [localeCode]);
 
   function localizedHref(href: string) {
     return href.startsWith("#") ? href : localizePath(href, localeCode);
   }
+
+  const persistedSavedTools = workspaceSnapshot?.status === "ready"
+    ? workspaceSnapshot.savedTools
+        .map(({ toolSlug }) => getToolBySlug(toolSlug))
+        .filter((tool): tool is ToolDefinition => Boolean(tool))
+        .slice(0, 4)
+    : null;
+  const kpis = fallbackKpis.map((kpi) => {
+    if (workspaceSnapshot?.status !== "ready") return kpi;
+    if (kpi.key === "favoriteTools") return { ...kpi, value: String(workspaceSnapshot.savedTools.length) };
+    if (kpi.key === "recentOutputs") return { ...kpi, value: String(workspaceSnapshot.recentTools.length) };
+    return kpi;
+  });
 
   return (
     <div className="my-tools-page" data-my-tools-page="true">
@@ -254,7 +288,26 @@ export function MyToolsDashboardView() {
             </a>
           </div>
           <div className="favorite-tool-grid">
-            {favoriteTools.map((tool) => {
+            {persistedSavedTools
+              ? persistedSavedTools.map((tool) => (
+              <a
+                className="favorite-tool-card"
+                data-persisted-saved-tool={tool.slug}
+                href={localizedHref(tool.href)}
+                key={tool.slug}
+              >
+                <span className="icon-tile">
+                  <ToolIcon tool={tool} />
+                </span>
+                <span>
+                  <strong>{tTool(`${tool.slug}.name`)}</strong>
+                  <small>{tTool(`${tool.slug}.description`)}</small>
+                </span>
+                <span className="badge">{t("favoriteTools.open")}</span>
+                <span className="open-link">{t("favoriteTools.open")}</span>
+              </a>
+              ))
+              : favoriteTools.map((tool) => {
               const Icon = favoriteToolIcons[tool.key];
 
               return (

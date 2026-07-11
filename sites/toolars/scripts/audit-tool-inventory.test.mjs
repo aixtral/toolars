@@ -166,19 +166,25 @@ describe("tool inventory audit", () => {
       toolars: 12,
       vitalcalc: 86
     });
-    expect(audit.summary.toolars.publicTools).toBe(190);
+    expect(audit.summary.launchReadiness).toBe("launch-scope-55");
+    expect(audit.summary.toolars.registeredPublicTools).toBe(190);
+    expect(audit.summary.toolars.publicTools).toBe(55);
     expect(audit.summary.toolars.launchCertifiedTools).toBe(55);
-    expect(audit.summary.toolars.publicUncertifiedTools).toBe(135);
+    expect(audit.summary.toolars.deferredTools).toBe(135);
+    expect(audit.summary.toolars.publicUncertifiedTools).toBe(0);
     expect(audit.summary.sources.vitalcalc.rootToolPages).toBe(86);
     expect(audit.summary.sources.aixtralLab.configTools).toBe(92);
     expect(audit.summary.sources.aixtralLab.implementedTools).toBe(66);
   });
 
-  it("reports launch-certified tools separately from public preview inventory", async () => {
+  it("keeps deferred tools outside the public launch inventory", async () => {
     const audit = await createToolInventoryAudit({ siteRoot, ...sourceRoots });
     const bySlug = new Map(audit.entries.map((entry) => [entry.slug, entry]));
 
-    expect(audit.gaps.toolars.publicUncertifiedTools).toHaveLength(135);
+    expect(audit.gaps.toolars.publicUncertifiedTools).toEqual([]);
+    expect(audit.gaps.toolars.deferredTools).toHaveLength(135);
+    expect(audit.gaps.toolars.deferredTools).toContain("color-contrast-checker");
+    expect(audit.gaps.toolars.deferredTools).not.toContain("token-counter");
     expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("token-counter");
     expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("json-formatter");
     expect(audit.gaps.toolars.publicUncertifiedTools).not.toContain("jwt-decoder");
@@ -251,18 +257,18 @@ describe("tool inventory audit", () => {
     const audit = await createToolInventoryAudit({ siteRoot, ...sourceRoots });
 
     expect(audit.summary.toolars.publicByCategory).toMatchObject({
-      "AI": 94,
-      "AI Security": 11,
-      Data: 9,
-      Developer: 36,
-      "Frontend & Design": 16,
-      Finance: 42,
-      Health: 42,
-      "LLM Cost": 6,
-      PDF: 10,
-      "Prompt Engineering": 4,
+      All: 55,
+      "AI": 39,
+      "AI Security": 3,
+      Data: 4,
+      Developer: 21,
+      "Frontend & Design": 3,
+      Finance: 13,
+      Health: 1,
+      "LLM Cost": 2,
+      PDF: 1,
       Productivity: 6,
-      Writing: 2
+      "RAG / MCP / Agent": 1
     });
     expect(audit.gaps.categoryCountMismatches).toEqual([]);
     expect(audit.summary.gaps.categoryCountMismatches).toBe(0);

@@ -50,6 +50,11 @@ export function getLaunchCertificationRobotsHeader(pathname: string): string | n
   return isLaunchCertifiedToolSlug(slug) ? null : PREVIEW_TOOL_ROBOTS_HEADER;
 }
 
+export function isLaunchPublicToolPath(pathname: string): boolean {
+  const slug = getToolSlugFromPathname(pathname);
+  return !slug || isLaunchCertifiedToolSlug(slug);
+}
+
 function getToolSlugFromPathname(pathname: string): string | null {
   const segments = pathname.split("/").filter(Boolean);
   const firstSegment = segments[0];
@@ -65,6 +70,11 @@ function getToolSlugFromPathname(pathname: string): string | null {
   } catch {
     return rawSlug.toLowerCase();
   }
+}
+
+function getLocaleFromPathname(pathname: string): string | null {
+  const firstSegment = pathname.split("/").filter(Boolean)[0];
+  return ROUTED_LOCALES.some((locale) => locale.code === firstSegment) ? firstSegment : null;
 }
 
 function applyLaunchCertificationHeaders(response: NextResponse, pathname: string): NextResponse {
@@ -85,6 +95,11 @@ export function proxy(request: NextRequest) {
   // Skip Next internals, API routes, and the manifest/robots/sitemap special files.
   if (isStaticAssetPath(pathname)) {
     return NextResponse.next();
+  }
+
+  if (!isLaunchPublicToolPath(pathname)) {
+    const locale = getLocaleFromPathname(pathname) ?? detectLocale(request.headers.get("accept-language"));
+    return NextResponse.rewrite(new URL(`/${locale}/__tool-unavailable__`, request.url));
   }
 
   // Already has a locale prefix (e.g. /en/tools, /es/tools).

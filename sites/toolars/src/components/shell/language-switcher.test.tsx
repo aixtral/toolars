@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
 import { scanSourceText } from "../../../scripts/audit-i18n.mjs";
 import en from "../../../messages/en.json";
@@ -9,6 +9,7 @@ import es from "../../../messages/es.json";
 import zhHans from "../../../messages/zh-hans.json";
 import zhHant from "../../../messages/zh-hant.json";
 import { DRAFT_LOCALES } from "../../lib/i18n";
+import { setToolarsSupabaseWorkspaceDriverForTest } from "@/lib/supabase/toolars-supabase-workspace-client";
 import { LanguageSwitcher } from "./language-switcher";
 
 const usePathnameMock = vi.fn(() => "/tools/pdf-toolkit");
@@ -38,6 +39,10 @@ function readGlobalStyles() {
 describe("LanguageSwitcher", () => {
   beforeEach(() => {
     usePathnameMock.mockReturnValue("/tools/pdf-toolkit");
+  });
+
+  afterEach(() => {
+    setToolarsSupabaseWorkspaceDriverForTest(null);
   });
 
   it("renders a restrained RustDesk-inspired language trigger with the current language name", () => {
@@ -115,6 +120,33 @@ describe("LanguageSwitcher", () => {
     expect(screen.getByRole("option", { name: /Español/ })).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("option", { name: /Español/ })).toHaveClass("is-active");
     expect(screen.getByRole("option", { name: /English/ })).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("persists a signed-in user's selected language before following the localized route", async () => {
+    const updateSettings = vi.fn().mockResolvedValue(true);
+    setToolarsSupabaseWorkspaceDriverForTest({
+      ensureWorkspace: vi.fn().mockResolvedValue({ workspaceId: "workspace_123" }),
+      getCurrentUser: vi.fn().mockResolvedValue({ accountId: "user_123" }),
+      getRecentTools: vi.fn(),
+      getSavedTools: vi.fn(),
+      getSettings: vi.fn().mockResolvedValue({ locale: "en", preferences: {} }),
+      recordRecentTool: vi.fn(),
+      removeSavedTool: vi.fn(),
+      saveTool: vi.fn(),
+      updateSettings
+    });
+    renderLanguageSwitcher();
+
+    fireEvent.click(screen.getByRole("button", { name: "Switch language: English" }));
+    fireEvent.click(screen.getByRole("option", { name: /简体中文/ }));
+
+    await waitFor(() => {
+      expect(updateSettings).toHaveBeenCalledWith({
+        locale: "zh-hans",
+        preferences: {},
+        workspaceId: "workspace_123"
+      });
+    });
   });
 
   it("renders a direct native-language list for mobile menus", () => {

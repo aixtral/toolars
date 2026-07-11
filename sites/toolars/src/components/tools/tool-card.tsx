@@ -1,9 +1,11 @@
-import { ArrowRight, Bookmark } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { ArrowRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import type { PricingMode, ProcessingMode, ToolDefinition, ToolType } from "@/data/registry";
+import { DEFAULT_LOCALE, isValidLocale } from "@/lib/i18n";
 import { getToolTagMessageKey } from "@/lib/i18n/tool-tags";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { ToolIcon } from "./tool-icon";
+import { ToolSaveButton } from "./tool-save-button";
 
 const processingLabelKey: Record<ProcessingMode, "processing.local" | "processing.cloud" | "processing.aiConsent"> = {
   local: "processing.local",
@@ -24,6 +26,7 @@ const toolTypeLabelKey: Record<ToolType, "toolTypes.traditional" | "toolTypes.ai
 };
 
 export function ToolCard({ tool }: { tool: ToolDefinition }) {
+  const locale = useLocale();
   const tTool = useTranslations(`tools.${tool.slug}`);
   const tCommon = useTranslations("common");
   const tTag = useTranslations("commonToolTags");
@@ -31,6 +34,7 @@ export function ToolCard({ tool }: { tool: ToolDefinition }) {
   const tSubmitTool = useTranslations("submitTool");
   const name = tTool("name");
   const description = tTool("description");
+  const localeCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const pricingMessageKey = isFreeTrialMode() && tool.pricing !== "free" ? "pricing.freeTrial" : pricingLabelKey[tool.pricing];
 
   return (
@@ -62,7 +66,7 @@ export function ToolCard({ tool }: { tool: ToolDefinition }) {
       <div className="tool-footer">
         <span className="badge local">{tToolDetail(pricingMessageKey)}</span>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-          <Bookmark size={16} color="#6b7280" aria-hidden="true" />
+          <ToolSaveButton locale={localeCode} toolSlug={tool.slug} />
           <a className="open-link" href={tool.href}>
             {tCommon("open")} <ArrowRight size={14} aria-hidden="true" />
           </a>

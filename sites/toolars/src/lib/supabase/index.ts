@@ -13,6 +13,13 @@ export {
   submitToolarsSupabaseEmailAuth
 } from "./toolars-supabase-auth-client";
 export {
+  getToolarsSupabaseWorkspaceSnapshot,
+  recordToolarsRecentTool,
+  removeToolarsSavedTool,
+  saveToolarsTool,
+  updateToolarsWorkspacePreferences
+} from "./toolars-supabase-workspace-client";
+export {
   getToolarsSupabaseSessionPayload,
   signOutToolarsSupabaseSession
 } from "./toolars-supabase-auth-server";

@@ -4,6 +4,7 @@ import type { ProcessingMode, ToolDefinition } from "@/data/registry";
 import type { DetailBadgeTone, ToolDetailDefinition, ToolDetailRow } from "@/data/tool-details";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
+import { ToolarsRecentToolRecorder } from "@/components/workspace/toolars-recent-tool-recorder";
 
 function badgeClass(tone?: DetailBadgeTone): string {
   return tone ? `badge ${tone}` : "badge";
@@ -62,6 +63,7 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
 
   return (
     <div className="tool-workspace-shell" data-tool-workspace-shell={detail.tool.slug}>
+      <ToolarsRecentToolRecorder locale={localeCode} toolSlug={detail.tool.slug} />
       <div className="llm-cost-layout tool-workspace-handoff-layout">
         <aside className="workspace-panel llm-cost-overview">
           <span className="eyebrow">{t("eyebrow")}</span>

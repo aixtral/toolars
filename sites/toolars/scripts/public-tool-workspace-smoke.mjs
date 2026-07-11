@@ -15,8 +15,8 @@ export async function createPublicToolWorkspaceSmokeManifest(options = {}) {
     .filter((entry) => entry.launchCertified)
     .map((entry) => entry.slug)
     .sort((a, b) => a.localeCompare(b));
-  const publicUncertifiedSlugs = [...audit.gaps.toolars.publicUncertifiedTools].sort((a, b) => a.localeCompare(b));
-  const publicSlugs = [...launchCertifiedSlugs, ...publicUncertifiedSlugs].sort((a, b) => a.localeCompare(b));
+  const publicUncertifiedSlugs = [];
+  const publicSlugs = launchCertifiedSlugs;
 
   return {
     generatedAt: new Date().toISOString(),

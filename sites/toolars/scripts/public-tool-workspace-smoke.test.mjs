@@ -20,17 +20,17 @@ const sourceRoots = {
 describe("public tool workspace smoke manifest", () => {
   it("covers every public tool workspace route with a stable workspace marker", async () => {
     const audit = await createToolInventoryAudit({ siteRoot, ...sourceRoots });
-    const publicSlugs = [
-      ...audit.entries.filter((entry) => entry.launchCertified).map((entry) => entry.slug),
-      ...audit.gaps.toolars.publicUncertifiedTools
-    ].sort((a, b) => a.localeCompare(b));
+    const publicSlugs = audit.entries
+      .filter((entry) => entry.launchCertified)
+      .map((entry) => entry.slug)
+      .sort((a, b) => a.localeCompare(b));
     const manifest = await createPublicToolWorkspaceSmokeManifest({ siteRoot, ...sourceRoots });
 
     expect(manifest.scenarios.map((scenario) => scenario.slug)).toEqual(publicSlugs);
     expect(manifest.summary).toEqual({
-      total: 190,
+      total: 55,
       launchCertified: 55,
-      publicUncertified: 135
+      publicUncertified: 0
     });
 
     for (const scenario of manifest.scenarios) {

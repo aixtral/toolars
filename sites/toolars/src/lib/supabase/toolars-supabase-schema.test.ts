@@ -68,4 +68,16 @@ describe("toolars supabase phase 1 foundation migration", () => {
     expect(sql).toMatch(/after insert on auth\.users/i);
     expect(sql).toMatch(/execute function public\.handle_new_toolars_user\(\)/i);
   });
+
+  it("provides an authenticated, idempotent workspace provisioning RPC for existing OAuth accounts", () => {
+    const runtimeSql = readFileSync(
+      join(process.cwd(), "supabase", "migrations", "202607110001_workspace_runtime.sql"),
+      "utf8"
+    );
+
+    expect(runtimeSql).toMatch(/create or replace function public\.ensure_toolars_workspace/i);
+    expect(runtimeSql).toMatch(/security definer/i);
+    expect(runtimeSql).toMatch(/auth\.uid\(\)/i);
+    expect(runtimeSql).toMatch(/grant execute on function public\.ensure_toolars_workspace\(text\) to authenticated/i);
+  });
 });

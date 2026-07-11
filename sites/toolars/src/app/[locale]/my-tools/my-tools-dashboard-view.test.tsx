@@ -1,12 +1,13 @@
 import { readFileSync } from "node:fs";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 // @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
 import { scanSourceText } from "../../../../scripts/audit-i18n.mjs";
 import en from "../../../../messages/en.json";
 import { MyToolsDashboardView } from "./my-tools-dashboard-view";
+import { setToolarsSupabaseWorkspaceDriverForTest } from "@/lib/supabase/toolars-supabase-workspace-client";
 
 const localizedDashboardCopy = {
   hero: {
@@ -153,6 +154,9 @@ function scanMyToolsSource() {
 }
 
 describe("MyToolsDashboardView", () => {
+  afterEach(() => {
+    setToolarsSupabaseWorkspaceDriverForTest(null);
+  });
   it("does not leave hardcoded UI audit candidates in the dashboard source", () => {
     const scan = scanMyToolsSource();
 
@@ -222,6 +226,32 @@ describe("MyToolsDashboardView", () => {
     expect(container.querySelectorAll("[data-recent-output-icon] svg")).toHaveLength(4);
     expect(container.querySelectorAll("[data-favorite-tool-icon] svg")).toHaveLength(4);
     expect(screen.queryByText("Marketing Sprint")).not.toBeInTheDocument();
+  });
+
+  it("replaces decorative favorites with the signed-in workspace's saved tools", async () => {
+    setToolarsSupabaseWorkspaceDriverForTest({
+      ensureWorkspace: vi.fn().mockResolvedValue({ workspaceId: "workspace_123" }),
+      getCurrentUser: vi.fn().mockResolvedValue({ accountId: "user_123" }),
+      getRecentTools: vi.fn().mockResolvedValue([
+        { locale: "en", openedAt: "2026-07-11T00:00:00.000Z", toolSlug: "token-counter" }
+      ]),
+      getSavedTools: vi.fn().mockResolvedValue([
+        { locale: "en", savedAt: "2026-07-11T00:00:00.000Z", toolSlug: "json-repair" }
+      ]),
+      getSettings: vi.fn().mockResolvedValue({ locale: "en", preferences: {} }),
+      recordRecentTool: vi.fn(),
+      removeSavedTool: vi.fn(),
+      saveTool: vi.fn(),
+      updateSettings: vi.fn()
+    });
+    const { container } = renderWithIntl(<MyToolsDashboardView />);
+
+    await waitFor(() => {
+      expect(container.querySelector('[data-persisted-saved-tool="json-repair"]')).toBeInTheDocument();
+      expect(container.querySelector('[data-favorite-tool-icon="jsonRepair"]')).not.toBeInTheDocument();
+    });
+    expect(container.querySelector('[data-kpi-icon="favoriteTools"]')?.parentElement).toHaveTextContent("1");
+    expect(container.querySelector('[data-kpi-icon="recentOutputs"]')?.parentElement).toHaveTextContent("1");
   });
 
   it("prefixes internal dashboard links for routed non-default locales", () => {

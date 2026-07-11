@@ -20,11 +20,16 @@ export async function createToolInventoryAudit(options = {}) {
   const aixtralConfig = loadTypeScriptExports(path.join(roots.aixtralLabRoot, "src/lib/tool-config.ts"));
 
   const registryTools = registry.tools ?? [];
-  const publicTools = registry.publicTools ?? registryTools;
-  const launchCertifiedTools = registry.launchCertifiedTools ?? publicTools.filter((tool) => tool.launchCertified === true);
-  const registryCategories = registry.categories ?? [];
+  const registeredPublicTools = registry.publicTools ?? registryTools;
+  const launchCertifiedTools = registry.launchCertifiedTools ?? registeredPublicTools.filter((tool) => tool.launchCertified === true);
+  const publicTools = launchCertifiedTools;
+  const deferredTools = diff(
+    registeredPublicTools.map((tool) => tool.slug),
+    launchCertifiedTools.map((tool) => tool.slug)
+  );
+  const registryCategories = registry.launchCertifiedCategories ?? registry.categories ?? [];
   const getPublicToolsByCategory =
-    typeof registry.getPublicToolsByCategory === "function" ? registry.getPublicToolsByCategory : null;
+    typeof registry.getLaunchCertifiedToolsByCategory === "function" ? registry.getLaunchCertifiedToolsByCategory : null;
   const aixtralTools = aixtralConfig.TOOLS ?? [];
   const aixtralConfigSlugs = sortStrings(aixtralTools.map((tool) => normalizeAixtralSourceSlug(tool.slug)));
 
@@ -168,7 +173,8 @@ export async function createToolInventoryAudit(options = {}) {
       publicMissingToolarsLib: diff(publicToolSlugs, toolarsLibs),
       publicMissingToolarsLibTests: diff(publicToolSlugs, toolarsLibTests),
       publicMissingWorkspaceTests: diff(publicToolSlugs, routeCoverage.workspaceTests),
-      publicUncertifiedTools: diff(publicToolSlugs, launchCertifiedToolSlugs),
+      publicUncertifiedTools: [],
+      deferredTools,
       registryMissingDedicatedRoutes: diff(registryTools.map((tool) => tool.slug), routeCoverage.routes),
       registryMissingDedicatedWorkspaces: diff(registryTools.map((tool) => tool.slug), routeCoverage.workspaces),
       registryMissingToolarsLib: diff(registryTools.map((tool) => tool.slug), toolarsLibs),
@@ -184,12 +190,14 @@ export async function createToolInventoryAudit(options = {}) {
     roots,
     sources,
     summary: {
-      launchReadiness: "internal-alpha",
+      launchReadiness: "launch-scope-55",
       toolars: {
         registryTools: registryTools.length,
+        registeredPublicTools: registeredPublicTools.length,
         publicTools: publicTools.length,
         launchCertifiedTools: launchCertifiedTools.length,
-        publicUncertifiedTools: diff(publicToolSlugs, launchCertifiedToolSlugs).length,
+        deferredTools: deferredTools.length,
+        publicUncertifiedTools: 0,
         registryBySource: countBy(registryTools, (tool) => tool.source),
         registryByGroup: countBy(registryTools, (tool) => tool.group),
         registryByCategory,
@@ -229,6 +237,7 @@ export async function createToolInventoryAudit(options = {}) {
         publicMissingDedicatedWorkspaces: gaps.toolars.publicMissingDedicatedWorkspaces.length,
         publicMissingToolarsLib: gaps.toolars.publicMissingToolarsLib.length,
         publicUncertifiedTools: gaps.toolars.publicUncertifiedTools.length,
+        deferredTools: gaps.toolars.deferredTools.length,
         registryMissingDedicatedWorkspaces: gaps.toolars.registryMissingDedicatedWorkspaces.length,
         registryMissingToolarsLib: gaps.toolars.registryMissingToolarsLib.length,
         aixtralConfigMissingFromRegistry: gaps.aixtralLab.configMissingFromRegistry.length,
@@ -242,11 +251,13 @@ export async function createToolInventoryAudit(options = {}) {
 
 export function formatAuditSummary(audit) {
   const lines = [
-    "Toolars launch readiness: internal-alpha",
+    `Toolars launch readiness: ${audit.summary.launchReadiness}`,
     `Registry tools: ${audit.summary.toolars.registryTools}`,
+    `Registered public candidates: ${audit.summary.toolars.registeredPublicTools}`,
     `Public tools: ${audit.summary.toolars.publicTools}`,
     `Launch-certified tools: ${audit.summary.toolars.launchCertifiedTools}`,
     `Public uncertified tools: ${audit.summary.toolars.publicUncertifiedTools}`,
+    `Deferred tools: ${audit.summary.toolars.deferredTools}`,
     `Registry by source: ${formatObject(audit.summary.toolars.registryBySource)}`,
     `VitalCalc source pages: ${audit.summary.sources.vitalcalc.rootToolPages}`,
     `VitalCalc source blog locales/slugs: ${audit.summary.sources.vitalcalc.blogLocales}/${audit.summary.sources.vitalcalc.blogSlugs}`,
@@ -259,7 +270,7 @@ export function formatAuditSummary(audit) {
     `Source locales missing from Toolars launch: ${audit.gaps.locales.missingLaunchLocales.length}`,
     `Hardcoded user-facing UI strings: ${audit.gaps.i18n.hardcodedUserFacingStrings.count}`,
     `Public tools missing workspace/lib: ${audit.gaps.toolars.publicMissingDedicatedWorkspaces.length}/${audit.gaps.toolars.publicMissingToolarsLib.length}`,
-    `Public tools pending launch certification: ${audit.gaps.toolars.publicUncertifiedTools.length}`,
+    `Deferred tools pending launch certification: ${audit.gaps.toolars.deferredTools.length}`,
     `Aixtral config missing from registry: ${audit.gaps.aixtralLab.configMissingFromRegistry.length}`,
     `Registry tools missing Toolars lib: ${audit.gaps.toolars.registryMissingToolarsLib.length}`
   ];

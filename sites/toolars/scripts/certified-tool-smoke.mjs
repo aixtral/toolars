@@ -6,6 +6,38 @@ import { chromium } from "playwright";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultOutputRoot = path.resolve(scriptDir, "../output/playwright/certified-tool-smoke");
 
+const disabledRunFailureSlugs = new Set([
+  "base64-converter",
+  "case-converter",
+  "code-minifier",
+  "color-converter",
+  "cron-explainer",
+  "csv-to-json",
+  "diff-checker",
+  "docker-compose-converter",
+  "file-size-converter",
+  "hash-generator",
+  "html-entity-encoder",
+  "ipv4-subnet-calculator",
+  "json-diff",
+  "json-formatter",
+  "json-to-csv",
+  "jwt-decoder",
+  "markdown-to-json",
+  "number-base-converter",
+  "regex-tester",
+  "slug-generator",
+  "text-diff",
+  "text-stats",
+  "timestamp-converter",
+  "token-counter",
+  "url-encoder",
+  "url-parser",
+  "user-agent-parser",
+  "xml-formatter",
+  "yaml-validator"
+]);
+
 export const certifiedToolSmokeScenarios = [
   {
     slug: "pdf-toolkit",
@@ -580,7 +612,31 @@ export const certifiedToolSmokeScenarios = [
     runButtonName: "Calculate average",
     resultAssertion: { type: "selectorText", selector: ".llm-metric strong", text: "$140.00" }
   }
-];
+].map((scenario) => {
+  if (!disabledRunFailureSlugs.has(scenario.slug)) return scenario;
+
+  return {
+    ...scenario,
+    failureAssertion: {
+      type: "disabledRun",
+      inputActions: scenario.inputActions
+        .filter((action) => action.type === "fill")
+        .map((action) => ({ ...action, value: "" }))
+    }
+  };
+});
+
+export function getCertifiedToolFailureCoverage(scenarios = certifiedToolSmokeScenarios) {
+  const contractedScenarios = scenarios.filter((scenario) => scenario.failureAssertion);
+
+  return {
+    total: scenarios.length,
+    contracted: contractedScenarios.length,
+    disabledRun: contractedScenarios.filter((scenario) => scenario.failureAssertion.type === "disabledRun").length,
+    invalidInput: contractedScenarios.filter((scenario) => scenario.failureAssertion.type === "invalidInput").length,
+    uncontracted: scenarios.filter((scenario) => !scenario.failureAssertion).map((scenario) => scenario.slug)
+  };
+}
 
 export async function runCertifiedToolSmoke({
   baseUrl = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088",
@@ -607,6 +663,9 @@ export async function runCertifiedToolSmoke({
         }
 
         await page.locator(scenario.workspaceSelector).first().waitFor({ state: "visible", timeout: 15000 });
+        if (scenario.failureAssertion) {
+          await assertFailure(page, scenario);
+        }
         for (const action of scenario.inputActions) {
           await runInputAction(page, action);
         }
@@ -654,7 +713,8 @@ export async function runCertifiedToolSmoke({
     summary: {
       total: results.length,
       passed: results.filter((result) => result.ok).length,
-      failed: results.filter((result) => !result.ok).length
+      failed: results.filter((result) => !result.ok).length,
+      failureAssertions: getCertifiedToolFailureCoverage(scenarios)
     },
     results
   };
@@ -670,6 +730,24 @@ async function runInputAction(page, action) {
     return;
   }
   throw new Error(`Unsupported smoke action: ${action.type}`);
+}
+
+async function assertFailure(page, scenario) {
+  const assertion = scenario.failureAssertion;
+  for (const action of assertion.inputActions) {
+    await runInputAction(page, action);
+  }
+
+  if (assertion.type === "disabledRun") {
+    await assertResult(page, { type: "disabledButton", name: scenario.runButtonName });
+    return;
+  }
+  if (assertion.type === "invalidInput") {
+    await page.getByRole("button", { name: scenario.runButtonName, exact: true }).click();
+    await assertResult(page, assertion.resultAssertion);
+    return;
+  }
+  throw new Error(`Unsupported failure assertion: ${assertion.type}`);
 }
 
 async function assertResult(page, assertion) {
@@ -697,14 +775,23 @@ async function assertResult(page, assertion) {
     if (disabled !== null) throw new Error(`Expected button ${assertion.name} to be enabled`);
     return;
   }
+  if (assertion.type === "disabledButton") {
+    await page.getByRole("button", { name: assertion.name, exact: true }).waitFor({ state: "visible" });
+    const disabled = await page.getByRole("button", { name: assertion.name, exact: true }).getAttribute("disabled");
+    if (disabled === null) throw new Error(`Expected button ${assertion.name} to be disabled`);
+    return;
+  }
   throw new Error(`Unsupported result assertion: ${assertion.type}`);
 }
 
 export function formatCertifiedToolSmokeSummary(report) {
+  const coverage = report.summary.failureAssertions;
   return [
     "Certified tool smoke: " + (report.summary.failed === 0 ? "pass" : "fail"),
     `Base URL: ${report.baseUrl}`,
     `Scenarios: ${report.summary.passed}/${report.summary.total}`,
+    `Failure assertions: ${coverage.contracted}/${coverage.total} (disabled-run: ${coverage.disabledRun}, invalid-input: ${coverage.invalidInput})`,
+    `Uncontracted: ${coverage.uncontracted.length === 0 ? "none" : coverage.uncontracted.join(", ")}`,
     ...report.results.map((result) => `${result.ok ? "pass" : "fail"} ${result.slug}${result.error ? ` - ${result.error}` : ""}`)
   ].join("\n") + "\n";
 }

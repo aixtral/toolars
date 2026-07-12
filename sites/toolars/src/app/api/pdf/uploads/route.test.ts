@@ -32,7 +32,7 @@ describe("/api/pdf/uploads", () => {
     const payload = await response.json();
     expect(response.status).toBe(201);
     expect(payload.uploads[0]).toMatchObject({
-      fileName: "blob",
+      fileName: "Board Pack.pdf",
       retentionLabel: "Private temporary storage",
       scanLabel: "PDF type and size validated",
       scanStatus: "ready"
@@ -69,9 +69,17 @@ describe("/api/pdf/uploads", () => {
 });
 
 function uploadRequest(fileName: string, headers?: HeadersInit) {
-  const formData = new FormData();
-  formData.append("files", new File(["%PDF-1.7"], fileName, { type: "application/pdf" }), fileName);
-  return new Request("http://toolars.test/api/pdf/uploads", { body: formData, headers, method: "POST" });
+  const file = {
+    arrayBuffer: async () => new TextEncoder().encode("%PDF-1.7").buffer,
+    name: fileName,
+    size: 8,
+    type: "application/pdf"
+  } as File;
+
+  return {
+    formData: async () => ({ getAll: (name: string) => (name === "files" ? [file] : []) }),
+    headers: new Headers(headers)
+  } as unknown as Request;
 }
 
 function createPdfDriver(uploadsByUser: Map<string, ToolarsPrivatePdfUpload[]>): ToolarsPrivateDataDriver {

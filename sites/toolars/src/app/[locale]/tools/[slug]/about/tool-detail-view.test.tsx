@@ -4,13 +4,23 @@ import type { ReactNode } from "react";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
 import { getToolDetailBySlug } from "@/data/tool-details";
+import es from "../../../../../../messages/es.json";
 import zhHans from "../../../../../../messages/zh-hans.json";
-import { generateStaticParams, getDetailShellActive } from "./page";
+import zhHant from "../../../../../../messages/zh-hant.json";
+import { generateMetadata, generateStaticParams, getDetailShellActive } from "./page";
 import { ToolDetailView } from "./tool-detail-view";
 
 function renderWithZhHans(ui: ReactNode) {
   return render(
     <NextIntlClientProvider locale="zh-hans" messages={zhHans}>
+      {ui}
+    </NextIntlClientProvider>
+  );
+}
+
+function renderWithLocale(locale: string, messages: typeof es, ui: ReactNode) {
+  return render(
+    <NextIntlClientProvider locale={locale} messages={messages}>
       {ui}
     </NextIntlClientProvider>
   );
@@ -93,6 +103,33 @@ describe("ToolDetailView", () => {
 
     expect(screen.getByRole("dialog", { name: "分享此工具" })).toBeInTheDocument();
     expect(screen.getByDisplayValue("/zh-hans/tools/pdf-toolkit/about")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["es", es, "Kit de herramientas PDF combina operaciones locales y pasos guiados para que puedas revisar el trabajo antes de exportar o continuar.", "Esta ficha explica el objetivo de Kit de herramientas PDF, los pasos principales y los límites que conviene revisar antes de usar un resultado.", "La revisión mantiene visibles las condiciones de privacidad, procesamiento y uso responsable antes de continuar."],
+    ["zh-hans", zhHans, "PDF 工具箱将本地操作与引导步骤结合起来，让你在导出或继续前完成审查。", "此详情页说明 PDF 工具箱 的用途、主要步骤，以及在使用结果前应确认的边界。", "继续前请确认隐私、处理方式和负责任使用的条件。"],
+    ["zh-hant", zhHant, "PDF 工具箱結合本機操作與引導步驟，讓你在匯出或繼續前完成審查。", "此詳情頁說明 PDF 工具箱 的用途、主要步驟，以及使用結果前應確認的界限。", "繼續前請確認隱私、處理方式和負責任使用的條件。"]
+  ])("uses complete localized content instead of English detail body in %s", (locale, messages, hero, overview, trust) => {
+    const detail = getToolDetailBySlug("pdf-toolkit");
+    if (!detail) throw new Error("missing PDF detail");
+
+    renderWithLocale(locale, messages, <ToolDetailView detail={detail} />);
+
+    expect(screen.getByText(hero)).toBeInTheDocument();
+    expect(screen.getByText(overview)).toBeInTheDocument();
+    expect(screen.getByText(trust)).toBeInTheDocument();
+    expect(screen.queryByText("Merge, split, compress, convert, summarize, and export PDFs in one place.")).not.toBeInTheDocument();
+    expect(screen.queryByText(detail.overview)).not.toBeInTheDocument();
+    expect(screen.getByText(locale === "es" ? "Cómo funciona" : locale === "zh-hans" ? "工作方式" : "運作方式")).toBeInTheDocument();
+    expect(screen.getByText(locale === "es" ? "Traspaso de implementación" : locale === "zh-hans" ? "实现交接" : "實作交接")).toBeInTheDocument();
+  });
+
+  it("passes the route locale to About metadata", async () => {
+    const metadata = await generateMetadata({ params: Promise.resolve({ locale: "zh-hans", slug: "pdf-toolkit" }) });
+
+    expect(metadata.title).toBe("PDF 工具箱概览");
+    expect(metadata.alternates?.canonical).toBe("/zh-hans/tools/pdf-toolkit/about");
+    expect(metadata.openGraph).toMatchObject({ url: "/zh-hans/tools/pdf-toolkit/about" });
   });
 
   it("renders the designed PDF Toolkit and JSON Repair public listings", () => {

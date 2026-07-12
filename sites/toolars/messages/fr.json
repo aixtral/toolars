@@ -14596,6 +14596,31 @@
       "localFiles": "Fichiers locaux",
       "retention": "Rétention"
     },
+    "seo": {
+      "title": "Présentation de {name}",
+      "description": "Découvrez ce que fait {name}, son fonctionnement et quand l'utiliser. {description}"
+    },
+    "content": {
+      "hero": "{name} associe des opérations locales à des étapes guidées afin que vous puissiez vérifier le travail avant d'exporter ou de continuer.",
+      "overview": "Cette page détaille l'objectif de {name}, les principales étapes et les limites à confirmer avant d'utiliser un résultat.",
+      "metrics": { "reviewLabel": "Étapes de vérification", "processingLabel": "Traitement par défaut", "boundaryLabel": "Limites d'utilisation" },
+      "steps": {
+        "prepare": { "title": "Préparer la tâche", "description": "Commencez avec les entrées ou fichiers nécessaires à la tâche sélectionnée, puis confirmez le résultat attendu." },
+        "review": { "title": "Vérifier le résultat", "description": "Contrôlez les hypothèses visibles, la sortie intermédiaire et les limites avant de vous fier au résultat." },
+        "continue": { "title": "Continuer ou exporter", "description": "Passez à l'action suivante seulement lorsque la vérification est terminée et que le résultat convient à votre objectif." }
+      },
+      "trust": {
+        "title": "Confidentialité et modèle de vérification",
+        "local": "Les étapes locales restent dans le navigateur lorsque l'outil prend en charge le traitement local.",
+        "review": "Vérifiez les hypothèses et limites visibles avant d'utiliser un résultat pour une décision ou un transfert.",
+        "handoff": "Le traitement externe ou l'export reste explicite afin que vous puissiez décider de poursuivre ou non."
+      },
+      "handoff": {
+        "workspace": { "title": "Flux de l'espace de travail", "description": "Gardez les entrées, la progression et les contrôles de résultat visibles durant toute la tâche." },
+        "review": { "title": "Liste de vérification", "description": "Confirmez le résultat, la limite de confidentialité et l'action suivante avant de finaliser le transfert." }
+      },
+      "outcome": "Cette page conserve le résultat attendu, les points de vérification et l'action suivante au même endroit."
+    },
     "workflow": {
       "meta": "{minutes} min · {runs} exécutions",
       "outcome": "{outcome} est le résultat principal du catalogue pour cette page de détail."

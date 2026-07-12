@@ -1,5 +1,44 @@
 import type { Metadata } from "next";
+import en from "../../../messages/en.json";
+import es from "../../../messages/es.json";
+import zhHans from "../../../messages/zh-hans.json";
+import zhHant from "../../../messages/zh-hant.json";
 import type { ToolDefinition } from "@/data/registry";
+import { DEFAULT_LOCALE, isLaunchLocale, localizePath, type LocaleCode } from "@/lib/i18n";
+
+const messagesByLocale = {
+  en,
+  es,
+  "zh-hans": zhHans,
+  "zh-hant": zhHant
+} as const;
+
+type ToolMetadataLocale = keyof typeof messagesByLocale;
+type ToolMessage = { description?: unknown; name?: unknown };
+
+function resolveMetadataLocale(locale: string | undefined): ToolMetadataLocale {
+  return locale && isLaunchLocale(locale) && locale in messagesByLocale
+    ? (locale as ToolMetadataLocale)
+    : (DEFAULT_LOCALE as ToolMetadataLocale);
+}
+
+function interpolate(template: string, values: Record<string, string>): string {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? "");
+}
+
+function getLocalizedToolName(tool: ToolDefinition, locale: ToolMetadataLocale): string {
+  const messages = messagesByLocale[locale];
+  const toolMessage = (messages.tools as Record<string, ToolMessage>)[tool.slug];
+
+  return typeof toolMessage?.name === "string" ? toolMessage.name : tool.name;
+}
+
+function getLocalizedToolDescription(tool: ToolDefinition, locale: ToolMetadataLocale): string {
+  const messages = messagesByLocale[locale];
+  const toolMessage = (messages.tools as Record<string, ToolMessage>)[tool.slug];
+
+  return typeof toolMessage?.description === "string" ? toolMessage.description : tool.description;
+}
 
 function buildKeywords(tool: ToolDefinition): string[] {
   const keywords = new Set<string>();
@@ -50,20 +89,29 @@ export function buildToolMetadata(tool: ToolDefinition): Metadata {
 /**
  * Build Next.js Metadata for a tool about/overview page (`/tools/[slug]/about`).
  */
-export function buildToolAboutMetadata(tool: ToolDefinition): Metadata {
+export function buildToolAboutMetadata(tool: ToolDefinition, locale?: string): Metadata {
+  const localeCode: LocaleCode = resolveMetadataLocale(locale);
+  const messages = messagesByLocale[localeCode];
+  const copy = messages.toolDetail.seo;
+  const name = getLocalizedToolName(tool, localeCode);
+  const toolDescription = getLocalizedToolDescription(tool, localeCode);
+  const title = interpolate(copy.title, { name, description: tool.description });
+  const description = interpolate(copy.description, { name, description: toolDescription });
+  const canonical = localizePath(tool.aboutHref, localeCode);
+
   return {
-    title: `${tool.name} overview`,
-    description: `What ${tool.name} does, how it works, and when to use it. ${tool.description}`,
+    title,
+    description,
     keywords: buildKeywords(tool),
     alternates: {
-      canonical: tool.aboutHref
+      canonical
     },
     robots: buildToolRobots(tool),
     openGraph: {
       type: "article",
-      title: `${tool.name} overview — Toolars`,
-      description: tool.description,
-      url: tool.aboutHref
+      title: `${title} — Toolars`,
+      description,
+      url: canonical
     }
   };
 }

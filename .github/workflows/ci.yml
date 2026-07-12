@@ -19,7 +19,10 @@ jobs:
     env:
       # Required so metadataBase / sitemap / JSON-LD resolve to an absolute URL
       # during the production build. No secrets needed for the build itself.
-      NEXT_PUBLIC_SITE_URL: https://toolars.app
+      NEXT_PUBLIC_SITE_URL: https://toolars-two.vercel.app
+      # A repository Actions variable can point release gates at a replacement
+      # temporary deployment without making an unbound canonical domain a gate.
+      TOOLARS_TEMP_PRODUCTION_ORIGIN: ${{ vars.TOOLARS_TEMP_PRODUCTION_ORIGIN || 'https://toolars-two.vercel.app' }}
       NEXT_TELEMETRY_DISABLED: "1"
 
     steps:
@@ -46,6 +49,13 @@ jobs:
 
       - name: Launch readiness
         run: pnpm run launch:readiness -- --full --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
+
+      - name: Temporary production certified tool smoke
+        run: pnpm exec node "$PWD/scripts/certified-tool-smoke.mjs" --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN" --write ../../output/launch-readiness/ci/deployed-certified-tool-smoke.json --output-dir ../../output/launch-readiness/ci/deployed-certified-tools
+
+      - name: Temporary production health
+        if: always()
+        run: pnpm exec node "$PWD/scripts/check-public-health.mjs" --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN"
 
       - name: Upload launch readiness report
         if: always()

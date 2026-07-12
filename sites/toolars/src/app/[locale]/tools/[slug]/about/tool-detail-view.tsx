@@ -205,6 +205,66 @@ function heroSummary(detail: ToolDetailDefinition): string {
   return designedHeroSummaries[detail.tool.slug] ?? `${detail.tool.description} ${detail.summary}`;
 }
 
+function genericDetailMetrics(t: ToolDetailTranslator) {
+  return [
+    { value: "3", label: t("content.metrics.reviewLabel") },
+    { value: t("processing.local"), label: t("content.metrics.processingLabel") },
+    { value: t("badges.review"), label: t("content.metrics.boundaryLabel") }
+  ];
+}
+
+function genericDetailSteps(t: ToolDetailTranslator) {
+  return [
+    {
+      title: t("content.steps.prepare.title"),
+      description: t("content.steps.prepare.description"),
+      badge: t("badges.process"),
+      tone: "local" as const
+    },
+    {
+      title: t("content.steps.review.title"),
+      description: t("content.steps.review.description"),
+      badge: t("badges.review")
+    },
+    {
+      title: t("content.steps.continue.title"),
+      description: t("content.steps.continue.description"),
+      badge: t("badges.handoff"),
+      tone: "workflow" as const
+    }
+  ];
+}
+
+function genericTrustSection(t: ToolDetailTranslator) {
+  return {
+    title: t("content.trust.title"),
+    rows: [
+      { badge: t("processing.local"), description: t("content.trust.local"), tone: "local" as const },
+      { badge: t("badges.review"), description: t("content.trust.review") },
+      { badge: t("badges.handoff"), description: t("content.trust.handoff"), tone: "workflow" as const }
+    ]
+  };
+}
+
+function genericHandoff(t: ToolDetailTranslator) {
+  return [
+    {
+      initials: "UI",
+      title: t("content.handoff.workspace.title"),
+      description: t("content.handoff.workspace.description"),
+      badge: t("badges.stable"),
+      accent: "blue"
+    },
+    {
+      initials: "QA",
+      title: t("content.handoff.review.title"),
+      description: t("content.handoff.review.description"),
+      badge: t("badges.review"),
+      accent: "emerald"
+    }
+  ];
+}
+
 function localizeInternalHref(href: string, localeCode: LocaleCode): string {
   if (!href.startsWith("/")) return href;
   return localizePath(href, localeCode);
@@ -228,6 +288,11 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
   const t = useTranslations("toolDetail") as ToolDetailTranslator;
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
+  const isEnglishBaseline = localeCode === DEFAULT_LOCALE;
+  const metrics = isEnglishBaseline ? detail.metrics : genericDetailMetrics(t);
+  const steps = isEnglishBaseline ? detail.howItWorks : genericDetailSteps(t);
+  const trustSection = isEnglishBaseline ? detail.trustSection : genericTrustSection(t);
+  const handoff = isEnglishBaseline ? detail.handoff : genericHandoff(t);
 
   return (
     <div
@@ -242,7 +307,7 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
           <span className="eyebrow">{t("eyebrow")}</span>
           <h1 className="title">{t("title", { name: tTools("name") })}</h1>
           <p className="subtitle tool-detail-hero-summary">
-            {heroSummary(detail)}
+            {isEnglishBaseline ? heroSummary(detail) : t("content.hero", { name: tTools("name") })}
           </p>
           <div className="badge-row detail-badge-row">
             {detailBadges(detail, t).map((badge) => (
@@ -272,9 +337,11 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
         <section className="tool-detail-main">
           <section className="panel tool-detail-overview-panel">
             <h2>{t("sections.overview")}</h2>
-            <p className="subtitle">{detail.overview}</p>
+            <p className="subtitle">
+              {isEnglishBaseline ? detail.overview : t("content.overview", { name: tTools("name") })}
+            </p>
             <div className="detail-metric-grid">
-              {detail.metrics.map((metric) => (
+              {metrics.map((metric) => (
                 <div className="detail-metric" key={`${metric.value}-${metric.label}`}>
                   <strong>{metric.value}</strong>
                   <span>{metric.label}</span>
@@ -286,7 +353,7 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
           <section className="panel section tool-detail-how-it-works-panel">
             <h2>{t("sections.howItWorks")}</h2>
             <div className="detail-step-list">
-              {detail.howItWorks.map((step, index) => (
+              {steps.map((step, index) => (
                 <article className="detail-step-row" key={step.title}>
                   <span className="mcp-stage-number">{index + 1}</span>
                   <span>
@@ -300,14 +367,14 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
           </section>
 
           <section className="panel section">
-            <h2>{detail.trustSection.title}</h2>
-            <DetailRows rows={detail.trustSection.rows} t={t} />
+            <h2>{trustSection.title}</h2>
+            <DetailRows rows={trustSection.rows} t={t} />
           </section>
 
           <section className="panel section">
             <h2>{t("sections.implementationHandoff")}</h2>
             <div className="detail-resource-list">
-              {detail.handoff.map((item) => (
+              {handoff.map((item) => (
                 <article className="detail-resource-row" key={item.title}>
                   <span className={`icon-tile ${item.accent}`}>{item.initials}</span>
                   <span>
@@ -370,7 +437,9 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
                   </small>
                 </span>
               </a>
-              <p className="detail-aside-note">{t("workflow.outcome", { outcome: detail.outcome })}</p>
+              <p className="detail-aside-note">
+                {isEnglishBaseline ? t("workflow.outcome", { outcome: detail.outcome }) : t("content.outcome")}
+              </p>
             </section>
           ) : null}
         </aside>

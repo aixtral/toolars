@@ -14596,6 +14596,35 @@
       "localFiles": "本地檔案",
       "retention": "保留策略"
     },
+    "seo": {
+      "title": "{name}概覽",
+      "description": "了解 {name} 的用途、運作方式以及適合使用的情境。{description}"
+    },
+    "content": {
+      "hero": "{name}結合本機操作與引導步驟，讓你在匯出或繼續前完成審查。",
+      "overview": "此詳情頁說明 {name} 的用途、主要步驟，以及使用結果前應確認的界限。",
+      "metrics": {
+        "reviewLabel": "審查步驟",
+        "processingLabel": "預設處理方式",
+        "boundaryLabel": "使用界限"
+      },
+      "steps": {
+        "prepare": { "title": "準備工作", "description": "從所需的輸入或檔案開始，並確認希望取得的結果。" },
+        "review": { "title": "審查結果", "description": "在依賴結果前，檢查可見的假設、中間輸出和限制。" },
+        "continue": { "title": "繼續或匯出", "description": "僅在審查完成且結果適合目前用途後，再執行下一步操作。" }
+      },
+      "trust": {
+        "title": "隱私與審查模式",
+        "local": "工具支援本機處理時，本機步驟會保留在瀏覽器中。",
+        "review": "繼續前請確認隱私、處理方式和負責任使用的條件。",
+        "handoff": "外部處理或匯出會明確顯示，以便你決定是否繼續。"
+      },
+      "handoff": {
+        "workspace": { "title": "工作區流程", "description": "在整個任務過程中保持輸入、進度和結果控制項清楚可見。" },
+        "review": { "title": "審查清單", "description": "完成交接前確認結果、隱私界限和下一步操作。" }
+      },
+      "outcome": "此詳情頁會在同一處清楚呈現預期結果、審查重點和下一步操作。"
+    },
     "workflow": {
       "meta": "{minutes} 分鐘 · {runs} 次執行",
       "outcome": "{outcome} 是此詳情頁的主要目錄結果。"

@@ -14596,6 +14596,31 @@
       "localFiles": "Arquivos locais",
       "retention": "Retenção"
     },
+    "seo": {
+      "title": "Visão geral de {name}",
+      "description": "Veja o que {name} faz, como funciona e quando usá-la. {description}"
+    },
+    "content": {
+      "hero": "{name} combina operações locais e etapas guiadas para que você revise o trabalho antes de exportar ou continuar.",
+      "overview": "Esta página detalhada explica o objetivo de {name}, as principais etapas e os limites a confirmar antes de usar um resultado.",
+      "metrics": { "reviewLabel": "Etapas de revisão", "processingLabel": "Processamento padrão", "boundaryLabel": "Limites de uso" },
+      "steps": {
+        "prepare": { "title": "Preparar a tarefa", "description": "Comece com as entradas ou arquivos necessários para a tarefa selecionada e confirme o resultado desejado." },
+        "review": { "title": "Revisar o resultado", "description": "Verifique as premissas visíveis, a saída intermediária e os limites antes de depender do resultado." },
+        "continue": { "title": "Continuar ou exportar", "description": "Use a próxima ação do espaço de trabalho somente depois que a revisão terminar e o resultado estiver adequado ao seu objetivo." }
+      },
+      "trust": {
+        "title": "Privacidade e modelo de revisão",
+        "local": "As etapas locais permanecem no navegador sempre que a ferramenta aceita processamento local.",
+        "review": "Revise as premissas e limitações visíveis antes de usar um resultado para uma decisão ou transferência.",
+        "handoff": "O processamento externo ou a exportação permanece explícito para que você escolha se deseja continuar."
+      },
+      "handoff": {
+        "workspace": { "title": "Fluxo do espaço de trabalho", "description": "Mantenha entradas, progresso e controles de resultado visíveis durante toda a tarefa." },
+        "review": { "title": "Lista de revisão", "description": "Confirme o resultado, o limite de privacidade e a próxima ação antes de concluir a transferência." }
+      },
+      "outcome": "Esta página detalhada mantém o resultado pretendido, os pontos de revisão e a próxima ação visíveis em um só lugar."
+    },
     "workflow": {
       "meta": "{minutes} min · {runs} execuções",
       "outcome": "{outcome} é o principal resultado do catálogo para esta página de detalhes."

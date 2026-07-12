@@ -161,7 +161,7 @@ export function scanSourceText(source, file) {
   const hardcodedText = [];
   const absoluteHrefs = [];
   const attributePattern = /\b(aria-label|placeholder|title|alt)=["']([^"']+)["']/g;
-  const textNodePattern = />\s*([^<>{}][^<>{}]*?)\s*</g;
+  const textNodePattern = /(?<!=)>\s*([^<>{}][^<>{}]*?)\s*</g;
   const hrefPattern = /\bhref=["'](\/(?!\/|#)[^"']*)["']/g;
 
   for (const match of source.matchAll(attributePattern)) {

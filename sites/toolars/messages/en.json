@@ -14599,6 +14599,35 @@
       "localFiles": "Local files",
       "retention": "Retention"
     },
+    "seo": {
+      "title": "{name} overview",
+      "description": "What {name} does, how it works, and when to use it. {description}"
+    },
+    "content": {
+      "hero": "{name} combines local operations and guided steps so you can review work before exporting or continuing.",
+      "overview": "This detail page explains the purpose of {name}, the main steps, and the boundaries to confirm before using a result.",
+      "metrics": {
+        "reviewLabel": "Review steps",
+        "processingLabel": "Default processing",
+        "boundaryLabel": "Usage boundaries"
+      },
+      "steps": {
+        "prepare": { "title": "Prepare the task", "description": "Start with the inputs or files needed for the selected task, then confirm the intended result." },
+        "review": { "title": "Review the result", "description": "Check the visible assumptions, intermediate output, and any limits before relying on the result." },
+        "continue": { "title": "Continue or export", "description": "Use the next workspace action only after the review step is complete and the result is suitable for your purpose." }
+      },
+      "trust": {
+        "title": "Privacy and review model",
+        "local": "Local steps stay in the browser whenever the tool supports local processing.",
+        "review": "Review the visible assumptions and limitations before using a result for a decision or handoff.",
+        "handoff": "External processing or export should remain explicit so you can choose whether to continue."
+      },
+      "handoff": {
+        "workspace": { "title": "Workspace flow", "description": "Keep inputs, progress, and result controls visible throughout the task." },
+        "review": { "title": "Review checklist", "description": "Confirm the result, privacy boundary, and next action before completing the handoff." }
+      },
+      "outcome": "This detail page keeps the intended outcome, review points, and next action visible in one place."
+    },
     "workflow": {
       "meta": "{minutes} min · {runs} runs",
       "outcome": "{outcome} is the primary catalog outcome for this detail page."

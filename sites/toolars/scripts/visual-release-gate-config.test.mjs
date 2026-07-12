@@ -14,8 +14,8 @@ describe("visual release gate config", () => {
     expect(MOBILE_RELEASE_GATE_VISUAL_IDS).toContain("53");
   });
 
-  it("targets the four desktop hotspot screens requested for release gating", () => {
-    expect(DESKTOP_HOTSPOT_VISUAL_IDS).toEqual(["01", "02", "03", "05"]);
+  it("includes the requested tool-detail desktop screens in the desktop hotspots", () => {
+    expect(DESKTOP_HOTSPOT_VISUAL_IDS).toEqual(["01", "02", "03", "05", "28", "29"]);
   });
 
   it("selects scoped release gates with explicit default thresholds", () => {

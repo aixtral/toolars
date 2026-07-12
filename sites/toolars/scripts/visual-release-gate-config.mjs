@@ -3,7 +3,7 @@ export const MOBILE_RELEASE_GATE_VISUAL_IDS = [
   ...Array.from({ length: 27 }, (_item, index) => String(index + 31).padStart(2, "0"))
 ];
 
-export const DESKTOP_HOTSPOT_VISUAL_IDS = ["01", "02", "03", "05"];
+export const DESKTOP_HOTSPOT_VISUAL_IDS = ["01", "02", "03", "05", "28", "29"];
 
 export function getReleaseGateDefinitions() {
   return [

@@ -227,6 +227,18 @@ describe("i18n audit", () => {
     expect(scan.absoluteHrefs.map((item) => item.href)).toEqual(["/tools/json-repair"]);
   });
 
+  it("does not mistake an arrow function body for a JSX text node", () => {
+    const scan = scanSourceText(
+      `
+        const localizedHref = (href) => localizePath(href, localeCode);
+        return <a>{t("nav.explore")}</a>;
+      `,
+      "src/components/example.tsx"
+    );
+
+    expect(scan.hardcodedText).toEqual([]);
+  });
+
   it("audits the real Toolars message files without requiring a clean translation state", async () => {
     const audit = await createI18nAudit({ siteRoot });
 

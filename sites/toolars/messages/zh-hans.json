@@ -14596,6 +14596,35 @@
       "localFiles": "本地文件",
       "retention": "保留策略"
     },
+    "seo": {
+      "title": "{name}概览",
+      "description": "了解 {name} 的用途、工作方式以及适合使用的场景。{description}"
+    },
+    "content": {
+      "hero": "{name}将本地操作与引导步骤结合起来，让你在导出或继续前完成审查。",
+      "overview": "此详情页说明 {name} 的用途、主要步骤，以及在使用结果前应确认的边界。",
+      "metrics": {
+        "reviewLabel": "审查步骤",
+        "processingLabel": "默认处理方式",
+        "boundaryLabel": "使用边界"
+      },
+      "steps": {
+        "prepare": { "title": "准备任务", "description": "从所需的输入或文件开始，并确认希望获得的结果。" },
+        "review": { "title": "审查结果", "description": "在依赖结果前，检查可见的假设、中间输出和限制。" },
+        "continue": { "title": "继续或导出", "description": "仅在审查完成且结果适合当前用途后，再执行下一步操作。" }
+      },
+      "trust": {
+        "title": "隐私与审查模式",
+        "local": "工具支持本地处理时，本地步骤会保留在浏览器中。",
+        "review": "继续前请确认隐私、处理方式和负责任使用的条件。",
+        "handoff": "外部处理或导出会明确显示，以便你决定是否继续。"
+      },
+      "handoff": {
+        "workspace": { "title": "工作区流程", "description": "在整个任务过程中保持输入、进度和结果控制项清晰可见。" },
+        "review": { "title": "审查清单", "description": "完成交接前确认结果、隐私边界和下一步操作。" }
+      },
+      "outcome": "此详情页会在同一处清晰呈现预期结果、审查要点和下一步操作。"
+    },
     "workflow": {
       "meta": "{minutes} 分钟 · {runs} 次运行",
       "outcome": "{outcome} 是此详情页的主要目录结果。"

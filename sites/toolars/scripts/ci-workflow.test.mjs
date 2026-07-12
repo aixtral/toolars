@@ -25,7 +25,9 @@ describe("CI workflow", () => {
 
   it("keeps local-only dependencies out of the hosted readiness run while calibrating Linux visual diffs", () => {
     expect(workflow).toContain("TOOLARS_TEST_SCRIPT=test:ci");
+    expect(workflow).toContain("TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1");
     expect(workflow).toContain("--visual-mobile-max-ratio 0.14");
+    expect(workflow).toContain("continue-on-error: true");
     expect(workflow).toContain("--skip-production-health --skip-source-inventory");
   });
 

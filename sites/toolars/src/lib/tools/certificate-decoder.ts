@@ -248,8 +248,12 @@ function getValidityStatus(notBefore: Date, notAfter: Date): CertificateDecoded[
 
 async function digestHex(algorithm: AlgorithmIdentifier, bytes: Uint8Array): Promise<string> {
   if (globalThis.crypto?.subtle) {
-    const digest = await globalThis.crypto.subtle.digest(algorithm, toArrayBuffer(bytes));
-    return colonHex(new Uint8Array(digest));
+    try {
+      const digest = await globalThis.crypto.subtle.digest(algorithm, toArrayBuffer(bytes));
+      return colonHex(new Uint8Array(digest));
+    } catch {
+      // Some browser shells expose Web Crypto but reject legacy digest algorithms.
+    }
   }
   return colonHex(fallbackDigest(bytes));
 }

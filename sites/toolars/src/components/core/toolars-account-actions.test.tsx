@@ -38,6 +38,7 @@ describe("ToolarsAccountActions", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
 
     await waitFor(() => expect(signOut).toHaveBeenCalledTimes(1));
+    expect(screen.getByRole("status")).toHaveClass("topbar-account-toast");
     expect(screen.getByRole("status")).toHaveTextContent("Signed out.");
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument();

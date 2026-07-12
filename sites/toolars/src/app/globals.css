@@ -304,6 +304,7 @@ select {
   align-items: center;
   gap: 3px;
   padding: 0;
+  position: relative;
 }
 
 .topbar-account-menu {
@@ -365,8 +366,9 @@ select {
   top: calc(100% + 8px);
   right: 0;
   z-index: 70;
-  display: grid;
-  width: 232px;
+  display: flex;
+  flex-direction: column;
+  width: 220px;
   padding: 6px;
   background: var(--canvas);
   border: 1px solid var(--border);
@@ -378,7 +380,8 @@ select {
   display: flex;
   align-items: center;
   gap: 9px;
-  padding: 8px 8px 10px;
+  padding: 8px;
+  margin-bottom: 2px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -406,7 +409,9 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  min-height: 34px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 36px;
   padding: 0 9px;
   color: var(--ink-secondary);
   background: transparent;
@@ -418,13 +423,13 @@ select {
 }
 
 .topbar-account-menu-link {
-  margin-top: 4px;
+  margin: 0;
 }
 
 .topbar-account-menu-sign-out {
-  width: 100%;
   margin-top: 4px;
-  padding-top: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   color: var(--ink-muted);
   border-top: 1px solid var(--border);
   cursor: pointer;
@@ -434,6 +439,36 @@ select {
 .topbar-account-menu-sign-out:hover {
   color: var(--ink);
   background: var(--surface);
+}
+
+.topbar-account-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 120;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 0 13px;
+  color: var(--ink);
+  background: var(--canvas);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.topbar-account-toast.success {
+  color: #047857;
+  border-color: #86efac;
+}
+
+.topbar-account-toast.error {
+  color: var(--danger);
+  border-color: #fca5a5;
 }
 
 .topbar-sign-in,

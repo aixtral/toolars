@@ -25,9 +25,13 @@ describe("certified tool smoke manifest", () => {
     expect(scenarioSlugs).toEqual(certifiedSlugs);
     expect(getCertifiedToolFailureCoverage()).toMatchObject({
       total: 55,
-      contracted: 29,
+      contracted: 30,
       disabledRun: 29,
-      invalidInput: 0
+      invalidInput: 1
+    });
+    expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "json-repair")?.failureAssertion).toMatchObject({
+      type: "invalidInput",
+      resultAssertion: { type: "selectorVisible", selector: ".status-error" }
     });
     for (const scenario of certifiedToolSmokeScenarios) {
       expect(scenario.path).toBe(`/tools/${scenario.slug}`);

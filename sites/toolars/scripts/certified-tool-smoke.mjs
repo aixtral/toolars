@@ -38,6 +38,13 @@ const disabledRunFailureSlugs = new Set([
   "yaml-validator"
 ]);
 
+const invalidInputFailureScenarios = {
+  "json-repair": {
+    inputActions: [{ type: "fill", selector: "#json-input", value: "" }],
+    resultAssertion: { type: "selectorVisible", selector: ".status-error" }
+  }
+};
+
 export const certifiedToolSmokeScenarios = [
   {
     slug: "pdf-toolkit",
@@ -613,17 +620,20 @@ export const certifiedToolSmokeScenarios = [
     resultAssertion: { type: "selectorText", selector: ".llm-metric strong", text: "$140.00" }
   }
 ].map((scenario) => {
-  if (!disabledRunFailureSlugs.has(scenario.slug)) return scenario;
+  if (disabledRunFailureSlugs.has(scenario.slug)) {
+    return {
+      ...scenario,
+      failureAssertion: {
+        type: "disabledRun",
+        inputActions: scenario.inputActions
+          .filter((action) => action.type === "fill")
+          .map((action) => ({ ...action, value: "" }))
+      }
+    };
+  }
 
-  return {
-    ...scenario,
-    failureAssertion: {
-      type: "disabledRun",
-      inputActions: scenario.inputActions
-        .filter((action) => action.type === "fill")
-        .map((action) => ({ ...action, value: "" }))
-    }
-  };
+  const invalidInput = invalidInputFailureScenarios[scenario.slug];
+  return invalidInput ? { ...scenario, failureAssertion: { type: "invalidInput", ...invalidInput } } : scenario;
 });
 
 export function getCertifiedToolFailureCoverage(scenarios = certifiedToolSmokeScenarios) {
@@ -779,6 +789,10 @@ async function assertResult(page, assertion) {
     await page.getByRole("button", { name: assertion.name, exact: true }).waitFor({ state: "visible" });
     const disabled = await page.getByRole("button", { name: assertion.name, exact: true }).getAttribute("disabled");
     if (disabled === null) throw new Error(`Expected button ${assertion.name} to be disabled`);
+    return;
+  }
+  if (assertion.type === "selectorVisible") {
+    await page.locator(assertion.selector).first().waitFor({ state: "visible" });
     return;
   }
   throw new Error(`Unsupported result assertion: ${assertion.type}`);

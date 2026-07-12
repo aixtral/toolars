@@ -85,9 +85,17 @@ export function formatProductionHealthReport(result) {
   return lines.join("\n");
 }
 
+export function getProductionHealthRequestHeaders(env = process.env) {
+  const token = env.TOOLARS_HEALTHCHECK_TOKEN?.trim();
+
+  return token
+    ? { accept: "application/json", authorization: `Bearer ${token}` }
+    : { accept: "application/json" };
+}
+
 async function fetchProductionHealth(baseUrl) {
   const response = await fetch(`${baseUrl}/api/system/production-health`, {
-    headers: { accept: "application/json" }
+    headers: getProductionHealthRequestHeaders()
   });
 
   if (!response.ok) {

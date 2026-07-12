@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   evaluateProductionHealth,
   formatProductionHealthReport,
+  getProductionHealthRequestHeaders,
   parseProductionHealthArgs
 } from "./check-production-health.mjs";
 
@@ -71,6 +72,14 @@ describe("production health check", () => {
     expect(parseProductionHealthArgs(["--", "--base-url", "https://toolars.app/"])).toMatchObject({
       baseUrl: "https://toolars.app"
     });
+  });
+
+  it("sends the configured health token without exposing it in the report", () => {
+    expect(getProductionHealthRequestHeaders({ TOOLARS_HEALTHCHECK_TOKEN: "health-token" })).toEqual({
+      accept: "application/json",
+      authorization: "Bearer health-token"
+    });
+    expect(getProductionHealthRequestHeaders({})).toEqual({ accept: "application/json" });
   });
 
   it("formats blocker and warning evidence without secret values", () => {

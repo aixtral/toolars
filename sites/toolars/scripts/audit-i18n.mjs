@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import ts from "typescript";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSiteRoot = path.resolve(scriptDir, "..");
@@ -160,27 +161,29 @@ export function auditCopiedEnglishByPhase(copiedEnglishByLocale) {
 export function scanSourceText(source, file) {
   const hardcodedText = [];
   const absoluteHrefs = [];
-  const attributePattern = /\b(aria-label|placeholder|title|alt)=["']([^"']+)["']/g;
-  const textNodePattern = /(?<!=)>\s*([^<>{}][^<>{}]*?)\s*</g;
-  const hrefPattern = /\bhref=["'](\/(?!\/|#)[^"']*)["']/g;
+  const sourceFile = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 
-  for (const match of source.matchAll(attributePattern)) {
-    const text = normalizeText(match[2]);
-    if (isLikelyHardcodedEnglish(text)) {
-      hardcodedText.push({ file, text, kind: match[1] });
+  const visit = (node) => {
+    if (ts.isJsxText(node)) {
+      const text = normalizeText(node.getText(sourceFile));
+      if (isLikelyHardcodedEnglish(text)) hardcodedText.push({ file, text, kind: "text-node" });
     }
-  }
 
-  for (const match of source.matchAll(textNodePattern)) {
-    const text = normalizeText(match[1]);
-    if (isLikelyHardcodedEnglish(text)) {
-      hardcodedText.push({ file, text, kind: "text-node" });
+    if (ts.isJsxAttribute(node) && node.initializer && ts.isStringLiteral(node.initializer)) {
+      const name = node.name.text;
+      const value = node.initializer.text;
+
+      if (["aria-label", "placeholder", "title", "alt"].includes(name) && isLikelyHardcodedEnglish(normalizeText(value))) {
+        hardcodedText.push({ file, text: normalizeText(value), kind: name });
+      }
+
+      if (name === "href" && /^\/(?!\/|#)/.test(value)) absoluteHrefs.push({ file, href: value });
     }
-  }
 
-  for (const match of source.matchAll(hrefPattern)) {
-    absoluteHrefs.push({ file, href: match[1] });
-  }
+    ts.forEachChild(node, visit);
+  };
+
+  visit(sourceFile);
 
   return {
     file,
@@ -340,6 +343,7 @@ function keyEndsWithAny(key, suffixes) {
 
 function isLikelyHardcodedEnglish(text) {
   if (!text || text.length < 3) return false;
+  if (/^&(?:copy|reg|trade);$/i.test(text)) return false;
   if (!/[A-Za-z]/.test(text)) return false;
   if (/^[A-Z0-9 /&+-]{2,8}$/.test(text)) return false;
   if (/^[{}()[\].,:;'"`]+$/.test(text)) return false;

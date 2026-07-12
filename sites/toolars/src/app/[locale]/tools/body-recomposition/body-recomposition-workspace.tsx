@@ -22,6 +22,7 @@ const goalOptionKeys: Record<BodyRecompositionGoal, "recomp" | "slowCut" | "main
 
 export function BodyRecompositionWorkspace() {
   const t = useTranslations("tools.body-recomposition.workspace");
+  const rootT = useTranslations();
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const detailsHref = localizePath("/tools/body-recomposition/about", localeCode);
@@ -120,7 +121,7 @@ export function BodyRecompositionWorkspace() {
               <select className="input" id="recomp-goal" onChange={(event) => updateGoal(event.target.value as BodyRecompositionGoal)} value={plan.goal}>
                 {bodyRecompositionGoals.map((goal) => (
                   <option key={goal.value} value={goal.value}>
-                    {t(`options.goals.${goalOptionKeys[goal.value]}`)} (-{goal.deficit} kcal)
+                    {t(`options.goals.${goalOptionKeys[goal.value]}`)} ({rootT("tools.calorie-deficit.workspace.formats.calories", { value: -goal.deficit })})
                   </option>
                 ))}
               </select>
@@ -148,11 +149,11 @@ export function BodyRecompositionWorkspace() {
 
           <div className="llm-metric-grid">
             <article className="llm-metric">
-              <strong>{result?.formattedTargetCalories ?? "0 kcal"}</strong>
+              <strong>{result?.formattedTargetCalories ?? rootT("tools.calorie-deficit.workspace.formats.calories", { value: 0 })}</strong>
               <span>{t("metrics.targetCalories")}</span>
             </article>
             <article className="llm-metric">
-              <strong>{result?.formattedTdee ?? "0 kcal"}</strong>
+              <strong>{result?.formattedTdee ?? rootT("tools.calorie-deficit.workspace.formats.calories", { value: 0 })}</strong>
               <span>{t("metrics.tdee")}</span>
             </article>
             <article className="llm-metric">

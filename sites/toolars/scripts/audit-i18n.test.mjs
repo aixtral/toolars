@@ -239,6 +239,18 @@ describe("i18n audit", () => {
     expect(scan.hardcodedText).toEqual([]);
   });
 
+  it("does not mistake a TypeScript generic closing token for a JSX text node", () => {
+    const scan = scanSourceText(
+      `
+        const [toast, setToast] = useState<AccountToast | null>(null);
+        return <span>{t("auth.signOut.signedOut")}</span>;
+      `,
+      "src/components/example.tsx"
+    );
+
+    expect(scan.hardcodedText).toEqual([]);
+  });
+
   it("audits the real Toolars message files without requiring a clean translation state", async () => {
     const audit = await createI18nAudit({ siteRoot });
 
@@ -252,7 +264,7 @@ describe("i18n audit", () => {
       draft: audit.messages.copiedEnglishAccounting.draft.total
     });
     expect(audit.messages.copiedEnglishAccounting.draft.locales).toEqual(["ar", "fr", "hi", "ja", "pt", "ru"]);
-    expect(audit.summary.hardcodedTextCandidates).toBeGreaterThanOrEqual(0);
-    expect(audit.summary.absoluteHrefCandidates).toBeGreaterThanOrEqual(0);
+    expect(audit.summary.hardcodedTextCandidates).toBe(0);
+    expect(audit.summary.absoluteHrefCandidates).toBe(0);
   });
 });

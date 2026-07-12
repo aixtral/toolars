@@ -1,7 +1,7 @@
 "use client";
 
 import { ClipboardList, Gauge, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
 import { planTokenBudget, type TokenBudgetAllocationInput, type TokenBudgetPlan } from "@/lib/tools/token-budget-planner";
@@ -10,6 +10,8 @@ const defaultAllocations = "System | 1500\nUser | 2500\nRetrieval | 18000\nTools
 
 export function TokenBudgetPlannerWorkspace() {
   const t = useTranslations("tools.token-budget-planner.workspace");
+  const rootT = useTranslations();
+  const locale = useLocale();
   const [totalBudget, setTotalBudget] = useState(32000);
   const [allocationsText, setAllocationsText] = useState(defaultAllocations);
   const [result, setResult] = useState<TokenBudgetPlan | null>(null);
@@ -32,7 +34,7 @@ export function TokenBudgetPlannerWorkspace() {
         </section>
       </main>
       <aside className="workspace-stack">
-        <section className="workspace-panel"><div className="workspace-section-title" style={{ marginTop: 0 }}><h2>{t("allocationRowsTitle")}</h2><ShieldCheck size={18} aria-hidden="true" /></div><div className="detail-resource-list">{(result?.allocations ?? []).map((allocation) => <article className="detail-resource-row" key={allocation.label}><span className="icon-tile blue">{allocation.percent}%</span><span><strong>{allocation.label}</strong><small>{allocation.tokens.toLocaleString("en-US")} tokens</small></span></article>)}</div></section>
+        <section className="workspace-panel"><div className="workspace-section-title" style={{ marginTop: 0 }}><h2>{t("allocationRowsTitle")}</h2><ShieldCheck size={18} aria-hidden="true" /></div><div className="detail-resource-list">{(result?.allocations ?? []).map((allocation) => <article className="detail-resource-row" key={allocation.label}><span className="icon-tile blue">{allocation.percent}%</span><span><strong>{allocation.label}</strong><small>{allocation.tokens.toLocaleString(locale)} {rootT("commonToolTags.tokens")}</small></span></article>)}</div></section>
         <section className="workspace-panel"><h2>{t("handoffTitle")}</h2><p className="tool-description">{t("handoffCopy")}</p></section>
       </aside>
     </AiLabWorkbenchShell>

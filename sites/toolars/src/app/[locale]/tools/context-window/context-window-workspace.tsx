@@ -1,7 +1,7 @@
 "use client";
 
 import { ClipboardList, Gauge, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
 import { visualizeContextWindow, type ContextWindowResult, type ContextSegmentInput } from "@/lib/tools/context-window";
@@ -10,6 +10,8 @@ const defaultSegments = "System | 1200\nUser | 800\nRetrieval | 9000\nTools | 12
 
 export function ContextWindowWorkspace() {
   const t = useTranslations("tools.context-window.workspace");
+  const rootT = useTranslations();
+  const locale = useLocale();
   const [maxTokens, setMaxTokens] = useState(16000);
   const [segmentsText, setSegmentsText] = useState(defaultSegments);
   const [result, setResult] = useState<ContextWindowResult | null>(null);
@@ -32,7 +34,7 @@ export function ContextWindowWorkspace() {
         </section>
       </main>
       <aside className="workspace-stack">
-        <section className="workspace-panel"><div className="workspace-section-title" style={{ marginTop: 0 }}><h2>{t("segmentsTitle")}</h2><ShieldCheck size={18} aria-hidden="true" /></div><div className="detail-resource-list">{(result?.segments ?? []).map((segment) => <article className="detail-resource-row" key={segment.label}><span className="icon-tile blue">{segment.percent}%</span><span><strong>{segment.label}</strong><small>{segment.tokens.toLocaleString("en-US")} tokens</small></span></article>)}</div></section>
+        <section className="workspace-panel"><div className="workspace-section-title" style={{ marginTop: 0 }}><h2>{t("segmentsTitle")}</h2><ShieldCheck size={18} aria-hidden="true" /></div><div className="detail-resource-list">{(result?.segments ?? []).map((segment) => <article className="detail-resource-row" key={segment.label}><span className="icon-tile blue">{segment.percent}%</span><span><strong>{segment.label}</strong><small>{segment.tokens.toLocaleString(locale)} {rootT("commonToolTags.tokens")}</small></span></article>)}</div></section>
         <section className="workspace-panel"><h2>{t("handoffTitle")}</h2><p className="tool-description">{t("handoffCopy")}</p></section>
       </aside>
     </AiLabWorkbenchShell>

@@ -42,6 +42,14 @@ const invalidInputFailureScenarios = {
   "json-repair": {
     inputActions: [{ type: "fill", selector: "#json-input", value: "" }],
     resultAssertion: { type: "selectorVisible", selector: ".status-error" }
+  },
+  "password-generator": {
+    inputActions: [{ type: "fill", selector: "#password-generator-length", value: "2" }],
+    resultAssertion: { type: "pageText", text: "Length must be between 4 and 128" }
+  },
+  "chmod-calculator": {
+    inputActions: [{ type: "fill", selector: "#chmod-input", value: "99" }],
+    resultAssertion: { type: "pageText", text: "Enter a 3-digit octal mode" }
   }
 };
 

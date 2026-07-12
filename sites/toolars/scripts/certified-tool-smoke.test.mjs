@@ -25,13 +25,21 @@ describe("certified tool smoke manifest", () => {
     expect(scenarioSlugs).toEqual(certifiedSlugs);
     expect(getCertifiedToolFailureCoverage()).toMatchObject({
       total: 55,
-      contracted: 30,
+      contracted: 32,
       disabledRun: 29,
-      invalidInput: 1
+      invalidInput: 3
     });
     expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "json-repair")?.failureAssertion).toMatchObject({
       type: "invalidInput",
       resultAssertion: { type: "selectorVisible", selector: ".status-error" }
+    });
+    expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "password-generator")?.failureAssertion).toMatchObject({
+      type: "invalidInput",
+      resultAssertion: { type: "pageText", text: "Length must be between 4 and 128" }
+    });
+    expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "chmod-calculator")?.failureAssertion).toMatchObject({
+      type: "invalidInput",
+      resultAssertion: { type: "pageText", text: "Enter a 3-digit octal mode" }
     });
     for (const scenario of certifiedToolSmokeScenarios) {
       expect(scenario.path).toBe(`/tools/${scenario.slug}`);

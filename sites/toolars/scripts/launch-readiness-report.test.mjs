@@ -64,6 +64,17 @@ describe("launch readiness report", () => {
     expect(plan.find((gate) => gate.id === "button-behavior-audit")?.args).toContain("scripts/audit-button-behavior.mjs");
   });
 
+  it("can skip local config and source-repository gates when CI supplies remote equivalents", () => {
+    const parsed = parseLaunchReadinessArgs(["--full", "--skip-production-health", "--skip-source-inventory"]);
+    const plan = createLaunchReadinessPlan({ ...parsed, outputRoot: "/tmp/toolars-launch-readiness" });
+
+    expect(parsed).toMatchObject({ skipProductionHealth: true, skipSourceInventory: true });
+    expect(plan.map((gate) => gate.id)).not.toContain("production-health");
+    expect(plan.map((gate) => gate.id)).not.toContain("tool-inventory-audit");
+    expect(plan.map((gate) => gate.id)).toContain("certified-tool-smoke");
+    expect(plan.map((gate) => gate.id)).toContain("visual-release-gate");
+  });
+
   it("adds browser smoke and visual gates for full release mode", () => {
     const plan = createLaunchReadinessPlan({
       full: true,

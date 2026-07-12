@@ -11,6 +11,8 @@ export function createLaunchReadinessPlan({
   full = false,
   browser = full,
   visual = full,
+  skipProductionHealth = false,
+  skipSourceInventory = false,
   baseUrl = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088",
   outputRoot = defaultOutputRoot()
 } = {}) {
@@ -19,17 +21,21 @@ export function createLaunchReadinessPlan({
     gate("unit-tests", "Vitest unit and workspace tests", "pnpm", ["test"]),
     gate("typecheck", "TypeScript typecheck", "pnpm", ["run", "typecheck"]),
     gate("production-build", "Next.js production build", "pnpm", ["run", "build"]),
-    browserGate("production-health", "Production health gate", "node", [
-      "scripts/check-production-health.mjs",
-      "--base-url",
-      baseUrl
-    ], baseUrl, {
-      TOOLARS_BASE_URL: baseUrl
-    }),
-    gate("tool-inventory-audit", "Tool inventory audit", "node", [
-      "scripts/audit-tool-inventory.mjs",
-      "--write",
-      path.join(auditsRoot, "tool-inventory.json")
+    ...(skipProductionHealth ? [] : [
+      browserGate("production-health", "Production health gate", "node", [
+        "scripts/check-production-health.mjs",
+        "--base-url",
+        baseUrl
+      ], baseUrl, {
+        TOOLARS_BASE_URL: baseUrl
+      })
+    ]),
+    ...(skipSourceInventory ? [] : [
+      gate("tool-inventory-audit", "Tool inventory audit", "node", [
+        "scripts/audit-tool-inventory.mjs",
+        "--write",
+        path.join(auditsRoot, "tool-inventory.json")
+      ])
     ]),
     browserGate("certified-tool-smoke", "Certified tool browser smoke", "node", [
       "scripts/certified-tool-smoke.mjs",
@@ -232,6 +238,8 @@ export function parseLaunchReadinessArgs(argv) {
 
   if (args.has("--browser")) parsed.browser = true;
   if (args.has("--visual")) parsed.visual = true;
+  if (args.has("--skip-production-health")) parsed.skipProductionHealth = true;
+  if (args.has("--skip-source-inventory")) parsed.skipSourceInventory = true;
 
   return parsed;
 }

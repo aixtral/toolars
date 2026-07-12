@@ -8,11 +8,11 @@ const workflow = readFileSync(path.join(repoRoot, ".github/workflows/ci.yml"), "
 describe("CI workflow", () => {
   it("runs the full launch readiness gate on a managed production server", () => {
     expect(workflow).toContain("Launch readiness");
-    expect(workflow).toContain("pnpm run launch:readiness -- --full --base-url http://127.0.0.1:9188");
+    expect(workflow).toContain("pnpm run launch:readiness -- --full --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188");
   });
 
   it("uses the configurable temporary production origin for deployed smoke and public health gates", () => {
-    expect(workflow).toContain("NEXT_PUBLIC_SITE_URL: https://toolars-two.vercel.app");
+    expect(workflow).not.toContain("NEXT_PUBLIC_SITE_URL:");
     expect(workflow).toContain("TOOLARS_TEMP_PRODUCTION_ORIGIN: ${{ vars.TOOLARS_TEMP_PRODUCTION_ORIGIN || 'https://toolars-two.vercel.app' }}");
     expect(workflow).toContain("Temporary production certified tool smoke");
     expect(workflow).toContain("Temporary production health");
@@ -20,6 +20,11 @@ describe("CI workflow", () => {
     expect(workflow).toContain('pnpm exec node "$PWD/scripts/certified-tool-smoke.mjs" --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN"');
     expect(workflow).not.toContain('pnpm run release:health -- --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN"');
     expect(workflow).not.toContain("https://toolars.app");
+  });
+
+  it("keeps local-only dependencies out of the hosted readiness run while calibrating Linux visual diffs", () => {
+    expect(workflow).toContain("TOOLARS_RELEASE_GATE_MOBILE_MAX_RATIO=0.14");
+    expect(workflow).toContain("--skip-production-health --skip-source-inventory");
   });
 
   it("installs the Playwright browser required by smoke and visual gates", () => {

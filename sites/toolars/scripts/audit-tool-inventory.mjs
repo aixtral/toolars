@@ -15,9 +15,16 @@ const aixtralSourceSlugAliases = {
 
 export async function createToolInventoryAudit(options = {}) {
   const roots = resolveRoots(options);
+  const allowMissingMigrationSources = options.allowMissingMigrationSources === true
+    || process.env.TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES === "1";
   const registry = loadTypeScriptExports(path.join(roots.siteRoot, "src/data/registry.ts"));
   const localeData = loadTypeScriptExports(path.join(roots.siteRoot, "src/data/locales.ts"));
-  const aixtralConfig = loadTypeScriptExports(path.join(roots.aixtralLabRoot, "src/lib/tool-config.ts"));
+  const aixtralConfigPath = path.join(roots.aixtralLabRoot, "src/lib/tool-config.ts");
+  const aixtralConfig = existsSync(aixtralConfigPath)
+    ? loadTypeScriptExports(aixtralConfigPath)
+    : allowMissingMigrationSources
+      ? { TOOLS: [] }
+      : loadTypeScriptExports(aixtralConfigPath);
 
   const registryTools = registry.tools ?? [];
   const registeredPublicTools = registry.publicTools ?? registryTools;

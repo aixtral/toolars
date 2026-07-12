@@ -13,12 +13,14 @@ export function createLaunchReadinessPlan({
   visual = full,
   skipProductionHealth = false,
   skipSourceInventory = false,
+  testScript = process.env.TOOLARS_TEST_SCRIPT ?? "test",
+  visualMobileMaxRatio,
   baseUrl = process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088",
   outputRoot = defaultOutputRoot()
 } = {}) {
   const auditsRoot = path.join(outputRoot, "audits");
   const gates = [
-    gate("unit-tests", "Vitest unit and workspace tests", "pnpm", ["test"]),
+    gate("unit-tests", "Vitest unit and workspace tests", "pnpm", ["run", testScript]),
     gate("typecheck", "TypeScript typecheck", "pnpm", ["run", "typecheck"]),
     gate("production-build", "Next.js production build", "pnpm", ["run", "build"]),
     ...(skipProductionHealth ? [] : [
@@ -91,7 +93,8 @@ export function createLaunchReadinessPlan({
     gates.push(
       browserGate("visual-release-gate", "Visual release gate", "node", ["scripts/visual-release-gate.mjs"], baseUrl, {
         TOOLARS_BASE_URL: baseUrl,
-        TOOLARS_RELEASE_GATE_OUTPUT_DIR: path.join(outputRoot, "visual-release-gate")
+        TOOLARS_RELEASE_GATE_OUTPUT_DIR: path.join(outputRoot, "visual-release-gate"),
+        ...(visualMobileMaxRatio ? { TOOLARS_RELEASE_GATE_MOBILE_MAX_RATIO: visualMobileMaxRatio } : {})
       })
     );
   }
@@ -233,7 +236,8 @@ export function parseLaunchReadinessArgs(argv) {
   const parsed = {
     full: args.has("--full"),
     baseUrl: valueAfter("--base-url") ?? process.env.TOOLARS_BASE_URL ?? "http://127.0.0.1:9088",
-    outputRoot: valueAfter("--output")
+    outputRoot: valueAfter("--output"),
+    visualMobileMaxRatio: valueAfter("--visual-mobile-max-ratio")
   };
 
   if (args.has("--browser")) parsed.browser = true;

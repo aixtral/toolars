@@ -65,14 +65,17 @@ describe("launch readiness report", () => {
   });
 
   it("can skip local config and source-repository gates when CI supplies remote equivalents", () => {
-    const parsed = parseLaunchReadinessArgs(["--full", "--skip-production-health", "--skip-source-inventory"]);
+    const parsed = parseLaunchReadinessArgs(["--full", "--visual-mobile-max-ratio", "0.14", "--skip-production-health", "--skip-source-inventory"]);
     const plan = createLaunchReadinessPlan({ ...parsed, outputRoot: "/tmp/toolars-launch-readiness" });
 
-    expect(parsed).toMatchObject({ skipProductionHealth: true, skipSourceInventory: true });
+    expect(parsed).toMatchObject({ skipProductionHealth: true, skipSourceInventory: true, visualMobileMaxRatio: "0.14" });
     expect(plan.map((gate) => gate.id)).not.toContain("production-health");
     expect(plan.map((gate) => gate.id)).not.toContain("tool-inventory-audit");
     expect(plan.map((gate) => gate.id)).toContain("certified-tool-smoke");
     expect(plan.map((gate) => gate.id)).toContain("visual-release-gate");
+    expect(plan.find((gate) => gate.id === "visual-release-gate")?.env).toMatchObject({
+      TOOLARS_RELEASE_GATE_MOBILE_MAX_RATIO: "0.14"
+    });
   });
 
   it("adds browser smoke and visual gates for full release mode", () => {

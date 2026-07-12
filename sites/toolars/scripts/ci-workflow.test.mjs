@@ -8,7 +8,8 @@ const workflow = readFileSync(path.join(repoRoot, ".github/workflows/ci.yml"), "
 describe("CI workflow", () => {
   it("runs the full launch readiness gate on a managed production server", () => {
     expect(workflow).toContain("Launch readiness");
-    expect(workflow).toContain("pnpm run launch:readiness -- --full --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188");
+    expect(workflow).toContain("pnpm run launch:readiness -- --full --visual-mobile-max-ratio 0.14 --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188");
+    expect(workflow).toContain("TOOLARS_TEST_SCRIPT=test:ci");
   });
 
   it("uses the configurable temporary production origin for deployed smoke and public health gates", () => {
@@ -23,7 +24,8 @@ describe("CI workflow", () => {
   });
 
   it("keeps local-only dependencies out of the hosted readiness run while calibrating Linux visual diffs", () => {
-    expect(workflow).toContain("TOOLARS_RELEASE_GATE_MOBILE_MAX_RATIO=0.14");
+    expect(workflow).toContain("TOOLARS_TEST_SCRIPT=test:ci");
+    expect(workflow).toContain("--visual-mobile-max-ratio 0.14");
     expect(workflow).toContain("--skip-production-health --skip-source-inventory");
   });
 

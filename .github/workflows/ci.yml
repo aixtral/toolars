@@ -45,7 +45,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Launch readiness
-        run: TOOLARS_RELEASE_GATE_MOBILE_MAX_RATIO=0.14 pnpm run launch:readiness -- --full --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
+        run: TOOLARS_TEST_SCRIPT=test:ci pnpm run launch:readiness -- --full --visual-mobile-max-ratio 0.14 --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
 
       - name: Temporary production certified tool smoke
         run: pnpm exec node "$PWD/scripts/certified-tool-smoke.mjs" --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN" --write ../../output/launch-readiness/ci/deployed-certified-tool-smoke.json --output-dir ../../output/launch-readiness/ci/deployed-certified-tools

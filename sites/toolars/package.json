@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start -p 9088",
     "test": "vitest run",
+    "test:ci": "TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1 vitest run --exclude scripts/audit-tool-inventory.test.mjs --maxWorkers=8",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "audit:button-behavior": "node scripts/audit-button-behavior.mjs",

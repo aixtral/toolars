@@ -157,6 +157,20 @@ const aixtralBatch9Slugs = [
 ];
 
 describe("tool inventory audit", () => {
+  it("can retain Toolars launch coverage when an explicitly optional migration source is absent", async () => {
+    const audit = await createToolInventoryAudit({
+      siteRoot,
+      aixtralLabRoot: "/tmp/toolars-missing-aixtral-lab",
+      allowMissingMigrationSources: true,
+      vitalcalcRoot: "/tmp/toolars-missing-vitalcalc"
+    });
+
+    expect(audit.summary.toolars).toMatchObject({
+      launchCertifiedTools: 55,
+      publicUncertifiedTools: 0
+    });
+    expect(audit.summary.sources.aixtralLab.configTools).toBe(0);
+  });
   it("reports the current Toolars registry and source-project coverage", async () => {
     const audit = await createToolInventoryAudit({ siteRoot, ...sourceRoots });
 

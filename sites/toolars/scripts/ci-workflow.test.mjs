@@ -6,6 +6,12 @@ const repoRoot = path.resolve(import.meta.dirname, "../../..");
 const workflow = readFileSync(path.join(repoRoot, ".github/workflows/ci.yml"), "utf8");
 
 describe("CI workflow", () => {
+  it("cancels superseded branch runs so release feedback stays focused on the latest commit", () => {
+    expect(workflow).toContain("concurrency:");
+    expect(workflow).toContain("group: ci-${{ github.workflow }}-${{ github.ref }}");
+    expect(workflow).toContain("cancel-in-progress: true");
+  });
+
   it("runs the full launch readiness gate on a managed production server", () => {
     expect(workflow).toContain("Launch readiness");
     expect(workflow).toContain("pnpm run launch:readiness -- --full --visual-mobile-max-ratio 0.14 --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188");

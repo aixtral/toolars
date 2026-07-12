@@ -628,6 +628,11 @@
     },
     "workspaceReady": "Your workspace is ready",
     "trust": "Your access stays private.",
+    "menu": {
+      "open": "Open account menu",
+      "account": "Account",
+      "settings": "Personal center"
+    },
     "status": {
       "failed": "We couldn't start {provider}. Try again.",
       "notConfigured": "Sign in isn't available right now. Please try again later.",

@@ -1,8 +1,6 @@
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { resetServerConsentAuditLedger, setServerConsentAuditLedgerStoragePathForTest } from "@/lib/ai/server-consent-audit-ledger";
+import type { ToolarsPrivateAuditRecord, ToolarsPrivateDataDriver } from "@/lib/supabase/toolars-private-data";
+import { setToolarsPrivateDataDriverForTest } from "@/lib/supabase/toolars-private-data";
 import { setToolarsSupabaseServerAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-server";
 import { POST } from "./route";
 
@@ -29,25 +27,24 @@ const runMetadata = {
 };
 
 describe("/api/ai/provider-runs", () => {
-  let tempDirectory: string;
+  let recordsByUser: Map<string, ToolarsPrivateAuditRecord[]>;
   const originalEndpoint = process.env.TOOLARS_AI_PROVIDER_ENDPOINT;
   const originalApiKey = process.env.TOOLARS_AI_PROVIDER_API_KEY;
 
   beforeEach(() => {
-    tempDirectory = mkdtempSync(join(tmpdir(), "toolars-api-provider-run-"));
+    recordsByUser = new Map();
     process.env.TOOLARS_AI_PROVIDER_ENDPOINT = "https://ai-provider.toolars.test";
     process.env.TOOLARS_AI_PROVIDER_API_KEY = "ai-provider-secret";
-    setServerConsentAuditLedgerStoragePathForTest(join(tempDirectory, "ledger.json"));
-    resetServerConsentAuditLedger();
+    setToolarsPrivateDataDriverForTest(createAuditDriver(recordsByUser));
+    setSupabaseUser({ email: "owner@example.com", id: "user_provider_owner" });
   });
 
   afterEach(() => {
     process.env.TOOLARS_AI_PROVIDER_ENDPOINT = originalEndpoint;
     process.env.TOOLARS_AI_PROVIDER_API_KEY = originalApiKey;
-    setServerConsentAuditLedgerStoragePathForTest(null);
+    setToolarsPrivateDataDriverForTest(null);
     setToolarsSupabaseServerAuthDriverForTest(null);
     vi.unstubAllGlobals();
-    rmSync(tempDirectory, { force: true, recursive: true });
   });
 
   it("executes the configured AI provider and records usage analytics in the server ledger", async () => {
@@ -78,7 +75,6 @@ describe("/api/ai/provider-runs", () => {
         }),
         headers: {
           "Content-Type": "application/json",
-          "x-toolars-workspace-id": "toolars_ws_ai_provider_test"
         },
         method: "POST"
       })
@@ -95,7 +91,7 @@ describe("/api/ai/provider-runs", () => {
         runId: "run_pdf-summary_summarize-with-ai_20260621T101000Z",
         stepId: "summarize-with-ai",
         workflowSlug: "pdf-summary",
-        workspaceId: "toolars_ws_ai_provider_test"
+        workspaceId: "user:user_ai_owner"
       }),
       headers: {
         Accept: "application/json",
@@ -132,6 +128,23 @@ describe("/api/ai/provider-runs", () => {
     });
   });
 
+  it("rejects an unauthenticated provider run before calling the configured provider", async () => {
+    setToolarsSupabaseServerAuthDriverForTest(null);
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await POST(
+      new Request("http://toolars.test/api/ai/provider-runs", {
+        body: JSON.stringify({ event, prompt: "Summarize.", runMetadata }),
+        headers: { "Content-Type": "application/json", "x-toolars-workspace-id": "victim-workspace" },
+        method: "POST"
+      })
+    );
+
+    expect(response.status).toBe(401);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it("records provider failures with model route metadata and returns a provider error", async () => {
     vi.stubGlobal(
       "fetch",
@@ -150,7 +163,6 @@ describe("/api/ai/provider-runs", () => {
         }),
         headers: {
           "Content-Type": "application/json",
-          "x-toolars-workspace-id": "toolars_ws_ai_failure_test"
         },
         method: "POST"
       })
@@ -179,4 +191,20 @@ function setSupabaseUser(user: { email: string; id: string }) {
     }),
     signOut: vi.fn()
   });
+}
+
+function createAuditDriver(recordsByUser: Map<string, ToolarsPrivateAuditRecord[]>): ToolarsPrivateDataDriver {
+  return {
+    async createAuditRecord({ event, runMetadata, userId }) {
+      const record = { createdAt: new Date().toISOString(), event, runMetadata };
+      recordsByUser.set(userId, [...(recordsByUser.get(userId) ?? []), record]);
+      return record;
+    },
+    async listAuditRecords({ userId }) { return recordsByUser.get(userId) ?? []; },
+    async deleteAuditRecords() { return { deletedRecords: 0 }; },
+    async createPdfUpload() { throw new Error("not used"); },
+    async listPdfUploads() { return []; },
+    async getPdfUpload() { return null; },
+    async deletePdfUpload() { return false; }
+  };
 }

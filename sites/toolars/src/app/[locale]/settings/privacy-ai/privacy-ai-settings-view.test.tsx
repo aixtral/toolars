@@ -3,7 +3,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AI_CONSENT_AUDIT_STORAGE_KEY } from "@/lib/ai/consent-audit-storage";
-import { WORKSPACE_IDENTITY_STORAGE_KEY, bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
 import en from "../../../../../messages/en.json";
 import { PrivacyAiSettingsView } from "./privacy-ai-settings-view";
 
@@ -249,36 +248,15 @@ describe("PrivacyAiSettingsView", () => {
     expect(screen.getByText("consent-approved")).toBeInTheDocument();
   });
 
-  it("refreshes server auth context when the workspace identity changes after sign-in", async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({
-          auth: {
-            accountEmail: null,
-            accountId: null,
-            isAuthenticated: false,
-            source: "anonymous",
-            workspaceId: "toolars_ws_privacy_refresh"
-          },
-          ledger: {
-            deletions: [],
-            events: [],
-            runs: [],
-            version: 1,
-            workspaceId: "toolars_ws_privacy_refresh"
-          }
-        }),
-        ok: true
-      })
-      .mockResolvedValueOnce({
+  it("renders the authenticated server audit context returned for the current session", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
         json: vi.fn().mockResolvedValue({
           auth: {
             accountEmail: "owner@example.com",
             accountId: "acct-owner",
             isAuthenticated: true,
-            source: "preview-header",
-            workspaceId: "toolars_ws_privacy_refresh"
+            source: "supabase",
+            workspaceId: "user:acct-owner"
           },
           ledger: {
             accountBindings: [
@@ -287,7 +265,7 @@ describe("PrivacyAiSettingsView", () => {
                 accountId: "acct-owner",
                 boundAt: "2026-06-21T09:10:00Z",
                 source: "future-login",
-                workspaceId: "toolars_ws_privacy_refresh"
+                workspaceId: "user:acct-owner"
               }
             ],
             deletions: [],
@@ -305,22 +283,10 @@ describe("PrivacyAiSettingsView", () => {
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
 
-    bindWorkspaceIdentityToAccount({
-      accountEmail: "owner@example.com",
-      accountId: "acct-owner",
-      now: () => "2026-06-21T09:10:00Z"
-    });
-
     expect(await screen.findByText("Account ledger connected")).toBeInTheDocument();
     expect(screen.getByText("acct-owner")).toBeInTheDocument();
     expect(screen.getByText("owner@example.com")).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenLastCalledWith("/api/ai/consent-audit", {
-      headers: {
-        "x-toolars-account-email": "owner@example.com",
-        "x-toolars-account-id": "acct-owner",
-        "x-toolars-workspace-id": expect.stringMatching(/^toolars_ws_/)
-      }
-    });
+    expect(fetchMock).toHaveBeenLastCalledWith("/api/ai/consent-audit");
   });
 
   it("exports and deletes AI history while retaining server deletion audit status", async () => {
@@ -351,16 +317,6 @@ describe("PrivacyAiSettingsView", () => {
         events: [auditEvent]
       })
     );
-    window.localStorage.setItem(
-      WORKSPACE_IDENTITY_STORAGE_KEY,
-      JSON.stringify({
-        createdAt: "2026-06-19T10:08:00Z",
-        source: "anonymous-local",
-        version: 1,
-        workspaceId: "toolars_ws_privacy_test"
-      })
-    );
-
     const fetchMock = vi.fn((_url: string, init?: RequestInit) => {
       const ledger =
         init?.method === "DELETE"
@@ -407,15 +363,8 @@ describe("PrivacyAiSettingsView", () => {
     expect(screen.getByText("0 server audit runs with metadata")).toBeInTheDocument();
     expect(screen.getByText("1 deletion request retained in server ledger")).toBeInTheDocument();
     expect(window.localStorage.getItem(AI_CONSENT_AUDIT_STORAGE_KEY)).toBeNull();
+    expect(fetchMock).toHaveBeenCalledWith("/api/ai/consent-audit");
     expect(fetchMock).toHaveBeenCalledWith("/api/ai/consent-audit", {
-      headers: {
-        "x-toolars-workspace-id": "toolars_ws_privacy_test"
-      }
-    });
-    expect(fetchMock).toHaveBeenCalledWith("/api/ai/consent-audit", {
-      headers: {
-        "x-toolars-workspace-id": "toolars_ws_privacy_test"
-      },
       method: "DELETE"
     });
   });

@@ -23,7 +23,6 @@ import {
   type PdfUploadServerHandoffRecord
 } from "@/lib/tools/pdf-upload-lifecycle";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
-import { buildWorkspaceAuditHeaders } from "@/lib/workspace/workspace-identity";
 
 type PdfWorkspaceTranslator = ReturnType<typeof useTranslations>;
 type PdfUploadSelectionEvent = {
@@ -195,7 +194,6 @@ export function PdfToolkitWorkspace() {
     try {
       const response = await fetch("/api/pdf/uploads", {
         body: formData,
-        headers: buildWorkspaceAuditHeaders(),
         method: "POST"
       });
       if (!response.ok) throw new Error("PDF upload temp store unavailable");

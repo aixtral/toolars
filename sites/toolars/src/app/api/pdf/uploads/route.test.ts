@@ -1,383 +1,112 @@
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { registerPdfUploadTempObjects, resetPdfUploadTempStore, setPdfUploadTempStorePathForTest } from "@/lib/tools/pdf-upload-server-store";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { ToolarsPrivateDataDriver, ToolarsPrivatePdfUpload } from "@/lib/supabase/toolars-private-data";
+import { setToolarsPrivateDataDriverForTest } from "@/lib/supabase/toolars-private-data";
+import { setToolarsSupabaseServerAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-server";
 import { DELETE, GET, POST } from "./route";
 import { GET as GET_OBJECT } from "./object/route";
 import { POST as POST_SCAN } from "./scan/route";
 
-/**
- * Anchor upload timestamps to the current time so signed-object URLs never
- * go stale between the time the fixture is written and the test asserts.
- */
-function recentTimestamp() {
-  return new Date().toISOString();
-}
-
 describe("/api/pdf/uploads", () => {
-  let tempDirectory: string;
+  let uploadsByUser: Map<string, ToolarsPrivatePdfUpload[]>;
 
   beforeEach(() => {
-    tempDirectory = mkdtempSync(join(tmpdir(), "toolars-api-pdf-upload-"));
-    setPdfUploadTempStorePathForTest(join(tempDirectory, "uploads.json"));
-    resetPdfUploadTempStore();
+    uploadsByUser = new Map();
+    setToolarsPrivateDataDriverForTest(createPdfDriver(uploadsByUser));
+    setSupabaseUser("pdf-owner");
   });
 
   afterEach(() => {
-    setPdfUploadTempStorePathForTest(null);
-    rmSync(tempDirectory, { force: true, recursive: true });
+    setToolarsPrivateDataDriverForTest(null);
+    setToolarsSupabaseServerAuthDriverForTest(null);
   });
 
-  it("registers File API uploads as scanned temporary handoff objects", async () => {
-    const formData = new FormData();
-    const upload = new File(["%PDF-1.7"], "Board Pack.pdf", { type: "application/pdf" });
-    formData.append("files", upload, upload.name);
-    formData.append("fileNames", upload.name);
+  it("rejects anonymous PDF writes despite a forged workspace header", async () => {
+    setToolarsSupabaseServerAuthDriverForTest(null);
+    const response = await POST(uploadRequest("private.pdf", { "x-toolars-workspace-id": "victim-workspace" }));
+    expect(response.status).toBe(401);
+    expect(uploadsByUser.size).toBe(0);
+  });
 
-    const response = await POST(
-      new Request("http://toolars.test/api/pdf/uploads", {
-        body: formData,
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_upload_test"
-        },
-        method: "POST"
-      })
-    );
+  it("creates a private Supabase-backed handoff for the authenticated user", async () => {
+    const response = await POST(uploadRequest("Board Pack.pdf", { "x-toolars-workspace-id": "untrusted-workspace" }));
     const payload = await response.json();
-
     expect(response.status).toBe(201);
     expect(payload.uploads[0]).toMatchObject({
-      deleteStatus: "active",
-      fileName: "Board Pack.pdf",
-      handoffTarget: "pdf-summary",
-      scanLabel: "Server scan passed",
-      scanStatus: "ready",
-      workspaceId: "toolars_ws_api_upload_test"
-    });
-
-    const handoffResponse = await GET(
-      new Request("http://toolars.test/api/pdf/uploads?handoff=pdf-summary", {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_upload_test"
-        }
-      })
-    );
-    const handoffPayload = await handoffResponse.json();
-
-    expect(handoffPayload.uploads).toHaveLength(1);
-    expect(handoffPayload.uploads[0].handoffToken).toMatch(/^handoff_pdf-summary_/);
-    expect(handoffPayload.uploads[0].signedHandoffUrl).toContain("signature=");
-
-    const signedHandoffResponse = await GET(
-      new Request(`http://toolars.test${handoffPayload.uploads[0].signedHandoffUrl}`, {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_upload_test"
-        }
-      })
-    );
-    const signedHandoffPayload = await signedHandoffResponse.json();
-
-    expect(signedHandoffResponse.status).toBe(200);
-    expect(signedHandoffPayload.upload).toMatchObject({
-      fileName: "Board Pack.pdf",
-      handoffToken: handoffPayload.uploads[0].handoffToken,
+      fileName: "blob",
+      retentionLabel: "Private temporary storage",
+      scanLabel: "PDF type and size validated",
       scanStatus: "ready"
     });
-    expect(signedHandoffPayload.upload.signedObjectUrl).toContain("/api/pdf/uploads/object?");
-    expect(signedHandoffPayload.upload.signedObjectUrl).toContain("signature=");
+    expect(payload.uploads[0].signedObjectUrl).toContain("https://storage.test/");
+    expect((uploadsByUser.get("pdf-owner") ?? [])).toHaveLength(1);
   });
 
-  it("marks a temporary upload deleted by workspace and upload id", async () => {
-    const formData = new FormData();
-    const upload = new File(["%PDF-1.7"], "Delete Me.pdf", { type: "application/pdf" });
-    formData.append("files", upload, upload.name);
-    formData.append("fileNames", upload.name);
+  it("does not expose another user's upload when the client replays its id or workspace header", async () => {
+    const created = await (await POST(uploadRequest("Owner.pdf"))).json();
+    const uploadId = created.uploads[0].uploadId as string;
 
-    const created = await (
-      await POST(
-        new Request("http://toolars.test/api/pdf/uploads", {
-          body: formData,
-          headers: {
-            "x-toolars-workspace-id": "toolars_ws_api_delete_test"
-          },
-          method: "POST"
-        })
-      )
-    ).json();
+    setSupabaseUser("other-user");
+    const listResponse = await GET(new Request("http://toolars.test/api/pdf/uploads?handoffToken=" + uploadId, { headers: { "x-toolars-workspace-id": "pdf-owner" } }));
+    const objectResponse = await GET_OBJECT(new Request("http://toolars.test/api/pdf/uploads/object?uploadId=" + uploadId, { headers: { "x-toolars-workspace-id": "pdf-owner" } }));
+    const deleteResponse = await DELETE(new Request("http://toolars.test/api/pdf/uploads", { body: JSON.stringify({ uploadId }), method: "DELETE" }));
 
-    const response = await DELETE(
-      new Request("http://toolars.test/api/pdf/uploads", {
-        body: JSON.stringify({ uploadId: created.uploads[0].uploadId }),
-        headers: {
-          "Content-Type": "application/json",
-          "x-toolars-workspace-id": "toolars_ws_api_delete_test"
-        },
-        method: "DELETE"
-      })
-    );
-    const payload = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(payload.deletion).toMatchObject({
-      deleteStatus: "deleted",
-      fileName: "Delete Me.pdf",
-      uploadId: created.uploads[0].uploadId
-    });
-
-    const handoffs = await (
-      await GET(
-        new Request("http://toolars.test/api/pdf/uploads?handoff=pdf-summary", {
-          headers: {
-            "x-toolars-workspace-id": "toolars_ws_api_delete_test"
-          }
-        })
-      )
-    ).json();
-
-    expect(handoffs.uploads).toHaveLength(0);
+    expect(listResponse.status).toBe(404);
+    expect(objectResponse.status).toBe(404);
+    expect(deleteResponse.status).toBe(404);
+    expect((uploadsByUser.get("pdf-owner") ?? [])).toHaveLength(1);
   });
 
-  it("serves signed temporary PDF object content and rejects tampered object URLs", async () => {
-    const content = "%PDF-1.7\nroute-object-content";
-    const [record] = registerPdfUploadTempObjects({
-      files: [
-        {
-          contentBase64: Buffer.from(content).toString("base64"),
-          contentHash: "sha256-route-object-content",
-          name: "Route Object.pdf",
-          size: Buffer.byteLength(content),
-          type: "application/pdf"
-        }
-      ],
-      uploadedAt: recentTimestamp(),
-      workspaceId: "toolars_ws_api_object_test"
-    });
+  it("redirects the owner to a short-lived storage URL and protects the scan endpoint", async () => {
+    const created = await (await POST(uploadRequest("Owner.pdf"))).json();
+    const uploadId = created.uploads[0].uploadId as string;
+    const objectResponse = await GET_OBJECT(new Request("http://toolars.test/api/pdf/uploads/object?uploadId=" + uploadId));
+    expect(objectResponse.status).toBe(302);
+    expect(objectResponse.headers.get("location")).toContain("https://storage.test/");
 
-    const objectResponse = await GET_OBJECT(
-      new Request(`http://toolars.test${record.signedObjectUrl}`, {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_object_test"
-        }
-      })
-    );
-
-    expect(objectResponse.status).toBe(200);
-    expect(objectResponse.headers.get("content-type")).toBe("application/pdf");
-    expect(objectResponse.headers.get("cache-control")).toBe("no-store");
-    expect(await objectResponse.text()).toBe(content);
-
-    const tampered = await GET_OBJECT(
-      new Request(`http://toolars.test${record.signedObjectUrl.replace("signature=", "signature=tampered")}`, {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_object_test"
-        }
-      })
-    );
-
-    expect(tampered.status).toBe(403);
-  });
-
-  it("records object access audit entries for granted and rejected object reads", async () => {
-    const content = "%PDF-1.7\nroute-object-audit";
-    const [record] = registerPdfUploadTempObjects({
-      files: [
-        {
-          contentBase64: Buffer.from(content).toString("base64"),
-          contentHash: "sha256-route-object-audit",
-          name: "Route Object Audit.pdf",
-          size: Buffer.byteLength(content),
-          type: "application/pdf"
-        }
-      ],
-      uploadedAt: recentTimestamp(),
-      workspaceId: "toolars_ws_api_object_audit_test"
-    });
-
-    await GET_OBJECT(
-      new Request(`http://toolars.test${record.signedObjectUrl}`, {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_object_audit_test"
-        }
-      })
-    );
-    await GET_OBJECT(
-      new Request(`http://toolars.test${record.signedObjectUrl.replace("signature=", "signature=tampered")}`, {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_object_audit_test"
-        }
-      })
-    );
-
-    const ledger = await (
-      await GET(
-        new Request("http://toolars.test/api/pdf/uploads?handoff=pdf-summary", {
-          headers: {
-            "x-toolars-workspace-id": "toolars_ws_api_object_audit_test"
-          }
-        })
-      )
-    ).json();
-
-    expect(ledger.objectAccesses).toEqual([
-      expect.objectContaining({
-        accessStatus: "granted",
-        fileName: "Route Object Audit.pdf",
-        objectKey: record.objectKey,
-        uploadId: record.uploadId,
-        workspaceId: "toolars_ws_api_object_audit_test"
-      }),
-      expect.objectContaining({
-        accessStatus: "rejected",
-        denyReason: "invalid-or-expired-object-access",
-        objectKey: record.objectKey,
-        workspaceId: "toolars_ws_api_object_audit_test"
-      })
-    ]);
-    expect(ledger.objectAccesses[0].accessedAt).toEqual(expect.any(String));
-    expect(ledger.objectAccesses[1].accessedAt).toEqual(expect.any(String));
-  });
-
-  it("rejects tampered signed handoffs and sweeps expired temp objects", async () => {
-    const [expiredRecord] = registerPdfUploadTempObjects({
-      files: [
-        {
-          contentHash: "sha256-route-expired",
-          name: "Route Expired.pdf",
-          size: 350_000,
-          type: "application/pdf"
-        }
-      ],
-      uploadedAt: "2026-06-19T10:00:00Z",
-      workspaceId: "toolars_ws_api_retention_test"
-    });
-    registerPdfUploadTempObjects({
-      files: [
-        {
-          contentHash: "sha256-route-active",
-          name: "Route Active.pdf",
-          size: 350_000,
-          type: "application/pdf"
-        }
-      ],
-      uploadedAt: "2026-06-19T11:45:00Z",
-      workspaceId: "toolars_ws_api_retention_test"
-    });
-
-    const tampered = await GET(
-      new Request(`http://toolars.test/api/pdf/uploads?handoffToken=${expiredRecord.handoffToken}&signature=tampered`, {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_retention_test"
-        }
-      })
-    );
-
-    expect(tampered.status).toBe(403);
-
-    const sweep = await DELETE(
-      new Request("http://toolars.test/api/pdf/uploads?sweep=expired&now=2026-06-19T12:31:00Z", {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_retention_test"
-        },
-        method: "DELETE"
-      })
-    );
-    const sweepPayload = await sweep.json();
-
-    expect(sweep.status).toBe(200);
-    expect(sweepPayload.deletions).toEqual([
-      expect.objectContaining({
-        deleteReason: "expired",
-        fileName: "Route Expired.pdf",
-        uploadId: expiredRecord.uploadId
-      })
-    ]);
-
-    const handoffs = (await (
-      await GET(
-        new Request("http://toolars.test/api/pdf/uploads?handoff=pdf-summary", {
-          headers: {
-            "x-toolars-workspace-id": "toolars_ws_api_retention_test"
-          }
-        })
-      )
-    ).json()) as { deletions: Array<{ deleteReason: string; fileName: string }>; uploads: Array<{ fileName: string }> };
-
-    expect(handoffs.uploads.map((upload) => upload.fileName)).toEqual(["Route Active.pdf"]);
-    expect(handoffs.deletions).toEqual([
-      expect.objectContaining({
-        deleteReason: "expired",
-        fileName: "Route Expired.pdf"
-      })
-    ]);
-  });
-
-  it("queues File API uploads for the async scan worker before exposing handoffs", async () => {
-    const formData = new FormData();
-    const upload = new File(["%PDF-1.7\nasync-route"], "Async Route.pdf", { type: "application/pdf" });
-    formData.append("files", upload, upload.name);
-    formData.append("fileNames", upload.name);
-
-    const queuedResponse = await POST(
-      new Request("http://toolars.test/api/pdf/uploads?scan=async", {
-        body: formData,
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_scan_worker_test"
-        },
-        method: "POST"
-      })
-    );
-    const queuedPayload = await queuedResponse.json();
-
-    expect(queuedResponse.status).toBe(201);
-    expect(queuedPayload.uploads[0]).toMatchObject({
-      fileName: "Async Route.pdf",
-      scanLabel: "Queued for server scan",
-      scanStatus: "queued"
-    });
-
-    const emptyHandoffs = await (
-      await GET(
-        new Request("http://toolars.test/api/pdf/uploads?handoff=pdf-summary", {
-          headers: {
-            "x-toolars-workspace-id": "toolars_ws_api_scan_worker_test"
-          }
-        })
-      )
-    ).json();
-
-    expect(emptyHandoffs.uploads).toHaveLength(0);
-
-    const scanResponse = await POST_SCAN(
-      new Request("http://toolars.test/api/pdf/uploads/scan", {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_api_scan_worker_test"
-        },
-        method: "POST"
-      })
-    );
-    const scanPayload = await scanResponse.json();
-
-    expect(scanResponse.status).toBe(200);
-    expect(scanPayload.processed).toEqual([
-      expect.objectContaining({
-        fileName: "Async Route.pdf",
-        scanLabel: "Server scan passed",
-        scanStatus: "ready"
-      })
-    ]);
-
-    const readyHandoffs = await (
-      await GET(
-        new Request("http://toolars.test/api/pdf/uploads?handoff=pdf-summary", {
-          headers: {
-            "x-toolars-workspace-id": "toolars_ws_api_scan_worker_test"
-          }
-        })
-      )
-    ).json();
-
-    expect(readyHandoffs.uploads).toHaveLength(1);
-    expect(readyHandoffs.uploads[0].signedObjectUrl).toContain("signature=");
+    setToolarsSupabaseServerAuthDriverForTest(null);
+    expect((await POST_SCAN(new Request("http://toolars.test/api/pdf/uploads/scan", { method: "POST" }))).status).toBe(401);
   });
 });
+
+function uploadRequest(fileName: string, headers?: HeadersInit) {
+  const formData = new FormData();
+  formData.append("files", new File(["%PDF-1.7"], fileName, { type: "application/pdf" }), fileName);
+  return new Request("http://toolars.test/api/pdf/uploads", { body: formData, headers, method: "POST" });
+}
+
+function createPdfDriver(uploadsByUser: Map<string, ToolarsPrivatePdfUpload[]>): ToolarsPrivateDataDriver {
+  return {
+    async createPdfUpload({ expiresAt, fileName, fileSizeBytes, userId }) {
+      const id = `upload-${(uploadsByUser.get(userId) ?? []).length + 1}`;
+      const record = {
+        createdAt: new Date().toISOString(),
+        expiresAt,
+        fileName,
+        fileSizeBytes,
+        id,
+        objectPath: `${userId}/${id}.pdf`,
+        signedObjectUrl: `https://storage.test/${userId}/${id}.pdf?token=short-lived`
+      };
+      uploadsByUser.set(userId, [...(uploadsByUser.get(userId) ?? []), record]);
+      return record;
+    },
+    async listPdfUploads({ userId }) { return uploadsByUser.get(userId) ?? []; },
+    async getPdfUpload({ id, userId }) { return (uploadsByUser.get(userId) ?? []).find((upload) => upload.id === id) ?? null; },
+    async deletePdfUpload({ id, userId }) {
+      const current = uploadsByUser.get(userId) ?? [];
+      if (!current.some((upload) => upload.id === id)) return false;
+      uploadsByUser.set(userId, current.filter((upload) => upload.id !== id));
+      return true;
+    },
+    async createAuditRecord() { throw new Error("not used"); },
+    async listAuditRecords() { return []; },
+    async deleteAuditRecords() { return { deletedRecords: 0 }; }
+  };
+}
+
+function setSupabaseUser(id: string) {
+  setToolarsSupabaseServerAuthDriverForTest({
+    getUser: vi.fn().mockResolvedValue({ data: { user: { email: `${id}@example.com`, id } }, error: null }),
+    signOut: vi.fn()
+  });
+}

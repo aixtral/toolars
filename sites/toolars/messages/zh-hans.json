@@ -625,6 +625,11 @@
     "providers": { "google": "Google", "github": "GitHub" },
     "workspaceReady": "你的工作区已准备就绪",
     "trust": "你的访问权限将保持私密。",
+    "menu": {
+      "open": "打开账户菜单",
+      "account": "账户",
+      "settings": "个人中心"
+    },
     "status": {
       "failed": "无法启动 {provider} 登录，请重试。",
       "notConfigured": "登录暂时不可用，请稍后重试。",

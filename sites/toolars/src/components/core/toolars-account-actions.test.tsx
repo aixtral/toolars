@@ -16,7 +16,7 @@ describe("ToolarsAccountActions", () => {
     expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument();
   });
 
-  it("renders the Supabase account and signs out from the topbar", async () => {
+  it("places signed-in workspace actions inside a compact account menu", async () => {
     const signOut = vi.fn().mockResolvedValue({ error: null });
     setToolarsSupabaseBrowserAuthDriverForTest({
       getUser: vi.fn().mockResolvedValue({
@@ -30,7 +30,11 @@ describe("ToolarsAccountActions", () => {
 
     renderWithIntl(<ToolarsAccountActions />);
 
-    expect(await screen.findByText("owner@example.com")).toBeInTheDocument();
+    expect(await screen.findByLabelText("Open account menu")).toBeInTheDocument();
+    expect(screen.getByText("owner@example.com")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "My Tools" })).toHaveAttribute("href", "/my-tools");
+    expect(screen.getByRole("link", { name: "Personal center" })).toHaveAttribute("href", "/settings");
+
     fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
 
     await waitFor(() => expect(signOut).toHaveBeenCalledTimes(1));

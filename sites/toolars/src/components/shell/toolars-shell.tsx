@@ -184,8 +184,7 @@ function MobileLanguageMenu({
 const nav = [
   { labelKey: "nav.explore", href: "/", key: "explore" },
   { labelKey: "nav.workflows", href: "/workflows", key: "workflows" },
-  { labelKey: "nav.collections", href: "/collections", key: "collections" },
-  { labelKey: "nav.myTools", href: "/my-tools", key: "my-tools" }
+  { labelKey: "nav.collections", href: "/collections", key: "collections" }
 ] as const;
 
 const adminNav = [

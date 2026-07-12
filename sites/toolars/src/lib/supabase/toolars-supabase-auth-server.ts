@@ -29,13 +29,12 @@ export function setToolarsSupabaseServerAuthDriverForTest(driver: ToolarsSupabas
 }
 
 export async function getToolarsSupabaseSessionPayload(request: Request) {
-  const workspaceId = normalizeWorkspaceId(request.headers.get("x-toolars-workspace-id"));
   const auth = await getServerAuthDriver();
 
   if (!auth) {
     return buildAnonymousPayload({
       isConfigured: false,
-      workspaceId
+      workspaceId: DEFAULT_TOOLARS_WORKSPACE_ID
     });
   }
 
@@ -44,7 +43,7 @@ export async function getToolarsSupabaseSessionPayload(request: Request) {
   if (response.error || !user?.id) {
     return buildAnonymousPayload({
       isConfigured: true,
-      workspaceId
+      workspaceId: DEFAULT_TOOLARS_WORKSPACE_ID
     });
   }
 
@@ -62,7 +61,7 @@ export async function getToolarsSupabaseSessionPayload(request: Request) {
       accountId: user.id,
       isAuthenticated: true,
       source: "supabase",
-      workspaceId
+      workspaceId: `user:${user.id}`
     },
     session: {
       accountEmail,
@@ -118,11 +117,6 @@ function buildAnonymousPayload({ isConfigured, workspaceId }: { isConfigured: bo
       isConfigured
     }
   };
-}
-
-function normalizeWorkspaceId(workspaceId?: string | null) {
-  const normalized = workspaceId?.trim().replace(/[^a-zA-Z0-9._:-]/g, "-").slice(0, 80);
-  return normalized || DEFAULT_TOOLARS_WORKSPACE_ID;
 }
 
 function normalizeEmail(email?: string | null) {

@@ -39,13 +39,7 @@ describe("toolars supabase server auth", () => {
       signOut: vi.fn()
     });
 
-    const payload = await getToolarsSupabaseSessionPayload(
-      new Request("https://toolars.test/api/auth/session", {
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_server"
-        }
-      })
-    );
+    const payload = await getToolarsSupabaseSessionPayload(new Request("https://toolars.test/api/auth/session"));
 
     expect(payload).toMatchObject({
       account: {
@@ -58,7 +52,7 @@ describe("toolars supabase server auth", () => {
         accountId: "user_server_123",
         isAuthenticated: true,
         source: "supabase",
-        workspaceId: "toolars_ws_server"
+        workspaceId: "user:user_server_123"
       },
       session: {
         accountEmail: "owner@example.com",

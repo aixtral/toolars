@@ -1,8 +1,10 @@
 "use client";
 
+import { BriefcaseBusiness, ChevronDown, LogOut, Settings } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
+import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { getToolarsSupabaseBrowserUser, signOutToolarsSupabaseBrowserUser } from "@/lib/supabase/toolars-supabase-auth-client";
 
 interface ToolarsAccountActionsProps {
@@ -20,6 +22,8 @@ export function ToolarsAccountActions({
   signUpClassName = "button button-solid topbar-sign-up"
 }: ToolarsAccountActionsProps) {
   const t = useTranslations();
+  const locale = useLocale();
+  const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const [account, setAccount] = useState<BrowserAccount | null>(null);
   const [status, setStatus] = useState("");
 
@@ -46,14 +50,41 @@ export function ToolarsAccountActions({
     setStatus(t("auth.signOut.signedOut"));
   }
 
+  const accountLabel = account?.accountEmail ?? account?.accountId ?? "";
+  const accountInitial = accountLabel.trim().charAt(0).toUpperCase() || "T";
+  const localizedHref = (href: string) => localizePath(href, localeCode);
+
   return (
     <span className="topbar-account-actions" aria-label={t("auth.eyebrow")}>
       {account ? (
         <>
-          <span className="topbar-account-email">{account.accountEmail ?? account.accountId}</span>
-          <button className={signInClassName} onClick={() => void signOut()} type="button">
-            {t("auth.signOut.button")}
-          </button>
+          <details className="topbar-account-menu">
+            <summary className="topbar-account-trigger" aria-label={t("auth.menu.open")} title={t("auth.menu.open")}>
+              <span aria-hidden="true" className="topbar-account-avatar">{accountInitial}</span>
+              <ChevronDown aria-hidden="true" size={15} />
+            </summary>
+            <div className="topbar-account-menu-panel" role="menu">
+              <div className="topbar-account-menu-identity">
+                <span aria-hidden="true" className="topbar-account-avatar topbar-account-avatar-large">{accountInitial}</span>
+                <span>
+                  <strong>{t("auth.menu.account")}</strong>
+                  <small>{accountLabel}</small>
+                </span>
+              </div>
+              <a className="topbar-account-menu-link" href={localizedHref("/my-tools")}>
+                <BriefcaseBusiness aria-hidden="true" size={16} />
+                {t("nav.myTools")}
+              </a>
+              <a className="topbar-account-menu-link" href={localizedHref("/settings")}>
+                <Settings aria-hidden="true" size={16} />
+                {t("auth.menu.settings")}
+              </a>
+              <button className="topbar-account-menu-sign-out" onClick={() => void signOut()} type="button">
+                <LogOut aria-hidden="true" size={16} />
+                {t("auth.signOut.button")}
+              </button>
+            </div>
+          </details>
           {status ? <span className="visually-hidden" role="status">{status}</span> : null}
         </>
       ) : (

@@ -10,7 +10,6 @@ import { buildAiConsentRunMetadata } from "@/lib/ai/consent-audit-run-metadata";
 import { selectAiProviderRoute } from "@/lib/ai/provider-routing";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import type { PdfUploadServerHandoffRecord } from "@/lib/tools/pdf-upload-lifecycle";
-import { buildWorkspaceAuditHeaders, buildWorkspaceScopedJsonHeaders } from "@/lib/workspace/workspace-identity";
 import {
   buildPdfSummarySteps,
   runPdfSummaryWorkflow,
@@ -46,9 +45,7 @@ export function PdfSummaryWorkflow() {
       if (typeof fetch !== "function") return;
 
       try {
-        const response = await fetch("/api/pdf/uploads?handoff=pdf-summary", {
-          headers: buildWorkspaceAuditHeaders()
-        });
+        const response = await fetch("/api/pdf/uploads?handoff=pdf-summary");
         if (!response.ok) throw new Error("PDF upload handoff unavailable");
         const payload = (await response.json()) as { uploads?: PdfUploadServerHandoffRecord[] };
         if (isActive) setHandoffUploads(payload.uploads ?? []);
@@ -94,7 +91,7 @@ export function PdfSummaryWorkflow() {
     appendAiConsentAuditEvent(event);
     void fetch("/api/ai/consent-audit", {
       body: JSON.stringify({ event, runMetadata }),
-      headers: buildWorkspaceScopedJsonHeaders(),
+      headers: { "Content-Type": "application/json" },
       method: "POST"
     }).catch(() => undefined);
     setConsentReviewed(true);

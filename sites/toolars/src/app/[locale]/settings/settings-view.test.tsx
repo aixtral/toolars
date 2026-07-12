@@ -139,14 +139,7 @@ describe("SettingsView", () => {
     expect(screen.getByText("ops@example.com")).toBeInTheDocument();
     expect(screen.getByText("user_settings_001")).toBeInTheDocument();
     expect(screen.getAllByText("supabase")).toHaveLength(2);
-    expect(fetchMock).toHaveBeenCalledWith(
-      "/api/auth/session",
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          "x-toolars-workspace-id": expect.stringMatching(/^toolars_ws_/)
-        })
-      })
-    );
+    expect(fetchMock).toHaveBeenCalledWith("/api/auth/session", { credentials: "same-origin" });
   });
 
   it("confirms before queuing account deletion", () => {

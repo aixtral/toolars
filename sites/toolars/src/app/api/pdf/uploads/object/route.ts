@@ -1,53 +1,18 @@
-import { resolveServerConsentAuditWorkspaceId } from "@/lib/ai/server-consent-audit-ledger";
-import { recordPdfUploadObjectAccess, resolvePdfUploadSignedObject } from "@/lib/tools/pdf-upload-server-store";
+import { isToolarsAuthenticationError, requireAuthenticatedUser } from "@/lib/auth/toolars-api-auth-context";
+import { getToolarsPrivatePdfUpload } from "@/lib/supabase/toolars-private-data";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
-  const workspaceId = resolveServerConsentAuditWorkspaceId(request);
-  const searchParams = new URL(request.url).searchParams;
-  const objectKey = searchParams.get("objectKey");
-  const expiresAt = searchParams.get("expiresAt");
-  const signature = searchParams.get("signature");
-
-  const object =
-    objectKey && expiresAt && signature
-      ? resolvePdfUploadSignedObject({
-          expiresAt,
-          objectKey,
-          signature,
-          workspaceId
-        })
-      : null;
-
-  if (!object) {
-    recordPdfUploadObjectAccess({
-      accessStatus: "rejected",
-      denyReason: "invalid-or-expired-object-access",
-      objectKey: objectKey ?? "missing-object-key",
-      workspaceId
-    });
-    return Response.json({ error: "Invalid or expired PDF object access" }, { status: 403 });
+  try {
+    const auth = await requireAuthenticatedUser(request);
+    const uploadId = new URL(request.url).searchParams.get("uploadId");
+    if (!uploadId) return Response.json({ error: "Missing PDF upload id" }, { status: 400 });
+    const upload = await getToolarsPrivatePdfUpload({ id: uploadId, userId: auth.accountId! });
+    if (!upload) return Response.json({ error: "PDF upload not found" }, { status: 404 });
+    return Response.redirect(upload.signedObjectUrl, 302);
+  } catch (error) {
+    if (isToolarsAuthenticationError(error)) return Response.json({ error: "Authentication required" }, { status: 401 });
+    return Response.json({ error: "Unable to access PDF upload" }, { status: 500 });
   }
-
-  recordPdfUploadObjectAccess({
-    accessStatus: "granted",
-    fileName: object.fileName,
-    objectKey: object.objectKey,
-    uploadId: object.uploadId,
-    workspaceId
-  });
-
-  return new Response(new Uint8Array(object.content), {
-    headers: {
-      "Cache-Control": "no-store",
-      "Content-Disposition": `inline; filename="${sanitizeHeaderFilename(object.fileName)}"`,
-      "Content-Type": object.contentType
-    },
-    status: 200
-  });
-}
-
-function sanitizeHeaderFilename(fileName: string) {
-  return fileName.replace(/[^\x20-\x7E]/g, "_").replace(/[\\"]/g, "_");
 }

@@ -625,6 +625,11 @@
     "providers": { "google": "Google", "github": "GitHub" },
     "workspaceReady": "你的工作區已準備就緒",
     "trust": "你的存取權限將保持私密。",
+    "menu": {
+      "open": "開啟帳戶選單",
+      "account": "帳戶",
+      "settings": "個人中心"
+    },
     "status": {
       "failed": "無法啟動 {provider} 登入，請再試一次。",
       "notConfigured": "登入目前無法使用，請稍後再試。",

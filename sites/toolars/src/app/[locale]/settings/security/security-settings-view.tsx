@@ -16,7 +16,6 @@ import {
   UserCheck
 } from "lucide-react";
 import { useDialogFocus } from "@/components/core/use-dialog-focus";
-import { buildWorkspaceAuditHeaders } from "@/lib/workspace/workspace-identity";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 const overviewCards = ["securityScore", "sessionCount", "recoveryCoverage", "lastReview"] as const;
@@ -147,7 +146,6 @@ export function SecuritySettingsView() {
 
       const response = await fetch(authSessionEndpoint, {
         credentials: "same-origin",
-        headers: buildWorkspaceAuditHeaders(),
         method: "DELETE"
       });
       if (!response.ok) throw new Error("Auth session revoke failed");

@@ -232,15 +232,6 @@ export function resetServerConsentAuditLedger(workspaceId?: string) {
   writeLedgerStore(createEmptyLedgerStore());
 }
 
-export function resolveServerConsentAuditWorkspaceId(request?: Request | null) {
-  return normalizeWorkspaceId(request?.headers.get("x-toolars-workspace-id"));
-}
-
-export function resolveServerConsentAuditAccountId(request?: Request | null) {
-  const accountId = request?.headers.get("x-toolars-account-id");
-  return accountId ? normalizeAccountId(accountId) : null;
-}
-
 export function setServerConsentAuditLedgerStoragePathForTest(path: string | null) {
   storagePathForTest = path;
 }
@@ -412,7 +403,7 @@ function isAiConsentDeletionAuditEntry(deletion: unknown): deletion is AiConsent
   );
 }
 
-function isAiConsentAuditEvent(event: unknown): event is AiConsentAuditEvent {
+export function isAiConsentAuditEvent(event: unknown): event is AiConsentAuditEvent {
   if (!event || typeof event !== "object") return false;
 
   const candidate = event as Partial<AiConsentAuditEvent>;
@@ -427,7 +418,7 @@ function isAiConsentAuditEvent(event: unknown): event is AiConsentAuditEvent {
   );
 }
 
-function isAiConsentRunMetadata(run: unknown): run is AiConsentRunMetadata {
+export function isAiConsentRunMetadata(run: unknown): run is AiConsentRunMetadata {
   if (!run || typeof run !== "object") return false;
 
   const candidate = run as Partial<AiConsentRunMetadata>;

@@ -4,12 +4,11 @@ import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 type RuntimeEnv = Partial<Record<string, string | undefined>>;
 type RuntimeStatus = "configured" | "fallback" | "legacy-disabled" | "missing";
 
+// Retained for one-way reads of legacy records only. New runtime writes use Supabase.
 export const TOOLARS_RUNTIME_FILES = {
   accountStore: "toolars-account-store.json",
   aiConsentLedger: "toolars-ai-consent-audit-ledger.json",
-  authSessionLedger: "toolars-auth-session-ledger.json",
-  pdfObjectStorage: "toolars-pdf-upload-objects",
-  pdfUploadTempStore: "toolars-pdf-upload-temp-store.json"
+  authSessionLedger: "toolars-auth-session-ledger.json"
 } as const;
 
 export function getToolarsRuntimeFilePath({
@@ -28,33 +27,12 @@ export function getToolarsRuntimeFilePath({
 
   const dataRoot = normalizeRuntimeValue(env.TOOLARS_DATA_DIR);
   if (dataRoot) return join(/*turbopackIgnore: true*/ dataRoot, fileName);
-
   return fallbackPath;
 }
 
-export function getToolarsPdfObjectRoot({
-  env = readToolarsRuntimeEnv(),
-  fallbackRoot
-}: {
-  env?: RuntimeEnv;
-  fallbackRoot: string;
-}) {
-  const explicitRoot = normalizeRuntimeValue(env.TOOLARS_PDF_UPLOAD_OBJECT_ROOT);
-  if (explicitRoot) return explicitRoot;
-
-  const dataRoot = normalizeRuntimeValue(env.TOOLARS_DATA_DIR);
-  if (dataRoot) return join(/*turbopackIgnore: true*/ dataRoot, TOOLARS_RUNTIME_FILES.pdfObjectStorage);
-
-  return fallbackRoot;
-}
-
 export function getToolarsProductionRuntimeStatus(env = readToolarsRuntimeEnv()) {
-  const hasDataRoot = hasRuntimeValue(env.TOOLARS_DATA_DIR);
   const status = {
     auth: {
-      legacyGoogleOAuth: getGroupedSecretStatus(env.GOOGLE_OAUTH_CLIENT_ID, env.GOOGLE_OAUTH_CLIENT_SECRET),
-      legacySessionSecret: hasRuntimeValue(env.TOOLARS_AUTH_SESSION_SECRET) ? "configured" : "fallback",
-      legacySessionSecretRotation: hasRuntimeValue(env.TOOLARS_AUTH_SESSION_SECRET_PREVIOUS) ? "configured" : "fallback",
       supabase: getSupabasePublicStatus(env),
       supabaseSecret: getSupabaseSecretStatus(env)
     },
@@ -63,18 +41,12 @@ export function getToolarsProductionRuntimeStatus(env = readToolarsRuntimeEnv())
       freeTrial: isFreeTrialMode(env)
     },
     persistence: {
-      accountStore: "legacy-disabled",
-      aiConsentLedger: getRuntimePathStatus(env.TOOLARS_AI_CONSENT_LEDGER_PATH, hasDataRoot),
-      authSessionLedger: "legacy-disabled",
-      dataRoot: hasDataRoot ? "configured" : "fallback",
-      pdfObjectStorage: getRuntimePathStatus(env.TOOLARS_PDF_UPLOAD_OBJECT_ROOT, hasDataRoot),
-      pdfUploadTempStore: getRuntimePathStatus(env.TOOLARS_PDF_UPLOAD_TEMP_STORE_PATH, hasDataRoot)
+      aiConsentAudit: "supabase",
+      pdfUploads: "supabase-private-storage"
     },
     providers: {
       aiProvider: getGroupedSecretStatus(env.TOOLARS_AI_PROVIDER_ENDPOINT, env.TOOLARS_AI_PROVIDER_API_KEY),
-      billingProvider: getGroupedSecretStatus(env.TOOLARS_BILLING_PROVIDER_ENDPOINT, env.TOOLARS_BILLING_PROVIDER_API_KEY),
-      objectEncryptionKey: hasRuntimeValue(env.TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY) ? "configured" : "fallback",
-      uploadHandoffSecret: hasRuntimeValue(env.TOOLARS_UPLOAD_HANDOFF_SECRET) ? "configured" : "fallback"
+      billingProvider: getGroupedSecretStatus(env.TOOLARS_BILLING_PROVIDER_ENDPOINT, env.TOOLARS_BILLING_PROVIDER_API_KEY)
     },
     version: 1 as const
   };
@@ -93,11 +65,6 @@ export function getToolarsProductionRuntimeStatus(env = readToolarsRuntimeEnv())
 function readToolarsRuntimeEnv(): RuntimeEnv {
   if (typeof process === "undefined") return {};
   return process.env;
-}
-
-function getRuntimePathStatus(pathValue: string | undefined, hasDataRoot: boolean): RuntimeStatus {
-  if (hasRuntimeValue(pathValue) || hasDataRoot) return "configured";
-  return "fallback";
 }
 
 function getSupabasePublicStatus(env: RuntimeEnv): RuntimeStatus {

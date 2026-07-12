@@ -306,6 +306,136 @@ select {
   padding: 0;
 }
 
+.topbar-account-menu {
+  position: relative;
+}
+
+.topbar-account-menu > summary {
+  list-style: none;
+}
+
+.topbar-account-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.topbar-account-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 40px;
+  min-height: 32px;
+  padding: 0 5px;
+  color: var(--ink-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.topbar-account-trigger:hover,
+.topbar-account-menu[open] .topbar-account-trigger {
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.topbar-account-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #ffffff;
+  background: var(--emerald);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.topbar-account-avatar-large {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  font-size: 13px;
+}
+
+.topbar-account-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 70;
+  display: grid;
+  width: 232px;
+  padding: 6px;
+  background: var(--canvas);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+}
+
+.topbar-account-menu-identity {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-account-menu-identity > span:last-child {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.topbar-account-menu-identity strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.topbar-account-menu-identity small {
+  overflow: hidden;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-account-menu-link,
+.topbar-account-menu-sign-out {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 34px;
+  padding: 0 9px;
+  color: var(--ink-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.topbar-account-menu-link {
+  margin-top: 4px;
+}
+
+.topbar-account-menu-sign-out {
+  width: 100%;
+  margin-top: 4px;
+  padding-top: 8px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.topbar-account-menu-link:hover,
+.topbar-account-menu-sign-out:hover {
+  color: var(--ink);
+  background: var(--surface);
+}
+
 .topbar-sign-in,
 .topbar-sign-up {
   min-height: 32px;

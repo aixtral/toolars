@@ -3,7 +3,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AI_CONSENT_AUDIT_STORAGE_KEY } from "@/lib/ai/consent-audit-storage";
-import { WORKSPACE_IDENTITY_STORAGE_KEY } from "@/lib/workspace/workspace-identity";
 import en from "../../../../../messages/en.json";
 import { PdfSummaryWorkflow } from "./pdf-summary-workflow";
 
@@ -176,15 +175,6 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("posts approved consent with run metadata to the server audit ledger", () => {
-    window.localStorage.setItem(
-      WORKSPACE_IDENTITY_STORAGE_KEY,
-      JSON.stringify({
-        createdAt: "2026-06-19T10:07:00Z",
-        source: "anonymous-local",
-        version: 1,
-        workspaceId: "toolars_ws_pdf_summary_test"
-      })
-    );
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({ ledger: { events: [], runs: [], version: 1 } }),
       ok: true
@@ -200,8 +190,7 @@ describe("PdfSummaryWorkflow", () => {
       "/api/ai/consent-audit",
       expect.objectContaining({
         headers: {
-          "Content-Type": "application/json",
-          "x-toolars-workspace-id": "toolars_ws_pdf_summary_test"
+          "Content-Type": "application/json"
         },
         method: "POST"
       })
@@ -226,15 +215,6 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("loads PDF Toolkit server upload handoffs for the workflow input source", async () => {
-    window.localStorage.setItem(
-      WORKSPACE_IDENTITY_STORAGE_KEY,
-      JSON.stringify({
-        createdAt: "2026-06-19T10:30:00Z",
-        source: "anonymous-local",
-        version: 1,
-        workspaceId: "toolars_ws_pdf_handoff_test"
-      })
-    );
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({
         uploads: [
@@ -262,10 +242,6 @@ describe("PdfSummaryWorkflow", () => {
     expect(await screen.findByText("Board Pack.pdf")).toBeInTheDocument();
     expect(screen.getByText("Server handoff ready")).toBeInTheDocument();
     expect(screen.getByText("handoff_pdf-summary_board_pack")).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledWith("/api/pdf/uploads?handoff=pdf-summary", {
-      headers: {
-        "x-toolars-workspace-id": "toolars_ws_pdf_handoff_test"
-      }
-    });
+    expect(fetchMock).toHaveBeenCalledWith("/api/pdf/uploads?handoff=pdf-summary");
   });
 });

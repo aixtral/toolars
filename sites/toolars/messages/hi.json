@@ -625,6 +625,11 @@
     "providers": { "google": "Google", "github": "GitHub" },
     "workspaceReady": "आपका कार्यक्षेत्र तैयार है",
     "trust": "आपकी पहुंच निजी रहती है।",
+    "menu": {
+      "open": "खाता मेनू खोलें",
+      "account": "खाता",
+      "settings": "व्यक्तिगत केंद्र"
+    },
     "status": {
       "failed": "{provider} शुरू नहीं हो सका। फिर कोशिश करें।",
       "notConfigured": "साइन इन अभी उपलब्ध नहीं है। बाद में कोशिश करें।",

@@ -76,7 +76,7 @@ describe("/api/auth/session", () => {
       auth: {
         isAuthenticated: true,
         source: "supabase",
-        workspaceId: "toolars_ws_session_test"
+        workspaceId: "user:user_server_123"
       },
       session: {
         provider: "supabase",

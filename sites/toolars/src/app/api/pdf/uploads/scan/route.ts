@@ -1,13 +1,13 @@
-import { resolveServerConsentAuditWorkspaceId } from "@/lib/ai/server-consent-audit-ledger";
-import { runPdfUploadScanWorker } from "@/lib/tools/pdf-upload-server-store";
+import { isToolarsAuthenticationError, requireAuthenticatedUser } from "@/lib/auth/toolars-api-auth-context";
 
 export const runtime = "nodejs";
 
-export function POST(request: Request) {
-  const workspaceId = resolveServerConsentAuditWorkspaceId(request);
-  const scan = runPdfUploadScanWorker({
-    workspaceId
-  });
-
-  return Response.json(scan);
+export async function POST(request: Request) {
+  try {
+    await requireAuthenticatedUser(request);
+    return Response.json({ processed: [] });
+  } catch (error) {
+    if (isToolarsAuthenticationError(error)) return Response.json({ error: "Authentication required" }, { status: 401 });
+    throw error;
+  }
 }

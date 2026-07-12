@@ -625,6 +625,11 @@
     "providers": { "google": "Google", "github": "GitHub" },
     "workspaceReady": "مساحة عملك جاهزة",
     "trust": "يبقى وصولك خاصاً.",
+    "menu": {
+      "open": "فتح قائمة الحساب",
+      "account": "الحساب",
+      "settings": "المركز الشخصي"
+    },
     "status": {
       "failed": "تعذر بدء {provider}. حاول مرة أخرى.",
       "notConfigured": "تسجيل الدخول غير متاح حالياً. حاول لاحقاً.",

@@ -168,7 +168,7 @@ describe("SecuritySettingsView", () => {
     expect(screen.getByText("0 active sessions are currently trusted for this account.")).toBeInTheDocument();
   });
 
-  it("calls the auth session revoke API with workspace audit headers", async () => {
+  it("calls the auth session revoke API with the same-origin session", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({
         revokedSession: {
@@ -185,16 +185,10 @@ describe("SecuritySettingsView", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign out other sessions" }));
 
     await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        "/api/auth/session",
-        expect.objectContaining({
-          credentials: "same-origin",
-          headers: expect.objectContaining({
-            "x-toolars-workspace-id": expect.stringMatching(/^toolars_ws_/)
-          }),
-          method: "DELETE"
-        })
-      );
+      expect(fetchMock).toHaveBeenCalledWith("/api/auth/session", {
+        credentials: "same-origin",
+        method: "DELETE"
+      });
     });
     expect(await screen.findByText("sess_security_002")).toBeInTheDocument();
   });

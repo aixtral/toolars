@@ -625,6 +625,11 @@
     "providers": { "google": "Google", "github": "GitHub" },
     "workspaceReady": "ワークスペースの準備ができました",
     "trust": "アクセス情報は非公開のままです。",
+    "menu": {
+      "open": "アカウントメニューを開く",
+      "account": "アカウント",
+      "settings": "パーソナルセンター"
+    },
     "status": {
       "failed": "{provider} を開始できませんでした。もう一度お試しください。",
       "notConfigured": "現在サインインを利用できません。後でもう一度お試しください。",

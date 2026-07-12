@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { setToolarsSupabaseServerAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-server";
-import { resolveToolarsApiAuthContext } from "./toolars-api-auth-context";
+import { requireAuthenticatedUser, resolveToolarsApiAuthContext } from "./toolars-api-auth-context";
 
 describe("resolveToolarsApiAuthContext", () => {
   afterEach(() => {
@@ -23,7 +23,7 @@ describe("resolveToolarsApiAuthContext", () => {
       accountId: null,
       isAuthenticated: false,
       source: "anonymous",
-      workspaceId: "toolars_ws_local"
+      workspaceId: "anonymous-local"
     });
   });
 
@@ -49,7 +49,20 @@ describe("resolveToolarsApiAuthContext", () => {
       accountId: "user_supabase_123",
       isAuthenticated: true,
       source: "supabase",
-      workspaceId: "toolars_ws_supabase"
+      workspaceId: "user:user_supabase_123"
     });
+  });
+
+  it("rejects unauthenticated requests even when they forge workspace or account headers", async () => {
+    await expect(
+      requireAuthenticatedUser(
+        new Request("https://toolars.test/api/ai/consent-audit", {
+          headers: {
+            "x-toolars-account-id": "victim-account",
+            "x-toolars-workspace-id": "victim-workspace"
+          }
+        })
+      )
+    ).rejects.toMatchObject({ code: "authentication-required" });
   });
 });

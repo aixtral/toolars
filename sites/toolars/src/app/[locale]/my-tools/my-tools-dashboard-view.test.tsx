@@ -194,6 +194,26 @@ describe("MyToolsDashboardView", () => {
     expect(screen.getByText("Recent shared links")).toBeInTheDocument();
   });
 
+  it("asks unauthenticated visitors to sign in before showing their private workspace", async () => {
+    setToolarsSupabaseWorkspaceDriverForTest({
+      ensureWorkspace: vi.fn(),
+      getCurrentUser: vi.fn().mockResolvedValue(null),
+      getRecentTools: vi.fn(),
+      getSavedTools: vi.fn(),
+      getSettings: vi.fn(),
+      recordRecentTool: vi.fn(),
+      removeSavedTool: vi.fn(),
+      saveTool: vi.fn(),
+      updateSettings: vi.fn()
+    });
+
+    renderWithIntl(<MyToolsDashboardView />);
+
+    expect(await screen.findByRole("heading", { name: "Continue to Toolars" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+    expect(screen.queryByText("Recent outputs")).not.toBeInTheDocument();
+  });
+
   it("links workspace cards to existing tools, workflows, and collections", () => {
     const { container } = renderWithIntl(<MyToolsDashboardView />);
 

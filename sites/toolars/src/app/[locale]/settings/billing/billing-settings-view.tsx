@@ -7,7 +7,6 @@ import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
 import type { ToolarsBillingAccount, ToolarsInvoiceStatus } from "@/lib/billing/billing-account";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
-import { buildWorkspaceAuditHeaders, subscribeWorkspaceIdentityChanges } from "@/lib/workspace/workspace-identity";
 
 type BillingSummaryCard = [label: string, value: string, detail: string];
 type BillingDetailRow = [label: string, value: string, action: string];
@@ -58,9 +57,7 @@ export function BillingSettingsView() {
       if (typeof fetch !== "function") return;
 
       try {
-        const response = await fetch("/api/billing/account", {
-          headers: buildWorkspaceAuditHeaders()
-        });
+        const response = await fetch("/api/billing/account");
         if (!response.ok) throw new Error("Billing account request failed");
 
         const payload = (await response.json()) as BillingApiPayload;
@@ -75,15 +72,10 @@ export function BillingSettingsView() {
       }
     }
 
-    const unsubscribeFromIdentityChanges = subscribeWorkspaceIdentityChanges(() => {
-      void loadBillingAccount();
-    });
-
     void loadBillingAccount();
 
     return () => {
       isActive = false;
-      unsubscribeFromIdentityChanges();
     };
   }, [freeTrialMode]);
 

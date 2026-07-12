@@ -625,6 +625,11 @@
     "providers": { "google": "Google", "github": "GitHub" },
     "workspaceReady": "Seu espaço de trabalho está pronto",
     "trust": "Seu acesso permanece privado.",
+    "menu": {
+      "open": "Abrir menu da conta",
+      "account": "Conta",
+      "settings": "Central pessoal"
+    },
     "status": {
       "failed": "Não foi possível iniciar {provider}. Tente novamente.",
       "notConfigured": "O login não está disponível agora. Tente mais tarde.",

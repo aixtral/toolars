@@ -155,6 +155,19 @@ describe("ToolarsShell", () => {
     expect(signIn).toHaveClass("topbar-sign-in");
   });
 
+  it("keeps My Tools out of the public primary navigation", () => {
+    renderWithIntl(
+      <ToolarsShell active="explore" sidebarVariant="none">
+        <h1>Explore content</h1>
+      </ToolarsShell>
+    );
+
+    expect(screen.queryByRole("link", { name: "My Tools" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Explore" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Workflows" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Collections" })).toBeInTheDocument();
+  });
+
   it("exposes a direct RustDesk-style language list from the mobile menu", () => {
     const { container } = renderWithIntl(
       <ToolarsShell active="explore" sidebarVariant="none">

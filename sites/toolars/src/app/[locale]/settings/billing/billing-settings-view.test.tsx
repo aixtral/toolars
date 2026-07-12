@@ -3,7 +3,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { bindWorkspaceIdentityToAccount } from "@/lib/workspace/workspace-identity";
 // @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
 import { scanSourceText } from "../../../../../scripts/audit-i18n.mjs";
 import en from "../../../../../messages/en.json";
@@ -308,74 +307,6 @@ describe("BillingSettingsView", () => {
       "href",
       "https://billing.example.com/session/team-001"
     );
-    expect(fetchMock).toHaveBeenCalledWith(
-      "/api/billing/account",
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          "x-toolars-workspace-id": expect.stringMatching(/^toolars_ws_/)
-        })
-      })
-    );
-  });
-
-  it("refreshes billing account data when the workspace identity changes after sign-in", async () => {
-    process.env.NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE = "disabled";
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({ error: "Authentication required for billing account" }),
-        ok: false
-      })
-      .mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({
-          auth: {
-            accountEmail: "owner@example.com",
-            accountId: "acct-owner",
-            isAuthenticated: true,
-            source: "preview-header",
-            workspaceId: "toolars_ws_20260621090000_refresh"
-          },
-          billing: {
-            accountId: "acct-owner",
-            billingEmail: "owner@example.com",
-            customerPortalUrl: "https://billing.example.com/session/owner",
-            invoices: [],
-            planId: "team",
-            planName: "Toolars Team",
-            source: "billing-driver",
-            status: "active",
-            usage: {
-              aiCreditsLimit: 5000,
-              aiCreditsUsed: 500,
-              periodEnd: "2026-06-30T23:59:59Z",
-              periodStart: "2026-06-01T00:00:00Z",
-              storageBytesLimit: 10737418240,
-              storageBytesUsed: 1073741824
-            },
-            version: 1
-          }
-        }),
-        ok: true
-      });
-    vi.stubGlobal("fetch", fetchMock);
-
-    renderWithIntl(<BillingSettingsView />);
-
-    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-
-    bindWorkspaceIdentityToAccount({
-      accountEmail: "owner@example.com",
-      accountId: "acct-owner",
-      now: () => "2026-06-21T09:00:00Z"
-    });
-
-    expect(await screen.findByText("Toolars Team")).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenLastCalledWith("/api/billing/account", {
-      headers: {
-        "x-toolars-account-email": "owner@example.com",
-        "x-toolars-account-id": "acct-owner",
-        "x-toolars-workspace-id": expect.stringMatching(/^toolars_ws_/)
-      }
-    });
+    expect(fetchMock).toHaveBeenCalledWith("/api/billing/account");
   });
 });

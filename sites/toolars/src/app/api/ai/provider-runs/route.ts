@@ -1,11 +1,19 @@
 import {
-  appendServerConsentAuditRecord,
+  isAiConsentAuditEvent,
+  isAiConsentRunMetadata,
   summarizeServerConsentUsageAnalytics
 } from "@/lib/ai/server-consent-audit-ledger";
 import type { AiConsentAuditEvent } from "@/lib/ai/consent-audit-storage";
 import type { AiConsentRunMetadata, AiConsentRunUsage } from "@/lib/ai/consent-audit-run-metadata";
-import { resolveToolarsApiAuthContext } from "@/lib/auth/toolars-api-auth-context";
-import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
+import {
+  isToolarsAuthenticationError,
+  requireAuthenticatedUser
+} from "@/lib/auth/toolars-api-auth-context";
+import type { ToolarsAuthenticatedAuthContext } from "@/lib/auth/toolars-api-auth-context";
+import {
+  createToolarsPrivateAuditRecord,
+  listToolarsPrivateAuditRecords
+} from "@/lib/supabase/toolars-private-data";
 
 export const runtime = "nodejs";
 
@@ -30,10 +38,11 @@ class AiProviderExecutionError extends Error {
 }
 
 export async function POST(request: Request) {
-  const auth = await resolveToolarsApiAuthContext(request);
+  let auth: ToolarsAuthenticatedAuthContext | null = null;
   let body: ProviderRunRequestBody | null = null;
 
   try {
+    auth = await requireAuthenticatedUser(request);
     body = (await request.json()) as ProviderRunRequestBody;
     assertProviderRunBody(body);
     const providerRun = await executeConfiguredAiProviderRun({
@@ -43,12 +52,12 @@ export async function POST(request: Request) {
       runMetadata: body.runMetadata
     });
     const runMetadata = buildCompletedRunMetadata(body.runMetadata, providerRun);
-    const ledger = appendServerConsentAuditRecord({
-      accountId: auth.accountId,
+    await createToolarsPrivateAuditRecord({
       event: body.event,
       runMetadata,
-      workspaceId: auth.workspaceId
+      userId: auth.accountId
     });
+    const ledger = await loadLedger(auth.accountId);
 
     return Response.json(
       {
@@ -61,14 +70,15 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    if (body?.event && body.runMetadata && error instanceof AiProviderExecutionError) {
+    if (isToolarsAuthenticationError(error)) return Response.json({ error: "Authentication required" }, { status: 401 });
+    if (auth && body?.event && body.runMetadata && error instanceof AiProviderExecutionError) {
       const failedRun = buildFailedRunMetadata(body.runMetadata, error.message);
-      const ledger = appendServerConsentAuditRecord({
-        accountId: auth.accountId,
+      await createToolarsPrivateAuditRecord({
         event: body.event,
         runMetadata: failedRun,
-        workspaceId: auth.workspaceId
+      userId: auth.accountId
       });
+      const ledger = await loadLedger(auth.accountId);
 
       return Response.json(
         {
@@ -92,7 +102,7 @@ async function executeConfiguredAiProviderRun({
   prompt,
   runMetadata
 }: {
-  auth: ToolarsAuthContext;
+  auth: ToolarsAuthenticatedAuthContext;
   event: AiConsentAuditEvent;
   prompt: string;
   runMetadata: AiConsentRunMetadata;
@@ -161,7 +171,19 @@ function normalizeNonNegativeNumber(value: unknown) {
 }
 
 function assertProviderRunBody(body: ProviderRunRequestBody): asserts body is Required<ProviderRunRequestBody> {
-  if (!body.event || !body.runMetadata) {
+  if (!isAiConsentAuditEvent(body.event) || !isAiConsentRunMetadata(body.runMetadata)) {
     throw new Error("Invalid AI provider run body");
   }
+}
+
+async function loadLedger(accountId: string) {
+  const records = await listToolarsPrivateAuditRecords({ userId: accountId });
+  return {
+    accountBindings: [],
+    deletions: [],
+    events: records.map((record) => record.event),
+    runs: records.map((record) => record.runMetadata),
+    version: 1 as const,
+    workspaceId: `account:${accountId}`
+  };
 }

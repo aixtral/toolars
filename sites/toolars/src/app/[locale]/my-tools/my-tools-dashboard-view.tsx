@@ -14,12 +14,14 @@ import {
   Puzzle,
   Sparkles,
   Star,
+  UserRound,
   Workflow
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { getToolBySlug, type ToolDefinition } from "@/data/registry";
 import { ToolIcon } from "@/components/tools/tool-icon";
+import { CoreActionModalButton } from "@/components/core/core-action-modal";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
@@ -114,6 +116,7 @@ const workflowTones = {
 
 export function MyToolsDashboardView() {
   const t = useTranslations("myToolsDashboard");
+  const tGlobal = useTranslations();
   const tTool = useTranslations("tools");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
@@ -145,6 +148,21 @@ export function MyToolsDashboardView() {
     if (kpi.key === "recentOutputs") return { ...kpi, value: String(workspaceSnapshot.recentTools.length) };
     return kpi;
   });
+
+  if (workspaceSnapshot?.status === "unauthenticated") {
+    return (
+      <div className="my-tools-access-gate" data-my-tools-access-gate="sign-in-required">
+        <section className="section landing-hero">
+          <span className="eyebrow">{tGlobal("nav.myTools")}</span>
+          <h1 className="title">{tGlobal("auth.signIn.title")}</h1>
+          <p className="subtitle">{tGlobal("auth.signIn.description")}</p>
+          <CoreActionModalButton className="button button-solid" kind="sign-in">
+            <UserRound aria-hidden="true" size={16} /> {tGlobal("nav.signIn")}
+          </CoreActionModalButton>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="my-tools-page" data-my-tools-page="true">

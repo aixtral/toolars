@@ -4,7 +4,6 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { WORKSPACE_IDENTITY_STORAGE_KEY } from "@/lib/workspace/workspace-identity";
 import es from "../../../../../messages/es.json";
 import { PdfToolkitWorkspace } from "./pdf-toolkit-workspace";
 
@@ -172,15 +171,6 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("registers ready PDF uploads with the server temp store for workflow handoff", async () => {
-    window.localStorage.setItem(
-      WORKSPACE_IDENTITY_STORAGE_KEY,
-      JSON.stringify({
-        createdAt: "2026-06-19T10:27:00Z",
-        source: "anonymous-local",
-        version: 1,
-        workspaceId: "toolars_ws_upload_component_test"
-      })
-    );
     const fetchMock = vi.fn().mockResolvedValue({
       json: vi.fn().mockResolvedValue({
         uploads: [
@@ -216,9 +206,6 @@ describe("PdfToolkitWorkspace", () => {
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/pdf/uploads",
       expect.objectContaining({
-        headers: {
-          "x-toolars-workspace-id": "toolars_ws_upload_component_test"
-        },
         method: "POST"
       })
     );
@@ -232,15 +219,6 @@ describe("PdfToolkitWorkspace", () => {
   });
 
   it("shows server storage failure and lets users retry the upload handoff", async () => {
-    window.localStorage.setItem(
-      WORKSPACE_IDENTITY_STORAGE_KEY,
-      JSON.stringify({
-        createdAt: "2026-06-19T10:35:00Z",
-        source: "anonymous-local",
-        version: 1,
-        workspaceId: "toolars_ws_upload_retry_test"
-      })
-    );
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({

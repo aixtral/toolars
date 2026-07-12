@@ -7,7 +7,6 @@ import { clearAiConsentAuditLog, loadAiConsentAuditLog } from "@/lib/ai/consent-
 import { selectAiProviderRoute } from "@/lib/ai/provider-routing";
 import type { ServerConsentAuditLedger } from "@/lib/ai/server-consent-audit-ledger";
 import type { ToolarsAuthContext } from "@/lib/auth/toolars-auth-context";
-import { buildWorkspaceAuditHeaders, subscribeWorkspaceIdentityChanges } from "@/lib/workspace/workspace-identity";
 
 const trustDefaults = [
   { key: "askBeforeAi" },
@@ -84,9 +83,7 @@ export function PrivacyAiSettingsView() {
       if (typeof fetch !== "function") return;
 
       try {
-        const response = await fetch("/api/ai/consent-audit", {
-          headers: buildWorkspaceAuditHeaders()
-        });
+        const response = await fetch("/api/ai/consent-audit");
         if (!response.ok) throw new Error("Server audit ledger request failed");
         const payload = (await response.json()) as { auth?: ToolarsAuthContext; ledger?: ServerConsentAuditLedger };
         if (!isActive || payload.ledger?.version !== 1) return;
@@ -98,15 +95,10 @@ export function PrivacyAiSettingsView() {
       }
     }
 
-    const unsubscribeFromIdentityChanges = subscribeWorkspaceIdentityChanges(() => {
-      void loadServerAuditLedger();
-    });
-
     void loadServerAuditLedger();
 
     return () => {
       isActive = false;
-      unsubscribeFromIdentityChanges();
     };
   }, []);
 
@@ -162,7 +154,6 @@ export function PrivacyAiSettingsView() {
 
     try {
       const response = await fetch("/api/ai/consent-audit", {
-        headers: buildWorkspaceAuditHeaders(),
         method: "DELETE"
       });
       if (!response.ok) throw new Error("Server audit deletion failed");

@@ -21,7 +21,6 @@ import {
 import { useDialogFocus } from "@/components/core/use-dialog-focus";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { isFreeTrialMode } from "@/lib/product/free-trial-mode";
-import { buildWorkspaceAuditHeaders, subscribeWorkspaceIdentityChanges } from "@/lib/workspace/workspace-identity";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 
 const usageMeters = [
@@ -121,8 +120,7 @@ export function SettingsView() {
 
       try {
         const response = await fetch("/api/auth/session", {
-          credentials: "same-origin",
-          headers: buildWorkspaceAuditHeaders()
+          credentials: "same-origin"
         });
         if (!response.ok) throw new Error("Auth session request failed");
 
@@ -139,15 +137,10 @@ export function SettingsView() {
       }
     }
 
-    const unsubscribeFromIdentityChanges = subscribeWorkspaceIdentityChanges(() => {
-      void loadAccountSession();
-    });
-
     void loadAccountSession();
 
     return () => {
       isActive = false;
-      unsubscribeFromIdentityChanges();
     };
   }, []);
 

@@ -1,8 +1,12 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { setToolarsSupabaseBrowserAuthDriverForTest } from "@/lib/supabase/toolars-supabase-auth-client";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { ToolarsAccountActions } from "./toolars-account-actions";
+
+const accountMenuStyles = readFileSync(path.resolve(import.meta.dirname, "../../app/globals.css"), "utf8");
 
 describe("ToolarsAccountActions", () => {
   afterEach(() => {
@@ -14,6 +18,11 @@ describe("ToolarsAccountActions", () => {
 
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument();
+  });
+
+  it("keeps the account menu compact and clear of the topbar boundary", () => {
+    expect(accountMenuStyles).toMatch(/\.topbar-account-menu-panel\s*\{[\s\S]*?top: calc\(100% \+ 18px\);[\s\S]*?width: 196px;/);
+    expect(accountMenuStyles).toMatch(/\.topbar-account-menu-link,[\s\S]*?\.topbar-account-menu-sign-out\s*\{[\s\S]*?min-height: 34px;/);
   });
 
   it("places signed-in workspace actions inside a compact account menu", async () => {

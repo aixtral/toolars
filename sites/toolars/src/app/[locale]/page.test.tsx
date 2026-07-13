@@ -37,6 +37,18 @@ describe("HomePage", () => {
     expect(screen.getByText("View all picks")).toBeInTheDocument();
   });
 
+  it("shows each semantic label only once in a desktop pick card", () => {
+    const { container } = renderWithIntl(<HomePage />);
+
+    for (const card of container.querySelectorAll(".home-desktop-pick-card")) {
+      const labels = Array.from(card.querySelectorAll(".home-desktop-pick-footer .chip, .home-desktop-pick-footer .badge"))
+        .map((element) => element.textContent?.trim().toLowerCase())
+        .filter((label): label is string => Boolean(label));
+
+      expect(new Set(labels).size).toBe(labels.length);
+    }
+  });
+
   it("exposes the high-fidelity mobile Explore home structure", () => {
     const { container } = renderWithIntl(<HomePage />);
 

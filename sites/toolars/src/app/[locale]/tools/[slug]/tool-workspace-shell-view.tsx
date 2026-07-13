@@ -22,8 +22,8 @@ function initials(label: string): string {
 function DetailRows({ rows }: { rows: ToolDetailRow[] }) {
   return (
     <div className="detail-row-list">
-      {rows.map((row) => (
-        <div className="detail-row" key={row.badge}>
+      {rows.map((row, index) => (
+        <div className="detail-row" key={`${row.badge}-${index}`}>
           <span className={badgeClass(row.tone)}>{row.badge}</span>
           <span>{row.description}</span>
         </div>
@@ -93,14 +93,6 @@ export function ToolWorkspaceShellView({ detail }: { detail: ToolDetailDefinitio
             <div className="workspace-section-title">
               <h2>{detail.trustSection.title}</h2>
               <span className="badge local">{t("badges.sourceBacked")}</span>
-            </div>
-            <div className="detail-metric-grid tool-workspace-metric-grid">
-              {detail.metrics.map((metric) => (
-                <div className="detail-metric" key={`${metric.value}-${metric.label}`}>
-                  <strong>{metric.value}</strong>
-                  <span>{metric.label}</span>
-                </div>
-              ))}
             </div>
             <DetailRows rows={detail.trustSection.rows} />
           </section>

@@ -25,6 +25,35 @@ const toolTypeLabelKey: Record<ToolType, "toolTypes.traditional" | "toolTypes.ai
   workflow: "toolTypes.workflow"
 };
 
+const nonTopicTagKeys = new Set([
+  "ai",
+  "ai-powered",
+  "ai-consent",
+  "cloud",
+  "free",
+  "freemium",
+  "local",
+  "local-first",
+  "paid",
+  "traditional",
+  "workflow"
+]);
+
+function normalizeTopicTag(tag: string) {
+  return tag.trim().toLowerCase().replace(/[\s_]+/g, "-");
+}
+
+export function getToolCardTopicTags(tool: ToolDefinition): string[] {
+  const seen = new Set<string>();
+
+  return tool.tags.filter((tag) => {
+    const normalized = normalizeTopicTag(tag);
+    if (!normalized || nonTopicTagKeys.has(normalized) || seen.has(normalized)) return false;
+    seen.add(normalized);
+    return true;
+  });
+}
+
 export function ToolCard({ tool }: { tool: ToolDefinition }) {
   const locale = useLocale();
   const tTool = useTranslations(`tools.${tool.slug}`);
@@ -36,6 +65,7 @@ export function ToolCard({ tool }: { tool: ToolDefinition }) {
   const description = tTool("description");
   const localeCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const pricingMessageKey = isFreeTrialMode() && tool.pricing !== "free" ? "pricing.freeTrial" : pricingLabelKey[tool.pricing];
+  const topicTags = getToolCardTopicTags(tool).slice(0, 3);
 
   return (
     <article className="tool-card">
@@ -48,13 +78,15 @@ export function ToolCard({ tool }: { tool: ToolDefinition }) {
           <p className="tool-description">{description}</p>
         </div>
       </div>
-      <div className="tag-list" aria-label={`${name} ${tSubmitTool("fields.tags")}`}>
-        {tool.tags.slice(0, 3).map((tag) => (
-          <span className="badge" key={tag}>
-            {tTag(getToolTagMessageKey(tag))}
-          </span>
-        ))}
-      </div>
+      {topicTags.length > 0 ? (
+        <div className="tag-list" aria-label={`${name} ${tSubmitTool("fields.tags")}`}>
+          {topicTags.map((tag) => (
+            <span className="badge" key={tag}>
+              {tTag(getToolTagMessageKey(tag))}
+            </span>
+          ))}
+        </div>
+      ) : null}
       <div className="tag-list">
         <span className="badge">{tSubmitTool(toolTypeLabelKey[tool.type])}</span>
         {tool.processing.slice(0, 2).map((mode) => (

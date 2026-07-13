@@ -5,8 +5,8 @@ import { afterEach, describe, expect, it } from "vitest";
 // @ts-expect-error audit-i18n is a plain ESM script without TS declarations.
 import { scanSourceText } from "../../../scripts/audit-i18n.mjs";
 import es from "../../../messages/es.json";
-import type { ToolDefinition } from "../../data/registry";
-import { ToolCard } from "./tool-card";
+import { tools, type ToolDefinition } from "../../data/registry";
+import { getToolCardTopicTags, ToolCard } from "./tool-card";
 
 const toolCardSourceFile = "src/components/tools/tool-card.tsx";
 const localizedTool: ToolDefinition = {
@@ -60,5 +60,33 @@ describe("ToolCard", () => {
     expect(screen.queryByText("AI-powered")).not.toBeInTheDocument();
     expect(screen.queryByText("Cloud")).not.toBeInTheDocument();
     expect(screen.queryByText("Free trial")).not.toBeInTheDocument();
+  });
+
+  it("removes pricing, type, processing, and duplicate topic tags across the registry", () => {
+    const taggedTool: ToolDefinition = {
+      ...localizedTool,
+      tags: ["AI", "Freemium", "JSON", "json", "Local-first"]
+    };
+
+    expect(getToolCardTopicTags(taggedTool)).toEqual(["JSON"]);
+
+    for (const tool of tools) {
+      const tags = getToolCardTopicTags(tool);
+      expect(new Set(tags.map((tag) => tag.toLowerCase())).size, tool.slug).toBe(tags.length);
+      expect(tags.map((tag) => tag.toLowerCase()), tool.slug).not.toEqual(
+        expect.arrayContaining([
+          "free",
+          "freemium",
+          "paid",
+          "ai",
+          "ai-powered",
+          "traditional",
+          "workflow",
+          "local",
+          "cloud",
+          "ai-consent"
+        ])
+      );
+    }
   });
 });

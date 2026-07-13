@@ -197,9 +197,6 @@ export default function HomePage() {
                       <Icon size={48} aria-hidden="true" />
                     </span>
                     <span className="home-desktop-pick-footer">
-                      {badges.map((badge) => (
-                        <span className="chip" key={badge}>{t(`home.badges.${badge}`)}</span>
-                      ))}
                       <span className="badge local">{badges.some((badge) => badge === "freemium") ? t("home.badges.freemium") : t("home.badges.free")}</span>
                       <span className="button button-solid">{t("home.actions.open")}</span>
                     </span>

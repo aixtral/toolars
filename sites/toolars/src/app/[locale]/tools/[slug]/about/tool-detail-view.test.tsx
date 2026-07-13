@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
-import { getToolDetailBySlug } from "@/data/tool-details";
+import { getAllToolDetails, getToolDetailBySlug } from "@/data/tool-details";
 import es from "../../../../../../messages/es.json";
 import zhHans from "../../../../../../messages/zh-hans.json";
 import zhHant from "../../../../../../messages/zh-hant.json";
@@ -55,6 +55,24 @@ describe("ToolDetailView", () => {
     );
   });
 
+  it("does not present static migration metadata as runtime tool metrics", () => {
+    const detail = getToolDetailBySlug("prompt-injection-scanner");
+    if (!detail) throw new Error("missing prompt detail");
+
+    const { container } = renderWithIntl(<ToolDetailView detail={detail} />);
+
+    expect(container.querySelector(".detail-metric-grid")).not.toBeInTheDocument();
+  });
+
+  it("does not present static metrics for any public tool detail route", () => {
+    for (const detail of getAllToolDetails()) {
+      const { container, unmount } = renderWithIntl(<ToolDetailView detail={detail} />);
+
+      expect(container.querySelector(".detail-metric-grid"), detail.tool.slug).not.toBeInTheDocument();
+      unmount();
+    }
+  });
+
   it("renders detail-specific copy for the cost calculator template", () => {
     const detail = getToolDetailBySlug("llm-cost-calculator");
     if (!detail) throw new Error("missing cost detail");
@@ -63,7 +81,6 @@ describe("ToolDetailView", () => {
 
     expect(screen.getByRole("heading", { name: "LLM Cost Calculator details" })).toBeInTheDocument();
     expect(screen.getByText("Pricing and limits")).toBeInTheDocument();
-    expect(screen.getByText("Model profiles")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /LLM Cost Review/ })).toHaveAttribute(
       "href",
       "/workflows/llm-cost-review"
@@ -150,13 +167,12 @@ describe("ToolDetailView", () => {
       "Local"
     ]);
     expect(screen.getByText("PDF processing model")).toBeInTheDocument();
-    expect(screen.getByText("Core operations")).toBeInTheDocument();
-    expect(screen.getByText("Base plan")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open tool" })).toHaveAttribute("href", "/tools/pdf-toolkit");
     expect(screen.getByRole("link", { name: /Turn PDF into summary/ })).toHaveAttribute(
       "href",
       "/workflows/pdf-summary"
     );
+    expect(screen.queryByText("4 min · +1,240 runs")).not.toBeInTheDocument();
 
     rerender(<ToolDetailView detail={jsonDetail} />);
 
@@ -168,9 +184,6 @@ describe("ToolDetailView", () => {
       "LLM",
       "API"
     ]);
-    expect(screen.getByText("Local repair model")).toBeInTheDocument();
-    expect(screen.getByText("Syntax issue types")).toBeInTheDocument();
-    expect(screen.getByText("Recommended next step")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute("href", "/tools/json-repair");
     expect(screen.getByRole("link", { name: /AI Prompt Hardening/ })).toHaveAttribute(
       "href",
@@ -302,7 +315,6 @@ describe("ToolDetailView", () => {
     renderWithIntl(<ToolDetailView detail={detail} />);
 
     expect(screen.getByRole("heading", { name: "Mortgage Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("Free").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Local").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
@@ -515,9 +527,7 @@ describe("ToolDetailView", () => {
     renderWithIntl(<ToolDetailView detail={detail} />);
 
     expect(screen.getByRole("heading", { name: "TDEE Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Daily energy estimate")).toBeInTheDocument();
     expect(screen.getAllByText("Local").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
@@ -532,9 +542,7 @@ describe("ToolDetailView", () => {
     renderWithIntl(<ToolDetailView detail={detail} />);
 
     expect(screen.getByRole("heading", { name: "BMR Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Basal metabolic estimate")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/bmr-calculator"
@@ -549,9 +557,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={fireDetail} />);
 
     expect(screen.getByRole("heading", { name: "FIRE Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Financial independence target")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/fire-calculator"
@@ -560,7 +566,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={sleepDetail} />);
 
     expect(screen.getByRole("heading", { name: "Sleep Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Sleep schedule estimate")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/sleep-calculator"
@@ -575,9 +580,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={rentDetail} />);
 
     expect(screen.getByRole("heading", { name: "Rent vs Buy Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Break-even comparison")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/rent-vs-buy"
@@ -586,7 +589,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={pressureDetail} />);
 
     expect(screen.getByRole("heading", { name: "Blood Pressure Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Blood pressure category")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/blood-pressure"
@@ -601,9 +603,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={apyDetail} />);
 
     expect(screen.getByRole("heading", { name: "APY Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Annual yield estimate")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/apy-calculator"
@@ -612,7 +612,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={macroDetail} />);
 
     expect(screen.getByRole("heading", { name: "Macro Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Macro split target")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/macro-calculator"
@@ -627,9 +626,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={emergencyDetail} />);
 
     expect(screen.getByRole("heading", { name: "Emergency Fund Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Emergency fund target")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/emergency-fund"
@@ -638,7 +635,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={sideTaxDetail} />);
 
     expect(screen.getByRole("heading", { name: "Side Income Tax Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Quarterly tax estimate")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/side-income-tax"
@@ -653,9 +649,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={fastingDetail} />);
 
     expect(screen.getByRole("heading", { name: "Intermittent Fasting Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Fasting window schedule")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/intermittent-fasting"
@@ -664,7 +658,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={glycemicDetail} />);
 
     expect(screen.getByRole("heading", { name: "Glycemic Load Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Glycemic load value")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/glycemic-load"
@@ -679,9 +672,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={tipDetail} />);
 
     expect(screen.getByRole("heading", { name: "Tip Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Per-person split")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/tip-calculator"
@@ -690,7 +681,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={unitDetail} />);
 
     expect(screen.getByRole("heading", { name: "Unit Converter details" })).toBeInTheDocument();
-    expect(screen.getByText("Universal conversion")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/unit-converter"
@@ -705,9 +695,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={caffeineDetail} />);
 
     expect(screen.getByRole("heading", { name: "Caffeine Safe Limit Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Daily caffeine allowance")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/caffeine-calculator"
@@ -716,7 +704,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={drinkDetail} />);
 
     expect(screen.getByRole("heading", { name: "Drink Calories Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Liquid calorie total")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/drink-calories"
@@ -731,9 +718,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={currencyDetail} />);
 
     expect(screen.getByRole("heading", { name: "Currency Converter details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Manual exchange-rate conversion")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/currency-converter"
@@ -742,7 +727,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={feeDetail} />);
 
     expect(screen.getByRole("heading", { name: "Investment Fee Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Investment fee drag")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/investment-fee"
@@ -757,9 +741,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={creditDetail} />);
 
     expect(screen.getByRole("heading", { name: "Credit Score Simulator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Credit score scenario impact")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/credit-score-simulator"
@@ -768,7 +750,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={cityDetail} />);
 
     expect(screen.getByRole("heading", { name: "City Cost Comparison details" })).toBeInTheDocument();
-    expect(screen.getByText("Relocation surplus comparison")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/city-cost-comparison"
@@ -783,9 +764,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={socialDetail} />);
 
     expect(screen.getByRole("heading", { name: "China Social Insurance Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("Payroll contribution breakdown")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/social-insurance-calculator"
@@ -794,7 +773,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={smokeDetail} />);
 
     expect(screen.getByRole("heading", { name: "Quit Smoking Tracker details" })).toBeInTheDocument();
-    expect(screen.getByText("Smoke-free recovery tracker")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/smoke-free"
@@ -809,9 +787,7 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={adhdDetail} />);
 
     expect(screen.getByRole("heading", { name: "ADHD Adult Screener ASRS-v1.1 details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("ASRS-v1.1 screening score")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/adhd-screener"
@@ -820,7 +796,6 @@ describe("ToolDetailView", () => {
     rerender(<ToolDetailView detail={glp1Detail} />);
 
     expect(screen.getByRole("heading", { name: "GLP-1 Eligibility Check details" })).toBeInTheDocument();
-    expect(screen.getByText("BMI eligibility screen")).toBeInTheDocument();
     expect(screen.getByText(/doctor or qualified clinician/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
@@ -836,15 +811,12 @@ describe("ToolDetailView", () => {
     const { rerender } = renderWithIntl(<ToolDetailView detail={strengthDetail} />);
 
     expect(screen.getByRole("heading", { name: "1RM Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Local calculation model")).toBeInTheDocument();
     expect(screen.getAllByText("VitalCalc source").length).toBeGreaterThan(0);
-    expect(screen.getByText("1RM estimate")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute("href", "/tools/one-rep-max");
 
     rerender(<ToolDetailView detail={dueDateDetail} />);
 
     expect(screen.getByRole("heading", { name: "Pregnancy Due Date Calculator details" })).toBeInTheDocument();
-    expect(screen.getByText("Due date estimate")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open workspace" })).toHaveAttribute(
       "href",
       "/tools/pregnancy-due-date"

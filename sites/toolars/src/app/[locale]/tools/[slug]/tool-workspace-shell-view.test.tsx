@@ -48,6 +48,15 @@ describe("ToolWorkspaceShellView", () => {
     );
   });
 
+  it("does not show static migration metadata as workspace metrics", () => {
+    const detail = getToolDetailBySlug("loan-calculator");
+    if (!detail) throw new Error("missing loan detail");
+
+    const { container } = renderWithIntl(<ToolWorkspaceShellView detail={detail} />);
+
+    expect(container.querySelector(".tool-workspace-metric-grid")).not.toBeInTheDocument();
+  });
+
   it("renders AI Lab handoff context and workflow links", () => {
     const detail = getToolDetailBySlug("prompt-injection-scanner");
     if (!detail) throw new Error("missing prompt scanner detail");

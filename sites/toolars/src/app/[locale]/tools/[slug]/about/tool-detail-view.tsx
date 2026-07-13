@@ -205,14 +205,6 @@ function heroSummary(detail: ToolDetailDefinition): string {
   return designedHeroSummaries[detail.tool.slug] ?? `${detail.tool.description} ${detail.summary}`;
 }
 
-function genericDetailMetrics(t: ToolDetailTranslator) {
-  return [
-    { value: "3", label: t("content.metrics.reviewLabel") },
-    { value: t("processing.local"), label: t("content.metrics.processingLabel") },
-    { value: t("badges.review"), label: t("content.metrics.boundaryLabel") }
-  ];
-}
-
 function genericDetailSteps(t: ToolDetailTranslator) {
   return [
     {
@@ -273,8 +265,8 @@ function localizeInternalHref(href: string, localeCode: LocaleCode): string {
 function DetailRows({ rows, t }: { rows: ToolDetailRow[]; t: ToolDetailTranslator }) {
   return (
     <div className="detail-row-list">
-      {rows.map((row) => (
-        <div className="detail-row" key={row.badge}>
+      {rows.map((row, index) => (
+        <div className="detail-row" key={`${row.badge}-${index}`}>
           <span className={badgeClass(row.tone)}>{localizedBadgeLabel(row.badge, t)}</span>
           <span>{row.description}</span>
         </div>
@@ -289,7 +281,6 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const isEnglishBaseline = localeCode === DEFAULT_LOCALE;
-  const metrics = isEnglishBaseline ? detail.metrics : genericDetailMetrics(t);
   const steps = isEnglishBaseline ? detail.howItWorks : genericDetailSteps(t);
   const trustSection = isEnglishBaseline ? detail.trustSection : genericTrustSection(t);
   const handoff = isEnglishBaseline ? detail.handoff : genericHandoff(t);
@@ -340,14 +331,6 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
             <p className="subtitle">
               {isEnglishBaseline ? detail.overview : t("content.overview", { name: tTools("name") })}
             </p>
-            <div className="detail-metric-grid">
-              {metrics.map((metric) => (
-                <div className="detail-metric" key={`${metric.value}-${metric.label}`}>
-                  <strong>{metric.value}</strong>
-                  <span>{metric.label}</span>
-                </div>
-              ))}
-            </div>
           </section>
 
           <section className="panel section tool-detail-how-it-works-panel">
@@ -429,12 +412,6 @@ export function ToolDetailView({ detail }: { detail: ToolDetailDefinition }) {
                 <span className="icon-tile rose">{detail.recommendedWorkflow.steps.length}</span>
                 <span>
                   <strong>{detail.recommendedWorkflow.title}</strong>
-                  <small>
-                    {t("workflow.meta", {
-                      minutes: detail.recommendedWorkflow.estimatedMinutes,
-                      runs: detail.recommendedWorkflow.runCount
-                    })}
-                  </small>
                 </span>
               </a>
               <p className="detail-aside-note">

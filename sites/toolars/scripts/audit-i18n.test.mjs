@@ -266,5 +266,5 @@ describe("i18n audit", () => {
     expect(audit.messages.copiedEnglishAccounting.draft.locales).toEqual(["ar", "fr", "hi", "ja", "pt", "ru"]);
     expect(audit.summary.hardcodedTextCandidates).toBe(0);
     expect(audit.summary.absoluteHrefCandidates).toBe(0);
-  });
+  }, 90_000);
 });

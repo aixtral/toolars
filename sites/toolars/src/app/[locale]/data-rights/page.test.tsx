@@ -1,8 +1,12 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import es from "../../../../messages/es.json";
 import DataRightsPage from "./page";
+
+const globalStyles = readFileSync(path.resolve(import.meta.dirname, "../../globals.css"), "utf8");
 
 function renderDataRightsWithSpanishMessages() {
   return render(
@@ -13,6 +17,12 @@ function renderDataRightsWithSpanishMessages() {
 }
 
 describe("DataRightsPage", () => {
+  it("uses the blog-width, single-column layout shared by legal pages", () => {
+    expect(globalStyles).toMatch(
+      /\.legal-page,\s*\.data-rights-page\s*\{[\s\S]*?grid-template-columns: minmax\(0, 1fr\);[\s\S]*?width: min\(100%, 1180px\);/
+    );
+  });
+
   it("renders visible request copy from the active locale bundle", () => {
     renderDataRightsWithSpanishMessages();
 

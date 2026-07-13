@@ -9058,8 +9058,11 @@ select {
   }
 }
 
-.legal-page {
-  max-width: 760px;
+.legal-page,
+.data-rights-page {
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 1180px);
+  max-width: 1180px;
   margin: 0 auto;
 }
 
@@ -9308,11 +9311,6 @@ select {
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
-}
-
-.data-rights-page {
-  max-width: 880px;
-  margin: 0 auto;
 }
 
 .data-rights-grid {

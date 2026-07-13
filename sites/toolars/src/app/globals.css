@@ -663,6 +663,10 @@ select {
   justify-content: flex-end;
 }
 
+.workspace-topbar-actions .workspace-breadcrumb {
+  margin-right: auto;
+}
+
 .side-section-head {
   justify-content: space-between;
   gap: 10px;
@@ -4919,45 +4923,6 @@ select {
 }
 
 @media (min-width: 781px) {
-  .topbar[data-desktop-layout="pdf-workspace-v2"] {
-    grid-template-columns: 220px 260px minmax(320px, 1fr) auto;
-    grid-template-areas: "brand breadcrumb command nav";
-    min-height: 64px;
-    padding: 0 20px;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .brand-tagline {
-    display: none;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .workspace-breadcrumb {
-    grid-area: breadcrumb;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .command-trigger {
-    justify-self: center;
-    max-width: 414px;
-    height: 38px;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .workspace-topbar-actions {
-    grid-area: nav;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .button {
-    min-height: 36px;
-    padding: 0 14px;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .button-solid {
-    min-width: 76px;
-  }
-
-  .topbar[data-desktop-layout="pdf-workspace-v2"] .pdf-appearance-button {
-    min-width: 36px;
-    padding: 0;
-  }
-
   .shell-grid[data-shell-layout="pdf-workspace-v2"] {
     grid-template-columns: 246px minmax(0, 1fr);
     min-height: calc(100vh - 64px);
@@ -6358,6 +6323,10 @@ select {
   }
 
   .topbar-submit-link {
+    display: none;
+  }
+
+  .workspace-topbar-actions .workspace-breadcrumb {
     display: none;
   }
 

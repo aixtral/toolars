@@ -36,6 +36,11 @@ describe("topbar visual style contract", () => {
     expect(block).toContain("grid-template-columns: minmax(188px, 220px) var(--topbar-command-width) minmax(0, 1fr)");
   });
 
+  it("does not override the shared command column for PDF workspace pages", () => {
+    expect(css).not.toContain('grid-template-areas: "brand breadcrumb command nav"');
+    expect(css).not.toContain('.topbar[data-desktop-layout="pdf-workspace-v2"] .command-trigger');
+  });
+
   it("keeps sign-in as a borderless ghost action and sign-up as the only solid action", () => {
     const signIn = cssBlockContaining(".topbar-account-actions .topbar-sign-in");
     const signUp = cssBlockContaining(".topbar-account-actions .topbar-sign-up");

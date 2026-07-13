@@ -678,27 +678,21 @@ export function ToolarsShell({
 
   return (
     <div className="app-shell">
-      <header
-        className={`topbar ${sidebarVariant === "pdf-workspace" ? "pdf-workspace-topbar" : ""}`}
-        data-desktop-layout={sidebarVariant === "pdf-workspace" ? "pdf-workspace-v2" : undefined}
-        data-mobile-layout="brand-menu-command-compact-v2"
-      >
+      <header className="topbar" data-mobile-layout="brand-menu-command-compact-v2">
         <a className="brand" href={localizedHref(active === "admin" ? "/admin/review" : "/")} aria-label={brandAriaLabel}>
           <span>
             <ToolarsLogoMark label={brandName} />
             <span className="brand-tagline">{t("common.tagline")}</span>
           </span>
         </a>
-        {sidebarVariant === "pdf-workspace" ? (
-          <div className="workspace-breadcrumb" aria-label={t("shell.pdfWorkspace.breadcrumbLabel")}>
-            <span>{t("shell.pdfWorkspace.tools")}</span>
-            <span aria-hidden="true">/</span>
-            <strong>{t("shell.pdfWorkspace.toolkit")}</strong>
-          </div>
-        ) : null}
         <CommandCenter />
         {sidebarVariant === "pdf-workspace" ? (
           <nav className="nav workspace-topbar-actions" aria-label={t("shell.pdfWorkspace.actionsLabel")}>
+            <div className="workspace-breadcrumb" aria-label={t("shell.pdfWorkspace.breadcrumbLabel")} role="group">
+              <span>{t("shell.pdfWorkspace.tools")}</span>
+              <span aria-hidden="true">/</span>
+              <strong>{t("shell.pdfWorkspace.toolkit")}</strong>
+            </div>
             <span className="topbar-actions-cluster" data-topbar-actions="account-language-v3">
               <ToolarsAccountActions />
               <LanguageSwitcher />

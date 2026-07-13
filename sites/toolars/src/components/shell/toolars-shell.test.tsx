@@ -66,14 +66,15 @@ describe("ToolarsShell", () => {
     expect(screen.getByText("AI credits")).toBeInTheDocument();
   });
 
-  it("renders the PDF workspace chrome from the high-fidelity desktop design", () => {
+  it("keeps the PDF workspace inside the shared topbar grid", () => {
     const { container } = renderWithIntl(
       <ToolarsShell active="pdf" sidebarVariant="pdf-workspace">
         <h1>PDF workspace content</h1>
       </ToolarsShell>
     );
 
-    expect(container.querySelector(".topbar")).toHaveAttribute("data-desktop-layout", "pdf-workspace-v2");
+    expect(container.querySelector(".topbar")).not.toHaveAttribute("data-desktop-layout");
+    expect(within(screen.getByLabelText("PDF workspace actions")).getByRole("group", { name: "Breadcrumb" })).toBeInTheDocument();
     expect(screen.getByLabelText("PDF workspace navigation")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /PDF Toolkit/ })).toHaveAttribute("href", "/tools/pdf-toolkit");
     expect(screen.getByRole("link", { name: /Image Tools/ })).toHaveAttribute("href", "/explore/image");

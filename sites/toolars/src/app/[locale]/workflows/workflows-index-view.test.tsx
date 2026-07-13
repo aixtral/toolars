@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
@@ -88,7 +88,7 @@ describe("WorkflowsIndexView", () => {
     expect(screen.getByText("Popular workflow templates")).toBeInTheDocument();
     expect(screen.getByText("Trending this week")).toBeInTheDocument();
     expect(screen.getAllByText("Build from scratch").length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: "Create workflow" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Create workflow" })).toBeEnabled();
     expect(screen.getByRole("link", { name: "Browse collections" })).toHaveAttribute("href", "/collections");
   });
 
@@ -103,13 +103,14 @@ describe("WorkflowsIndexView", () => {
       "data-workflows-density",
       "mobile-v2"
     );
-    expect(screen.getByRole("button", { name: "Build from scratch" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Build from scratch" })).toBeEnabled();
     expect(screen.getByText("WF")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Go" })).toHaveAttribute("href", "/workflows/pdf-summary");
-    expect(screen.getByRole("button", { name: "All workflows" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Includes AI" })).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByRole("button", { name: "Local first" })).toHaveAttribute("aria-pressed", "false");
-    expect(screen.getByRole("button", { name: "Team ready" })).toHaveAttribute("aria-pressed", "false");
+    const filters = screen.getByRole("list", { name: "Workflow filters" });
+    expect(within(filters).getByText("All workflows")).toHaveClass("active");
+    expect(within(filters).getByText("Includes AI")).toBeInTheDocument();
+    expect(within(filters).getByText("Local first")).toBeInTheDocument();
+    expect(within(filters).getByText("Team ready")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Featured workflow templates" })).toBeInTheDocument();
     expect(screen.getAllByText("PDF Summary Workflow Builder").length).toBeGreaterThan(0);
     expect(screen.getAllByText("+1.2K runs").length).toBeGreaterThan(0);
@@ -126,6 +127,24 @@ describe("WorkflowsIndexView", () => {
     expect(screen.getAllByText("AI step").length).toBeGreaterThan(0);
     expect(screen.getByText("Local-first steps")).toBeInTheDocument();
     expect(screen.getByText("Files removed after session")).toBeInTheDocument();
+  });
+
+  it("creates a persistent local workflow draft from every create entry point", () => {
+    renderWithIntl(<WorkflowsIndexView />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Create workflow" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Create workflow" });
+    fireEvent.change(within(dialog).getByRole("textbox", { name: "Create workflow" }), {
+      target: { value: "Quarterly release review" }
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Create workflow" }));
+
+    expect(within(dialog).getByRole("status")).toHaveTextContent("Quarterly release review");
+    expect(window.localStorage.getItem("toolars.local-workflows:v1")).toContain("Quarterly release review");
+    expect(screen.getByRole("button", { name: "Build from scratch" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Create custom workflow" })).toBeEnabled();
+    expect(screen.getByRole("link", { name: "Browse templates" })).toHaveAttribute("href", "#templates");
   });
 
   it("uses semantic workflow icons instead of numeric or abbreviated icon placeholders", () => {
@@ -163,8 +182,8 @@ describe("WorkflowsIndexView", () => {
     expect(screen.getByRole("link", { name: "前往-哨兵" })).toHaveAttribute("href", "/zh-hans/workflows/pdf-summary");
     expect(screen.getByLabelText("工作流示例-哨兵")).toBeInTheDocument();
     expect(screen.getByText("摘要 PDF 报告-哨兵")).toBeInTheDocument();
-    expect(screen.getByRole("group", { name: "工作流筛选-哨兵" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "全部工作流-哨兵" })).toHaveAttribute("aria-pressed", "true");
+    const filters = screen.getByRole("list", { name: "工作流筛选-哨兵" });
+    expect(within(filters).getByText("全部工作流-哨兵")).toHaveClass("active");
     expect(screen.getAllByText("PDF 摘要工作流构建器-哨兵").length).toBeGreaterThan(0);
     expect(screen.getAllByLabelText("PDF 摘要工作流构建器-哨兵 步骤-哨兵").length).toBeGreaterThan(0);
     expect(screen.getAllByText("AI 步骤-哨兵").length).toBeGreaterThan(0);

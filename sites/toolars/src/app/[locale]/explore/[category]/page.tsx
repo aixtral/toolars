@@ -57,7 +57,7 @@ function ExploreCategoryView({ category, label }: Readonly<{ category: string; l
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
-  const categoryName = t(`categories.${category}`);
+  const categoryName = category === "all" ? t("shell.toolCategories.all") : t(`categories.${category}`);
 
   return (
     <ToolarsShell active="explore" sidebarActiveHref={getCategoryHref(label)}>

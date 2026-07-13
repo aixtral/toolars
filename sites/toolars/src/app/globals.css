@@ -8445,14 +8445,9 @@ select {
 
   .workflow-index-page[data-workflows-mobile-layout="template-directory"] .workflow-mobile-filter-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-top: 14px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .workflow-index-page[data-workflows-mobile-layout="template-directory"] .workflow-mobile-filter-row::-webkit-scrollbar {
-    display: none;
   }
 
   .workflow-index-page[data-workflows-mobile-layout="template-directory"] .workflow-mobile-filter-row .chip {

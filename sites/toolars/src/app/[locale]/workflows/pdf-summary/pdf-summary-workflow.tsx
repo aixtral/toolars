@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ClipboardList, FileText, Play, Save } from "lucide-react";
 import { AiConsentDialog } from "@/components/core/ai-consent-dialog";
+import { LocalDraftModalButton } from "@/components/core/local-draft-modal-button";
 import { useDialogFocus } from "@/components/core/use-dialog-focus";
 import { appendAiConsentAuditEvent } from "@/lib/ai/consent-audit-storage";
 import { buildAiConsentRunMetadata } from "@/lib/ai/consent-audit-run-metadata";
@@ -134,9 +135,14 @@ export function PdfSummaryWorkflow() {
               <h2>{t("stepCanvas.title")}</h2>
               <p className="tool-description">{t("stepCanvas.description")}</p>
             </div>
-            <button disabled className="button button-outline-neutral" type="button">
-              <Save size={16} aria-hidden="true" /> {t("actions.saveTemplate")}
-            </button>
+            <LocalDraftModalButton
+              className="button button-outline-neutral"
+              defaultName={t("title")}
+              draftKind="workflow"
+              icon={<Save size={16} aria-hidden="true" />}
+              label={t("actions.saveTemplate")}
+              storageKey="toolars.local-workflows:v1"
+            />
           </div>
 
           <div className="workflow-step-list">

@@ -2293,7 +2293,7 @@ export function getCategorySlug(label: string): string {
 }
 
 export function getCategoryHref(label: string): string {
-  if (label === "All") return "/";
+  if (label === "All") return "/explore/all";
   if (label === "AI") return "/explore/ai-developer";
   return `/explore/${getCategorySlug(label)}`;
 }
@@ -2304,7 +2304,7 @@ export function getCategoryLabelBySlug(slug: string): string | undefined {
 
 export const exploreCategorySlugs = categoryDefinitions
   .map((category) => getCategorySlug(category.label))
-  .filter((slug) => slug !== "all" && slug !== "ai" && slug !== "pdf");
+  .filter((slug) => slug !== "ai" && slug !== "pdf");
 
 export const workflows: WorkflowDefinition[] = [
   {

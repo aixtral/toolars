@@ -1,5 +1,6 @@
-import { ArrowRight, Bookmark, FileText, FolderPlus, Globe2, Import, Sparkles } from "lucide-react";
+import { ArrowRight, Bookmark, FileText, FolderPlus, Globe2, Sparkles } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { BookmarkImportModalButton, LocalDraftModalButton } from "@/components/core/local-draft-modal-button";
 import { ToolIcon } from "@/components/tools/tool-icon";
 import { collections, getToolBySlug, type CollectionDefinition, type ToolDefinition } from "@/data/registry";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
@@ -133,16 +134,22 @@ export function CollectionsIndexView() {
           <h1 className="title collections-title-mobile">{t("heroTitleMobile")}</h1>
           <p className="subtitle collections-copy-desktop">{t("heroCopyDesktop")}</p>
           <p className="subtitle collections-copy-mobile">{t("heroCopyMobile")}</p>
-          <button disabled className="button button-solid collections-mobile-primary-action" type="button">
-            <FolderPlus size={16} aria-hidden="true" /> {t("createPrivate")}
-          </button>
+          <LocalDraftModalButton
+            className="button button-solid collections-mobile-primary-action"
+            draftKind="collection"
+            icon={<FolderPlus size={16} aria-hidden="true" />}
+            label={t("createPrivate")}
+            storageKey="toolars.local-collections:v1"
+          />
           <div className="landing-action-row">
-            <button disabled className="button button-solid" type="button">
-              <FolderPlus size={16} aria-hidden="true" /> {t("createCollection")}
-            </button>
-            <button disabled className="button button-outline-neutral" type="button">
-              <Import size={16} aria-hidden="true" /> {t("importBookmarks")}
-            </button>
+            <LocalDraftModalButton
+              className="button button-solid"
+              draftKind="collection"
+              icon={<FolderPlus size={16} aria-hidden="true" />}
+              label={t("createCollection")}
+              storageKey="toolars.local-collections:v1"
+            />
+            <BookmarkImportModalButton className="button button-outline-neutral" label={t("importBookmarks")} storageKey="toolars.imported-bookmarks:v1" />
             <a className="button button-outline-neutral" href="#all-collections">
               <Globe2 size={16} aria-hidden="true" /> {t("browsePublic")}
             </a>
@@ -251,9 +258,12 @@ export function CollectionsIndexView() {
           </span>
           <h2>{t("createPrivateTitle")}</h2>
           <p className="tool-description">{t("createPrivateDescription")}</p>
-          <button disabled className="button button-solid" type="button">
-            {t("createPrivate")}
-          </button>
+          <LocalDraftModalButton
+            className="button button-solid"
+            draftKind="collection"
+            label={t("createPrivate")}
+            storageKey="toolars.local-collections:v1"
+          />
         </section>
 
         <section className="panel">

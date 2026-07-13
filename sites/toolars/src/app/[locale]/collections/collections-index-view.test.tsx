@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { describe, expect, it } from "vitest";
@@ -27,14 +27,14 @@ describe("CollectionsIndexView", () => {
     );
     expect(screen.getByRole("heading", { name: "Collections for every kind of work" })).toBeInTheDocument();
     expect(screen.getByText("Collections for repeated work")).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Create private collection" }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole("button", { name: "Create private collection" }).every((button) => !button.hasAttribute("disabled"))).toBe(true);
     expect(screen.getByText("Featured collections")).toBeInTheDocument();
     expect(screen.getByText("All collections")).toBeInTheDocument();
     expect(screen.getByText("Recently updated")).toBeInTheDocument();
     expect(screen.getByText("Suggested for you")).toBeInTheDocument();
     expect(screen.getByText("Create a private collection")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Create collection" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Import bookmarks" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Create collection" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Import bookmarks" })).toBeEnabled();
   });
 
   it("uses registry collections with open links and collection metadata", () => {
@@ -50,6 +50,30 @@ describe("CollectionsIndexView", () => {
     expect(screen.queryByText("Health Basics")).not.toBeInTheDocument();
     expect(screen.getByText("Collections sync across devices")).toBeInTheDocument();
     expect(screen.getAllByText("Open").length).toBeGreaterThan(0);
+  });
+
+  it("creates a local collection draft and imports bookmark URLs", async () => {
+    renderWithIntl(<CollectionsIndexView />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Create collection" }));
+    const createDialog = screen.getByRole("dialog", { name: "Create collection" });
+    fireEvent.change(within(createDialog).getByRole("textbox", { name: "Create collection" }), {
+      target: { value: "Release favorites" }
+    });
+    fireEvent.click(within(createDialog).getByRole("button", { name: "Create collection" }));
+
+    expect(within(createDialog).getByRole("status")).toHaveTextContent("Release favorites");
+    expect(window.localStorage.getItem("toolars.local-collections:v1")).toContain("Release favorites");
+
+    fireEvent.click(screen.getByRole("button", { name: "Import bookmarks" }));
+    const importDialog = screen.getByRole("dialog", { name: "Import bookmarks" });
+    const file = new File(['<a href="https://toolars.example/tools/pdf-toolkit">PDF Toolkit</a>'], "bookmarks.html", { type: "text/html" });
+    Object.defineProperty(file, "text", { value: () => Promise.resolve('<a href="https://toolars.example/tools/pdf-toolkit">PDF Toolkit</a>') });
+    fireEvent.change(within(importDialog).getByLabelText("Import bookmarks"), { target: { files: [file] } });
+    fireEvent.submit(within(importDialog).getByRole("button", { name: "Import bookmarks" }).closest("form")!);
+
+    await waitFor(() => expect(within(importDialog).getByRole("status")).toHaveTextContent("bookmarks.html"));
+    expect(window.localStorage.getItem("toolars.imported-bookmarks:v1")).toContain("https://toolars.example/tools/pdf-toolkit");
   });
 
   it("uses real collection and tool icons instead of fake counts or initials", () => {

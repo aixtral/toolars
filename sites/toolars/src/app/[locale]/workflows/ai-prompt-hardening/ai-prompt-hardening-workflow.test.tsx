@@ -163,4 +163,17 @@ describe("AiPromptHardeningWorkflow", () => {
     expect(screen.getByText(/Guardrails and red-team variants/)).toBeInTheDocument();
     expect(screen.getByLabelText("Prompt hardening progress")).toHaveAttribute("aria-valuenow", "82");
   });
+
+  it("expands the optional AI consent review instead of disabling the control", () => {
+    renderWithIntl(<AiPromptHardeningWorkflow />);
+
+    const trigger = screen.getByRole("button", { name: "Review consent" });
+    expect(trigger).toBeEnabled();
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("status")).toHaveTextContent("Optional model-assisted review should require explicit consent.");
+  });
 });

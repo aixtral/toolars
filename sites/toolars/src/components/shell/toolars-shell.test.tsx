@@ -386,6 +386,7 @@ describe("ToolarsShell", () => {
     expect(sidebarLink("Finance")).toHaveAttribute("href", "/explore/finance");
     expect(sidebarLink("Health")).toHaveAttribute("href", "/explore/health");
     expect(sidebarLink("AI")).toHaveAttribute("href", "/explore/ai-developer");
+    expect(sidebarLink("Clear all filters")).toHaveAttribute("href", "/workflows");
   });
 
   it("uses real sidebar icons for workflow and collection categories instead of abbreviations", () => {

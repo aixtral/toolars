@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { BadgeDollarSign, Gauge, Save, Workflow } from "lucide-react";
+import { LocalDraftModalButton } from "@/components/core/local-draft-modal-button";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { runLlmCostReviewWorkflow, type LlmCostReviewResult } from "@/lib/workflows/llm-cost-review";
 
@@ -70,9 +71,14 @@ export function LlmCostReviewWorkflow() {
               <h2>{t("canvas.title")}</h2>
               <p className="tool-description">{t("canvas.description")}</p>
             </div>
-            <button disabled className="button button-outline-neutral" type="button">
-              <Save size={16} aria-hidden="true" /> {t("canvas.save")}
-            </button>
+            <LocalDraftModalButton
+              className="button button-outline-neutral"
+              defaultName={t("title")}
+              draftKind="workflow"
+              icon={<Save size={16} aria-hidden="true" />}
+              label={t("canvas.save")}
+              storageKey="toolars.local-workflows:v1"
+            />
           </div>
 
           <div className="workflow-step-list">

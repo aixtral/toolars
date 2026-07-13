@@ -322,9 +322,9 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             </label>
           ))}
         </section>
-        <button disabled className="button button-outline-neutral workflow-clear-button" type="button">
+        <a className="button button-outline-neutral workflow-clear-button" href={localizedHref("/workflows")}>
           {t("shell.commonSidebars.clearFilters")}
-        </button>
+        </a>
       </>
     );
   }

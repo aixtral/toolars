@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -138,6 +138,17 @@ describe("PdfSummaryWorkflow", () => {
     expect(screen.getByText(/Local extraction complete/)).toBeInTheDocument();
     expect(screen.getByText(/AI summary is waiting for consent approval/)).toBeInTheDocument();
     expect(screen.getByLabelText("PDF summary progress")).toHaveAttribute("aria-valuenow", "72");
+  });
+
+  it("saves the template locally instead of presenting a disabled save control", () => {
+    renderWithIntl(<PdfSummaryWorkflow />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Save template" }));
+    const dialog = screen.getByRole("dialog", { name: "Save template" });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Save template" }));
+
+    expect(within(dialog).getByRole("status")).toHaveTextContent("PDF Summary Workflow Builder");
+    expect(window.localStorage.getItem("toolars.local-workflows:v1")).toContain("PDF Summary Workflow Builder");
   });
 
   it("opens the step-scoped AI consent dialog from Review consent", () => {

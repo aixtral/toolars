@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { renderWithIntl } from "@/test/i18n-test-utils";
-import ExploreCategoryPage from "./page";
+import ExploreCategoryPage, { generateStaticParams } from "./page";
 
 function activeSidebarLink(label: string) {
   const link = screen.getAllByText(label).map((node) => node.closest("a")).find(Boolean);
@@ -18,6 +18,16 @@ describe("ExploreCategoryPage", () => {
     expect(screen.getByRole("heading", { name: "Finance tools" })).toBeInTheDocument();
     expect(activeSidebarLink("Finance")).toHaveAttribute("aria-current", "page");
     expect(screen.getByText("Mortgage Calculator")).toBeInTheDocument();
+  });
+
+  it("generates the complete All 55 directory instead of routing the sidebar entry to the home overview", async () => {
+    const ui = await ExploreCategoryPage({ params: Promise.resolve({ category: "all" }) });
+    const { container } = renderWithIntl(ui);
+
+    expect(generateStaticParams()).toContainEqual({ category: "all" });
+    expect(container.querySelector('[data-explore-category="all"]')).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "All tools" })).toBeInTheDocument();
+    expect(container.querySelectorAll(".tool-card")).toHaveLength(55);
   });
 
   it.each([

@@ -10,6 +10,7 @@ import {
   Workflow
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { LocalDraftModalButton } from "@/components/core/local-draft-modal-button";
 import { workflows, type WorkflowDefinition } from "@/data/registry";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
@@ -167,16 +168,23 @@ export function WorkflowsIndexView() {
           <h1 className="title">{t("pageHeroTitle")}</h1>
           <p className="subtitle">{t("pageHeroCopy")}</p>
           <div className="landing-action-row">
-            <button disabled className="button button-solid" type="button">
-              <Workflow size={16} aria-hidden="true" /> {t("createWorkflow")}
-            </button>
-            <button disabled className="button button-outline-neutral" type="button">
+            <LocalDraftModalButton
+              className="button button-solid"
+              draftKind="workflow"
+              icon={<Workflow size={16} aria-hidden="true" />}
+              label={t("createWorkflow")}
+              storageKey="toolars.local-workflows:v1"
+            />
+            <a className="button button-outline-neutral" href="#templates">
               <FolderOpen size={16} aria-hidden="true" /> {t("browseTemplates")}
-            </button>
+            </a>
           </div>
-          <button disabled className="button button-solid workflow-mobile-primary-action" type="button">
-            {t("buildFromScratch")}
-          </button>
+          <LocalDraftModalButton
+            className="button button-solid workflow-mobile-primary-action"
+            draftKind="workflow"
+            label={t("buildFromScratch")}
+            storageKey="toolars.local-workflows:v1"
+          />
           <div className="search-panel landing-search-panel">
             <div className="hero-input">
               <span className="workflow-mobile-search-icon">{t("searchIconLabel")}</span>
@@ -196,11 +204,11 @@ export function WorkflowsIndexView() {
               </span>
             ))}
           </div>
-          <div className="workflow-mobile-filter-row" role="group" aria-label={t("filtersAriaLabel")}>
+          <div className="workflow-mobile-filter-row" role="list" aria-label={t("filtersAriaLabel")}>
             {workflowFilters.map((filter, index) => (
-              <button disabled className={index === 0 ? "chip active" : "chip"} aria-pressed={index === 0 ? "true" : "false"} key={filter} type="button">
+              <span className={index === 0 ? "chip active" : "chip"} key={filter} role="listitem">
                 {filter}
-              </button>
+              </span>
             ))}
           </div>
         </section>
@@ -269,9 +277,13 @@ export function WorkflowsIndexView() {
         <section className="panel landing-build-card">
           <h2>{t("buildTitle")}</h2>
           <p className="tool-description">{t("buildDescription")}</p>
-          <button disabled className="button button-outline-neutral" type="button">
-            <Workflow size={16} aria-hidden="true" /> {t("createCustom")}
-          </button>
+          <LocalDraftModalButton
+            className="button button-outline-neutral"
+            draftKind="workflow"
+            icon={<Workflow size={16} aria-hidden="true" />}
+            label={t("createCustom")}
+            storageKey="toolars.local-workflows:v1"
+          />
         </section>
 
         <section className="panel">

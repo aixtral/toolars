@@ -539,7 +539,7 @@ describe("Toolars registry", () => {
   });
 
   it("derives public category counts from launch-visible tools", () => {
-    expect(categories[0]).toMatchObject({ label: "All", slug: "all", href: "/", count: publicTools.length });
+    expect(categories[0]).toMatchObject({ label: "All", slug: "all", href: "/explore/all", count: publicTools.length });
     expect(categories).not.toEqual(expect.arrayContaining([{ label: "All", count: 2643 }]));
     expect(categories.every((category) => category.count > 0)).toBe(true);
 
@@ -568,7 +568,7 @@ describe("Toolars registry", () => {
 
   it("builds stable explore links for every public category", () => {
     expect(getCategorySlug("RAG / MCP / Agent")).toBe("rag-mcp-agent");
-    expect(getCategoryHref("All")).toBe("/");
+    expect(getCategoryHref("All")).toBe("/explore/all");
     expect(getCategoryHref("AI")).toBe("/explore/ai-developer");
     expect(getCategoryHref("Finance")).toBe("/explore/finance");
     expect(getCategoryLabelBySlug("llm-cost")).toBe("LLM Cost");

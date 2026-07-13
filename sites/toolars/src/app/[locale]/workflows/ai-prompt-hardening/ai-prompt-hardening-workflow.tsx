@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { FileJson, Save, ScanSearch, ShieldCheck } from "lucide-react";
+import { LocalDraftModalButton } from "@/components/core/local-draft-modal-button";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
   runAiPromptHardeningWorkflow,
@@ -20,6 +21,7 @@ export function AiPromptHardeningWorkflow() {
   const localizedHref = (href: string) => localizePath(href, localeCode);
   const [surface, setSurface] = useState("systemPrompt" as InputSurface);
   const [result, setResult] = useState(null as AiPromptHardeningResult | null);
+  const [isConsentReviewOpen, setIsConsentReviewOpen] = useState(false);
   const progress = result?.progressPercent ?? 0;
 
   const runHardening = () => {
@@ -62,9 +64,14 @@ export function AiPromptHardeningWorkflow() {
               <h2>{t("canvas.title")}</h2>
               <p className="tool-description">{t("canvas.description")}</p>
             </div>
-            <button disabled className="button button-outline-neutral" type="button">
-              <Save size={16} aria-hidden="true" /> {t("canvas.save")}
-            </button>
+            <LocalDraftModalButton
+              className="button button-outline-neutral"
+              defaultName={t("title")}
+              draftKind="workflow"
+              icon={<Save size={16} aria-hidden="true" />}
+              label={t("canvas.save")}
+              storageKey="toolars.local-workflows:v1"
+            />
           </div>
 
           <div className="workflow-step-list">
@@ -139,9 +146,15 @@ export function AiPromptHardeningWorkflow() {
         <div className="workflow-review-gate">
           <strong>{t("reviewGate.title")}</strong>
           <p>{t("reviewGate.description")}</p>
-          <button disabled className="button button-outline-neutral" type="button">
+          <button
+            aria-expanded={isConsentReviewOpen}
+            className="button button-outline-neutral"
+            onClick={() => setIsConsentReviewOpen((isOpen) => !isOpen)}
+            type="button"
+          >
             {t("reviewGate.action")}
           </button>
+          {isConsentReviewOpen ? <p role="status">{t("reviewGate.description")}</p> : null}
         </div>
       </aside>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseBusiness, CheckCircle2, ChevronDown, CircleAlert, LogOut, Settings } from "lucide-react";
+import { CheckCircle2, ChevronDown, CircleAlert } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
@@ -83,15 +83,12 @@ export function ToolarsAccountActions({
               </span>
             </div>
             <a className="topbar-account-menu-link" href={localizedHref("/my-tools")}>
-              <BriefcaseBusiness aria-hidden="true" size={16} />
               {t("nav.myTools")}
             </a>
             <a className="topbar-account-menu-link" href={localizedHref("/settings")}>
-              <Settings aria-hidden="true" size={16} />
               {t("auth.menu.settings")}
             </a>
             <button className="topbar-account-menu-sign-out" onClick={() => void signOut()} type="button">
-              <LogOut aria-hidden="true" size={16} />
               {t("auth.signOut.button")}
             </button>
           </div>

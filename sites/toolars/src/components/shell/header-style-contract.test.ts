@@ -29,6 +29,13 @@ describe("topbar visual style contract", () => {
     expect(block).not.toMatch(/border(?:-color|-radius)?\s*:/);
   });
 
+  it("reserves a language-independent desktop width for the command search", () => {
+    const block = cssBlockContaining(".topbar");
+
+    expect(block).toContain("--topbar-command-width: 400px");
+    expect(block).toContain("grid-template-columns: minmax(188px, 220px) var(--topbar-command-width) minmax(0, 1fr)");
+  });
+
   it("keeps sign-in as a borderless ghost action and sign-up as the only solid action", () => {
     const signIn = cssBlockContaining(".topbar-account-actions .topbar-sign-in");
     const signUp = cssBlockContaining(".topbar-account-actions .topbar-sign-up");

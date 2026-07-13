@@ -20,9 +20,9 @@ describe("ToolarsAccountActions", () => {
     expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument();
   });
 
-  it("keeps the account menu compact and clear of the topbar boundary", () => {
-    expect(accountMenuStyles).toMatch(/\.topbar-account-menu-panel\s*\{[\s\S]*?top: calc\(100% \+ 18px\);[\s\S]*?width: 196px;/);
-    expect(accountMenuStyles).toMatch(/\.topbar-account-menu-link,[\s\S]*?\.topbar-account-menu-sign-out\s*\{[\s\S]*?min-height: 34px;/);
+  it("centers the compact account menu under its trigger while keeping menu text left aligned", () => {
+    expect(accountMenuStyles).toMatch(/\.topbar-account-menu-panel\s*\{[\s\S]*?top: calc\(100% \+ 18px\);[\s\S]*?left: 50%;[\s\S]*?right: auto;[\s\S]*?width: 196px;[\s\S]*?transform: translateX\(-50%\);/);
+    expect(accountMenuStyles).toMatch(/\.topbar-account-menu-link,[\s\S]*?\.topbar-account-menu-sign-out\s*\{[\s\S]*?justify-content: flex-start;[\s\S]*?text-align: left;/);
   });
 
   it("places signed-in workspace actions inside a compact account menu", async () => {
@@ -41,10 +41,17 @@ describe("ToolarsAccountActions", () => {
 
     expect(await screen.findByLabelText("Open account menu")).toBeInTheDocument();
     expect(screen.getByText("owner@example.com")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "My Tools" })).toHaveAttribute("href", "/my-tools");
-    expect(screen.getByRole("link", { name: "Personal center" })).toHaveAttribute("href", "/settings");
+    const myTools = screen.getByRole("link", { name: "My Tools" });
+    const settings = screen.getByRole("link", { name: "Personal center" });
+    const signOutButton = screen.getByRole("button", { name: "Sign out" });
 
-    fireEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(myTools).toHaveAttribute("href", "/my-tools");
+    expect(settings).toHaveAttribute("href", "/settings");
+    expect(myTools.querySelector("svg")).toBeNull();
+    expect(settings.querySelector("svg")).toBeNull();
+    expect(signOutButton.querySelector("svg")).toBeNull();
+
+    fireEvent.click(signOutButton);
 
     await waitFor(() => expect(signOut).toHaveBeenCalledTimes(1));
     expect(screen.getByRole("status")).toHaveClass("topbar-account-toast");

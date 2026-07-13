@@ -35,6 +35,14 @@ describe("production health check", () => {
     });
   });
 
+  it("treats the intentionally limited anonymous response as a liveness pass with an observability warning", () => {
+    expect(evaluateProductionHealth({ status: "ok" })).toEqual({
+      ok: true,
+      blockers: [],
+      warnings: ["Detailed runtime status requires TOOLARS_HEALTHCHECK_TOKEN"]
+    });
+  });
+
   it("blocks release when Supabase public config is missing", () => {
     const result = evaluateProductionHealth({
       ...healthyPhase1Payload,

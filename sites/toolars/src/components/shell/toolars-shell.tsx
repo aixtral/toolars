@@ -38,7 +38,6 @@ import {
   Share2,
   Sparkles,
   Star,
-  Sun,
   Upload,
   User,
   Users,
@@ -284,14 +283,6 @@ const pdfWorkspaceLinks = [
   { labelKey: "shell.pdfWorkspace.links.health", href: "/explore/health", icon: ShieldCheck, badgeKey: null },
   { labelKey: "shell.pdfWorkspace.links.developer", href: "/explore/ai-developer", icon: Code2, badgeKey: null },
   { labelKey: "shell.pdfWorkspace.links.moreTools", href: "/", icon: Grid2X2, badgeKey: null }
-] as const;
-
-const pdfRecentOutputs = [
-  ["q2Marketing", "merged", "twoMinutes"],
-  ["contractDraft", "compressed", "oneHour"],
-  ["invoiceMarch", "converted", "yesterday"],
-  ["productBrochure", "split", "twoDays"],
-  ["researchPaper", "summarized", "threeDays"]
 ] as const;
 
 function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActiveHref, sidebarVariant }: ShellSidebarContentProps) {
@@ -543,47 +534,6 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             </a>
           ))}
         </section>
-        <section className="side-section pdf-recent-outputs">
-          <div className="side-section-head">
-            <p className="side-title">{t("shell.pdfWorkspace.recentOutputs.title")}</p>
-            <a href={localizedHref("/my-tools#recent")}>{t("common.viewAll")}</a>
-          </div>
-          {pdfRecentOutputs.map(([key, metaKey, timeKey]) => (
-            <a className="pdf-recent-output" href={localizedHref("/my-tools#recent")} key={key}>
-              <span className="pdf-mini-file">PDF</span>
-              <span>
-                <strong>{t(`shell.pdfWorkspace.recentOutputs.files.${key}`)}</strong>
-                <small>{t(`shell.pdfWorkspace.recentOutputs.meta.${metaKey}`)}</small>
-              </span>
-              <small>{t(`shell.pdfWorkspace.recentOutputs.time.${timeKey}`)}</small>
-            </a>
-          ))}
-        </section>
-        <section className="panel pdf-plan-card">
-          <div className="side-section-head">
-            <strong>{freeTrialMode ? t("shell.pdfWorkspace.plan.trialUsage") : t("shell.pdfWorkspace.plan.freePlan")}</strong>
-            {freeTrialMode ? <span className="badge local">{t("common.beta")}</span> : <a href={localizedHref("/pricing")}>{t("common.upgrade")}</a>}
-          </div>
-          <div className="workspace-meter" aria-label={t("shell.aria.pdfWorkspaceStorage")}>
-            <span style={{ width: "42%" }} />
-          </div>
-          <div className="filter-row">
-            <span>{t("shell.pdfWorkspace.plan.storageUsed")}</span>
-            <span className="side-count">42%</span>
-          </div>
-          <div className="filter-row">
-            <span>{t("shell.pdfWorkspace.plan.localPdfTools")}</span>
-            <span className="side-count">{t("common.unlimited")}</span>
-          </div>
-          <div className="filter-row">
-            <span>{freeTrialMode ? t("shell.pdfWorkspace.plan.aiTrialCredits") : t("shell.pdfWorkspace.plan.aiToolsMonthly")}</span>
-            <span className="side-count">{freeTrialMode ? "1,250 / 2,000" : "10 / 20"}</span>
-          </div>
-          <div className="filter-row">
-            <span>{t("shell.pdfWorkspace.plan.storage")}</span>
-            <span className="side-count">{t("shell.pdfWorkspace.plan.storageQuota")}</span>
-          </div>
-        </section>
       </>
     );
   }
@@ -749,12 +699,6 @@ export function ToolarsShell({
         <CommandCenter />
         {sidebarVariant === "pdf-workspace" ? (
           <nav className="nav workspace-topbar-actions" aria-label={t("shell.pdfWorkspace.actionsLabel")}>
-            <button disabled className="button button-outline-neutral" type="button">
-              <Save size={16} aria-hidden="true" /> {t("common.save")}
-            </button>
-            <button disabled className="button button-outline-neutral" type="button">
-              <Share2 size={16} aria-hidden="true" /> {t("common.share")}
-            </button>
             <span className="topbar-actions-cluster" data-topbar-actions="account-language-v3">
               <ToolarsAccountActions />
               <LanguageSwitcher />
@@ -765,9 +709,6 @@ export function ToolarsShell({
               localizedHref={localizedHref}
               sidebarActiveHref={sidebarActiveHref}
             />
-            <button disabled aria-label={t("shell.pdfWorkspace.appearanceLabel")} className="button pdf-appearance-button" type="button">
-              <Sun size={17} aria-hidden="true" />
-            </button>
           </nav>
         ) : (
           <nav className="nav" aria-label={t("shell.aria.primaryNavigation")}>

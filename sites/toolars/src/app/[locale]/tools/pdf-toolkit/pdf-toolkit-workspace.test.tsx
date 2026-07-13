@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
+import { PDFDocument } from "pdf-lib";
 import { renderWithIntl } from "@/test/i18n-test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import es from "../../../../../messages/es.json";
@@ -23,12 +24,26 @@ function scanPdfToolkitWorkspaceSource() {
   };
 }
 
-function renderPdfToolkitWithSpanishMessages() {
-  return render(
-    <NextIntlClientProvider locale="es" messages={es}>
-      <PdfToolkitWorkspace />
-    </NextIntlClientProvider>
-  );
+async function createPdfFile(name: string, pageCount = 1) {
+  const document = await PDFDocument.create();
+  for (let page = 0; page < pageCount; page += 1) document.addPage();
+  const bytes = await document.save();
+  const arrayBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+  const file = new File([arrayBuffer], name, {
+    type: "application/pdf"
+  });
+  Object.defineProperty(file, "arrayBuffer", {
+    configurable: true,
+    value: async () => arrayBuffer
+  });
+  return file;
+}
+
+async function addQueuedPdf(file: File) {
+  fireEvent.click(screen.getByRole("button", { name: "Add files" }));
+  fireEvent.change(screen.getByLabelText("Choose PDF files"), { target: { files: [file] } });
+  await waitFor(() => expect(screen.getByRole("button", { name: "Add 1 file to queue" })).toBeEnabled());
+  fireEvent.click(screen.getByRole("button", { name: "Add 1 file to queue" }));
 }
 
 describe("PdfToolkitWorkspace", () => {
@@ -41,23 +56,18 @@ describe("PdfToolkitWorkspace", () => {
     vi.unstubAllGlobals();
   });
 
-  it("renders the design-contract sections for the PDF workspace", () => {
+  it("starts without example documents, a result, or an enabled processing action", () => {
     renderWithIntl(<PdfToolkitWorkspace />);
 
     expect(screen.getByRole("heading", { name: "PDF Toolkit" })).toBeInTheDocument();
     expect(screen.getByText("Add & organize PDF files")).toBeInTheDocument();
     expect(screen.getByText("Choose operation")).toBeInTheDocument();
     expect(screen.getByText("Result")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "AI Enhance" })).toBeInTheDocument();
-    expect(screen.getByText("Local PDF operations")).toBeInTheDocument();
-    expect(document.querySelector('[data-pdf-mobile-density="sidebar-first"]')).toBeInTheDocument();
-    expect(document.querySelector('[data-pdf-desktop-layout="workspace-v2"]')).toBeInTheDocument();
-    expect(screen.getByText("Pro plan usage")).toBeInTheDocument();
-    expect(screen.getByText("Key takeaways")).toBeInTheDocument();
-    expect(screen.getByText("Citations")).toBeInTheDocument();
-    expect(screen.getByText("Turn PDF into slides")).toBeInTheDocument();
-    expect(screen.getByText("Create email draft")).toBeInTheDocument();
-    expect(document.querySelectorAll(".next-step-strip article")).toHaveLength(5);
+    expect(screen.getByText("Ready for local PDF processing.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Merge PDFs" })).toBeDisabled();
+    expect(screen.queryByText("Q2_Marketing_Report_2024.pdf")).not.toBeInTheDocument();
+    expect(screen.queryByText("Completed")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Download" })).not.toBeInTheDocument();
   });
 
   it("keeps the desktop PDF workspace grid fluid within the shell content width", () => {
@@ -77,243 +87,92 @@ describe("PdfToolkitWorkspace", () => {
     expect(scan.absoluteHrefs).toEqual([]);
   });
 
-  it("requires explicit consent before generating an AI summary", () => {
-    renderWithIntl(<PdfToolkitWorkspace />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Summarize" }));
-    fireEvent.click(screen.getByRole("button", { name: "Generate summary" }));
-
-    expect(screen.getByText("Consent required before AI processing.")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "I consent" }));
-    fireEvent.click(screen.getByRole("button", { name: "Approve AI consent" }));
-    fireEvent.click(screen.getByRole("button", { name: "Generate summary" }));
-
-    expect(screen.getByText("AI summary ready")).toBeInTheDocument();
-    expect(screen.getByText(/Q2 2024 marketing report/)).toBeInTheDocument();
-  });
-
-  it("opens an AI consent dialog and restores focus when dismissed", () => {
-    renderWithIntl(<PdfToolkitWorkspace />);
-
-    const trigger = screen.getByRole("button", { name: "I consent" });
-
-    trigger.focus();
-    fireEvent.click(trigger);
-
-    const dialog = screen.getByRole("dialog", { name: "Review AI consent" });
-    expect(dialog).toHaveAttribute("aria-modal", "true");
-    expect(dialog).toHaveFocus();
-    expect(screen.getByText("Only selected PDF text is sent after you approve this step.")).toBeInTheDocument();
-
-    fireEvent.keyDown(dialog, { key: "Escape" });
-
-    expect(screen.queryByRole("dialog", { name: "Review AI consent" })).not.toBeInTheDocument();
-    expect(trigger).toHaveFocus();
-    expect(screen.getByRole("button", { name: "I consent" })).toBeInTheDocument();
-  });
-
   it("opens a local PDF upload overlay from Add files and restores focus on close", () => {
     renderWithIntl(<PdfToolkitWorkspace />);
 
     const trigger = screen.getByRole("button", { name: "Add files" });
-
     trigger.focus();
     fireEvent.click(trigger);
 
     const dialog = screen.getByRole("dialog", { name: "Add PDF files" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     expect(dialog).toHaveFocus();
-    expect(screen.getByText("Files stay on this device until you choose a cloud or AI step.")).toBeInTheDocument();
-    expect(screen.getByText("PDF limit: 50 MB per file")).toBeInTheDocument();
+    expect(screen.getByText("Files stay on this device.")).toBeInTheDocument();
 
     fireEvent.keyDown(dialog, { key: "Escape" });
-
     expect(screen.queryByRole("dialog", { name: "Add PDF files" })).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
   });
 
-  it("keeps upload guidance separate from AI consent copy", () => {
+  it("rejects non-PDF uploads and lets users delete queued PDFs", async () => {
     renderWithIntl(<PdfToolkitWorkspace />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Add files" }));
-
-    const uploadDialog = screen.getByRole("dialog", { name: "Add PDF files" });
-
-    expect(uploadDialog).toBeInTheDocument();
-    expect(screen.getByText("Queued locally")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Approve AI consent" })).not.toBeInTheDocument();
-
-    fireEvent.keyDown(uploadDialog, { key: "Escape" });
-    fireEvent.click(screen.getByRole("button", { name: "I consent" }));
-
-    expect(screen.getByRole("dialog", { name: "Review AI consent" })).toBeInTheDocument();
-  });
-
-  it("queues selected File API PDFs after scan and applies session retention", () => {
-    renderWithIntl(<PdfToolkitWorkspace />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Add files" }));
-    const fileInput = screen.getByLabelText("Choose PDF files");
-    const upload = new File(["pdf"], "Client_Brief.pdf", { type: "application/pdf" });
-
-    fireEvent.change(fileInput, { target: { files: [upload] } });
-
-    expect(screen.getByText("Client_Brief.pdf")).toBeInTheDocument();
-    expect(screen.getByText("Scan passed")).toBeInTheDocument();
-    expect(screen.getByText("Auto-delete after session")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Add 1 file to queue" }));
-
-    expect(screen.queryByRole("dialog", { name: "Add PDF files" })).not.toBeInTheDocument();
-    expect(screen.getByText("Client_Brief.pdf")).toBeInTheDocument();
-    expect(screen.getByText("Uploaded · Scan passed · Auto-delete after session")).toBeInTheDocument();
-  });
-
-  it("registers ready PDF uploads with the server temp store for workflow handoff", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({
-        uploads: [
-          {
-            deleteStatus: "active",
-            expiresAt: "2026-06-19T12:27:00Z",
-            fileName: "Client_Brief.pdf",
-            handoffTarget: "pdf-summary",
-            handoffToken: "handoff_pdf-summary_component_test",
-            objectKey: "temp/toolars_ws_upload_component_test/pdf_upload_component_test.pdf",
-            retentionLabel: "Temporary server object",
-            scanLabel: "Server scan passed",
-            scanStatus: "ready",
-            uploadId: "pdf_upload_component_test",
-            workspaceId: "toolars_ws_upload_component_test"
-          }
-        ]
-      }),
-      ok: true
-    });
-    vi.stubGlobal("fetch", fetchMock);
-
-    renderWithIntl(<PdfToolkitWorkspace />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Add files" }));
-    fireEvent.change(screen.getByLabelText("Choose PDF files"), {
-      target: { files: [new File(["pdf"], "Client_Brief.pdf", { type: "application/pdf" })] }
-    });
-
-    expect(await screen.findByText("Server scan passed")).toBeInTheDocument();
-    expect(screen.getByText("Temporary server object")).toBeInTheDocument();
-    expect(screen.getByText("handoff_pdf-summary_component_test")).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledWith(
-      "/api/pdf/uploads",
-      expect.objectContaining({
-        method: "POST"
-      })
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: "Add 1 file to queue" }));
-
-    await waitFor(() => {
-      expect(screen.queryByRole("dialog", { name: "Add PDF files" })).not.toBeInTheDocument();
-    });
-    expect(screen.getByText("Uploaded · Server scan passed · Temporary server object")).toBeInTheDocument();
-  });
-
-  it("shows server storage failure and lets users retry the upload handoff", async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({ error: "Storage unavailable" }),
-        ok: false
-      })
-      .mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({
-          uploads: [
-            {
-              deleteStatus: "active",
-              expiresAt: "2026-06-19T12:35:00Z",
-              fileName: "Retry_Me.pdf",
-              handoffTarget: "pdf-summary",
-              handoffToken: "handoff_pdf-summary_retry_component_test",
-              objectKey: "temp/toolars_ws_upload_retry_test/pdf_upload_retry_component_test.pdf",
-              retentionLabel: "Temporary server object",
-              scanLabel: "Server scan passed",
-              scanStatus: "ready",
-              signedHandoffUrl: "/api/pdf/uploads?handoffToken=handoff_pdf-summary_retry_component_test&signature=abc",
-              signedObjectUrl: "/api/pdf/uploads/object?objectKey=temp%2Ftoolars_ws_upload_retry_test%2Fpdf_upload_retry_component_test.pdf&signature=def",
-              uploadId: "pdf_upload_retry_component_test",
-              workspaceId: "toolars_ws_upload_retry_test"
-            }
-          ]
-        }),
-        ok: true
-      });
-    vi.stubGlobal("fetch", fetchMock);
-
-    renderWithIntl(<PdfToolkitWorkspace />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Add files" }));
-    fireEvent.change(screen.getByLabelText("Choose PDF files"), {
-      target: { files: [new File(["pdf"], "Retry_Me.pdf", { type: "application/pdf" })] }
-    });
-
-    expect(await screen.findByText("Storage handoff failed")).toBeInTheDocument();
-    expect(screen.getByText("Retry upload handoff")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Retry upload handoff Retry_Me.pdf" }));
-
-    expect(await screen.findByText("Server scan passed")).toBeInTheDocument();
-    expect(screen.getByText("handoff_pdf-summary_retry_component_test")).toBeInTheDocument();
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-  });
-
-  it("shows scan rejection and lets users delete uploaded files from the local queue", () => {
-    renderWithIntl(<PdfToolkitWorkspace />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Add files" }));
-    const fileInput = screen.getByLabelText("Choose PDF files");
-    const upload = new File(["pdf"], "Contract.pdf", { type: "application/pdf" });
+    const upload = await createPdfFile("Contract.pdf");
     const textFile = new File(["notes"], "notes.txt", { type: "text/plain" });
 
-    fireEvent.change(fileInput, { target: { files: [upload, textFile] } });
+    fireEvent.click(screen.getByRole("button", { name: "Add files" }));
+    fireEvent.change(screen.getByLabelText("Choose PDF files"), { target: { files: [upload, textFile] } });
 
-    expect(screen.getByText("Contract.pdf")).toBeInTheDocument();
-    expect(screen.getByText("notes.txt")).toBeInTheDocument();
-    expect(screen.getByText("Only PDF files can be queued")).toBeInTheDocument();
-
+    await waitFor(() => expect(screen.getByText("Only PDF files can be queued")).toBeInTheDocument());
     fireEvent.click(screen.getByRole("button", { name: "Add 1 file to queue" }));
-
-    expect(screen.getByText("Contract.pdf")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Delete uploaded file Contract.pdf" }));
 
     expect(screen.queryByText("Contract.pdf")).not.toBeInTheDocument();
     expect(screen.getByText("Deleted Contract.pdf from the local queue.")).toBeInTheDocument();
   });
 
-  it("renders critical PDF workspace controls and statuses from the active locale bundle", () => {
-    const { container } = renderPdfToolkitWithSpanishMessages();
+  it("merges uploaded PDFs and only enables download after real bytes are produced", async () => {
+    const createObjectURL = vi.fn(() => "blob:toolars-output");
+    const revokeObjectURL = vi.fn();
+    const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    vi.stubGlobal("URL", { ...URL, createObjectURL, revokeObjectURL });
+
+    renderWithIntl(<PdfToolkitWorkspace />);
+    await addQueuedPdf(await createPdfFile("Client_Brief.pdf", 2));
+
+    fireEvent.click(screen.getByRole("button", { name: "Merge PDFs" }));
+
+    await waitFor(() => expect(screen.getByText("Completed")).toBeInTheDocument());
+    expect(screen.getByText("Client_Brief_merged.pdf")).toBeInTheDocument();
+    expect(screen.getAllByText(/2 pages/).length).toBeGreaterThanOrEqual(2);
+
+    fireEvent.click(screen.getByRole("button", { name: "Download" }));
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(anchorClick).toHaveBeenCalledTimes(1);
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:toolars-output");
+  });
+
+  it("produces a ZIP result when splitting uploaded PDFs", async () => {
+    renderWithIntl(<PdfToolkitWorkspace />);
+    await addQueuedPdf(await createPdfFile("Client_Brief.pdf", 2));
+
+    fireEvent.click(screen.getByRole("button", { name: "Split" }));
+    fireEvent.click(screen.getByRole("button", { name: "Split PDF" }));
+
+    await waitFor(() => expect(screen.getByText("Client_Brief_pages.zip")).toBeInTheDocument());
+    expect(screen.getAllByText(/2 pages/).length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("does not advertise unsupported drive, AI, conversion, sharing, or preview controls", () => {
+    renderWithIntl(<PdfToolkitWorkspace />);
+
+    expect(screen.queryByRole("button", { name: "Import from Drive" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Convert" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Summarize" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Copy link" })).not.toBeInTheDocument();
+    expect(screen.queryByText("AI Enhance")).not.toBeInTheDocument();
+    expect(screen.queryByText("Preview")).not.toBeInTheDocument();
+  });
+
+  it("renders critical controls from the active locale bundle", () => {
+    render(
+      <NextIntlClientProvider locale="es" messages={es}>
+        <PdfToolkitWorkspace />
+      </NextIntlClientProvider>
+    );
 
     expect(screen.getByRole("button", { name: "Añadir archivos" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add files" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Resultado" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Mejora con IA" })).toBeInTheDocument();
-    expect(screen.getByText("hace 2 h")).toBeInTheDocument();
-    expect(screen.queryByText("2h")).not.toBeInTheDocument();
-    expect(container.querySelector(".pdf-mobile-rail-back")).toHaveAttribute("href", "/es/explore/pdf");
-    expect(container.querySelector('.workspace-tab[href="/es/workflows/pdf-summary"]')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Resumir" }));
-    fireEvent.click(screen.getByRole("button", { name: "Generar resumen" }));
-
-    expect(screen.getByText("Se requiere consentimiento antes del procesamiento con IA.")).toBeInTheDocument();
-    expect(screen.queryByText("Consent required before AI processing.")).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Añadir archivos" }));
-    fireEvent.change(screen.getByLabelText("Elegir archivos PDF"), {
-      target: { files: [new File(["pdf"], "Client_Brief.pdf", { type: "application/pdf" })] }
-    });
-
-    expect(screen.getByText("Escaneo aprobado")).toBeInTheDocument();
-    expect(screen.queryByText("Scan passed")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Añadir 1 archivo a la cola" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Fusionar PDF" })).toBeDisabled();
   });
 });

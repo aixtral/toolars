@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "Черновик русского 531: PDF Toolkit",
-      "description": "Черновик русского 532: Merge, split, compress, convert, summarize, and export PDFs in one workspace.",
+      "description": "Объединяйте, разделяйте и сжимайте PDF локально в браузере.",
       "workspace": {
         "a11y": {
           "navigation": "Черновик русского 533: PDF workspace navigation",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "Черновик русского 581: Server scan passed",
             "onlyPdf": "Черновик русского 582: Only PDF files can be queued",
             "blockedByLimit": "Черновик русского 583: Blocked by 50 MB PDF limit",
+            "invalidPdf": "Не удалось прочитать PDF",
             "autoDelete": "Черновик русского 584: Auto-delete after session",
             "notRetained": "Черновик русского 585: Not retained",
             "localOnly": "Черновик русского 586: Local only",
@@ -11288,7 +11289,7 @@
         "inputTitle": "Черновик русского 1869: JSON source",
         "inputDescription": "Черновик русского 1870: Paste a JSON array of objects and choose the CSV delimiter.",
         "inputLabel": "Черновик русского 1871: JSON array input",
-        "inputPlaceholder": "Черновик русского 1872: [{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "Черновик русского 1872: JSON object array: name, city",
         "delimiterLabel": "Черновик русского 1873: Delimiter",
         "delimiters": {
           "comma": "Черновик русского 1874: Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "Черновик русского 2008: XML input",
         "inputDescription": "Черновик русского 2009: Paste XML snippets, feed fragments, manifests, or config payloads.",
         "inputLabel": "Черновик русского 2010: XML input",
-        "inputPlaceholder": "Черновик русского 2011: <root><child>hello</child></root>",
+        "inputPlaceholder": "Черновик русского 2011: XML document with root and child elements",
         "modeLabel": "Черновик русского 2012: Mode",
         "modes": {
           "format": "Черновик русского 2013: Format",

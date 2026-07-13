@@ -37,9 +37,12 @@ describe("JsonRepairWorkspace", () => {
     expect(screen.queryByText("Malformed JSON input")).not.toBeInTheDocument();
   });
 
-  it("repairs the sample JSON payload", () => {
+  it("repairs JSON supplied by the user", () => {
     renderWithIntl(<JsonRepairWorkspace />);
 
+    fireEvent.change(screen.getByLabelText("Paste model output"), {
+      target: { value: "{user: 'ada',}" }
+    });
     fireEvent.click(screen.getByRole("button", { name: "Repair JSON" }));
 
     expect(screen.getByText("Repair complete. 3 fixes applied locally.")).toBeInTheDocument();

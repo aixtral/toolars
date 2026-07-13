@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import { useState } from "react";
-import { ClipboardCheck, FileWarning, Save, ShieldAlert, ShieldCheck, Sparkles } from "lucide-react";
+import { FileWarning, Save, ShieldAlert, ShieldCheck, Sparkles } from "lucide-react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { scanPromptInjection, type PromptInjectionScanResult } from "@/lib/tools/prompt-injection-scanner";
@@ -35,7 +35,7 @@ export function PromptInjectionScannerWorkspace() {
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
-  const [prompt, setPrompt] = useState(() => t("samplePrompt"));
+  const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState(null as PromptInjectionScanResult | null);
 
   const scan = () => {
@@ -97,7 +97,6 @@ export function PromptInjectionScannerWorkspace() {
         </div>
 
         <div className="button-row" style={{ justifyContent: "flex-start", marginTop: 28 }}>
-          <button disabled className="button button-outline" type="button">{t("actions.deepReview")}</button>
           <a className="button button-outline" href={localizedHref("/tools/prompt-injection-scanner/about")}>{t("actions.details")}</a>
         </div>
       </section>
@@ -124,7 +123,7 @@ export function PromptInjectionScannerWorkspace() {
             <button className="button button-outline" type="button" onClick={saveDraft}>
               <Save size={16} aria-hidden="true" /> {t("actions.saveDraft")}
             </button>
-            <button className="button button-solid" type="button" onClick={scan}>
+            <button className="button button-solid" disabled={!prompt.trim()} type="button" onClick={scan}>
               <ShieldAlert size={16} aria-hidden="true" /> {t("actions.scan")}
             </button>
           </div>
@@ -136,7 +135,6 @@ export function PromptInjectionScannerWorkspace() {
               <h2>{t("resultSection.title")}</h2>
               <p className="tool-description">{result ? t("resultSection.readyDescription") : t("resultSection.emptyDescription")}</p>
             </div>
-            <button disabled className="button button-outline" type="button">{t("actions.exportReport")}</button>
           </div>
 
           <div className="risk-meter" aria-label={t("metrics.riskScore")}>
@@ -200,12 +198,6 @@ export function PromptInjectionScannerWorkspace() {
           ))}
         </div>
 
-        <div className="button-row">
-          <button disabled className="button button-outline" type="button">{t("actions.saveToLab")}</button>
-          <button disabled className="button button-solid" type="button">
-            <ClipboardCheck size={16} aria-hidden="true" /> {t("actions.createChecklist")}
-          </button>
-        </div>
 
         <div className="consent-box">
           <strong>

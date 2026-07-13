@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import { useMemo, useState } from "react";
-import { Copy, FileJson, RotateCcw, ShieldCheck } from "lucide-react";
+import { Copy, FileJson, ShieldCheck } from "lucide-react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { repairJson, type JsonRepairResult } from "@/lib/tools/json-repair";
@@ -12,8 +12,7 @@ export function JsonRepairWorkspace() {
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
-  const sampleInput = t.raw("sampleInput") as string;
-  const [input, setInput] = useState(sampleInput);
+  const [input, setInput] = useState("");
   const [result, setResult] = useState(null as JsonRepairResult | null);
   const [copied, setCopied] = useState(false);
 
@@ -86,12 +85,6 @@ export function JsonRepairWorkspace() {
           </label>
           <textarea id="json-input" className="textarea" value={input} onChange={(event) => setInput(event.target.value)} />
           <div className="button-row">
-            <button className="button button-outline" type="button" onClick={() => {
-              setInput(sampleInput);
-              setResult(null);
-            }}>
-              <RotateCcw size={16} aria-hidden="true" /> {t("actions.resetSample")}
-            </button>
             <button className="button button-solid" type="button" onClick={runRepair}>
               <FileJson size={16} aria-hidden="true" /> {t("actions.repair")}
             </button>
@@ -131,10 +124,6 @@ export function JsonRepairWorkspace() {
             <br />
             <span className="tool-description">{t("next.functionCallBuilder.description")}</span>
           </span>
-        </div>
-        <div className="button-row">
-          <button disabled className="button button-outline" type="button">{t("actions.saveStack")}</button>
-          <button disabled className="button button-solid" type="button">{t("actions.useApi")}</button>
         </div>
       </aside>
     </AiLabWorkbenchShell>

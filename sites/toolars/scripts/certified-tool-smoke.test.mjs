@@ -25,8 +25,8 @@ describe("certified tool smoke manifest", () => {
     expect(scenarioSlugs).toEqual(certifiedSlugs);
     expect(getCertifiedToolFailureCoverage()).toMatchObject({
       total: 55,
-      contracted: 32,
-      disabledRun: 29,
+      contracted: 33,
+      disabledRun: 30,
       invalidInput: 3
     });
     expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "json-repair")?.failureAssertion).toMatchObject({
@@ -41,6 +41,12 @@ describe("certified tool smoke manifest", () => {
       type: "invalidInput",
       resultAssertion: { type: "pageText", text: "Enter a 3-digit octal mode" }
     });
+    expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "pdf-toolkit")).toMatchObject({
+      inputActions: [{ type: "uploadPdf" }, { type: "clickButton", name: "Compress" }],
+      resultAssertion: { type: "selectorText", selector: ".pdf-output-card", text: "toolars-smoke_compressed.pdf" },
+      downloadFileName: "toolars-smoke_compressed.pdf",
+      failureAssertion: { type: "disabledRun", inputActions: [], runButtonName: "Merge PDFs" }
+    });
     for (const scenario of certifiedToolSmokeScenarios) {
       expect(scenario.path).toBe(`/tools/${scenario.slug}`);
       expect(scenario.workspaceSelector.length).toBeGreaterThan(0);
@@ -48,7 +54,7 @@ describe("certified tool smoke manifest", () => {
       expect(scenario.runButtonName.length).toBeGreaterThan(0);
       expect(scenario.resultAssertion).toBeTruthy();
       if (scenario.failureAssertion?.type === "disabledRun") {
-        expect(scenario.failureAssertion.inputActions.length).toBeGreaterThan(0);
+        expect(scenario.failureAssertion.inputActions).toBeInstanceOf(Array);
       }
       if (scenario.failureAssertion?.type === "invalidInput") {
         expect(scenario.failureAssertion.inputActions.length).toBeGreaterThan(0);

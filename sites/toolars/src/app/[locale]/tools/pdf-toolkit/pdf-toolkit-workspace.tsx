@@ -2,55 +2,49 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import { type KeyboardEvent as ReactKeyboardEvent, useId, useMemo, useState } from "react";
-import { CheckCircle2, Download, FileText, Link2, LockKeyhole, Mail, MoreHorizontal, RotateCcw, Sparkles, Table2, Trash2, Upload } from "lucide-react";
-import { AiConsentDialog } from "@/components/core/ai-consent-dialog";
+import { CheckCircle2, Download, Sparkles, Trash2, Upload } from "lucide-react";
 import { useDialogFocus } from "@/components/core/use-dialog-focus";
 import {
   buildPdfJob,
   getPdfOperationPolicies,
   getPdfOperationPolicy,
-  samplePdfFiles,
-  type PdfFile,
   type PdfJobResult,
   type PdfOperation
 } from "@/lib/tools/pdf-toolkit";
 import {
   buildPdfUploadItems,
-  getReadyPdfUploadItems,
-  markPdfUploadStorageFailed,
-  mergePdfUploadServerRecords,
-  type PdfUploadItem,
-  type PdfUploadServerHandoffRecord
+  type PdfUploadItem
 } from "@/lib/tools/pdf-upload-lifecycle";
+import { getPdfPageCount, processPdfFiles, type LocalPdfProcessingResult } from "@/lib/tools/pdf-local-processor";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 
 type PdfWorkspaceTranslator = ReturnType<typeof useTranslations>;
 type PdfUploadSelectionEvent = {
   currentTarget: HTMLInputElement;
 };
+type QueuedPdfFile = PdfUploadItem & { rawFile: File };
 type PdfUploadDialogProps = {
   dialogRef: { current: HTMLElement | null };
   isOpen: boolean;
   onAddReadyUploads: () => void;
   onClose: () => void;
   onFilesSelected: (event: PdfUploadSelectionEvent) => void;
-  onRetryServerUploadHandoff: () => void;
-  stagedUploads: PdfUploadItem[];
+  stagedUploads: QueuedPdfFile[];
 };
 
 const INITIAL_PDF_OPERATION: PdfOperation = "merge";
-const localOperations = getPdfOperationPolicies().filter((operation) => operation.processing === "local");
+const localOperations = getPdfOperationPolicies();
 
-function createEmptyPdfUploadItems(): PdfUploadItem[] {
+function isLocalPdfOperation(operation: PdfOperation): operation is "merge" | "split" | "compress" {
+  return operation === "merge" || operation === "split" || operation === "compress";
+}
+
+function createEmptyPdfUploadItems(): QueuedPdfFile[] {
   return [];
 }
 
-function createEmptyUploadFiles(): File[] {
+function createInitialSelectedFiles(): QueuedPdfFile[] {
   return [];
-}
-
-function createInitialSelectedFiles(): PdfFile[] {
-  return samplePdfFiles.slice(0, 2);
 }
 
 function createInitialPdfJob(): PdfJobResult {
@@ -66,16 +60,13 @@ export function PdfToolkitWorkspace() {
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const [operation, setOperation] = useState(INITIAL_PDF_OPERATION);
-  const [aiSummarySelected, setAiSummarySelected] = useState(false);
-  const [consentGranted, setConsentGranted] = useState(false);
-  const [isConsentDialogOpen, setIsConsentDialogOpen] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
-  const [lastLocalUploads, setLastLocalUploads] = useState(createEmptyPdfUploadItems);
-  const [lastUploadFiles, setLastUploadFiles] = useState(createEmptyUploadFiles);
   const [selectedFiles, setSelectedFiles] = useState(createInitialSelectedFiles);
   const [stagedUploads, setStagedUploads] = useState(createEmptyPdfUploadItems);
   const [uploadStatus, setUploadStatus] = useState(t("workspace.upload.status.initial"));
   const [job, setJob] = useState(createInitialPdfJob);
+  const [processedOutput, setProcessedOutput] = useState<LocalPdfProcessingResult | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   function localizedHref(href: string) {
     return localizePath(href, localeCode);
@@ -83,81 +74,55 @@ export function PdfToolkitWorkspace() {
 
   const activePolicy = getPdfOperationPolicy(operation);
   const {
-    dialogRef: consentDialogRef,
-    restoreTriggerFocus: restoreConsentTriggerFocus,
-    triggerRef: consentTriggerRef
-  } = useDialogFocus(isConsentDialogOpen);
-  const {
     dialogRef: uploadDialogRef,
     restoreTriggerFocus: restoreUploadTriggerFocus,
     triggerRef: uploadTriggerRef
   } = useDialogFocus(isUploadDialogOpen);
   const totalPages = useMemo(() => selectedFiles.reduce((sum, file) => sum + file.pages, 0), [selectedFiles]);
   const totalSize = useMemo(() => selectedFiles.reduce((sum, file) => sum + file.sizeMb, 0), [selectedFiles]);
-  const designTakeaways = [
-    t("workspace.ai.designTakeaways.leads"),
-    t("workspace.ai.designTakeaways.paidSearch"),
-    t("workspace.ai.designTakeaways.campaign"),
-    t("workspace.ai.designTakeaways.budget")
-  ];
-  const designCitations = [
-    t("workspace.ai.designCitations.overview"),
-    t("workspace.ai.designCitations.paidSearch"),
-    t("workspace.ai.designCitations.budget"),
-    t("workspace.ai.designCitations.recommendations")
-  ];
+  const runOperation = async () => {
+    if (selectedFiles.length === 0) {
+      setJob(buildPdfJob({ files: [], operation, consentGranted: false }));
+      return;
+    }
 
-  const runOperation = () => {
-    setJob(
-      buildPdfJob({
-        files: selectedFiles,
-        operation,
-        consentGranted
-      })
-    );
+    if (!isLocalPdfOperation(operation)) return;
+
+    setIsProcessing(true);
+    setProcessedOutput(null);
+    try {
+      const output = await processPdfFiles({
+        files: await Promise.all(
+          selectedFiles.map(async (file) => ({
+            bytes: new Uint8Array(await file.rawFile.arrayBuffer()),
+            name: file.name
+          }))
+        ),
+        operation
+      });
+      setProcessedOutput(output);
+      setJob({
+        status: "completed",
+        consentRequired: false,
+        securityLabel: "Processed locally",
+        message: "Local processing complete",
+        output: {
+          fileName: output.fileName,
+          pages: output.pages,
+          sizeMb: Math.round((output.bytes.byteLength / 1024 / 1024) * 10) / 10
+        }
+      });
+    } catch {
+      setJob(buildPdfJob({ files: [], operation, consentGranted: false }));
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const chooseLocalOperation = (nextOperation: PdfOperation) => {
     setOperation(nextOperation);
-    setAiSummarySelected(false);
-    setJob(
-      buildPdfJob({
-        files: selectedFiles,
-        operation: nextOperation,
-        consentGranted
-      })
-    );
-  };
-
-  const chooseAiSummary = () => {
-    setAiSummarySelected(true);
-    setJob({
-      status: "needs-consent",
-      consentRequired: true,
-      securityLabel: "AI consent required",
-      message: "Consent required before AI processing."
-    });
-  };
-
-  const runAiSummary = () => {
-    setAiSummarySelected(true);
-    setJob(
-      buildPdfJob({
-        files: selectedFiles,
-        operation: "summarize",
-        consentGranted
-      })
-    );
-  };
-
-  const closeConsentDialog = () => {
-    setIsConsentDialogOpen(false);
-    restoreConsentTriggerFocus();
-  };
-
-  const approveAiConsent = () => {
-    setConsentGranted(true);
-    closeConsentDialog();
+    setProcessedOutput(null);
+    setJob(buildPdfJob({ files: [], operation: nextOperation, consentGranted: false }));
   };
 
   const closeUploadDialog = () => {
@@ -165,13 +130,32 @@ export function PdfToolkitWorkspace() {
     restoreUploadTriggerFocus();
   };
 
-  const handleUploadSelection = (event: PdfUploadSelectionEvent) => {
+  const handleUploadSelection = async (event: PdfUploadSelectionEvent) => {
     const files = Array.from(event.currentTarget.files ?? []);
-    const nextUploads = buildPdfUploadItems(files);
-    const readyCount = getReadyPdfUploadItems(nextUploads).length;
+    const nextUploads = await Promise.all(
+      buildPdfUploadItems(files).map(async (upload, index) => {
+        const rawFile = files[index]!;
+        if (upload.scanStatus !== "scan-passed") return { ...upload, rawFile };
 
-    setLastLocalUploads(nextUploads);
-    setLastUploadFiles(files);
+        try {
+          return {
+            ...upload,
+            pages: await getPdfPageCount(new Uint8Array(await rawFile.arrayBuffer())),
+            rawFile
+          };
+        } catch {
+          return {
+            ...upload,
+            rawFile,
+            retentionLabel: "Not retained",
+            scanLabel: "The PDF could not be read",
+            scanStatus: "rejected" as const
+          };
+        }
+      })
+    );
+    const readyCount = nextUploads.filter((upload) => upload.scanStatus === "scan-passed").length;
+
     setStagedUploads(nextUploads);
     setUploadStatus(
       readyCount === 1
@@ -179,54 +163,12 @@ export function PdfToolkitWorkspace() {
         : t("workspace.upload.status.localReadyMany", { count: readyCount })
     );
 
-    void registerServerUploadHandoff(files, nextUploads);
-  };
-
-  const registerServerUploadHandoff = async (files: File[], localUploads: PdfUploadItem[]) => {
-    if (files.length === 0 || typeof fetch !== "function" || typeof FormData === "undefined") return;
-
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append("files", file);
-      formData.append("fileNames", file.name);
-    });
-
-    try {
-      const response = await fetch("/api/pdf/uploads", {
-        body: formData,
-        method: "POST"
-      });
-      if (!response.ok) throw new Error("PDF upload temp store unavailable");
-
-      const payload = (await response.json()) as { uploads?: PdfUploadServerHandoffRecord[] };
-      const serverUploads = mergePdfUploadServerRecords(localUploads, payload.uploads ?? []);
-      const readyCount = getReadyPdfUploadItems(serverUploads).length;
-
-      setStagedUploads(serverUploads);
-      setUploadStatus(
-        readyCount === 1
-          ? t("workspace.upload.status.serverReadyOne")
-          : t("workspace.upload.status.serverReadyMany", { count: readyCount })
-      );
-    } catch {
-      const readyCount = getReadyPdfUploadItems(localUploads).length;
-      setStagedUploads(markPdfUploadStorageFailed(localUploads));
-      setUploadStatus(
-        readyCount === 1
-          ? t("workspace.upload.status.serverFailedOne")
-          : t("workspace.upload.status.serverFailedMany", { count: readyCount })
-      );
-    }
-  };
-
-  const retryServerUploadHandoff = () => {
-    if (lastUploadFiles.length === 0 || lastLocalUploads.length === 0) return;
-
-    void registerServerUploadHandoff(lastUploadFiles, lastLocalUploads);
   };
 
   const addReadyUploadsToQueue = () => {
-    const readyUploads = getReadyPdfUploadItems(stagedUploads);
+    const readyUploads = stagedUploads.filter(
+      (upload) => upload.scanStatus === "scan-passed" && upload.deleteStatus === "active"
+    );
     if (readyUploads.length === 0) return;
 
     setSelectedFiles((currentFiles) => [...currentFiles, ...readyUploads]);
@@ -236,93 +178,42 @@ export function PdfToolkitWorkspace() {
         : t("workspace.upload.status.addedMany", { count: readyUploads.length })
     );
     setStagedUploads([]);
+    setProcessedOutput(null);
+    setJob(buildPdfJob({ files: [], operation, consentGranted: false }));
     closeUploadDialog();
   };
 
-  const deleteSelectedFile = (file: PdfFile) => {
+  const deleteSelectedFile = (file: QueuedPdfFile) => {
     setSelectedFiles((currentFiles) => currentFiles.filter((item) => item.id !== file.id));
+    setProcessedOutput(null);
+    setJob(buildPdfJob({ files: [], operation, consentGranted: false }));
     setUploadStatus(t("workspace.upload.status.deleted", { name: file.name }));
   };
 
+  const downloadOutput = () => {
+    if (!processedOutput || typeof document === "undefined") return;
+    const outputBytes = processedOutput.bytes.buffer.slice(
+      processedOutput.bytes.byteOffset,
+      processedOutput.bytes.byteOffset + processedOutput.bytes.byteLength
+    ) as ArrayBuffer;
+    const url = URL.createObjectURL(new Blob([outputBytes], { type: processedOutput.mimeType }));
+    const anchor = document.createElement("a");
+    anchor.download = processedOutput.fileName;
+    anchor.href = url;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div className="pdf-workspace-shell" data-pdf-desktop-layout="workspace-v2" data-pdf-mobile-density="sidebar-first">
-      <section className="pdf-mobile-workspace-rail" data-pdf-mobile-rail="true" aria-label={t("workspace.a11y.navigation")}>
-        <div className="pdf-mobile-rail-brand">
-          <span className="pdf-mobile-rail-mark" aria-hidden="true" />
-          <span>
-            <strong>Toolars</strong>
-            <small>{t("workspace.mobileRail.workspace")}</small>
-          </span>
-        </div>
-        <a className="pdf-mobile-rail-back" href={localizedHref("/explore/pdf")}>
-          <span>PDF</span>
-          <strong>{t("workspace.mobileRail.backToCatalog")}</strong>
-        </a>
-
-        <h2>{t("workspace.mobileRail.workspace")}</h2>
-        <div className="pdf-mobile-rail-list">
-          <div className="pdf-mobile-rail-row is-active">
-            <strong>{t("workspace.mobileRail.files")}</strong>
-            <span>3</span>
-          </div>
-          <div className="pdf-mobile-rail-row">
-            <strong>{t("workspace.mobileRail.operations")}</strong>
-            <span>8</span>
-          </div>
-          <div className="pdf-mobile-rail-row">
-            <strong>{t("workspace.ai.title")}</strong>
-            <span>2</span>
-          </div>
-          <div className="pdf-mobile-rail-row">
-            <strong>{t("workspace.mobileRail.outputHistory")}</strong>
-            <span>12</span>
-          </div>
-        </div>
-
-        <h2>{t("workspace.mobileRail.recentOutputs")}</h2>
-        <div className="pdf-mobile-rail-list">
-          <div className="pdf-mobile-rail-row">
-            <strong>{t("workspace.mobileRail.recentOutputsList.q2Summary")}</strong>
-            <span>{t("workspace.mobileRail.recentOutputTimes.twoHours")}</span>
-          </div>
-          <div className="pdf-mobile-rail-row">
-            <strong>{t("workspace.mobileRail.recentOutputsList.invoiceBundle")}</strong>
-            <span>{t("workspace.mobileRail.recentOutputTimes.oneDay")}</span>
-          </div>
-          <div className="pdf-mobile-rail-row">
-            <strong>{t("workspace.mobileRail.recentOutputsList.boardNotes")}</strong>
-            <span>{t("workspace.mobileRail.recentOutputTimes.threeDays")}</span>
-          </div>
-        </div>
-
-        <div className="pdf-mobile-rail-usage">
-          <strong>{t("workspace.mobileRail.proPlanUsage")}</strong>
-          <span>{t("workspace.mobileRail.aiCredits")}</span>
-          <span className="pdf-mobile-rail-meter is-credits">
-            <span />
-          </span>
-          <span>{t("workspace.mobileRail.storage")}</span>
-          <span className="pdf-mobile-rail-meter is-storage">
-            <span />
-          </span>
-        </div>
-      </section>
-
+    <div className="pdf-workspace-shell" data-pdf-desktop-layout="workspace-v2">
       <section className="workspace-tabs" aria-label={t("workspace.a11y.modes")}>
-        <button disabled className="workspace-tab is-active" type="button">
+        <span className="workspace-tab is-active">
           <Sparkles size={18} aria-hidden="true" />
           <span>
             <strong>{t("workspace.tabs.traditionalTool")}</strong>
             <small>{t("workspace.tabs.localProcessing")}</small>
           </span>
-        </button>
-        <button className="workspace-tab" type="button" onClick={chooseAiSummary}>
-          <Sparkles size={18} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.ai.title")}</strong>
-            <small>{t("workspace.tabs.aiPoweredFeatures")}</small>
-          </span>
-        </button>
+        </span>
         <a className="workspace-tab" href={localizedHref("/workflows/pdf-summary")}>
           <Sparkles size={18} aria-hidden="true" />
           <span>
@@ -345,6 +236,8 @@ export function PdfToolkitWorkspace() {
               type="button"
               onClick={() => {
                 setSelectedFiles([]);
+                setProcessedOutput(null);
+                setJob(buildPdfJob({ files: [], operation, consentGranted: false }));
                 setUploadStatus(t("workspace.upload.status.cleared"));
               }}
             >
@@ -355,7 +248,6 @@ export function PdfToolkitWorkspace() {
             <button ref={uploadTriggerRef} className="button button-outline" type="button" onClick={() => setIsUploadDialogOpen(true)}>
               <Upload size={16} aria-hidden="true" /> {t("workspace.files.addFiles")}
             </button>
-            <button disabled className="button button-outline" type="button">{t("workspace.files.importFromDrive")}</button>
           </div>
 
           <div className="pdf-file-list" aria-label={t("workspace.files.selectedFiles")}>
@@ -366,14 +258,12 @@ export function PdfToolkitWorkspace() {
                 <span>
                   <strong>{file.name}</strong>
                   <small>{t("workspace.files.fileMeta", { pages: file.pages, size: file.sizeMb.toFixed(1) })}</small>
-                  {isPdfUploadItem(file) ? (
-                    <small>
-                      {t("workspace.upload.uploadedMeta", {
-                        retentionLabel: localizePdfUploadLabel(file.retentionLabel, t),
-                        scanLabel: localizePdfUploadLabel(file.scanLabel, t)
-                      })}
-                    </small>
-                  ) : null}
+                  <small>
+                    {t("workspace.upload.uploadedMeta", {
+                      retentionLabel: localizePdfUploadLabel(file.retentionLabel, t),
+                      scanLabel: localizePdfUploadLabel(file.scanLabel, t)
+                    })}
+                  </small>
                 </span>
                 <span className="badge local">{t("workspace.files.localBadge")}</span>
                 <button
@@ -411,17 +301,9 @@ export function PdfToolkitWorkspace() {
               <strong>{t("workspace.operations.settingsTitle", { operation: t(`workspace.operations.${activePolicy.operation}.label`) })}</strong>
               <p className="tool-description">{t(`workspace.operations.${activePolicy.operation}.description`)}</p>
             </div>
-            <label className="toggle-row">
-              <span>{t("workspace.operations.addBookmark")}</span>
-              <input type="checkbox" defaultChecked />
-            </label>
-            <label className="toggle-row">
-              <span>{t("workspace.operations.optimizeSize")}</span>
-              <input type="checkbox" />
-            </label>
           </div>
 
-          <button className="button button-solid full-width" type="button" onClick={runOperation}>
+          <button className="button button-solid full-width" disabled={selectedFiles.length === 0 || isProcessing} type="button" onClick={runOperation}>
             {t(`workspace.operations.${activePolicy.operation}.primaryAction`)}
           </button>
         </section>
@@ -432,43 +314,25 @@ export function PdfToolkitWorkspace() {
             {job.status === "completed" ? <span className="badge local"><CheckCircle2 size={14} aria-hidden="true" /> {t("workspace.result.completed")}</span> : null}
           </div>
 
-          <div className={job.status === "needs-consent" ? "status-error" : "status-success"}>{localizePdfJobMessage(job.message, t)}</div>
+          <div className={job.status === "completed" ? "status-success" : "status-error"}>{localizePdfJobMessage(job.message, t)}</div>
 
-          <article className="pdf-output-card">
-            <span className="pdf-file-icon large">PDF</span>
-            <span>
-              <strong>{job.output?.fileName ?? "Q2_Marketing_Report_2024_pending.pdf"}</strong>
-              <small>
-                {job.output
-                  ? t("workspace.files.fileMeta", { pages: job.output.pages, size: job.output.sizeMb.toFixed(1) })
-                  : t("workspace.files.fileMeta", { pages: totalPages, size: totalSize.toFixed(1) })}
-              </small>
-            </span>
-          </article>
+          {job.output && processedOutput ? (
+            <>
+              <article className="pdf-output-card">
+                <span className="pdf-file-icon large">PDF</span>
+                <span>
+                  <strong>{job.output.fileName}</strong>
+                  <small>{t("workspace.files.fileMeta", { pages: job.output.pages, size: job.output.sizeMb.toFixed(1) })}</small>
+                </span>
+              </article>
 
-          <div className="button-row" style={{ justifyContent: "flex-start" }}>
-            <button className="button button-solid" type="button" disabled={job.status !== "completed"}>
-              <Download size={16} aria-hidden="true" /> {t("workspace.result.download")}
-            </button>
-            <button className="button button-outline" type="button" disabled={job.status !== "completed"}>
-              <Link2 size={16} aria-hidden="true" /> {t("workspace.result.copyLink")}
-            </button>
-            <button disabled className="button button-outline" type="button">
-              <MoreHorizontal size={16} aria-hidden="true" />
-            </button>
-          </div>
+              <div className="button-row" style={{ justifyContent: "flex-start" }}>
+                <button className="button button-solid" type="button" onClick={downloadOutput}>
+                  <Download size={16} aria-hidden="true" /> {t("workspace.result.download")}
+                </button>
+              </div>
 
-          <h2 style={{ marginTop: 24 }}>{t("workspace.result.preview")}</h2>
-          <div className="pdf-preview-strip" aria-label={t("workspace.result.previewPages")}>
-            {[1, 2, 3, 4].map((page) => (
-              <span className="pdf-preview-page" key={page}>
-                <FileText size={22} aria-hidden="true" />
-                <small>{page}</small>
-              </span>
-            ))}
-          </div>
-
-          <dl className="detail-list">
+              <dl className="detail-list">
             <div>
               <dt>{t("workspace.result.operation")}</dt>
               <dd>{t(`workspace.operations.${activePolicy.operation}.label`)}</dd>
@@ -485,101 +349,11 @@ export function PdfToolkitWorkspace() {
               <dt>{t("workspace.result.security")}</dt>
               <dd>{localizePdfJobSecurityLabel(job.securityLabel, t)}</dd>
             </div>
-          </dl>
+              </dl>
+            </>
+          ) : null}
         </section>
-
-        <aside className="workspace-panel">
-          <div className="workspace-section-title">
-            <h2>{t("workspace.ai.title")}</h2>
-            <span className="badge ai">{t("workspace.ai.betaBadge")}</span>
-          </div>
-          <div className="ai-tabs" aria-label={t("workspace.ai.actionsLabel")}>
-            <button className={aiSummarySelected ? "is-selected" : ""} type="button" onClick={chooseAiSummary}>
-              {t("workspace.ai.summarize")}
-            </button>
-            <button disabled type="button">{t("workspace.ai.actionItems")}</button>
-            <button disabled type="button">{t("workspace.ai.translate")}</button>
-          </div>
-
-          <div className="consent-box">
-            <strong>
-              <LockKeyhole size={16} aria-hidden="true" /> {t("workspace.ai.consentTitle")}
-            </strong>
-            <p>{t("workspace.ai.consentDescription")}</p>
-            <button
-              ref={consentTriggerRef}
-              className="button button-solid"
-              type="button"
-              onClick={() => {
-                if (!consentGranted) {
-                  setIsConsentDialogOpen(true);
-                }
-              }}
-            >
-              {consentGranted ? t("workspace.ai.consentGranted") : t("workspace.ai.consentButton")}
-            </button>
-          </div>
-
-          <button className="button button-solid full-width" type="button" onClick={runAiSummary}>
-            {t("workspace.ai.generateSummary")}
-          </button>
-
-          <div className="summary-box pdf-ai-summary-box">
-            <strong>{job.output?.summary ? t("workspace.ai.summaryReady") : t("workspace.ai.summary")}</strong>
-            <p>{job.output?.summary ? localizePdfOutputSummary(job.output.summary, t) : t("workspace.ai.designSummary")}</p>
-            <strong>{t("workspace.ai.keyTakeaways")}</strong>
-            <ul>
-              {designTakeaways.map((takeaway) => (
-                <li key={takeaway}>{takeaway}</li>
-              ))}
-            </ul>
-            <strong>{t("workspace.ai.citations")}</strong>
-            <ul className="pdf-citation-list">
-              {(job.output?.citations?.map((citation) => localizePdfCitation(citation, t)) ?? designCitations).map((citation) => (
-                <li key={citation}>{citation}</li>
-              ))}
-            </ul>
-          </div>
-        </aside>
       </div>
-
-      <section className="next-step-strip" aria-label={t("workspace.nextSteps.ariaLabel")}>
-        <article>
-          <Sparkles size={20} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.nextSteps.summarizeTitle")}</strong>
-            <small>{t("workspace.nextSteps.summarizeDescription")}</small>
-          </span>
-        </article>
-        <article>
-          <FileText size={20} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.nextSteps.slidesTitle")}</strong>
-            <small>{t("workspace.nextSteps.slidesDescription")}</small>
-          </span>
-        </article>
-        <article>
-          <Table2 size={20} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.nextSteps.csvTitle")}</strong>
-            <small>{t("workspace.nextSteps.csvDescription")}</small>
-          </span>
-        </article>
-        <article>
-          <Mail size={20} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.nextSteps.emailTitle")}</strong>
-            <small>{t("workspace.nextSteps.emailDescription")}</small>
-          </span>
-        </article>
-        <article>
-          <RotateCcw size={20} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.nextSteps.allWorkflowsTitle")}</strong>
-            <small>{t("workspace.nextSteps.allWorkflowsDescription")}</small>
-          </span>
-        </article>
-      </section>
 
       <section className="trust-strip" aria-label={t("workspace.trust.ariaLabel")}>
         <div>
@@ -589,46 +363,17 @@ export function PdfToolkitWorkspace() {
             <small>{t("workspace.trust.localDescription")}</small>
           </span>
         </div>
-        <div>
-          <LockKeyhole size={22} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.trust.aiTitle")}</strong>
-            <small>{t("workspace.trust.aiDescription")}</small>
-          </span>
-        </div>
-        <div>
-          <Trash2 size={22} aria-hidden="true" />
-          <span>
-            <strong>{t("workspace.trust.filesTitle")}</strong>
-            <small>{t("workspace.trust.filesDescription")}</small>
-          </span>
-        </div>
       </section>
-
-      <AiConsentDialog
-        contentSummary={t("workspace.ai.dialogContentSummary")}
-        dialogRef={consentDialogRef}
-        isOpen={isConsentDialogOpen}
-        onApprove={approveAiConsent}
-        onClose={closeConsentDialog}
-        retentionSummary={t("workspace.ai.dialogRetentionSummary")}
-        scopeSummary={t("workspace.ai.dialogScopeSummary")}
-      />
       <PdfUploadDialog
         dialogRef={uploadDialogRef}
         isOpen={isUploadDialogOpen}
         onAddReadyUploads={addReadyUploadsToQueue}
         onClose={closeUploadDialog}
         onFilesSelected={handleUploadSelection}
-        onRetryServerUploadHandoff={retryServerUploadHandoff}
         stagedUploads={stagedUploads}
       />
     </div>
   );
-}
-
-function isPdfUploadItem(file: PdfFile): file is PdfUploadItem {
-  return "scanStatus" in file;
 }
 
 function localizePdfUploadLabel(label: string, t: PdfWorkspaceTranslator) {
@@ -641,6 +386,8 @@ function localizePdfUploadLabel(label: string, t: PdfWorkspaceTranslator) {
       return t("workspace.upload.labels.onlyPdf");
     case "Blocked by 50 MB PDF limit":
       return t("workspace.upload.labels.blockedByLimit");
+    case "The PDF could not be read":
+      return t("workspace.upload.labels.invalidPdf");
     case "Auto-delete after session":
       return t("workspace.upload.labels.autoDelete");
     case "Not retained":
@@ -688,42 +435,19 @@ function localizePdfJobSecurityLabel(label: string, t: PdfWorkspaceTranslator) {
   }
 }
 
-function localizePdfOutputSummary(summary: string, t: PdfWorkspaceTranslator) {
-  if (
-    summary ===
-    "This document is a Q2 2024 marketing report that outlines campaign performance, budget utilization, key wins, challenges, and recommendations for the next quarter."
-  ) {
-    return t("workspace.ai.outputSummary");
-  }
-
-  return summary;
-}
-
-function localizePdfCitation(citation: string, t: PdfWorkspaceTranslator) {
-  switch (citation) {
-    case "p. 3 Q2 Performance Overview":
-      return t("workspace.ai.outputCitations.overview");
-    case "p. 8 Campaign Results":
-      return t("workspace.ai.outputCitations.results");
-    case "p. 12 Budget Summary":
-      return t("workspace.ai.outputCitations.budget");
-    default:
-      return citation;
-  }
-}
-
 function PdfUploadDialog({
   dialogRef,
   isOpen,
   onAddReadyUploads,
   onClose,
   onFilesSelected,
-  onRetryServerUploadHandoff,
   stagedUploads
 }: PdfUploadDialogProps) {
   const t = useTranslations("tools.pdf-toolkit");
   const titleId = useId();
-  const readyCount = getReadyPdfUploadItems(stagedUploads).length;
+  const readyCount = stagedUploads.filter(
+    (upload) => upload.scanStatus === "scan-passed" && upload.deleteStatus === "active"
+  ).length;
 
   if (!isOpen) return null;
 
@@ -781,17 +505,6 @@ function PdfUploadDialog({
                   <small>{localizePdfUploadLabel(file.scanLabel, t)}</small>
                   <small>{localizePdfUploadLabel(file.retentionLabel, t)}</small>
                   <small>{localizePdfUploadLabel(file.storageLabel, t)}</small>
-                  {file.handoffToken ? <small>{file.handoffToken}</small> : null}
-                  {file.storageStatus === "failed" ? (
-                    <button
-                      aria-label={t("workspace.upload.retryAria", { name: file.name })}
-                      className="text-button"
-                      type="button"
-                      onClick={onRetryServerUploadHandoff}
-                    >
-                      <RotateCcw size={13} aria-hidden="true" /> {t("workspace.upload.retryButton")}
-                    </button>
-                  ) : null}
                 </span>
                 <span className={`badge ${file.scanStatus === "scan-passed" ? "local" : "ai"}`}>
                   {file.scanStatus === "scan-passed" ? t("workspace.upload.dialog.readyBadge") : t("workspace.upload.dialog.rejectedBadge")}

@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import { useMemo, useState } from "react";
-import { Clipboard, Save, ServerCog } from "lucide-react";
+import { Save, ServerCog } from "lucide-react";
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
@@ -13,11 +13,6 @@ import {
   validateMcpServerDraft,
   type McpServerDraft
 } from "@/lib/tools/mcp-server-builder";
-
-const initialPreview = `{
-  "name": "toolars-research-kit",
-  "tools": []
-}`;
 
 const builderStages = [
   { number: "1", key: "defineTools", tone: "local" },
@@ -44,7 +39,7 @@ export function McpServerBuilderWorkspace() {
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
   const [draft, setDraft] = useState(() => buildMcpServerDraft());
-  const [manifestText, setManifestText] = useState(initialPreview);
+  const [manifestText, setManifestText] = useState("");
   const [manifestStats, setManifestStats] = useState(null as ManifestStats | null);
   const status = manifestStats ? t("status.generated", manifestStats) : t("status.waiting");
 
@@ -205,11 +200,8 @@ export function McpServerBuilderWorkspace() {
               <h2>{t("preview.title")}</h2>
               <p className="tool-description">{status}</p>
             </div>
-            <button disabled className="button button-outline" type="button">
-              <Clipboard size={16} aria-hidden="true" /> {t("actions.copyManifest")}
-            </button>
           </div>
-          <pre className="code-output mcp-code-output">{manifestText}</pre>
+          {manifestText ? <pre className="code-output mcp-code-output">{manifestText}</pre> : null}
         </section>
       </div>
 

@@ -1,44 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { buildPdfJob, getPdfOperationPolicy, samplePdfFiles } from "./pdf-toolkit";
+import { buildPdfJob, getPdfOperationPolicies, getPdfOperationPolicy } from "./pdf-toolkit";
 
-describe("PDF Toolkit job planning", () => {
-  it("keeps merge operations local and produces a merged output", () => {
-    const result = buildPdfJob({
-      files: samplePdfFiles.slice(0, 2),
-      operation: "merge",
-      consentGranted: false
+const queuedPdf = {
+  id: "client-brief",
+  name: "Client_Brief.pdf",
+  pages: 2,
+  sizeMb: 0.1,
+  source: "local" as const
+};
+
+describe("PDF Toolkit operation policy", () => {
+  it("only exposes locally implemented operations", () => {
+    expect(getPdfOperationPolicies().map((policy) => policy.operation)).toEqual(["merge", "split", "compress"]);
+    expect(getPdfOperationPolicy("merge")).toMatchObject({
+      label: "Merge",
+      consentRequired: false,
+      processing: "local"
     });
-
-    expect(result.status).toBe("completed");
-    expect(result.consentRequired).toBe(false);
-    expect(result.securityLabel).toBe("Processed locally");
-    expect(result.output?.fileName).toBe("Q2_Marketing_Report_2024_merged.pdf");
-    expect(result.output?.pages).toBe(42);
   });
 
-  it("blocks AI summary work until consent is granted", () => {
-    const blocked = buildPdfJob({
-      files: samplePdfFiles,
-      operation: "summarize",
-      consentGranted: false
-    });
-
-    expect(blocked.status).toBe("needs-consent");
-    expect(blocked.consentRequired).toBe(true);
-    expect(blocked.output).toBeUndefined();
-
-    const completed = buildPdfJob({
-      files: samplePdfFiles,
-      operation: "summarize",
-      consentGranted: true
-    });
-
-    expect(completed.status).toBe("completed");
-    expect(completed.output?.summary).toContain("Q2 2024 marketing report");
-    expect(completed.securityLabel).toBe("AI consent granted");
-  });
-
-  it("requires at least one PDF before planning an operation", () => {
+  it("requires a PDF before an operation can run", () => {
     const result = buildPdfJob({
       files: [],
       operation: "compress",
@@ -49,16 +30,15 @@ describe("PDF Toolkit job planning", () => {
     expect(result.message).toBe("Add at least one PDF file to continue.");
   });
 
-  it("exposes processing policy for the workspace tabs", () => {
-    expect(getPdfOperationPolicy("merge")).toMatchObject({
-      label: "Merge",
-      consentRequired: false,
-      processing: "local"
+  it("never manufactures an output before the local processor returns bytes", () => {
+    const result = buildPdfJob({
+      files: [queuedPdf],
+      operation: "merge",
+      consentGranted: false
     });
-    expect(getPdfOperationPolicy("summarize")).toMatchObject({
-      label: "Summarize",
-      consentRequired: true,
-      processing: "ai-consent"
-    });
+
+    expect(result.status).toBe("blocked");
+    expect(result.output).toBeUndefined();
+    expect(result.message).toBe("Choose a local operation to process the queued PDFs.");
   });
 });

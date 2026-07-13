@@ -1,7 +1,7 @@
 "use client";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Calculator, Download, Save, ShieldCheck, TrendingUp } from "lucide-react";
+import { Calculator, Save, ShieldCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
@@ -124,9 +124,6 @@ export function CompoundInterestWorkspace() {
                   : t("resultSection.emptyDescription")}
               </p>
             </div>
-            <button disabled className="button button-outline" type="button">
-              <Download size={16} aria-hidden="true" /> {t("actions.export")}
-            </button>
           </div>
 
           <div className="llm-metric-grid">

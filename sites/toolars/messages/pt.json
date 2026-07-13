@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "Kit de ferramentas PDF",
-      "description": "Mescle, divida, comprima, converta, resuma e exporte PDFs em um único espaço de trabalho.",
+      "description": "Mescle, divida e comprima PDFs localmente no navegador.",
       "workspace": {
         "a11y": {
           "navigation": "Navegação do espaço de trabalho PDF",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "Verificação do servidor aprovada",
             "onlyPdf": "Somente arquivos PDF podem entrar na fila",
             "blockedByLimit": "Bloqueado pelo limite de PDF de 50 MB",
+            "invalidPdf": "Não foi possível ler o PDF",
             "autoDelete": "Excluir automaticamente após a sessão",
             "notRetained": "Não retido",
             "localOnly": "Apenas local",
@@ -11288,7 +11289,7 @@
         "inputTitle": "Fonte JSON",
         "inputDescription": "Cole um array JSON de objetos e escolha o delimitador CSV.",
         "inputLabel": "Entrada de array JSON",
-        "inputPlaceholder": "[{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "Matriz JSON de objetos: name, city",
         "delimiterLabel": "Delimiter",
         "delimiters": {
           "comma": "Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "Entrada XML",
         "inputDescription": "Cole trechos XML, fragmentos de feed, manifestos ou payloads de configuração.",
         "inputLabel": "Entrada XML",
-        "inputPlaceholder": "<root><child>hello</child></root>",
+        "inputPlaceholder": "Documento XML com elementos raiz e filho",
         "modeLabel": "Mode",
         "modes": {
           "format": "Format",

@@ -48,6 +48,19 @@ export function createLaunchReadinessPlan({
     ], baseUrl, {
       TOOLARS_BASE_URL: baseUrl
     }),
+    browserGate("public-tool-button-audit", "Public tool button browser audit", "node", [
+      "scripts/audit-public-tool-buttons.mjs"
+    ], baseUrl, {
+      TOOLARS_BASE_URL: baseUrl,
+      TOOLARS_PUBLIC_BUTTON_AUDIT_OUTPUT_DIR: path.join(outputRoot, "browser", "public-tool-buttons")
+    }),
+    browserGate("deferred-tool-access-smoke", "Deferred tool access boundary smoke", "node", [
+      "scripts/deferred-tool-access-smoke.mjs",
+      "--output-dir",
+      path.join(outputRoot, "browser", "deferred-tools")
+    ], baseUrl, {
+      TOOLARS_BASE_URL: baseUrl
+    }),
     gate("button-behavior-audit", "Button behavior audit", "node", ["scripts/audit-button-behavior.mjs"]),
     gate("i18n-audit", "I18n residue audit", "node", [
       "scripts/audit-i18n.mjs",

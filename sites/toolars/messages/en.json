@@ -2005,7 +2005,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "PDF Toolkit",
-      "description": "Merge, split, compress, convert, summarize, and export PDFs in one workspace.",
+      "description": "Merge, split, and compress PDFs locally in your browser.",
       "workspace": {
         "a11y": {
           "navigation": "PDF workspace navigation",
@@ -2077,6 +2077,7 @@
             "serverScanPassed": "Server scan passed",
             "onlyPdf": "Only PDF files can be queued",
             "blockedByLimit": "Blocked by 50 MB PDF limit",
+            "invalidPdf": "The PDF could not be read",
             "autoDelete": "Auto-delete after session",
             "notRetained": "Not retained",
             "localOnly": "Local only",
@@ -2089,12 +2090,12 @@
             "title": "Add PDF files",
             "description": "Stage PDFs in the local queue before choosing an operation.",
             "guidanceLabel": "PDF upload guidance",
-            "localTitle": "Files stay on this device until you choose a cloud or AI step.",
-            "localDescription": "Local merge, split, compress, and convert actions use the browser queue first.",
+            "localTitle": "Files stay on this device.",
+            "localDescription": "Merge, split, and compress run in this browser.",
             "limitTitle": "PDF limit: 50 MB per file",
-            "limitDescription": "Larger production uploads will require the Phase 4 storage service and scan state.",
+            "limitDescription": "Files larger than 50 MB cannot be queued.",
             "queueTitle": "Queued locally",
-            "queueDescription": "Toolars keeps this upload step separate from AI consent so users know when content would leave the device.",
+            "queueDescription": "This tool does not upload or save your files.",
             "readyBadge": "Ready",
             "rejectedBadge": "Rejected",
             "cancel": "Cancel"
@@ -11291,7 +11292,7 @@
         "inputTitle": "JSON source",
         "inputDescription": "Paste a JSON array of objects and choose the CSV delimiter.",
         "inputLabel": "JSON array input",
-        "inputPlaceholder": "[{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "JSON array of objects: name, city",
         "delimiterLabel": "Delimiter",
         "delimiters": {
           "comma": "Comma",
@@ -11468,7 +11469,7 @@
         "inputTitle": "XML input",
         "inputDescription": "Paste XML snippets, feed fragments, manifests, or config payloads.",
         "inputLabel": "XML input",
-        "inputPlaceholder": "<root><child>hello</child></root>",
+        "inputPlaceholder": "XML document with root and child elements",
         "modeLabel": "Mode",
         "modes": {
           "format": "Format",

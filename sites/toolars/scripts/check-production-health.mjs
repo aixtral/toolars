@@ -6,6 +6,7 @@ const supabasePublicConfig = "NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_PUBL
 const freeTrialModeConfig = "NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE/TOOLARS_FREE_TRIAL_MODE";
 const aiProviderConfig = "TOOLARS_AI_PROVIDER_ENDPOINT/TOOLARS_AI_PROVIDER_API_KEY";
 const billingProviderConfig = "TOOLARS_BILLING_PROVIDER_ENDPOINT/TOOLARS_BILLING_PROVIDER_API_KEY";
+const detailedStatusWarning = "Detailed runtime status requires TOOLARS_HEALTHCHECK_TOKEN";
 
 export function parseProductionHealthArgs(argv) {
   const parsed = {
@@ -35,6 +36,14 @@ export function parseProductionHealthArgs(argv) {
 }
 
 export function evaluateProductionHealth(payload, options = {}) {
+  if (payload?.status === "ok") {
+    return {
+      ok: true,
+      blockers: [],
+      warnings: [detailedStatusWarning]
+    };
+  }
+
   const blockers = [];
   const warnings = [];
 

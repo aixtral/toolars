@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "مسودة عربية 537: PDF Toolkit",
-      "description": "مسودة عربية 538: Merge, split, compress, convert, summarize, and export PDFs in one workspace.",
+      "description": "ادمج ملفات PDF وقسمها واضغطها محلياً في المتصفح.",
       "workspace": {
         "a11y": {
           "navigation": "مسودة عربية 539: PDF workspace navigation",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "مسودة عربية 587: Server scan passed",
             "onlyPdf": "مسودة عربية 588: Only PDF files can be queued",
             "blockedByLimit": "مسودة عربية 589: Blocked by 50 MB PDF limit",
+            "invalidPdf": "تعذر قراءة ملف PDF",
             "autoDelete": "مسودة عربية 590: Auto-delete after session",
             "notRetained": "مسودة عربية 591: Not retained",
             "localOnly": "مسودة عربية 592: Local only",
@@ -11288,7 +11289,7 @@
         "inputTitle": "مسودة عربية 1858: JSON source",
         "inputDescription": "مسودة عربية 1859: Paste a JSON array of objects and choose the CSV delimiter.",
         "inputLabel": "مسودة عربية 1860: JSON array input",
-        "inputPlaceholder": "مسودة عربية 1861: [{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "مسودة عربية 1861: JSON object array: name, city",
         "delimiterLabel": "مسودة عربية 1862: Delimiter",
         "delimiters": {
           "comma": "مسودة عربية 1863: Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "مسودة عربية 1997: XML input",
         "inputDescription": "مسودة عربية 1998: Paste XML snippets, feed fragments, manifests, or config payloads.",
         "inputLabel": "مسودة عربية 1999: XML input",
-        "inputPlaceholder": "مسودة عربية 2000: <root><child>hello</child></root>",
+        "inputPlaceholder": "مسودة عربية 2000: XML document with root and child elements",
         "modeLabel": "مسودة عربية 2001: Mode",
         "modes": {
           "format": "مسودة عربية 2002: Format",

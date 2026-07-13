@@ -25,6 +25,8 @@ describe("Base64ImageEncoderWorkspace", () => {
     renderWithIntl(<Base64ImageEncoderWorkspace />);
 
     expect(screen.getByTestId("ai-lab-workbench")).toHaveAttribute("data-ai-lab-tool", "base64-image-encoder");
+    expect(screen.getByRole("button", { name: "Inspect image" })).toBeDisabled();
+    expect(screen.queryByLabelText("Image data URL output")).not.toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Image Base64 or data URL"), { target: { value: "aGVsbG8=" } });
     fireEvent.click(screen.getByRole("button", { name: "Inspect image" }));
 

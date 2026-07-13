@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "PDF 工具箱",
-      "description": "在一個工作台中合併、拆分、壓縮、轉換、摘要和匯出 PDF。",
+      "description": "在瀏覽器中本地合併、拆分和壓縮 PDF。",
       "workspace": {
         "a11y": {
           "navigation": "PDF 工作台導覽",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "伺服器掃描通過",
             "onlyPdf": "只能將 PDF 檔案加入佇列",
             "blockedByLimit": "受 50 MB PDF 限制阻止",
+            "invalidPdf": "無法讀取此 PDF",
             "autoDelete": "工作階段結束後自動刪除",
             "notRetained": "不保留",
             "localOnly": "僅本地",
@@ -11288,7 +11289,7 @@
         "inputTitle": "JSON 來源",
         "inputDescription": "貼上由物件組成的 JSON 陣列，並選擇 CSV 分隔符號。",
         "inputLabel": "JSON 陣列輸入",
-        "inputPlaceholder": "[{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "JSON 物件陣列：name、city",
         "delimiterLabel": "分隔符號",
         "delimiters": {
           "comma": "逗號",
@@ -11465,7 +11466,7 @@
         "inputTitle": "XML 輸入",
         "inputDescription": "貼上 XML 片段、feed 片段、清單 或配置 酬載。",
         "inputLabel": "XML 輸入",
-        "inputPlaceholder": "<root><child>hello</child></root>",
+        "inputPlaceholder": "包含根元素和子元素的 XML 文件",
         "modeLabel": "模式",
         "modes": {
           "format": "格式",

@@ -32,6 +32,8 @@ describe("launch readiness report", () => {
       "production-health",
       "tool-inventory-audit",
       "certified-tool-smoke",
+      "public-tool-button-audit",
+      "deferred-tool-access-smoke",
       "button-behavior-audit",
       "i18n-audit",
       "i18n-quality-audit"
@@ -60,6 +62,29 @@ describe("launch readiness report", () => {
       "/tmp/toolars-launch-readiness/audits/certified-tool-smoke.json",
       "--output-dir",
       "/tmp/toolars-launch-readiness/browser/certified-tools"
+    ]);
+    expect(wrappedCommand(plan.find((gate) => gate.id === "public-tool-button-audit"))).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node",
+      "scripts/audit-public-tool-buttons.mjs"
+    ]);
+    expect(plan.find((gate) => gate.id === "public-tool-button-audit")?.env).toMatchObject({
+      TOOLARS_PUBLIC_BUTTON_AUDIT_OUTPUT_DIR: "/tmp/toolars-launch-readiness/browser/public-tool-buttons"
+    });
+    expect(wrappedCommand(plan.find((gate) => gate.id === "deferred-tool-access-smoke"))).toEqual([
+      "node",
+      "scripts/with-production-server.mjs",
+      "--base-url",
+      "http://127.0.0.1:9088",
+      "--",
+      "node",
+      "scripts/deferred-tool-access-smoke.mjs",
+      "--output-dir",
+      "/tmp/toolars-launch-readiness/browser/deferred-tools"
     ]);
     expect(plan.find((gate) => gate.id === "button-behavior-audit")?.args).toContain("scripts/audit-button-behavior.mjs");
   });
@@ -92,6 +117,8 @@ describe("launch readiness report", () => {
       "production-health",
       "tool-inventory-audit",
       "certified-tool-smoke",
+      "public-tool-button-audit",
+      "deferred-tool-access-smoke",
       "button-behavior-audit",
       "i18n-audit",
       "i18n-quality-audit",

@@ -79,9 +79,11 @@ describe("ToolarsShell", () => {
     expect(screen.getByRole("link", { name: /Image Tools/ })).toHaveAttribute("href", "/explore/image");
     expect(screen.getByRole("link", { name: /^Finance$/ })).toHaveAttribute("href", "/explore/finance");
     expect(screen.getByRole("link", { name: /^Health$/ })).toHaveAttribute("href", "/explore/health");
-    expect(screen.getByText("Recent Outputs")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Share" })).toBeInTheDocument();
+    expect(screen.queryByText("Recent Outputs")).not.toBeInTheDocument();
+    expect(screen.queryByText("Q2_Marketing_Report_2024...")).not.toBeInTheDocument();
+    expect(screen.queryByText("2.1 GB / 5 GB used")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Save" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Share" })).not.toBeInTheDocument();
   });
 
   it("localizes PDF workspace topbar actions and labels", () => {
@@ -97,12 +99,12 @@ describe("ToolarsShell", () => {
     expect(screen.getByLabelText("路径导航")).toBeInTheDocument();
     expect(screen.getByText("工具")).toBeInTheDocument();
     expect(screen.getAllByText("PDF 工具箱").length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: "保存" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "分享" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "登录" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "注册" })).toBeInTheDocument();
     expect(screen.getByText("菜单")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "外观" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "保存" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "分享" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "外观" })).not.toBeInTheDocument();
   });
 
   it("can render route content without a sidebar", () => {
@@ -247,7 +249,7 @@ describe("ToolarsShell", () => {
       </NextIntlClientProvider>
     );
 
-    expect(screen.getByText("Salidas recientes")).toBeInTheDocument();
+    expect(screen.queryByText("Salidas recientes")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Herramientas de imagen/ })).toHaveAttribute("href", "/es/explore/image");
     expect(screen.queryByText("Recent Outputs")).not.toBeInTheDocument();
 

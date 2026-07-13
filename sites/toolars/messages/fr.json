@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "Boîte à outils PDF",
-      "description": "Fusionnez, divisez, compressez, convertissez, résumez et exportez des PDF dans un seul espace de travail.",
+      "description": "Fusionnez, divisez et compressez des PDF localement dans votre navigateur.",
       "workspace": {
         "a11y": {
           "navigation": "Navigation de l’espace de travail PDF",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "Analyse serveur réussie",
             "onlyPdf": "Seuls les fichiers PDF peuvent être mis en file",
             "blockedByLimit": "Bloqué par la limite PDF de 50 Mo",
+            "invalidPdf": "Le PDF n'a pas pu être lu",
             "autoDelete": "Suppression automatique après la session",
             "notRetained": "Non conservé",
             "localOnly": "Local uniquement",
@@ -2086,12 +2087,12 @@
             "title": "Ajouter des fichiers PDF",
             "description": "Préparez les PDF dans la file locale avant de choisir une opération.",
             "guidanceLabel": "Conseils de téléversement PDF",
-            "localTitle": "Les fichiers restent sur cet appareil jusqu’à ce que vous choisissiez une étape cloud ou AI.",
-            "localDescription": "Les actions locales de fusion, division, compression et conversion utilisent d’abord la file du navigateur.",
+            "localTitle": "Les fichiers restent sur cet appareil.",
+            "localDescription": "La fusion, la division et la compression s’exécutent dans ce navigateur.",
             "limitTitle": "Limite PDF : 50 Mo par fichier",
-            "limitDescription": "Les téléversements de production plus volumineux nécessiteront le service de stockage Phase 4 et l’état d’analyse.",
+            "limitDescription": "Les fichiers de plus de 50 Mo ne peuvent pas être mis en file d’attente.",
             "queueTitle": "Mis en file localement",
-            "queueDescription": "Toolars garde cette étape de téléversement séparée du consentement AI afin que les utilisateurs sachent quand le contenu quitterait l’appareil.",
+            "queueDescription": "Cet outil ne transfère ni n’enregistre vos fichiers.",
             "readyBadge": "Ready",
             "rejectedBadge": "Rejected",
             "cancel": "Cancel"
@@ -11288,7 +11289,7 @@
         "inputTitle": "Source JSON",
         "inputDescription": "Collez un tableau JSON d’objets et choisissez le délimiteur CSV.",
         "inputLabel": "Entrée de tableau JSON",
-        "inputPlaceholder": "[{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "Tableau JSON d'objets : name, city",
         "delimiterLabel": "Delimiter",
         "delimiters": {
           "comma": "Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "Entrée XML",
         "inputDescription": "Collez des extraits XML, fragments de flux, manifestes ou payloads de configuration.",
         "inputLabel": "Entrée XML",
-        "inputPlaceholder": "<root><child>hello</child></root>",
+        "inputPlaceholder": "Document XML avec éléments racine et enfant",
         "modeLabel": "Mode",
         "modes": {
           "format": "Formater",

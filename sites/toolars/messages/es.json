@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "Kit de herramientas PDF",
-      "description": "Fusionar, dividir, comprimir, convertir, resumir y exportar PDF en un solo espacio.",
+      "description": "Fusiona, divide y comprime PDF localmente en tu navegador.",
       "workspace": {
         "a11y": {
           "navigation": "Navegación del espacio PDF",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "Escaneo del servidor aprobado",
             "onlyPdf": "Solo se pueden poner en cola archivos PDF",
             "blockedByLimit": "Bloqueado por el límite de PDF de 50 MB",
+            "invalidPdf": "No se pudo leer el PDF",
             "autoDelete": "Eliminación automática tras la sesión",
             "notRetained": "No se conserva",
             "localOnly": "Solo local",
@@ -2086,12 +2087,12 @@
             "title": "Añadir archivos PDF",
             "description": "Prepara PDF en la cola local antes de elegir una operación.",
             "guidanceLabel": "Guía de subida PDF",
-            "localTitle": "Los archivos permanecen en este dispositivo hasta que elijas un paso en la nube o con IA.",
-            "localDescription": "Las acciones locales de fusionar, dividir, comprimir y convertir usan primero la cola del navegador.",
+            "localTitle": "Los archivos permanecen en este dispositivo.",
+            "localDescription": "Fusionar, dividir y comprimir se ejecutan en este navegador.",
             "limitTitle": "Límite de PDF: 50 MB por archivo",
-            "limitDescription": "Las subidas de producción más grandes requerirán el servicio de almacenamiento de la fase 4 y estado de escaneo.",
+            "limitDescription": "Los archivos de más de 50 MB no pueden ponerse en cola.",
             "queueTitle": "En cola local",
-            "queueDescription": "Toolars separa este paso de subida del consentimiento de IA para que sepas cuándo el contenido saldría del dispositivo.",
+            "queueDescription": "Esta herramienta no sube ni guarda tus archivos.",
             "readyBadge": "Listo",
             "rejectedBadge": "Rechazado",
             "cancel": "Cancelar"
@@ -11288,7 +11289,7 @@
         "inputTitle": "Fuente JSON",
         "inputDescription": "Pega un array JSON de objetos y elige el delimitador CSV.",
         "inputLabel": "Entrada de array JSON",
-        "inputPlaceholder": "[{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "Matriz JSON de objetos: name, city",
         "delimiterLabel": "Delimiter",
         "delimiters": {
           "comma": "Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "Entrada XML",
         "inputDescription": "Pega snippets XML, fragmentos de feed, manifiestos o payloads de config.",
         "inputLabel": "Entrada XML",
-        "inputPlaceholder": "<root><child>hello</child></root>",
+        "inputPlaceholder": "Documento XML con elementos raíz e hijo",
         "modeLabel": "Modo",
         "modes": {
           "format": "Formatear",

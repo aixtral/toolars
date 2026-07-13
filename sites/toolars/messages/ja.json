@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "日本語ドラフト 531: PDF Toolkit",
-      "description": "日本語ドラフト 532: Merge, split, compress, convert, summarize, and export PDFs in one workspace.",
+      "description": "ブラウザ上で PDF をローカルに結合、分割、圧縮します。",
       "workspace": {
         "a11y": {
           "navigation": "日本語ドラフト 533: PDF workspace navigation",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "日本語ドラフト 581: Server scan passed",
             "onlyPdf": "日本語ドラフト 582: Only PDF files can be queued",
             "blockedByLimit": "日本語ドラフト 583: Blocked by 50 MB PDF limit",
+            "invalidPdf": "PDF を読み取れませんでした",
             "autoDelete": "日本語ドラフト 584: Auto-delete after session",
             "notRetained": "日本語ドラフト 585: Not retained",
             "localOnly": "日本語ドラフト 586: Local only",
@@ -11288,7 +11289,7 @@
         "inputTitle": "日本語ドラフト 1869: JSON source",
         "inputDescription": "日本語ドラフト 1870: Paste a JSON array of objects and choose the CSV delimiter.",
         "inputLabel": "日本語ドラフト 1871: JSON array input",
-        "inputPlaceholder": "日本語ドラフト 1872: [{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "日本語ドラフト 1872: JSON object array: name, city",
         "delimiterLabel": "日本語ドラフト 1873: Delimiter",
         "delimiters": {
           "comma": "日本語ドラフト 1874: Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "日本語ドラフト 2008: XML input",
         "inputDescription": "日本語ドラフト 2009: Paste XML snippets, feed fragments, manifests, or config payloads.",
         "inputLabel": "日本語ドラフト 2010: XML input",
-        "inputPlaceholder": "日本語ドラフト 2011: <root><child>hello</child></root>",
+        "inputPlaceholder": "日本語ドラフト 2011: XML document with root and child elements",
         "modeLabel": "日本語ドラフト 2012: Mode",
         "modes": {
           "format": "日本語ドラフト 2013: Format",

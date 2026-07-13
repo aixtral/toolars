@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "हिंदी मसौदा 531: PDF Toolkit",
-      "description": "हिंदी मसौदा 532: Merge, split, compress, convert, summarize, and export PDFs in one workspace.",
+      "description": "ब्राउज़र में स्थानीय रूप से PDF मर्ज, विभाजित और संपीड़ित करें।",
       "workspace": {
         "a11y": {
           "navigation": "हिंदी मसौदा 533: PDF workspace navigation",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "हिंदी मसौदा 581: Server scan passed",
             "onlyPdf": "हिंदी मसौदा 582: Only PDF files can be queued",
             "blockedByLimit": "हिंदी मसौदा 583: Blocked by 50 MB PDF limit",
+            "invalidPdf": "PDF पढ़ा नहीं जा सका",
             "autoDelete": "हिंदी मसौदा 584: Auto-delete after session",
             "notRetained": "हिंदी मसौदा 585: Not retained",
             "localOnly": "हिंदी मसौदा 586: Local only",
@@ -11288,7 +11289,7 @@
         "inputTitle": "हिंदी मसौदा 1869: JSON source",
         "inputDescription": "हिंदी मसौदा 1870: Paste a JSON array of objects and choose the CSV delimiter.",
         "inputLabel": "हिंदी मसौदा 1871: JSON array input",
-        "inputPlaceholder": "हिंदी मसौदा 1872: [{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "हिंदी मसौदा 1872: JSON object array: name, city",
         "delimiterLabel": "हिंदी मसौदा 1873: Delimiter",
         "delimiters": {
           "comma": "हिंदी मसौदा 1874: Comma",
@@ -11465,7 +11466,7 @@
         "inputTitle": "हिंदी मसौदा 2008: XML input",
         "inputDescription": "हिंदी मसौदा 2009: Paste XML snippets, feed fragments, manifests, or config payloads.",
         "inputLabel": "हिंदी मसौदा 2010: XML input",
-        "inputPlaceholder": "हिंदी मसौदा 2011: <root><child>hello</child></root>",
+        "inputPlaceholder": "हिंदी मसौदा 2011: XML document with root and child elements",
         "modeLabel": "हिंदी मसौदा 2012: Mode",
         "modes": {
           "format": "हिंदी मसौदा 2013: Format",

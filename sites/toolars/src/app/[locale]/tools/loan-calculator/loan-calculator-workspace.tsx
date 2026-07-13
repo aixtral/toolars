@@ -1,7 +1,7 @@
 "use client";
 import { useLocale, useTranslations } from "next-intl";
 
-import { Calculator, Download, Save, ShieldCheck } from "lucide-react";
+import { Calculator, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import {
@@ -122,9 +122,6 @@ export function LoanCalculatorWorkspace() {
               <h2>{t("resultSection.title")}</h2>
               <p className="tool-description">{resultSummary}</p>
             </div>
-            <button disabled className="button button-outline" type="button">
-              <Download size={16} aria-hidden="true" /> {t("actions.exportPlan")}
-            </button>
           </div>
 
           <div className="llm-metric-grid">

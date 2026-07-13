@@ -4022,10 +4022,13 @@ select {
 
 .workspace-stack {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
+  min-width: 0;
 }
 
 .workspace-panel {
+  min-width: 0;
   padding: 18px;
   background: var(--canvas);
   border: 1px solid var(--border);
@@ -4859,7 +4862,7 @@ select {
 
 .workspace-tabs {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   max-width: 760px;
   overflow: hidden;
   background: var(--canvas);
@@ -4908,7 +4911,7 @@ select {
 }
 
 .pdf-workspace {
-  grid-template-columns: minmax(300px, 430px) minmax(320px, 1fr) minmax(300px, 400px);
+  grid-template-columns: minmax(300px, 1.05fr) minmax(320px, 0.95fr);
 }
 
 @media (min-width: 781px) {
@@ -5007,7 +5010,7 @@ select {
   }
 
   .pdf-workspace-shell[data-pdf-desktop-layout="workspace-v2"] .pdf-workspace {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.92fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     gap: 14px;
     min-width: 0;
     max-width: 100%;

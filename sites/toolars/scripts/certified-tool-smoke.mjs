@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
+import { PDFDocument } from "pdf-lib";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultOutputRoot = path.resolve(scriptDir, "../output/playwright/certified-tool-smoke");
@@ -58,9 +59,11 @@ export const certifiedToolSmokeScenarios = [
     slug: "pdf-toolkit",
     path: "/tools/pdf-toolkit",
     workspaceSelector: '[data-pdf-desktop-layout="workspace-v2"]',
-    inputActions: [{ type: "clickButton", name: "Compress" }],
+    inputActions: [{ type: "uploadPdf" }, { type: "clickButton", name: "Compress" }],
     runButtonName: "Compress PDF",
-    resultAssertion: { type: "enabledButton", name: "Download" }
+    resultAssertion: { type: "selectorText", selector: ".pdf-output-card", text: "toolars-smoke_compressed.pdf" },
+    downloadFileName: "toolars-smoke_compressed.pdf",
+    failureAssertion: { type: "disabledRun", inputActions: [], runButtonName: "Merge PDFs" }
   },
   {
     slug: "json-repair",
@@ -665,6 +668,7 @@ export async function runCertifiedToolSmoke({
   const browser = await chromium.launch({ headless });
   const context = await browser.newContext({ baseURL: baseUrl });
   await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin: baseUrl });
+  const pdfFixturePath = await createPdfSmokeFixture(outputRoot);
 
   const results = [];
   try {
@@ -675,18 +679,24 @@ export async function runCertifiedToolSmoke({
       const screenshotPath = path.join(screenshotsRoot, `${scenario.slug}.png`);
 
       try {
-        const response = await page.goto(scenario.path, { waitUntil: "networkidle" });
+        const response = await page.goto(scenario.path, { waitUntil: "domcontentloaded" });
         if (!response?.ok()) {
           throw new Error(`Navigation failed with status ${response?.status() ?? "unknown"}`);
         }
 
         await page.locator(scenario.workspaceSelector).first().waitFor({ state: "visible", timeout: 15000 });
+        // The workspace marker can be present before React has adopted controlled inputs.
+        // Give the client a turn before filling form fields, then assert its enabled state below.
+        await page.waitForTimeout(150);
         if (scenario.failureAssertion) {
           await assertFailure(page, scenario);
         }
         for (const action of scenario.inputActions) {
-          await runInputAction(page, action);
+          await runInputAction(page, action, { pdfFixturePath });
         }
+        const runButton = page.getByRole("button", { name: scenario.runButtonName, exact: true });
+        await runButton.waitFor({ state: "visible" });
+        await page.waitForFunction((button) => !button.disabled, await runButton.elementHandle(), { timeout: 5000 });
         if (scenario.saveButtonName) {
           await page.getByRole("button", { name: scenario.saveButtonName, exact: true }).click();
           if (scenario.saveStorageKey) {
@@ -694,11 +704,19 @@ export async function runCertifiedToolSmoke({
           }
         }
 
-        await page.getByRole("button", { name: scenario.runButtonName, exact: true }).click();
+        await runButton.click();
         await assertResult(page, scenario.resultAssertion);
 
         if (scenario.postRunButtonName) {
           await page.getByRole("button", { name: scenario.postRunButtonName, exact: true }).click();
+        }
+        if (scenario.downloadFileName) {
+          const download = page.waitForEvent("download");
+          await page.getByRole("button", { name: "Download", exact: true }).click();
+          const downloadedFile = await download;
+          if (downloadedFile.suggestedFilename() !== scenario.downloadFileName) {
+            throw new Error(`Expected download ${scenario.downloadFileName}, received ${downloadedFile.suggestedFilename()}`);
+          }
         }
 
         await fs.mkdir(screenshotsRoot, { recursive: true });
@@ -738,13 +756,26 @@ export async function runCertifiedToolSmoke({
   };
 }
 
-async function runInputAction(page, action) {
+async function runInputAction(page, action, fixtures = {}) {
   if (action.type === "fill") {
     await page.locator(action.selector).fill(action.value);
     return;
   }
   if (action.type === "clickButton") {
     await page.getByRole("button", { name: action.name, exact: true }).click();
+    return;
+  }
+  if (action.type === "uploadPdf") {
+    if (!fixtures.pdfFixturePath) throw new Error("Missing PDF smoke fixture");
+    await page.getByRole("button", { name: "Add files", exact: true }).click();
+    await page.locator('input[type="file"]').setInputFiles(fixtures.pdfFixturePath);
+    const addToQueue = page.getByRole("button", { name: "Add 1 file to queue", exact: true });
+    await addToQueue.waitFor({ state: "visible" });
+    await page.waitForFunction((button) => !button.disabled, await addToQueue.elementHandle());
+    await addToQueue.click();
+    const mergeButton = page.getByRole("button", { name: "Merge PDFs", exact: true });
+    await mergeButton.waitFor({ state: "visible" });
+    await page.waitForFunction((button) => !button.disabled, await mergeButton.elementHandle());
     return;
   }
   throw new Error(`Unsupported smoke action: ${action.type}`);
@@ -757,7 +788,7 @@ async function assertFailure(page, scenario) {
   }
 
   if (assertion.type === "disabledRun") {
-    await assertResult(page, { type: "disabledButton", name: scenario.runButtonName });
+    await assertResult(page, { type: "disabledButton", name: assertion.runButtonName ?? scenario.runButtonName });
     return;
   }
   if (assertion.type === "invalidInput") {
@@ -766,6 +797,16 @@ async function assertFailure(page, scenario) {
     return;
   }
   throw new Error(`Unsupported failure assertion: ${assertion.type}`);
+}
+
+async function createPdfSmokeFixture(outputRoot) {
+  const fixturesRoot = path.join(outputRoot, "fixtures");
+  const fixturePath = path.join(fixturesRoot, "toolars-smoke.pdf");
+  const document = await PDFDocument.create();
+  document.addPage([320, 240]);
+  await fs.mkdir(fixturesRoot, { recursive: true });
+  await fs.writeFile(fixturePath, await document.save());
+  return fixturePath;
 }
 
 async function assertResult(page, assertion) {

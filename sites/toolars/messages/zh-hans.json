@@ -2002,7 +2002,7 @@
   "tools": {
     "pdf-toolkit": {
       "name": "PDF 工具箱",
-      "description": "在一个工作台中合并、拆分、压缩、转换、摘要和导出 PDF。",
+      "description": "在浏览器中本地合并、拆分和压缩 PDF。",
       "workspace": {
         "a11y": {
           "navigation": "PDF 工作台导航",
@@ -2074,6 +2074,7 @@
             "serverScanPassed": "服务器扫描通过",
             "onlyPdf": "只能将 PDF 文件加入队列",
             "blockedByLimit": "受 50 MB PDF 限制阻止",
+            "invalidPdf": "无法读取该 PDF",
             "autoDelete": "会话结束后自动删除",
             "notRetained": "不保留",
             "localOnly": "仅本地",
@@ -2086,12 +2087,12 @@
             "title": "添加 PDF 文件",
             "description": "先将 PDF 暂存到本地队列，再选择操作。",
             "guidanceLabel": "PDF 上传指引",
-            "localTitle": "除非你选择云端或 AI 步骤，文件会留在此设备上。",
-            "localDescription": "本地合并、拆分、压缩和转换会先使用浏览器队列。",
+            "localTitle": "文件始终保留在此设备上。",
+            "localDescription": "合并、拆分和压缩均在此浏览器中运行。",
             "limitTitle": "PDF 限制：每个文件 50 MB",
-            "limitDescription": "更大的生产上传需要第 4 阶段存储服务和扫描状态。",
+            "limitDescription": "超过 50 MB 的文件无法加入队列。",
             "queueTitle": "本地排队",
-            "queueDescription": "Toolars 将上传步骤与 AI 同意分开，让用户清楚内容何时会离开设备。",
+            "queueDescription": "此工具不会上传或保存你的文件。",
             "readyBadge": "就绪",
             "rejectedBadge": "已拒绝",
             "cancel": "取消"
@@ -11288,7 +11289,7 @@
         "inputTitle": "JSON 源数据",
         "inputDescription": "粘贴对象组成的 JSON 数组，并选择 CSV 分隔符。",
         "inputLabel": "JSON 数组输入",
-        "inputPlaceholder": "[{\"name\":\"Alice\",\"city\":\"NYC\"}]",
+        "inputPlaceholder": "JSON 对象数组：name、city",
         "delimiterLabel": "分隔符",
         "delimiters": {
           "comma": "逗号",
@@ -11465,7 +11466,7 @@
         "inputTitle": "XML 输入",
         "inputDescription": "粘贴 XML 片段、feed 片段、清单 或配置 载荷。",
         "inputLabel": "XML 输入",
-        "inputPlaceholder": "<root><child>hello</child></root>",
+        "inputPlaceholder": "包含根元素和子元素的 XML 文档",
         "modeLabel": "模式",
         "modes": {
           "format": "格式化",

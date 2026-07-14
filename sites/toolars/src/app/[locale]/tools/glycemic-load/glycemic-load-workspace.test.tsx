@@ -72,6 +72,7 @@ const localizedWorkspaceCopy = {
   resultSection: {
     title: "ES Glycemic summary",
     emptyDescription: "ES Run calculation to show GL category and blood-sugar impact.",
+    pending: "ES Pending calculation",
     summary: "ES {gl} GL from {carbs} carbs"
   },
   formats: {

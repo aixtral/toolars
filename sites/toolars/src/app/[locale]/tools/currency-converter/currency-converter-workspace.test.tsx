@@ -81,6 +81,21 @@ const localizedWorkspaceCopy = {
   recommendation: {
     title: "Local primero centinela",
     body: "La conversión centinela permanece local."
+  },
+  currencyOptionLabel: "{code}: {name}",
+  currencyNames: {
+    USD: "dólar estadounidense",
+    EUR: "euro",
+    GBP: "libra esterlina",
+    JPY: "yen japonés",
+    CNY: "yuan chino",
+    CAD: "dólar canadiense",
+    AUD: "dólar australiano",
+    CHF: "franco suizo",
+    HKD: "dólar de Hong Kong",
+    SGD: "dólar singapurense",
+    INR: "rupia india",
+    KRW: "won surcoreano"
   }
 };
 

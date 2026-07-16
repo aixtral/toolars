@@ -53,7 +53,7 @@ export function createHeaderGeometryFindings({ header, url, viewport }) {
   }];
 }
 
-export function createLayoutFindings({ controls, header, root, url, viewport }) {
+export function createLayoutFindings({ controls, header, horizontalOffenders, root, url, viewport }) {
   const findings = [];
 
   findings.push(...createHeaderGeometryFindings({ header, url, viewport }));
@@ -62,6 +62,7 @@ export function createLayoutFindings({ controls, header, root, url, viewport }) 
     findings.push({
       actualWidth: root.scrollWidth,
       expectedWidth: root.clientWidth,
+      horizontalOffenders: horizontalOffenders ?? [],
       kind: "page-horizontal-overflow",
       url,
       viewport
@@ -170,6 +171,10 @@ async function auditTargetsAtViewport(context, targets, viewport, requestedConcu
         try {
           const response = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
           if (!response?.ok()) throw new Error(`HTTP ${response?.status() ?? "unknown"}`);
+          // Measure the settled page: web font swaps change text metrics, so a
+          // measurement taken while fallback fonts are still active can report
+          // transient overflow that users never see.
+          await page.evaluate(() => document.fonts?.ready?.then(() => true) ?? true);
           const observation = await collectLayoutObservation(page);
           const findings = createLayoutFindings({ ...observation, url, viewport });
           for (const message of pageErrors) findings.push({ kind: "page-error", message, url, viewport });
@@ -238,6 +243,21 @@ async function collectLayoutObservation(page) {
         }];
       });
 
+    const viewportWidth = document.documentElement.clientWidth;
+    const pageScrollWidth = document.documentElement.scrollWidth;
+    const horizontalOffenders = pageScrollWidth > viewportWidth + 1
+      ? [...document.querySelectorAll("body *")]
+        .map((element) => ({ element, rect: element.getBoundingClientRect() }))
+        .filter(({ rect }) => rect.width > 0 && rect.height > 0 && (rect.right - viewportWidth > 0.5 || rect.left < -0.5))
+        .slice(0, 5)
+        .map(({ element, rect }) => ({
+          left: Math.round(rect.left * 100) / 100,
+          right: Math.round(rect.right * 100) / 100,
+          selector: element.tagName.toLowerCase() + (typeof element.className === "string" && element.className.trim() ? `.${element.className.trim().replace(/\s+/g, ".")}` : ""),
+          text: (element.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 80)
+        }))
+      : [];
+
     return {
       controls,
       header: (() => {
@@ -258,9 +278,10 @@ async function collectLayoutObservation(page) {
           }
         };
       })(),
+      horizontalOffenders,
       root: {
-        clientWidth: document.documentElement.clientWidth,
-        scrollWidth: document.documentElement.scrollWidth
+        clientWidth: viewportWidth,
+        scrollWidth: pageScrollWidth
       }
     };
   });

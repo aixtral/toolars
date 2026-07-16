@@ -58,6 +58,25 @@ describe("shared UI layout contract", () => {
     ]);
   });
 
+  it("names the elements that push the page past the viewport on horizontal overflow", () => {
+    expect(createLayoutFindings({
+      controls: [],
+      horizontalOffenders: [
+        { left: 0, right: 1080, selector: "section.panel.tool-detail-overview-panel", text: "Case Converter" }
+      ],
+      root: { clientWidth: 1024, scrollWidth: 1080 },
+      url: "http://localhost:9088/es/tools/case-converter/about",
+      viewport: { height: 768, width: 1024 }
+    })).toEqual([
+      expect.objectContaining({
+        horizontalOffenders: [
+          expect.objectContaining({ right: 1080, selector: "section.panel.tool-detail-overview-panel" })
+        ],
+        kind: "page-horizontal-overflow"
+      })
+    ]);
+  });
+
   it("reports a desktop header search position or width that drifts from the shared contract", () => {
     expect(createHeaderGeometryFindings({
       header: {

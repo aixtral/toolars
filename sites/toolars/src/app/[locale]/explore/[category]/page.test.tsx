@@ -20,14 +20,14 @@ describe("ExploreCategoryPage", () => {
     expect(screen.getByText("Mortgage Calculator")).toBeInTheDocument();
   });
 
-  it("generates the complete All 55 directory instead of routing the sidebar entry to the home overview", async () => {
+  it("generates the complete All 60 directory instead of routing the sidebar entry to the home overview", async () => {
     const ui = await ExploreCategoryPage({ params: Promise.resolve({ category: "all" }) });
     const { container } = renderWithIntl(ui);
 
     expect(generateStaticParams()).toContainEqual({ category: "all" });
     expect(container.querySelector('[data-explore-category="all"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "All tools" })).toBeInTheDocument();
-    expect(container.querySelectorAll(".tool-card")).toHaveLength(55);
+    expect(container.querySelectorAll(".tool-card")).toHaveLength(60);
   });
 
   it.each([

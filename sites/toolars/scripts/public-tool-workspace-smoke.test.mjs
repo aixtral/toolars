@@ -28,8 +28,8 @@ describe("public tool workspace smoke manifest", () => {
 
     expect(manifest.scenarios.map((scenario) => scenario.slug)).toEqual(publicSlugs);
     expect(manifest.summary).toEqual({
-      total: 55,
-      launchCertified: 55,
+      total: 60,
+      launchCertified: 60,
       publicUncertified: 0
     });
 

@@ -217,7 +217,7 @@ Exit criteria:
 
 ### Phase 3: Tool Functionality Completion
 
-Status: source and Toolars wiring complete; 190 public workspace route smoke passes; 55 launch-certified tools have semantic smoke; source-behavior golden coverage and remaining per-tool semantic smoke still pending.
+Status: source and Toolars wiring complete; 190 public workspace route smoke passes; 60 launch-certified tools have semantic smoke; source-behavior golden coverage and remaining per-tool semantic smoke still pending.
 
 Tasks:
 
@@ -237,6 +237,7 @@ Tasks:
 - Expand launch-certified semantic smoke batch 8. Done for `html-entity-encoder`, `css-gradient-generator`, `css-border-radius-generator`, `slug-generator`, and `text-stats`; local production evidence on 2026-07-10 passed 45/45.
 - Expand launch-certified semantic smoke batch 9. Done for `discount-calculator`, `tip-calculator`, `bill-split-calculator`, `hourly-to-salary`, and `rule-of-72`; local production evidence on 2026-07-10 passed 50/50.
 - Expand launch-certified semantic smoke batch 10. Done for `retirement-calculator`, `roi-calculator`, `apy-calculator`, `savings-goal`, and `stock-average`; local production evidence on 2026-07-11 passed 55/55.
+- Expand launch-certified semantic smoke batch 11. Done for `percentage-calculator`, `qr-code-generator`, `sql-formatter`, `calorie-deficit`, and `debt-payoff`; local production evidence on 2026-07-16 passed 60/60.
 
 Exit criteria:
 

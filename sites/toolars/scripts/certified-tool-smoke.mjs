@@ -28,6 +28,7 @@ const disabledRunFailureSlugs = new Set([
   "number-base-converter",
   "regex-tester",
   "slug-generator",
+  "sql-formatter",
   "text-diff",
   "text-stats",
   "timestamp-converter",
@@ -51,6 +52,25 @@ const invalidInputFailureScenarios = {
   "chmod-calculator": {
     inputActions: [{ type: "fill", selector: "#chmod-input", value: "99" }],
     resultAssertion: { type: "pageText", text: "Enter a 3-digit octal mode" }
+  },
+  "percentage-calculator": {
+    inputActions: [
+      { type: "selectOption", selector: "#percentage-mode", value: "ratio" },
+      { type: "fill", selector: "#percentage-whole", value: "0" }
+    ],
+    resultAssertion: { type: "pageText", text: "Denominator cannot be zero." }
+  },
+  "qr-code-generator": {
+    inputActions: [{ type: "fill", selector: "#qr-code-content", value: "" }],
+    resultAssertion: { type: "pageText", text: "Enter text or a URL before generating a QR preview." }
+  },
+  "calorie-deficit": {
+    inputActions: [{ type: "fill", selector: "#deficit-tdee", value: "1000" }],
+    resultAssertion: { type: "pageText", text: "Recommended intake is below the 1200 kcal safety reference" }
+  },
+  "debt-payoff": {
+    inputActions: [{ type: "fill", selector: "#debt-payoff-payment", value: "100" }],
+    resultAssertion: { type: "pageText", text: "Monthly payment must be greater than monthly interest." }
   }
 };
 
@@ -629,6 +649,64 @@ export const certifiedToolSmokeScenarios = [
     saveStorageKey: "toolars.stock-average.plan",
     runButtonName: "Calculate average",
     resultAssertion: { type: "selectorText", selector: ".llm-metric strong", text: "$140.00" }
+  },
+  {
+    slug: "percentage-calculator",
+    path: "/tools/percentage-calculator",
+    workspaceSelector: '[data-tool-workspace="percentage-calculator"]',
+    inputActions: [
+      { type: "selectOption", selector: "#percentage-mode", value: "percentOf" },
+      { type: "fill", selector: "#percentage-percent", value: "25" },
+      { type: "fill", selector: "#percentage-base", value: "168" }
+    ],
+    saveButtonName: "Save percentage",
+    saveStorageKey: "toolars.percentage-calculator.plan",
+    runButtonName: "Calculate percentage",
+    resultAssertion: { type: "selectorText", selector: ".llm-metric strong", text: "42" }
+  },
+  {
+    slug: "qr-code-generator",
+    path: "/tools/qr-code-generator",
+    workspaceSelector: '[data-ai-lab-tool="qr-code-generator"]',
+    inputActions: [{ type: "fill", selector: "#qr-code-content", value: "https://toolars.app" }],
+    runButtonName: "Generate QR preview",
+    resultAssertion: { type: "selectorText", selector: 'pre[aria-label="QR SVG output"]', text: 'data-qr-content-length="19"' }
+  },
+  {
+    slug: "sql-formatter",
+    path: "/tools/sql-formatter",
+    workspaceSelector: '[data-ai-lab-tool="sql-formatter"]',
+    inputActions: [{ type: "fill", selector: "#sql-input", value: "select id, name from users where id = 1" }],
+    runButtonName: "Format SQL",
+    resultAssertion: { type: "selectorText", selector: "pre.input", text: "FROM users" }
+  },
+  {
+    slug: "calorie-deficit",
+    path: "/tools/calorie-deficit",
+    workspaceSelector: '[data-tool-workspace="calorie-deficit"]',
+    inputActions: [
+      { type: "fill", selector: "#deficit-current-weight", value: "90" },
+      { type: "fill", selector: "#deficit-target-weight", value: "80" },
+      { type: "fill", selector: "#deficit-tdee", value: "2500" }
+    ],
+    saveButtonName: "Save deficit plan",
+    saveStorageKey: "toolars.calorie-deficit.plan",
+    runButtonName: "Calculate deficit",
+    resultAssertion: { type: "selectorText", selector: ".llm-metric strong", text: "1,950 kcal" }
+  },
+  {
+    slug: "debt-payoff",
+    path: "/tools/debt-payoff",
+    workspaceSelector: '[data-tool-workspace="debt-payoff"]',
+    inputActions: [
+      { type: "fill", selector: "#debt-payoff-balance", value: "12000" },
+      { type: "fill", selector: "#debt-payoff-rate", value: "12" },
+      { type: "fill", selector: "#debt-payoff-payment", value: "400" }
+    ],
+    saveButtonName: "Save payoff plan",
+    saveStorageKey: "toolars.debt-payoff.plan",
+    runButtonName: "Calculate payoff",
+    resultAssertion: { type: "selectorText", selector: ".llm-metric strong", text: "$2,338" }
   }
 ].map((scenario) => {
   if (disabledRunFailureSlugs.has(scenario.slug)) {
@@ -759,6 +837,10 @@ export async function runCertifiedToolSmoke({
 async function runInputAction(page, action, fixtures = {}) {
   if (action.type === "fill") {
     await page.locator(action.selector).fill(action.value);
+    return;
+  }
+  if (action.type === "selectOption") {
+    await page.locator(action.selector).selectOption(action.value);
     return;
   }
   if (action.type === "clickButton") {

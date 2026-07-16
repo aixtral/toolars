@@ -21,13 +21,13 @@ describe("certified tool smoke manifest", () => {
       .sort((a, b) => a.localeCompare(b));
     const scenarioSlugs = certifiedToolSmokeScenarios.map((scenario) => scenario.slug).sort((a, b) => a.localeCompare(b));
 
-    expect(certifiedToolSmokeScenarios).toHaveLength(55);
+    expect(certifiedToolSmokeScenarios).toHaveLength(60);
     expect(scenarioSlugs).toEqual(certifiedSlugs);
     expect(getCertifiedToolFailureCoverage()).toMatchObject({
-      total: 55,
-      contracted: 33,
-      disabledRun: 30,
-      invalidInput: 3
+      total: 60,
+      contracted: 38,
+      disabledRun: 31,
+      invalidInput: 7
     });
     expect(certifiedToolSmokeScenarios.find((scenario) => scenario.slug === "json-repair")?.failureAssertion).toMatchObject({
       type: "invalidInput",

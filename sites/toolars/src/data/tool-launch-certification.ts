@@ -53,7 +53,12 @@ export const launchCertifiedToolSlugs = new Set([
   "roi-calculator",
   "apy-calculator",
   "savings-goal",
-  "stock-average"
+  "stock-average",
+  "percentage-calculator",
+  "qr-code-generator",
+  "sql-formatter",
+  "calorie-deficit",
+  "debt-payoff"
 ]);
 
 export function isLaunchCertifiedToolSlug(slug: string): boolean {

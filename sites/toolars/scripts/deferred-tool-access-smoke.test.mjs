@@ -20,7 +20,7 @@ describe("deferred tool access smoke", () => {
   it("covers every deferred registry tool and launch locale with workspace and about URLs", async () => {
     const manifest = await createDeferredToolAccessSmokeManifest({ siteRoot, ...sourceRoots });
 
-    expect(manifest.summary).toEqual({ tools: 135, locales: 4, total: 1080 });
+    expect(manifest.summary).toEqual({ tools: 130, locales: 4, total: 1040 });
     expect(manifest.scenarios).toContainEqual({
       slug: "color-contrast-checker",
       locale: "en",

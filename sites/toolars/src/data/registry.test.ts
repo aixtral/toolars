@@ -272,7 +272,7 @@ describe("Toolars registry", () => {
   it("separates route-visible public tools from launch-certified default surfaces", () => {
     const certifiedSlugs = launchCertifiedTools.map((tool) => tool.slug);
 
-    expect(launchCertifiedTools).toHaveLength(55);
+    expect(launchCertifiedTools).toHaveLength(60);
     expect(launchCertifiedTools.every((tool) => publicTools.includes(tool))).toBe(true);
     expect(certifiedSlugs).toEqual(
       expect.arrayContaining([
@@ -330,10 +330,15 @@ describe("Toolars registry", () => {
         "roi-calculator",
         "apy-calculator",
         "savings-goal",
-        "stock-average"
+        "stock-average",
+        "percentage-calculator",
+        "qr-code-generator",
+        "sql-formatter",
+        "calorie-deficit",
+        "debt-payoff"
       ])
     );
-    expect(getLaunchCertifiedToolsByCategory("All")).toHaveLength(55);
+    expect(getLaunchCertifiedToolsByCategory("All")).toHaveLength(60);
     expect(getLaunchCertifiedToolsByCategory("AI").map((tool) => tool.slug)).toEqual(
       expect.arrayContaining([
         "json-repair",
@@ -370,7 +375,9 @@ describe("Toolars registry", () => {
         "css-gradient-generator",
         "css-border-radius-generator",
         "slug-generator",
-        "text-stats"
+        "text-stats",
+        "qr-code-generator",
+        "sql-formatter"
       ])
     );
     expect(getLaunchCertifiedToolsByCategory("Developer").map((tool) => tool.slug)).toEqual(
@@ -395,14 +402,16 @@ describe("Toolars registry", () => {
         "code-minifier",
         "cron-explainer",
         "docker-compose-converter",
-        "html-entity-encoder"
+        "html-entity-encoder",
+        "qr-code-generator",
+        "sql-formatter"
       ])
     );
     expect(getLaunchCertifiedToolsByCategory("Frontend & Design").map((tool) => tool.slug)).toEqual(
       expect.arrayContaining(["color-converter", "css-gradient-generator", "css-border-radius-generator"])
     );
     expect(getLaunchCertifiedToolsByCategory("Data").map((tool) => tool.slug)).toEqual(
-      expect.arrayContaining(["csv-to-json", "json-to-csv", "markdown-to-json"])
+      expect.arrayContaining(["csv-to-json", "json-to-csv", "markdown-to-json", "percentage-calculator"])
     );
     expect(getLaunchCertifiedToolsByCategory("Productivity").map((tool) => tool.slug)).toEqual(
       expect.arrayContaining(["case-converter", "text-stats"])
@@ -427,7 +436,8 @@ describe("Toolars registry", () => {
         "roi-calculator",
         "apy-calculator",
         "savings-goal",
-        "stock-average"
+        "stock-average",
+        "debt-payoff"
       ])
     );
   });
@@ -586,7 +596,7 @@ describe("Toolars registry", () => {
     expect(labTools).toHaveLength(94);
     expect(labTools.map((tool) => tool.slug)).toContain("json-repair");
     expect(labTools.map((tool) => tool.slug)).toContain("mcp-server-builder");
-    expect(aiDeveloperLabTools).toHaveLength(39);
+    expect(aiDeveloperLabTools).toHaveLength(41);
     expect(aiDeveloperLabTools.map((tool) => tool.slug)).toEqual(expect.arrayContaining([
       "json-repair",
       "prompt-injection-scanner",
@@ -626,7 +636,9 @@ describe("Toolars registry", () => {
       "css-gradient-generator",
       "css-border-radius-generator",
       "slug-generator",
-      "text-stats"
+      "text-stats",
+      "qr-code-generator",
+      "sql-formatter"
     ]));
   });
 

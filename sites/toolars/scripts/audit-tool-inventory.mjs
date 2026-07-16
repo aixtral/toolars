@@ -197,7 +197,7 @@ export async function createToolInventoryAudit(options = {}) {
     roots,
     sources,
     summary: {
-      launchReadiness: "launch-scope-55",
+      launchReadiness: "launch-scope-60",
       toolars: {
         registryTools: registryTools.length,
         registeredPublicTools: registeredPublicTools.length,

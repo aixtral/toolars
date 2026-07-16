@@ -5801,6 +5801,14 @@ button {
   margin-bottom: 18px;
 }
 
+.tool-detail-head > div:first-child {
+  min-width: 0;
+}
+
+.tool-detail-head .title {
+  overflow-wrap: anywhere;
+}
+
 .detail-badge-row {
   display: flex;
   flex-wrap: wrap;

@@ -29,6 +29,11 @@ describe("shared UI layout contract", () => {
     expect(css).toMatch(/\.prompt-overview-panel\[data-prompt-mobile-density="title-single-line-v2"\] h1\s*\{[^}]*white-space:\s*normal;[^}]*overflow-wrap:\s*anywhere;/s);
   });
 
+  it("lets localized tool detail titles wrap instead of overflowing the viewport", () => {
+    expect(css).toMatch(/\.tool-detail-head \.title\s*\{[^}]*overflow-wrap:\s*anywhere;/s);
+    expect(css).toMatch(/\.tool-detail-head > div:first-child\s*\{[^}]*min-width:\s*0;/s);
+  });
+
   it("moves workflow actions as a complete control when a desktop panel is narrow", () => {
     expect(css).toMatch(/\.workflow-run-head\s*\{[^}]*flex-wrap:\s*wrap;/s);
     expect(css).toMatch(/\.workflow-run-button\s*\{[^}]*min-width:\s*max-content;/s);

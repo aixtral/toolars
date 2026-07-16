@@ -3737,13 +3737,6 @@ button {
 }
 
 @media (max-width: 1320px) {
-  .topbar {
-    --topbar-command-width: 360px;
-    grid-template-columns: 200px var(--topbar-command-width) minmax(0, 1fr);
-    gap: 16px;
-    padding: 0 16px;
-  }
-
   .nav {
     gap: 6px;
   }
@@ -5196,7 +5189,7 @@ button {
 
 .operation-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-top: 14px;
 }

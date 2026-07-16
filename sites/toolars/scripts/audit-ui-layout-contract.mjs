@@ -11,15 +11,52 @@ const repoRoot = path.resolve(siteRoot, "../..");
 export const layoutGateLocales = ["en", "es", "zh-hans", "zh-hant"];
 export const layoutGateWorkflowSlugs = ["pdf-summary", "ai-prompt-hardening", "llm-cost-review", "mcp-tool-launch"];
 export const layoutGateViewports = [
+  { id: "desktop-wide", width: 1440, height: 900 },
   { id: "desktop", width: 1280, height: 720 },
+  { id: "tablet", width: 1024, height: 768 },
   { id: "mobile", width: 390, height: 844 }
 ];
+export const headerSearchLayoutContracts = {
+  "desktop-wide": { left: 262, width: 400 },
+  desktop: { left: 262, width: 400 },
+  tablet: { left: 230, width: 320 },
+  mobile: { left: 12, width: 366 }
+};
 export const requiredWorkflowLayoutPaths = layoutGateLocales.flatMap((locale) =>
   layoutGateWorkflowSlugs.map((slug) => `/${locale}/workflows/${slug}`)
 );
 
-export function createLayoutFindings({ controls, root, url, viewport }) {
+export function createHeaderGeometryFindings({ header, url, viewport }) {
+  const expected = headerSearchLayoutContracts[viewport.id];
+  if (!expected || header === undefined) return [];
+
+  if (!header?.topbar || !header?.command) {
+    return [{
+      kind: "missing-shared-header-search",
+      url,
+      viewport
+    }];
+  }
+
+  const actual = {
+    left: header.command.left,
+    width: header.command.width
+  };
+  if (actual.left === expected.left && actual.width === expected.width) return [];
+
+  return [{
+    actual,
+    expected,
+    kind: "header-search-geometry-drift",
+    url,
+    viewport
+  }];
+}
+
+export function createLayoutFindings({ controls, header, root, url, viewport }) {
   const findings = [];
+
+  findings.push(...createHeaderGeometryFindings({ header, url, viewport }));
 
   if (root.scrollWidth > root.clientWidth + 1) {
     findings.push({
@@ -203,6 +240,24 @@ async function collectLayoutObservation(page) {
 
     return {
       controls,
+      header: (() => {
+        const topbar = document.querySelector(".topbar");
+        const command = topbar?.querySelector(".command-trigger");
+        if (!topbar || !command || !isVisible(topbar) || !isVisible(command)) return null;
+        const topbarRect = topbar.getBoundingClientRect();
+        const commandRect = command.getBoundingClientRect();
+        const rounded = (value) => Math.round(value * 100) / 100;
+        return {
+          command: {
+            left: rounded(commandRect.left),
+            width: rounded(commandRect.width)
+          },
+          topbar: {
+            left: rounded(topbarRect.left),
+            width: rounded(topbarRect.width)
+          }
+        };
+      })(),
       root: {
         clientWidth: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth

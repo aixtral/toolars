@@ -3,7 +3,13 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { createLaunchReadinessPlan } from "./launch-readiness-report.mjs";
-import { createLayoutFindings, requiredWorkflowLayoutPaths } from "./audit-ui-layout-contract.mjs";
+import {
+  createHeaderGeometryFindings,
+  createLayoutFindings,
+  headerSearchLayoutContracts,
+  layoutGateViewports,
+  requiredWorkflowLayoutPaths
+} from "./audit-ui-layout-contract.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(path.join(scriptDir, "../src/app/globals.css"), "utf8");
@@ -50,6 +56,41 @@ describe("shared UI layout contract", () => {
       expect.objectContaining({ kind: "page-horizontal-overflow" }),
       expect.objectContaining({ kind: "control-not-single-line", label: "Command K" })
     ]);
+  });
+
+  it("reports a desktop header search position or width that drifts from the shared contract", () => {
+    expect(createHeaderGeometryFindings({
+      header: {
+        command: { left: 232, width: 360 },
+        topbar: { left: 0, width: 1280 }
+      },
+      url: "http://localhost:9088/es/workflows/mcp-tool-launch",
+      viewport: { id: "desktop", height: 720, width: 1280 }
+    })).toEqual([
+      expect.objectContaining({
+        actual: { left: 232, width: 360 },
+        expected: { left: 262, width: 400 },
+        kind: "header-search-geometry-drift"
+      })
+    ]);
+  });
+
+  it("enforces shared header geometry at every audited responsive breakpoint", () => {
+    expect(layoutGateViewports.map((viewport) => viewport.id)).toEqual([
+      "desktop-wide",
+      "desktop",
+      "tablet",
+      "mobile"
+    ]);
+
+    for (const viewport of layoutGateViewports) {
+      const expected = headerSearchLayoutContracts[viewport.id];
+      expect(createHeaderGeometryFindings({
+        header: { command: expected, topbar: { left: 0, width: viewport.width } },
+        url: "http://localhost:9088/zh-hant/workflows/mcp-tool-launch",
+        viewport
+      })).toEqual([]);
+    }
   });
 
   it("requires every workflow detail page in every launch locale", () => {

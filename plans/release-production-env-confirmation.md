@@ -19,14 +19,18 @@
 | `TOOLARS_UPLOAD_HANDOFF_SECRET` | 同上，独立生成一个 | [ ] |
 | `TOOLARS_AUTH_SESSION_SECRET` | legacy 签名 session fallback（Phase 1 主线是 Supabase Auth，此项目前仅作迁移/旧路由兜底，go/no-go 仍要求显式确认） | [ ] |
 
-## 2. 持久化（不确认则重新部署即丢数据）
+## 2. 持久化：生产走 Supabase，不设 TOOLARS_DATA_DIR
 
-- [ ] `TOOLARS_DATA_DIR` 指向持久卷路径（如 `/var/data/toolars`）。缺省回落到 `.next/cache`，账号 profile / session ledger / AI consent ledger / PDF 元数据会在 redeploy 后丢失。
-- [ ] 如需按存储拆分，再覆盖 `TOOLARS_ACCOUNT_STORE_PATH` / `TOOLARS_AUTH_SESSION_LEDGER_PATH` / `TOOLARS_AI_CONSENT_LEDGER_PATH` / `TOOLARS_PDF_UPLOAD_TEMP_STORE_PATH` / `TOOLARS_PDF_UPLOAD_OBJECT_ROOT`（缺省从 `TOOLARS_DATA_DIR` 派生）。
-- [ ] owner 确认 PDF 上传数据保留策略与存储路径策略（go/no-go 人工确认项）。
+Vercel serverless 没有持久磁盘（文件系统只读，`/tmp` 调用间失效），`TOOLARS_DATA_DIR` 在生产无意义，文件型 store 仅是本地/legacy 兜底（生产健康检查将其标记为 `legacy-disabled`）。生产持久化已在代码内建 Supabase 驱动（`src/lib/supabase/toolars-private-data.ts`：Postgres 表 + Storage bucket）。
 
-## 3. 四个决策项（零代码，但必须显式拍板）
+- [ ] 生产 Supabase 项目已按顺序应用 3 个 migration：`supabase/migrations/202607060001_phase1_foundation.sql`、`202607110001_workspace_runtime.sql`、`202607120001_secure_private_runtime.sql`。
+- [ ] Supabase Storage 已建私有 bucket `toolars-pdf-temp`（PDF 上传加密对象）。
+- [ ] 已知免费档限制并确认可接受：项目**一周不活跃会暂停**（预发环境注意）；数据库 500MB；Storage 1GB 且单文件上限 50MB（与应用自身 PDF 50MB 上限恰好同界）。
+- [ ] owner 确认 PDF 上传数据保留策略（go/no-go 人工确认项）。
 
+## 3. 五个决策项（零代码，但必须显式拍板）
+
+0. **托管计划**: Vercel Hobby 计划 ToS 明确限制非商业用途（"restricts users to non-commercial, personal use only"）。Toolars 是商业化产品，上线应使用 Pro（$20/seat/月起），或明确记录接受该风险。
 1. **认证模式**: Phase 1 主线 = Supabase Auth（Google 登录）。legacy `GOOGLE_OAUTH_CLIENT_ID/SECRET/REDIRECT_URI` 是否配置？不配置则视为接受 legacy fallback 不可用。
 2. **Free Trial Mode**: `NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE=enabled`（默认，隐藏 Pricing/Billing）还是 `disabled` 并配好 `TOOLARS_BILLING_PROVIDER_ENDPOINT/API_KEY` + 付费文案？当前建议保持 enabled。
 3. **AI provider**: `TOOLARS_AI_PROVIDER_ENDPOINT/API_KEY` 不配置时 AI 路由返回 "not configured"（`release:health` 仅 warning）。接受还是配置？

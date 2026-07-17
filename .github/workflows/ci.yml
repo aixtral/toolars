@@ -52,6 +52,12 @@ jobs:
         run: TOOLARS_TEST_SCRIPT=test:ci TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1 pnpm run launch:readiness -- --full --visual-mobile-max-ratio 0.14 --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
 
       - name: Temporary production certified tool smoke
+        # Informational on PRs: the fixed temporary origin trails main, so any PR
+        # that adds routes or changes workspace DOM fails against the stale
+        # deployment rather than its own code. Main-push runs stay blocking so a
+        # stale temporary deployment is caught and refreshed. Tracked in
+        # plans/release-production-env-confirmation.md.
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
         run: pnpm exec node "$PWD/scripts/certified-tool-smoke.mjs" --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN" --write ../../output/launch-readiness/ci/deployed-certified-tool-smoke.json --output-dir ../../output/launch-readiness/ci/deployed-certified-tools
 
       - name: Temporary production health

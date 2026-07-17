@@ -20,6 +20,7 @@
     "audit:i18n": "node scripts/audit-i18n.mjs",
     "audit:i18n-quality": "node scripts/audit-i18n-quality.mjs --fail-on-needs-work",
     "audit:tool-inventory": "node scripts/audit-tool-inventory.mjs",
+    "audit:layout-contract": "node scripts/audit-ui-layout-contract.mjs",
     "launch:route-crawl": "node scripts/launch-route-crawl.mjs",
     "launch:readiness": "node scripts/launch-readiness-report.mjs",
     "release:health": "node scripts/check-production-health.mjs",

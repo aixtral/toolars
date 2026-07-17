@@ -36,6 +36,10 @@ describe("topbar visual style contract", () => {
     expect(block).toContain("grid-template-columns: minmax(188px, 220px) var(--topbar-command-width) minmax(0, 1fr)");
   });
 
+  it("does not use a compact search width at the 1320px desktop breakpoint", () => {
+    expect(css).not.toContain("--topbar-command-width: 360px");
+  });
+
   it("does not override the shared command column for PDF workspace pages", () => {
     expect(css).not.toContain('grid-template-areas: "brand breadcrumb command nav"');
     expect(css).not.toContain('.topbar[data-desktop-layout="pdf-workspace-v2"] .command-trigger');

@@ -165,6 +165,7 @@ select {
 }
 
 .kbd {
+  flex: 0 0 auto;
   margin-left: auto;
   padding: 3px 7px;
   color: var(--ink-muted);
@@ -173,6 +174,7 @@ select {
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .nav {
@@ -189,6 +191,7 @@ select {
 .nav button,
 .button {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -201,6 +204,11 @@ select {
   cursor: pointer;
   font-size: 14px;
   font-weight: 700;
+  white-space: nowrap;
+}
+
+button {
+  white-space: nowrap;
 }
 
 .nav > a,
@@ -3729,13 +3737,6 @@ select {
 }
 
 @media (max-width: 1320px) {
-  .topbar {
-    --topbar-command-width: 360px;
-    grid-template-columns: 200px var(--topbar-command-width) minmax(0, 1fr);
-    gap: 16px;
-    padding: 0 16px;
-  }
-
   .nav {
     gap: 6px;
   }
@@ -4047,6 +4048,7 @@ select {
   margin: 14px 0 10px;
   font-size: 34px;
   line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
 .workspace-panel h2 {
@@ -4082,6 +4084,8 @@ select {
 
 .textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 136px;
   padding: 14px;
   resize: vertical;
@@ -5080,14 +5084,23 @@ select {
 
 .workspace-section-title {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 14px;
   margin-top: 24px;
 }
 
 .workspace-section-title h2 {
   margin: 0;
+}
+
+.workspace-section-title > :first-child {
+  min-width: 0;
+}
+
+.workspace-section-title > .button {
+  margin-left: auto;
 }
 
 .text-button {
@@ -5176,7 +5189,7 @@ select {
 
 .operation-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-top: 14px;
 }
@@ -5610,9 +5623,14 @@ select {
 
 .workflow-run-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 18px;
+}
+
+.workflow-run-head > :first-child {
+  min-width: 0;
 }
 
 .workflow-run-head h2,
@@ -5622,7 +5640,8 @@ select {
 }
 
 .workflow-run-button {
-  min-width: 112px;
+  min-width: max-content;
+  margin-left: auto;
 }
 
 .workflow-progress {
@@ -5780,6 +5799,14 @@ select {
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 18px;
+}
+
+.tool-detail-head > div:first-child {
+  min-width: 0;
+}
+
+.tool-detail-head .title {
+  overflow-wrap: anywhere;
 }
 
 .detail-badge-row {
@@ -6157,6 +6184,9 @@ select {
   font-family: inherit;
   font-size: 16px;
   line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .risk-meter {
@@ -7367,7 +7397,8 @@ select {
     margin: 22px 0 10px;
     font-size: 24px;
     line-height: 1.08;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .title {

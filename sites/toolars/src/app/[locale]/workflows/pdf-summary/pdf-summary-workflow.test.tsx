@@ -93,6 +93,7 @@ describe("PdfSummaryWorkflow", () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.restoreAllMocks();
+    vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {})));
   });
 
   afterEach(() => {
@@ -186,9 +187,12 @@ describe("PdfSummaryWorkflow", () => {
   });
 
   it("posts approved consent with run metadata to the server audit ledger", () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({ ledger: { events: [], runs: [], version: 1 } }),
-      ok: true
+    const fetchMock = vi.fn((url: string, _init?: RequestInit) => {
+      if (url === "/api/pdf/uploads?handoff=pdf-summary") return new Promise(() => {});
+      return Promise.resolve({
+        json: vi.fn().mockResolvedValue({ ledger: { events: [], runs: [], version: 1 } }),
+        ok: true
+      });
     });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -207,7 +211,9 @@ describe("PdfSummaryWorkflow", () => {
       })
     );
 
-    const [, init] = fetchMock.mock.calls.find(([url, callInit]) => url === "/api/ai/consent-audit" && callInit?.method === "POST")!;
+    const postCall = fetchMock.mock.calls.find(([url, callInit]) => url === "/api/ai/consent-audit" && callInit?.method === "POST");
+    expect(postCall).toBeDefined();
+    const init = postCall?.[1] as RequestInit;
     const body = JSON.parse(String(init.body));
 
     expect(body.event).toMatchObject({

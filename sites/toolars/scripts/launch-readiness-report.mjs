@@ -98,6 +98,10 @@ export function createLaunchReadinessPlan({
       browserGate("draft-locale-smoke", "Draft locale non-public smoke", "node", ["scripts/draft-locale-non-public-smoke.mjs"], baseUrl, {
         TOOLARS_BASE_URL: baseUrl,
         TOOLARS_DRAFT_LOCALE_SMOKE_OUTPUT_DIR: path.join(outputRoot, "browser", "draft-locales")
+      }),
+      browserGate("layout-contract", "All-route responsive layout contract", "node", ["scripts/audit-ui-layout-contract.mjs"], baseUrl, {
+        TOOLARS_BASE_URL: baseUrl,
+        TOOLARS_LAYOUT_GATE_OUTPUT_DIR: path.join(outputRoot, "browser", "layout-contract")
       })
     );
   }

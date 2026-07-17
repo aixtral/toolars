@@ -12,5 +12,8 @@ describe("CssAnimationGeneratorWorkspace", () => {
     fireEvent.click(screen.getByRole("button", { name: "Generate animation CSS" }));
 
     expect(screen.getByLabelText("CSS animation output")).toHaveTextContent("@keyframes fade-in");
+    expect(screen.getByTestId("css-animation-preview")).toHaveStyle({
+      animation: "fade-in 600ms ease-out 0ms 1 normal both"
+    });
   });
 });

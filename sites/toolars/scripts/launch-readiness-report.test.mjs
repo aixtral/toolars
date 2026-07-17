@@ -126,6 +126,7 @@ describe("launch readiness report", () => {
       "route-crawl",
       "language-ux-smoke",
       "draft-locale-smoke",
+      "layout-contract",
       "visual-release-gate"
     ]);
     expect(wrappedCommand(plan.find((gate) => gate.id === "public-tool-workspace-smoke"))).toEqual([
@@ -164,6 +165,10 @@ describe("launch readiness report", () => {
     expect(plan.find((gate) => gate.id === "route-crawl")?.env).toMatchObject({
       TOOLARS_BASE_URL: "http://127.0.0.1:9088",
       TOOLARS_ROUTE_CRAWL_OUTPUT_DIR: "/tmp/toolars-launch-readiness/browser/route-crawl"
+    });
+    expect(plan.find((gate) => gate.id === "layout-contract")?.env).toMatchObject({
+      TOOLARS_BASE_URL: "http://127.0.0.1:9088",
+      TOOLARS_LAYOUT_GATE_OUTPUT_DIR: "/tmp/toolars-launch-readiness/browser/layout-contract"
     });
   });
 

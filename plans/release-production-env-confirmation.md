@@ -42,12 +42,12 @@ Vercel serverless 没有持久磁盘（文件系统只读，`/tmp` 调用间失�
 
 - [ ] 确认 `ar/fr/hi/ja/pt/ru` 6 个草稿 locale 保持非公开：无公开路由、无 sitemap 条目、无 hreflang、语言切换器不展示（现状已由 smoke 验证，选此项=零工作量）。若要毕业，走 launch-locale checklist 另立流程。
 
-## 4.5 刷新 CI 临时部署（顺带完成，解锁 deployed-smoke 强制门禁）
+## 4.5 CI 临时部署（已自愈，仅需知悉）
 
-CI 的 "Temporary production certified tool smoke" 步骤对固定域 `toolars-two.vercel.app` 跑认证 smoke。该部署已过期：新 dedicated route 返回 404（实测 `/en/tools/percentage-calculator` 404），旧 DOM 导致部分场景超时。2026-07-16 起该步骤对 PR 降级为信息项（`continue-on-error`），main 推送保持阻断。
+CI 的 "Temporary production certified tool smoke" 步骤对固定域 `toolars-two.vercel.app` 跑认证 smoke。该域由 Vercel Git 集成跟随 main 自动部署：**2026-07-16 验证已刷新**（`/en/tools/percentage-calculator` 200，main CI deployed smoke 恢复绿色）。该步骤对 PR 保持信息项（`continue-on-error`，防 PR 超前于部署的误报），对 main 推送保持阻断。
 
-- [ ] 将 `toolars-two.vercel.app` 重新部署到当前 main（或把仓库 Actions 变量 `TOOLARS_TEMP_PRODUCTION_ORIGIN` 指向新临时部署）。
-- [ ] 部署刷新后跑一次 main 分支 CI 确认该步骤恢复绿色；如长期用 preview 部署替代固定域，另立 workflow 改造任务。
+- [x] 临时部署刷新 — 自动完成，无需操作
+- [ ] 知悉：临时域公共 `release:health` 已 pass；详细运行时状态需要 `TOOLARS_HEALTHCHECK_TOKEN`（见 §5）
 
 ## 5. 验证步骤（确认完 1–4 后执行）
 
@@ -59,6 +59,7 @@ pnpm run --silent release:health -- --base-url "$TOOLARS_PRODUCTION_URL"
 ```
 
 - 要求两次均 `Status: pass`；Supabase 公共配置与 Free Trial Mode 是 blocker 级，AI/Billing provider 仅 warning。
+- 公共检查只覆盖公开状态；**详细运行时状态（PDF 密钥、session 密钥、存储路径等）需要部署端设置 `TOOLARS_HEALTHCHECK_TOKEN` 并把该值交给执行验证的人**，随 `release:health` 一并取证。
 - 将两次输出原文附到 release candidate（贴在本文件末节或 PR 描述）。
 - 另需 owner 提供 `TOOLARS_PREPRODUCTION_URL` / `TOOLARS_PRODUCTION_URL` 两个值本身（2026-07-10 全仓搜索只有占位符）。
 

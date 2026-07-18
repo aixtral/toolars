@@ -282,7 +282,7 @@ Exit criteria:
 
 ### Phase 6: Release Gates
 
-Status: managed production full gate passed locally; CI wiring, production health gate, and public workspace browser smoke added, pending first remote CI run and real deployment health evidence.
+Status: first remote CI run green on main 2026-07-16, including deployed certified smoke against the auto-refreshed temporary origin; real preproduction/production deployment health evidence still pending owner-provided URLs.
 
 Tasks:
 
@@ -302,6 +302,8 @@ Tasks:
 - Fix CLI `--full` parsing so browser and visual gates run when full mode is requested. Done in `scripts/launch-readiness-report.mjs`.
 - Full managed local evidence: `/tmp/toolars-launch-readiness-full-managed-fixed` passed on 2026-07-08 with route crawl 236/236, language UX 4/4, draft locale 3/3, mobile visual 28/28, and desktop visual 4/4.
 - CI wiring added: `.github/workflows/ci.yml` now installs Playwright Chromium, runs `pnpm run launch:readiness -- --full --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci`, and uploads the launch readiness artifact. First remote run is still required as release evidence.
+- First remote CI evidence: run 29596575538 on main commit `1cfe6d2a` (2026-07-16) passed the full remote launch readiness gate, including layout contract 2400/2400 page viewports and certified tool smoke 60/60. PR-level green runs: 29592500357 (responsive layout gate, PR #26) and 29592608977 (certified smoke batch 11, PR #27).
+- Deployed certified smoke policy: the step is blocking on main pushes and informational (`continue-on-error`) on PRs, because the fixed temporary origin trails in-flight PR code. The origin auto-deploys from main through the Vercel Git integration; verified refreshed on 2026-07-16 (`/en/tools/percentage-calculator` 200, main deployed smoke green).
 - Production health gate added: `pnpm run release:health -- --base-url <deployment-url>` checks `/api/system/production-health` with Phase 1 semantics, and `launch:readiness` now runs it through the managed production server after build. Supabase public config and Free Trial Mode are release blockers; AI/Billing providers remain warnings unless explicitly required.
 - Remote deployment health evidence is still blocked on real deployment URLs. Repository/config search on 2026-07-10 found only placeholders and test fixtures; release owner must provide `TOOLARS_PREPRODUCTION_URL` and `TOOLARS_PRODUCTION_URL`, then run `pnpm run release:health -- --base-url <url>` for each deployed environment.
 - Local Supabase env evidence: on 2026-07-09, `.env.local` was configured with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; local `release:health` against `http://127.0.0.1:9088` returned `Status: pass` with no blockers and AI provider warning only.
@@ -340,8 +342,8 @@ Exit criteria:
 
 ## 6. Immediate Next Work
 
-1. Run the new GitHub Actions workflow remotely on PR/main and attach the launch readiness artifact to the release candidate.
-2. Configure preproduction and production Supabase/env, run `pnpm run release:health -- --base-url <deployment-url>` for each deployed URL, and attach the pass output to the release candidate.
-3. Expand semantic browser smoke beyond the 55 launch-certified tools, starting with the remaining high-traffic public uncertified finance/health/developer tools.
+1. ~~Run the new GitHub Actions workflow remotely on PR/main~~ Done 2026-07-16: main run 29596575538 green on `1cfe6d2a`; attach its launch readiness artifact to the release candidate.
+2. Configure preproduction and production Supabase/env, run `pnpm run release:health -- --base-url <deployment-url>` for each deployed URL, and attach the pass output to the release candidate. Owner action list lives in `plans/release-production-env-confirmation.md`; temporary-origin public health passed 2026-07-16, detailed runtime status still requires `TOOLARS_HEALTHCHECK_TOKEN`.
+3. Expand semantic browser smoke beyond the 60 launch-certified tools (batch 11 merged 2026-07-16), continuing with the remaining high-traffic public uncertified finance/health/developer tools.
 4. Add source golden fixtures for the highest-risk VitalCalc formulas and Aixtral Lab transformations.
 5. Decide whether the six draft locales stay non-public for this release or graduate through the launch-locale checklist.

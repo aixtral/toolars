@@ -74,7 +74,8 @@ pnpm run --silent release:health -- --base-url "$TOOLARS_PRODUCTION_URL"
 
 ## 7. 证据存档
 
-- [x] 临时域（toolars-two.vercel.app）深度 `release:health`（2026-07-18，含 `TOOLARS_HEALTHCHECK_TOKEN`）：`Status: pass`，blockers `none`，唯一 warning 为 AI provider 未配置
+- [x] 临时域（toolars-two.vercel.app）深度 `release:health`（2026-07-18，含 `TOOLARS_HEALTHCHECK_TOKEN`）：`Status: pass`，blockers `none`，**warnings `none`**（AI provider 接入后告警清零）
+- [x] DeepSeek 端到端（2026-07-18）：`POST /api/ai/deepseek-gateway/runs` 带网关 bearer → `201`，返回 `deepseek-v4-flash` 真实补全与 token 用量
 - [ ] 预发 `release:health` 输出（粘贴处）
 - [ ] 生产 `release:health` 输出（粘贴处）
 - [ ] owner 签字确认上述变量已在托管方后台设置（非仅本地文件）
@@ -82,7 +83,8 @@ pnpm run --silent release:health -- --base-url "$TOOLARS_PRODUCTION_URL"
 ## 8. 剩余 owner 事项汇总（2026-07-18 时点）
 
 1. ~~提供 `SUPABASE_SECRET_KEY`~~ 已完成（2026-07-18 写入双环境）。
-2. ~~`NEXT_PUBLIC_SITE_URL` 确认~~ 已决策：现阶段沿用临时域，发布前切换。**发布阻断：正式域 `toolars.com` 尚未注册——尽快注册，注册后改绑 Vercel 域、更新该变量（Production+Preview）、复核 sitemap/robots/OG/JSON-LD 与 Supabase Auth 回调域**。
+2. ~~`NEXT_PUBLIC_SITE_URL` 确认~~ 已决策：现阶段沿用临时域，发布前切换。**发布阻断：正式域 `toolars.com` 尚未注册——尽快注册，注册后改绑 Vercel 域、更新该变量与 `TOOLARS_AI_PROVIDER_ENDPOINT`（Production+Preview）、复核 sitemap/robots/OG/JSON-LD 与 Supabase Auth 回调域**。
 3. ~~`NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE` 确认~~ 已确认 `enabled`（2026-07-18）。
-4. 决策仍待：托管计划（Hobby 禁商用 vs Pro，发布付费功能前必须 Pro）、AI provider 配置与否、Sentry/PostHog 启用与否。
-5. 正式环境 URL 口径：`toolars-two.vercel.app` 即当前生产候选部署；预发可用 main 的 Preview 部署。切正式域名后执行 §5 双环境 `release:health` 取证并归档。
+4. ~~AI provider~~ 已完成（2026-07-18）：内置 DeepSeek 网关（PR #28）+ `TOOLARS_DEEPSEEK_API_KEY`，端到端真实调用验证通过，health 检查 warnings 归零。Sentry（org `stanvl` / project `toolars`）与 PostHog（US 区）变量已写入双环境，随部署生效。
+5. 决策仍待：托管计划（Hobby 禁商用 vs Pro，发布付费功能前必须 Pro）。
+6. 正式环境 URL 口径：`toolars-two.vercel.app` 即当前生产候选部署；预发可用 main 的 Preview 部署。切正式域名后执行 §5 双环境 `release:health` 取证并归档。

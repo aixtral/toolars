@@ -13,19 +13,13 @@ type CommandGroupMessageKey = "tools" | "workflows" | "collections";
 
 const commandShortcutKey = "k" satisfies KeyboardEvent["key"];
 const keyboardKeys = {
-  tab: "Tab",
   escape: "Escape",
+  tab: "Tab",
   arrowDown: "ArrowDown",
   arrowUp: "ArrowUp",
   enter: "Enter"
 } as const satisfies Record<string, KeyboardEvent["key"]>;
 type CommandCenterKeyboardKey = (typeof keyboardKeys)[keyof typeof keyboardKeys];
-const focusableSelector = [
-  "a[href]",
-  "button:not([disabled])",
-  "input:not([disabled])",
-  "[tabindex]:not([tabindex='-1'])"
-] as const;
 const commandGroupMessageKeys = {
   Tools: "tools",
   Workflows: "workflows",
@@ -40,8 +34,7 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
-  const triggerRef = useRef(null as HTMLButtonElement | null);
-  const dialogRef = useRef(null as HTMLElement | null);
+  const fieldRef = useRef(null as HTMLDivElement | null);
   const inputRef = useRef(null as HTMLInputElement | null);
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
@@ -49,183 +42,155 @@ export function CommandCenter({ resultLimit = maxVisibleResults }: CommandCenter
 
   const results = useMemo(() => searchCommandResults(query, { limit: resultLimit }), [query, resultLimit]);
   const groupedResults = useMemo(() => groupResults(results), [results]);
-  const openCommandCenter = () => {
-    setOpen(true);
-  };
-  const closeCommandCenter = () => {
-    setOpen(false);
-    triggerRef.current?.focus();
-  };
 
-  const handleDialogKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
-    if (!hasKeyboardKey(event, keyboardKeys.tab)) return;
-
-    const focusableItems = getFocusableElements(dialogRef.current);
-    if (focusableItems.length === 0) return;
-
-    const firstItem = focusableItems[0];
-    const lastItem = focusableItems[focusableItems.length - 1];
-
-    if (event.shiftKey && document.activeElement === firstItem) {
-      event.preventDefault();
-      lastItem.focus();
-      return;
-    }
-
-    if (!event.shiftKey && document.activeElement === lastItem) {
-      event.preventDefault();
-      firstItem.focus();
-    }
-  };
-
+  // Cmd/Ctrl+K moves focus straight into the inline search field.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const isCommandShortcut = event.key.toLowerCase() === commandShortcutKey && (event.metaKey || event.ctrlKey);
-
-      if (isCommandShortcut) {
+      if (event.key.toLowerCase() === commandShortcutKey && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        openCommandCenter();
-        return;
-      }
-
-      if (!open) return;
-
-      if (hasKeyboardKey(event, keyboardKeys.escape)) {
-        event.preventDefault();
-        closeCommandCenter();
-      }
-
-      if (hasKeyboardKey(event, keyboardKeys.arrowDown)) {
-        event.preventDefault();
-        setActiveIndex((index) => Math.min(index + 1, Math.max(results.length - 1, 0)));
-      }
-
-      if (hasKeyboardKey(event, keyboardKeys.arrowUp)) {
-        event.preventDefault();
-        setActiveIndex((index) => Math.max(index - 1, 0));
-      }
-
-      if (hasKeyboardKey(event, keyboardKeys.enter) && results[activeIndex]) {
-        event.preventDefault();
-        window.location.href = localizeCommandHref(results[activeIndex].href, localeCode);
+        inputRef.current?.focus();
+        setOpen(true);
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, localeCode, open, results]);
+  }, []);
 
+  // The dropdown is non-modal: a pointer down anywhere outside the field closes it.
   useEffect(() => {
     if (!open) return;
-    inputRef.current?.focus();
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (fieldRef.current && event.target instanceof Node && !fieldRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [open]);
 
   useEffect(() => {
     setActiveIndex(0);
   }, [query]);
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  const handleInputKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (hasKeyboardKey(event, keyboardKeys.escape)) {
+      if (open) {
+        event.preventDefault();
+        setOpen(false);
+      }
+      return;
+    }
+
+    if (hasKeyboardKey(event, keyboardKeys.tab)) {
+      setOpen(false);
+      return;
+    }
+
+    if (hasKeyboardKey(event, keyboardKeys.arrowDown) || hasKeyboardKey(event, keyboardKeys.arrowUp)) {
+      event.preventDefault();
+      if (!open) {
+        setOpen(true);
+        return;
+      }
+      if (hasKeyboardKey(event, keyboardKeys.arrowDown)) {
+        setActiveIndex((index) => Math.min(index + 1, Math.max(results.length - 1, 0)));
+      } else {
+        setActiveIndex((index) => Math.max(index - 1, 0));
+      }
+      return;
+    }
+
+    if (hasKeyboardKey(event, keyboardKeys.enter) && open && results[activeIndex]) {
+      event.preventDefault();
+      window.location.href = localizeCommandHref(results[activeIndex].href, localeCode);
+    }
+  };
 
   return (
-    <>
-      <button
-        ref={triggerRef}
-        className="command-trigger"
-        type="button"
-        data-command-center
-        aria-label={t("aria.open")}
+    <div ref={fieldRef} className="command-trigger command-field" data-command-center>
+      <Search size={18} aria-hidden="true" />
+      <input
+        ref={inputRef}
+        aria-controls="command-center-results"
         aria-expanded={open}
-        onClick={openCommandCenter}
-      >
-        <Search size={18} aria-hidden="true" />
-        <span>{t("placeholder")}</span>
+        aria-label={t("aria.search")}
+        className="command-input-inline"
+        onChange={(event) => {
+          setQuery(event.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+        onKeyDown={handleInputKeyDown}
+        placeholder={t("placeholder")}
+        role="combobox"
+        value={query}
+      />
+      {query ? (
+        <button
+          className="command-icon-button"
+          type="button"
+          aria-label={t("aria.clear")}
+          onClick={() => {
+            setQuery("");
+            inputRef.current?.focus();
+          }}
+        >
+          <X size={16} aria-hidden="true" />
+        </button>
+      ) : (
         <kbd className="kbd">{t("kbd.command")}</kbd>
-      </button>
+      )}
 
       {open ? (
-        <div className="command-overlay" role="presentation" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) closeCommandCenter();
-        }}>
-          <section
-            ref={dialogRef}
-            className="command-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-label={t("aria.dialog")}
-            onKeyDown={handleDialogKeyDown}
-          >
-            <div className="command-search-row">
-              <Search size={18} aria-hidden="true" />
-              <input
-                ref={inputRef}
-                aria-label={t("aria.search")}
-                className="command-input"
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={t("placeholder")}
-                role="searchbox"
-                value={query}
-              />
-              {query ? (
-                <button className="command-icon-button" type="button" aria-label={t("aria.clear")} onClick={() => setQuery("")}>
-                  <X size={16} aria-hidden="true" />
-                </button>
-              ) : null}
-              <button className="command-close-button" type="button" aria-label={t("aria.close")} onClick={closeCommandCenter}>
-                {t("kbd.escape")}
-              </button>
-            </div>
-
-            <div className="command-results" role="listbox" aria-label={t("aria.results")}>
-              {results.length > 0 ? (
-                query.trim() ? (
-                  groupedResults.map(([group, items]) => (
-                    <CommandGroup
-                      activeIndex={activeIndex}
-                      group={group}
-                      items={items}
-                      key={group}
-                      localeCode={localeCode}
-                      results={results}
+        <div className="command-panel" role="dialog" aria-label={t("aria.dialog")}>
+          <div className="command-results" id="command-center-results" role="listbox" aria-label={t("aria.results")}>
+            {results.length > 0 ? (
+              query.trim() ? (
+                groupedResults.map(([group, items]) => (
+                  <CommandGroup
+                    activeIndex={activeIndex}
+                    group={group}
+                    items={items}
+                    key={group}
+                    localeCode={localeCode}
+                    results={results}
+                    setActiveIndex={setActiveIndex}
+                  />
+                ))
+              ) : (
+                <section className="command-group">
+                  <h2>{t("suggested")}</h2>
+                  {results.map((result, index) => (
+                    <CommandResultItem
+                      active={index === activeIndex}
+                      href={localizeCommandHref(result.href, localeCode)}
+                      index={index}
+                      key={`${result.group}-${result.slug}`}
+                      result={result}
                       setActiveIndex={setActiveIndex}
                     />
-                  ))
-                ) : (
-                  <section className="command-group">
-                    <h2>{t("suggested")}</h2>
-                    {results.map((result, index) => (
-                      <CommandResultItem
-                        active={index === activeIndex}
-                        href={localizeCommandHref(result.href, localeCode)}
-                        index={index}
-                        key={`${result.group}-${result.slug}`}
-                        result={result}
-                        setActiveIndex={setActiveIndex}
-                      />
-                    ))}
-                  </section>
-                )
-              ) : (
-                <div className="command-empty">
-                  <strong>{t("empty")}</strong>
-                  <p>{t("emptyDescription")}</p>
-                </div>
-              )}
-            </div>
+                  ))}
+                </section>
+              )
+            ) : (
+              <div className="command-empty">
+                <strong>{t("empty")}</strong>
+                <p>{t("emptyDescription")}</p>
+              </div>
+            )}
+          </div>
 
-            <footer className="command-footer">
-              <span><ArrowUp size={13} aria-hidden="true" /> <ArrowDown size={13} aria-hidden="true" /> {t("footer.navigate")}</span>
-              <span><CornerDownLeft size={13} aria-hidden="true" /> {t("footer.select")}</span>
-              <span>{t("kbd.escape")} {t("footer.close")}</span>
-            </footer>
-          </section>
+          <footer className="command-footer">
+            <span><ArrowUp size={13} aria-hidden="true" /> <ArrowDown size={13} aria-hidden="true" /> {t("footer.navigate")}</span>
+            <span><CornerDownLeft size={13} aria-hidden="true" /> {t("footer.select")}</span>
+            <span>{t("kbd.escape")} {t("footer.close")}</span>
+          </footer>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }
 
@@ -312,14 +277,6 @@ function hasKeyboardKey(event: CommandCenterKeyboardEvent, key: CommandCenterKey
 
 function getCommandGroupMessageKey(group: CommandResult["group"]) {
   return commandGroupMessageKeys[group];
-}
-
-function getFocusableElements(dialog: HTMLElement | null) {
-  if (!dialog) return [];
-
-  return Array.from(dialog.querySelectorAll(focusableSelector.join(","))).filter(
-    (element): element is HTMLElement => element instanceof HTMLElement
-  );
 }
 
 function groupResults(results: CommandResult[]): Array<[CommandResult["group"], CommandResult[]]> {

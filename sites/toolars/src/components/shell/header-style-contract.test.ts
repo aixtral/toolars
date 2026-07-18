@@ -32,7 +32,7 @@ describe("topbar visual style contract", () => {
   it("reserves a fluid, nav-safe desktop column for the command search", () => {
     const block = cssBlockContaining(".topbar");
 
-    expect(block).toContain("--topbar-command-max-width: 560px");
+    expect(block).toContain("--topbar-command-max-width: 720px");
     expect(block).toContain("grid-template-columns: minmax(188px, 220px) minmax(0, 1fr) auto");
   });
 

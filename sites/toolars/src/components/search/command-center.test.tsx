@@ -53,98 +53,97 @@ describe("CommandCenter", () => {
     expect(scanCommandCenterI18nCandidates()).toEqual([]);
   });
 
-  it("opens from the shell trigger and focuses search", () => {
+  it("opens the dropdown below the inline field on focus", () => {
     renderWithIntl(<CommandCenter />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    expect(screen.queryByRole("dialog", { name: "Command Center" })).not.toBeInTheDocument();
 
-    const dialog = screen.getByRole("dialog", { name: "Command Center" });
-    expect(dialog).toBeInTheDocument();
-    expect(screen.getByRole("searchbox", { name: "Search tools and workflows" })).toHaveFocus();
-    expect(within(dialog).getByText("Suggested")).toBeInTheDocument();
+    fireEvent.focus(searchbox);
+
+    const panel = screen.getByRole("dialog", { name: "Command Center" });
+    expect(panel).toBeInTheDocument();
+    expect(within(panel).getByText("Suggested")).toBeInTheDocument();
+    expect(searchbox).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("opens with the keyboard shortcut and closes with Escape", () => {
+  it("focuses the inline field with the keyboard shortcut and closes with Escape", () => {
     renderWithIntl(<CommandCenter />);
 
     fireEvent.keyDown(document, { key: "k", metaKey: true });
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    expect(searchbox).toHaveFocus();
     expect(screen.getByRole("dialog", { name: "Command Center" })).toBeInTheDocument();
 
-    fireEvent.keyDown(document, { key: "Escape" });
+    fireEvent.keyDown(searchbox, { key: "Escape" });
     expect(screen.queryByRole("dialog", { name: "Command Center" })).not.toBeInTheDocument();
-  });
-
-  it("traps Tab focus inside the command dialog", () => {
-    renderWithIntl(<CommandCenter />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
-
-    const dialog = screen.getByRole("dialog", { name: "Command Center" });
-    const searchbox = screen.getByRole("searchbox", { name: "Search tools and workflows" });
-    const results = within(dialog).getAllByRole("link");
-
-    expect(searchbox).toHaveFocus();
-
-    fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
-    expect(results.at(-1)).toHaveFocus();
-
-    fireEvent.keyDown(dialog, { key: "Tab" });
     expect(searchbox).toHaveFocus();
   });
 
-  it("restores focus to the command trigger after closing", () => {
-    renderWithIntl(<CommandCenter />);
+  it("closes the dropdown on outside pointer down without trapping focus", () => {
+    renderWithIntl(
+      <div>
+        <CommandCenter />
+        <button type="button">Outside target</button>
+      </div>
+    );
 
-    const trigger = screen.getByRole("button", { name: "Open command search" });
-    trigger.focus();
-    fireEvent.click(trigger);
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    fireEvent.focus(searchbox);
+    expect(screen.getByRole("dialog", { name: "Command Center" })).toBeInTheDocument();
 
-    expect(screen.getByRole("searchbox", { name: "Search tools and workflows" })).toHaveFocus();
-
-    fireEvent.keyDown(document, { key: "Escape" });
-
+    fireEvent.mouseDown(screen.getByRole("button", { name: "Outside target" }));
     expect(screen.queryByRole("dialog", { name: "Command Center" })).not.toBeInTheDocument();
-    expect(trigger).toHaveFocus();
+
+    fireEvent.focus(searchbox);
+    fireEvent.keyDown(searchbox, { key: "Tab" });
+    expect(screen.queryByRole("dialog", { name: "Command Center" })).not.toBeInTheDocument();
   });
 
   it("routes JSON searches to the JSON Repair tool", () => {
     renderWithIntl(<CommandCenter />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search tools and workflows" }), {
-      target: { value: "json" }
-    });
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    fireEvent.focus(searchbox);
+    fireEvent.change(searchbox, { target: { value: "json" } });
 
     const result = screen.getByRole("link", { name: /JSON Repair/ });
     expect(result).toHaveAttribute("href", "/tools/json-repair");
     expect(screen.getByText("Tools")).toBeInTheDocument();
   });
 
+  it("clears the query from the inline clear button", () => {
+    renderWithIntl(<CommandCenter />);
+
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    fireEvent.change(searchbox, { target: { value: "json" } });
+    expect(searchbox).toHaveValue("json");
+
+    fireEvent.click(screen.getByRole("button", { name: "Clear search" }));
+    expect(searchbox).toHaveValue("");
+    expect(searchbox).toHaveFocus();
+  });
+
   it("localizes command chrome and result hrefs for non-default locales", () => {
     renderWithSpanishIntl(<CommandCenter />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Abrir búsqueda de comandos" }));
+    const searchbox = screen.getByRole("combobox", { name: "Buscar herramientas y flujos" });
+    fireEvent.focus(searchbox);
 
-    const dialog = screen.getByRole("dialog", { name: "Centro de comandos" });
-    expect(screen.getByRole("searchbox", { name: "Buscar herramientas y flujos" })).toHaveFocus();
+    const panel = screen.getByRole("dialog", { name: "Centro de comandos" });
+    expect(within(panel).getByText("Sugeridos")).toBeInTheDocument();
     expect(screen.getByText("Comando K")).toBeInTheDocument();
-    expect(within(dialog).getByRole("button", { name: "Cerrar centro de comandos" })).toHaveTextContent("Escape");
-    expect(within(dialog).getByText("Sugeridos")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar herramientas y flujos" }), {
-      target: { value: "json" }
-    });
+    fireEvent.change(searchbox, { target: { value: "json" } });
 
     const result = screen.getByRole("link", { name: /JSON Repair/ });
     expect(result).toHaveAttribute("href", "/es/tools/json-repair");
     expect(screen.getByText("Herramientas")).toBeInTheDocument();
-    expect(within(dialog).getByText("Navegar")).toBeInTheDocument();
-    expect(within(dialog).getByText("Seleccionar")).toBeInTheDocument();
-    expect(within(dialog).getByText("Escape Cerrar")).toBeInTheDocument();
+    expect(within(panel).getByText("Navegar")).toBeInTheDocument();
+    expect(within(panel).getByText("Seleccionar")).toBeInTheDocument();
+    expect(within(panel).getByText("Escape Cerrar")).toBeInTheDocument();
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar herramientas y flujos" }), {
-      target: { value: "zzzz no matching task" }
-    });
+    fireEvent.change(searchbox, { target: { value: "zzzz no matching task" } });
 
     expect(screen.getByText("No se encontraron herramientas ni flujos")).toBeInTheDocument();
     expect(screen.getByText("Prueba con el nombre de una herramienta, un tipo de archivo o una tarea como resumir PDF.")).toBeInTheDocument();
@@ -153,10 +152,8 @@ describe("CommandCenter", () => {
   it("shows an empty state for unmatched tasks", () => {
     renderWithIntl(<CommandCenter />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search tools and workflows" }), {
-      target: { value: "zzzz no matching task" }
-    });
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    fireEvent.change(searchbox, { target: { value: "zzzz no matching task" } });
 
     expect(screen.getByText("No matching tools or workflows")).toBeInTheDocument();
     expect(screen.getByText("Try a tool name, file type, or task like summarize pdf.")).toBeInTheDocument();
@@ -165,22 +162,14 @@ describe("CommandCenter", () => {
   it("renders certified search results in the scroll region while keeping the footer mounted", () => {
     renderWithIntl(<CommandCenter />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Open command search" }));
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search tools and workflows" }), {
-      target: { value: "calculator" }
-    });
+    const searchbox = screen.getByRole("combobox", { name: "Search tools and workflows" });
+    fireEvent.change(searchbox, { target: { value: "calculator" } });
 
-    const dialog = screen.getByRole("dialog", { name: "Command Center" });
-    const resultsRegion = within(dialog).getByRole("listbox", { name: "Command results" });
+    const panel = screen.getByRole("dialog", { name: "Command Center" });
+    const resultsRegion = within(panel).getByRole("listbox", { name: "Command results" });
     const resultLinks = within(resultsRegion).getAllByRole("link");
 
     expect(resultLinks.length).toBeGreaterThan(3);
-    expect(within(dialog).getByText("Escape Close")).toBeInTheDocument();
-
-    resultLinks.at(-1)?.focus();
-    expect(resultLinks.at(-1)).toHaveFocus();
-
-    fireEvent.keyDown(dialog, { key: "Tab" });
-    expect(screen.getByRole("searchbox", { name: "Search tools and workflows" })).toHaveFocus();
+    expect(within(panel).getByText("Escape Close")).toBeInTheDocument();
   });
 });

@@ -17,9 +17,13 @@ export const layoutGateViewports = [
   { id: "mobile", width: 390, height: 844 }
 ];
 export const headerSearchLayoutContracts = {
-  "desktop-wide": { left: 262, width: 400 },
-  desktop: { left: 262, width: 400 },
-  tablet: { left: 230, width: 320 },
+  // The command column is fluid: the trigger anchors to the brand gutter and
+  // takes the space left by the nav (capped at 560px), so exact widths vary
+  // by viewport and locale. The contract pins the left anchor plus a minimum
+  // usable width; mobile keeps a fixed full-width row.
+  "desktop-wide": { left: 256, minWidth: 440 },
+  desktop: { left: 256, minWidth: 280 },
+  tablet: { left: 24, width: 976 },
   mobile: { left: 12, width: 366 }
 };
 export const requiredWorkflowLayoutPaths = layoutGateLocales.flatMap((locale) =>
@@ -42,7 +46,11 @@ export function createHeaderGeometryFindings({ header, url, viewport }) {
     left: header.command.left,
     width: header.command.width
   };
-  if (actual.left === expected.left && actual.width === expected.width) return [];
+  const leftMatches = actual.left === expected.left;
+  const widthMatches = expected.width !== undefined
+    ? actual.width === expected.width
+    : actual.width >= expected.minWidth;
+  if (leftMatches && widthMatches) return [];
 
   return [{
     actual,

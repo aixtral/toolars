@@ -85,18 +85,31 @@ describe("shared UI layout contract", () => {
   it("reports a desktop header search position or width that drifts from the shared contract", () => {
     expect(createHeaderGeometryFindings({
       header: {
-        command: { left: 232, width: 360 },
+        command: { left: 232, width: 240 },
         topbar: { left: 0, width: 1280 }
       },
       url: "http://localhost:9088/es/workflows/mcp-tool-launch",
       viewport: { id: "desktop", height: 720, width: 1280 }
     })).toEqual([
       expect.objectContaining({
-        actual: { left: 232, width: 360 },
-        expected: { left: 262, width: 400 },
+        actual: { left: 232, width: 240 },
+        expected: { left: 256, minWidth: 280 },
         kind: "header-search-geometry-drift"
       })
     ]);
+  });
+
+  it("accepts any fluid width at or above the desktop minimum", () => {
+    for (const width of [280, 410, 560]) {
+      expect(createHeaderGeometryFindings({
+        header: {
+          command: { left: 256, width },
+          topbar: { left: 0, width: 1280 }
+        },
+        url: "http://localhost:9088/en/workflows/mcp-tool-launch",
+        viewport: { id: "desktop", height: 720, width: 1280 }
+      })).toEqual([]);
+    }
   });
 
   it("enforces shared header geometry at every audited responsive breakpoint", () => {
@@ -109,8 +122,9 @@ describe("shared UI layout contract", () => {
 
     for (const viewport of layoutGateViewports) {
       const expected = headerSearchLayoutContracts[viewport.id];
+      const command = { left: expected.left, width: expected.width ?? expected.minWidth };
       expect(createHeaderGeometryFindings({
-        header: { command: expected, topbar: { left: 0, width: viewport.width } },
+        header: { command, topbar: { left: 0, width: viewport.width } },
         url: "http://localhost:9088/zh-hant/workflows/mcp-tool-launch",
         viewport
       })).toEqual([]);

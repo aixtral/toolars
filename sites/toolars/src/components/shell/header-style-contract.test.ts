@@ -29,11 +29,17 @@ describe("topbar visual style contract", () => {
     expect(block).not.toMatch(/border(?:-color|-radius)?\s*:/);
   });
 
-  it("reserves a language-independent desktop width for the command search", () => {
+  it("reserves a fluid, nav-safe desktop column for the command search", () => {
     const block = cssBlockContaining(".topbar");
 
-    expect(block).toContain("--topbar-command-width: 400px");
-    expect(block).toContain("grid-template-columns: minmax(188px, 220px) var(--topbar-command-width) minmax(0, 1fr)");
+    expect(block).toContain("--topbar-command-max-width: 560px");
+    expect(block).toContain("grid-template-columns: minmax(188px, 220px) minmax(0, 1fr) auto");
+  });
+
+  it("caps the command trigger at the shared max width", () => {
+    const block = cssBlockContaining(".command-trigger");
+
+    expect(block).toContain("max-width: var(--topbar-command-max-width)");
   });
 
   it("does not use a compact search width at the 1320px desktop breakpoint", () => {

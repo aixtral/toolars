@@ -1,23 +1,25 @@
 # Toolars 生产环境变量确认单（Release P0 Blocker）
 
-日期: 2026-07-16
-状态: 待 owner 确认 — 当前唯一发布硬阻塞
+日期: 2026-07-16（2026-07-18 更新）
+状态: 大部分已完成 — 仅剩 owner 少量确认（见 §6 汇总）
 用法: 由有托管平台（Vercel）后台权限的人逐项确认/填写，完成后按末节跑 `release:health` 取证。
 依据: `sites/toolars/.env.example`、`plans/release-go-no-go-checklist.md`、`docs/architecture/PHASE1-FREE-SUPABASE-LAUNCH-PLAN.md`。
 
 ## 1. 必填变量（缺任何一个 = No-Go）
 
-在托管方后台（预发 + 生产两套）设置，不能只存在于本地 `.env.local`。
-
 | 变量 | 值/来源 | 确认 |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | 真实 canonical 生产域（非 `toolars-two.vercel.app` 临时域）。必须与 OAuth redirect、sitemap、robots、OpenGraph、JSON-LD、CDN/域名配置一致 | [ ] |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Dashboard → Project Settings → Data API | [ ] |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 同上（legacy `NEXT_PUBLIC_SUPABASE_ANON_KEY` 仅迁移期兼容） | [ ] |
-| `SUPABASE_SECRET_KEY` | 服务端特权任务用；绝不出现在 `NEXT_PUBLIC_*` 或客户端 bundle | [ ] |
-| `TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY` | `openssl rand -base64 48` 生成；生产 PDF 上传**不允许**本地 fallback | [ ] |
-| `TOOLARS_UPLOAD_HANDOFF_SECRET` | 同上，独立生成一个 | [ ] |
-| `TOOLARS_AUTH_SESSION_SECRET` | legacy 签名 session fallback（Phase 1 主线是 Supabase Auth，此项目前仅作迁移/旧路由兜底，go/no-go 仍要求显式确认） | [ ] |
+| `NEXT_PUBLIC_SITE_URL` | 已在 Vercel 设置（Production+Preview，7 天前）。⚠️ CLI 拉取已打码无法核对：**owner 需确认当前值是正式 canonical 域而非临时域**，它驱动 sitemap/robots/OG/JSON-LD | [ ] owner 确认值 |
+| `NEXT_PUBLIC_SUPABASE_URL` | 已在 Vercel 设置（Production+Preview） | [x] |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 已在 Vercel 设置（Production+Preview） | [x] |
+| `SUPABASE_SECRET_KEY` | **缺失** — 需 owner 从 Supabase Dashboard → Data API 取得后写入（服务端特权任务用） | [ ] 待 owner 提供 |
+| `TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY` | ✅ 2026-07-18 已生成并写入 Production+Preview（Sensitive） | [x] |
+| `TOOLARS_UPLOAD_HANDOFF_SECRET` | ✅ 2026-07-18 已生成并写入 Production+Preview（Sensitive） | [x] |
+| `TOOLARS_AUTH_SESSION_SECRET` | ✅ 2026-07-18 已生成并写入 Production+Preview（Sensitive） | [x] |
+
+密钥本地备份：`/tmp/toolars-secrets-local.env`（600 权限），建议 owner 存入密码管理器后删除。`TOOLARS_HEALTHCHECK_TOKEN` 已轮换为新值（同文件内），旧值作废。
+
+**深度健康检查证据（2026-07-18，重新部署后）**：`TOOLARS_HEALTHCHECK_TOKEN` + `pnpm run release:health -- --base-url https://toolars-two.vercel.app` → `Status: pass`，blockers `none`，详细运行时状态全过，唯一 warning 为 AI provider 未配置（决策项 3）。
 
 ## 2. 持久化：生产走 Supabase，不设 TOOLARS_DATA_DIR
 
@@ -72,6 +74,15 @@ pnpm run --silent release:health -- --base-url "$TOOLARS_PRODUCTION_URL"
 
 ## 7. 证据存档
 
+- [x] 临时域（toolars-two.vercel.app）深度 `release:health`（2026-07-18，含 `TOOLARS_HEALTHCHECK_TOKEN`）：`Status: pass`，blockers `none`，唯一 warning 为 AI provider 未配置
 - [ ] 预发 `release:health` 输出（粘贴处）
 - [ ] 生产 `release:health` 输出（粘贴处）
 - [ ] owner 签字确认上述变量已在托管方后台设置（非仅本地文件）
+
+## 8. 剩余 owner 事项汇总（2026-07-18 时点）
+
+1. 提供 `SUPABASE_SECRET_KEY`（Supabase Dashboard → Data API），由我写入或自行写入 Vercel。
+2. 确认 `NEXT_PUBLIC_SITE_URL` 当前值；绑正式域名时同步更新该变量与 §6 回滚预案。
+3. 确认 `NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE` 当前值（建议 `enabled`）。
+4. 决策：托管计划（Hobby 禁商用 vs Pro）、AI provider、Sentry/PostHog 启用与否。
+5. 提供预发/生产 URL（`TOOLARS_PREPRODUCTION_URL` / `TOOLARS_PRODUCTION_URL`）后执行 §5 双环境取证。

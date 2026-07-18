@@ -743,6 +743,13 @@ export async function runCertifiedToolSmoke({
   scenarios = certifiedToolSmokeScenarios,
   headless = process.env.TOOLARS_SMOKE_HEADED === "1" ? false : true
 } = {}) {
+  // Timeout budgets are env-tunable so the same scenarios can run with tight
+  // budgets locally and generous ones against cold remote deployments
+  // (serverless cold starts pushed waitForFunction past the previous
+  // hardcoded 5s assertion budget on the temporary origin).
+  const defaultTimeoutMs = Number(process.env.TOOLARS_SMOKE_DEFAULT_TIMEOUT_MS ?? "30000");
+  const workspaceVisibleTimeoutMs = Number(process.env.TOOLARS_SMOKE_WORKSPACE_VISIBLE_TIMEOUT_MS ?? "15000");
+  const enabledAssertionTimeoutMs = Number(process.env.TOOLARS_SMOKE_ENABLED_ASSERTION_TIMEOUT_MS ?? "5000");
   const browser = await chromium.launch({ headless });
   const context = await browser.newContext({ baseURL: baseUrl });
   await context.grantPermissions(["clipboard-read", "clipboard-write"], { origin: baseUrl });
@@ -753,6 +760,7 @@ export async function runCertifiedToolSmoke({
     for (const scenario of scenarios) {
       const started = Date.now();
       const page = await context.newPage();
+      page.setDefaultTimeout(defaultTimeoutMs);
       const screenshotsRoot = path.join(outputRoot, "screenshots");
       const screenshotPath = path.join(screenshotsRoot, `${scenario.slug}.png`);
 
@@ -762,19 +770,19 @@ export async function runCertifiedToolSmoke({
           throw new Error(`Navigation failed with status ${response?.status() ?? "unknown"}`);
         }
 
-        await page.locator(scenario.workspaceSelector).first().waitFor({ state: "visible", timeout: 15000 });
+        await page.locator(scenario.workspaceSelector).first().waitFor({ state: "visible", timeout: workspaceVisibleTimeoutMs });
         // The workspace marker can be present before React has adopted controlled inputs.
         // Give the client a turn before filling form fields, then assert its enabled state below.
         await page.waitForTimeout(150);
         if (scenario.failureAssertion) {
-          await assertFailure(page, scenario);
+          await assertFailure(page, scenario, { enabledAssertionTimeoutMs });
         }
         for (const action of scenario.inputActions) {
           await runInputAction(page, action, { pdfFixturePath });
         }
         const runButton = page.getByRole("button", { name: scenario.runButtonName, exact: true });
         await runButton.waitFor({ state: "visible" });
-        await page.waitForFunction((button) => !button.disabled, await runButton.elementHandle(), { timeout: 5000 });
+        await page.waitForFunction((button) => !button.disabled, await runButton.elementHandle(), { timeout: enabledAssertionTimeoutMs });
         if (scenario.saveButtonName) {
           await page.getByRole("button", { name: scenario.saveButtonName, exact: true }).click();
           if (scenario.saveStorageKey) {
@@ -863,7 +871,7 @@ async function runInputAction(page, action, fixtures = {}) {
   throw new Error(`Unsupported smoke action: ${action.type}`);
 }
 
-async function assertFailure(page, scenario) {
+async function assertFailure(page, scenario, { enabledAssertionTimeoutMs }) {
   const assertion = scenario.failureAssertion;
   for (const action of assertion.inputActions) {
     await runInputAction(page, action);
@@ -874,7 +882,13 @@ async function assertFailure(page, scenario) {
     return;
   }
   if (assertion.type === "invalidInput") {
-    await page.getByRole("button", { name: scenario.runButtonName, exact: true }).click();
+    const runButton = page.getByRole("button", { name: scenario.runButtonName, exact: true });
+    await runButton.waitFor({ state: "visible" });
+    // Wait for hydration to adopt the controlled button before clicking: on cold
+    // remote deployments a pre-hydration click is a no-op and the expected
+    // validation message never renders (seen as flaky deployed-smoke timeouts).
+    await page.waitForFunction((button) => !button.disabled, await runButton.elementHandle(), { timeout: enabledAssertionTimeoutMs });
+    await runButton.click();
     await assertResult(page, assertion.resultAssertion);
     return;
   }

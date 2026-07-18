@@ -58,6 +58,13 @@ jobs:
         # stale temporary deployment is caught and refreshed. Tracked in
         # plans/release-production-env-confirmation.md.
         continue-on-error: ${{ github.event_name == 'pull_request' }}
+        # The remote origin is a Hobby serverless deployment: cold starts push
+        # page loads and interactions past the local smoke budgets, so the
+        # deployed run gets generous failure-path timeouts (pass path unchanged).
+        env:
+          TOOLARS_SMOKE_DEFAULT_TIMEOUT_MS: "60000"
+          TOOLARS_SMOKE_WORKSPACE_VISIBLE_TIMEOUT_MS: "60000"
+          TOOLARS_SMOKE_ENABLED_ASSERTION_TIMEOUT_MS: "30000"
         run: pnpm exec node "$PWD/scripts/certified-tool-smoke.mjs" --base-url "$TOOLARS_TEMP_PRODUCTION_ORIGIN" --write ../../output/launch-readiness/ci/deployed-certified-tool-smoke.json --output-dir ../../output/launch-readiness/ci/deployed-certified-tools
 
       - name: Temporary production health

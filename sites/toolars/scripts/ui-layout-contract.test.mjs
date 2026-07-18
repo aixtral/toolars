@@ -85,25 +85,25 @@ describe("shared UI layout contract", () => {
   it("reports a desktop header search position or width that drifts from the shared contract", () => {
     expect(createHeaderGeometryFindings({
       header: {
-        command: { left: 232, width: 280 },
+        command: { left: 232, width: 240 },
         topbar: { left: 0, width: 1280 }
       },
       url: "http://localhost:9088/es/workflows/mcp-tool-launch",
       viewport: { id: "desktop", height: 720, width: 1280 }
     })).toEqual([
       expect.objectContaining({
-        actual: { left: 232, width: 280 },
-        expected: { left: 262, minWidth: 320 },
+        actual: { left: 232, width: 240 },
+        expected: { left: 256, minWidth: 280 },
         kind: "header-search-geometry-drift"
       })
     ]);
   });
 
   it("accepts any fluid width at or above the desktop minimum", () => {
-    for (const width of [320, 410, 560]) {
+    for (const width of [280, 410, 560]) {
       expect(createHeaderGeometryFindings({
         header: {
-          command: { left: 262, width },
+          command: { left: 256, width },
           topbar: { left: 0, width: 1280 }
         },
         url: "http://localhost:9088/en/workflows/mcp-tool-launch",

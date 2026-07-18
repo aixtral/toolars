@@ -21,8 +21,8 @@ export const headerSearchLayoutContracts = {
   // takes the space left by the nav (capped at 560px), so exact widths vary
   // by viewport and locale. The contract pins the left anchor plus a minimum
   // usable width; mobile keeps a fixed full-width row.
-  "desktop-wide": { left: 262, minWidth: 480 },
-  desktop: { left: 262, minWidth: 320 },
+  "desktop-wide": { left: 256, minWidth: 440 },
+  desktop: { left: 256, minWidth: 280 },
   tablet: { left: 24, width: 976 },
   mobile: { left: 12, width: 366 }
 };

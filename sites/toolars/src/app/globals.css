@@ -49,7 +49,7 @@ select {
 }
 
 .topbar {
-  --topbar-command-max-width: 560px;
+  --topbar-command-max-width: 720px;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -171,6 +171,27 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.command-field {
+  position: relative;
+}
+
+.command-input-inline {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.command-input-inline::placeholder {
+  color: var(--ink-muted);
+  font-weight: 500;
 }
 
 .kbd {
@@ -4179,48 +4200,32 @@ select.input,
   font-weight: 700;
 }
 
-.command-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
+.command-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 70;
   display: grid;
-  align-items: start;
-  justify-items: center;
-  padding: 86px 18px 24px;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(10px);
-  animation: command-overlay-in 120ms ease-out;
-}
-
-.command-dialog {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  width: min(640px, 100%);
-  max-height: min(78vh, 640px);
+  grid-template-rows: minmax(0, 1fr) auto;
+  width: 100%;
+  max-height: min(70vh, 560px);
   overflow: hidden;
   background: var(--canvas);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
-  animation: command-dialog-in 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+  animation: command-panel-in 120ms ease-out;
 }
 
-@keyframes command-overlay-in {
+@keyframes command-panel-in {
   from {
     opacity: 0;
-  }
-}
-
-@keyframes command-dialog-in {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.985);
+    transform: translateY(-4px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .command-overlay,
-  .command-dialog {
+  .command-panel {
     animation: none;
   }
 }
@@ -4739,34 +4744,7 @@ select.input,
   }
 }
 
-.command-search-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 10px;
-  min-height: 58px;
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.command-input {
-  width: 100%;
-  min-height: 38px;
-  color: var(--ink);
-  background: transparent;
-  border: 0;
-  outline: 0;
-  font-size: 15px;
-  font-weight: 650;
-}
-
-.command-input::placeholder {
-  color: var(--ink-muted);
-  font-weight: 550;
-}
-
-.command-icon-button,
-.command-close-button {
+.command-icon-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;

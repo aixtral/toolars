@@ -11,6 +11,7 @@ const accountMenuStyles = readFileSync(path.resolve(import.meta.dirname, "../../
 describe("ToolarsAccountActions", () => {
   afterEach(() => {
     setToolarsSupabaseBrowserAuthDriverForTest(null);
+    window.localStorage.clear();
   });
 
   it("renders sign-in and sign-up actions when no Supabase user is available", async () => {
@@ -18,6 +19,59 @@ describe("ToolarsAccountActions", () => {
 
     expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign up" })).toBeInTheDocument();
+  });
+
+  it("renders the cached account hint on first paint instead of flashing signed-out chrome", async () => {
+    window.localStorage.setItem("toolars.account.hint", JSON.stringify({ accountEmail: "owner@example.com", accountId: "user_123" }));
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn().mockResolvedValue({
+        data: { user: { email: "owner@example.com", id: "user_123" } },
+        error: null
+      }),
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    renderWithIntl(<ToolarsAccountActions />);
+
+    expect(screen.getByLabelText("Open account menu")).toBeInTheDocument();
+    expect(screen.getByText("owner@example.com")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Sign in" })).not.toBeInTheDocument();
+  });
+
+  it("drops a stale account hint when the session refresh finds no user", async () => {
+    window.localStorage.setItem("toolars.account.hint", JSON.stringify({ accountEmail: "owner@example.com", accountId: "user_123" }));
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    renderWithIntl(<ToolarsAccountActions />);
+
+    expect(screen.getByLabelText("Open account menu")).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument());
+    expect(window.localStorage.getItem("toolars.account.hint")).toBeNull();
+  });
+
+  it("persists the refreshed account as the hint for the next navigation", async () => {
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getUser: vi.fn().mockResolvedValue({
+        data: { user: { email: "owner@example.com", id: "user_123" } },
+        error: null
+      }),
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    renderWithIntl(<ToolarsAccountActions />);
+
+    await waitFor(() => {
+      expect(window.localStorage.getItem("toolars.account.hint")).toBe(JSON.stringify({ accountEmail: "owner@example.com", accountId: "user_123" }));
+    });
   });
 
   it("centers the compact account menu under its trigger while keeping menu text left aligned", () => {

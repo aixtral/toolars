@@ -22,6 +22,41 @@ interface AccountToast {
   tone: "error" | "success";
 }
 
+const ACCOUNT_HINT_KEY = "toolars.account.hint";
+
+/**
+ * The shell is statically rendered, so the server always emits the signed-out
+ * chrome. Reading a cached account hint synchronously on the first client
+ * render lets a signed-in user see the account menu immediately instead of a
+ * "Sign in / Sign up" flash on every navigation; the hint is rewritten on
+ * every real session refresh and cleared on sign-out (or when the refresh
+ * finds no session), so stale state self-heals.
+ */
+function readAccountHint(): BrowserAccount | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(ACCOUNT_HINT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<BrowserAccount> | null;
+    return typeof parsed?.accountId === "string" ? { accountEmail: parsed.accountEmail ?? null, accountId: parsed.accountId } : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeAccountHint(account: BrowserAccount | null) {
+  try {
+    if (account) {
+      window.localStorage.setItem(ACCOUNT_HINT_KEY, JSON.stringify(account));
+    } else {
+      window.localStorage.removeItem(ACCOUNT_HINT_KEY);
+    }
+  } catch {
+    // Storage unavailable (private mode); the hint is a progressive enhancement.
+  }
+}
+
 export function ToolarsAccountActions({
   signInClassName = "button topbar-sign-in",
   signUpClassName = "button button-solid topbar-sign-up"
@@ -29,11 +64,13 @@ export function ToolarsAccountActions({
   const t = useTranslations();
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
-  const [account, setAccount] = useState<BrowserAccount | null>(null);
+  const [account, setAccount] = useState<BrowserAccount | null>(() => readAccountHint());
   const [toast, setToast] = useState<AccountToast | null>(null);
 
   const refreshAccount = useCallback(async () => {
-    setAccount(await getToolarsSupabaseBrowserUser());
+    const nextAccount = await getToolarsSupabaseBrowserUser();
+    setAccount(nextAccount);
+    writeAccountHint(nextAccount);
   }, []);
 
   useEffect(() => {
@@ -59,6 +96,7 @@ export function ToolarsAccountActions({
     }
 
     setAccount(null);
+    writeAccountHint(null);
     setToast({ message: t("auth.signOut.signedOut"), tone: "success" });
   }
 
@@ -67,7 +105,7 @@ export function ToolarsAccountActions({
   const localizedHref = (href: string) => localizePath(href, localeCode);
 
   return (
-    <div className="topbar-account-actions" aria-label={t("auth.eyebrow")}>
+    <div className="topbar-account-actions" aria-label={t("auth.eyebrow")} suppressHydrationWarning>
       {account ? (
         <details className="topbar-account-menu">
           <summary className="topbar-account-trigger" aria-label={t("auth.menu.open")} title={t("auth.menu.open")}>

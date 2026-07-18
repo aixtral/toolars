@@ -84,7 +84,7 @@ describe("CommandCenter", () => {
     renderWithIntl(
       <div>
         <CommandCenter />
-        <button type="button">Outside target</button>
+        <button type="button" onClick={() => undefined}>Outside target</button>
       </div>
     );
 

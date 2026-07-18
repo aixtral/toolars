@@ -1,7 +1,7 @@
 # Toolars 生产环境变量确认单（Release P0 Blocker）
 
 日期: 2026-07-16（2026-07-18 更新）
-状态: 大部分已完成 — 仅剩 owner 少量确认（见 §6 汇总）
+状态: 环境变量全部就位；深度 health 已 pass。剩余：3 个决策 + 域名注册（发布阻断），见 §8 汇总
 用法: 由有托管平台（Vercel）后台权限的人逐项确认/填写，完成后按末节跑 `release:health` 取证。
 依据: `sites/toolars/.env.example`、`plans/release-go-no-go-checklist.md`、`docs/architecture/PHASE1-FREE-SUPABASE-LAUNCH-PLAN.md`。
 
@@ -9,10 +9,10 @@
 
 | 变量 | 值/来源 | 确认 |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | 已在 Vercel 设置（Production+Preview，7 天前）。⚠️ CLI 拉取已打码无法核对：**owner 需确认当前值是正式 canonical 域而非临时域**，它驱动 sitemap/robots/OG/JSON-LD | [ ] owner 确认值 |
+| `NEXT_PUBLIC_SITE_URL` | ✅ owner 决策（2026-07-18）：现阶段沿用临时域 `toolars-two.vercel.app`，功能全 OK 后切正式域。**正式域 `toolars.com` 尚未注册 → 见 §8 发布阻断项** | [x] 决策已记 |
 | `NEXT_PUBLIC_SUPABASE_URL` | 已在 Vercel 设置（Production+Preview） | [x] |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | 已在 Vercel 设置（Production+Preview） | [x] |
-| `SUPABASE_SECRET_KEY` | **缺失** — 需 owner 从 Supabase Dashboard → Data API 取得后写入（服务端特权任务用） | [ ] 待 owner 提供 |
+| `SUPABASE_SECRET_KEY` | ✅ 2026-07-18 owner 提供，已写入 Production+Preview（Sensitive） | [x] |
 | `TOOLARS_OBJECT_STORAGE_ENCRYPTION_KEY` | ✅ 2026-07-18 已生成并写入 Production+Preview（Sensitive） | [x] |
 | `TOOLARS_UPLOAD_HANDOFF_SECRET` | ✅ 2026-07-18 已生成并写入 Production+Preview（Sensitive） | [x] |
 | `TOOLARS_AUTH_SESSION_SECRET` | ✅ 2026-07-18 已生成并写入 Production+Preview（Sensitive） | [x] |
@@ -81,8 +81,8 @@ pnpm run --silent release:health -- --base-url "$TOOLARS_PRODUCTION_URL"
 
 ## 8. 剩余 owner 事项汇总（2026-07-18 时点）
 
-1. 提供 `SUPABASE_SECRET_KEY`（Supabase Dashboard → Data API），由我写入或自行写入 Vercel。
-2. 确认 `NEXT_PUBLIC_SITE_URL` 当前值；绑正式域名时同步更新该变量与 §6 回滚预案。
-3. 确认 `NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE` 当前值（建议 `enabled`）。
-4. 决策：托管计划（Hobby 禁商用 vs Pro）、AI provider、Sentry/PostHog 启用与否。
-5. 提供预发/生产 URL（`TOOLARS_PREPRODUCTION_URL` / `TOOLARS_PRODUCTION_URL`）后执行 §5 双环境取证。
+1. ~~提供 `SUPABASE_SECRET_KEY`~~ 已完成（2026-07-18 写入双环境）。
+2. ~~`NEXT_PUBLIC_SITE_URL` 确认~~ 已决策：现阶段沿用临时域，发布前切换。**发布阻断：正式域 `toolars.com` 尚未注册——尽快注册，注册后改绑 Vercel 域、更新该变量（Production+Preview）、复核 sitemap/robots/OG/JSON-LD 与 Supabase Auth 回调域**。
+3. ~~`NEXT_PUBLIC_TOOLARS_FREE_TRIAL_MODE` 确认~~ 已确认 `enabled`（2026-07-18）。
+4. 决策仍待：托管计划（Hobby 禁商用 vs Pro，发布付费功能前必须 Pro）、AI provider 配置与否、Sentry/PostHog 启用与否。
+5. 正式环境 URL 口径：`toolars-two.vercel.app` 即当前生产候选部署；预发可用 main 的 Preview 部署。切正式域名后执行 §5 双环境 `release:health` 取证并归档。

@@ -2,6 +2,9 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const css = readFileSync("src/app/globals.css", "utf8");
+const accountActionsSource = readFileSync("src/components/core/toolars-account-actions.tsx", "utf8");
+const localeLayoutSource = readFileSync("src/app/[locale]/layout.tsx", "utf8");
+const shellSource = readFileSync("src/components/shell/toolars-shell.tsx", "utf8");
 
 function cssBlockContaining(selector: string): string {
   const index = css.indexOf(selector);
@@ -12,6 +15,26 @@ function cssBlockContaining(selector: string): string {
 }
 
 describe("topbar visual style contract", () => {
+  it("uses client-side links for shared shell navigation instead of full document reloads", () => {
+    expect(shellSource).toContain('import NextLink from "next/link"');
+    expect(shellSource).not.toMatch(/<a\b/);
+  });
+
+  it("keeps cached account chrome stable before hydration", () => {
+    const accountActions = cssBlockContaining(".topbar-account-actions");
+
+    expect(localeLayoutSource).toContain("TOOLARS_ACCOUNT_HINT_BOOTSTRAP_SCRIPT");
+    expect(localeLayoutSource).toMatch(/<head>[\s\S]*?<script/);
+    expect(accountActions).toContain("display: grid");
+    expect(accountActionsSource).toContain('className="topbar-account-width-reserver"');
+    expect(accountActionsSource).toContain('className="topbar-account-content"');
+    expect(css).toMatch(/\.topbar-account-width-reserver,[\s\S]*?\.topbar-account-content[\s\S]*?grid-area: 1 \/ 1/);
+    expect(css).toMatch(/\.topbar-account-width-reserver[\s\S]*?visibility: hidden/);
+    expect(css).toMatch(/\.topbar-account-content[\s\S]*?justify-content: flex-end/);
+    expect(accountActionsSource).toContain('data-auth-state={account ? "signed-in" : "signed-out"}');
+    expect(css).toMatch(/html\[data-toolars-account-hint="true"\][\s\S]*?\.topbar-account-actions\[data-auth-state="signed-out"\][\s\S]*?visibility: hidden/);
+  });
+
   it("keeps the active nav item as an underline-only state", () => {
     const block = cssBlockContaining(".topbar-nav-link.is-active");
 

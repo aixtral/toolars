@@ -1,4 +1,5 @@
 import { useLocale, useTranslations } from "next-intl";
+import NextLink from "next/link";
 import {
   AlertTriangle,
   BarChart3,
@@ -23,7 +24,7 @@ import {
   Image as ImageIcon,
   Inbox,
   KeyRound,
-  Link,
+  Link as LinkIcon,
   ListChecks,
   MessageSquare,
   MoreHorizontal,
@@ -160,7 +161,7 @@ function MobileLanguageMenu({
               const isActive = sidebarActiveHref ? href === sidebarActiveHref : active === getCategoryActiveKey(category.label);
 
               return (
-                <a
+                <NextLink
                   aria-current={isActive ? "page" : undefined}
                   className={`side-link ${isActive ? "is-active" : ""}`}
                   href={localizedHref(href)}
@@ -169,7 +170,7 @@ function MobileLanguageMenu({
                 >
                   <span>{t(`shell.toolCategories.${category.slug}`)}</span>
                   <span className="side-count">{category.count.toLocaleString()}</span>
-                </a>
+                </NextLink>
               );
             })}
           </nav>
@@ -232,7 +233,7 @@ const workspaceLinks = [
   { labelKey: "shell.workspaceLinks.collections", href: "/my-tools#collections", icon: Folder },
   { labelKey: "shell.workspaceLinks.workflows", href: "/my-tools#workflows", icon: Workflow },
   { labelKey: "shell.workspaceLinks.uploads", href: "/my-tools#uploads", icon: Upload },
-  { labelKey: "shell.workspaceLinks.sharedLinks", href: "/my-tools#shared", icon: Link },
+  { labelKey: "shell.workspaceLinks.sharedLinks", href: "/my-tools#shared", icon: LinkIcon },
   { labelKey: "shell.workspaceLinks.settings", href: "/my-tools#settings", icon: Settings }
 ] as const;
 
@@ -304,13 +305,13 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
         <section className="side-section">
           <p className="side-title">{t("shell.workflow.categoriesTitle")}</p>
           {workflowCategories.map(({ key, count, icon: Icon, href }) => (
-            <a className={`side-link ${key === "allWorkflows" ? "is-active" : ""}`} href={localizedHref(href)} key={key}>
+            <NextLink className={`side-link ${key === "allWorkflows" ? "is-active" : ""}`} href={localizedHref(href)} key={key}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <Icon size={14} aria-hidden="true" />
                 {t(`shell.workflow.categories.${key}`)}
               </span>
               <span className="side-count">{count.toLocaleString()}</span>
-            </a>
+            </NextLink>
           ))}
         </section>
         <section className="side-section">
@@ -322,9 +323,9 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             </label>
           ))}
         </section>
-        <a className="button button-outline-neutral workflow-clear-button" href={localizedHref("/workflows")}>
+        <NextLink className="button button-outline-neutral workflow-clear-button" href={localizedHref("/workflows")}>
           {t("shell.commonSidebars.clearFilters")}
-        </a>
+        </NextLink>
       </>
     );
   }
@@ -335,13 +336,13 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
         <section className="side-section">
           <p className="side-title">{t("shell.collections.categoriesTitle")}</p>
           {collectionCategories.map(({ key, count, icon: Icon, href }) => (
-            <a className={`side-link ${key === "featured" ? "is-active" : ""}`} href={localizedHref(href)} key={key}>
+            <NextLink className={`side-link ${key === "featured" ? "is-active" : ""}`} href={localizedHref(href)} key={key}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <Icon size={14} aria-hidden="true" />
                 {t(`shell.collections.categories.${key}`)}
               </span>
               <span className="side-count">{count.toLocaleString()}</span>
-            </a>
+            </NextLink>
           ))}
         </section>
         <section className="side-section">
@@ -370,12 +371,12 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
           <section className="side-section">
             <p className="side-title">{t("shell.billing.freeTrialTitle")}</p>
             {trialLinks.map(({ labelKey, href, icon: Icon }, index) => (
-              <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
+              <NextLink className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                   <Icon size={14} aria-hidden="true" />
                   {t(labelKey)}
                 </span>
-              </a>
+              </NextLink>
             ))}
           </section>
           <section className="panel workspace-upgrade-card">
@@ -399,23 +400,23 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
         <section className="side-section">
           <p className="side-title">{t("shell.billing.title")}</p>
           {billingLinks.slice(0, 4).map(({ labelKey, href, icon: Icon }, index) => (
-            <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
+            <NextLink className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <Icon size={14} aria-hidden="true" />
                 {t(labelKey)}
               </span>
-            </a>
+            </NextLink>
           ))}
         </section>
         <section className="side-section">
           <p className="side-title">{t("shell.billing.workspaceTitle")}</p>
           {billingLinks.slice(4).map(({ labelKey, href, icon: Icon }) => (
-            <a className="side-link" href={localizedHref(href)} key={labelKey}>
+            <NextLink className="side-link" href={localizedHref(href)} key={labelKey}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <Icon size={14} aria-hidden="true" />
                 {t(labelKey)}
               </span>
-            </a>
+            </NextLink>
           ))}
         </section>
         <section className="panel workspace-upgrade-card">
@@ -423,18 +424,18 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             <GraduationCap size={16} aria-hidden="true" /> {t("shell.billing.educationTitle")}
           </h3>
           <p className="tool-description">{t("shell.billing.educationDescription")}</p>
-          <a className="text-link" href={localizedHref("/pricing#education")}>
+          <NextLink className="text-link" href={localizedHref("/pricing#education")}>
             {t("shell.billing.verifyNow")}
-          </a>
+          </NextLink>
         </section>
         <section className="panel">
           <h3>
             <Headphones size={16} aria-hidden="true" /> {t("shell.billing.helpChoosingTitle")}
           </h3>
           <p className="tool-description">{t("shell.billing.helpChoosingDescription")}</p>
-          <a className="text-link" href={localizedHref("/pricing#faq")}>
+          <NextLink className="text-link" href={localizedHref("/pricing#faq")}>
             {t("shell.billing.contactSupport")}
-          </a>
+          </NextLink>
         </section>
         <section className="panel">
           <h3>
@@ -452,7 +453,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
         <section className="side-section">
           <p className="side-title">{t("shell.settings.title")}</p>
           {settingsLinks.map(({ labelKey, href, icon: Icon }, index) => (
-            <a
+            <NextLink
               aria-current={(sidebarActiveHref ? href === sidebarActiveHref : index === 0) ? "page" : undefined}
               className={`side-link ${(sidebarActiveHref ? href === sidebarActiveHref : index === 0) ? "is-active" : ""}`}
               href={localizedHref(href)}
@@ -462,7 +463,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
                 <Icon size={14} aria-hidden="true" />
                 {t(labelKey)}
               </span>
-            </a>
+            </NextLink>
           ))}
         </section>
         <section className="panel">
@@ -470,9 +471,9 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             <Box size={16} aria-hidden="true" /> {t("shell.settings.helpTitle")}
           </h3>
           <p className="tool-description">{t("shell.settings.helpDescription")}</p>
-          <a className="text-link" href={localizedHref("/settings#support")}>
+          <NextLink className="text-link" href={localizedHref("/settings#support")}>
             {t("shell.settings.helpLink")}
-          </a>
+          </NextLink>
         </section>
       </>
     );
@@ -484,13 +485,13 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
         <section className="side-section">
           <p className="side-title">{t("shell.admin.reviewQueuesTitle")}</p>
           {adminReviewLinks.map(({ labelKey, href, count, icon: Icon }, index) => (
-            <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
+            <NextLink className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <Icon size={14} aria-hidden="true" />
                 {t(labelKey)}
               </span>
               <span className="side-count">{count}</span>
-            </a>
+            </NextLink>
           ))}
         </section>
         <section className="side-section">
@@ -507,9 +508,9 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
             <ListChecks size={16} aria-hidden="true" /> {t("shell.admin.slaTitle")}
           </h3>
           <p className="tool-description">{t("shell.admin.slaDescription")}</p>
-          <a className="text-link" href={localizedHref("/admin/review#reports")}>
+          <NextLink className="text-link" href={localizedHref("/admin/review#reports")}>
             {t("shell.admin.viewReport")}
-          </a>
+          </NextLink>
         </section>
       </>
     );
@@ -520,7 +521,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
       <>
         <section className="side-section pdf-workspace-menu">
           {pdfWorkspaceLinks.map(({ labelKey, href, icon: Icon, badgeKey }) => (
-            <a
+            <NextLink
               aria-current={labelKey === "shell.pdfWorkspace.links.pdfToolkit" ? "page" : undefined}
               className={`side-link ${labelKey === "shell.pdfWorkspace.links.pdfToolkit" ? "is-active" : ""}`}
               href={localizedHref(href)}
@@ -531,7 +532,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
                 {t(labelKey)}
               </span>
               {badgeKey ? <span className="badge local">{t(badgeKey)}</span> : null}
-            </a>
+            </NextLink>
           ))}
         </section>
       </>
@@ -544,12 +545,12 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
         <section className="side-section">
           <p className="side-title">{t("shell.workspace.title")}</p>
           {workspaceLinks.map(({ labelKey, href, icon: Icon }, index) => (
-            <a className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
+            <NextLink className={`side-link ${index === 0 ? "is-active" : ""}`} href={localizedHref(href)} key={labelKey}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <Icon size={14} aria-hidden="true" />
                 {t(labelKey)}
               </span>
-            </a>
+            </NextLink>
           ))}
         </section>
         {freeTrialMode ? (
@@ -610,7 +611,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
           const displayLabel = t(`shell.toolCategories.${category.slug}`);
 
           return (
-            <a
+            <NextLink
               aria-current={(sidebarActiveHref ? href === sidebarActiveHref : active === key) ? "page" : undefined}
               className={`side-link ${(sidebarActiveHref ? href === sidebarActiveHref : active === key) ? "is-active" : ""}`}
               href={localizedHref(href)}
@@ -621,11 +622,11 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
                 {displayLabel}
               </span>
               <span className="side-count">{category.count.toLocaleString()}</span>
-            </a>
+            </NextLink>
           );
         })}
         {activeCategoryFallbackSlug && activeCategoryFallbackLabel && sidebarActiveHref ? (
-          <a aria-current="page" className="side-link is-active" href={localizedHref(sidebarActiveHref)}>
+          <NextLink aria-current="page" className="side-link is-active" href={localizedHref(sidebarActiveHref)}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               {(() => {
                 const Icon = getCategoryIcon(activeCategoryFallbackLabel);
@@ -634,7 +635,7 @@ function ShellSidebarContent({ active, freeTrialMode, localizedHref, sidebarActi
               {t(`shell.toolCategories.${activeCategoryFallbackSlug}`)}
             </span>
             <span className="side-count">{activeCategoryFallbackCount.toLocaleString()}</span>
-          </a>
+          </NextLink>
         ) : null}
       </section>
       <section className="panel">
@@ -679,12 +680,12 @@ export function ToolarsShell({
   return (
     <div className="app-shell">
       <header className="topbar" data-mobile-layout="brand-menu-command-compact-v2">
-        <a className="brand" href={localizedHref(active === "admin" ? "/admin/review" : "/")} aria-label={brandAriaLabel}>
+        <NextLink className="brand" href={localizedHref(active === "admin" ? "/admin/review" : "/")} aria-label={brandAriaLabel}>
           <span>
             <ToolarsLogoMark label={brandName} />
             <span className="brand-tagline">{t("common.tagline")}</span>
           </span>
-        </a>
+        </NextLink>
         <CommandCenter />
         {sidebarVariant === "pdf-workspace" ? (
           <nav className="nav workspace-topbar-actions" aria-label={t("shell.pdfWorkspace.actionsLabel")}>
@@ -709,14 +710,14 @@ export function ToolarsShell({
             {visibleNav.map((item) => {
               const isActive = active === item.key || (item.key === "explore" && ["pdf", "ai-developer"].includes(active));
               return (
-                <a
+                <NextLink
                   aria-current={isActive ? "page" : undefined}
                   className={`topbar-nav-link ${isActive ? "is-active" : ""}`}
                   href={localizedHref(item.href)}
                   key={item.key}
                 >
                   {t(item.labelKey)}
-                </a>
+                </NextLink>
               );
             })}
             {active === "admin" ? (
@@ -726,9 +727,9 @@ export function ToolarsShell({
             ) : (
               <span className="topbar-actions-cluster" data-topbar-actions="account-language-v3">
                 {isFeatureEnabled("submit") ? (
-                  <a className="topbar-submit-link" href={localizedHref("/submit")}>
+                  <NextLink className="topbar-submit-link" href={localizedHref("/submit")}>
                     <Plus size={15} aria-hidden="true" /> {t("nav.submitTool")}
-                  </a>
+                  </NextLink>
                 ) : null}
                 <ToolarsAccountActions />
                 <LanguageSwitcher />

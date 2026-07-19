@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, ChevronDown, CircleAlert } from "lucide-react";
+import NextLink from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
@@ -54,6 +55,12 @@ function writeAccountHint(account: BrowserAccount | null) {
     }
   } catch {
     // Storage unavailable (private mode); the hint is a progressive enhancement.
+  }
+
+  if (account) {
+    document.documentElement.setAttribute("data-toolars-account-hint", "true");
+  } else {
+    document.documentElement.removeAttribute("data-toolars-account-hint");
   }
 }
 
@@ -118,42 +125,53 @@ export function ToolarsAccountActions({
   const localizedHref = (href: string) => localizePath(href, localeCode);
 
   return (
-    <div className="topbar-account-actions" aria-label={t("auth.eyebrow")} suppressHydrationWarning>
-      {account ? (
-        <details className="topbar-account-menu">
-          <summary className="topbar-account-trigger" aria-label={t("auth.menu.open")} title={t("auth.menu.open")}>
-            <span aria-hidden="true" className="topbar-account-avatar">{accountInitial}</span>
-            <ChevronDown aria-hidden="true" size={15} />
-          </summary>
-          <div className="topbar-account-menu-panel" role="menu">
-            <div className="topbar-account-menu-identity">
-              <span aria-hidden="true" className="topbar-account-avatar topbar-account-avatar-large">{accountInitial}</span>
-              <span>
-                <strong>{t("auth.menu.account")}</strong>
-                <small>{accountLabel}</small>
-              </span>
+    <div
+      className="topbar-account-actions"
+      aria-label={t("auth.eyebrow")}
+      data-auth-state={account ? "signed-in" : "signed-out"}
+      suppressHydrationWarning
+    >
+      <span aria-hidden="true" className="topbar-account-width-reserver">
+        <span className={signInClassName}>{t("nav.signIn")}</span>
+        <span className={signUpClassName}>{t("nav.signUp")}</span>
+      </span>
+      <span className="topbar-account-content">
+        {account ? (
+          <details className="topbar-account-menu">
+            <summary className="topbar-account-trigger" aria-label={t("auth.menu.open")} title={t("auth.menu.open")}>
+              <span aria-hidden="true" className="topbar-account-avatar">{accountInitial}</span>
+              <ChevronDown aria-hidden="true" size={15} />
+            </summary>
+            <div className="topbar-account-menu-panel" role="menu">
+              <div className="topbar-account-menu-identity">
+                <span aria-hidden="true" className="topbar-account-avatar topbar-account-avatar-large">{accountInitial}</span>
+                <span>
+                  <strong>{t("auth.menu.account")}</strong>
+                  <small>{accountLabel}</small>
+                </span>
+              </div>
+              <NextLink className="topbar-account-menu-link" href={localizedHref("/my-tools")}>
+                {t("nav.myTools")}
+              </NextLink>
+              <NextLink className="topbar-account-menu-link" href={localizedHref("/settings")}>
+                {t("auth.menu.settings")}
+              </NextLink>
+              <button className="topbar-account-menu-sign-out" onClick={() => void signOut()} type="button">
+                {t("auth.signOut.button")}
+              </button>
             </div>
-            <a className="topbar-account-menu-link" href={localizedHref("/my-tools")}>
-              {t("nav.myTools")}
-            </a>
-            <a className="topbar-account-menu-link" href={localizedHref("/settings")}>
-              {t("auth.menu.settings")}
-            </a>
-            <button className="topbar-account-menu-sign-out" onClick={() => void signOut()} type="button">
-              {t("auth.signOut.button")}
-            </button>
-          </div>
-        </details>
-      ) : (
-        <>
-          <CoreActionModalButton className={signInClassName} kind="sign-in">
-            {t("nav.signIn")}
-          </CoreActionModalButton>
-          <CoreActionModalButton className={signUpClassName} kind="sign-up">
-            {t("nav.signUp")}
-          </CoreActionModalButton>
-        </>
-      )}
+          </details>
+        ) : (
+          <>
+            <CoreActionModalButton className={signInClassName} kind="sign-in">
+              {t("nav.signIn")}
+            </CoreActionModalButton>
+            <CoreActionModalButton className={signUpClassName} kind="sign-up">
+              {t("nav.signUp")}
+            </CoreActionModalButton>
+          </>
+        )}
+      </span>
       {toast ? (
         <div className={`topbar-account-toast ${toast.tone}`} role="status">
           {toast.tone === "success" ? <CheckCircle2 aria-hidden="true" size={17} /> : <CircleAlert aria-hidden="true" size={17} />}

@@ -12,6 +12,7 @@ describe("ToolarsAccountActions", () => {
   afterEach(() => {
     setToolarsSupabaseBrowserAuthDriverForTest(null);
     window.localStorage.clear();
+    document.documentElement.removeAttribute("data-toolars-account-hint");
   });
 
   it("renders sign-in and sign-up actions when no Supabase user is available", async () => {
@@ -54,6 +55,7 @@ describe("ToolarsAccountActions", () => {
     expect(screen.getByLabelText("Open account menu")).toBeInTheDocument();
     await waitFor(() => expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument());
     expect(window.localStorage.getItem("toolars.account.hint")).toBeNull();
+    expect(document.documentElement).not.toHaveAttribute("data-toolars-account-hint");
   });
 
   it("persists the refreshed account as the hint for the next navigation", async () => {
@@ -72,6 +74,7 @@ describe("ToolarsAccountActions", () => {
     await waitFor(() => {
       expect(window.localStorage.getItem("toolars.account.hint")).toBe(JSON.stringify({ accountEmail: "owner@example.com", accountId: "user_123" }));
     });
+    expect(document.documentElement).toHaveAttribute("data-toolars-account-hint", "true");
   });
 
   it("resolves the account from the storage-local session without a network round-trip", async () => {
@@ -119,6 +122,7 @@ describe("ToolarsAccountActions", () => {
 
     await waitFor(() => expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument());
     expect(window.localStorage.getItem("toolars.account.hint")).toBeNull();
+    expect(document.documentElement).not.toHaveAttribute("data-toolars-account-hint");
   });
 
   it("re-resolves the account on a SIGNED_IN event", async () => {

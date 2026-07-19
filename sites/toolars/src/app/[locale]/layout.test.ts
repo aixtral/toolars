@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { DRAFT_LOCALES, LAUNCH_LOCALES } from "@/lib/i18n";
 import { TOOLARS_FAVICON_URL } from "@/lib/seo/brand-icons";
-import { generateMetadata, generateStaticParams, resolveLayoutLocale } from "./layout";
+import {
+  generateMetadata,
+  generateStaticParams,
+  resolveLayoutLocale,
+  TOOLARS_ACCOUNT_HINT_BOOTSTRAP_SCRIPT
+} from "./layout";
 
 vi.mock("next/navigation", () => ({
   notFound: () => {
@@ -10,6 +15,21 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("locale layout routing", () => {
+  it("marks a cached account before the page body can paint signed-out chrome", () => {
+    window.localStorage.setItem(
+      "toolars.account.hint",
+      JSON.stringify({ accountEmail: "owner@example.com", accountId: "user_123" })
+    );
+    document.documentElement.removeAttribute("data-toolars-account-hint");
+
+    window.eval(TOOLARS_ACCOUNT_HINT_BOOTSTRAP_SCRIPT);
+
+    expect(document.documentElement).toHaveAttribute("data-toolars-account-hint", "true");
+
+    window.localStorage.clear();
+    document.documentElement.removeAttribute("data-toolars-account-hint");
+  });
+
   it("generates static params only for routed launch locales", () => {
     expect(generateStaticParams()).toEqual(LAUNCH_LOCALES.map((locale) => ({ locale: locale.code })));
     expect(generateStaticParams()).not.toEqual(expect.arrayContaining(DRAFT_LOCALES.map((locale) => ({ locale: locale.code }))));

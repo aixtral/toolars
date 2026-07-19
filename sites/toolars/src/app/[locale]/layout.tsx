@@ -12,6 +12,17 @@ import { TOOLARS_FAVICON_URL } from "@/lib/seo/brand-icons";
 import { getLocalizedSiteMetadataCopy } from "@/lib/seo/localized-page-metadata";
 import { getSiteBaseUrl } from "@/lib/seo/site-config";
 
+export const TOOLARS_ACCOUNT_HINT_BOOTSTRAP_SCRIPT = `
+(function () {
+  try {
+    var raw = window.localStorage.getItem("toolars.account.hint");
+    var account = raw ? JSON.parse(raw) : null;
+    if (account && typeof account.accountId === "string" && account.accountId.length > 0) {
+      window.document.documentElement.setAttribute("data-toolars-account-hint", "true");
+    }
+  } catch (_) {}
+})();`;
+
 export function generateStaticParams() {
   return LAUNCH_LOCALES.map((locale) => ({ locale: locale.code }));
 }
@@ -118,7 +129,10 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={hreflang} dir={dir}>
+    <html lang={hreflang} dir={dir} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: TOOLARS_ACCOUNT_HINT_BOOTSTRAP_SCRIPT }} />
+      </head>
       <body>
         <NextIntlClientProvider messages={messages}>
           <PostHogProviderWrapper>

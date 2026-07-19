@@ -339,11 +339,34 @@ button {
 }
 
 .topbar-account-actions {
+  display: grid;
+  align-items: center;
+  padding: 0;
+  position: relative;
+}
+
+.topbar-account-width-reserver,
+.topbar-account-content {
+  grid-area: 1 / 1;
+}
+
+.topbar-account-width-reserver {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  padding: 0;
-  position: relative;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.topbar-account-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+html[data-toolars-account-hint="true"] .topbar-account-actions[data-auth-state="signed-out"] {
+  visibility: hidden;
 }
 
 .topbar-account-menu {

@@ -1719,6 +1719,16 @@
           "retentionSummary": "हिंदी मसौदा W20-BI: You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "हिंदी मसौदा W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "हिंदी मसौदा W20-BI: PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "AI सारांश चल रहा है…",
+          "completedTitle": "AI सारांश पूर्ण",
+          "failedTitle": "AI सारांश विफल",
+          "failedDescription": "AI प्रदाता रन पूरा नहीं हुआ। स्थानीय निष्कर्षण परिणाम अब भी उपलब्ध हैं।",
+          "needsAuthTitle": "AI चरण चलाने के लिए साइन इन करें",
+          "needsAuthDescription": "AI प्रसंस्करण आपके खाते से चलता है ताकि उपयोग और ऑडिट आपसे जुड़े रहें।",
+          "modelLabel": "मॉडल",
+          "usageLabel": "इनपुट / आउटपुट टोकन"
         }
       }
     },

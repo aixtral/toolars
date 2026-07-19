@@ -1722,6 +1722,16 @@
           "retentionSummary": "You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "AI processing starts only after the summarization step is approved.",
           "workflowTitle": "PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "Running AI summary…",
+          "completedTitle": "AI summary complete",
+          "failedTitle": "AI summary failed",
+          "failedDescription": "The AI provider run did not complete. Local extraction results are still available.",
+          "needsAuthTitle": "Sign in to run AI steps",
+          "needsAuthDescription": "AI processing runs against your account so usage and audit stay attached to you.",
+          "modelLabel": "Model",
+          "usageLabel": "Tokens in / out"
         }
       }
     },

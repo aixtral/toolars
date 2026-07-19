@@ -1719,6 +1719,16 @@
           "retentionSummary": "مسودة عربية W20-BI: You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "مسودة عربية W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "مسودة عربية W20-BI: PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "جارٍ تشغيل ملخص الذكاء الاصطناعي…",
+          "completedTitle": "اكتمل ملخص الذكاء الاصطناعي",
+          "failedTitle": "فشل ملخص الذكاء الاصطناعي",
+          "failedDescription": "لم تكتمل عملية موفر الذكاء الاصطناعي. لا تزال نتائج الاستخراج المحلي متاحة.",
+          "needsAuthTitle": "سجّل الدخول لتشغيل خطوات الذكاء الاصطناعي",
+          "needsAuthDescription": "تتم معالجة الذكاء الاصطناعي عبر حسابك لتبقى الاستخدامات والتدقيق مرتبطة بك.",
+          "modelLabel": "النموذج",
+          "usageLabel": "الرموز المدخلة / المخرجة"
         }
       }
     },

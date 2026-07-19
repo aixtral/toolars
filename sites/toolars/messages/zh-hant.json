@@ -1719,6 +1719,16 @@
           "retentionSummary": "核準前可以取消。模擬工作流程執行後會刪除產生的摘要內容。",
           "scopeSummary": "只有摘要步驟獲準後才開始 AI 處理。",
           "workflowTitle": "PDF 摘要工作流程"
+        },
+        "aiRun": {
+          "running": "正在執行 AI 摘要…",
+          "completedTitle": "AI 摘要完成",
+          "failedTitle": "AI 摘要失敗",
+          "failedDescription": "AI 提供商執行未完成，本機提取結果仍可使用。",
+          "needsAuthTitle": "登入後執行 AI 步驟",
+          "needsAuthDescription": "AI 處理會在你的帳號下執行，讓用量與稽核紀錄歸屬於你。",
+          "modelLabel": "模型",
+          "usageLabel": "輸入 / 輸出符記"
         }
       }
     },

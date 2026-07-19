@@ -74,6 +74,79 @@ describe("ToolarsAccountActions", () => {
     });
   });
 
+  it("resolves the account from the storage-local session without a network round-trip", async () => {
+    const getUser = vi.fn();
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getSession: vi.fn().mockResolvedValue({
+        data: { session: { user: { email: "session@example.com", id: "user_session" } } },
+        error: null
+      }),
+      getUser,
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    renderWithIntl(<ToolarsAccountActions />);
+
+    expect(await screen.findByText("session@example.com")).toBeInTheDocument();
+    expect(getUser).not.toHaveBeenCalled();
+  });
+
+  it("clears the account and hint on a real SIGNED_OUT event", async () => {
+    const authListenerRef = { current: null as null | ((event: string) => void) };
+    window.localStorage.setItem("toolars.account.hint", JSON.stringify({ accountEmail: "session@example.com", accountId: "user_session" }));
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getSession: vi.fn().mockResolvedValue({
+        data: { session: { user: { email: "session@example.com", id: "user_session" } } },
+        error: null
+      }),
+      getUser: vi.fn(),
+      onAuthStateChange: vi.fn().mockImplementation((callback) => {
+        authListenerRef.current = callback as (event: string) => void;
+        return { data: { subscription: { unsubscribe: vi.fn() } } };
+      }),
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    renderWithIntl(<ToolarsAccountActions />);
+
+    expect(await screen.findByText("session@example.com")).toBeInTheDocument();
+
+    authListenerRef.current?.("SIGNED_OUT");
+
+    await waitFor(() => expect(screen.getByRole("button", { name: "Sign in" })).toBeInTheDocument());
+    expect(window.localStorage.getItem("toolars.account.hint")).toBeNull();
+  });
+
+  it("re-resolves the account on a SIGNED_IN event", async () => {
+    const authListenerRef = { current: null as null | ((event: string) => void) };
+    const getSession = vi.fn().mockResolvedValue({
+      data: { session: { user: { email: "session@example.com", id: "user_session" } } },
+      error: null
+    });
+    setToolarsSupabaseBrowserAuthDriverForTest({
+      getSession,
+      getUser: vi.fn(),
+      onAuthStateChange: vi.fn().mockImplementation((callback) => {
+        authListenerRef.current = callback as (event: string) => void;
+        return { data: { subscription: { unsubscribe: vi.fn() } } };
+      }),
+      signInWithPassword: vi.fn(),
+      signOut: vi.fn(),
+      signUp: vi.fn()
+    });
+
+    renderWithIntl(<ToolarsAccountActions />);
+    await waitFor(() => expect(getSession).toHaveBeenCalledTimes(1));
+
+    authListenerRef.current?.("SIGNED_IN");
+
+    await waitFor(() => expect(getSession).toHaveBeenCalledTimes(2));
+  });
+
   it("centers the compact account menu under its trigger while keeping menu text left aligned", () => {
     expect(accountMenuStyles).toMatch(/\.topbar-account-menu-panel\s*\{[\s\S]*?top: calc\(100% \+ 18px\);[\s\S]*?left: 50%;[\s\S]*?right: auto;[\s\S]*?width: 196px;[\s\S]*?transform: translateX\(-50%\);/);
     expect(accountMenuStyles).toMatch(/\.topbar-account-menu-link,[\s\S]*?\.topbar-account-menu-sign-out\s*\{[\s\S]*?justify-content: flex-start;[\s\S]*?text-align: left;/);

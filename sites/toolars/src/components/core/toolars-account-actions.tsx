@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { CoreActionModalButton } from "@/components/core/core-action-modal";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
-import { getToolarsSupabaseBrowserUser, signOutToolarsSupabaseBrowserUser } from "@/lib/supabase/toolars-supabase-auth-client";
+import { getToolarsSupabaseBrowserSessionUser, signOutToolarsSupabaseBrowserUser, subscribeToolarsAuthStateChange } from "@/lib/supabase/toolars-supabase-auth-client";
 
 interface ToolarsAccountActionsProps {
   signInClassName?: string;
@@ -68,7 +68,7 @@ export function ToolarsAccountActions({
   const [toast, setToast] = useState<AccountToast | null>(null);
 
   const refreshAccount = useCallback(async () => {
-    const nextAccount = await getToolarsSupabaseBrowserUser();
+    const nextAccount = await getToolarsSupabaseBrowserSessionUser();
     setAccount(nextAccount);
     writeAccountHint(nextAccount);
   }, []);
@@ -79,6 +79,19 @@ export function ToolarsAccountActions({
     if (typeof window === "undefined") return undefined;
     window.addEventListener("toolars:auth-session-changed", refreshAccount);
     return () => window.removeEventListener("toolars:auth-session-changed", refreshAccount);
+  }, [refreshAccount]);
+
+  // Track the real session lifecycle: explicit sign-out clears the account
+  // immediately; any other auth event (sign-in, token refresh) re-resolves it.
+  useEffect(() => {
+    return subscribeToolarsAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        setAccount(null);
+        writeAccountHint(null);
+        return;
+      }
+      void refreshAccount();
+    });
   }, [refreshAccount]);
 
   useEffect(() => {

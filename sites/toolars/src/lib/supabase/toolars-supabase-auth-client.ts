@@ -30,7 +30,11 @@ interface SupabaseOAuthResponse {
 }
 
 export interface ToolarsSupabaseBrowserAuthDriver {
+  getSession?: () => Promise<SupabaseAuthResponse>;
   getUser: () => Promise<SupabaseAuthResponse>;
+  onAuthStateChange?: (callback: (event: string, session: unknown) => void) => {
+    data?: { subscription?: { unsubscribe?: () => void } | null } | null;
+  };
   signInWithOAuth?: (credentials: {
     options?: {
       redirectTo?: string;
@@ -174,6 +178,42 @@ export async function getToolarsSupabaseBrowserUser() {
   };
 }
 
+/**
+ * Header account display helper. Prefers getSession (storage-local, no
+ * network) so the account chrome never blanks on transient network or
+ * token-refresh races the way the getUser network round-trip can; falls back
+ * to getUser for drivers that do not implement getSession.
+ */
+export async function getToolarsSupabaseBrowserSessionUser() {
+  const auth = getBrowserAuthDriver();
+  if (!auth) return null;
+
+  if (auth.getSession) {
+    const response = await safeAuthRequest(() => auth.getSession!());
+    const session = response?.data?.session as { user?: ToolarsSupabaseAuthUser | null } | null | undefined;
+    const user = session?.user ?? response?.data?.user;
+    if (response && !response.error && user?.id) {
+      return {
+        accountEmail: normalizeEmail(user.email) ?? null,
+        accountId: user.id
+      };
+    }
+    return null;
+  }
+
+  return getToolarsSupabaseBrowserUser();
+}
+
+/** Subscribe to real session lifecycle events; returns an unsubscribe function. */
+export function subscribeToolarsAuthStateChange(listener: (event: string) => void) {
+  const auth = getBrowserAuthDriver();
+  if (!auth?.onAuthStateChange) return () => undefined;
+
+  const result = auth.onAuthStateChange((event) => listener(event));
+  const subscription = result?.data?.subscription;
+  return () => subscription?.unsubscribe?.();
+}
+
 export async function signOutToolarsSupabaseBrowserUser() {
   const auth = getBrowserAuthDriver();
   if (!auth) return { errorCode: "not-configured", ok: false as const };
@@ -204,8 +244,14 @@ function getBrowserAuthDriver(): ToolarsSupabaseBrowserAuthDriver | null {
   if (browserAuthDriverForTest) return browserAuthDriverForTest;
   if (!isToolarsSupabaseConfigured()) return null;
 
-  return createToolarsSupabaseBrowserClient().auth;
+  // Creating a client per call makes every session check spin up a fresh
+  // storage read and refresh cycle, which raced into transient signed-out
+  // states; keep one client for the page lifetime instead.
+  cachedBrowserAuthDriver ??= createToolarsSupabaseBrowserClient().auth;
+  return cachedBrowserAuthDriver;
 }
+
+let cachedBrowserAuthDriver: ToolarsSupabaseBrowserAuthDriver | null = null;
 
 function normalizeEmail(email?: string | null) {
   const normalized = email?.trim().toLowerCase();

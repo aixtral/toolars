@@ -15,8 +15,55 @@ defaults:
     working-directory: sites/toolars
 
 jobs:
-  verify:
+  # PRs get a fast static gate (~5 min): no production build, no browser.
+  # The full 31-minute launch gate runs on main pushes only and remains the
+  # release-blocking evidence; issues it catches are fixed forward on main.
+  pr-fast-checks:
+    name: PR fast checks
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: sites/toolars/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1 pnpm run test:ci
+
+      - name: I18n audit
+        run: pnpm audit:i18n
+
+      - name: I18n quality audit
+        run: pnpm audit:i18n-quality
+
+      - name: Button behavior audit
+        run: pnpm audit:button-behavior
+
+  main-launch-gate:
     name: Launch readiness
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -52,12 +99,9 @@ jobs:
         run: TOOLARS_TEST_SCRIPT=test:ci TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1 pnpm run launch:readiness -- --full --visual-mobile-max-ratio 0.14 --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
 
       - name: Temporary production certified tool smoke
-        # Informational on PRs: the fixed temporary origin trails main, so any PR
-        # that adds routes or changes workspace DOM fails against the stale
-        # deployment rather than its own code. Main-push runs stay blocking so a
-        # stale temporary deployment is caught and refreshed. Tracked in
-        # plans/release-production-env-confirmation.md.
-        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        # Blocking: the temporary origin auto-deploys from main, so this run
+        # validates the just-merged code against the fresh deployment. Tracked
+        # in plans/release-production-env-confirmation.md.
         # The remote origin is a Hobby serverless deployment: cold starts push
         # page loads and interactions past the local smoke budgets, so the
         # deployed run gets generous failure-path timeouts (pass path unchanged).

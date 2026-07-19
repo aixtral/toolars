@@ -46,7 +46,7 @@ Vercel serverless 没有持久磁盘（文件系统只读，`/tmp` 调用间失�
 
 ## 4.5 CI 临时部署（已自愈，仅需知悉）
 
-CI 的 "Temporary production certified tool smoke" 步骤对固定域 `toolars-two.vercel.app` 跑认证 smoke。该域由 Vercel Git 集成跟随 main 自动部署：**2026-07-16 验证已刷新**（`/en/tools/percentage-calculator` 200，main CI deployed smoke 恢复绿色）。该步骤对 PR 保持信息项（`continue-on-error`，防 PR 超前于部署的误报），对 main 推送保持阻断。
+CI 的 "Temporary production certified tool smoke" 步骤对固定域 `toolars-two.vercel.app` 跑认证 smoke。该域由 Vercel Git 集成跟随 main 自动部署：**2026-07-16 验证已刷新**（`/en/tools/percentage-calculator` 200，main CI deployed smoke 恢复绿色）。2026-07-19 起 CI 按 Actions 分钟预算拆分：PR 只跑快速静态门禁（类型、全量单测、i18n/按钮审计，无构建无浏览器），完整门禁（含浏览器门禁与 deployed smoke）仅在 main 推送运行并保持阻断。
 
 - [x] 临时部署刷新 — 自动完成，无需操作
 - [ ] 知悉：临时域公共 `release:health` 已 pass；详细运行时状态需要 `TOOLARS_HEALTHCHECK_TOKEN`（见 §5）

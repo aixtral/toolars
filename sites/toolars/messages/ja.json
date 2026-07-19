@@ -1720,6 +1720,13 @@
           "scopeSummary": "日本語ドラフト W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "日本語ドラフト W20-BI: PDF Summary Workflow"
         },
+        "sourceUpload": {
+          "label": "要約する PDF をアップロード",
+          "extracting": "ローカルでテキストを抽出中…",
+          "ready": "{pageCount} ページ · {charCount} 文字を抽出",
+          "truncated": "AI コンテキスト予算のためテキストを制限し、先頭部分のみ送信します。",
+          "failed": "この PDF を読み取れませんでした。別のファイルをお試しください。"
+        },
         "aiRun": {
           "running": "AI 要約を実行中…",
           "completedTitle": "AI 要約が完了しました",

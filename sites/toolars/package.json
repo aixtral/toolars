@@ -37,6 +37,7 @@
     "next": "16.2.6",
     "next-intl": "^4.13.0",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.1.200",
     "posthog-js": "^1.391.3",
     "posthog-node": "^5.38.2",
     "react": "19.2.4",

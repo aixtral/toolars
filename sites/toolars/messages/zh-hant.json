@@ -1720,6 +1720,13 @@
           "scopeSummary": "只有摘要步驟獲準後才開始 AI 處理。",
           "workflowTitle": "PDF 摘要工作流程"
         },
+        "sourceUpload": {
+          "label": "上傳 PDF 進行摘要",
+          "extracting": "正在本機提取文本…",
+          "ready": "已提取 {pageCount} 頁 · {charCount} 字元",
+          "truncated": "文本已依 AI 上下文預算截斷，僅傳送前一部分。",
+          "failed": "無法讀取此 PDF，請換一個檔案。"
+        },
         "aiRun": {
           "running": "正在執行 AI 摘要…",
           "completedTitle": "AI 摘要完成",

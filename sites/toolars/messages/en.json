@@ -1723,6 +1723,13 @@
           "scopeSummary": "AI processing starts only after the summarization step is approved.",
           "workflowTitle": "PDF Summary Workflow"
         },
+        "sourceUpload": {
+          "label": "Upload a PDF to summarize",
+          "extracting": "Extracting text locally…",
+          "ready": "Extracted {pageCount} pages · {charCount} chars",
+          "truncated": "Text capped for the AI context budget; the first part is sent.",
+          "failed": "Could not read this PDF. Try another file."
+        },
         "aiRun": {
           "running": "Running AI summary…",
           "completedTitle": "AI summary complete",

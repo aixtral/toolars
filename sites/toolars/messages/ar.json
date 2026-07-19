@@ -1720,6 +1720,13 @@
           "scopeSummary": "مسودة عربية W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "مسودة عربية W20-BI: PDF Summary Workflow"
         },
+        "sourceUpload": {
+          "label": "حمّل ملف PDF لتلخيصه",
+          "extracting": "جارٍ استخراج النص محليًا…",
+          "ready": "تم استخراج {pageCount} صفحات · {charCount} حرفًا",
+          "truncated": "تم قص النص حسب ميزانية سياق الذكاء الاصطناعي؛ يُرسل الجزء الأول فقط.",
+          "failed": "تعذّرت قراءة ملف PDF هذا. جرّب ملفًا آخر."
+        },
         "aiRun": {
           "running": "جارٍ تشغيل ملخص الذكاء الاصطناعي…",
           "completedTitle": "اكتمل ملخص الذكاء الاصطناعي",

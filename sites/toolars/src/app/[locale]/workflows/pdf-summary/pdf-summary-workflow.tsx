@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type ChangeEvent as ReactChangeEvent, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ClipboardList, FileText, Play, Save } from "lucide-react";
 import { AiConsentDialog } from "@/components/core/ai-consent-dialog";
@@ -17,11 +17,18 @@ import {
   runPdfSummaryWorkflow,
   type PdfSummaryResult
 } from "@/lib/workflows/pdf-summary";
+import { extractPdfText, type PdfTextExtractionResult } from "@/lib/workflows/pdf-text-extraction";
 
 const variations = ["boardPack", "clientSummary", "tableExtract"] as const;
 const steps = buildPdfSummarySteps();
 const pdfSummaryProviderRoute = selectAiProviderRoute({ workflowSlug: "pdf-summary", stepId: "summarize-with-ai" });
 type PdfSummaryVariation = (typeof variations)[number];
+
+type ExtractionState =
+  | { status: "idle" }
+  | { status: "extracting" }
+  | { status: "done"; result: PdfTextExtractionResult }
+  | { status: "failed" };
 
 interface AiConsentContext {
   event: Parameters<typeof appendAiConsentAuditEvent>[0];
@@ -46,6 +53,8 @@ export function PdfSummaryWorkflow() {
   const [consentReviewed, setConsentReviewed] = useState(false);
   const [consentContext, setConsentContext] = useState(null as AiConsentContext | null);
   const [aiRun, setAiRun] = useState({ status: "idle" } as AiRunState);
+  const [sourceFile, setSourceFile] = useState(null as File | null);
+  const [extraction, setExtraction] = useState({ status: "idle" } as ExtractionState);
   const [handoffUploads, setHandoffUploads] = useState([] as PdfUploadServerHandoffRecord[]);
   const {
     dialogRef: consentDialogRef,
@@ -85,11 +94,16 @@ export function PdfSummaryWorkflow() {
     if (!consentContext) return;
 
     setAiRun({ status: "running" });
+    const fileNames = [
+      ...handoffUploads.map((upload) => upload.fileName),
+      ...(sourceFile ? [sourceFile.name] : [])
+    ];
+    const extractedText = extraction.status === "done" ? extraction.result.text : undefined;
     try {
       const response = await fetch("/api/ai/provider-runs", {
         body: JSON.stringify({
           event: consentContext.event,
-          prompt: buildPdfSummaryPrompt(variation, handoffUploads.map((upload) => upload.fileName)),
+          prompt: buildPdfSummaryPrompt(variation, fileNames, extractedText),
           runMetadata: consentContext.runMetadata
         }),
         headers: { "Content-Type": "application/json" },
@@ -126,8 +140,25 @@ export function PdfSummaryWorkflow() {
     restoreConsentTriggerFocus();
   };
 
-  const approveAiConsent = () => {
-    const approvedAt = new Date().toISOString();
+  const handleSourceFileSelected = async (event: ReactChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0] ?? null;
+    setSourceFile(file);
+    if (!file) {
+      setExtraction({ status: "idle" });
+      return;
+    }
+
+    setExtraction({ status: "extracting" });
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const result = await extractPdfText(bytes);
+      setExtraction({ result, status: "done" });
+    } catch {
+      setExtraction({ status: "failed" });
+    }
+  };
+
+  const approveAiConsent = () => {    const approvedAt = new Date().toISOString();
     const contentSummary = t("consent.contentSummary");
     const event = {
       approvedAt,
@@ -214,6 +245,31 @@ export function PdfSummaryWorkflow() {
                 </span>
               </article>
             ))}
+          </div>
+
+          <div className="workflow-source-upload">
+            <label className="field-label">
+              <span>{t("sourceUpload.label")}</span>
+              <input
+                accept="application/pdf,.pdf"
+                aria-label={t("sourceUpload.label")}
+                className="input"
+                onChange={(event) => void handleSourceFileSelected(event)}
+                type="file"
+              />
+            </label>
+            {extraction.status === "extracting" ? (
+              <p className="settings-status-note">{t("sourceUpload.extracting")}</p>
+            ) : null}
+            {extraction.status === "done" ? (
+              <p className="settings-status-note" role="status">
+                {t("sourceUpload.ready", { charCount: extraction.result.charCount, pageCount: extraction.result.pageCount })}
+                {extraction.result.truncated ? ` ${t("sourceUpload.truncated")}` : ""}
+              </p>
+            ) : null}
+            {extraction.status === "failed" ? (
+              <p className="settings-status-note" role="alert">{t("sourceUpload.failed")}</p>
+            ) : null}
           </div>
         </section>
 

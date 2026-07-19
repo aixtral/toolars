@@ -1719,6 +1719,16 @@
           "retentionSummary": "Rascunho português W20-BI: You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "Rascunho português W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "Rascunho português W20-BI: PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "Executando resumo com IA…",
+          "completedTitle": "Resumo de IA concluído",
+          "failedTitle": "Falha no resumo de IA",
+          "failedDescription": "A execução do provedor de IA não foi concluída. Os resultados da extração local continuam disponíveis.",
+          "needsAuthTitle": "Inicie sessão para executar etapas de IA",
+          "needsAuthDescription": "O processamento de IA é executado na sua conta para que o uso e a auditoria fiquem associados a você.",
+          "modelLabel": "Modelo",
+          "usageLabel": "Tokens de entrada / saída"
         }
       }
     },

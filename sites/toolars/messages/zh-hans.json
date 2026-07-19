@@ -1719,6 +1719,16 @@
           "retentionSummary": "批准前可以取消。模拟工作流运行后会删除生成的摘要上下文。",
           "scopeSummary": "只有摘要步骤获批后才开始 AI 处理。",
           "workflowTitle": "PDF 摘要工作流"
+        },
+        "aiRun": {
+          "running": "正在运行 AI 摘要…",
+          "completedTitle": "AI 摘要完成",
+          "failedTitle": "AI 摘要失败",
+          "failedDescription": "AI 提供商运行未完成，本地提取结果仍可用。",
+          "needsAuthTitle": "登录后运行 AI 步骤",
+          "needsAuthDescription": "AI 处理在你的账号下运行，以便用量和审计记录归属于你。",
+          "modelLabel": "模型",
+          "usageLabel": "输入 / 输出令牌"
         }
       }
     },

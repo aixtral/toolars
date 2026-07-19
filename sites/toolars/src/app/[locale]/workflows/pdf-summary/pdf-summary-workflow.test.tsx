@@ -261,4 +261,75 @@ describe("PdfSummaryWorkflow", () => {
     expect(screen.getByText("handoff_pdf-summary_board_pack")).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledWith("/api/pdf/uploads?handoff=pdf-summary");
   });
+
+  function stubProviderRuns(response: { status: number; body: unknown }) {
+    return vi.fn((url: string, _init?: RequestInit) => {
+      if (url === "/api/ai/provider-runs") {
+        return Promise.resolve({
+          json: vi.fn().mockResolvedValue(response.body),
+          ok: response.status < 400,
+          status: response.status
+        });
+      }
+      return Promise.resolve({
+        json: vi.fn().mockResolvedValue({ uploads: [] }),
+        ok: true,
+        status: 200
+      });
+    });
+  }
+
+  it("runs the real provider contract after consent and shows model output and usage", async () => {
+    const fetchMock = stubProviderRuns({
+      body: {
+        outputText: "Key points: revenue up 12%. Action items: share with the board.",
+        run: { modelId: "deepseek-chat", usage: { inputTokens: 120, outputTokens: 48 } }
+      },
+      status: 201
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    renderWithIntl(<PdfSummaryWorkflow />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Review consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Approve AI consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Run workflow" }));
+
+    expect(await screen.findByText("AI summary complete")).toBeInTheDocument();
+    expect(screen.getByText(/revenue up 12%/)).toBeInTheDocument();
+    expect(screen.getByText(/deepseek-chat/)).toBeInTheDocument();
+    expect(screen.getByText(/120 \/ 48/)).toBeInTheDocument();
+
+    const runCall = fetchMock.mock.calls.find(([url, init]) => url === "/api/ai/provider-runs" && init?.method === "POST");
+    expect(runCall).toBeDefined();
+    const body = JSON.parse(String((runCall?.[1] as RequestInit).body));
+    expect(body.prompt).toContain('"boardPack" brief');
+    expect(body.event.workflowSlug).toBe("pdf-summary");
+    expect(body.runMetadata.status).toBe("consent-approved");
+  });
+
+  it("asks for sign-in when the provider run is rejected as unauthenticated", async () => {
+    vi.stubGlobal("fetch", stubProviderRuns({ body: { error: "Authentication required" }, status: 401 }));
+
+    renderWithIntl(<PdfSummaryWorkflow />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Review consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Approve AI consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Run workflow" }));
+
+    expect(await screen.findByText("Sign in to run AI steps")).toBeInTheDocument();
+  });
+
+  it("shows the failure state when the provider run fails", async () => {
+    vi.stubGlobal("fetch", stubProviderRuns({ body: { error: "AI provider execution failed" }, status: 502 }));
+
+    renderWithIntl(<PdfSummaryWorkflow />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Review consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Approve AI consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Run workflow" }));
+
+    expect(await screen.findByText("AI summary failed")).toBeInTheDocument();
+    expect(screen.getByText(/Local extraction results are still available/)).toBeInTheDocument();
+  });
 });

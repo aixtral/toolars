@@ -12,6 +12,7 @@ import { selectAiProviderRoute } from "@/lib/ai/provider-routing";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import type { PdfUploadServerHandoffRecord } from "@/lib/tools/pdf-upload-lifecycle";
 import {
+  buildPdfSummaryPrompt,
   buildPdfSummarySteps,
   runPdfSummaryWorkflow,
   type PdfSummaryResult
@@ -22,6 +23,18 @@ const steps = buildPdfSummarySteps();
 const pdfSummaryProviderRoute = selectAiProviderRoute({ workflowSlug: "pdf-summary", stepId: "summarize-with-ai" });
 type PdfSummaryVariation = (typeof variations)[number];
 
+interface AiConsentContext {
+  event: Parameters<typeof appendAiConsentAuditEvent>[0];
+  runMetadata: ReturnType<typeof buildAiConsentRunMetadata>;
+}
+
+type AiRunState =
+  | { status: "idle" }
+  | { status: "running" }
+  | { status: "completed"; modelId?: string; outputText: string; usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number } }
+  | { status: "failed" }
+  | { status: "needs-auth" };
+
 export function PdfSummaryWorkflow() {
   const t = useTranslations("workflowsPage.pdfSummary.workspace");
   const locale = useLocale();
@@ -31,6 +44,8 @@ export function PdfSummaryWorkflow() {
   const [result, setResult] = useState(null as PdfSummaryResult | null);
   const [isConsentDialogOpen, setIsConsentDialogOpen] = useState(false);
   const [consentReviewed, setConsentReviewed] = useState(false);
+  const [consentContext, setConsentContext] = useState(null as AiConsentContext | null);
+  const [aiRun, setAiRun] = useState({ status: "idle" } as AiRunState);
   const [handoffUploads, setHandoffUploads] = useState([] as PdfUploadServerHandoffRecord[]);
   const {
     dialogRef: consentDialogRef,
@@ -62,8 +77,48 @@ export function PdfSummaryWorkflow() {
     };
   }, []);
 
-  const runWorkflow = () => {
+  const runWorkflow = async () => {
     setResult(runPdfSummaryWorkflow());
+
+    // With consent approved, the summarize step executes against the real
+    // provider contract instead of staying a simulation.
+    if (!consentContext) return;
+
+    setAiRun({ status: "running" });
+    try {
+      const response = await fetch("/api/ai/provider-runs", {
+        body: JSON.stringify({
+          event: consentContext.event,
+          prompt: buildPdfSummaryPrompt(variation, handoffUploads.map((upload) => upload.fileName)),
+          runMetadata: consentContext.runMetadata
+        }),
+        headers: { "Content-Type": "application/json" },
+        method: "POST"
+      });
+      const payload = (await response.json().catch(() => ({}))) as {
+        error?: string;
+        outputText?: string;
+        run?: { modelId?: string; usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number } };
+      };
+
+      if (response.status === 401) {
+        setAiRun({ status: "needs-auth" });
+        return;
+      }
+      if (!response.ok || typeof payload.outputText !== "string") {
+        setAiRun({ status: "failed" });
+        return;
+      }
+
+      setAiRun({
+        modelId: payload.run?.modelId,
+        outputText: payload.outputText,
+        status: "completed",
+        usage: payload.run?.usage
+      });
+    } catch {
+      setAiRun({ status: "failed" });
+    }
   };
 
   const closeConsentDialog = () => {
@@ -95,6 +150,7 @@ export function PdfSummaryWorkflow() {
       headers: { "Content-Type": "application/json" },
       method: "POST"
     }).catch(() => undefined);
+    setConsentContext({ event, runMetadata });
     setConsentReviewed(true);
     closeConsentDialog();
   };
@@ -167,7 +223,7 @@ export function PdfSummaryWorkflow() {
               <h2>{t("runPreview.title")}</h2>
               <p className="tool-description">{t("runPreview.description")}</p>
             </div>
-            <button className="button button-solid workflow-run-button" onClick={runWorkflow} type="button">
+            <button className="button button-solid workflow-run-button" onClick={() => void runWorkflow()} type="button">
               <Play size={16} aria-hidden="true" /> {t("actions.runWorkflow")}
             </button>
           </div>
@@ -188,6 +244,33 @@ export function PdfSummaryWorkflow() {
             <p>{result?.summary ?? t("runPreview.readyDescription")}</p>
             {result ? <small>{result.securityNote}</small> : null}
           </div>
+
+          {aiRun.status === "running" ? (
+            <div className="workflow-output-box" role="status">
+              <strong>{t("aiRun.running")}</strong>
+            </div>
+          ) : null}
+          {aiRun.status === "completed" ? (
+            <div className="workflow-output-box" data-ai-run="completed">
+              <strong>{t("aiRun.completedTitle")}</strong>
+              <p>{aiRun.outputText}</p>
+              <small>
+                {t("aiRun.modelLabel")}: {aiRun.modelId ?? "—"} · {t("aiRun.usageLabel")}: {aiRun.usage?.inputTokens ?? 0} / {aiRun.usage?.outputTokens ?? 0}
+              </small>
+            </div>
+          ) : null}
+          {aiRun.status === "failed" ? (
+            <div className="workflow-output-box" role="alert">
+              <strong>{t("aiRun.failedTitle")}</strong>
+              <p>{t("aiRun.failedDescription")}</p>
+            </div>
+          ) : null}
+          {aiRun.status === "needs-auth" ? (
+            <div className="workflow-output-box" role="alert">
+              <strong>{t("aiRun.needsAuthTitle")}</strong>
+              <p>{t("aiRun.needsAuthDescription")}</p>
+            </div>
+          ) : null}
         </section>
       </div>
 

@@ -1719,6 +1719,16 @@
           "retentionSummary": "Puedes cancelar antes de aprobar. El contexto generado se elimina tras la ejecución simulada.",
           "scopeSummary": "El procesamiento IA empieza solo tras aprobar el paso de resumen.",
           "workflowTitle": "Flujo de resumen PDF"
+        },
+        "aiRun": {
+          "running": "Ejecutando resumen con IA…",
+          "completedTitle": "Resumen de IA completado",
+          "failedTitle": "Error en el resumen de IA",
+          "failedDescription": "La ejecución del proveedor de IA no se completó. Los resultados de la extracción local siguen disponibles.",
+          "needsAuthTitle": "Inicia sesión para ejecutar pasos de IA",
+          "needsAuthDescription": "El procesamiento de IA se ejecuta con tu cuenta para que el uso y la auditoría queden vinculados a ti.",
+          "modelLabel": "Modelo",
+          "usageLabel": "Tokens de entrada / salida"
         }
       }
     },

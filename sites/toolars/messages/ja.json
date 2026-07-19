@@ -1719,6 +1719,16 @@
           "retentionSummary": "日本語ドラフト W20-BI: You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "日本語ドラフト W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "日本語ドラフト W20-BI: PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "AI 要約を実行中…",
+          "completedTitle": "AI 要約が完了しました",
+          "failedTitle": "AI 要約に失敗しました",
+          "failedDescription": "AI プロバイダーの実行が完了しませんでした。ローカル抽出の結果は引き続き利用できます。",
+          "needsAuthTitle": "AI ステップを実行するにはサインイン",
+          "needsAuthDescription": "AI 処理はアカウントに紐付けて実行され、使用量と監査があなたに関連付けられます。",
+          "modelLabel": "モデル",
+          "usageLabel": "入力 / 出力トークン"
         }
       }
     },

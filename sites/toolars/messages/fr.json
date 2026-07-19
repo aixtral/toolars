@@ -1719,6 +1719,16 @@
           "retentionSummary": "Brouillon français W20-BI: You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "Brouillon français W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "Brouillon français W20-BI: PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "Résumé IA en cours…",
+          "completedTitle": "Résumé IA terminé",
+          "failedTitle": "Échec du résumé IA",
+          "failedDescription": "L'exécution du fournisseur d'IA n'a pas abouti. Les résultats de l'extraction locale restent disponibles.",
+          "needsAuthTitle": "Connectez-vous pour exécuter les étapes IA",
+          "needsAuthDescription": "Le traitement IA s'exécute avec votre compte afin que l'usage et l'audit vous soient rattachés.",
+          "modelLabel": "Modèle",
+          "usageLabel": "Jetons entrée / sortie"
         }
       }
     },

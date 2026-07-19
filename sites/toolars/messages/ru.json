@@ -1719,6 +1719,16 @@
           "retentionSummary": "Черновик русского W20-BI: You can cancel before approval. Generated summary context is deleted after the simulated workflow run.",
           "scopeSummary": "Черновик русского W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "Черновик русского W20-BI: PDF Summary Workflow"
+        },
+        "aiRun": {
+          "running": "Выполняется ИИ-резюме…",
+          "completedTitle": "ИИ-резюме готово",
+          "failedTitle": "Ошибка ИИ-резюме",
+          "failedDescription": "Запуск ИИ-провайдера не завершился. Результаты локального извлечения по-прежнему доступны.",
+          "needsAuthTitle": "Войдите, чтобы запускать шаги ИИ",
+          "needsAuthDescription": "Обработка ИИ выполняется от вашего аккаунта, чтобы использование и аудит были привязаны к вам.",
+          "modelLabel": "Модель",
+          "usageLabel": "Входящие / исходящие токены"
         }
       }
     },

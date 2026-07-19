@@ -46,3 +46,17 @@ export function runPdfSummaryWorkflow(): PdfSummaryResult {
     securityNote: "Only extracted text selected for summary is sent after approval."
   };
 }
+
+/**
+ * Prompt sent to the AI provider for the summarize step once consent is
+ * approved. Kept deterministic and English-only so provider runs are
+ * reproducible; output language handling is a later iteration.
+ */
+export function buildPdfSummaryPrompt(variation: string, fileNames: string[]): string {
+  const target = fileNames.length > 0 ? fileNames.join(", ") : "the uploaded PDF document";
+  return [
+    `Summarize ${target} as a "${variation}" brief.`,
+    "Include key points with page citations where possible and a short list of action items.",
+    "Keep the summary under 200 words."
+  ].join(" ");
+}

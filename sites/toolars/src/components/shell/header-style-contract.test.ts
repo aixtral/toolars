@@ -30,6 +30,7 @@ describe("topbar visual style contract", () => {
     expect(accountActionsSource).toContain('className="topbar-account-content"');
     expect(css).toMatch(/\.topbar-account-width-reserver,[\s\S]*?\.topbar-account-content[\s\S]*?grid-area: 1 \/ 1/);
     expect(css).toMatch(/\.topbar-account-width-reserver[\s\S]*?visibility: hidden/);
+    expect(css).toMatch(/\.topbar-account-actions\[data-auth-state="signed-in"\] \.topbar-account-width-reserver[\s\S]*?display: none/);
     expect(css).toMatch(/\.topbar-account-content[\s\S]*?justify-content: flex-end/);
     expect(accountActionsSource).toContain('data-auth-state={account ? "signed-in" : "signed-out"}');
     expect(css).toMatch(/html\[data-toolars-account-hint="true"\][\s\S]*?\.topbar-account-actions\[data-auth-state="signed-out"\][\s\S]*?visibility: hidden/);

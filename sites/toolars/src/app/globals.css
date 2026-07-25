@@ -358,6 +358,10 @@ button {
   visibility: hidden;
 }
 
+.topbar-account-actions[data-auth-state="signed-in"] .topbar-account-width-reserver {
+  display: none;
+}
+
 .topbar-account-content {
   display: inline-flex;
   align-items: center;

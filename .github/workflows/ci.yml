@@ -1,8 +1,37 @@
 name: CI
 
-# Manual-only CI: nothing fires on push/PR (budget control). After committing,
-# run the workflow manually from the Actions tab on the relevant ref.
+# Budget model (2000 free Actions minutes/month, private repo):
+# - push/PR (code paths only): fast static gate ~6 min. Worst case
+#   ~100 runs/mo ≈ 600 min.
+# - schedule (nightly) + manual: full launch gate ~31 min, capped at
+#   ~30 scheduled runs/mo ≈ 930 min.
+# Total worst case ≈ 1500-1700 min/mo, inside the free tier with margin.
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'plans/**'
+      - 'design/**'
+      - 'output/**'
+      - 'specs/**'
+      - '.cdc/**'
+      - '.tasks/**'
+      - '*.md'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'plans/**'
+      - 'design/**'
+      - 'output/**'
+      - 'specs/**'
+      - '.cdc/**'
+      - '.tasks/**'
+      - '*.md'
+  schedule:
+    # Nightly full gate, 18:37 UTC (02:37 +08), off the herd minute marks.
+    - cron: '37 18 * * *'
   workflow_dispatch:
 
 concurrency:
@@ -14,9 +43,10 @@ defaults:
     working-directory: sites/toolars
 
 jobs:
-  # Fast static gate (~5 min): no production build, no browser. Runs first so
-  # obvious failures fail cheap before the full gate spends 31 minutes.
-  pr-fast-checks:
+  # Runs on every trigger: cheap always-on quality signal (~6 min, no
+  # production build, no browser). On schedule/dispatch it acts as the cheap
+  # first stage before the full gate.
+  fast-checks:
     name: Fast checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -58,9 +88,13 @@ jobs:
       - name: Button behavior audit
         run: pnpm audit:button-behavior
 
+  # The 31-minute release-blocking gate: browser gates + deployed smoke.
+  # Scheduled nightly on main and on demand — never per push, which is what
+  # blew the minute budget.
   main-launch-gate:
     name: Launch readiness
-    needs: pr-fast-checks
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: fast-checks
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -103,8 +137,8 @@ jobs:
 
       - name: Temporary production certified tool smoke
         # Blocking: the temporary origin auto-deploys from main, so this run
-        # validates the just-merged code against the fresh deployment. Tracked
-        # in plans/release-production-env-confirmation.md.
+        # validates the latest main against the live deployment. Tracked in
+        # plans/release-production-env-confirmation.md.
         # The remote origin is a Hobby serverless deployment: cold starts push
         # page loads and interactions past the local smoke budgets, so the
         # deployed run gets generous failure-path timeouts (pass path unchanged).

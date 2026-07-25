@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 
 const DEEPSEEK_CHAT_COMPLETIONS_URL = "https://api.deepseek.com/chat/completions";
-const DEFAULT_DEEPSEEK_MODEL = "deepseek-chat";
+const DEFAULT_DEEPSEEK_MODEL = "deepseek-v4-flash";
 const UPSTREAM_TIMEOUT_MS = 60_000;
 
 interface DeepSeekGatewayRequestBody {

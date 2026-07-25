@@ -283,7 +283,7 @@ describe("PdfSummaryWorkflow", () => {
     const fetchMock = stubProviderRuns({
       body: {
         outputText: "Key points: revenue up 12%. Action items: share with the board.",
-        run: { modelId: "deepseek-chat", usage: { inputTokens: 120, outputTokens: 48 } }
+        run: { modelId: "deepseek-v4-flash", usage: { inputTokens: 120, outputTokens: 48 } }
       },
       status: 201
     });
@@ -297,7 +297,7 @@ describe("PdfSummaryWorkflow", () => {
 
     expect(await screen.findByText("AI summary complete")).toBeInTheDocument();
     expect(screen.getByText(/revenue up 12%/)).toBeInTheDocument();
-    expect(screen.getByText(/deepseek-chat/)).toBeInTheDocument();
+    expect(screen.getByText(/deepseek-v4-flash/)).toBeInTheDocument();
     expect(screen.getByText(/120 \/ 48/)).toBeInTheDocument();
 
     const runCall = fetchMock.mock.calls.find(([url, init]) => url === "/api/ai/provider-runs" && init?.method === "POST");
@@ -342,7 +342,7 @@ describe("PdfSummaryWorkflow", () => {
     const bytes = new Uint8Array(await doc.save());
 
     const fetchMock = stubProviderRuns({
-      body: { outputText: "Summary of the real text.", run: { modelId: "deepseek-chat", usage: {} } },
+      body: { outputText: "Summary of the real text.", run: { modelId: "deepseek-v4-flash", usage: {} } },
       status: 201
     });
     vi.stubGlobal("fetch", fetchMock);

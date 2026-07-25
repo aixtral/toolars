@@ -1720,6 +1720,13 @@
           "scopeSummary": "Rascunho português W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "Rascunho português W20-BI: PDF Summary Workflow"
         },
+        "sourceUpload": {
+          "label": "Envie um PDF para resumir",
+          "extracting": "Extraindo texto localmente…",
+          "ready": "Extraídas {pageCount} páginas · {charCount} caracteres",
+          "truncated": "Texto limitado pelo orçamento de contexto da IA; a primeira parte é enviada.",
+          "failed": "Não foi possível ler este PDF. Tente outro arquivo."
+        },
         "aiRun": {
           "running": "Executando resumo com IA…",
           "completedTitle": "Resumo de IA concluído",

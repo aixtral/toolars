@@ -1720,6 +1720,13 @@
           "scopeSummary": "El procesamiento IA empieza solo tras aprobar el paso de resumen.",
           "workflowTitle": "Flujo de resumen PDF"
         },
+        "sourceUpload": {
+          "label": "Sube un PDF para resumir",
+          "extracting": "Extrayendo texto localmente…",
+          "ready": "Extraídas {pageCount} páginas · {charCount} caracteres",
+          "truncated": "Texto limitado por el presupuesto de contexto de IA; se envía la primera parte.",
+          "failed": "No se pudo leer este PDF. Prueba con otro archivo."
+        },
         "aiRun": {
           "running": "Ejecutando resumen con IA…",
           "completedTitle": "Resumen de IA completado",

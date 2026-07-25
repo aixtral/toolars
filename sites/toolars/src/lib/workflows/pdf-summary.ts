@@ -52,11 +52,15 @@ export function runPdfSummaryWorkflow(): PdfSummaryResult {
  * approved. Kept deterministic and English-only so provider runs are
  * reproducible; output language handling is a later iteration.
  */
-export function buildPdfSummaryPrompt(variation: string, fileNames: string[]): string {
+export function buildPdfSummaryPrompt(variation: string, fileNames: string[], extractedText?: string): string {
   const target = fileNames.length > 0 ? fileNames.join(", ") : "the uploaded PDF document";
-  return [
+  const parts = [
     `Summarize ${target} as a "${variation}" brief.`,
     "Include key points with page citations where possible and a short list of action items.",
     "Keep the summary under 200 words."
-  ].join(" ");
+  ];
+  if (extractedText?.trim()) {
+    parts.push("Use only the following extracted document text as the source and do not invent details that are not in it:", extractedText);
+  }
+  return parts.join(" ");
 }

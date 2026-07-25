@@ -38,4 +38,12 @@ describe("pdf summary workflow", () => {
   it("falls back to a generic document reference when no files are queued", () => {
     expect(buildPdfSummaryPrompt("clientSummary", [])).toContain("the uploaded PDF document");
   });
+
+  it("grounds the prompt in real extracted text when provided", () => {
+    const prompt = buildPdfSummaryPrompt("boardPack", ["report.pdf"], "[Page 1] Revenue grew 12 percent.");
+
+    expect(prompt).toContain("Use only the following extracted document text");
+    expect(prompt).toContain("[Page 1] Revenue grew 12 percent.");
+    expect(prompt).toContain("do not invent details");
+  });
 });

@@ -1720,6 +1720,13 @@
           "scopeSummary": "Черновик русского W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "Черновик русского W20-BI: PDF Summary Workflow"
         },
+        "sourceUpload": {
+          "label": "Загрузите PDF для резюме",
+          "extracting": "Извлечение текста локально…",
+          "ready": "Извлечено страниц: {pageCount} · символов: {charCount}",
+          "truncated": "Текст ограничен бюджетом контекста ИИ; отправляется первая часть.",
+          "failed": "Не удалось прочитать этот PDF. Попробуйте другой файл."
+        },
         "aiRun": {
           "running": "Выполняется ИИ-резюме…",
           "completedTitle": "ИИ-резюме готово",

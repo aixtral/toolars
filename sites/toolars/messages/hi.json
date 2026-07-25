@@ -1720,6 +1720,13 @@
           "scopeSummary": "हिंदी मसौदा W20-BI: AI processing starts only after the summarization step is approved.",
           "workflowTitle": "हिंदी मसौदा W20-BI: PDF Summary Workflow"
         },
+        "sourceUpload": {
+          "label": "सारांश के लिए PDF अपलोड करें",
+          "extracting": "स्थानीय रूप से टेक्स्ट निकाला जा रहा है…",
+          "ready": "{pageCount} पृष्ठ निकाले गए · {charCount} अक्षर",
+          "truncated": "AI संदर्भ बजट के लिए टेक्स्ट सीमित; पहला भाग ही भेजा जाएगा।",
+          "failed": "यह PDF पढ़ा नहीं जा सका। कोई अन्य फ़ाइल आज़माएँ।"
+        },
         "aiRun": {
           "running": "AI सारांश चल रहा है…",
           "completedTitle": "AI सारांश पूर्ण",

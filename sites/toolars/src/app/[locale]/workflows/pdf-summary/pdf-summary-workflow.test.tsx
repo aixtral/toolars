@@ -332,4 +332,37 @@ describe("PdfSummaryWorkflow", () => {
     expect(await screen.findByText("AI summary failed")).toBeInTheDocument();
     expect(screen.getByText(/Local extraction results are still available/)).toBeInTheDocument();
   });
+
+  it("extracts real text from an uploaded PDF and grounds the provider prompt in it", async () => {
+    const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
+    const doc = await PDFDocument.create();
+    const font = await doc.embedFont(StandardFonts.Helvetica);
+    const page = doc.addPage([420, 320]);
+    page.drawText("Quarterly revenue grew 12 percent year over year.", { color: rgb(0, 0, 0), font, size: 12, x: 24, y: 260 });
+    const bytes = new Uint8Array(await doc.save());
+
+    const fetchMock = stubProviderRuns({
+      body: { outputText: "Summary of the real text.", run: { modelId: "deepseek-chat", usage: {} } },
+      status: 201
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    renderWithIntl(<PdfSummaryWorkflow />);
+
+    const input = screen.getByLabelText("Upload a PDF to summarize");
+    const file = new File([bytes], "quarterly-report.pdf", { type: "application/pdf" });
+    fireEvent.change(input, { target: { files: [file] } });
+
+    expect(await screen.findByText(/Extracted 1 pages/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Review consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Approve AI consent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Run workflow" }));
+
+    expect(await screen.findByText("AI summary complete")).toBeInTheDocument();
+    const runCall = fetchMock.mock.calls.find(([url, init]) => url === "/api/ai/provider-runs" && init?.method === "POST");
+    const body = JSON.parse(String((runCall?.[1] as RequestInit).body));
+    expect(body.prompt).toContain("Quarterly revenue grew 12 percent year over year.");
+    expect(body.prompt).toContain("quarterly-report.pdf");
+  });
 });

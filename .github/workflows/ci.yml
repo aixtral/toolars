@@ -1,10 +1,38 @@
 name: CI
 
+# Budget model (2000 free Actions minutes/month, private repo):
+# - push/PR (code paths only): fast static gate ~6 min. Worst case
+#   ~100 runs/mo ≈ 600 min.
+# - schedule (nightly) + manual: full launch gate ~31 min, capped at
+#   ~30 scheduled runs/mo ≈ 930 min.
+# Total worst case ≈ 1500-1700 min/mo, inside the free tier with margin.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'plans/**'
+      - 'design/**'
+      - 'output/**'
+      - 'specs/**'
+      - '.cdc/**'
+      - '.tasks/**'
+      - '*.md'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'plans/**'
+      - 'design/**'
+      - 'output/**'
+      - 'specs/**'
+      - '.cdc/**'
+      - '.tasks/**'
+      - '*.md'
+  schedule:
+    # Nightly full gate, 18:37 UTC (02:37 +08), off the herd minute marks.
+    - cron: '37 18 * * *'
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -15,8 +43,58 @@ defaults:
     working-directory: sites/toolars
 
 jobs:
-  verify:
+  # Runs on every trigger: cheap always-on quality signal (~6 min, no
+  # production build, no browser). On schedule/dispatch it acts as the cheap
+  # first stage before the full gate.
+  fast-checks:
+    name: Fast checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: sites/toolars/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1 pnpm run test:ci
+
+      - name: I18n audit
+        run: pnpm audit:i18n
+
+      - name: I18n quality audit
+        run: pnpm audit:i18n-quality
+
+      - name: Button behavior audit
+        run: pnpm audit:button-behavior
+
+  # The 31-minute release-blocking gate: browser gates + deployed smoke.
+  # Scheduled nightly on main and on demand — never per push, which is what
+  # blew the minute budget.
+  main-launch-gate:
     name: Launch readiness
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: fast-checks
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -45,6 +123,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('sites/toolars/package.json', 'sites/toolars/pnpm-lock.yaml') }}
+
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
@@ -52,12 +136,9 @@ jobs:
         run: TOOLARS_TEST_SCRIPT=test:ci TOOLARS_ALLOW_MISSING_MIGRATION_SOURCES=1 pnpm run launch:readiness -- --full --visual-mobile-max-ratio 0.14 --skip-production-health --skip-source-inventory --base-url http://127.0.0.1:9188 --output ../../output/launch-readiness/ci
 
       - name: Temporary production certified tool smoke
-        # Informational on PRs: the fixed temporary origin trails main, so any PR
-        # that adds routes or changes workspace DOM fails against the stale
-        # deployment rather than its own code. Main-push runs stay blocking so a
-        # stale temporary deployment is caught and refreshed. Tracked in
+        # Blocking: the temporary origin auto-deploys from main, so this run
+        # validates the latest main against the live deployment. Tracked in
         # plans/release-production-env-confirmation.md.
-        continue-on-error: ${{ github.event_name == 'pull_request' }}
         # The remote origin is a Hobby serverless deployment: cold starts push
         # page loads and interactions past the local smoke budgets, so the
         # deployed run gets generous failure-path timeouts (pass path unchanged).

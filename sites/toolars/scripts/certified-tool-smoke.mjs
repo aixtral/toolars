@@ -857,6 +857,12 @@ async function runInputAction(page, action, fixtures = {}) {
   }
   if (action.type === "uploadPdf") {
     if (!fixtures.pdfFixturePath) throw new Error("Missing PDF smoke fixture");
+    // Wait for hydration to adopt the workspace before clicking: on cold
+    // deployments a pre-hydration "Add files" click is a no-op and the upload
+    // dialog never opens (seen as setInputFiles timeouts in deployed smoke).
+    const mergeButtonPre = page.getByRole("button", { name: "Merge PDFs", exact: true });
+    await mergeButtonPre.waitFor({ state: "visible" });
+    await page.waitForFunction((button) => !button.disabled, await mergeButtonPre.elementHandle());
     await page.getByRole("button", { name: "Add files", exact: true }).click();
     await page.locator('input[type="file"]').setInputFiles(fixtures.pdfFixturePath);
     const addToQueue = page.getByRole("button", { name: "Add 1 file to queue", exact: true });

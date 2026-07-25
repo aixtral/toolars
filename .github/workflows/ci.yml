@@ -1,30 +1,8 @@
 name: CI
 
+# Manual-only CI: nothing fires on push/PR (budget control). After committing,
+# run the workflow manually from the Actions tab on the relevant ref.
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - 'plans/**'
-      - 'design/**'
-      - 'output/**'
-      - 'specs/**'
-      - '.cdc/**'
-      - '.tasks/**'
-      - '*.md'
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - 'plans/**'
-      - 'design/**'
-      - 'output/**'
-      - 'specs/**'
-      - '.cdc/**'
-      - '.tasks/**'
-      - '*.md'
-  # Manual full-gate runs on any ref (release evidence, gate testing) without
-  # burning a push cycle.
   workflow_dispatch:
 
 concurrency:
@@ -36,12 +14,10 @@ defaults:
     working-directory: sites/toolars
 
 jobs:
-  # PRs get a fast static gate (~5 min): no production build, no browser.
-  # The full 31-minute launch gate runs on main pushes only and remains the
-  # release-blocking evidence; issues it catches are fixed forward on main.
+  # Fast static gate (~5 min): no production build, no browser. Runs first so
+  # obvious failures fail cheap before the full gate spends 31 minutes.
   pr-fast-checks:
-    name: PR fast checks
-    if: github.event_name == 'pull_request'
+    name: Fast checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -84,7 +60,7 @@ jobs:
 
   main-launch-gate:
     name: Launch readiness
-    if: github.event_name != 'pull_request'
+    needs: pr-fast-checks
     runs-on: ubuntu-latest
     timeout-minutes: 35
 

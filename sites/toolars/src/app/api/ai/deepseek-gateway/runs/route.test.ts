@@ -16,7 +16,7 @@ function deepSeekSuccessPayload() {
   return {
     choices: [{ message: { content: "  摘要：这是一段测试输出。 " } }],
     id: "chatcmpl-test-123",
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     usage: { completion_tokens: 12, prompt_tokens: 34, total_tokens: 46 }
   };
 }
@@ -93,13 +93,13 @@ describe("/api/ai/deepseek-gateway/runs", () => {
     expect(init.headers.Authorization).toBe(`Bearer ${deepSeekKey}`);
     expect(JSON.parse(init.body)).toEqual({
       messages: [{ content: "总结一下这份 PDF", role: "user" }],
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       stream: false
     });
 
     const payload = await response.json();
     expect(payload).toEqual({
-      modelId: "deepseek-chat",
+      modelId: "deepseek-v4-flash",
       outputText: "  摘要：这是一段测试输出。 ",
       providerRunId: "chatcmpl-test-123",
       usage: { inputTokens: 34, outputTokens: 12, totalTokens: 46 }

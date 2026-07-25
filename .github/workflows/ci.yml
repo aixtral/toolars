@@ -3,8 +3,29 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'plans/**'
+      - 'design/**'
+      - 'output/**'
+      - 'specs/**'
+      - '.cdc/**'
+      - '.tasks/**'
+      - '*.md'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'plans/**'
+      - 'design/**'
+      - 'output/**'
+      - 'specs/**'
+      - '.cdc/**'
+      - '.tasks/**'
+      - '*.md'
+  # Manual full-gate runs on any ref (release evidence, gate testing) without
+  # burning a push cycle.
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -63,7 +84,7 @@ jobs:
 
   main-launch-gate:
     name: Launch readiness
-    if: github.event_name == 'push'
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 35
 
@@ -91,6 +112,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('sites/toolars/package.json', 'sites/toolars/pnpm-lock.yaml') }}
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium

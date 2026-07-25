@@ -782,7 +782,26 @@ export async function runCertifiedToolSmoke({
         }
         const runButton = page.getByRole("button", { name: scenario.runButtonName, exact: true });
         await runButton.waitFor({ state: "visible" });
-        await page.waitForFunction((button) => !button.disabled, await runButton.elementHandle(), { timeout: enabledAssertionTimeoutMs });
+        // Fills that land before hydration are silent no-ops for React-controlled
+        // inputs, leaving the run button disabled forever. Verify the effect and
+        // re-apply the fills once before failing with a descriptive error.
+        const probeTimeout = Math.min(enabledAssertionTimeoutMs, 8000);
+        let enabled = await runButton
+          .elementHandle()
+          .then((handle) => page.waitForFunction((button) => !button.disabled, handle, { timeout: probeTimeout }))
+          .then(() => true)
+          .catch(() => false);
+        if (!enabled) {
+          for (const action of scenario.inputActions) {
+            await runInputAction(page, action, { pdfFixturePath });
+          }
+          enabled = await runButton
+            .elementHandle()
+            .then((handle) => page.waitForFunction((button) => !button.disabled, handle, { timeout: enabledAssertionTimeoutMs }))
+            .then(() => true)
+            .catch(() => false);
+        }
+        if (!enabled) throw new Error(`Run button "${scenario.runButtonName}" did not enable after re-applying inputs`);
         if (scenario.saveButtonName) {
           await page.getByRole("button", { name: scenario.saveButtonName, exact: true }).click();
           if (scenario.saveStorageKey) {
@@ -857,8 +876,18 @@ async function runInputAction(page, action, fixtures = {}) {
   }
   if (action.type === "uploadPdf") {
     if (!fixtures.pdfFixturePath) throw new Error("Missing PDF smoke fixture");
-    await page.getByRole("button", { name: "Add files", exact: true }).click();
-    await page.locator('input[type="file"]').setInputFiles(fixtures.pdfFixturePath);
+    // On cold deployments a pre-hydration "Add files" click is a no-op and the
+    // upload dialog never opens. Verify the effect (file input appears) and
+    // retry the click once before relying on setInputFiles' own wait.
+    const addFilesButton = page.getByRole("button", { name: "Add files", exact: true });
+    const fileInput = page.locator('input[type="file"]');
+    await addFilesButton.click();
+    try {
+      await fileInput.waitFor({ state: "attached", timeout: 8000 });
+    } catch {
+      await addFilesButton.click();
+    }
+    await fileInput.setInputFiles(fixtures.pdfFixturePath);
     const addToQueue = page.getByRole("button", { name: "Add 1 file to queue", exact: true });
     await addToQueue.waitFor({ state: "visible" });
     await page.waitForFunction((button) => !button.disabled, await addToQueue.elementHandle());

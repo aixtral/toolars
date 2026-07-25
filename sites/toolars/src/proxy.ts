@@ -38,6 +38,7 @@ export function isStaticAssetPath(pathname: string): boolean {
     pathname.startsWith("/api") ||
     pathname.startsWith("/brand/") ||
     pathname === "/manifest.webmanifest" ||
+    pathname === "/pdf-worker.min.mjs" ||
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml" ||
     pathname === "/favicon.svg"
@@ -128,7 +129,8 @@ export const config = {
      * - Next internals (_next/static, _next/image)
      * - favicon
      * - public brand assets
+     * - the pdf.js worker asset used for on-device text extraction
      */
-    "/((?!_next/static|_next/image|favicon|brand).*)"
+    "/((?!_next/static|_next/image|favicon|brand|pdf-worker).*)"
   ]
 };

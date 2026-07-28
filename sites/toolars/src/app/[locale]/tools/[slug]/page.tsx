@@ -9,11 +9,11 @@ export function generateStaticParams() {
   return allDetailSlugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ locale?: string; slug: string }> }): Promise<Metadata> {
+  const { locale, slug } = await params;
   const detail = getToolDetailBySlug(slug);
   if (!detail) return {};
-  return buildToolMetadata(detail.tool);
+  return buildToolMetadata(detail.tool, locale);
 }
 
 export function getWorkspaceShellActive(detail: ToolDetailDefinition): "ai-developer" | "explore" | "pdf" {

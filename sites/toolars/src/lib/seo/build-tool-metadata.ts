@@ -63,24 +63,29 @@ function buildToolRobots(tool: ToolDefinition): Metadata["robots"] {
  * Build Next.js Metadata for a tool workspace page (`/tools/[slug]`).
  * The title template in the root layout appends the brand name automatically.
  */
-export function buildToolMetadata(tool: ToolDefinition): Metadata {
+export function buildToolMetadata(tool: ToolDefinition, locale?: string): Metadata {
+  const localeCode: LocaleCode = resolveMetadataLocale(locale);
+  const name = getLocalizedToolName(tool, localeCode);
+  const description = getLocalizedToolDescription(tool, localeCode);
+  const canonical = localizePath(tool.href, localeCode);
+
   return {
-    title: tool.name,
-    description: tool.description,
+    title: name,
+    description,
     keywords: buildKeywords(tool),
     alternates: {
-      canonical: tool.href
+      canonical
     },
     robots: buildToolRobots(tool),
     openGraph: {
       type: "website",
-      title: `${tool.name} — Toolars`,
+      title: `${name} — Toolars`,
       description: buildOpenGraphDescription(tool),
-      url: tool.href
+      url: canonical
     },
     twitter: {
       card: "summary",
-      title: `${tool.name} — Toolars`,
+      title: `${name} — Toolars`,
       description: buildOpenGraphDescription(tool)
     }
   };

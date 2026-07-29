@@ -24,6 +24,7 @@ describe("proxy static asset routing", () => {
     expect(isStaticAssetPath("/brand/toolars-tool-network.png")).toBe(true);
     expect(isStaticAssetPath("/favicon.svg")).toBe(true);
     expect(isStaticAssetPath("/pdf-worker.min.mjs")).toBe(true);
+    expect(isStaticAssetPath("/llms.txt")).toBe(true);
     expect(isStaticAssetPath("/tools/json-repair")).toBe(false);
   });
 });

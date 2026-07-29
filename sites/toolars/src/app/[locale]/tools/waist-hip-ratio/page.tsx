@@ -3,6 +3,7 @@ import { buildToolMetadata } from "@/lib/seo/build-tool-metadata";
 import { getToolBySlug } from "@/data/registry";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
 import { WaistHipRatioWorkspace } from "./waist-hip-ratio-workspace";
+import { ToolWorkspaceJsonLd } from "@/components/seo/tool-workspace-json-ld";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale?: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -14,6 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale?: 
 export default function WaistHipRatioPage() {
   return (
     <ToolarsShell active="explore" sidebarVariant="tools">
+      <ToolWorkspaceJsonLd slug="waist-hip-ratio" />
       <WaistHipRatioWorkspace />
     </ToolarsShell>
   );

@@ -38,6 +38,7 @@ export function isStaticAssetPath(pathname: string): boolean {
     pathname.startsWith("/api") ||
     pathname.startsWith("/brand/") ||
     pathname === "/manifest.webmanifest" ||
+    pathname === "/llms.txt" ||
     pathname === "/pdf-worker.min.mjs" ||
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml" ||
@@ -130,7 +131,8 @@ export const config = {
      * - favicon
      * - public brand assets
      * - the pdf.js worker asset used for on-device text extraction
+     * - llms.txt (AI engine guide, served locale-free)
      */
-    "/((?!_next/static|_next/image|favicon|brand|pdf-worker).*)"
+    "/((?!_next/static|_next/image|favicon|brand|pdf-worker|llms.txt).*)"
   ]
 };

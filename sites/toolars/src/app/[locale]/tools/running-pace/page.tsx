@@ -3,6 +3,7 @@ import { buildToolMetadata } from "@/lib/seo/build-tool-metadata";
 import { getToolBySlug } from "@/data/registry";
 import { ToolarsShell } from "@/components/shell/toolars-shell";
 import { RunningPaceWorkspace } from "./running-pace-workspace";
+import { ToolWorkspaceJsonLd } from "@/components/seo/tool-workspace-json-ld";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale?: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -14,6 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale?: 
 export default function RunningPacePage() {
   return (
     <ToolarsShell active="explore" sidebarVariant="tools">
+      <ToolWorkspaceJsonLd slug="running-pace" />
       <RunningPaceWorkspace />
     </ToolarsShell>
   );

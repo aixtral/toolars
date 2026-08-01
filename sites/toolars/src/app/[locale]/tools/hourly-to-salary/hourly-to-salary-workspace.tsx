@@ -10,6 +10,7 @@ import {
   type HourlyToSalaryInput,
   type HourlyToSalaryResult
 } from "@/lib/tools/hourly-to-salary";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -21,6 +22,7 @@ const salaryNotes = ["formula", "overtime", "compare"] as const;
 
 export function HourlyToSalaryWorkspace() {
   const t = useTranslations("tools.hourly-to-salary.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -31,8 +33,10 @@ export function HourlyToSalaryWorkspace() {
     setResult(calculateHourlyToSalary(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.hourly-to-salary.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof HourlyToSalaryInput, value: string) => {
@@ -105,6 +109,7 @@ export function HourlyToSalaryWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

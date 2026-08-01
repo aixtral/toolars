@@ -13,6 +13,7 @@ import {
   validateMcpServerDraft,
   type McpServerDraft
 } from "@/lib/tools/mcp-server-builder";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const builderStages = [
   { number: "1", key: "defineTools", tone: "local" },
@@ -35,6 +36,7 @@ interface ManifestStats {
 
 export function McpServerBuilderWorkspace() {
   const t = useTranslations("tools.mcp-server-builder.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -72,8 +74,10 @@ export function McpServerBuilderWorkspace() {
     });
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const saveDraft = () => {
     window.localStorage.setItem("toolars.mcp-server-builder.draft", JSON.stringify(draft));
+    flashSaved();
   };
 
   return (
@@ -188,6 +192,7 @@ export function McpServerBuilderWorkspace() {
             <button className="button button-outline" type="button" onClick={saveDraft}>
               <Save size={16} aria-hidden="true" /> {t("actions.saveDraft")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" type="button" onClick={generateManifest}>
               <ServerCog size={16} aria-hidden="true" /> {t("actions.generateManifest")}
             </button>

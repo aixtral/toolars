@@ -11,6 +11,7 @@ import {
   type PercentageMode,
   type PercentageResult
 } from "@/lib/tools/percentage-calculator";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -22,6 +23,7 @@ const denominatorNotes = ["percentOf", "ratio", "change"] as const;
 
 export function PercentageCalculatorWorkspace() {
   const t = useTranslations("tools.percentage-calculator.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const detailsHref = localizePath("/tools/percentage-calculator/about", localeCode);
@@ -32,8 +34,10 @@ export function PercentageCalculatorWorkspace() {
     setResult(calculatePercentage(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.percentage-calculator.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateMode = (value: string) => {
@@ -134,6 +138,7 @@ export function PercentageCalculatorWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

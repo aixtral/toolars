@@ -10,6 +10,7 @@ import {
   type StockAverageInput,
   type StockAverageResult
 } from "@/lib/tools/stock-average";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -25,6 +26,7 @@ const costBasisNotes = [
 
 export function StockAverageWorkspace() {
   const t = useTranslations("tools.stock-average.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -41,8 +43,10 @@ export function StockAverageWorkspace() {
     setResult(calculateStockAverage(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.stock-average.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateLot = (index: number, key: "shares" | "pricePerShare", value: string) => {
@@ -113,6 +117,7 @@ export function StockAverageWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

@@ -4205,6 +4205,13 @@ select.input,
   margin-top: 12px;
 }
 
+.save-feedback {
+  align-self: center;
+  color: var(--emerald);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .status-success {
   margin-top: 12px;
   padding: 12px;

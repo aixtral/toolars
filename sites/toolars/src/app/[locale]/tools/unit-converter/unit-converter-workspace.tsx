@@ -13,6 +13,7 @@ import {
   type UnitConversionInput,
   type UnitConversionResult
 } from "@/lib/tools/unit-converter";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -45,6 +46,7 @@ const defaultUnitByCategory: Record<UnitCategory, { fromUnit: string; toUnit: st
 
 export function UnitConverterWorkspace() {
   const t = useTranslations("tools.unit-converter.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -58,8 +60,10 @@ export function UnitConverterWorkspace() {
     setResult(calculateUnitConversion(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.unit-converter.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (value: string) => {
@@ -169,6 +173,7 @@ export function UnitConverterWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

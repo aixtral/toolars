@@ -12,6 +12,7 @@ import {
   type LlmCostProfileKey,
   type LlmCostResult
 } from "@/lib/tools/llm-cost-calculator";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const defaultScenario: LlmCostInput = {
   inputTokensPerRequest: 2400,
@@ -40,6 +41,7 @@ function formatUsd(value: number) {
 
 export function LlmCostCalculatorWorkspace() {
   const t = useTranslations("tools.llm-cost-calculator.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -50,8 +52,10 @@ export function LlmCostCalculatorWorkspace() {
     setResult(calculateLlmCost(scenario));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const saveScenario = () => {
     window.localStorage.setItem("toolars.llm-cost-calculator.scenario", JSON.stringify(scenario));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof Pick<LlmCostInput, "inputTokensPerRequest" | "outputTokensPerRequest" | "requestsPerMonth">, value: string) => {
@@ -166,6 +170,7 @@ export function LlmCostCalculatorWorkspace() {
             <button className="button button-outline" type="button" onClick={saveScenario}>
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" type="button" onClick={calculate}>
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

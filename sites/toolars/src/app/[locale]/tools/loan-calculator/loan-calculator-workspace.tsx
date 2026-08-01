@@ -10,6 +10,7 @@ import {
   type LoanInput,
   type LoanResult
 } from "@/lib/tools/loan-calculator";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -27,6 +28,7 @@ function getLoanRecommendationKey(input: LoanInput): "highApr" | "longTerm" | "r
 
 export function LoanCalculatorWorkspace() {
   const t = useTranslations("tools.loan-calculator.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -37,8 +39,10 @@ export function LoanCalculatorWorkspace() {
     setResult(calculateLoanPayment(scenario));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const saveScenario = () => {
     window.localStorage.setItem("toolars.loan-calculator.scenario", JSON.stringify(scenario));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof LoanInput, value: string) => {
@@ -110,6 +114,7 @@ export function LoanCalculatorWorkspace() {
             <button className="button button-outline" onClick={saveScenario} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

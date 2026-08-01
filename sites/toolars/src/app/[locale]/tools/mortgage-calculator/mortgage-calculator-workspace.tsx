@@ -10,6 +10,7 @@ import {
   type MortgageInput,
   type MortgageResult
 } from "@/lib/tools/mortgage-calculator";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -21,6 +22,7 @@ const affordabilityNotes = ["escrow", "rates", "saved"] as const;
 
 export function MortgageCalculatorWorkspace() {
   const t = useTranslations("tools.mortgage-calculator.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const detailsHref = localizePath("/tools/mortgage-calculator/about", localeCode);
@@ -31,8 +33,10 @@ export function MortgageCalculatorWorkspace() {
     setResult(calculateMortgagePayment(scenario));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const saveScenario = () => {
     window.localStorage.setItem("toolars.mortgage-calculator.scenario", JSON.stringify(scenario));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof MortgageInput, value: string) => {
@@ -149,6 +153,7 @@ export function MortgageCalculatorWorkspace() {
             <button className="button button-outline" type="button" onClick={saveScenario}>
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" type="button" onClick={calculate}>
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

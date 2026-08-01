@@ -5,6 +5,7 @@ import { Calculator, Receipt, Save, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { calculateTip, defaultTipScenario, type TipInput, type TipResult } from "@/lib/tools/tip-calculator";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -20,6 +21,7 @@ function formatTipPercent(value: number): string {
 
 export function TipCalculatorWorkspace() {
   const t = useTranslations("tools.tip-calculator.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -30,8 +32,10 @@ export function TipCalculatorWorkspace() {
     setResult(calculateTip(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.tip-calculator.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof TipInput, value: string) => {
@@ -99,6 +103,7 @@ export function TipCalculatorWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

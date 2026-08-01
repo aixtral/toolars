@@ -10,6 +10,7 @@ import {
   type DiscountInput,
   type DiscountResult
 } from "@/lib/tools/discount-calculator";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -21,6 +22,7 @@ const checkoutNotes = ["discount", "tax", "checkout"] as const;
 
 export function DiscountCalculatorWorkspace() {
   const t = useTranslations("tools.discount-calculator.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -31,8 +33,10 @@ export function DiscountCalculatorWorkspace() {
     setResult(calculateDiscount(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.discount-calculator.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof DiscountInput, value: string) => {
@@ -102,6 +106,7 @@ export function DiscountCalculatorWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

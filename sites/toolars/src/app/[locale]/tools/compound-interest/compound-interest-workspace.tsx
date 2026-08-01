@@ -10,6 +10,7 @@ import {
   type CompoundInterestInput,
   type CompoundInterestResult
 } from "@/lib/tools/compound-interest";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -25,6 +26,7 @@ const investmentNotes = [
 
 export function CompoundInterestWorkspace() {
   const t = useTranslations("tools.compound-interest.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -35,8 +37,10 @@ export function CompoundInterestWorkspace() {
     setResult(calculateCompoundInterest(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.compound-interest.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof CompoundInterestInput, value: string) => {
@@ -104,6 +108,7 @@ export function CompoundInterestWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

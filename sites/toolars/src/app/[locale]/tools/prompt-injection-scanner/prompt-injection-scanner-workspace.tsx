@@ -6,6 +6,7 @@ import { FileWarning, Save, ShieldAlert, ShieldCheck, Sparkles } from "lucide-re
 import { AiLabWorkbenchShell } from "@/components/lab/ai-lab-workbench-shell";
 import { DEFAULT_LOCALE, isValidLocale, localizePath, type LocaleCode } from "@/lib/i18n";
 import { scanPromptInjection, type PromptInjectionScanResult } from "@/lib/tools/prompt-injection-scanner";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const profileRows = [
   { key: "local", tone: "local" },
@@ -32,6 +33,7 @@ type PatternType = (typeof patternTypes)[number];
 
 export function PromptInjectionScannerWorkspace() {
   const t = useTranslations("tools.prompt-injection-scanner.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -42,8 +44,10 @@ export function PromptInjectionScannerWorkspace() {
     setResult(scanPromptInjection(prompt));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const saveDraft = () => {
     window.localStorage.setItem("toolars.prompt-injection-scanner.draft", prompt);
+    flashSaved();
   };
 
   const getPatternLabel = (type: string, fallback: string) => {
@@ -123,6 +127,7 @@ export function PromptInjectionScannerWorkspace() {
             <button className="button button-outline" type="button" onClick={saveDraft}>
               <Save size={16} aria-hidden="true" /> {t("actions.saveDraft")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" disabled={!prompt.trim()} type="button" onClick={scan}>
               <ShieldAlert size={16} aria-hidden="true" /> {t("actions.scan")}
             </button>

@@ -10,6 +10,7 @@ import {
   type RuleOf72Input,
   type RuleOf72Result
 } from "@/lib/tools/rule-of-72";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -25,6 +26,7 @@ const shortcutNotes = [
 
 export function RuleOf72Workspace() {
   const t = useTranslations("tools.rule-of-72.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const localizedHref = (href: string) => localizePath(href, localeCode);
@@ -35,8 +37,10 @@ export function RuleOf72Workspace() {
     setResult(calculateRuleOf72(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.rule-of-72.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (key: keyof RuleOf72Input, value: string) => {
@@ -93,6 +97,7 @@ export function RuleOf72Workspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>

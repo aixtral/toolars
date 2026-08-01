@@ -11,6 +11,7 @@ import {
   type DebtPayoffResult,
   type DebtPayoffStrategy
 } from "@/lib/tools/debt-payoff";
+import { useSaveFeedback } from "@/components/core/use-save-feedback";
 
 const trustRows = [
   { key: "local", tone: "local" },
@@ -22,6 +23,7 @@ const debtNotes = ["loop", "principal", "strategy"] as const;
 
 export function DebtPayoffWorkspace() {
   const t = useTranslations("tools.debt-payoff.workspace");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const localeCode: LocaleCode = isValidLocale(locale) ? locale : DEFAULT_LOCALE;
   const detailsHref = localizePath("/tools/debt-payoff/about", localeCode);
@@ -32,8 +34,10 @@ export function DebtPayoffWorkspace() {
     setResult(calculateDebtPayoff(plan));
   };
 
+  const { flashSaved, saved } = useSaveFeedback();
   const savePlan = () => {
     window.localStorage.setItem("toolars.debt-payoff.plan", JSON.stringify(plan));
+    flashSaved();
   };
 
   const updateNumber = (key: "debtBalance" | "annualInterestRate" | "monthlyPayment", value: string) => {
@@ -106,6 +110,7 @@ export function DebtPayoffWorkspace() {
             <button className="button button-outline" onClick={savePlan} type="button">
               <Save size={16} aria-hidden="true" /> {t("actions.save")}
             </button>
+            {saved ? <span className="save-feedback" role="status">{tCommon("saved")}</span> : null}
             <button className="button button-solid" onClick={calculate} type="button">
               <Calculator size={16} aria-hidden="true" /> {t("actions.calculate")}
             </button>
